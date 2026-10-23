@@ -42,54 +42,92 @@ if [[ -z "$RESOURCES_DIR" ]]; then
 fi
 mkdir -p "$RESOURCES_DIR"
 
-MACHINE="$(uname -m)"
-case "$MACHINE" in
-  arm64)
-    PY_ARCH="aarch64"
-    EXPECTED_SHA="dbadb0ffe46f8bace50daaf8a0c5fc6903c003690776da9eb5269e33c856bb53"
-    ;;
-  x86_64)
-    PY_ARCH="x86_64"
-    EXPECTED_SHA="187eed2282e9c3a5b6b14953d564ee25a9f35cf2c209c9fa292186ee48b0e4a1"
-    ;;
-  *)
-    echo "Unsupported host architecture: $MACHINE" >&2
-    exit 2
-    ;;
-esac
+# The Flutter app is built universal (arm64 + x86_64), so the bundled Python
+# must run on both too. Bundling only the build host's architecture leaves the
+# app unable to start its CHIRP helper on the other kind of Mac.
+read -r -a BUNDLE_ARCHS <<< "${NEWCHIRP_PYTHON_ARCHS:-arm64 x86_64}"
 
-ASSET="cpython-${PYTHON_VERSION}+${RELEASE_TAG}-${PY_ARCH}-apple-darwin-install_only_stripped.tar.gz"
-ARCHIVE="$CACHE_DIR/$ASSET"
-EXTRACT_DIR="$CACHE_DIR/python-${PYTHON_VERSION}-${PY_ARCH}"
-RUNTIME_SRC="$EXTRACT_DIR/python"
+# Downloads and verifies one architecture's runtime, then prints its path.
+fetch_runtime() {
+  local arch="$1" py_arch expected_sha
+  case "$arch" in
+    arm64)
+      py_arch="aarch64"
+      expected_sha="dbadb0ffe46f8bace50daaf8a0c5fc6903c003690776da9eb5269e33c856bb53"
+      ;;
+    x86_64)
+      py_arch="x86_64"
+      expected_sha="187eed2282e9c3a5b6b14953d564ee25a9f35cf2c209c9fa292186ee48b0e4a1"
+      ;;
+    *)
+      echo "Unsupported Python architecture: $arch" >&2
+      exit 2
+      ;;
+  esac
 
-if [[ ! -x "$RUNTIME_SRC/bin/python3" ]]; then
-  if [[ ! -f "$ARCHIVE" ]]; then
-    URL="https://github.com/astral-sh/python-build-standalone/releases/download/${RELEASE_TAG}/${ASSET//+/%2B}"
-    echo "Downloading bundled Python runtime: $URL" >&2
-    curl -fL --retry 3 -o "$ARCHIVE" "$URL"
+  local asset="cpython-${PYTHON_VERSION}+${RELEASE_TAG}-${py_arch}-apple-darwin-install_only_stripped.tar.gz"
+  local archive="$CACHE_DIR/$asset"
+  local extract_dir="$CACHE_DIR/python-${PYTHON_VERSION}-${py_arch}"
+  local runtime_src="$extract_dir/python"
+
+  if [[ ! -x "$runtime_src/bin/python3" ]]; then
+    if [[ ! -f "$archive" ]]; then
+      local url="https://github.com/astral-sh/python-build-standalone/releases/download/${RELEASE_TAG}/${asset//+/%2B}"
+      echo "Downloading bundled Python runtime: $url" >&2
+      curl -fL --retry 3 -o "$archive" "$url"
+    fi
+
+    local actual_sha
+    actual_sha="$(shasum -a 256 "$archive" | awk '{print $1}')"
+    if [[ "$actual_sha" != "$expected_sha" ]]; then
+      echo "Checksum mismatch for $asset" >&2
+      echo "Expected $expected_sha" >&2
+      echo "Actual   $actual_sha" >&2
+      exit 1
+    fi
+
+    rm -rf "$extract_dir"
+    mkdir -p "$extract_dir"
+    tar -xzf "$archive" -C "$extract_dir"
   fi
 
-  ACTUAL_SHA="$(shasum -a 256 "$ARCHIVE" | awk '{print $1}')"
-  if [[ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]]; then
-    echo "Checksum mismatch for $ASSET" >&2
-    echo "Expected $EXPECTED_SHA" >&2
-    echo "Actual   $ACTUAL_SHA" >&2
+  if [[ ! -x "$runtime_src/bin/python3" ]]; then
+    echo "Bundled Python runtime is missing: $runtime_src/bin/python3" >&2
     exit 1
   fi
+  printf '%s\n' "$runtime_src"
+}
 
-  rm -rf "$EXTRACT_DIR"
-  mkdir -p "$EXTRACT_DIR"
-  tar -xzf "$ARCHIVE" -C "$EXTRACT_DIR"
-fi
-
-if [[ ! -x "$RUNTIME_SRC/bin/python3" ]]; then
-  echo "Bundled Python runtime is missing: $RUNTIME_SRC/bin/python3" >&2
-  exit 1
-fi
+RUNTIME_SRCS=()
+for arch in "${BUNDLE_ARCHS[@]}"; do
+  RUNTIME_SRCS+=("$(fetch_runtime "$arch")")
+done
 
 rm -rf "$RESOURCES_DIR/python"
-ditto "$RUNTIME_SRC" "$RESOURCES_DIR/python"
+ditto "${RUNTIME_SRCS[0]}" "$RESOURCES_DIR/python"
+
+# Merge every Mach-O file (interpreter, libpython, extension modules) into a
+# fat binary. lipo invalidates the existing signatures, so re-sign ad hoc;
+# Apple Silicon refuses to run unsigned code.
+if [[ ${#RUNTIME_SRCS[@]} -gt 1 ]]; then
+  while IFS= read -r -d '' file; do
+    lipo -archs "$file" >/dev/null 2>&1 || continue
+    rel="${file#"$RESOURCES_DIR/python/"}"
+    slices=()
+    for src in "${RUNTIME_SRCS[@]}"; do
+      if [[ ! -f "$src/$rel" ]]; then
+        echo "Python runtimes differ; $rel is missing from $src" >&2
+        exit 1
+      fi
+      slices+=("$src/$rel")
+    done
+    lipo -create "${slices[@]}" -output "$file.universal"
+    mv "$file.universal" "$file"
+    if [[ "$(file -b "$file")" != *"ar archive"* ]]; then
+      codesign --force --sign - "$file" >/dev/null 2>&1 || true
+    fi
+  done < <(find "$RESOURCES_DIR/python" -type f -print0)
+fi
 
 if [[ -n "$CHIRP_SOURCE" ]]; then
   CHIRP_ROOT="$CHIRP_SOURCE"
