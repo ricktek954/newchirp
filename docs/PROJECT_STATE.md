@@ -8,9 +8,11 @@ release requirements.
 
 ## Resume here
 
+- The Linux `1.0.17` release is built, uploaded, and live as DEB, RPM, and
+  AppImage. It includes the FT-60 manual-read timing fix.
 - The macOS `1.0.18` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes the FT-60 manual-read timing fix.
-- GitHub HEAD is the macOS `1.0.18` release-source commit.
+  and live.
+- GitHub HEAD is the Windows `1.0.17` release-source commit.
 - No build, upload, or deployment is currently in progress.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
@@ -22,13 +24,13 @@ release requirements.
 
 ## Repository state
 
-- Local path: `/Volumes/RICKEXT/desktop/newchirp`
+- Local path on the Linux build host: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Latest release commit fetched from GitHub: `c26a9f1`
-  (`Release macOS 1.0.18`)
-- Previous source commit: `2d7e1aa` (`Fix FT-60 manual read timing`)
+- Latest release commit fetched from GitHub: `8964214`
+  (`Release Windows 1.0.17`)
+- Previous source commit: `8802cd2` (`Record macOS 1.0.18 release`)
 - Open pull requests: none
-- Checked-out source version: `1.0.18+18`
+- Checked-out source version: `1.0.17+17`
 - Intended untracked file: `tshirt - i chirp often.png`
   - This is a user asset, not application source.
   - Do not commit or delete it unless explicitly requested.
@@ -41,9 +43,9 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.18 |
-| Windows | 1.0.16 |
-| Linux | 1.0.13 |
-| Legacy shared manifest version | 1.0.13 |
+| Windows | 1.0.17 |
+| Linux | 1.0.17 |
+| Legacy shared manifest version | 1.0.17 |
 
 macOS artifact:
 
@@ -55,6 +57,24 @@ macOS artifact:
 - Notarization submission: `50b1cef6-dd9a-4896-9bc1-74aa773b725a`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
+
+Linux artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.17.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.17.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.17.AppImage`
+- DEB metadata: `newchirp` `1.0.17-1` `amd64`
+- RPM metadata: `newchirp` `1.0.17-1` `x86_64`
+- SHA-256:
+  - DEB:
+    `0d2a770a77c92b6c4631a62bf0314cb2098a53bc37ded1d6daec458c8b69e77f`
+  - RPM:
+    `10aaf78b534a41d2c5f562dcc5e92b12d3629f3482e9d40b914e3a08fad98690`
+  - AppImage:
+    `f575d8820a138061b5aec91afabb70fa803b2545745328e2f5772805c19b1b63`
 
 ## Recently completed
 
@@ -90,12 +110,25 @@ Full verification before the macOS `1.0.18` release:
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
 - Server SHA-256 matched the final stapled DMG
 
+## Linux 1.0.17 verification status
+
+Full verification before the Linux `1.0.17` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 70 tests passed
+- `python3 test/chirp_bridge_upload_test.py -v`: all 6 tests passed
+- `flutter build linux --release`: succeeded
+- `scripts/bundle_linux_runtime.sh`: succeeded
+- `scripts/build_linux_deb.sh`: built
+  `build/NewChirp-linux-x64-1.0.17.deb`
+- Server packaging built and published DEB, RPM, and AppImage artifacts
+- Public download URLs returned HTTP 200
+- `/api/releases/latest` reports Linux `1.0.17`
+
 ## Known limitations and follow-ups
 
-- The published Windows `1.0.16` installer predates the FT-60 manual-read
-  timing fix. The fix waits to tell the user to hold PTT until after the
-  serial port is open. Confirm the read sequence on a physical FT-60 before
-  building the next Windows release.
+- Confirm the FT-60 manual-read sequence on physical hardware. The fix waits
+  to tell the user to hold PTT until after the serial port is open.
 - TK-880 multi-zone support still needs a report from a physical five-zone
   radio. The automated test uses CHIRP's `Kenwood_TK-880.img`.
 - TD-H3 upload uses a protocol-level fake serial test. Physical hardware
