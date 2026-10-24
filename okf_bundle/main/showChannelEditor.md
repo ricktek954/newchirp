@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T17:59:44Z"
+timestamp: "2026-10-24T18:03:09Z"
 concept_id: main/showChannelEditor
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_showChannelEditor_showChannelEditor
 ```
 
 ## Source
-Lines 2259–2259 in `main.dart`
+Lines 2269–2269 in `main.dart`
 
 ## Relationships
 

@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:services"
   - "domain:update_checker.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-23T19:03:53Z"
+timestamp: "2026-10-24T18:03:09Z"
 concept_id: services/update_checker
 language: dart
 ---
@@ -29,6 +29,8 @@ language: dart
 | related | [_currentPlatformKey](/services/update_checker/currentPlatformKey.md) |
 | related | [compareVersions](/services/update_checker/compareVersions.md) |
 | related | [_versionParts](/services/update_checker/versionParts.md) |
+| related | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) |
+| related | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) |
 | related | [openExternalUrl](/services/update_checker/openExternalUrl.md) |
 | related | [toString](/services/update_checker/toString.md) |
 | related | [UpdateCheckException](/services/update_checker/UpdateCheckException.md) |

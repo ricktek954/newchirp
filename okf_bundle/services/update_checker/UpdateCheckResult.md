@@ -9,9 +9,9 @@ tags:
   - "type:Class"
   - "module:services"
   - "domain:update_checker.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-23T19:03:53Z"
+timestamp: "2026-10-24T18:03:09Z"
 concept_id: services/update_checker/UpdateCheckResult
 language: dart
 ---
