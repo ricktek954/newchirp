@@ -58,14 +58,7 @@ jobs:
           flutter test test/update_checker_test.dart
           flutter build macos --release
           APP="build/macos/Build/Products/Release/NewChirp.app"
-          if ! CHIRP_ROOT="$(bash scripts/update_chirp.sh)"; then
-            CHIRP_ROOT="$PWD/build_support/chirp-master"
-            rm -rf "$CHIRP_ROOT"
-            mkdir -p "$CHIRP_ROOT"
-            curl -fL --retry 3 \
-              https://codeload.github.com/kk7ds/chirp/tar.gz/refs/heads/master \
-              | tar -xz -C "$CHIRP_ROOT" --strip-components=1
-          fi
+          CHIRP_ROOT="$(bash scripts/update_chirp.sh)"
           bash scripts/bundle_macos_runtime.sh \
             --resources-dir "$APP/Contents/Resources" \
             --chirp-source "$CHIRP_ROOT"
@@ -105,14 +98,7 @@ jobs:
           flutter test test/update_checker_test.dart
           flutter build linux --release
           BUNDLE="build/linux/x64/release/bundle"
-          if ! CHIRP_ROOT="$(bash scripts/update_chirp.sh)"; then
-            CHIRP_ROOT="$PWD/build_support/chirp-master"
-            rm -rf "$CHIRP_ROOT"
-            mkdir -p "$CHIRP_ROOT"
-            curl -fL --retry 3 \
-              https://codeload.github.com/kk7ds/chirp/tar.gz/refs/heads/master \
-              | tar -xz -C "$CHIRP_ROOT" --strip-components=1
-          fi
+          CHIRP_ROOT="$(bash scripts/update_chirp.sh)"
           bash scripts/bundle_linux_runtime.sh \
             --bundle-dir "$BUNDLE" \
             --chirp-source "$CHIRP_ROOT"

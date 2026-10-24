@@ -276,9 +276,8 @@ catalog packages these files into `AppIcon.icns` during the macOS build.
 - The macOS build bundles a private Python 3.13 runtime and the CHIRP driver
   tree, so users do not need to install Python or keep a CHIRP source folder.
 - No user-installed Python packages are required because pySerial is bundled.
-- Builds check the latest CHIRP-next build and fetch the newest master source
-  into `build_support` automatically. `CHIRP_SOURCE` still overrides the source
-  explicitly, and `NEWCHIRP_AUTO_UPDATE_CHIRP=0` disables the auto-update.
+- Builds download the CHIRP commit in `scripts/chirp-source.pin` and check its
+  sha256 before unpacking. `CHIRP_SOURCE` still overrides the source explicitly.
 - CHIRP GUI dependencies such as wxPython are not used.
 - CHIRP GUI dependencies such as wxPython are not used.
 
@@ -453,7 +452,7 @@ If work resumes with no conversation history:
 
 1. Read this file and `README.md`.
 2. Run `flutter analyze` and `flutter test` before editing.
-3. Run `scripts/update_chirp.sh` to fetch the latest CHIRP source, or set
+3. Run `scripts/update_chirp.sh` to fetch the pinned CHIRP source, or set
    `CHIRP_SOURCE` to use a specific tree.
 4. Never test **Write to radio** without first reading the same model and
    understanding the current deletion/cancellation limitations.

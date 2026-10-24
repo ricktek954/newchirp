@@ -103,30 +103,7 @@ esac
 if [[ -n "$CHIRP_SOURCE" ]]; then
   CHIRP_ROOT="$CHIRP_SOURCE"
 else
-  CHIRP_ROOT=""
-  if [[ "${NEWCHIRP_AUTO_UPDATE_CHIRP:-1}" != "0" ]]; then
-    if UPDATED_CHIRP="$(NEWCHIRP_PYTHON="${NEWCHIRP_PYTHON:-python3}" bash "$SCRIPT_DIR/update_chirp.sh" 2>/dev/null)"; then
-      CHIRP_ROOT="$UPDATED_CHIRP"
-    fi
-  fi
-  if [[ -z "$CHIRP_ROOT" ]]; then
-    CHIRP_VERSION=""
-    if [[ -s "$BUILD_SUPPORT_DIR/chirp-version.txt" ]]; then
-      CHIRP_VERSION="$(tr -d '[:space:]' < "$BUILD_SUPPORT_DIR/chirp-version.txt")"
-    fi
-    if [[ -n "$CHIRP_VERSION" && -d "$BUILD_SUPPORT_DIR/chirp-$CHIRP_VERSION/chirp" ]]; then
-      CHIRP_ROOT="$BUILD_SUPPORT_DIR/chirp-$CHIRP_VERSION"
-      echo "warning: Could not check for a newer CHIRP build; using cached next-$CHIRP_VERSION." >&2
-    elif [[ -d "$BUILD_SUPPORT_DIR/chirp-master/chirp" ]]; then
-      CHIRP_ROOT="$BUILD_SUPPORT_DIR/chirp-master"
-      echo "warning: No versioned CHIRP snapshot is available; using cached chirp-master." >&2
-    elif [[ -d "$PROJECT_DIR/../chirp-20260626/chirp" ]]; then
-      CHIRP_ROOT="$PROJECT_DIR/../chirp-20260626"
-    else
-      echo "CHIRP source not found. Set CHIRP_SOURCE or run scripts/update_chirp.sh." >&2
-      exit 1
-    fi
-  fi
+  CHIRP_ROOT="$(NEWCHIRP_PYTHON="${NEWCHIRP_PYTHON:-python3}" bash "$SCRIPT_DIR/update_chirp.sh")"
 fi
 
 CHIRP_PACKAGE="$CHIRP_ROOT/chirp"
