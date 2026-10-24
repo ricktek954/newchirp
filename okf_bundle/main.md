@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Module"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:24:36Z"
+timestamp: "2026-10-24T18:40:52Z"
 concept_id: main
 language: dart
 ---
@@ -103,6 +103,8 @@ language: dart
 | related | [_actionErrorPresentation](/main/actionErrorPresentation.md) |
 | related | [_showActionError](/main/showActionError.md) |
 | related | [_openLibraryFile](/main/openLibraryFile.md) |
+| related | [_loadChirpModule](/main/loadChirpModule.md) |
+| related | [_unloadChirpModule](/main/unloadChirpModule.md) |
 | related | [_importChirpImage](/main/importChirpImage.md) |
 | related | [_chooseChannelApplyMode](/main/chooseChannelApplyMode.md) |
 | related | [_applyChannels](/main/applyChannels.md) |

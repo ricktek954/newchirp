@@ -160,6 +160,7 @@ void main() {
 
     await tester.tap(find.text('Help'));
     await tester.pumpAndSettle();
+    expect(find.text('Load CHIRP driver module…'), findsOneWidget);
     await tester.tap(find.text('Check for updates'));
     await tester.pumpAndSettle();
 

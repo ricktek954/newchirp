@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T14:39:22Z"
+timestamp: "2026-10-24T18:37:52Z"
 concept_id: chirp_bridge/status_progress
 language: python
 ---
@@ -40,7 +40,7 @@ Translate a CHIRP Status message into a structured progress event.
 | `end` | `—` | `1.0` |
 
 ## Source
-Lines 35–52 in `chirp_bridge.py`
+Lines 36–53 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -19,6 +19,7 @@ implementation history, architecture, known risks, and prioritized next work.
 - 22-channel GMRS starter library
 - USB serial-port discovery
 - CHIRP radio-model catalog and guarded read/write workflow
+- Session-scoped loading of experimental CHIRP `.py` and `.mod` driver modules
 - Reusable per-model radio images after the first read
 - Multi-zone channel selection for radios that expose CHIRP subdevices
 - Radio-aware channel slot allocation within each model's memory range
@@ -90,6 +91,18 @@ Use **Open file** to load either a CHIRP-compatible CSV or a native CHIRP image
 such as `.img`, `.icf`, `.itm`, or `.d72`. Native images use CHIRP model
 detection, retain the original image for radio transfer, and unlock upload when
 the detected model is selected.
+
+### Experimental CHIRP modules
+
+**Help > Load CHIRP driver module…** loads a trusted CHIRP `.py` or `.mod`
+module for the current NewChirp session and refreshes the radio catalog. Modules
+can replace built-in drivers or add experimental driver classes.
+
+CHIRP modules are executable Python code and are not sandboxed. Loading an
+untrusted or incompatible module can damage the computer, a radio, or both.
+Only load modules from a source you trust. NewChirp does not automatically
+download, remember, or reload modules after the app closes. This feature loads
+desktop CHIRP drivers; it does not flash or install radio firmware.
 
 ## Verify and build
 

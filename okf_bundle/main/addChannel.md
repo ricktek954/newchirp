@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:24:36Z"
+timestamp: "2026-10-24T18:40:52Z"
 concept_id: main/addChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ void_addChannel()
 ```
 
 ## Source
-Lines 1334–1334 in `main.dart`
+Lines 1430–1430 in `main.dart`
 
 ## Relationships
 

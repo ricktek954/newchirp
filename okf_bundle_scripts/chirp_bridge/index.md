@@ -2,6 +2,7 @@
 
 ## Functions
 
+- [_load_module](load_module.md)
 - [apply_json](apply_json.md)
 - [apply_setting_changes](apply_setting_changes.md)
 - [channel_context](channel_context.md) — Return the selected channel owner plus available radio zones.

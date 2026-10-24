@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T14:51:17Z"
+timestamp: "2026-10-24T18:37:55Z"
 concept_id: services/radio_bridge/parseWindowsSerialPortDetails
 language: dart
 ---
@@ -24,7 +24,7 @@ ListparseWindowsSerialPortDetailsparseWindowsSerialPortDetails
 ```
 
 ## Source
-Lines 338–341 in `services/radio_bridge.dart`
+Lines 340–343 in `services/radio_bridge.dart`
 
 ## Relationships
 

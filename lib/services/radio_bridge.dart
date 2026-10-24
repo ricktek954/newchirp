@@ -256,10 +256,12 @@ class RadioBridge {
   RadioBridge({this.sourcePath, this.newDriversPath});
   final String? sourcePath;
   final String? newDriversPath;
+  String? _loadedModulePath;
   Process? _activeProcess;
   bool _cancelRequested = false;
 
   String get chirpSource => _findChirpSource();
+  String? get loadedModulePath => _loadedModulePath;
 
   bool cancelActive() {
     _cancelRequested = true;
@@ -392,6 +394,30 @@ class RadioBridge {
   Future<List<String>> models() async {
     final data = await _run(['list-models']);
     return (data['models'] as List).cast<String>();
+  }
+
+  Future<List<String>> loadModule(String path) async {
+    final extension = path.toLowerCase();
+    if (!extension.endsWith('.py') && !extension.endsWith('.mod')) {
+      throw RadioBridgeException(
+        'CHIRP modules must be Python .py files or .mod files.',
+      );
+    }
+    if (!File(path).existsSync()) {
+      throw RadioBridgeException('The selected CHIRP module was not found.');
+    }
+    final previous = _loadedModulePath;
+    _loadedModulePath = path;
+    try {
+      return await models();
+    } catch (_) {
+      _loadedModulePath = previous;
+      rethrow;
+    }
+  }
+
+  void unloadModule() {
+    _loadedModulePath = null;
   }
 
   Future<RadioInstructions> instructions(String model) async {
@@ -613,6 +639,7 @@ class RadioBridge {
         '--vendor',
         vendor,
         if (newDrivers != null) ...['--newchirp-driver-dir', newDrivers],
+        if (_loadedModulePath != null) ...['--module', _loadedModulePath!],
         ...args,
       ]);
     } on ProcessException catch (error) {

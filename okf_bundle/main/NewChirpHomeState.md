@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:24:36Z"
+timestamp: "2026-10-24T18:40:52Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -48,6 +48,8 @@ class _NewChirpHomeState
 - `_actionErrorPresentation`
 - `_showActionError`
 - `_openLibraryFile`
+- `_loadChirpModule`
+- `_unloadChirpModule`
 - `_importChirpImage`
 - `_chooseChannelApplyMode`
 - `_applyChannels`
@@ -111,7 +113,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 285–3920 in `main.dart`
+Lines 285–4053 in `main.dart`
 
 ## Relationships
 

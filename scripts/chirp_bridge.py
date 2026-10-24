@@ -3,6 +3,7 @@
 import argparse
 import builtins
 import glob
+import importlib.machinery
 import importlib.util
 import json
 import os
@@ -52,7 +53,36 @@ def status_progress(status, start=0.0, end=1.0):
         emit_progress(label, start + (end - start) * raw)
 
 
-def load_chirp(source, vendor, newchirp_driver_dir=None):
+def _load_module(module_path, directory):
+    if not os.path.isfile(module_path):
+        raise RuntimeError(
+            "CHIRP module file was not found: %s" % module_path
+        )
+    directory.enable_reregistrations()
+    module_name = "newchirp.loaded.%s" % os.path.splitext(
+        os.path.basename(module_path)
+    )[0]
+    loader = importlib.machinery.SourceFileLoader(module_name, module_path)
+    spec = importlib.util.spec_from_file_location(
+        module_name, module_path, loader=loader
+    )
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Invalid or unsupported CHIRP module file")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    try:
+        spec.loader.exec_module(module)
+    except Exception as exc:
+        sys.modules.pop(module_name, None)
+        raise RuntimeError(
+            "Could not load CHIRP module %s: %s"
+            % (os.path.basename(module_path), exc)
+        ) from exc
+
+
+def load_chirp(
+    source, vendor, newchirp_driver_dir=None, module_path=None
+):
     # pyserial is shipped as a pure-Python wheel inside NewChirp. Python can
     # import it directly without pip or a user-level installation.
     sys.path.insert(0, vendor)
@@ -69,6 +99,8 @@ def load_chirp(source, vendor, newchirp_driver_dir=None):
         ) from exc
     from chirp import directory
     directory.import_drivers()
+    if module_path:
+        _load_module(os.path.abspath(module_path), directory)
     if newchirp_driver_dir and os.path.isdir(newchirp_driver_dir):
         for driver_path in sorted(
             glob.glob(os.path.join(newchirp_driver_dir, "*.py"))
@@ -505,6 +537,10 @@ def main():
     parser.add_argument("--source", required=True)
     parser.add_argument("--vendor", required=True)
     parser.add_argument("--newchirp-driver-dir")
+    parser.add_argument(
+        "--module",
+        help="Load a session-scoped CHIRP .py or .mod module",
+    )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("list-models")
     model_info = sub.add_parser("model-info")
@@ -535,7 +571,10 @@ def main():
     args = parser.parse_args()
     try:
         directory = load_chirp(
-            args.source, args.vendor, args.newchirp_driver_dir
+            args.source,
+            args.vendor,
+            args.newchirp_driver_dir,
+            args.module,
         )
         if args.command == "list-models":
             print(json.dumps({"models": sorted(directory.DRV_TO_RADIO.keys())}))

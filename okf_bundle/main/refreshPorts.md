@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:24:36Z"
+timestamp: "2026-10-24T18:40:52Z"
 concept_id: main/refreshPorts
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_refreshPorts_refreshPorts
 ```
 
 ## Source
-Lines 578–578 in `main.dart`
+Lines 579–579 in `main.dart`
 
 ## Relationships
 

@@ -310,6 +310,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   String? _port;
   String? _model;
   String? _radioImage;
+  String? _chirpModuleName;
   RadioCapabilities? _capabilities;
   List<RadioZone> _radioZones = [];
   int? _selectedZone;
@@ -803,6 +804,101 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ),
         libraryPath: file.path,
       );
+    });
+  }
+
+  Future<void> _loadChirpModule() async {
+    const type = XTypeGroup(
+      label: 'CHIRP driver modules',
+      extensions: ['py', 'mod'],
+    );
+    final file = await openFile(acceptedTypeGroups: const [type]);
+    if (file == null || !mounted) return;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Load experimental CHIRP module?'),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: const Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'CHIRP modules are executable Python code. A malicious or '
+                'incompatible module could damage your computer, radio, or '
+                'both.',
+              ),
+              SizedBox(height: 12),
+              Text(
+                'Only load modules from a source you trust. NewChirp cannot '
+                'verify that a module is safe. The module remains active only '
+                'for this NewChirp session. Select the radio model and read '
+                'the radio again before writing.',
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: const Color(0xFF9B3D2E),
+            ),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Load module'),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+
+    await _task('Loading ${file.name}…', () async {
+      final models = await _bridge.loadModule(file.path);
+      if (!mounted) return;
+      setState(() {
+        _chirpModuleName = file.name;
+        _models = models;
+        _model = null;
+        _capabilities = null;
+        _radioZones = [];
+        _selectedZone = null;
+        _radioImage = null;
+        _radioSettings = null;
+        _settingsDirty = false;
+        _settingsLoadedFromRadio = false;
+        _settingsLoadedModel = null;
+        _settingsLoadedImage = null;
+        _settingsError = null;
+      });
+      await _saveRadioSelection();
+    });
+  }
+
+  Future<void> _unloadChirpModule() async {
+    _bridge.unloadModule();
+    await _task('Refreshing radio catalog…', () async {
+      final models = await _bridge.models();
+      if (!mounted) return;
+      setState(() {
+        _chirpModuleName = null;
+        _models = models;
+        _model = null;
+        _capabilities = null;
+        _radioZones = [];
+        _selectedZone = null;
+        _radioImage = null;
+        _radioSettings = null;
+        _settingsDirty = false;
+        _settingsLoadedFromRadio = false;
+        _settingsLoadedModel = null;
+        _settingsLoadedImage = null;
+        _settingsError = null;
+      });
+      await _saveRadioSelection();
     });
   }
 
@@ -1874,8 +1970,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             dirty: _dirty,
                             busy: _busy,
                             status: _status,
+                            chirpModuleName: _chirpModuleName,
                             checkingForUpdates: _checkingForUpdates,
                             onCheckForUpdates: () => _checkForUpdates(),
+                            onLoadChirpModule: _loadChirpModule,
+                            onUnloadChirpModule: _unloadChirpModule,
                             onNew: _newLibrary,
                             onGmrsStarter: _useGmrsStarter,
                             onRestoreStock: _restoreStockChannels,
@@ -3651,6 +3750,40 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
               ),
               const SizedBox(height: 20),
+              if (_chirpModuleName != null) ...[
+                Container(
+                  padding: const EdgeInsets.fromLTRB(14, 10, 10, 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF4E5),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFFE9BE84)),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.extension_outlined,
+                        color: Color(0xFF9B5B18),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Experimental CHIRP module loaded: '
+                          '$_chirpModuleName',
+                          style: const TextStyle(
+                            color: Color(0xFF73420F),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _busy ? null : _unloadChirpModule,
+                        child: const Text('Unload'),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+              ],
               Card(
                 child: Padding(
                   padding: const EdgeInsets.all(22),
@@ -4515,8 +4648,11 @@ class _TopBar extends StatelessWidget {
     required this.dirty,
     required this.busy,
     required this.status,
+    required this.chirpModuleName,
     required this.checkingForUpdates,
     required this.onCheckForUpdates,
+    required this.onLoadChirpModule,
+    required this.onUnloadChirpModule,
     required this.onNew,
     required this.onGmrsStarter,
     required this.onRestoreStock,
@@ -4534,8 +4670,11 @@ class _TopBar extends StatelessWidget {
   final bool dirty;
   final bool busy;
   final String status;
+  final String? chirpModuleName;
   final bool checkingForUpdates;
   final VoidCallback onCheckForUpdates;
+  final VoidCallback onLoadChirpModule;
+  final VoidCallback onUnloadChirpModule;
   final VoidCallback onNew;
   final VoidCallback onGmrsStarter;
   final VoidCallback onRestoreStock;
@@ -4631,11 +4770,19 @@ class _TopBar extends StatelessWidget {
                   ],
                 ),
                 Text(
-                  busy ? status : 'CHIRP-compatible channel library',
+                  busy
+                      ? status
+                      : chirpModuleName == null
+                      ? 'CHIRP-compatible channel library'
+                      : 'Experimental CHIRP module: $chirpModuleName',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: busy ? const Color(0xFF1F7455) : Colors.black45,
+                    color: busy
+                        ? const Color(0xFF1F7455)
+                        : chirpModuleName != null
+                        ? const Color(0xFF9B5B18)
+                        : Colors.black45,
                     fontSize: 12,
                   ),
                 ),
@@ -4714,6 +4861,19 @@ class _TopBar extends StatelessWidget {
           leadingIcon: const Icon(Icons.menu_book_outlined),
           child: const Text('Abbreviations & terms'),
         ),
+        const Divider(height: 1),
+        MenuItemButton(
+          onPressed: busy ? null : onLoadChirpModule,
+          leadingIcon: const Icon(Icons.extension_outlined),
+          child: const Text('Load CHIRP driver module…'),
+        ),
+        if (chirpModuleName != null)
+          MenuItemButton(
+            onPressed: busy ? null : onUnloadChirpModule,
+            leadingIcon: const Icon(Icons.extension_off_outlined),
+            child: const Text('Unload CHIRP module'),
+          ),
+        const Divider(height: 1),
         MenuItemButton(
           onPressed: checkingForUpdates ? null : onCheckForUpdates,
           leadingIcon: checkingForUpdates

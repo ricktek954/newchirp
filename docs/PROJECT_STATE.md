@@ -11,6 +11,8 @@ release requirements.
 - The macOS `1.0.16` release is built, signed, notarized, uploaded, and live.
 - GitHub also contains the independently published Linux `1.0.12` release
   commit.
+- Main contains unreleased session-scoped CHIRP module loading for `.py` and
+  `.mod` files; no release artifact for this change has been built.
 - No source change, build, upload, or deployment is currently in progress.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
@@ -77,6 +79,10 @@ macOS artifact:
 - Searchable abbreviation glossary and channel-header tooltips.
 - Update downloads are restricted to exact HTTPS URLs on `newchirp.net`.
 - Bundled Linux and Windows Python runtime hashes are pinned in build scripts.
+- CHIRP `.py` and `.mod` driver modules can be loaded from
+  **Help > Load CHIRP driver module…** for the current session.
+- Loaded modules can add or override radio drivers; the radio catalog refreshes
+  after loading and unloading.
 
 ## macOS 1.0.16 verification status
 
@@ -86,6 +92,12 @@ Last full verification before the macOS `1.0.16` release:
 - `flutter test`: all 66 tests passed
 - `python3 test/chirp_bridge_upload_test.py -v`: all 4 tests passed
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+
+Unreleased module-loading verification:
+
+- `flutter analyze`: clean
+- `flutter test`: all 70 tests passed
+- `python3 test/chirp_bridge_upload_test.py -v`: all 4 tests passed
 
 ## Known limitations and follow-ups
 
@@ -98,6 +110,9 @@ Last full verification before the macOS `1.0.16` release:
   selector appear to offer only `88.5`.
 - CHIRP drivers can expose additional subdevice types beyond the zones handled
   for the TK-880.
+- CHIRP modules execute arbitrary Python without sandboxing. Only trusted
+  modules should be loaded, and modules requiring packages not bundled with
+  NewChirp may fail to import.
 - Forum like counts and website-side ranking are a separate website project,
   not part of this Flutter repository.
 - The roadmap in `docs/SOFTWARE_ROADMAP.md` is older than this handoff and

@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T14:51:17Z"
+timestamp: "2026-10-24T18:37:55Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -44,6 +44,8 @@ language: dart
 | related | [parseWindowsSerialPortDetails](/services/radio_bridge/parseWindowsSerialPortDetails.md) |
 | related | [_parseComPorts](/services/radio_bridge/parseComPorts.md) |
 | related | [models](/services/radio_bridge/models.md) |
+| related | [loadModule](/services/radio_bridge/loadModule.md) |
+| related | [unloadModule](/services/radio_bridge/unloadModule.md) |
 | related | [instructions](/services/radio_bridge/instructions.md) |
 | related | [readImage](/services/radio_bridge/readImage.md) |
 | related | [imageInfo](/services/radio_bridge/imageInfo.md) |

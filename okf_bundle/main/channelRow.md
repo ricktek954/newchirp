@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:24:36Z"
+timestamp: "2026-10-24T18:40:52Z"
 concept_id: main/channelRow
 language: dart
 ---
@@ -28,7 +28,7 @@ Widget_channelRow(
 ```
 
 ## Source
-Lines 5481–5486 in `main.dart`
+Lines 5641–5646 in `main.dart`
 
 ## Relationships
 
