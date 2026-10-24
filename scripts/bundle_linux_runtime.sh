@@ -4,6 +4,21 @@ set -euo pipefail
 RELEASE_TAG="20260807"
 PYTHON_VERSION="3.13.15"
 
+# Fingerprints for the 20260807 install_only_stripped builds.
+python_runtime_sha256() {
+  case "$1" in
+    x86_64-unknown-linux-gnu)
+      printf '%s\n' 'faae10a9faa9bec06da009ac69326cc1d9691dc138fec6a1b69159dff1781f35'
+      ;;
+    aarch64-unknown-linux-gnu)
+      printf '%s\n' '1dfc9565c26f8892a33202b5966bdf9ff45c56a57b06e8fa65fecf05030afe5b'
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 BUILD_SUPPORT_DIR="${NEWCHIRP_BUILD_SUPPORT_DIR:-$PROJECT_DIR/build_support}"
@@ -64,6 +79,18 @@ if [[ ! -x "$RUNTIME_SRC/bin/python3" ]]; then
     URL="https://github.com/astral-sh/python-build-standalone/releases/download/${RELEASE_TAG}/${ASSET//+/%2B}"
     echo "Downloading bundled Python runtime: $URL" >&2
     curl -fL --retry 3 -o "$ARCHIVE" "$URL"
+  fi
+  EXPECTED_SHA="$(python_runtime_sha256 "$LINUX_ARCH")" || {
+    echo "No saved Python fingerprint for $ASSET" >&2
+    exit 1
+  }
+  ACTUAL_SHA="$(sha256sum "$ARCHIVE" | awk '{print $1}')"
+  if [[ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]]; then
+    echo "Checksum mismatch for $ASSET" >&2
+    echo "Expected $EXPECTED_SHA" >&2
+    echo "Actual   $ACTUAL_SHA" >&2
+    rm -f "$ARCHIVE"
+    exit 1
   fi
   rm -rf "$EXTRACT_DIR"
   mkdir -p "$EXTRACT_DIR"

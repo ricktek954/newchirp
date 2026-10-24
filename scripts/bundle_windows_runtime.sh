@@ -4,6 +4,21 @@ set -euo pipefail
 RELEASE_TAG="20260807"
 PYTHON_VERSION="3.13.15"
 
+# Fingerprints for the 20260807 install_only_stripped builds.
+python_runtime_sha256() {
+  case "$1" in
+    x86_64)
+      printf '%s\n' '44bf9ae71f4b45e3ba3104ae331c6eff3f7002593c26fd12453eb9310c4f259a'
+      ;;
+    aarch64)
+      printf '%s\n' 'aa90bcd4eccbec2753cd6e134d7a0477b23f2f972d83c7894e507bbc874c4fef'
+      ;;
+    *)
+      return 1
+      ;;
+  esac
+}
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 BUILD_SUPPORT_DIR="${NEWCHIRP_BUILD_SUPPORT_DIR:-$PROJECT_DIR/build_support}"
@@ -79,21 +94,16 @@ if [[ ! -f "$RUNTIME_SRC/python.exe" ]]; then
     curl -fL --retry 3 -o "$ARCHIVE" "$URL"
   fi
 
-  SHA_FILE="$CACHE_DIR/SHA256SUMS-$RELEASE_TAG"
-  if [[ ! -f "$SHA_FILE" ]]; then
-    curl -fL --retry 3 -o "$SHA_FILE" \
-      "https://github.com/astral-sh/python-build-standalone/releases/download/${RELEASE_TAG}/SHA256SUMS"
-  fi
-  EXPECTED_SHA="$(awk -v name="$ASSET" '{f=$2; sub(/^\*/,"",f); if (f==name) print $1}' "$SHA_FILE" | head -1)"
-  if [[ -z "$EXPECTED_SHA" ]]; then
-    echo "Checksum entry not found for $ASSET in the release manifest." >&2
+  EXPECTED_SHA="$(python_runtime_sha256 "$PY_ARCH")" || {
+    echo "No saved Python fingerprint for $ASSET" >&2
     exit 1
-  fi
+  }
   ACTUAL_SHA="$(sha256sum "$ARCHIVE" | awk '{print $1}')"
   if [[ "$ACTUAL_SHA" != "$EXPECTED_SHA" ]]; then
     echo "Checksum mismatch for $ASSET" >&2
     echo "Expected $EXPECTED_SHA" >&2
     echo "Actual   $ACTUAL_SHA" >&2
+    rm -f "$ARCHIVE"
     exit 1
   fi
 
