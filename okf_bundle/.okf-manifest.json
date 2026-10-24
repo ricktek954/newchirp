@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
+  "source_root": "/home/rlopez/newchirp.net/lib",
   "files": {
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1792779541396339291,
+      "mtime_ns": 1792783739458138055,
       "hash": "1b5abdf776a3bd0f585c6a9d68670357136522e78ec2c8ae4c2635c3f9b7050a",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
@@ -21,7 +21,7 @@
     },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
-      "mtime_ns": 1787526889853586163,
+      "mtime_ns": 1791109641575079505,
       "hash": "1d0d2204b57a9fe4753793712ec972cdd40ba6099dca82b4b249a2165a80806f",
       "concept_ids": [
         "services/chirp_csv/ChirpCsv",
@@ -38,7 +38,7 @@
     },
     "services/column_layout_store.dart": {
       "path": "services/column_layout_store.dart",
-      "mtime_ns": 1787526889853744664,
+      "mtime_ns": 1791109641575292000,
       "hash": "3cbc77b232410ab3567a72cdc0fc28a7edd906c0dc0c62cf73150e5e3172f566",
       "concept_ids": [
         "services/column_layout_store/ColumnLayout",
@@ -51,7 +51,7 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1792853477590679209,
+      "mtime_ns": 1792853547146169908,
       "hash": "7c8584f42f47ff812bd55c0da1fb522a36b5aab7bee6a92739a674ca9f98c739",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
@@ -94,7 +94,7 @@
     },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
-      "mtime_ns": 1787526889854147624,
+      "mtime_ns": 1791109641575292000,
       "hash": "01dbc10ad65696e5c963128028ba7d55ab035eba80b6d5da424c7127c7eb8fa7",
       "concept_ids": [
         "services/radio_image_store/RadioImageStore",
@@ -107,7 +107,7 @@
     },
     "services/radio_selection_store.dart": {
       "path": "services/radio_selection_store.dart",
-      "mtime_ns": 1787526889854243083,
+      "mtime_ns": 1791109641575292000,
       "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
       "concept_ids": [
         "services/radio_selection_store/RadioSelection",
@@ -120,7 +120,7 @@
     },
     "services/update_checker.dart": {
       "path": "services/update_checker.dart",
-      "mtime_ns": 1792864989857009305,
+      "mtime_ns": 1792866012313468111,
       "hash": "af4795e1aa63602fbb6889343b145ecf5df692f1581fee3202ed0187b9fc8bcf",
       "concept_ids": [
         "services/update_checker/PlatformRelease",
@@ -142,7 +142,7 @@
     },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
-      "mtime_ns": 1787526889854324166,
+      "mtime_ns": 1791109641575292000,
       "hash": "86c6b4a01b10d3a881e9437259adb1984e015cf75e552fdaa395c8b89c7fffb0",
       "concept_ids": [
         "services/window_state_store/WindowState",
@@ -156,8 +156,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1792866007763365567,
-      "hash": "fb06a2a62e47124f0b9746e048321385e56e2634d40f4b08b5b146672f32b67d",
+      "mtime_ns": 1792866276995660721,
+      "hash": "db96b67d2ba905c360ea8625df47e7348f53b00454b3ec52d4dad8c312a8d286",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -2220,5 +2220,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-10-24T18:20:08Z"
+  "generated_at": "2026-10-24T18:24:39Z"
 }
