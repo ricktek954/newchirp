@@ -3,6 +3,14 @@
 This repository keeps generated OKF knowledge bundles so coding agents can
 answer structural questions without re-reading large source files.
 
+## Session handoff
+
+When the user asks where work left off, asks to resume, or starts a fresh
+session without context, read `docs/PROJECT_STATE.md` in full before answering.
+Check `git status` and fetch the latest `origin/main` so the handoff is compared
+with the actual repository state. Keep any local user assets and unrelated
+changes out of commits.
+
 ## Release artifact requirements
 
 Every production installer build must contain and expose its version.
