@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:51:09Z"
+timestamp: "2026-10-24T20:43:26Z"
 concept_id: main/ChannelTableState
 language: dart
 ---
@@ -36,7 +36,7 @@ class _ChannelTableState
 - `build`
 
 ## Source
-Lines 5248–5842 in `main.dart`
+Lines 5258–5852 in `main.dart`
 
 ## Relationships
 

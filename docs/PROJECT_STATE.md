@@ -11,7 +11,8 @@ release requirements.
 - The macOS `1.0.17` release is built, signed, notarized, stapled, uploaded,
   and live. It includes session-scoped CHIRP `.py` and `.mod` module loading.
 - GitHub HEAD is the independently published Linux `1.0.13` release commit.
-- No source change, build, upload, or deployment is currently in progress.
+- An unreleased FT-60 manual-read timing fix is present in the working tree.
+- No build, upload, or deployment is currently in progress.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not
@@ -94,6 +95,10 @@ Full verification before the macOS `1.0.17` release:
 
 ## Known limitations and follow-ups
 
+- The published Windows `1.0.15` installer predates the FT-60 manual-read
+  timing fix. The fix waits to tell the user to hold PTT until after the
+  serial port is open. Confirm the read sequence on a physical FT-60 before
+  building the next Windows release.
 - TK-880 multi-zone support still needs a report from a physical five-zone
   radio. The automated test uses CHIRP's `Kenwood_TK-880.img`.
 - TD-H3 upload uses a protocol-level fake serial test. Physical hardware

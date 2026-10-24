@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:51:09Z"
+timestamp: "2026-10-24T20:43:26Z"
 concept_id: main/ChannelApplyMode
 language: dart
 ---
@@ -23,7 +23,7 @@ class _ChannelApplyMode
 ```
 
 ## Source
-Lines 4897–4902 in `main.dart`
+Lines 4907–4912 in `main.dart`
 
 ## Relationships
 

@@ -66,7 +66,9 @@ void main() {
         '6. <b>After clicking OK</b>, hold the [PTT] switch for one second.',
         'Radio is ready',
       ),
-      '6. After clicking "Radio is ready", hold the [PTT] switch for one second.',
+      '6. After clicking "Radio is ready", wait until the transfer window '
+      'says "Listening for the radio", then hold the [PTT] switch for one '
+      'second to send the image.',
     );
   });
 

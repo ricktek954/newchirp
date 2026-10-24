@@ -38,11 +38,12 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1792867072064610373,
-      "hash": "8cdcbb1144413aed09e60aa6d0de789be600a41f325d19b5bf7a02eb020f842b",
+      "mtime_ns": 1792874595353306599,
+      "hash": "faf72df8dccd0680496df00300ac6857e13e6dab94621acdfd86444c498ec2ee",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/emit_progress",
+        "chirp_bridge/bridge_error_message",
         "chirp_bridge/status_progress",
         "chirp_bridge/load_module",
         "chirp_bridge/load_chirp",
@@ -56,6 +57,7 @@
         "chirp_bridge/apply_json",
         "chirp_bridge/open_serial",
         "chirp_bridge/radio_for",
+        "chirp_bridge/emit_read_ready",
         "chirp_bridge/radio_from_image",
         "chirp_bridge/channel_context",
         "chirp_bridge/channel_radio_for",
@@ -70,7 +72,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "70863996a1992806ec8dacf0633fc467cc953bbb2deafdc5841a5bc2676eeea2",
+      "edge_hash": "0b46fc8365fde218b0bf3a6df25856b04b1bef5cd156ab374f0b3fee419df2d4",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -78,7 +80,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "6c86185ccef5982d1f5c1ca688ac610a7fdd6549a8ae12037ae1a43746b92959",
+      "edge_hash": "81b1d992a0f235f4968632de2598fe41fae21d10b4565d416c2e91070198800f",
       "enriched": false
     },
     "chirp_bridge/status_progress": {
@@ -198,7 +200,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "e85c39636cf7dfb3ae9273f027e79cc6547278ed5c2bbd251c9a3ee3acf40a3d",
+      "edge_hash": "08db171a43c7c00b03d983eae2ad11076e1b65dbfe58ab4d51b2d9b75640a480",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -376,7 +378,23 @@
       "render_hash": "stale",
       "edge_hash": "8aa8fdb1b459587776dee4b9c57cb1577d7beadf7da79a62c68c8ac6fe2df34d",
       "enriched": false
+    },
+    "chirp_bridge/emit_read_ready": {
+      "concept_id": "chirp_bridge/emit_read_ready",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "77fae6e3faea335ec3c06a0a2627d5b6078c6475162f4f2bcabed87a064425b5",
+      "enriched": false
+    },
+    "chirp_bridge/bridge_error_message": {
+      "concept_id": "chirp_bridge/bridge_error_message",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-24T18:37:52Z"
+  "generated_at": "2026-10-24T20:43:15Z"
 }

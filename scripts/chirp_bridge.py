@@ -11,6 +11,9 @@ import re
 import sys
 import tempfile
 PROGRESS_PREFIX = "__NEWCHIRP_PROGRESS__ "
+MANUAL_READ_READY_MESSAGE = (
+    "Listening for the radio - hold PTT for one second."
+)
 
 # CHIRP normally redirects stdout and stderr to ~/.chirp/debug.log when it is
 # launched without a terminal. The bridge owns those streams as its JSON/error
@@ -31,6 +34,22 @@ def emit_progress(label, fraction=None):
         PROGRESS_PREFIX + json.dumps(payload, separators=(",", ":")) + "\n"
     )
     sys.stderr.flush()
+
+
+def bridge_error_message(exc, command=None, model=None):
+    """Add safe, command-specific recovery guidance to bridge failures."""
+    message = str(exc).strip() or exc.__class__.__name__
+    if (
+        command in ("download", "read-settings")
+        and model == "Yaesu_FT-60"
+        and "no response from radio" in message.lower()
+    ):
+        return (
+            "No response from the FT-60. Leave the radio on its F8 CLONE "
+            "screen, read again, and hold PTT only after the transfer window "
+            'says "%s"' % MANUAL_READ_READY_MESSAGE
+        )
+    return message
 
 
 def status_progress(status, start=0.0, end=1.0):
@@ -477,6 +496,15 @@ def radio_for(
         raise
 
 
+def emit_read_ready(radio):
+    """Tell the user when a manual PTT-triggered clone read can begin."""
+    prompts = radio.get_prompts()
+    if "[PTT]" in (getattr(prompts, "pre_download", "") or ""):
+        emit_progress(MANUAL_READ_READY_MESSAGE, 0.01)
+    else:
+        emit_progress("Connecting to radio...", 0.01)
+
+
 def radio_from_image(directory, model, image):
     """Build a driver instance backed only by a saved radio image."""
     radio = directory.get_radio(model)(None)
@@ -621,7 +649,7 @@ def main():
                     progress_range=(0.02, 0.97),
                 )
                 try:
-                    emit_progress("Reading radio settings...", 0.01)
+                    emit_read_ready(radio)
                     radio.sync_in()
                     fd, image = tempfile.mkstemp(
                         prefix="newchirp-", suffix=".img"
@@ -655,7 +683,7 @@ def main():
         )
         try:
             if args.command == "download":
-                emit_progress("Connecting to radio...", 0.01)
+                emit_read_ready(radio)
                 radio.sync_in()
                 emit_progress("Saving the radio image...", 0.93)
                 fd, image = tempfile.mkstemp(prefix="newchirp-", suffix=".img")
@@ -789,7 +817,10 @@ def main():
         finally:
             radio.pipe.close()
     except Exception as exc:
-        print(str(exc).strip() or exc.__class__.__name__, file=sys.stderr)
+        print(
+            bridge_error_message(exc, args.command, args.model),
+            file=sys.stderr,
+        )
         raise SystemExit(1)
 
 

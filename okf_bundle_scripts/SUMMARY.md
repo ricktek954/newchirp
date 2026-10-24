@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 39 concepts across 3 domains and 3 modules'
+description: 'Top-level OKF summary: 41 concepts across 3 domains and 3 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-24T18:37:52Z'
+timestamp: '2026-10-24T20:43:15Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 39 concepts | 3 domains | 3 modules
+> OKF v0.2 bundle | 41 concepts | 3 domains | 3 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 35 |
+| Function | 37 |
 | Module | 3 |
 | Class | 1 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 39 |
+| python | 41 |
 
 ## Domain Map
 
@@ -32,9 +32,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [build_macos_dmg](build_macos_dmg/index.md) (4 concepts) — Build a styled NewChirp macOS DMG with a drag-to-Applications window.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 20 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 22 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (20 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (22 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [generate_gmrs_frs_pdf.py](generate_gmrs_frs_pdf.py/index.md) — 15 concepts
 
@@ -48,6 +48,8 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 |---------|------|--------|-------------|
 | [emit_progress](/chirp_bridge/emit_progress.md) | Function | `chirp_bridge.py` | Send structured transfer progress without touching the JSON … |
 | [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
+| [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
+| [emit_read_ready](/chirp_bridge/emit_read_ready.md) | Function | `chirp_bridge.py` | Tell the user when a manual PTT-triggered clone read can beg… |
 | [channel_context](/chirp_bridge/channel_context.md) | Function | `chirp_bridge.py` | Return the selected channel owner plus available radio zones… |
 | [radio_from_image](/chirp_bridge/radio_from_image.md) | Function | `chirp_bridge.py` | Build a driver instance backed only by a saved radio image. |
 | [channel_radio_for](/chirp_bridge/channel_radio_for.md) | Function | `chirp_bridge.py` | Return the radio object that owns channel memories. |

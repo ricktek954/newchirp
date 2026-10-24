@@ -8,6 +8,7 @@ import sys
 import unittest
 from collections import deque
 from pathlib import Path
+from unittest import mock
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -140,6 +141,65 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(
             channel_radio.get_features().memory_bounds,
             (1, 250),
+        )
+
+    def test_ft60_read_ready_message_follows_serial_open(self):
+        calls = []
+        serial = FakeTDH3Serial()
+        with (
+            mock.patch.object(
+                bridge,
+                "open_serial",
+                lambda _radio_class, _port: (
+                    calls.append("open") or serial
+                ),
+            ),
+            mock.patch.object(
+                bridge,
+                "emit_progress",
+                lambda label, fraction=None: calls.append(
+                    ("ready", label, fraction)
+                ),
+            ),
+        ):
+            radio = bridge.radio_for(
+                self.directory,
+                "Yaesu_FT-60",
+                "fake",
+                detect_serial=False,
+            )
+            bridge.emit_read_ready(radio)
+
+        self.assertEqual(
+            calls,
+            [
+                "open",
+                (
+                    "ready",
+                    bridge.MANUAL_READ_READY_MESSAGE,
+                    0.01,
+                ),
+            ],
+        )
+
+    def test_ft60_read_timeout_explains_when_to_press_ptt(self):
+        error = self.errors.RadioNoResponse()
+
+        message = bridge.bridge_error_message(
+            error,
+            command="download",
+            model="Yaesu_FT-60",
+        )
+
+        self.assertIn("F8 CLONE", message)
+        self.assertIn(bridge.MANUAL_READ_READY_MESSAGE, message)
+        self.assertNotIn(
+            "read again",
+            bridge.bridge_error_message(
+                error,
+                command="upload",
+                model="Yaesu_FT-60",
+            ),
         )
 
 

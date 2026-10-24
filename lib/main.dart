@@ -25,7 +25,7 @@ String adaptRadioPromptButton(String message, String buttonLabel) {
   final normalized = message
       .replaceAll(RegExp(r'<br\s*/?>', caseSensitive: false), '\n')
       .replaceAll(RegExp(r'<[^>]+>'), '');
-  return normalized.replaceAllMapped(
+  final adapted = normalized.replaceAllMapped(
     RegExp(
       r'\b(Click|Clicking|Press|Pressing)\s+(?:the\s+)?["“]?OK["”]?(?:\s+button)?',
       caseSensitive: false,
@@ -38,6 +38,16 @@ String adaptRadioPromptButton(String message, String buttonLabel) {
           : action;
       return '$cased "$buttonLabel"';
     },
+  );
+  if (!adapted.contains('[PTT]')) return adapted;
+  return adapted.replaceFirst(
+    RegExp(
+      r',\s*hold the \[PTT\] switch for one second'
+      r'(?: to send (?:the )?image)?\.',
+      caseSensitive: false,
+    ),
+    ', wait until the transfer window says "Listening for the radio", '
+    'then hold the [PTT] switch for one second to send the image.',
   );
 }
 

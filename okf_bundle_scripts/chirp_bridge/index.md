@@ -5,9 +5,11 @@
 - [_load_module](load_module.md)
 - [apply_json](apply_json.md)
 - [apply_setting_changes](apply_setting_changes.md)
+- [bridge_error_message](bridge_error_message.md) — Add safe, command-specific recovery guidance to bridge failures.
 - [channel_context](channel_context.md) — Return the selected channel owner plus available radio zones.
 - [channel_radio_for](channel_radio_for.md) — Return the radio object that owns channel memories.
 - [emit_progress](emit_progress.md) — Send structured transfer progress without touching the JSON stdout.
+- [emit_read_ready](emit_read_ready.md) — Tell the user when a manual PTT-triggered clone read can begin.
 - [extra_fields_json](extra_fields_json.md)
 - [features_json](features_json.md)
 - [load_chirp](load_chirp.md)

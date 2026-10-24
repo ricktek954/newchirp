@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:51:09Z"
+timestamp: "2026-10-24T20:43:26Z"
 concept_id: main/showAbbreviationGlossary
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_showAbbreviationGlossary_showAbbreviationGlossary
 ```
 
 ## Source
-Lines 4559–4559 in `main.dart`
+Lines 4569–4569 in `main.dart`
 
 ## Relationships
 
