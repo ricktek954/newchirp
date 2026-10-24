@@ -8,11 +8,9 @@ release requirements.
 
 ## Resume here
 
-- The macOS `1.0.16` release is built, signed, notarized, uploaded, and live.
-- GitHub also contains the independently published Linux `1.0.12` release
-  commit.
-- Main contains unreleased session-scoped CHIRP module loading for `.py` and
-  `.mod` files; no release artifact for this change has been built.
+- The macOS `1.0.17` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes session-scoped CHIRP `.py` and `.mod` module loading.
+- GitHub HEAD is the independently published Linux `1.0.13` release commit.
 - No source change, build, upload, or deployment is currently in progress.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
@@ -26,11 +24,11 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Latest release commit fetched from GitHub: `0695274`
-  (`Release Linux 1.0.12`)
-- Previous release commit: `5f95fae` (`Release macOS 1.0.16`)
+- Latest release commit fetched from GitHub: `964acc0`
+  (`Release Linux 1.0.13`)
+- Previous release commit: `f69b325` (`Release macOS 1.0.17`)
 - Open pull requests: none
-- Checked-out source version: `1.0.12+12`
+- Checked-out source version: `1.0.13+13`
   - The Linux release commit changed the shared app version after the macOS
     release was published.
   - Do not assume this is the next macOS version; wait for the requested
@@ -46,19 +44,19 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.16 |
+| macOS | 1.0.17 |
 | Windows | 1.0.15 |
-| Linux | 1.0.12 |
-| Legacy shared manifest version | 1.0.10 |
+| Linux | 1.0.13 |
+| Legacy shared manifest version | 1.0.13 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.16.dmg`
-- Version/build: `1.0.16` / `16`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.17.dmg`
+- Version/build: `1.0.17` / `17`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `5c74c560c81e856428513e5e418be7db42deb7a5c527e83a3b463fe439b53846`
-- Notarization submission: `8af1a744-b30a-4335-9b7f-06b8073d3b19`
+  `72a5b43363b33f7dd0aa698a4fe1fab72d543c066171d8c8ae68d39ccb85daaa`
+- Notarization submission: `4715fccb-b65b-4098-9297-562c6d7733af`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -84,20 +82,15 @@ macOS artifact:
 - Loaded modules can add or override radio drivers; the radio catalog refreshes
   after loading and unloading.
 
-## macOS 1.0.16 verification status
+## macOS 1.0.17 verification status
 
-Last full verification before the macOS `1.0.16` release:
-
-- `flutter analyze`: clean
-- `flutter test`: all 66 tests passed
-- `python3 test/chirp_bridge_upload_test.py -v`: all 4 tests passed
-- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
-
-Unreleased module-loading verification:
+Full verification before the macOS `1.0.17` release:
 
 - `flutter analyze`: clean
 - `flutter test`: all 70 tests passed
 - `python3 test/chirp_bridge_upload_test.py -v`: all 4 tests passed
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- Server SHA-256 matched the final stapled DMG
 
 ## Known limitations and follow-ups
 
