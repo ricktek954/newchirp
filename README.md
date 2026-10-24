@@ -78,11 +78,11 @@ flutter run -d macos
 The macOS app build now bundles a private Python runtime and the CHIRP driver
 tree inside `NewChirp.app`, so end users do not need to install Python or CHIRP.
 For development, a custom CHIRP location may still be selected by setting
-`CHIRP_SOURCE` to the folder containing the `chirp` Python package. Builds also
-check for the latest CHIRP-next release and fetch the newest master source into
-`build_support` automatically; set `NEWCHIRP_AUTO_UPDATE_CHIRP=0` to keep the
-current snapshot instead. NewChirp bundles the headless serial dependency used
-by the CHIRP drivers; do not install CHIRP's wxPython GUI requirements.
+`CHIRP_SOURCE` to the folder containing the `chirp` Python package. Release
+builds download the CHIRP commit named in `scripts/chirp-source.pin` and reject
+the archive when its checksum does not match. NewChirp bundles the headless
+serial dependency used by the CHIRP drivers; do not install CHIRP's wxPython
+GUI requirements.
 
 Always read a radio before writing it. NewChirp intentionally keeps writing
 locked until a matching radio image has been downloaded in the current session.
