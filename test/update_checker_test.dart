@@ -129,4 +129,52 @@ void main() {
       );
     });
   });
+
+  group('trustedDownloadUrl', () {
+    test('keeps https pages on newchirp.net', () {
+      expect(
+        trustedDownloadUrl('https://newchirp.net/#download'),
+        'https://newchirp.net/#download',
+      );
+      expect(
+        trustedDownloadUrl(
+          'https://NEWCHIRP.NET/downloads/NewChirp-1.0.15.dmg',
+        ),
+        'https://newchirp.net/downloads/NewChirp-1.0.15.dmg',
+      );
+      expect(
+        trustedDownloadUrl('https://newchirp.net:443/#download'),
+        'https://newchirp.net/#download',
+      );
+    });
+
+    test('replaces links that are not the NewChirp site', () {
+      const rejected = [
+        'http://newchirp.net/#download',
+        'https://www.newchirp.net/#download',
+        'https://newchirp.net.evil.com/setup',
+        'https://evil.example/newchirp.net',
+        'https://user:pass@newchirp.net/#download',
+        'https://newchirp.net:8443/setup',
+        'https://newchirp.net\\@evil.example',
+        'file:///etc/passwd',
+        'calc.exe',
+        '',
+      ];
+      for (final url in rejected) {
+        expect(
+          trustedDownloadUrl(url),
+          officialDownloadPageUrl,
+          reason: url,
+        );
+      }
+      expect(trustedDownloadUrl(null), officialDownloadPageUrl);
+    });
+
+    test('does not launch a page outside newchirp.net', () async {
+      expect(await openExternalUrl('https://evil.example/setup.exe'), isFalse);
+      expect(await openExternalUrl('calc.exe'), isFalse);
+      expect(await openExternalUrl('http://newchirp.net/#download'), isFalse);
+    });
+  });
 }

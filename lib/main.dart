@@ -2051,17 +2051,27 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _showUpdateAvailable(UpdateCheckResult result) {
-    final rawUrl = (result.releaseUrl ?? '').trim();
-    final downloadUrl = rawUrl.isEmpty
-        ? 'https://newchirp.net/#download'
-        : rawUrl;
+    final downloadUrl = trustedDownloadUrl(result.releaseUrl);
     return showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Update available'),
-        content: Text(
-          'NewChirp ${result.latestVersion} is available. '
-          'You are running ${result.currentVersion}.',
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'NewChirp ${result.latestVersion} is available. '
+              'You are running ${result.currentVersion}.',
+            ),
+            const SizedBox(height: 12),
+            const Text('This opens:'),
+            const SizedBox(height: 4),
+            SelectableText(
+              downloadUrl,
+              style: const TextStyle(color: Colors.black54),
+            ),
+          ],
         ),
         actions: [
           TextButton(

@@ -194,17 +194,55 @@ List<int> _versionParts(String version) {
       .toList(growable: false);
 }
 
-/// Opens [url] in the operating system's default browser.
+/// Download page used when a manifest link is missing or not on this site.
+const String officialDownloadPageUrl = 'https://newchirp.net/#download';
+
+/// True when [url] is an https link on newchirp.net, with no login or odd port.
+bool isAllowedDownloadUrl(String url) {
+  final trimmed = url.trim();
+  if (trimmed.isEmpty || trimmed.contains(RegExp(r'[\s\\]'))) return false;
+  final uri = Uri.tryParse(trimmed);
+  if (uri == null || !uri.isAbsolute) return false;
+  if (uri.scheme != 'https') return false;
+  if (uri.userInfo.isNotEmpty) return false;
+  if (uri.host != 'newchirp.net') return false;
+  if (uri.hasPort && uri.port != 443) return false;
+  return true;
+}
+
+/// Address the Update button may open. Untrusted links use the official page.
+String trustedDownloadUrl(String? raw) {
+  final candidate = (raw ?? '').trim();
+  if (!isAllowedDownloadUrl(candidate)) return officialDownloadPageUrl;
+  final uri = Uri.parse(candidate);
+  return Uri(
+    scheme: 'https',
+    host: 'newchirp.net',
+    path: uri.path,
+    query: uri.hasQuery ? uri.query : null,
+    fragment: uri.hasFragment ? uri.fragment : null,
+  ).toString();
+}
+
+/// Opens a newchirp.net download page in the default browser.
 ///
-/// Returns false when no usable launcher is available.
+/// Returns false when [url] is not an allowed download page, or when no
+/// usable launcher is available. The launched address is rebuilt as https on
+/// newchirp.net, so a tricky string cannot change the site.
 Future<bool> openExternalUrl(String url) async {
+  if (!isAllowedDownloadUrl(url)) return false;
+  final allowed = trustedDownloadUrl(url);
+  if (!isAllowedDownloadUrl(allowed)) return false;
   try {
     if (Platform.isMacOS) {
-      await Process.run('open', [url]);
+      await Process.run('/usr/bin/open', [allowed]);
     } else if (Platform.isWindows) {
-      await Process.run('cmd', ['/c', 'start', '', url]);
+      await Process.run(r'C:\Windows\System32\rundll32.exe', [
+        'url.dll,FileProtocolHandler',
+        allowed,
+      ]);
     } else {
-      await Process.run('xdg-open', [url]);
+      await Process.run('xdg-open', [allowed]);
     }
     return true;
   } on ProcessException {

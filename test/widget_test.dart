@@ -85,6 +85,33 @@ void main() {
 
     expect(find.text('Update available'), findsOneWidget);
     expect(find.textContaining('NewChirp 1.0.4 is available'), findsOneWidget);
+    expect(find.text('https://newchirp.net/#download'), findsOneWidget);
+  });
+
+  testWidgets('startup update check hides an off-site download link', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      testApp(
+        updateChecker: _FakeUpdateChecker(
+          const UpdateCheckResult(
+            currentVersion: '1.0.3',
+            latestVersion: '1.0.4',
+            releaseUrl: 'https://evil.example/setup.exe',
+          ),
+        ),
+        checkForUpdatesOnStartup: true,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('https://newchirp.net/#download'), findsOneWidget);
+    expect(find.text('https://evil.example/setup.exe'), findsNothing);
   });
 
   testWidgets('startup update failures stay quiet', (tester) async {
