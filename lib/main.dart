@@ -13,6 +13,7 @@ import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
 import 'services/radio_image_store.dart';
 import 'services/radio_selection_store.dart';
+import 'services/module_sandbox.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/window_state_store.dart';
@@ -808,6 +809,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _loadChirpModule() async {
+    final blocker = await moduleSandboxBlocker();
+    if (!mounted) return;
+    if (blocker != null) {
+      await _showActionError(RadioBridgeException(blocker));
+      return;
+    }
     const type = XTypeGroup(
       label: 'CHIRP driver modules',
       extensions: ['py', 'mod'],
@@ -825,16 +832,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'CHIRP modules are executable Python code. A malicious or '
-                'incompatible module could damage your computer, radio, or '
-                'both.',
+                'CHIRP modules are executable Python code. NewChirp runs the '
+                'module in a sandbox that blocks your home folder, other '
+                'drives, and the network. The module can still use the '
+                'selected radio and the files for this session.',
               ),
               SizedBox(height: 12),
               Text(
-                'Only load modules from a source you trust. NewChirp cannot '
-                'verify that a module is safe. The module remains active only '
-                'for this NewChirp session. Select the radio model and read '
-                'the radio again before writing.',
+                'Only load a module from a source you trust. A bad module can '
+                'still damage the radio. The module remains active only for '
+                'this NewChirp session. Select the radio model and read the '
+                'radio again before writing.',
               ),
             ],
           ),

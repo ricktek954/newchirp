@@ -1,15 +1,28 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 
+String chirpSourceForTest() {
+  const candidates = [
+    'build_support/chirp-20261023',
+    'build_support/chirp-20261016',
+    '../chirp-20260626',
+  ];
+  for (final candidate in candidates) {
+    if (File('$candidate/chirp/chirp_common.py').existsSync()) {
+      return candidate;
+    }
+  }
+  throw StateError('CHIRP source for tests was not found.');
+}
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('loads .py and .mod modules for the current bridge session', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = chirpSourceForTest();
     for (final extension in ['py', 'mod']) {
       final suffix = extension == 'py' ? 'Py' : 'Mod';
       final module = File(
@@ -44,9 +57,7 @@ class NewChirpLoadedModule${suffix}Radio(chirp_common.CloneModeRadio):
   });
 
   test('rejects non-CHIRP module extensions', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = chirpSourceForTest();
     final module = File(
       '${Directory.systemTemp.path}/newchirp-module-$pid.txt',
     );
@@ -71,9 +82,7 @@ class NewChirpLoadedModule${suffix}Radio(chirp_common.CloneModeRadio):
   });
 
   test('a loaded module can override a built-in CHIRP driver', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = chirpSourceForTest();
     final module = File(
       '${Directory.systemTemp.path}/newchirp-override-module-$pid.py',
     );
@@ -105,9 +114,7 @@ class NewChirpOverrideRadio(chirp_common.CloneModeRadio):
   });
 
   test('rolls back a module that fails to load', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = chirpSourceForTest();
     final module = File(
       '${Directory.systemTemp.path}/newchirp-broken-module-$pid.py',
     );
@@ -129,5 +136,39 @@ class NewChirpOverrideRadio(chirp_common.CloneModeRadio):
       ),
     );
     expect(bridge.loadedModulePath, isNull);
+  });
+
+  test('a loaded module cannot read the home folder', () async {
+    final source = chirpSourceForTest();
+    final secret = File('pubspec.yaml').absolute.path;
+    final module = File(
+      '${Directory.systemTemp.path}/newchirp-sandbox-probe-$pid.py',
+    );
+    final secretLiteral = jsonEncode(secret);
+    await module.writeAsString('''
+from chirp import chirp_common, directory
+held = True
+try:
+    open($secretLiteral, encoding="utf-8").read()
+    held = False
+except Exception:
+    held = True
+
+@directory.register
+class NewChirpSandboxProbe(chirp_common.CloneModeRadio):
+    VENDOR = "NewChirpTest"
+    MODEL = "SandboxHeld" if held else "SandboxLeak"
+    VARIANT = ""
+''', flush: true);
+    addTearDown(() async {
+      if (await module.exists()) await module.delete();
+    });
+
+    final bridge = RadioBridge(sourcePath: source);
+    addTearDown(bridge.unloadModule);
+    final models = await bridge.loadModule(module.path);
+
+    expect(models, contains('NewChirpTest_SandboxHeld'));
+    expect(models, isNot(contains('NewChirpTest_SandboxLeak')));
   });
 }
