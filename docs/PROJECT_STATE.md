@@ -8,10 +8,9 @@ release requirements.
 
 ## Resume here
 
-- The macOS `1.0.17` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes session-scoped CHIRP `.py` and `.mod` module loading.
-- GitHub HEAD is the independently published Linux `1.0.13` release commit.
-- An unreleased FT-60 manual-read timing fix is present in the working tree.
+- The macOS `1.0.18` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes the FT-60 manual-read timing fix.
+- GitHub HEAD is the macOS `1.0.18` release-source commit.
 - No build, upload, or deployment is currently in progress.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
@@ -25,15 +24,11 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Latest release commit fetched from GitHub: `964acc0`
-  (`Release Linux 1.0.13`)
-- Previous release commit: `f69b325` (`Release macOS 1.0.17`)
+- Latest release commit fetched from GitHub: `c26a9f1`
+  (`Release macOS 1.0.18`)
+- Previous source commit: `2d7e1aa` (`Fix FT-60 manual read timing`)
 - Open pull requests: none
-- Checked-out source version: `1.0.13+13`
-  - The Linux release commit changed the shared app version after the macOS
-    release was published.
-  - Do not assume this is the next macOS version; wait for the requested
-    version before changing it.
+- Checked-out source version: `1.0.18+18`
 - Intended untracked file: `tshirt - i chirp often.png`
   - This is a user asset, not application source.
   - Do not commit or delete it unless explicitly requested.
@@ -45,19 +40,19 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.17 |
-| Windows | 1.0.15 |
+| macOS | 1.0.18 |
+| Windows | 1.0.16 |
 | Linux | 1.0.13 |
 | Legacy shared manifest version | 1.0.13 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.17.dmg`
-- Version/build: `1.0.17` / `17`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.18.dmg`
+- Version/build: `1.0.18` / `18`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `72a5b43363b33f7dd0aa698a4fe1fab72d543c066171d8c8ae68d39ccb85daaa`
-- Notarization submission: `4715fccb-b65b-4098-9297-562c6d7733af`
+  `968876788c807cf9beba53977884b1c02f38539fb3a3737a4520721e853b98aa`
+- Notarization submission: `50b1cef6-dd9a-4896-9bc1-74aa773b725a`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -82,20 +77,22 @@ macOS artifact:
   **Help > Load CHIRP driver module…** for the current session.
 - Loaded modules can add or override radio drivers; the radio catalog refreshes
   after loading and unloading.
+- FT-60 reads now tell the user to hold PTT only after the serial port is open,
+  with read-specific recovery guidance if the initial frame times out.
 
-## macOS 1.0.17 verification status
+## macOS 1.0.18 verification status
 
-Full verification before the macOS `1.0.17` release:
+Full verification before the macOS `1.0.18` release:
 
 - `flutter analyze`: clean
 - `flutter test`: all 70 tests passed
-- `python3 test/chirp_bridge_upload_test.py -v`: all 4 tests passed
+- `python3 test/chirp_bridge_upload_test.py -v`: all 6 tests passed
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
 - Server SHA-256 matched the final stapled DMG
 
 ## Known limitations and follow-ups
 
-- The published Windows `1.0.15` installer predates the FT-60 manual-read
+- The published Windows `1.0.16` installer predates the FT-60 manual-read
   timing fix. The fix waits to tell the user to hold PTT until after the
   serial port is open. Confirm the read sequence on a physical FT-60 before
   building the next Windows release.
