@@ -107,7 +107,14 @@ if digest != expected:
     sys.exit(2)
 
 def unsafe_path(value):
+    if not isinstance(value, str) or not value:
+        return True
     name = value.replace("\\", "/")
+    if "\n" in name or "\r" in name or "\0" in name:
+        return True
+    # A drive letter can escape the extract folder on Windows.
+    if len(name) >= 2 and name[0].isalpha() and name[1] == ":":
+        return True
     parts = [part for part in name.split("/") if part]
     return name.startswith("/") or any(part == ".." for part in parts)
 
