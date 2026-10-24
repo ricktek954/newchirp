@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:03:09Z"
+timestamp: "2026-10-24T18:11:53Z"
 concept_id: main/buildRadio
 language: dart
 ---
@@ -23,7 +23,7 @@ Widget_buildRadio()
 ```
 
 ## Source
-Lines 3622–3622 in `main.dart`
+Lines 3626–3626 in `main.dart`
 
 ## Relationships
 

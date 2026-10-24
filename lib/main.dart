@@ -22,17 +22,21 @@ const _menuChannel = MethodChannel('newchirp/menu');
 const String _newChirpVersion = '1.0.11';
 
 String adaptRadioPromptButton(String message, String buttonLabel) {
-  return message.replaceAllMapped(
+  final normalized = message
+      .replaceAll(RegExp(r'<br\s*/?>', caseSensitive: false), '\n')
+      .replaceAll(RegExp(r'<[^>]+>'), '');
+  return normalized.replaceAllMapped(
     RegExp(
-      r'\b(?:Click|Press)\s+(?:the\s+)?["“]?OK["”]?(?:\s+button)?',
+      r'\b(Click|Clicking|Press|Pressing)\s+(?:the\s+)?["“]?OK["”]?(?:\s+button)?',
       caseSensitive: false,
     ),
     (match) {
-      final original = match.group(0)!;
-      final action = original[0] == original[0].toUpperCase()
-          ? 'Click'
-          : 'click';
-      return '$action "$buttonLabel"';
+      final original = match.group(1)!;
+      final action = original.toLowerCase();
+      final cased = original[0] == original[0].toUpperCase()
+          ? '${action[0].toUpperCase()}${action.substring(1)}'
+          : action;
+      return '$cased "$buttonLabel"';
     },
   );
 }

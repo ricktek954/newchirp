@@ -118,6 +118,28 @@
         "services/radio_selection_store"
       ]
     },
+    "services/update_checker.dart": {
+      "path": "services/update_checker.dart",
+      "mtime_ns": 1792864989857009305,
+      "hash": "af4795e1aa63602fbb6889343b145ecf5df692f1581fee3202ed0187b9fc8bcf",
+      "concept_ids": [
+        "services/update_checker/PlatformRelease",
+        "services/update_checker/ReleaseManifest",
+        "services/update_checker/UpdateCheckException",
+        "services/update_checker/UpdateCheckResult",
+        "services/update_checker/UpdateChecker",
+        "services/update_checker/check",
+        "services/update_checker/compareVersions",
+        "services/update_checker/currentPlatformKey",
+        "services/update_checker/isAllowedDownloadUrl",
+        "services/update_checker/openExternalUrl",
+        "services/update_checker/parseManifest",
+        "services/update_checker/toString",
+        "services/update_checker/trustedDownloadUrl",
+        "services/update_checker/versionParts",
+        "services/update_checker"
+      ]
+    },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
       "mtime_ns": 1787526889854324166,
@@ -134,8 +156,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1792864989856487266,
-      "hash": "6edff6dec6545f49f481f7a6b07220fa988bc9213dc4e463f0c116822020cdcf",
+      "mtime_ns": 1792865513120540355,
+      "hash": "80f1d15f0abb02f2eae3e1cc377bde04e6c0fbed537d47f50b4d6e0831bf2515",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -281,28 +303,6 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
-      ]
-    },
-    "services/update_checker.dart": {
-      "path": "services/update_checker.dart",
-      "mtime_ns": 1792864989857009305,
-      "hash": "af4795e1aa63602fbb6889343b145ecf5df692f1581fee3202ed0187b9fc8bcf",
-      "concept_ids": [
-        "services/update_checker",
-        "services/update_checker/UpdateCheckResult",
-        "services/update_checker/UpdateCheckException",
-        "services/update_checker/UpdateChecker",
-        "services/update_checker/ReleaseManifest",
-        "services/update_checker/PlatformRelease",
-        "services/update_checker/currentPlatformKey",
-        "services/update_checker/compareVersions",
-        "services/update_checker/versionParts",
-        "services/update_checker/isAllowedDownloadUrl",
-        "services/update_checker/trustedDownloadUrl",
-        "services/update_checker/openExternalUrl",
-        "services/update_checker/toString",
-        "services/update_checker/check",
-        "services/update_checker/parseManifest"
       ]
     }
   },
@@ -2220,5 +2220,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-10-24T18:03:10Z"
+  "generated_at": "2026-10-24T18:11:54Z"
 }

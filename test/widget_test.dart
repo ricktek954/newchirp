@@ -59,7 +59,14 @@ void main() {
         'Select the settings, then press the OK button.',
         'Radio is ready to receive',
       ),
-      'Select the settings, then click "Radio is ready to receive".',
+      'Select the settings, then press "Radio is ready to receive".',
+    );
+    expect(
+      adaptRadioPromptButton(
+        '6. <b>After clicking OK</b>, hold the [PTT] switch for one second.',
+        'Radio is ready',
+      ),
+      '6. After clicking "Radio is ready", hold the [PTT] switch for one second.',
     );
   });
 
