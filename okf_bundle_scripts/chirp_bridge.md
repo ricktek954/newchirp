@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T20:43:15Z"
+timestamp: "2026-10-25T00:30:13Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -34,6 +34,7 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [load_chirp](/chirp_bridge/load_chirp.md) |
 | related | [memory_json](/chirp_bridge/memory_json.md) |
 | related | [extra_fields_json](/chirp_bridge/extra_fields_json.md) |
+| related | [extra_field_doc](/chirp_bridge/extra_field_doc.md) |
 | related | [features_json](/chirp_bridge/features_json.md) |
 | related | [setting_doc](/chirp_bridge/setting_doc.md) |
 | related | [setting_value_json](/chirp_bridge/setting_value_json.md) |
@@ -41,10 +42,18 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [apply_setting_changes](/chirp_bridge/apply_setting_changes.md) |
 | related | [apply_json](/chirp_bridge/apply_json.md) |
 | related | [open_serial](/chirp_bridge/open_serial.md) |
+| related | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) |
 | related | [radio_for](/chirp_bridge/radio_for.md) |
 | related | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | related | [radio_from_image](/chirp_bridge/radio_from_image.md) |
 | related | [channel_context](/chirp_bridge/channel_context.md) |
 | related | [channel_radio_for](/chirp_bridge/channel_radio_for.md) |
+| related | [repeaterbook_resource_name](/chirp_bridge/repeaterbook_resource_name.md) |
+| related | [repeaterbook_cache_path](/chirp_bridge/repeaterbook_cache_path.md) |
+| related | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
+| related | [repeaterbook_tone](/chirp_bridge/repeaterbook_tone.md) |
+| related | [repeaterbook_item_to_channel](/chirp_bridge/repeaterbook_item_to_channel.md) |
+| related | [normalize_repeaterbook_query](/chirp_bridge/normalize_repeaterbook_query.md) |
+| related | [search_repeaterbook](/chirp_bridge/search_repeaterbook.md) |
 | related | [settings_payload](/chirp_bridge/settings_payload.md) |
 | related | [main](/chirp_bridge/main.md) |

@@ -5,8 +5,8 @@
   "files": {
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1792779541396339291,
-      "hash": "1b5abdf776a3bd0f585c6a9d68670357136522e78ec2c8ae4c2635c3f9b7050a",
+      "mtime_ns": 1792878198247377419,
+      "hash": "20be938a532c4c2f3b2aa1378aae3abe8b355e159bd50fb71164db776912f397",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
         "models/radio_channel/RadioChannel",
@@ -17,6 +17,20 @@
         "models/radio_channel/toJson",
         "models/radio_channel/validate",
         "models/radio_channel"
+      ]
+    },
+    "models/repeater_search.dart": {
+      "path": "models/repeater_search.dart",
+      "mtime_ns": 1792886818476392518,
+      "hash": "005f4767b479d89e1c7f06542e252b1ca45d7ea579b0db5381e5709152e55bd4",
+      "concept_ids": [
+        "models/repeater_search/RepeaterSearchResult",
+        "models/repeater_search/RepeaterSearchResults",
+        "models/repeater_search/RepeaterSortOrder",
+        "models/repeater_search/by",
+        "models/repeater_search/filterRepeaterResults",
+        "models/repeater_search/sortRepeaterResults",
+        "models/repeater_search"
       ]
     },
     "services/chirp_csv.dart": {
@@ -51,8 +65,8 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1792867075350387166,
-      "hash": "76234641d4263a4920eee5f56141d7362c9df3f493f38ccf591ddfaf6242b8bc",
+      "mtime_ns": 1792882903682033113,
+      "hash": "a59cb56f7d271e82c32d847db53b0440ef9f711cd5b92a8e071ff20c4a0c509f",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
         "services/radio_bridge/RadioBridgeException",
@@ -63,6 +77,7 @@
         "services/radio_bridge/RadioSettings",
         "services/radio_bridge/RadioZone",
         "services/radio_bridge/SerialPortInfo",
+        "services/radio_bridge/bundledAssetCandidates",
         "services/radio_bridge/bundledResourcesDirectory",
         "services/radio_bridge/cancelActive",
         "services/radio_bridge/download",
@@ -71,6 +86,7 @@
         "services/radio_bridge/imageCapabilities",
         "services/radio_bridge/imageInfo",
         "services/radio_bridge/instructions",
+        "services/radio_bridge/loadAssetBytes",
         "services/radio_bridge/loadModule",
         "services/radio_bridge/materializeBridge",
         "services/radio_bridge/materializePythonDependencies",
@@ -81,6 +97,8 @@
         "services/radio_bridge/readSettings",
         "services/radio_bridge/resolvePython",
         "services/radio_bridge/run",
+        "services/radio_bridge/runWithRuntime",
+        "services/radio_bridge/searchRepeaters",
         "services/radio_bridge/serialPortDetails",
         "services/radio_bridge/serialPorts",
         "services/radio_bridge/strings",
@@ -158,8 +176,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1792876638623097210,
-      "hash": "404a506cf184f34598e68d635c45771423296aa3ae4a92b5d5c4b3a1f9f5920e",
+      "mtime_ns": 1792888052317406123,
+      "hash": "3b8c28d6d64407d6bf9b064dc2c0be23d1f50174d8b4b60a54720e0b9742c664",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -180,6 +198,8 @@
         "main/LibraryState",
         "main/ChannelApplyDialog",
         "main/ChannelApplyDialogState",
+        "main/RepeaterBookDialog",
+        "main/RepeaterBookDialogState",
         "main/HelpButton",
         "main/WelcomeAction",
         "main/Metric",
@@ -190,6 +210,7 @@
         "main/TextField",
         "main/TextFieldState",
         "main/ExtraFieldEditor",
+        "main/ExtraFieldHelp",
         "main/NumberField",
         "main/NumberFieldState",
         "main/ChoiceField",
@@ -207,6 +228,8 @@
         "main/headerCell",
         "main/legendItem",
         "main/showAbbreviationGlossary",
+        "main/fitAllPoints",
+        "main/resizeBy",
         "main/inactive",
         "main/label",
         "main/choices",
@@ -251,6 +274,7 @@
         "main/channelIssues",
         "main/sortChannelsByLocation",
         "main/moveChannel",
+        "main/findRepeaters",
         "main/showNoEmptyChannelSlot",
         "main/saveCsv",
         "main/confirmReplaceLibrary",
@@ -300,6 +324,11 @@
         "main/didUpdateWidget",
         "main/buildHelpMenu",
         "main/apply",
+        "main/search",
+        "main/searchAmateurInstead",
+        "main/channelDetail",
+        "main/setResultSelected",
+        "main/buildResultsMap",
         "main/revealSelectedChannel",
         "main/showRowMenu",
         "main/columns",
@@ -316,7 +345,7 @@
       "type": "Module",
       "resource": "services/radio_bridge.dart",
       "render_hash": "stale",
-      "edge_hash": "a604a3f56c5cd524c57ff7882f1cfe963415a7fec65ae47c43f9a865137cc56b",
+      "edge_hash": "e6b84ebdc8acbd790b4bfd77b809cac2052b6e1643bccca2f1af7f1e40ec687d",
       "enriched": false
     },
     "services/radio_bridge/RadioBridgeException": {
@@ -956,7 +985,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "fdc0d75291454b0f467fba3d88b859dff8f518ca49c41a52d7e21bd26824d751",
+      "edge_hash": "f2bd60f290336df60ebb85f592e662258b497fd6ba86b5b46c2ddb76184779d0",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -2254,7 +2283,183 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "services/radio_bridge/runWithRuntime": {
+      "concept_id": "services/radio_bridge/runWithRuntime",
+      "type": "Function",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "main/ExtraFieldHelp": {
+      "concept_id": "main/ExtraFieldHelp",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "services/radio_bridge/loadAssetBytes": {
+      "concept_id": "services/radio_bridge/loadAssetBytes",
+      "type": "Function",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "services/radio_bridge/bundledAssetCandidates": {
+      "concept_id": "services/radio_bridge/bundledAssetCandidates",
+      "type": "Function",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "services/radio_bridge/searchRepeaters": {
+      "concept_id": "services/radio_bridge/searchRepeaters",
+      "type": "Function",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "models/repeater_search": {
+      "concept_id": "models/repeater_search",
+      "type": "Module",
+      "resource": "models/repeater_search.dart",
+      "render_hash": "stale",
+      "edge_hash": "d4c99c5642a292b02682f967ecd7f52e253ffa7f2090b123fd5b6e6232d39f1f",
+      "enriched": false
+    },
+    "models/repeater_search/RepeaterSearchResult": {
+      "concept_id": "models/repeater_search/RepeaterSearchResult",
+      "type": "Class",
+      "resource": "models/repeater_search.dart",
+      "render_hash": "stale",
+      "edge_hash": "c9097e88106d67f0a581485bdeffd27ddf9d2485f21f1a8847272507a8cafd47",
+      "enriched": false
+    },
+    "models/repeater_search/RepeaterSearchResults": {
+      "concept_id": "models/repeater_search/RepeaterSearchResults",
+      "type": "Class",
+      "resource": "models/repeater_search.dart",
+      "render_hash": "stale",
+      "edge_hash": "c9097e88106d67f0a581485bdeffd27ddf9d2485f21f1a8847272507a8cafd47",
+      "enriched": false
+    },
+    "main/findRepeaters": {
+      "concept_id": "main/findRepeaters",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/RepeaterBookDialog": {
+      "concept_id": "main/RepeaterBookDialog",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/RepeaterBookDialogState": {
+      "concept_id": "main/RepeaterBookDialogState",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/search": {
+      "concept_id": "main/search",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/channelDetail": {
+      "concept_id": "main/channelDetail",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/searchAmateurInstead": {
+      "concept_id": "main/searchAmateurInstead",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "models/repeater_search/RepeaterSortOrder": {
+      "concept_id": "models/repeater_search/RepeaterSortOrder",
+      "type": "Enum",
+      "resource": "models/repeater_search.dart",
+      "render_hash": "stale",
+      "edge_hash": "c9097e88106d67f0a581485bdeffd27ddf9d2485f21f1a8847272507a8cafd47",
+      "enriched": false
+    },
+    "models/repeater_search/sortRepeaterResults": {
+      "concept_id": "models/repeater_search/sortRepeaterResults",
+      "type": "Function",
+      "resource": "models/repeater_search.dart",
+      "render_hash": "stale",
+      "edge_hash": "c9097e88106d67f0a581485bdeffd27ddf9d2485f21f1a8847272507a8cafd47",
+      "enriched": false
+    },
+    "models/repeater_search/by": {
+      "concept_id": "models/repeater_search/by",
+      "type": "Function",
+      "resource": "models/repeater_search.dart",
+      "render_hash": "stale",
+      "edge_hash": "c9097e88106d67f0a581485bdeffd27ddf9d2485f21f1a8847272507a8cafd47",
+      "enriched": false
+    },
+    "models/repeater_search/filterRepeaterResults": {
+      "concept_id": "models/repeater_search/filterRepeaterResults",
+      "type": "Function",
+      "resource": "models/repeater_search.dart",
+      "render_hash": "stale",
+      "edge_hash": "c9097e88106d67f0a581485bdeffd27ddf9d2485f21f1a8847272507a8cafd47",
+      "enriched": false
+    },
+    "main/setResultSelected": {
+      "concept_id": "main/setResultSelected",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/buildResultsMap": {
+      "concept_id": "main/buildResultsMap",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/resizeBy": {
+      "concept_id": "main/resizeBy",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/fitAllPoints": {
+      "concept_id": "main/fitAllPoints",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-24T21:17:19Z"
+  "generated_at": "2026-10-25T00:27:33Z"
 }

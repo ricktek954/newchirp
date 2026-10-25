@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-23T18:19:01Z"
+timestamp: "2026-10-24T21:43:18Z"
 concept_id: models/radio_channel/ChannelExtraField
 language: dart
 ---
@@ -27,11 +27,12 @@ ChannelExtraField({
     required this.value,
     this.choices = const [],
     this.mutable = true,
+    this.documentation,
   })
 ```
 
 ## Source
-Lines 297–304 in `models/radio_channel.dart`
+Lines 297–305 in `models/radio_channel.dart`
 
 ## Relationships
 

@@ -202,6 +202,259 @@ class UploadHandshakeTest(unittest.TestCase):
             ),
         )
 
+    def test_bridge_error_does_not_require_a_model_argument(self):
+        message = bridge.bridge_error_message(
+            RuntimeError("catalog failed"),
+            command="list-models",
+            model=None,
+        )
+
+        self.assertEqual(message, "catalog failed")
+
+    def test_common_extra_fields_include_documentation(self):
+        image = SOURCE / "tests/images/Baofeng_UV-5R_Mini.img"
+        radio = self.directory.get_radio_by_image(str(image))
+        start, end = radio.get_features().memory_bounds
+        channel = next(
+            mem
+            for number in range(start, end + 1)
+            if not (mem := radio.get_memory(number)).empty
+        )
+        fields = {
+            field["name"]: field["documentation"]
+            for field in bridge.extra_fields_json(channel)
+        }
+
+        self.assertIn("Busy Channel Lockout", fields["bcl"])
+        self.assertIn("PTT ID", fields["pttid"])
+        self.assertIn("S-CODE", fields["scode"])
+
+    def test_live_radio_gets_headless_sync_interface(self):
+        from chirp import chirp_common
+
+        class FakeLiveRadio(chirp_common.LiveRadio):
+            VENDOR = "Kenwood"
+            MODEL = "TS-2000"
+
+            def __init__(self, pipe):
+                super().__init__(pipe)
+                self.pipe = pipe
+
+            def get_features(self):
+                features = chirp_common.RadioFeatures()
+                features.memory_bounds = (0, 2)
+                return features
+
+        serial = FakeTDH3Serial()
+        with (
+            mock.patch.object(
+                bridge,
+                "open_serial",
+                lambda _radio_class, _port: serial,
+            ),
+            mock.patch.object(
+                self.directory,
+                "get_radio",
+                return_value=FakeLiveRadio,
+            ),
+        ):
+            radio = bridge.radio_for(
+                self.directory,
+                "Kenwood_TS-2000",
+                "fake",
+                detect_serial=False,
+            )
+
+        self.assertEqual(radio.MODEL, "TS-2000")
+        self.assertTrue(hasattr(radio, "sync_in"))
+        self.assertTrue(hasattr(radio, "sync_out"))
+        self.assertIs(radio._live_radio.pipe, serial)
+        self.assertTrue(
+            issubclass(
+                self.directory.get_radio("Kenwood_TS-2000"),
+                chirp_common.LiveRadio,
+            )
+        )
+
+    def test_repeaterbook_result_converts_to_channel(self):
+        channel = bridge.repeaterbook_item_to_channel({
+            "Frequency": "146.865000",
+            "Input Freq": "146.265000",
+            "PL": "151.4",
+            "TSQ": "",
+            "Callsign": "WB2ECR",
+            "Landmark": "Buffalo",
+            "Nearest City": "Buffalo",
+            "County": "Erie",
+            "State": "New York",
+            "Use": "OPEN",
+            "Operational Status": "On-air",
+            "FM Analog": "Yes",
+            "DMR": "No",
+            "D-Star": "No",
+            "System Fusion": "No",
+        }, 1)
+
+        self.assertEqual(channel["frequency"], 146.865)
+        self.assertEqual(channel["duplex"], "-")
+        self.assertEqual(channel["offset"], 0.6)
+        self.assertEqual(channel["tone"], "Tone")
+        self.assertEqual(channel["txTone"], 151.4)
+        self.assertIn("RepeaterBook: WB2ECR", channel["comment"])
+
+    def test_repeaterbook_search_filters_closed_results(self):
+        items = [
+            {
+                "Frequency": "146.865000",
+                "Input Freq": "146.265000",
+                "PL": "",
+                "TSQ": "",
+                "Callsign": "OPEN1",
+                "Landmark": "Open repeater",
+                "Nearest City": "Buffalo",
+                "County": "Erie",
+                "State": "New York",
+                "Use": "OPEN",
+                "Operational Status": "On-air",
+                "FM Analog": "Yes",
+                "DMR": "No",
+                "D-Star": "No",
+                "System Fusion": "No",
+            },
+            {
+                "Frequency": "147.000000",
+                "Input Freq": "147.600000",
+                "PL": "",
+                "TSQ": "",
+                "Callsign": "CLOSED1",
+                "Landmark": "Closed repeater",
+                "Nearest City": "Buffalo",
+                "County": "Erie",
+                "State": "New York",
+                "Use": "CLOSED",
+                "Operational Status": "On-air",
+                "FM Analog": "Yes",
+                "DMR": "No",
+                "D-Star": "No",
+                "System Fusion": "No",
+            },
+        ]
+        with mock.patch.object(
+            bridge,
+            "fetch_repeaterbook_data",
+            return_value={"results": items},
+        ):
+            results = bridge.search_repeaterbook(
+                "United States",
+                "New York",
+                query="Buffalo",
+                open_only=True,
+                fm_only=True,
+            )
+
+        self.assertEqual(results["totalMatches"], 1)
+        self.assertEqual(results["results"][0]["callsign"], "OPEN1")
+
+    def test_repeaterbook_radius_excludes_missing_coordinates(self):
+        item = {
+            "Frequency": "146.865000",
+            "Input Freq": "146.265000",
+            "PL": "",
+            "TSQ": "",
+            "Callsign": "NOCOORD",
+            "Landmark": "No coordinates",
+            "County": "Erie",
+            "State": "New York",
+            "Use": "OPEN",
+            "Operational Status": "On-air",
+            "FM Analog": "Yes",
+            "DMR": "No",
+            "D-Star": "No",
+            "System Fusion": "No",
+        }
+        with mock.patch.object(
+            bridge,
+            "fetch_repeaterbook_data",
+            return_value={"results": [item]},
+        ):
+            results = bridge.search_repeaterbook(
+                "United States",
+                "New York",
+                latitude=42.8864,
+                longitude=-78.8784,
+                distance=50,
+            )
+
+        self.assertEqual(results["totalMatches"], 0)
+
+    def test_repeaterbook_query_normalizes_county_suffix(self):
+        self.assertEqual(
+            bridge.normalize_repeaterbook_query("Broward County"),
+            "broward",
+        )
+        self.assertEqual(
+            bridge.normalize_repeaterbook_query("East Baton Rouge Parish"),
+            "east baton rouge",
+        )
+
+    def test_repeaterbook_all_services_combines_results(self):
+        def item(callsign, frequency, latitude, longitude):
+            return {
+                "Frequency": frequency,
+                "Input Freq": "0",
+                "PL": "",
+                "TSQ": "",
+                "Callsign": callsign,
+                "Landmark": callsign,
+                "County": "Broward",
+                "State": "Florida",
+                "Use": "OPEN",
+                "Operational Status": "On-air",
+                "FM Analog": "Yes",
+                "DMR": "No",
+                "D-Star": "No",
+                "System Fusion": "No",
+                "Lat": latitude,
+                "Long": longitude,
+            }
+
+        def fetch(service, country, state):
+            if service == "gmrs":
+                return {
+                    "results": [
+                        item("GMRS1", "462.550000", "26.1224", "-80.1373")
+                    ]
+                }
+            return {
+                "results": [
+                    item("HAM1", "146.865000", "42.8864", "-78.8784")
+                ]
+            }
+
+        with mock.patch.object(
+            bridge,
+            "fetch_repeaterbook_data",
+            side_effect=fetch,
+        ):
+            results = bridge.search_repeaterbook(
+                "United States",
+                "Florida",
+                service="all",
+                query="Broward County",
+            )
+
+        self.assertEqual(results["totalMatches"], 2)
+        self.assertEqual(
+            {result["service"] for result in results["results"]},
+            {"Amateur", "GMRS"},
+        )
+        coordinates = {
+            result["callsign"]: (result["latitude"], result["longitude"])
+            for result in results["results"]
+        }
+        self.assertEqual(coordinates["HAM1"], (42.8864, -78.8784))
+        self.assertEqual(coordinates["GMRS1"], (26.1224, -80.1373))
+
 
 class FrequencyPrecisionTest(unittest.TestCase):
     @classmethod

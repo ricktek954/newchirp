@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:37:55Z"
+timestamp: "2026-10-24T23:01:43Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -55,10 +55,14 @@ language: dart
 | related | [readSettings](/services/radio_bridge/readSettings.md) |
 | related | [writeSettings](/services/radio_bridge/writeSettings.md) |
 | related | [_run](/services/radio_bridge/run.md) |
+| related | [searchRepeaters](/services/radio_bridge/searchRepeaters.md) |
+| related | [_runWithRuntime](/services/radio_bridge/runWithRuntime.md) |
 | related | [_resolvePython](/services/radio_bridge/resolvePython.md) |
 | related | [_bundledResourcesDirectory](/services/radio_bridge/bundledResourcesDirectory.md) |
 | related | [_materializeBridge](/services/radio_bridge/materializeBridge.md) |
 | related | [_materializePythonDependencies](/services/radio_bridge/materializePythonDependencies.md) |
+| related | [_loadAssetBytes](/services/radio_bridge/loadAssetBytes.md) |
+| related | [_bundledAssetCandidates](/services/radio_bridge/bundledAssetCandidates.md) |
 | related | [_findChirpSource](/services/radio_bridge/findChirpSource.md) |
 | related | [_findNewChirpDrivers](/services/radio_bridge/findNewChirpDrivers.md) |
 | related | [RadioBridge](/services/radio_bridge/RadioBridge.md) |

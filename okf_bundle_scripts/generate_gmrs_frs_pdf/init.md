@@ -39,3 +39,4 @@ Lines 50–51 in `generate_gmrs_frs_pdf.py`
 | Type | Target |
 |------|--------|
 | related | [PdfWriter](/generate_gmrs_frs_pdf/PdfWriter.md) |
+| called_by | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) |

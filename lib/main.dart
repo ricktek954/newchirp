@@ -5,10 +5,13 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'models/radio_channel.dart';
+import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
 import 'services/radio_image_store.dart';
@@ -1096,6 +1099,23 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  Future<void> _findRepeaters() async {
+    final channels = await showDialog<List<RadioChannel>>(
+      context: context,
+      builder: (context) => RepeaterBookDialog(bridge: _bridge),
+    );
+    if (channels == null || channels.isEmpty || !mounted) return;
+    final mode = _libraryOpen && _channels.isNotEmpty
+        ? await _chooseChannelApplyMode(
+            label: 'RepeaterBook results',
+            count: channels.length,
+          )
+        : const _ChannelApplyMode(replaceAll: true, startAt: 1);
+    if (mode == null || !mounted) return;
+    _recordHistory();
+    _applyChannels(channels, mode, libraryName: 'RepeaterBook Repeaters');
+  }
+
   void _showNoEmptyChannelSlot() {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -1971,7 +1991,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               SafeArea(
                 child: Row(
                   children: [
-                    _Sidebar(page: _page, onPage: _selectPage),
+                    _Sidebar(
+                      page: _page,
+                      onPage: _selectPage,
+                      onFindRepeaters: _findRepeaters,
+                    ),
                     Expanded(
                       child: Column(
                         children: [
@@ -2098,6 +2122,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             'Open the radio connection screen, choose your cable and exact model, '
                             'then choose Read channels from the radio. Settings are read separately '
                             'from the Radio settings page.',
+                      ),
+                      _WelcomeAction(
+                        width: cardWidth,
+                        icon: Icons.travel_explore,
+                        title: 'Find nearby repeaters',
+                        description:
+                            'Search RepeaterBook and add amateur or GMRS channels.',
+                        buttonLabel: 'Find repeaters',
+                        onPressed: _findRepeaters,
+                        help:
+                            'Search RepeaterBook by state and optional location, '
+                            'preview matching repeaters, and add selected channels '
+                            'to the current library.',
                       ),
                     ],
                   );
@@ -4063,9 +4100,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 }
 
 class _Sidebar extends StatelessWidget {
-  const _Sidebar({required this.page, required this.onPage});
+  const _Sidebar({
+    required this.page,
+    required this.onPage,
+    required this.onFindRepeaters,
+  });
   final int page;
   final ValueChanged<int> onPage;
+  final VoidCallback onFindRepeaters;
 
   @override
   Widget build(BuildContext context) {
@@ -4109,6 +4151,13 @@ class _Sidebar extends StatelessWidget {
             icon: Icons.settings_input_antenna,
             selected: page == 1,
             onTap: () => onPage(1),
+          ),
+          const SizedBox(height: 6),
+          _NavItem(
+            label: 'Find repeaters',
+            icon: Icons.travel_explore,
+            selected: false,
+            onTap: onFindRepeaters,
           ),
           const SizedBox(height: 6),
           _NavItem(
@@ -4180,7 +4229,6 @@ class _NavItem extends StatelessWidget {
     color: selected ? const Color(0xFF29493D) : Colors.transparent,
     borderRadius: BorderRadius.circular(9),
     child: InkWell(
-      onTapDown: (_) => onTap(),
       onTap: onTap,
       borderRadius: BorderRadius.circular(9),
       child: Padding(
@@ -4564,6 +4612,18 @@ const _glossaryTerms = <(String, String)>[
   ),
   ('STEP', 'Tuning step size used when changing frequency.'),
   ('SCAN', 'Whether the channel is included in scanning or marked to skip.'),
+  (
+    'BCL',
+    'Busy Channel Lockout. Prevents transmitting when the channel is already in use.',
+  ),
+  (
+    'PTT ID',
+    'Station identification sent at the beginning or end of a transmission, depending on the radio.',
+  ),
+  (
+    'S-CODE',
+    'Signaling code selector. Chooses which stored PTT-ID or signaling code the channel uses.',
+  ),
 ];
 
 Future<void> _showAbbreviationGlossary(BuildContext context) {
@@ -5051,6 +5111,866 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
   }
 }
 
+const _repeaterStates = <String>[
+  'Alabama',
+  'Alaska',
+  'Arizona',
+  'Arkansas',
+  'California',
+  'Colorado',
+  'Connecticut',
+  'Delaware',
+  'District of Columbia',
+  'Florida',
+  'Georgia',
+  'Guam',
+  'Hawaii',
+  'Idaho',
+  'Illinois',
+  'Indiana',
+  'Iowa',
+  'Kansas',
+  'Kentucky',
+  'Louisiana',
+  'Maine',
+  'Maryland',
+  'Massachusetts',
+  'Michigan',
+  'Minnesota',
+  'Mississippi',
+  'Missouri',
+  'Montana',
+  'Nebraska',
+  'Nevada',
+  'New Hampshire',
+  'New Jersey',
+  'New Mexico',
+  'New York',
+  'North Carolina',
+  'North Dakota',
+  'Ohio',
+  'Oklahoma',
+  'Oregon',
+  'Pennsylvania',
+  'Puerto Rico',
+  'Rhode Island',
+  'South Carolina',
+  'South Dakota',
+  'Tennessee',
+  'Texas',
+  'Utah',
+  'Vermont',
+  'Virgin Islands',
+  'Virginia',
+  'Washington',
+  'West Virginia',
+  'Wisconsin',
+  'Wyoming',
+];
+
+class RepeaterBookDialog extends StatefulWidget {
+  const RepeaterBookDialog({super.key, required this.bridge});
+
+  final RadioBridge bridge;
+
+  @override
+  State<RepeaterBookDialog> createState() => _RepeaterBookDialogState();
+}
+
+class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
+  final _filterController = TextEditingController();
+  final _latitudeController = TextEditingController();
+  final _longitudeController = TextEditingController();
+  final _distanceController = TextEditingController();
+  final _resultFilterController = TextEditingController();
+  String _state = 'New York';
+  String _service = 'all';
+  bool _fmOnly = true;
+  bool _openOnly = true;
+  bool _mapView = false;
+  bool _loading = false;
+  String _status = '';
+  String? _error;
+  RepeaterSearchResults? _results;
+  final Set<RepeaterSearchResult> _selected = {};
+  RepeaterSortOrder _sortOrder = RepeaterSortOrder.source;
+  Size? _dialogSize;
+  final MapController _mapController = MapController();
+
+  @override
+  void dispose() {
+    _filterController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
+    _distanceController.dispose();
+    _resultFilterController.dispose();
+    _mapController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _search() async {
+    final latitude = double.tryParse(_latitudeController.text.trim());
+    final longitude = double.tryParse(_longitudeController.text.trim());
+    final distance = double.tryParse(_distanceController.text.trim());
+    if ((latitude == null) != (longitude == null)) {
+      setState(() => _error = 'Enter both latitude and longitude, or neither.');
+      return;
+    }
+    if (latitude != null && (latitude < -90 || latitude > 90)) {
+      setState(() => _error = 'Latitude must be between -90 and 90.');
+      return;
+    }
+    if (longitude != null && (longitude < -180 || longitude > 180)) {
+      setState(() => _error = 'Longitude must be between -180 and 180.');
+      return;
+    }
+    if (distance != null && latitude == null) {
+      setState(
+        () =>
+            _error = 'Latitude and longitude are required for a radius search.',
+      );
+      return;
+    }
+    if (distance != null && distance <= 0) {
+      setState(() => _error = 'Radius must be greater than zero.');
+      return;
+    }
+    setState(() {
+      _loading = true;
+      _error = null;
+      _results = null;
+      _selected.clear();
+      _status = 'Searching RepeaterBook…';
+    });
+    try {
+      final results = await widget.bridge.searchRepeaters(
+        state: _state,
+        service: _service,
+        filter: _filterController.text.trim(),
+        latitude: latitude,
+        longitude: longitude,
+        distance: distance,
+        fmOnly: _fmOnly,
+        openOnly: _openOnly,
+        onProgress: (progress) {
+          if (mounted) setState(() => _status = progress.label);
+        },
+      );
+      if (!mounted) return;
+      setState(() {
+        _results = results;
+        if (results.results.isEmpty) {
+          _error = _service == 'gmrs'
+              ? 'No matching GMRS repeaters were found. RepeaterBook may '
+                    'not have a GMRS listing for this area yet.'
+              : 'No matching repeaters were found.';
+        }
+      });
+    } catch (error) {
+      if (mounted) setState(() => _error = '$error');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  List<RadioChannel> get _selectedChannels {
+    return [for (final result in _selected) result.channel.copy()];
+  }
+
+  void _searchAmateurInstead() {
+    setState(() => _service = 'amateur');
+    _search();
+  }
+
+  String _channelDetail(RepeaterSearchResult result) {
+    final channel = result.channel;
+    final frequency = '${channel.frequency.toStringAsFixed(4)} MHz';
+    final tone = channel.tone.isEmpty ? 'no tone' : channel.tone;
+    final distance = result.distanceKm == null
+        ? ''
+        : ' • ${result.distanceKm!.toStringAsFixed(1)} km';
+    return '${result.service} • $frequency • ${channel.mode} • $tone$distance'
+        '${result.location.isEmpty ? '' : ' • ${result.location}'}';
+  }
+
+  void _setResultSelected(RepeaterSearchResult result, bool selected) {
+    setState(() {
+      if (selected) {
+        _selected.add(result);
+      } else {
+        _selected.remove(result);
+      }
+    });
+  }
+
+  Widget _buildResultsMap(
+    BuildContext context,
+    List<RepeaterSearchResult> visibleResults,
+  ) {
+    final points = [
+      for (final result in visibleResults)
+        if (result.latitude != null && result.longitude != null)
+          LatLng(result.latitude!, result.longitude!),
+    ];
+    final markers = [
+      for (final result in visibleResults)
+        if (result.latitude != null && result.longitude != null)
+          Marker(
+            point: LatLng(result.latitude!, result.longitude!),
+            width: 24,
+            height: 24,
+            child: Tooltip(
+              message:
+                  '${result.callsign} • ${result.channel.frequency.toStringAsFixed(4)} MHz\n'
+                  '${result.location}',
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () =>
+                    _setResultSelected(result, !_selected.contains(result)),
+                child: Icon(
+                  Icons.location_on,
+                  size: 22,
+                  color: _selected.contains(result)
+                      ? const Color(0xFF9B3C20)
+                      : const Color(0xFF1F7455),
+                  shadows: const [Shadow(blurRadius: 4, color: Colors.black45)],
+                ),
+              ),
+            ),
+          ),
+    ];
+    final fallback = points.isEmpty ? const LatLng(39.5, -98.35) : points.first;
+    void fitAllPoints() {
+      if (!mounted || points.isEmpty) return;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _mapController.fitCamera(
+          CameraFit.bounds(
+            bounds: LatLngBounds.fromPoints(points),
+            padding: const EdgeInsets.all(52),
+            maxZoom: points.length == 1 ? 12 : 11,
+          ),
+        );
+      });
+    }
+
+    final mapKey = ValueKey(
+      Object.hashAll(
+        points.map((point) => '${point.latitude},${point.longitude}'),
+      ),
+    );
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: FlutterMap(
+            key: mapKey,
+            mapController: _mapController,
+            options: MapOptions(
+              initialCenter: fallback,
+              initialZoom: 9,
+              minZoom: 2,
+              maxZoom: 18,
+              initialCameraFit: points.length > 1
+                  ? CameraFit.bounds(
+                      bounds: LatLngBounds.fromPoints(points),
+                      padding: const EdgeInsets.all(48),
+                      maxZoom: 12,
+                    )
+                  : null,
+              onMapReady: fitAllPoints,
+            ),
+            children: [
+              TileLayer(
+                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                userAgentPackageName: 'com.rickext.newchirp',
+                maxZoom: 19,
+              ),
+              CircleLayer(
+                circles: [
+                  for (final result in visibleResults)
+                    if (result.latitude != null && result.longitude != null)
+                      CircleMarker(
+                        point: LatLng(result.latitude!, result.longitude!),
+                        radius: 4,
+                        color: _selected.contains(result)
+                            ? const Color(0xFFB23A28)
+                            : const Color(0xFF19724F),
+                        borderStrokeWidth: 1,
+                        borderColor: Colors.white,
+                      ),
+                ],
+              ),
+              MarkerLayer(markers: markers),
+              const RichAttributionWidget(
+                attributions: [
+                  TextSourceAttribution('OpenStreetMap contributors'),
+                ],
+              ),
+            ],
+          ),
+        ),
+        if (points.isEmpty)
+          const Positioned.fill(
+            child: ColoredBox(
+              color: Color(0xCCFFFFFF),
+              child: Center(
+                child: Text('No coordinates are available for these results.'),
+              ),
+            ),
+          )
+        else
+          Positioned(
+            top: 8,
+            right: 8,
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 6,
+                ),
+                child: Text(
+                  '${points.length} mapped • tap a pin to select',
+                  style: const TextStyle(fontSize: 11),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final results = _results;
+    final sortedResults = results == null
+        ? const <RepeaterSearchResult>[]
+        : sortRepeaterResults(results.results, _sortOrder);
+    final visibleResults = filterRepeaterResults(
+      sortedResults,
+      _resultFilterController.text,
+    );
+    final size = MediaQuery.sizeOf(context);
+    final maxWidth = size.width - 24;
+    final maxHeight = size.height - 24;
+    final minWidth = maxWidth < 680 ? maxWidth : 680.0;
+    final minHeight = maxHeight < 520 ? maxHeight : 520.0;
+    final dialogWidth = (_dialogSize?.width ?? size.width * 0.9)
+        .clamp(minWidth, maxWidth)
+        .toDouble();
+    final dialogHeight = (_dialogSize?.height ?? size.height * 0.9)
+        .clamp(minHeight, maxHeight)
+        .toDouble();
+    final resultsHeight = dialogHeight > 480 ? dialogHeight - 300 : 180.0;
+    void resizeBy(double dx, double dy) {
+      setState(() {
+        _dialogSize = Size(
+          (dialogWidth + dx).clamp(minWidth, maxWidth).toDouble(),
+          (dialogHeight + dy).clamp(minHeight, maxHeight).toDouble(),
+        );
+      });
+    }
+
+    return Dialog(
+      insetPadding: const EdgeInsets.all(12),
+      child: SizedBox(
+        key: const Key('repeater-book-dialog'),
+        width: dialogWidth,
+        height: dialogHeight,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 22),
+              child: Column(
+                children: [
+                  const Icon(
+                    Icons.travel_explore,
+                    color: Color(0xFF1F7455),
+                    size: 30,
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Find repeaters',
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                  ),
+                  const SizedBox(height: 14),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Search RepeaterBook and add selected repeater channels to '
+                            'your current library. Verify repeater status and access '
+                            'before transmitting.',
+                            style: TextStyle(color: Colors.black54),
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  initialValue: _state,
+                                  decoration: const InputDecoration(
+                                    labelText: 'State or territory',
+                                  ),
+                                  items: _repeaterStates
+                                      .map(
+                                        (state) => DropdownMenuItem(
+                                          value: state,
+                                          child: Text(state),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: _loading
+                                      ? null
+                                      : (value) {
+                                          if (value != null) {
+                                            setState(() => _state = value);
+                                          }
+                                        },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              SizedBox(
+                                width: 190,
+                                child: DropdownButtonFormField<String>(
+                                  isExpanded: true,
+                                  initialValue: _service,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Service',
+                                  ),
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 'all',
+                                      child: Text('Amateur + GMRS'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'amateur',
+                                      child: Text('Amateur (ham)'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'gmrs',
+                                      child: Text('GMRS'),
+                                    ),
+                                  ],
+                                  onChanged: _loading
+                                      ? null
+                                      : (value) {
+                                          if (value != null) {
+                                            setState(() => _service = value);
+                                          }
+                                        },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              SizedBox(
+                                width: 165,
+                                child:
+                                    DropdownButtonFormField<RepeaterSortOrder>(
+                                      isExpanded: true,
+                                      initialValue: _sortOrder,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Sort results',
+                                      ),
+                                      items: const [
+                                        DropdownMenuItem(
+                                          value: RepeaterSortOrder.source,
+                                          child: Text('Source order'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: RepeaterSortOrder.city,
+                                          child: Text('City'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: RepeaterSortOrder.county,
+                                          child: Text('County'),
+                                        ),
+                                      ],
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                          setState(() => _sortOrder = value);
+                                        }
+                                      },
+                                    ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: _filterController,
+                            enabled: !_loading,
+                            onSubmitted: (_) => _search(),
+                            decoration: const InputDecoration(
+                              labelText:
+                                  'City, county, callsign, landmark, or notes',
+                              prefixIcon: Icon(Icons.search),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  controller: _latitudeController,
+                                  enabled: !_loading,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                        decimal: true,
+                                        signed: true,
+                                      ),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Latitude (optional)',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: TextField(
+                                  controller: _longitudeController,
+                                  enabled: !_loading,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                        decimal: true,
+                                        signed: true,
+                                      ),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Longitude (optional)',
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: TextField(
+                                  controller: _distanceController,
+                                  enabled: !_loading,
+                                  keyboardType:
+                                      const TextInputType.numberWithOptions(
+                                        decimal: true,
+                                      ),
+                                  decoration: const InputDecoration(
+                                    labelText: 'Radius km',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Wrap(
+                            spacing: 18,
+                            children: [
+                              CheckboxListTile(
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                title: const Text('Open repeaters only'),
+                                value: _openOnly,
+                                onChanged: _loading
+                                    ? null
+                                    : (value) => setState(
+                                        () => _openOnly = value ?? false,
+                                      ),
+                              ),
+                              CheckboxListTile(
+                                contentPadding: EdgeInsets.zero,
+                                dense: true,
+                                controlAffinity:
+                                    ListTileControlAffinity.leading,
+                                title: const Text('FM-capable only'),
+                                value: _fmOnly,
+                                onChanged: _loading
+                                    ? null
+                                    : (value) => setState(
+                                        () => _fmOnly = value ?? false,
+                                      ),
+                              ),
+                            ],
+                          ),
+                          if (_loading) ...[
+                            const LinearProgressIndicator(),
+                            const SizedBox(height: 6),
+                            Text(
+                              _status,
+                              style: const TextStyle(color: Colors.black54),
+                            ),
+                          ],
+                          if (_error != null) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              _error!,
+                              style: const TextStyle(color: Color(0xFF9B3C20)),
+                            ),
+                            if (_service == 'gmrs' &&
+                                _results != null &&
+                                _results!.results.isEmpty)
+                              TextButton.icon(
+                                onPressed: _loading
+                                    ? null
+                                    : _searchAmateurInstead,
+                                icon: const Icon(Icons.search),
+                                label: const Text(
+                                  'Search Amateur repeaters instead',
+                                ),
+                              ),
+                          ],
+                          if (results != null) ...[
+                            const SizedBox(height: 8),
+                            TextField(
+                              controller: _resultFilterController,
+                              onChanged: (_) => setState(() {}),
+                              decoration: InputDecoration(
+                                isDense: true,
+                                labelText: 'Filter loaded results',
+                                hintText:
+                                    'City, county, callsign, mode, service, or frequency',
+                                prefixIcon: const Icon(
+                                  Icons.filter_alt_outlined,
+                                ),
+                                suffixIcon: _resultFilterController.text.isEmpty
+                                    ? null
+                                    : IconButton(
+                                        tooltip: 'Clear result filter',
+                                        onPressed: () => setState(
+                                          _resultFilterController.clear,
+                                        ),
+                                        icon: const Icon(Icons.close),
+                                      ),
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  results == null
+                                      ? 'Search to preview repeater channels.'
+                                      : '${visibleResults.length} shown'
+                                            ' of ${results.results.length} loaded'
+                                            ' • Data from RepeaterBook.com',
+                                  style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ),
+                              if (results != null &&
+                                  visibleResults.isNotEmpty) ...[
+                                SegmentedButton<bool>(
+                                  segments: const [
+                                    ButtonSegment(
+                                      value: false,
+                                      icon: Icon(Icons.view_list_outlined),
+                                      label: Text('List'),
+                                    ),
+                                    ButtonSegment(
+                                      value: true,
+                                      icon: Icon(Icons.map_outlined),
+                                      label: Text('Map'),
+                                    ),
+                                  ],
+                                  selected: {_mapView},
+                                  showSelectedIcon: false,
+                                  style: const ButtonStyle(
+                                    visualDensity: VisualDensity.compact,
+                                  ),
+                                  onSelectionChanged: (selection) {
+                                    setState(() => _mapView = selection.first);
+                                  },
+                                ),
+                                const SizedBox(width: 8),
+                                TextButton(
+                                  onPressed: () => setState(
+                                    () => _selected.addAll(visibleResults),
+                                  ),
+                                  child: const Text('Select all'),
+                                ),
+                                TextButton(
+                                  onPressed: () => setState(_selected.clear),
+                                  child: const Text('Clear'),
+                                ),
+                              ],
+                            ],
+                          ),
+                          SizedBox(
+                            key: const Key('repeater-results-area'),
+                            height: resultsHeight,
+                            child: results == null
+                                ? const Center(
+                                    child: Icon(
+                                      Icons.travel_explore,
+                                      size: 48,
+                                      color: Colors.black26,
+                                    ),
+                                  )
+                                : _mapView
+                                ? _buildResultsMap(context, visibleResults)
+                                : ListView.separated(
+                                    itemCount: visibleResults.length,
+                                    separatorBuilder: (_, _) =>
+                                        const Divider(height: 1),
+                                    itemBuilder: (context, index) {
+                                      final result = visibleResults[index];
+                                      return CheckboxListTile(
+                                        dense: true,
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                              horizontal: 4,
+                                            ),
+                                        value: _selected.contains(result),
+                                        onChanged: (selected) {
+                                          setState(() {
+                                            if (selected == true) {
+                                              _selected.add(result);
+                                            } else {
+                                              _selected.remove(result);
+                                            }
+                                          });
+                                        },
+                                        title: Text(
+                                          result.callsign.isEmpty
+                                              ? result.channel.name
+                                              : '${result.callsign} — ${result.channel.name}',
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        subtitle: Text(
+                                          _channelDetail(result),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: _loading
+                            ? null
+                            : () => Navigator.pop(context),
+                        child: const Text('Close'),
+                      ),
+                      const SizedBox(width: 8),
+                      FilledButton.tonalIcon(
+                        onPressed: _loading ? null : _search,
+                        icon: const Icon(Icons.search),
+                        label: const Text('Search'),
+                      ),
+                      const SizedBox(width: 8),
+                      FilledButton.icon(
+                        onPressed: _selected.isEmpty || _loading
+                            ? null
+                            : () => Navigator.pop(context, _selectedChannels),
+                        icon: const Icon(Icons.add),
+                        label: Text(
+                          _selected.isEmpty
+                              ? 'Add selected'
+                              : 'Add ${_selected.length} selected',
+                        ),
+                      ),
+                      const SizedBox(width: 18),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Positioned(
+              top: 36,
+              right: 0,
+              bottom: 36,
+              width: 12,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.resizeLeftRight,
+                child: GestureDetector(
+                  key: const Key('repeater-book-width-handle'),
+                  behavior: HitTestBehavior.opaque,
+                  onHorizontalDragUpdate: (details) =>
+                      resizeBy(details.delta.dx, 0),
+                  child: Center(
+                    child: Container(
+                      width: 3,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: const Color(0x6639725C),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 36,
+              right: 36,
+              bottom: 0,
+              height: 12,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.resizeUpDown,
+                child: GestureDetector(
+                  key: const Key('repeater-book-height-handle'),
+                  behavior: HitTestBehavior.opaque,
+                  onVerticalDragUpdate: (details) =>
+                      resizeBy(0, details.delta.dy),
+                  child: Center(
+                    child: Container(
+                      width: 42,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        color: const Color(0x6639725C),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.resizeDownRight,
+                child: Tooltip(
+                  message: 'Drag to resize',
+                  child: GestureDetector(
+                    key: const Key('repeater-book-corner-handle'),
+                    behavior: HitTestBehavior.opaque,
+                    onPanUpdate: (details) =>
+                        resizeBy(details.delta.dx, details.delta.dy),
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: const BoxDecoration(
+                        color: Color(0xEEF1F8F4),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomRight: Radius.circular(12),
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.open_in_full_rounded,
+                        size: 18,
+                        color: Color(0xFF39725C),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _HelpButton extends StatelessWidget {
   const _HelpButton({required this.title, required this.details});
 
@@ -5487,16 +6407,20 @@ class _ChannelTableState extends State<_ChannelTable> {
       ),
     ];
 
-    final extras = <String, String>{};
+    final extras = <String, ChannelExtraField>{};
     for (final entry in widget.entries) {
       for (final field in entry.value.extras) {
-        extras.putIfAbsent(field.name, () => field.label);
+        final current = extras[field.name];
+        if (current == null ||
+            (current.documentation == null && field.documentation != null)) {
+          extras[field.name] = field;
+        }
       }
     }
     for (final extra in extras.entries) {
       columns.add(
         _ChannelColumn(
-          extra.value.toUpperCase(),
+          extra.value.label.toUpperCase(),
           96,
           (channel) {
             final matches = channel.extras.where(
@@ -5508,7 +6432,9 @@ class _ChannelTableState extends State<_ChannelTable> {
             return value?.toString() ?? '—';
           },
           id: 'extra:${extra.key}',
-          help: 'Radio-specific channel setting reported by the CHIRP driver.',
+          help:
+              extra.value.documentation ??
+              'Radio-specific channel setting reported by the CHIRP driver.',
         ),
       );
     }
@@ -6196,7 +7122,7 @@ class _ChannelEditor extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   for (final field in channel.extras) ...[
-                    _ExtraFieldEditor(
+                    ExtraFieldEditor(
                       field: field,
                       onChanged: (value) =>
                           onChanged(() => field.value = value),
@@ -6253,6 +7179,7 @@ class _TextField extends StatefulWidget {
     this.maxLines = 1,
     this.maxLength,
     this.helperText,
+    this.documentation,
   });
   final String label;
   final String value;
@@ -6260,6 +7187,7 @@ class _TextField extends StatefulWidget {
   final int maxLines;
   final int? maxLength;
   final String? helperText;
+  final String? documentation;
   @override
   State<_TextField> createState() => _TextFieldState();
 }
@@ -6295,37 +7223,62 @@ class _TextFieldState extends State<_TextField> {
     decoration: InputDecoration(
       labelText: widget.label,
       helperText: widget.helperText,
+      suffixIcon: widget.documentation == null
+          ? null
+          : _ExtraFieldHelp(documentation: widget.documentation!),
     ),
   );
 }
 
-class _ExtraFieldEditor extends StatelessWidget {
-  const _ExtraFieldEditor({required this.field, required this.onChanged});
+class ExtraFieldEditor extends StatelessWidget {
+  const ExtraFieldEditor({
+    super.key,
+    required this.field,
+    required this.onChanged,
+  });
 
   final ChannelExtraField field;
   final ValueChanged<dynamic> onChanged;
 
   @override
   Widget build(BuildContext context) {
+    final documentation = field.documentation?.trim();
+    late final Widget control;
     if (field.kind == 'boolean') {
-      return SwitchListTile.adaptive(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-        title: Text(field.label),
-        value: field.value == true,
-        onChanged: field.mutable ? onChanged : null,
+      control = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+        child: Row(
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Flexible(child: Text(field.label)),
+                  if (documentation != null && documentation.isNotEmpty) ...[
+                    const SizedBox(width: 6),
+                    _ExtraFieldHelp(documentation: documentation),
+                  ],
+                ],
+              ),
+            ),
+            Switch.adaptive(
+              value: field.value == true,
+              onChanged: field.mutable ? onChanged : null,
+            ),
+          ],
+        ),
       );
-    }
-    if (field.kind == 'choice' && field.choices.isNotEmpty) {
-      return _ChoiceField(
+    } else if (field.kind == 'choice' && field.choices.isNotEmpty) {
+      control = _ChoiceField(
         label: field.label,
+        documentation: documentation,
         value: field.value?.toString() ?? '',
         choices: {for (final choice in field.choices) choice: choice},
         onValue: field.mutable ? onChanged : (_) {},
       );
-    }
-    if (field.kind == 'integer' || field.kind == 'number') {
-      return _NumberField(
+    } else if (field.kind == 'integer' || field.kind == 'number') {
+      control = _NumberField(
         label: field.label,
+        documentation: documentation,
         value: (field.value as num?)?.toDouble() ?? 0,
         decimals: field.kind == 'integer' ? 0 : 2,
         onValue: field.mutable
@@ -6333,23 +7286,41 @@ class _ExtraFieldEditor extends StatelessWidget {
                   onChanged(field.kind == 'integer' ? value.toInt() : value)
             : (_) {},
       );
+    } else {
+      control = _TextField(
+        label: field.label,
+        documentation: documentation,
+        value: field.value?.toString() ?? '',
+        onValue: field.mutable ? onChanged : (_) {},
+      );
     }
-    return _TextField(
-      label: field.label,
-      value: field.value?.toString() ?? '',
-      onValue: field.mutable ? onChanged : (_) {},
-    );
+    return control;
   }
+}
+
+class _ExtraFieldHelp extends StatelessWidget {
+  const _ExtraFieldHelp({required this.documentation});
+
+  final String documentation;
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: documentation,
+    waitDuration: const Duration(milliseconds: 300),
+    child: const Icon(Icons.info_outline, size: 17, color: Color(0xFF39725C)),
+  );
 }
 
 class _NumberField extends StatefulWidget {
   const _NumberField({
     required this.label,
+    this.documentation,
     required this.value,
     required this.onValue,
     required this.decimals,
   });
   final String label;
+  final String? documentation;
   final double value;
   final ValueChanged<double> onValue;
   final int decimals;
@@ -6409,18 +7380,25 @@ class _NumberFieldState extends State<_NumberField> {
       final parsed = double.tryParse(text);
       if (parsed != null) widget.onValue(parsed);
     },
-    decoration: InputDecoration(labelText: widget.label),
+    decoration: InputDecoration(
+      labelText: widget.label,
+      suffixIcon: widget.documentation == null
+          ? null
+          : _ExtraFieldHelp(documentation: widget.documentation!),
+    ),
   );
 }
 
 class _ChoiceField extends StatelessWidget {
   const _ChoiceField({
     required this.label,
+    this.documentation,
     required this.value,
     required this.choices,
     required this.onValue,
   });
   final String label;
+  final String? documentation;
   final String value;
   final Map<String, String> choices;
   final ValueChanged<String> onValue;
@@ -6430,7 +7408,12 @@ class _ChoiceField extends StatelessWidget {
     return DropdownButtonFormField<String>(
       isExpanded: true,
       initialValue: safeValue,
-      decoration: InputDecoration(labelText: label),
+      decoration: InputDecoration(
+        labelText: label,
+        suffixIcon: documentation == null
+            ? null
+            : _ExtraFieldHelp(documentation: documentation!),
+      ),
       items: choices.entries
           .map(
             (e) => DropdownMenuItem(

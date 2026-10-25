@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Class
-title: _ExtraFieldEditor
+title: ExtraFieldEditor
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,17 +9,17 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T21:17:18Z"
+timestamp: "2026-10-25T00:27:32Z"
 concept_id: main/ExtraFieldEditor
 language: dart
 ---
 
-# _ExtraFieldEditor
+# ExtraFieldEditor
 
 ## Signature
 
 ```dart
-class _ExtraFieldEditor
+class ExtraFieldEditor
 ```
 
 ## Methods
@@ -27,7 +27,7 @@ class _ExtraFieldEditor
 - `build`
 
 ## Source
-Lines 6302–6343 in `main.dart`
+Lines 7233–7299 in `main.dart`
 
 ## Relationships
 

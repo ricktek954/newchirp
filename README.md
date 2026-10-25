@@ -17,6 +17,9 @@ implementation history, architecture, known risks, and prioritized next work.
 - Right-click clear channel, which clears it from the radio on the next write
 - Undo/redo with keyboard shortcuts
 - 22-channel GMRS starter library
+- RepeaterBook search with state, location, radius, mode, and open-repeater
+  filters; preview on a synchronized interactive map and selectively insert
+  amateur or GMRS repeater channels
 - USB serial-port discovery
 - CHIRP radio-model catalog and guarded read/write workflow
 - Session-scoped loading of experimental CHIRP `.py` and `.mod` driver modules

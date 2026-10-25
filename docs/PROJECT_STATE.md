@@ -11,7 +11,9 @@ release requirements.
 - The macOS `1.0.18` release is built, signed, notarized, stapled, uploaded,
   and live. It includes the FT-60 manual-read timing fix.
 - GitHub HEAD is the macOS `1.0.18` release-source commit.
-- No build, upload, or deployment is currently in progress.
+- Unreleased working-tree work adds RepeaterBook search/import, headless
+  live-radio support, and radio-specific field help. No release build, upload,
+  or deployment is in progress.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not
@@ -29,6 +31,8 @@ release requirements.
 - Previous source commit: `2d7e1aa` (`Fix FT-60 manual read timing`)
 - Open pull requests: none
 - Checked-out source version: `1.0.18+18`
+- macOS builds are pinned to CocoaPods with
+  `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
   - This is a user asset, not application source.
   - Do not commit or delete it unless explicitly requested.
@@ -79,6 +83,9 @@ macOS artifact:
   after loading and unloading.
 - FT-60 reads now tell the user to hold PTT only after the serial port is open,
   with read-specific recovery guidance if the initial frame times out.
+- RepeaterBook search supports amateur and GMRS results, optional proximity
+  filtering, city/county sorting, local result filtering, an interactive map,
+  multi-select, and insertion into the current library.
 
 ## macOS 1.0.18 verification status
 

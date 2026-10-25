@@ -10,14 +10,23 @@
 - [channel_radio_for](channel_radio_for.md) — Return the radio object that owns channel memories.
 - [emit_progress](emit_progress.md) — Send structured transfer progress without touching the JSON stdout.
 - [emit_read_ready](emit_read_ready.md) — Tell the user when a manual PTT-triggered clone read can begin.
+- [extra_field_doc](extra_field_doc.md) — Return CHIRP's documentation or a concise fallback for common terms.
 - [extra_fields_json](extra_fields_json.md)
 - [features_json](features_json.md)
+- [fetch_repeaterbook_data](fetch_repeaterbook_data.md) — Fetch RepeaterBook's CHIRP-compatible compressed database.
+- [headless_live_adapter](headless_live_adapter.md) — Give a live radio the file-backed interfaces NewChirp requires.
 - [load_chirp](load_chirp.md)
 - [main](main.md)
 - [memory_json](memory_json.md)
+- [normalize_repeaterbook_query](normalize_repeaterbook_query.md) — Treat location words like "Broward County" as a county name.
 - [open_serial](open_serial.md)
 - [radio_for](radio_for.md)
 - [radio_from_image](radio_from_image.md) — Build a driver instance backed only by a saved radio image.
+- [repeaterbook_cache_path](repeaterbook_cache_path.md)
+- [repeaterbook_item_to_channel](repeaterbook_item_to_channel.md)
+- [repeaterbook_resource_name](repeaterbook_resource_name.md)
+- [repeaterbook_tone](repeaterbook_tone.md)
+- [search_repeaterbook](search_repeaterbook.md)
 - [setting_doc](setting_doc.md)
 - [setting_value_json](setting_value_json.md)
 - [settings_payload](settings_payload.md)

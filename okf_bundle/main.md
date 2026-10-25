@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T21:17:18Z"
+timestamp: "2026-10-25T00:27:32Z"
 concept_id: main
 language: dart
 ---
@@ -38,6 +38,8 @@ language: dart
 | related | [_LibraryState](/main/LibraryState.md) |
 | related | [_ChannelApplyDialog](/main/ChannelApplyDialog.md) |
 | related | [_ChannelApplyDialogState](/main/ChannelApplyDialogState.md) |
+| related | [RepeaterBookDialog](/main/RepeaterBookDialog.md) |
+| related | [_RepeaterBookDialogState](/main/RepeaterBookDialogState.md) |
 | related | [_HelpButton](/main/HelpButton.md) |
 | related | [_WelcomeAction](/main/WelcomeAction.md) |
 | related | [_Metric](/main/Metric.md) |
@@ -47,7 +49,8 @@ language: dart
 | related | [_ChannelEditor](/main/ChannelEditor.md) |
 | related | [_TextField](/main/TextField.md) |
 | related | [_TextFieldState](/main/TextFieldState.md) |
-| related | [_ExtraFieldEditor](/main/ExtraFieldEditor.md) |
+| related | [ExtraFieldEditor](/main/ExtraFieldEditor.md) |
+| related | [_ExtraFieldHelp](/main/ExtraFieldHelp.md) |
 | related | [_NumberField](/main/NumberField.md) |
 | related | [_NumberFieldState](/main/NumberFieldState.md) |
 | related | [_ChoiceField](/main/ChoiceField.md) |
@@ -65,6 +68,8 @@ language: dart
 | related | [_headerCell](/main/headerCell.md) |
 | related | [legendItem](/main/legendItem.md) |
 | related | [_showAbbreviationGlossary](/main/showAbbreviationGlossary.md) |
+| related | [fitAllPoints](/main/fitAllPoints.md) |
+| related | [resizeBy](/main/resizeBy.md) |
 | related | [inactive](/main/inactive.md) |
 | related | [label](/main/label.md) |
 | related | [choices](/main/choices.md) |
@@ -112,6 +117,7 @@ language: dart
 | related | [_channelIssues](/main/channelIssues.md) |
 | related | [_sortChannelsByLocation](/main/sortChannelsByLocation.md) |
 | related | [_moveChannel](/main/moveChannel.md) |
+| related | [_findRepeaters](/main/findRepeaters.md) |
 | related | [_showNoEmptyChannelSlot](/main/showNoEmptyChannelSlot.md) |
 | related | [_saveCsv](/main/saveCsv.md) |
 | related | [_confirmReplaceLibrary](/main/confirmReplaceLibrary.md) |
@@ -189,6 +195,16 @@ language: dart
 | related | [dispose](/main/dispose.md) |
 | related | [build](/main/build.md) |
 | related | [_apply](/main/apply.md) |
+| related | [createState](/main/createState.md) |
+| related | [dispose](/main/dispose.md) |
+| related | [_search](/main/search.md) |
+| related | [_searchAmateurInstead](/main/searchAmateurInstead.md) |
+| related | [_channelDetail](/main/channelDetail.md) |
+| related | [_setResultSelected](/main/setResultSelected.md) |
+| related | [_buildResultsMap](/main/buildResultsMap.md) |
+| related | [fitAllPoints](/main/fitAllPoints.md) |
+| related | [build](/main/build.md) |
+| related | [resizeBy](/main/resizeBy.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
@@ -210,6 +226,7 @@ language: dart
 | related | [initState](/main/initState.md) |
 | related | [didUpdateWidget](/main/didUpdateWidget.md) |
 | related | [dispose](/main/dispose.md) |
+| related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |

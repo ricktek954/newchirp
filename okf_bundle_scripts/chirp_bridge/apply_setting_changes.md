@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T20:43:15Z"
+timestamp: "2026-10-25T00:30:13Z"
 concept_id: chirp_bridge/apply_setting_changes
 language: python
 ---
@@ -31,7 +31,7 @@ def apply_setting_changes(settings, changes)
 | `changes` | `—` | `—` |
 
 ## Source
-Lines 371–392 in `chirp_bridge.py`
+Lines 433–454 in `chirp_bridge.py`
 
 ## Relationships
 

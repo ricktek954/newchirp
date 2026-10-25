@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/main.dart';
 import 'package:newchirp/models/radio_channel.dart';
+import 'package:newchirp/models/repeater_search.dart';
 import 'package:newchirp/services/column_layout_store.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 import 'package:newchirp/services/update_checker.dart';
@@ -35,6 +37,70 @@ class _FailingUpdateChecker extends UpdateChecker {
   @override
   Future<UpdateCheckResult> check(String currentVersion) async {
     throw UpdateCheckException('Update service unavailable.');
+  }
+}
+
+class _FakeRepeaterBridge extends RadioBridge {
+  @override
+  Future<RepeaterSearchResults> searchRepeaters({
+    required String state,
+    required String service,
+    String filter = '',
+    double? latitude,
+    double? longitude,
+    double? distance,
+    bool fmOnly = true,
+    bool openOnly = true,
+    void Function(RadioProgress)? onProgress,
+  }) async {
+    final channel = RadioChannel(
+      location: 1,
+      name: 'Buffalo',
+      frequency: 146.865,
+      duplex: '-',
+      offset: 0.6,
+      tone: 'Tone',
+      txTone: 151.4,
+    );
+    final secondChannel = RadioChannel(
+      location: 2,
+      name: 'Point of Americas',
+      frequency: 444,
+      duplex: '+',
+      offset: 5,
+      tone: 'TSQL',
+      txTone: 88.5,
+      rxTone: 110.9,
+    );
+    return RepeaterSearchResults(
+      source: 'RepeaterBook',
+      sourceUrl: 'https://repeaterbook.com',
+      totalMatches: 2,
+      results: [
+        RepeaterSearchResult(
+          channel: channel,
+          callsign: 'WB2ECR',
+          city: 'Buffalo',
+          county: 'Erie',
+          state: state,
+          use: 'OPEN',
+          service: 'Amateur',
+          latitude: 42.8864,
+          longitude: -78.8784,
+        ),
+        RepeaterSearchResult(
+          channel: secondChannel,
+          callsign: 'W4BUG',
+          city: 'Fort Lauderdale',
+          county: 'Broward',
+          state: state,
+          use: 'OPEN',
+          service: 'Amateur',
+          latitude: 26.1224,
+          longitude: -80.1373,
+        ),
+      ],
+    );
   }
 }
 
@@ -70,6 +136,156 @@ void main() {
       'says "Listening for the radio", then hold the [PTT] switch for one '
       'second to send the image.',
     );
+  });
+
+  testWidgets('radio extras only toggle through the switch', (tester) async {
+    var value = false;
+    final field = ChannelExtraField(
+      name: 'bcl',
+      label: 'BCL',
+      kind: 'boolean',
+      value: value,
+      documentation: 'Busy Channel Lockout.',
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) => ExtraFieldEditor(
+              field: field,
+              onChanged: (next) => setState(() {
+                value = next as bool;
+                field.value = value;
+              }),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('BCL'));
+    await tester.pump();
+    expect(value, isFalse);
+
+    await tester.tap(find.byType(Switch));
+    await tester.pump();
+    expect(value, isTrue);
+  });
+
+  testWidgets('RepeaterBook search previews and returns selected channels', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    List<RadioChannel>? selected;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: TextButton(
+              onPressed: () async {
+                selected = await showDialog<List<RadioChannel>>(
+                  context: context,
+                  builder: (context) =>
+                      RepeaterBookDialog(bridge: _FakeRepeaterBridge()),
+                );
+              },
+              child: const Text('Open repeater search'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open repeater search'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Search'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
+    expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
+    await tester.tap(find.text('Map'));
+    await tester.pump();
+    final allMarkers = tester.widget<MarkerLayer>(find.byType(MarkerLayer));
+    expect(allMarkers.markers, hasLength(2));
+    expect(
+      allMarkers.markers
+          .map((marker) => '${marker.point.latitude},${marker.point.longitude}')
+          .toSet(),
+      hasLength(2),
+    );
+    await tester.tap(find.text('List'));
+    await tester.pump();
+    final resultFilter = find.byWidgetPredicate(
+      (widget) =>
+          widget is TextField &&
+          widget.decoration?.labelText == 'Filter loaded results',
+    );
+    await tester.enterText(resultFilter, 'Broward');
+    await tester.pumpAndSettle();
+    expect(find.text('WB2ECR — Buffalo'), findsNothing);
+    expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
+    await tester.tap(find.text('Map'));
+    await tester.pump();
+    final markerLayer = tester.widget<MarkerLayer>(find.byType(MarkerLayer));
+    expect(markerLayer.markers, hasLength(1));
+    await tester.tap(find.text('List'));
+    await tester.pump();
+
+    final initialDialogSize = tester.getSize(
+      find.byKey(const Key('repeater-book-dialog')),
+    );
+    tester.view.physicalSize = const Size(1300, 820);
+    await tester.pumpAndSettle();
+    final resizedDialogSize = tester.getSize(
+      find.byKey(const Key('repeater-book-dialog')),
+    );
+    final initialResultsSize = tester.getSize(
+      find.byKey(const Key('repeater-results-area')),
+    );
+    expect(resizedDialogSize.width, greaterThan(initialDialogSize.width));
+    expect(resizedDialogSize.height, greaterThan(initialDialogSize.height));
+    await tester.drag(
+      find.byKey(const Key('repeater-book-width-handle')),
+      const Offset(100, 0),
+    );
+    await tester.pumpAndSettle();
+    final widthResizedSize = tester.getSize(
+      find.byKey(const Key('repeater-book-dialog')),
+    );
+    expect(widthResizedSize.width, greaterThan(resizedDialogSize.width));
+    expect(widthResizedSize.width, greaterThan(1200));
+    expect(widthResizedSize.height, resizedDialogSize.height);
+    await tester.drag(
+      find.byKey(const Key('repeater-book-height-handle')),
+      const Offset(0, 50),
+    );
+    await tester.pumpAndSettle();
+    final heightResizedSize = tester.getSize(
+      find.byKey(const Key('repeater-book-dialog')),
+    );
+    final heightResizedResultsSize = tester.getSize(
+      find.byKey(const Key('repeater-results-area')),
+    );
+    expect(heightResizedSize.width, widthResizedSize.width);
+    expect(heightResizedSize.height, greaterThan(widthResizedSize.height));
+    expect(
+      heightResizedResultsSize.height,
+      greaterThan(initialResultsSize.height),
+    );
+
+    await tester.ensureVisible(find.text('W4BUG — Point of Americas'));
+    await tester.tap(find.text('W4BUG — Point of Americas'));
+    await tester.pump();
+    expect(find.text('Add 1 selected'), findsOneWidget);
+    await tester.tap(find.text('Add 1 selected'));
+    await tester.pumpAndSettle();
+
+    expect(selected, hasLength(1));
+    expect(selected!.single.frequency, 444);
   });
 
   testWidgets('startup update check offers a newer release', (tester) async {
@@ -192,6 +408,15 @@ void main() {
 
     expect(find.text('DTCS POL'), findsOneWidget);
     expect(find.text('CTCSS'), findsNothing);
+
+    await tester.enterText(search, 'BCL');
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(of: find.byType(ListTile), matching: find.text('BCL')),
+      findsOneWidget,
+    );
+    expect(find.textContaining('Busy Channel Lockout'), findsOneWidget);
   });
 
   testWidgets('starts with configuration choices', (tester) async {
@@ -210,6 +435,21 @@ void main() {
     expect(find.text('Use GMRS template'), findsNothing);
     expect(find.text('Connect radio'), findsOneWidget);
     expect(find.text('GMRS 1'), findsNothing);
+  });
+
+  testWidgets('Find repeaters opens from the left navigation', (tester) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Find repeaters').first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('State or territory'), findsOneWidget);
+    expect(find.text('Data from RepeaterBook.com'), findsNothing);
   });
 
   testWidgets('opens the GMRS starter only when selected', (tester) async {

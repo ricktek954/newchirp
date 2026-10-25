@@ -11,14 +11,17 @@
 
 ## Functions
 
+- [_bundledAssetCandidates](bundledAssetCandidates.md)
 - [_bundledResourcesDirectory](bundledResourcesDirectory.md)
 - [_findChirpSource](findChirpSource.md)
 - [_findNewChirpDrivers](findNewChirpDrivers.md)
+- [_loadAssetBytes](loadAssetBytes.md)
 - [_materializeBridge](materializeBridge.md)
 - [_materializePythonDependencies](materializePythonDependencies.md)
 - [_parseComPorts](parseComPorts.md)
 - [_resolvePython](resolvePython.md) — The bundled CHIRP tree uses Python 3.10+ syntax, so prefer an interpreter
 - [_run](run.md)
+- [_runWithRuntime](runWithRuntime.md)
 - [_windowsSerialPortDetails](windowsSerialPortDetails.md)
 - [_windowsSerialPortNames](windowsSerialPortNames.md) — Windows: read the live COM ports from the SERIALCOMM registry key, then
 - [cancelActive](cancelActive.md)
@@ -34,6 +37,7 @@
 - [RadioSettingNode](RadioSettingNode.md)
 - [readImage](readImage.md)
 - [readSettings](readSettings.md)
+- [searchRepeaters](searchRepeaters.md)
 - [serialPortDetails](serialPortDetails.md)
 - [serialPorts](serialPorts.md)
 - [strings](strings.md)

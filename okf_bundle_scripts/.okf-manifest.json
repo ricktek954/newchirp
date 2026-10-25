@@ -38,8 +38,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1792874595353306599,
-      "hash": "faf72df8dccd0680496df00300ac6857e13e6dab94621acdfd86444c498ec2ee",
+      "mtime_ns": 1792888213945173442,
+      "hash": "428c7fc185a20d381b6693e9d874bd8681509293a73871b85b4556ec8a5e12d1",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/emit_progress",
@@ -49,6 +49,7 @@
         "chirp_bridge/load_chirp",
         "chirp_bridge/memory_json",
         "chirp_bridge/extra_fields_json",
+        "chirp_bridge/extra_field_doc",
         "chirp_bridge/features_json",
         "chirp_bridge/setting_doc",
         "chirp_bridge/setting_value_json",
@@ -56,11 +57,19 @@
         "chirp_bridge/apply_setting_changes",
         "chirp_bridge/apply_json",
         "chirp_bridge/open_serial",
+        "chirp_bridge/headless_live_adapter",
         "chirp_bridge/radio_for",
         "chirp_bridge/emit_read_ready",
         "chirp_bridge/radio_from_image",
         "chirp_bridge/channel_context",
         "chirp_bridge/channel_radio_for",
+        "chirp_bridge/repeaterbook_resource_name",
+        "chirp_bridge/repeaterbook_cache_path",
+        "chirp_bridge/fetch_repeaterbook_data",
+        "chirp_bridge/repeaterbook_tone",
+        "chirp_bridge/repeaterbook_item_to_channel",
+        "chirp_bridge/normalize_repeaterbook_query",
+        "chirp_bridge/search_repeaterbook",
         "chirp_bridge/settings_payload",
         "chirp_bridge/main"
       ]
@@ -72,7 +81,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "0b46fc8365fde218b0bf3a6df25856b04b1bef5cd156ab374f0b3fee419df2d4",
+      "edge_hash": "0504903224af6a2f5f06942a4a0f76422176e56c0f28f1cfdd9a711b0ea96ccb",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -80,7 +89,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "81b1d992a0f235f4968632de2598fe41fae21d10b4565d416c2e91070198800f",
+      "edge_hash": "433fa1038f7b7559594c0b5e284cd65b11d9afdf981f27429d41b7cc23568ee5",
       "enriched": false
     },
     "chirp_bridge/status_progress": {
@@ -104,7 +113,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "e80c6c28dad0dcd043a3e1c849867509c741729ca2a009d9da78bdf6eba108f0",
+      "edge_hash": "0780573db23fe5d1306058dadff1780eac272ff9125bfa2702dd8dad04fa3df0",
       "enriched": false
     },
     "chirp_bridge/extra_fields_json": {
@@ -112,7 +121,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "a742bdf7921c9f6afb1e4c0d2d3db7e1f42f849b1e55a511eed9762fcb651b23",
+      "edge_hash": "cd403cb9e52886fa0196ce792ea05acae20c1f39e16afeef421e7f646b74c9fa",
       "enriched": false
     },
     "chirp_bridge/features_json": {
@@ -128,7 +137,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "f957be007efd42ff2e8b0ab1a4dcd96ace84a3ef8339bd275c719d5c4fd42b29",
+      "edge_hash": "2dee80b1c35a5bad78c4b3cd08f52b1817808ade6ad047260df4bbac5e4d71c0",
       "enriched": false
     },
     "chirp_bridge/setting_value_json": {
@@ -176,7 +185,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "d11599c3ecbad46becb6142ad842b7d80cd6262a8f1847c23ec8e782dfc4e3bd",
+      "edge_hash": "0295f323ea678560b4750c918bcbf4578b87d287efab5a6e5825e1c560fecab2",
       "enriched": false
     },
     "chirp_bridge/radio_from_image": {
@@ -200,7 +209,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "08db171a43c7c00b03d983eae2ad11076e1b65dbfe58ab4d51b2d9b75640a480",
+      "edge_hash": "310f784e056938e66736636028eb0f5878b1b0f56975518d15779bbf42a2f820",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -264,7 +273,7 @@
       "type": "Function",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "ad5a96287a56ed6e24a754dd8aadf312d2438657a7f182b0653a2d9d59366b5e",
+      "edge_hash": "d7539626adf96d5bac285dd0e8fd817a800d70a64589d5e2ef6c47dd0ebecf09",
       "enriched": false
     },
     "generate_gmrs_frs_pdf/set_fill": {
@@ -394,7 +403,79 @@
       "render_hash": "stale",
       "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
       "enriched": false
+    },
+    "chirp_bridge/extra_field_doc": {
+      "concept_id": "chirp_bridge/extra_field_doc",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "1658c6319fd78858b7daa5537eed58ea0ba7e6d2c0b5df23cad4f59270600204",
+      "enriched": false
+    },
+    "chirp_bridge/headless_live_adapter": {
+      "concept_id": "chirp_bridge/headless_live_adapter",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "682017dd8a2b3cd414e680b4c88759f58372ff9602926e2f63ace3149e02e6c5",
+      "enriched": false
+    },
+    "chirp_bridge/repeaterbook_resource_name": {
+      "concept_id": "chirp_bridge/repeaterbook_resource_name",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "53e765dcdf21c294cea9e400599fb36199f356a821d396ab6f32ba4306ed67a1",
+      "enriched": false
+    },
+    "chirp_bridge/repeaterbook_cache_path": {
+      "concept_id": "chirp_bridge/repeaterbook_cache_path",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "53e765dcdf21c294cea9e400599fb36199f356a821d396ab6f32ba4306ed67a1",
+      "enriched": false
+    },
+    "chirp_bridge/fetch_repeaterbook_data": {
+      "concept_id": "chirp_bridge/fetch_repeaterbook_data",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "cd062a6118db2700be51f91418b423f4efc0592cb2bc6e1562495d343e7706d5",
+      "enriched": false
+    },
+    "chirp_bridge/repeaterbook_tone": {
+      "concept_id": "chirp_bridge/repeaterbook_tone",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "c000bd1c57e8d1140e2b9e5e223bc97208214cf1316063d1733a86b7e9f93f4f",
+      "enriched": false
+    },
+    "chirp_bridge/repeaterbook_item_to_channel": {
+      "concept_id": "chirp_bridge/repeaterbook_item_to_channel",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "92433af5159836680b489dc84d0016e66076fd51ff6c33dd71288acb05673d73",
+      "enriched": false
+    },
+    "chirp_bridge/search_repeaterbook": {
+      "concept_id": "chirp_bridge/search_repeaterbook",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "00473a05ded1ce8339d79cc02529db6fb7fd70cdb1bc7216f9d5fecc0b6d7f72",
+      "enriched": false
+    },
+    "chirp_bridge/normalize_repeaterbook_query": {
+      "concept_id": "chirp_bridge/normalize_repeaterbook_query",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "58fad39fa8db87c0b2c8649bf4298c87947e73365efb33906c89d7e5774b5556",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-24T20:43:15Z"
+  "generated_at": "2026-10-25T00:30:14Z"
 }

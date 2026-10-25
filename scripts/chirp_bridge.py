@@ -6,10 +6,15 @@ import glob
 import importlib.machinery
 import importlib.util
 import json
+import lzma
+import math
 import os
 import re
 import sys
 import tempfile
+import time
+import urllib.error
+import urllib.request
 PROGRESS_PREFIX = "__NEWCHIRP_PROGRESS__ "
 MANUAL_READ_READY_MESSAGE = (
     "Listening for the radio - hold PTT for one second."
@@ -210,12 +215,69 @@ def extra_fields_json(mem):
         fields.append({
             "name": setting.get_name(),
             "label": setting.get_shortname(),
+            "documentation": extra_field_doc(setting),
             "kind": kind,
             "value": current,
             "choices": choices,
             "mutable": is_mutable,
         })
     return fields
+
+
+_EXTRA_FIELD_DOCS = {
+    "bcl": (
+        "Busy Channel Lockout. Prevents transmitting when the channel is "
+        "already in use; the radio sounds an alert instead of transmitting."
+    ),
+    "bclo": (
+        "Busy Channel Lockout. Prevents transmitting when the channel is "
+        "already in use; the radio sounds an alert instead of transmitting."
+    ),
+    "pttid": (
+        "PTT ID. Controls when the radio sends its programmed station ID: "
+        "at the beginning (BOT), end (EOT), both, or not at all."
+    ),
+    "pttidcode": (
+        "PTT ID Code. Selects which programmed station-identification code "
+        "this channel transmits."
+    ),
+    "scode": (
+        "S-CODE. Selects which stored signaling or PTT-ID code this channel "
+        "uses. The code text is configured in the radio's signaling settings."
+    ),
+    "rxdtmf": (
+        "RX DTMF. Controls whether incoming DTMF signaling is decoded on "
+        "this channel."
+    ),
+    "fhss": (
+        "Frequency-hopping spread spectrum. Changes frequency rapidly to "
+        "reduce interference; only supported by compatible radios."
+    ),
+    "scramble": (
+        "Voice inversion scrambling. Obscures analog voice; another compatible "
+        "radio or scanner must use the same scramble setting."
+    ),
+    "compander": (
+        "Compander. Compresses loud audio before transmission and expands it "
+        "on receive to reduce level differences."
+    ),
+    "talkaround": (
+        "Talkaround. Transmits on the receive frequency, bypassing the "
+        "repeater input offset."
+    ),
+}
+
+
+def extra_field_doc(setting):
+    """Return CHIRP's documentation or a concise fallback for common terms."""
+    documentation = setting_doc(setting)
+    if documentation:
+        return documentation
+    for value in (setting.get_shortname(), setting.get_name()):
+        key = re.sub(r"[^a-z0-9]+", "", str(value).lower())
+        if key in _EXTRA_FIELD_DOCS:
+            return _EXTRA_FIELD_DOCS[key]
+    return None
 
 
 def features_json(radio):
@@ -460,6 +522,71 @@ def open_serial(radio_class, port):
     return handle
 
 
+def headless_live_adapter(live_radio):
+    """Give a live radio the file-backed interfaces NewChirp requires."""
+    from chirp import chirp_common
+    from chirp.drivers import generic_csv
+
+    class HeadlessLiveAdapter(generic_csv.CSVRadio):
+        FILE_EXTENSION = "img"
+
+        def __init__(self, radio):
+            bounds = radio.get_features().memory_bounds
+            super().__init__(None, max_memory=bounds[1])
+            self._live_radio = radio
+            self.VENDOR = radio.VENDOR
+            self.MODEL = radio.MODEL
+            self.VARIANT = getattr(radio, "VARIANT", "")
+            self.BAUD_RATE = radio.BAUD_RATE
+            self.HARDWARE_FLOW = radio.HARDWARE_FLOW
+            self.pipe = radio.pipe
+            self._features = radio.get_features()
+
+        def get_features(self):
+            return self._features
+
+        def get_prompts(self):
+            return self._live_radio.get_prompts()
+
+        def set_pipe(self, pipe):
+            self.pipe = pipe
+            self._live_radio.pipe = pipe
+
+        def sync_in(self):
+            start, end = self._features.memory_bounds
+            for number in range(start, end + 1):
+                self.set_memory(self._live_radio.get_memory(number))
+                if self.status_fn:
+                    status = chirp_common.Status()
+                    status.cur = number
+                    status.max = end
+                    status.msg = "Reading from radio"
+                    self.status_fn(status)
+
+        def sync_out(self):
+            start, end = self._features.memory_bounds
+            for number in range(start, end + 1):
+                memory = self.get_memory(number)
+                if memory.empty:
+                    self._live_radio.erase_memory(number)
+                else:
+                    self._live_radio.set_memory(memory)
+                if self.status_fn:
+                    status = chirp_common.Status()
+                    status.cur = number
+                    status.max = end
+                    status.msg = "Writing to radio"
+                    self.status_fn(status)
+
+        def get_settings(self):
+            return self._live_radio.get_settings()
+
+        def set_settings(self, settings):
+            return self._live_radio.set_settings(settings)
+
+    return HeadlessLiveAdapter(live_radio)
+
+
 def radio_for(
     directory,
     model,
@@ -468,8 +595,12 @@ def radio_for(
     image=None,
     detect_serial=True,
 ):
+    from chirp import chirp_common
+
     radio_class = directory.get_radio(model)
-    if image is not None:
+    if image is not None and not issubclass(
+        radio_class, chirp_common.LiveRadio
+    ):
         # Writes must use the exact class recorded in the image. The driver's
         # sync_out() owns its programming-mode handshake, like CHIRP's upload
         # dialog, so probing first would make strict drivers handshake twice.
@@ -485,6 +616,8 @@ def radio_for(
             except NotImplementedError:
                 pass
         radio = radio_class(handle)
+        if isinstance(radio, chirp_common.LiveRadio):
+            radio = headless_live_adapter(radio)
         # CHIRP's status callbacks become structured progress events on
         # stderr, leaving stdout available for the final JSON response.
         radio.status_fn = lambda status: status_progress(
@@ -550,6 +683,247 @@ def channel_radio_for(radio, zone=None):
     return channel_context(radio, zone)[0]
 
 
+def repeaterbook_resource_name(service, country, state):
+    service = "gmrs" if str(service).lower() == "gmrs" else ""
+    country_key = str(country).strip().lower().replace(" ", "_")
+    state_key = str(state).strip().lower().replace(" ", "_")
+    return "rb%s-%s-%s.json" % (service, country_key, state_key)
+
+
+def repeaterbook_cache_path(resource):
+    cache_dir = os.path.join(tempfile.gettempdir(), "newchirp-repeaterbook")
+    os.makedirs(cache_dir, exist_ok=True)
+    return os.path.join(cache_dir, resource)
+
+
+def fetch_repeaterbook_data(service, country, state):
+    """Fetch RepeaterBook's CHIRP-compatible compressed database."""
+    resource = repeaterbook_resource_name(service, country, state)
+    cache_path = repeaterbook_cache_path(resource)
+    cache_age = (
+        time.time() - os.path.getmtime(cache_path)
+        if os.path.exists(cache_path)
+        else None
+    )
+    if cache_age is not None and cache_age < 30 * 86400:
+        with open(cache_path, encoding="utf-8") as handle:
+            return json.load(handle)
+
+    emit_progress("Downloading RepeaterBook data...", 0.08)
+    url = "https://data.chirpmyradio.com/rb/%s.xz" % resource
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": "CHIRP/py3dev Python %s %s"
+            % (".".join(str(part) for part in sys.version_info[:3]), sys.platform)
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=45) as response:
+            compressed = response.read()
+        payload = lzma.decompress(compressed)
+        data = json.loads(payload)
+        with open(cache_path + ".tmp", "wb") as handle:
+            handle.write(json.dumps(data).encode("utf-8"))
+        os.replace(cache_path + ".tmp", cache_path)
+        return data
+    except Exception as exc:
+        if os.path.exists(cache_path):
+            emit_progress("Using cached RepeaterBook data.", 0.12)
+            with open(cache_path, encoding="utf-8") as handle:
+                return json.load(handle)
+        raise RuntimeError(
+            "Could not download RepeaterBook data for %s, %s: %s"
+            % (state, country, exc)
+        ) from exc
+
+
+def repeaterbook_tone(value):
+    from chirp import chirp_common
+
+    value = str(value or "").strip()
+    if value.startswith("D"):
+        return "DTCS", chirp_common.DTCS_CODES[int(value[1:])], "N"
+    if "." in value:
+        return "Tone", float(value), "N"
+    return "", None, "N"
+
+
+def repeaterbook_item_to_channel(item, number):
+    from chirp import chirp_common, errors
+
+    memory = chirp_common.Memory()
+    memory.number = number
+    memory.empty = False
+    memory.freq = chirp_common.parse_freq(item.get("Frequency") or "0")
+    try:
+        memory.tuning_step = chirp_common.required_step(memory.freq)
+    except errors.InvalidDataError:
+        memory.tuning_step = 5.0
+    tx_frequency = chirp_common.parse_freq(item.get("Input Freq") or "0")
+    if tx_frequency:
+        chirp_common.split_to_offset(memory, memory.freq, tx_frequency)
+    else:
+        memory.duplex = "off"
+        memory.offset = 0
+    chirp_common.split_tone_decode(
+        memory,
+        repeaterbook_tone(item.get("PL")),
+        repeaterbook_tone(item.get("TSQ")),
+    )
+    if item.get("DMR") == "Yes":
+        memory.mode = "DMR"
+    elif item.get("D-Star") == "Yes":
+        memory.mode = "DV"
+    elif item.get("System Fusion") == "Yes":
+        memory.mode = "DN"
+    else:
+        memory.mode = "FM"
+    memory.name = str(item.get("Landmark") or item.get("Callsign") or "")
+    location = ", ".join(
+        part
+        for part in (
+            item.get("Nearest City"),
+            item.get("County") and "%s County" % item.get("County"),
+            item.get("State") or item.get("Region"),
+        )
+        if part
+    )
+    comment = "RepeaterBook: %s" % (
+        item.get("Callsign") or "Unknown callsign"
+    )
+    if location:
+        comment += " - %s" % location
+    if item.get("Use"):
+        comment += " - %s" % item.get("Use")
+    if item.get("Notes"):
+        comment += " - %s" % item.get("Notes")
+    memory.comment = comment
+    return memory_json(memory)
+
+
+def normalize_repeaterbook_query(query):
+    """Treat location words like "Broward County" as a county name."""
+    normalized = re.sub(
+        r"\b(?:county|parish)\b",
+        " ",
+        str(query or ""),
+        flags=re.IGNORECASE,
+    )
+    return re.sub(r"\s+", " ", normalized).strip().lower()
+
+
+def search_repeaterbook(
+    country,
+    state,
+    service="amateur",
+    query="",
+    latitude=None,
+    longitude=None,
+    distance=None,
+    fm_only=False,
+    open_only=False,
+    limit=200,
+):
+    query = normalize_repeaterbook_query(query)
+    has_origin = latitude is not None and longitude is not None
+    matches = []
+    requested_services = (
+        ("amateur", "gmrs") if service == "all" else (service,)
+    )
+    for service_name in requested_services:
+        data = fetch_repeaterbook_data(service_name, country, state)
+        for item in data.get("results", []):
+            if not item or item.get("Operational Status") != "On-air":
+                continue
+            if open_only and item.get("Use") != "OPEN":
+                continue
+            if query:
+                fields = (
+                    "County",
+                    "State",
+                    "Landmark",
+                    "Nearest City",
+                    "Callsign",
+                    "Region",
+                    "Notes",
+                )
+                haystack = " ".join(
+                    str(item.get(key) or "") for key in fields
+                )
+                if query not in haystack.lower():
+                    continue
+            if fm_only and item.get("FM Analog") != "Yes":
+                continue
+            item_lat = item.get("Lat")
+            item_lon = item.get("Long")
+            distance_km = None
+            if has_origin and item_lat and item_lon:
+                lat1, lon1 = math.radians(latitude), math.radians(longitude)
+                lat2, lon2 = math.radians(float(item_lat)), math.radians(
+                    float(item_lon)
+                )
+                value = (
+                    math.sin((lat2 - lat1) / 2) ** 2
+                    + math.cos(lat1)
+                    * math.cos(lat2)
+                    * math.sin((lon2 - lon1) / 2) ** 2
+                )
+                distance_km = 6371 * 2 * math.atan2(
+                    math.sqrt(value), math.sqrt(1 - value)
+                )
+            if distance is not None and distance_km is not None:
+                if distance_km > distance:
+                    continue
+            elif distance is not None:
+                continue
+            matches.append((distance_km, item, service_name))
+    if has_origin:
+        matches.sort(
+            key=lambda match: (
+                match[0] is None,
+                match[0] if match[0] is not None else float("inf"),
+            )
+        )
+    results = []
+    for index, (distance_km, item, service_name) in enumerate(matches[:limit]):
+        try:
+            channel = repeaterbook_item_to_channel(item, index + 1)
+        except Exception:
+            continue
+        item_lat = item.get("Lat")
+        item_lon = item.get("Long")
+        channel["comment"] = channel["comment"].replace(
+            "RepeaterBook:",
+            "RepeaterBook %s:" % service_name.title(),
+            1,
+        )
+        results.append({
+            "channel": channel,
+            "callsign": item.get("Callsign") or "",
+            "city": item.get("Nearest City") or "",
+            "county": item.get("County") or "",
+            "state": item.get("State") or item.get("Region") or "",
+            "use": item.get("Use") or "",
+            "service": "GMRS" if service_name == "gmrs" else "Amateur",
+            "latitude": (
+                float(item_lat) if item_lat not in (None, "") else None
+            ),
+            "longitude": (
+                float(item_lon) if item_lon not in (None, "") else None
+            ),
+            "distanceKm": (
+                round(distance_km, 1) if distance_km is not None else None
+            ),
+        })
+    return {
+        "source": "RepeaterBook",
+        "sourceUrl": "https://repeaterbook.com",
+        "totalMatches": len(matches),
+        "results": results,
+    }
+
+
 def settings_payload(radio):
     settings = radio.get_settings()
     return {
@@ -573,6 +947,19 @@ def main():
     sub.add_parser("list-models")
     model_info = sub.add_parser("model-info")
     model_info.add_argument("--model", required=True)
+    repeaterbook = sub.add_parser("repeaterbook-search")
+    repeaterbook.add_argument("--country", default="United States")
+    repeaterbook.add_argument("--state", required=True)
+    repeaterbook.add_argument(
+        "--service", choices=("amateur", "gmrs", "all"), default="all"
+    )
+    repeaterbook.add_argument("--filter", default="")
+    repeaterbook.add_argument("--latitude", type=float)
+    repeaterbook.add_argument("--longitude", type=float)
+    repeaterbook.add_argument("--distance", type=float)
+    repeaterbook.add_argument("--fm-only", action="store_true")
+    repeaterbook.add_argument("--open-only", action="store_true")
+    repeaterbook.add_argument("--limit", type=int, default=200)
     read_image = sub.add_parser("read-image")
     read_image.add_argument("--image", required=True)
     read_image.add_argument("--metadata-only", action="store_true")
@@ -615,6 +1002,22 @@ def main():
                 "preDownload": prompts.pre_download,
                 "preUpload": prompts.pre_upload,
             }))
+            return
+        if args.command == "repeaterbook-search":
+            emit_progress("Searching RepeaterBook...", 0.04)
+            print(json.dumps(search_repeaterbook(
+                country=args.country,
+                state=args.state,
+                service=args.service,
+                query=args.filter,
+                latitude=args.latitude,
+                longitude=args.longitude,
+                distance=args.distance,
+                fm_only=args.fm_only,
+                open_only=args.open_only,
+                limit=max(1, min(args.limit, 500)),
+            )))
+            emit_progress("RepeaterBook search complete.", 1.0)
             return
         if args.command == "read-image":
             image_path = os.path.abspath(args.image)
@@ -818,7 +1221,11 @@ def main():
             radio.pipe.close()
     except Exception as exc:
         print(
-            bridge_error_message(exc, args.command, args.model),
+            bridge_error_message(
+                exc,
+                getattr(args, "command", None),
+                getattr(args, "model", None),
+            ),
             file=sys.stderr,
         )
         raise SystemExit(1)

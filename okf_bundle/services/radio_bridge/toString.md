@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:37:55Z"
+timestamp: "2026-10-24T23:01:43Z"
 concept_id: services/radio_bridge/toString
 language: dart
 ---
@@ -24,7 +24,7 @@ StringtoString()
 ```
 
 ## Source
-Lines 37–37 in `services/radio_bridge.dart`
+Lines 38–38 in `services/radio_bridge.dart`
 
 ## Relationships
 

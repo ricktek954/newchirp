@@ -25,7 +25,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   file_selector_macos: 3e56eaea051180007b900eacb006686fd54da150
-  FlutterMacOS: d0db08ddef1a9af05a5ec4b724367152bb0500b1
+  FlutterMacOS: c232990155153907050900a2e175c7773903ba4e
   screen_retriever_macos: 038d3f7b34a779b06f536842003e41e8ec1fb4b7
   window_manager: e25faf20d88283a0d46e7b1a759d07261ca27575
 

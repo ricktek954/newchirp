@@ -101,4 +101,23 @@ void main() {
       expect(secondZone.channels, hasLength(1));
     },
   );
+
+  test('radio-specific fields include mouse-over documentation', () async {
+    final source = Directory('build_support/chirp-20261023').existsSync()
+        ? 'build_support/chirp-20261023'
+        : '../chirp-20260626';
+    final image = File('$source/tests/images/Baofeng_UV-5R_Mini.img');
+
+    final imported = await RadioBridge(
+      sourcePath: source,
+    ).readImage(image.path);
+    final fields = {
+      for (final field in imported.channels.first.extras)
+        field.name: field.documentation,
+    };
+
+    expect(fields['bcl'], contains('Busy Channel Lockout'));
+    expect(fields['pttid'], contains('PTT ID'));
+    expect(fields['scode'], contains('S-CODE'));
+  });
 }
