@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-10-24
+Last updated: 2026-10-25
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -10,11 +10,9 @@ release requirements.
 
 - The Linux `1.0.17` release is built, uploaded, and live as DEB, RPM, and
   AppImage. It includes the FT-60 manual-read timing fix.
-- The macOS `1.0.18` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes the FT-60 manual-read timing fix.
-- Unreleased working-tree work adds RepeaterBook search/import, headless
-  live-radio support, and radio-specific field help. No release build, upload,
-  or deployment is in progress.
+- The macOS `1.0.19` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes RepeaterBook search/import, radio-model type-ahead,
+  headless live-radio support, and the experimental NewChirp drivers.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not
@@ -27,11 +25,10 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Latest release commit fetched from GitHub: `9e51ea4`
-  (`Record Linux 1.0.17 release`)
-- Previous source commit: `8802cd2` (`Record macOS 1.0.18 release`)
+- Latest source commit fetched from GitHub: `97ac4bc`
+  (`Release macOS 1.0.19`)
 - Open pull requests: none
-- Checked-out source version: `1.0.17+17`
+- Checked-out source version: `1.0.19+19`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -45,19 +42,19 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.18 |
+| macOS | 1.0.19 |
 | Windows | 1.0.17 |
 | Linux | 1.0.17 |
 | Legacy shared manifest version | 1.0.17 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.18.dmg`
-- Version/build: `1.0.18` / `18`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.19.dmg`
+- Version/build: `1.0.19` / `19`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `968876788c807cf9beba53977884b1c02f38539fb3a3737a4520721e853b98aa`
-- Notarization submission: `50b1cef6-dd9a-4896-9bc1-74aa773b725a`
+  `02bc67f7cc6dc8d11cffdca96d886fa77bd147031104917a19a84879d12e4b9a`
+- Notarization submission: `2dbe6902-d0ea-40ca-a473-7ed87dbbe560`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -105,14 +102,19 @@ Linux artifacts:
 - RepeaterBook search supports amateur and GMRS results, optional proximity
   filtering, city/county sorting, local result filtering, an interactive map,
   multi-select, and insertion into the current library.
+- Radio model selection now supports type-ahead filtering by manufacturer or
+  model, compact queries such as `uv5r`, keyboard selection, and bounded result
+  rendering for the growing catalog.
+- Added experimental read-only Radtel RT-950 and Connect Systems CS750 support,
+  plus reusable raw SCSI/RAP transport for compatible radios.
 
-## macOS 1.0.18 verification status
+## macOS 1.0.19 verification status
 
-Full verification before the macOS `1.0.18` release:
+Full verification before the macOS `1.0.19` release:
 
 - `flutter analyze`: clean
-- `flutter test`: all 70 tests passed
-- `python3 test/chirp_bridge_upload_test.py -v`: all 6 tests passed
+- `flutter test`: all 82 tests passed
+- `python3 test/chirp_bridge_upload_test.py -v`: all 14 tests passed
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
 - Server SHA-256 matched the final stapled DMG
 
@@ -147,6 +149,9 @@ Full verification before the Linux `1.0.17` release:
 - CHIRP modules execute arbitrary Python without sandboxing. Only trusted
   modules should be loaded, and modules requiring packages not bundled with
   NewChirp may fail to import.
+- The macOS raw SCSI helper for experimental mass-storage radios is currently
+  compiled for Apple Silicon only; live CS750 reads on Intel Macs still need a
+  universal or x86_64 helper build and hardware validation.
 - Forum like counts and website-side ranking are a separate website project,
   not part of this Flutter repository.
 - The roadmap in `docs/SOFTWARE_ROADMAP.md` is older than this handoff and
