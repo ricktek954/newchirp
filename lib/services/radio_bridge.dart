@@ -271,9 +271,13 @@ class RadioBridge {
   }
 
   Future<List<SerialPortInfo>> serialPortDetails() async {
-    if (Platform.isWindows) return _windowsSerialPortDetails();
+    final interfaces = await _massStoragePortDetails();
+    if (Platform.isWindows) {
+      final serial = await _windowsSerialPortDetails();
+      return _deduplicatePorts([...serial, ...interfaces]);
+    }
     final dev = Directory('/dev');
-    if (!dev.existsSync()) return [];
+    if (!dev.existsSync()) return interfaces;
     final patterns = Platform.isMacOS
         ? ['cu.usb', 'cu.SLAB', 'cu.wch', 'tty.usb']
         : ['ttyUSB', 'ttyACM'];
@@ -285,7 +289,35 @@ class RadioBridge {
             .where((path) => patterns.any(path.contains))
             .toList()
           ..sort();
-    return ports.map((port) => SerialPortInfo(port: port)).toList();
+    return _deduplicatePorts([
+      ...ports.map((port) => SerialPortInfo(port: port)),
+      ...interfaces,
+    ]);
+  }
+
+  Future<List<SerialPortInfo>> _massStoragePortDetails() async {
+    try {
+      final data = await _run(['list-interfaces']);
+      final entries = data['interfaces'] as List? ?? const [];
+      return entries
+          .whereType<Map>()
+          .map(
+            (entry) => SerialPortInfo(
+              port: '${entry['port'] ?? ''}',
+              deviceName: '${entry['deviceName'] ?? ''}',
+            ),
+          )
+          .where((entry) => entry.port.isNotEmpty)
+          .toList();
+    } catch (_) {
+      // A missing platform helper must not hide serial clone-mode radios.
+      return const [];
+    }
+  }
+
+  List<SerialPortInfo> _deduplicatePorts(List<SerialPortInfo> ports) {
+    final seen = <String>{};
+    return ports.where((entry) => seen.add(entry.port)).toList();
   }
 
   Future<List<String>> serialPorts() async {
@@ -677,18 +709,24 @@ class RadioBridge {
     final source = _findChirpSource();
     final newDrivers = _findNewChirpDrivers();
     final python = await _resolvePython();
+    final scsiHelper = _findScsiHelper();
     late final Process process;
     try {
-      process = await Process.start(python, [
-        script,
-        '--source',
-        source,
-        '--vendor',
-        vendor,
-        if (newDrivers != null) ...['--newchirp-driver-dir', newDrivers],
-        if (_loadedModulePath != null) ...['--module', _loadedModulePath!],
-        ...args,
-      ]);
+      process = await Process.start(
+        python,
+        [
+          script,
+          '--source',
+          source,
+          '--vendor',
+          vendor,
+          if (newDrivers != null) ...['--newchirp-driver-dir', newDrivers],
+          if (_loadedModulePath != null) ...['--module', _loadedModulePath!],
+          ...args,
+        ],
+        environment: {'NEWCHIRP_SCSI_HELPER': ?scsiHelper},
+        includeParentEnvironment: true,
+      );
     } on ProcessException catch (error) {
       throw RadioBridgeException(
         'NewChirp could not start its CHIRP helper. Python 3 was not found '
@@ -826,6 +864,11 @@ class RadioBridge {
     final file = File('${runtime.path}/chirp_bridge.py');
     final data = await _loadAssetBytes('scripts/chirp_bridge.py');
     await file.writeAsString(utf8.decode(data), flush: true);
+    final massStorage = File('${runtime.path}/newchirp_mass_storage.py');
+    final massStorageData = await _loadAssetBytes(
+      'scripts/newchirp_mass_storage.py',
+    );
+    await massStorage.writeAsBytes(massStorageData, flush: true);
     return file.path;
   }
 
@@ -904,5 +947,20 @@ class RadioBridge {
     final directory = Directory(configured);
     if (!directory.existsSync()) return null;
     return directory.absolute.path;
+  }
+
+  String? _findScsiHelper() {
+    final configured = Platform.environment['NEWCHIRP_SCSI_HELPER'];
+    final resources = _bundledResourcesDirectory();
+    final candidates = <String>[
+      if (configured != null && configured.isNotEmpty) configured,
+      if (resources != null) '${resources.path}/newchirp_scsi',
+      'tools/newchirp_scsi_mac',
+      'build/newchirp_scsi_mac',
+    ];
+    for (final candidate in candidates) {
+      if (File(candidate).existsSync()) return File(candidate).absolute.path;
+    }
+    return null;
   }
 }

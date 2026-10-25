@@ -40,6 +40,7 @@ migrate_working_dir/
 /build/
 /build_support/
 /coverage/
+tools/newchirp_scsi_mac
 
 # Symbolication related
 app.*.symbols

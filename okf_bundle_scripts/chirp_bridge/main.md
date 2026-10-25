@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T00:47:08Z"
+timestamp: "2026-10-25T01:54:14Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 940–1234 in `chirp_bridge.py`
+Lines 946–1250 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -34,6 +34,8 @@ Lines 940–1234 in `chirp_bridge.py`
 | calls | [radio_for](/chirp_bridge/radio_for.md) |
 | calls | [emit_progress](/chirp_bridge/emit_progress.md) |
 | calls | [channel_context](/chirp_bridge/channel_context.md) |
+| calls | [close](/newchirp_mass_storage/close.md) |
+| calls | [list_devices](/newchirp_mass_storage/list_devices.md) |
 | calls | [radio_from_image](/chirp_bridge/radio_from_image.md) |
 | calls | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | calls | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |

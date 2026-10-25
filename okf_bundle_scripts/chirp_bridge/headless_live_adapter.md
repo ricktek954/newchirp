@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T00:47:08Z"
+timestamp: "2026-10-25T01:54:14Z"
 concept_id: chirp_bridge/headless_live_adapter
 language: python
 ---
@@ -43,5 +43,4 @@ Lines 528–590 in `chirp_bridge.py`
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
-| calls | [__init__](/generate_gmrs_frs_pdf/init.md) |
 | called_by | [radio_for](/chirp_bridge/radio_for.md) |

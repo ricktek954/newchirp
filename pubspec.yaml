@@ -64,6 +64,7 @@ flutter:
     enable-swift-package-manager: false
   assets:
     - scripts/chirp_bridge.py
+    - scripts/newchirp_mass_storage.py
     - assets/python/pyserial-3.5-py2.py3-none-any.whl
     - assets/licenses/CHIRP-GPL-3.0.txt
     - assets/licenses/PYSERIAL-BSD-3-CLAUSE.txt

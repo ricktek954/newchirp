@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T23:01:43Z"
+timestamp: "2026-10-25T01:56:40Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -38,6 +38,8 @@ language: dart
 | related | [RadioSettingNode](/services/radio_bridge/RadioSettingNode.md) |
 | related | [cancelActive](/services/radio_bridge/cancelActive.md) |
 | related | [serialPortDetails](/services/radio_bridge/serialPortDetails.md) |
+| related | [_massStoragePortDetails](/services/radio_bridge/massStoragePortDetails.md) |
+| related | [_deduplicatePorts](/services/radio_bridge/deduplicatePorts.md) |
 | related | [serialPorts](/services/radio_bridge/serialPorts.md) |
 | related | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) |
 | related | [_windowsSerialPortDetails](/services/radio_bridge/windowsSerialPortDetails.md) |
@@ -65,4 +67,5 @@ language: dart
 | related | [_bundledAssetCandidates](/services/radio_bridge/bundledAssetCandidates.md) |
 | related | [_findChirpSource](/services/radio_bridge/findChirpSource.md) |
 | related | [_findNewChirpDrivers](/services/radio_bridge/findNewChirpDrivers.md) |
+| related | [_findScsiHelper](/services/radio_bridge/findScsiHelper.md) |
 | related | [RadioBridge](/services/radio_bridge/RadioBridge.md) |

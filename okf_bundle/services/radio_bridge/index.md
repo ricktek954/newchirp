@@ -13,9 +13,12 @@
 
 - [_bundledAssetCandidates](bundledAssetCandidates.md)
 - [_bundledResourcesDirectory](bundledResourcesDirectory.md)
+- [_deduplicatePorts](deduplicatePorts.md)
 - [_findChirpSource](findChirpSource.md)
 - [_findNewChirpDrivers](findNewChirpDrivers.md)
+- [_findScsiHelper](findScsiHelper.md)
 - [_loadAssetBytes](loadAssetBytes.md)
+- [_massStoragePortDetails](massStoragePortDetails.md)
 - [_materializeBridge](materializeBridge.md)
 - [_materializePythonDependencies](materializePythonDependencies.md)
 - [_parseComPorts](parseComPorts.md)

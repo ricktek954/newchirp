@@ -11,6 +11,11 @@ Check `git status` and fetch the latest `origin/main` so the handoff is compared
 with the actual repository state. Keep any local user assets and unrelated
 changes out of commits.
 
+When adding or changing a NewChirp-maintained radio driver, update
+`docs/DRIVER_STATUS.md`. Record transport details, implemented fields,
+read/write policy, evidence hashes, physical-radio validation, and the next
+milestone. Do not infer hardware-tested or released status from offline tests.
+
 ## Release artifact requirements
 
 Every production installer build must contain and expose its version.

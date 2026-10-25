@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T00:47:08Z"
+timestamp: "2026-10-25T01:54:14Z"
 concept_id: chirp_bridge/radio_for
 language: python
 ---
@@ -39,14 +39,16 @@ def radio_for(directory, model, port, progress_range = (0.0, 1.0), image = None,
 | `detect_serial` | `—` | `True` |
 
 ## Source
-Lines 593–632 in `chirp_bridge.py`
+Lines 593–638 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
+| calls | [ScsiPassthrough](/newchirp_mass_storage/ScsiPassthrough.md) |
 | calls | [open_serial](/chirp_bridge/open_serial.md) |
 | calls | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) |
 | calls | [status_progress](/chirp_bridge/status_progress.md) |
+| calls | [close](/newchirp_mass_storage/close.md) |
 | called_by | [main](/chirp_bridge/main.md) |

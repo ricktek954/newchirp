@@ -177,6 +177,15 @@ the 960 channel memories. Uploads are disabled because the CPS write path has
 not yet been independently validated. Protocol details and reverse-engineering
 evidence are recorded in `docs/RT950_PROTOCOL.md`.
 
+### Experimental CS750 codeplug support
+
+NewChirp includes a read-only Connect Systems CS750 transport for macOS. It
+uses NewChirp's own raw SCSI/RAP bridge instead of CHIRP's serial drivers, and
+exposes ordered channels, RX/TX frequencies, channel names, and analog/DMR
+mode from M100000/2000-channel radios. `.rdb` codeplugs saved by the official
+CPS can also be imported directly. Uploads remain disabled. Protocol and
+reverse-engineering notes are recorded in `docs/CS750_PROTOCOL.md`.
+
 ## Code knowledge graph
 
 This project keeps OKF knowledge bundles for coding agents:

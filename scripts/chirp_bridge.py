@@ -611,9 +611,15 @@ def radio_for(
             radio_class = directory.get_radio_by_image(image).__class__
         except Exception:
             pass
-    handle = open_serial(radio_class, port)
+    transport_kind = getattr(radio_class, "NEWCHIRP_TRANSPORT", None)
+    if transport_kind == "scsi_rap":
+        from newchirp_mass_storage import ScsiPassthrough
+
+        handle = ScsiPassthrough(port)
+    else:
+        handle = open_serial(radio_class, port)
     try:
-        if detect_serial:
+        if detect_serial and transport_kind != "scsi_rap":
             try:
                 radio_class = radio_class.detect_from_serial(handle)
             except NotImplementedError:
@@ -948,6 +954,7 @@ def main():
     )
     sub = parser.add_subparsers(dest="command", required=True)
     sub.add_parser("list-models")
+    sub.add_parser("list-interfaces")
     model_info = sub.add_parser("model-info")
     model_info.add_argument("--model", required=True)
     repeaterbook = sub.add_parser("repeaterbook-search")
@@ -996,6 +1003,15 @@ def main():
         )
         if args.command == "list-models":
             print(json.dumps({"models": sorted(directory.DRV_TO_RADIO.keys())}))
+            return
+        if args.command == "list-interfaces":
+            try:
+                from newchirp_mass_storage import list_devices
+
+                interfaces = list_devices()
+            except Exception:
+                interfaces = []
+            print(json.dumps({"interfaces": interfaces}))
             return
         if args.command == "model-info":
             prompts = directory.get_radio(args.model).get_prompts()

@@ -3841,9 +3841,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         number: '1',
                         title: 'Choose a programming cable',
                         help:
-                            'NewChirp finds USB serial ports automatically. Choose the port that '
-                            'matches your programming cable. If nothing appears, connect the cable '
-                            'and press refresh.',
+                            'NewChirp finds USB serial and mass-storage programming interfaces '
+                            'automatically. Choose the one that matches your radio connection. '
+                            'If nothing appears, connect the radio and press refresh.',
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -3856,7 +3856,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   : null,
                               isExpanded: true,
                               decoration: const InputDecoration(
-                                labelText: 'Serial port',
+                                labelText: 'Programming interface',
                                 prefixIcon: Icon(Icons.cable),
                               ),
                               items: _ports
@@ -3879,15 +3879,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           const SizedBox(width: 10),
                           IconButton.filledTonal(
                             onPressed: _refreshPorts,
-                            tooltip: 'Refresh ports',
+                            tooltip: 'Refresh interfaces',
                             icon: const Icon(Icons.refresh),
                           ),
                           const SizedBox(width: 2),
                           const _HelpButton(
-                            title: 'Refresh ports',
+                            title: 'Refresh interfaces',
                             details:
-                                'Rescan the system for USB serial ports. If your programming '
-                                'cable is not listed, connect it and press refresh.',
+                                'Rescan the system for USB serial and mass-storage '
+                                'programming interfaces. If your radio is not listed, '
+                                'connect it and press refresh.',
                           ),
                         ],
                       ),
@@ -3895,7 +3896,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         const Padding(
                           padding: EdgeInsets.only(top: 10),
                           child: Text(
-                            'No USB serial cable detected. Connect the cable and choose refresh.',
+                            'No programming interface detected. Connect the radio and '
+                            'choose refresh.',
                             style: TextStyle(color: Color(0xFF9B5B18)),
                           ),
                         ),

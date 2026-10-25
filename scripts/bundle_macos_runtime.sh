@@ -142,6 +142,18 @@ if [[ -d "$PROJECT_DIR/drivers" ]]; then
   cp "$PROJECT_DIR"/drivers/*.py "$RESOURCES_DIR/chirp/drivers/"
 fi
 
+if [[ -f "$PROJECT_DIR/tools/newchirp_scsi_mac.c" ]]; then
+  clang \
+    -O2 \
+    -Wall \
+    -Wextra \
+    -Werror \
+    -framework IOKit \
+    -framework CoreFoundation \
+    "$PROJECT_DIR/tools/newchirp_scsi_mac.c" \
+    -o "$RESOURCES_DIR/newchirp_scsi"
+fi
+
 if [[ -f "$CHIRP_ROOT/COPYING" ]]; then
   cp "$CHIRP_ROOT/COPYING" "$RESOURCES_DIR/chirp-COPYING.txt"
 fi
