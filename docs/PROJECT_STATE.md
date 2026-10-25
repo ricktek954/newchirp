@@ -8,14 +8,11 @@ release requirements.
 
 ## Resume here
 
-- The Linux `1.0.17` release is built, uploaded, and live as DEB, RPM, and
-  AppImage. It includes the FT-60 manual-read timing fix.
-- The macOS `1.0.19` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes RepeaterBook search/import, radio-model type-ahead,
-  headless live-radio support, and the experimental NewChirp drivers.
-- Post-1.0.19 work adds an experimental read-only Retevis RT97L driver. The
-  serial protocol is implemented and offline-tested, but its provisional
-  channel map still requires validation on physical hardware.
+- The Linux `1.0.19` release is built, uploaded, and live as DEB.
+- The macOS `1.0.20` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes the experimental read-only Retevis RT97L driver.
+- The RT97L serial protocol is implemented and offline-tested, but its
+  provisional channel map still requires validation on physical hardware.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not
@@ -28,10 +25,10 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Latest source commit fetched from GitHub: `97ac4bc`
-  (`Release macOS 1.0.19`)
+- Latest source commit fetched from GitHub: `0e71009`
+  (`Release macOS 1.0.20`)
 - Open pull requests: none
-- Checked-out source version: `1.0.19+19`
+- Checked-out source version: `1.0.20+20`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -45,39 +42,30 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.19 |
-| Windows | 1.0.17 |
-| Linux | 1.0.17 |
+| macOS | 1.0.20 |
+| Windows | 1.0.18 |
+| Linux | 1.0.19 |
 | Legacy shared manifest version | 1.0.17 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.19.dmg`
-- Version/build: `1.0.19` / `19`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.20.dmg`
+- Version/build: `1.0.20` / `20`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `02bc67f7cc6dc8d11cffdca96d886fa77bd147031104917a19a84879d12e4b9a`
-- Notarization submission: `2dbe6902-d0ea-40ca-a473-7ed87dbbe560`
+  `ff854e6a9c5aceab45d725aa733da66281443a1fdda55b3fcd7b1d866c10b351`
+- Notarization submission: `23a6ca49-ed22-49fd-a30c-6e2b7e238dcc`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.17.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.19.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.17.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.19.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.17.AppImage`
-- DEB metadata: `newchirp` `1.0.17-1` `amd64`
-- RPM metadata: `newchirp` `1.0.17-1` `x86_64`
-- SHA-256:
-  - DEB:
-    `0d2a770a77c92b6c4631a62bf0314cb2098a53bc37ded1d6daec458c8b69e77f`
-  - RPM:
-    `10aaf78b534a41d2c5f562dcc5e92b12d3629f3482e9d40b914e3a08fad98690`
-  - AppImage:
-    `f575d8820a138061b5aec91afabb70fa803b2545745328e2f5772805c19b1b63`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.19.AppImage`
 
 ## Recently completed
 
@@ -110,14 +98,17 @@ Linux artifacts:
   rendering for the growing catalog.
 - Added experimental read-only Radtel RT-950 and Connect Systems CS750 support,
   plus reusable raw SCSI/RAP transport for compatible radios.
+- Added experimental read-only Retevis RT97L support with 16-channel parsing,
+  CTCSS/DCS decoding, and hardware-safe upload blocking.
 
-## macOS 1.0.19 verification status
+## macOS 1.0.20 verification status
 
-Full verification before the macOS `1.0.19` release:
+Full verification before the macOS `1.0.20` release:
 
 - `flutter analyze`: clean
-- `flutter test`: all 82 tests passed
+- `flutter test`: all 83 tests passed
 - `python3 test/chirp_bridge_upload_test.py -v`: all 14 tests passed
+- `python3 test/rt97l_driver_test.py -v`: all 5 tests passed
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
 - Server SHA-256 matched the final stapled DMG
 
@@ -155,6 +146,9 @@ Full verification before the Linux `1.0.17` release:
 - The macOS raw SCSI helper for experimental mass-storage radios is currently
   compiled for Apple Silicon only; live CS750 reads on Intel Macs still need a
   universal or x86_64 helper build and hardware validation.
+- The experimental Retevis RT97L channel map and serial handshake still need a
+  physical read and comparison against an official CPS export before uploads
+  can be enabled.
 - Forum like counts and website-side ranking are a separate website project,
   not part of this Flutter repository.
 - The roadmap in `docs/SOFTWARE_ROADMAP.md` is older than this handoff and
