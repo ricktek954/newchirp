@@ -8,7 +8,7 @@ release requirements.
 
 ## Resume here
 
-- The Linux `1.0.19` release is built, uploaded, and live as DEB.
+- The Linux `1.0.20` release is built, uploaded, and live as DEB.
 - The macOS `1.0.20` release is built, signed, notarized, stapled, uploaded,
   and live. It includes the experimental read-only Retevis RT97L driver.
 - The RT97L serial protocol is implemented and offline-tested, but its
@@ -44,7 +44,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.20 |
 | Windows | 1.0.18 |
-| Linux | 1.0.19 |
+| Linux | 1.0.20 |
 | Legacy shared manifest version | 1.0.17 |
 
 macOS artifact:
@@ -61,11 +61,11 @@ macOS artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.19.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.20.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.19.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.20.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.19.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.20.AppImage`
 
 ## Recently completed
 
