@@ -105,6 +105,302 @@ const standardDtcsCodes = <int>[
   754,
 ];
 
+const _scanLabels = <String, String>{
+  '': 'Include',
+  'S': 'Skip',
+  'P': 'Priority',
+};
+
+/// Word shown for a stored scan code. Unknown codes stay visible.
+String scanLabel(String skip) => _scanLabels[skip] ?? skip;
+
+/// Edit-screen choices for the scan codes this radio allows.
+Map<String, String> scanChoices(List<String>? allowed) {
+  final values = (allowed == null || allowed.isEmpty)
+      ? _scanLabels.keys.toList()
+      : allowed;
+  return {for (final value in values) value: scanLabel(value)};
+}
+
+/// CHIRP id for the experimental Midland MXT295 driver.
+const midlandMxt295Model = 'Midland_MXT295';
+
+/// This radio's list uses Midland's channel numbers instead of raw slots.
+bool showsMidlandChannelNumbers(String? model) => model == midlandMxt295Model;
+
+/// Channel number shown in the list.
+///
+/// For the MXT295, [location] is still the radio's memory slot. The label
+/// matches the Midland screen: channels 1-99, with RPTR 15-22 between them.
+/// Other radios show the slot number unchanged.
+String channelNumberLabel(String? model, int location) {
+  if (!showsMidlandChannelNumbers(model)) return '$location';
+  if (location < 1 || location > 107) return '$location';
+  if (location <= 15) return '$location';
+  if (location <= 30) {
+    final offset = location - 15;
+    final channel = 15 + offset ~/ 2;
+    if (offset.isOdd) return 'RPTR $channel';
+    return '$channel';
+  }
+  return '${location - 8}';
+}
+
+/// Receive frequency, in MHz, for each MXT295 repeater row.
+///
+/// The keys are memory slots. RPTR 15 through RPTR 22 always stay in the
+/// radio. An empty one makes channel-down skip channels when repeater
+/// channels are turned off.
+const midlandRepeaterRxMhz = <int, double>{
+  16: 462.550,
+  18: 462.575,
+  20: 462.600,
+  22: 462.625,
+  24: 462.650,
+  26: 462.675,
+  28: 462.700,
+  30: 462.725,
+};
+
+/// Whether [location] is one of the eight repeater rows on this radio.
+bool isMidlandRepeaterRow(String? model, int location) =>
+    showsMidlandChannelNumbers(model) &&
+    midlandRepeaterRxMhz.containsKey(location);
+
+/// Midland channel 1-22 for a memory slot. Slots 31-107 are not fixed.
+int? _midlandGmrsChannel(int location) {
+  if (location >= 1 && location <= 15) return location;
+  if (location >= 16 && location <= 30) {
+    final offset = location - 15;
+    return 15 + offset ~/ 2;
+  }
+  return null;
+}
+
+/// Official receive frequency in Hz for one of the 22 GMRS channels.
+int? gmrsStandardRxHz(int channel) {
+  if (channel >= 1 && channel <= 7) {
+    return 462562500 + (channel - 1) * 25000;
+  }
+  if (channel >= 8 && channel <= 14) {
+    return 467562500 + (channel - 8) * 25000;
+  }
+  if (channel >= 15 && channel <= 22) {
+    return 462550000 + (channel - 15) * 25000;
+  }
+  return null;
+}
+
+/// GMRS channel 1-22 for a receive frequency, or null when it is not one.
+int? gmrsChannelForHz(int hz) {
+  for (var channel = 1; channel <= 22; channel++) {
+    if (gmrsStandardRxHz(channel) == hz) return channel;
+  }
+  return null;
+}
+
+/// Menu line for the receive-channel dropdown.
+String gmrsChannelMenuLabel(int channel) {
+  final hz = gmrsStandardRxHz(channel);
+  if (hz == null) return 'GMRS Channel $channel';
+  return 'GMRS Channel $channel, ${mhzLabelFromHz(hz)}';
+}
+
+/// Official receive frequency in Hz for MXT295 channels 1 through 22.
+///
+/// Returns null for channels 23 through 99. Those rows pick one of the
+/// same 22 GMRS channels from the list.
+int? midlandFixedRxHz(int location) {
+  final channel = _midlandGmrsChannel(location);
+  if (channel == null) return null;
+  return gmrsStandardRxHz(channel);
+}
+
+/// GMRS channel shown for this row. Fixed rows use the slot. Other rows
+/// use the stored receive frequency.
+int? midlandReceiveGmrsChannel(int location, double frequencyMhz) {
+  final fixed = _midlandGmrsChannel(location);
+  if (fixed != null) return fixed;
+  return gmrsChannelForHz((frequencyMhz * 1000000).round());
+}
+
+/// A new row has no receive channel yet. 146.52 MHz is the old placeholder.
+bool midlandReceiveChannelIsUnset(double frequencyMhz) {
+  final hz = (frequencyMhz * 1000000).round();
+  return hz == 0 || hz == 146520000;
+}
+
+/// Dropdown rows for Receive channel. Fixed rows have one choice.
+///
+/// An unset row starts with a blank line so the box does not show a
+/// placeholder frequency.
+Map<String, String> midlandReceiveChannelChoices(
+  int location,
+  double frequencyMhz,
+) {
+  final fixed = _midlandGmrsChannel(location);
+  if (fixed != null) {
+    return {'$fixed': gmrsChannelMenuLabel(fixed)};
+  }
+  final choices = <String, String>{};
+  final hz = (frequencyMhz * 1000000).round();
+  if (midlandReceiveChannelIsUnset(frequencyMhz)) {
+    choices[''] = '';
+  } else if (gmrsChannelForHz(hz) == null) {
+    choices['custom'] = '${mhzLabelFromHz(hz)} MHz';
+  }
+  for (var channel = 1; channel <= 22; channel++) {
+    choices['$channel'] = gmrsChannelMenuLabel(channel);
+  }
+  return choices;
+}
+
+/// Selected value for [midlandReceiveChannelChoices].
+String midlandReceiveChannelValue(int location, double frequencyMhz) {
+  final fixed = _midlandGmrsChannel(location);
+  if (fixed != null) return '$fixed';
+  final match = gmrsChannelForHz((frequencyMhz * 1000000).round());
+  if (match != null) return '$match';
+  if (midlandReceiveChannelIsUnset(frequencyMhz)) return '';
+  return 'custom';
+}
+
+/// Channels 1 through 22 already have a receive channel, so the list
+/// cannot move them.
+bool midlandReceiveChannelIsLocked(int location) =>
+    _midlandGmrsChannel(location) != null;
+
+/// GMRS repeater outputs from 462.550 through 462.725 MHz.
+bool isGmrsRepeaterOutputMhz(double mhz) {
+  final hz = (mhz * 1000000).round();
+  if (hz < 462550000 || hz > 462725000) return false;
+  return (hz - 462550000) % 25000 == 0;
+}
+
+String mhzLabelFromHz(int hz) {
+  final whole = hz ~/ 1000000;
+  final fraction = (hz % 1000000).toString().padLeft(6, '0');
+  return '$whole.$fraction';
+}
+
+bool _isPlusFiveMhz(double offset) => (offset * 1000000).round() == 5000000;
+
+bool _isZeroMhz(double offset) => (offset * 1000000).round() == 0;
+
+/// Duplex choices for one MXT295 slot.
+///
+/// Channels 1 through 7 stay simplex. Channels 8 through 14 are receive
+/// only. Repeater rows are +5 MHz. A receive channel of 1 through 14 on
+/// any other row also stays simplex. The current value stays in the list
+/// when it is not legal, so the editor shows what is stored.
+Map<String, String> midlandDuplexChoices(
+  int location,
+  String current, {
+  double? frequencyMhz,
+}) {
+  final Map<String, String> allowed;
+  final gmrs = frequencyMhz == null
+      ? null
+      : gmrsChannelForHz((frequencyMhz * 1000000).round());
+  if (location >= 8 && location <= 14) {
+    allowed = {'off': 'off'};
+  } else if (midlandRepeaterRxMhz.containsKey(location)) {
+    allowed = {'+': '+'};
+  } else if ((location >= 1 && location <= 7) ||
+      (gmrs != null && gmrs <= 14)) {
+    allowed = {'': 'Simplex'};
+  } else {
+    allowed = {'': 'Simplex', '+': '+', 'off': 'off'};
+  }
+  if (!allowed.containsKey(current)) {
+    allowed[current] = current.isEmpty ? 'Simplex' : current;
+  }
+  return allowed;
+}
+
+/// Channels 1-14, a GMRS 1-14 receive channel, and the repeater rows
+/// cannot change duplex.
+bool midlandDuplexIsLocked(int location, {double? frequencyMhz}) {
+  if (location >= 1 && location <= 14) return true;
+  if (midlandRepeaterRxMhz.containsKey(location)) return true;
+  if (frequencyMhz == null) return false;
+  final gmrs = gmrsChannelForHz((frequencyMhz * 1000000).round());
+  return gmrs != null && gmrs <= 14;
+}
+
+/// Offset can be chosen only for GMRS channels 15 through 22.
+///
+/// Repeater rows stay on +5 MHz, so that choice is not open there.
+bool midlandCanSelectOffset(int location, double frequencyMhz) {
+  if (location >= 1 && location <= 14) return false;
+  if (midlandRepeaterRxMhz.containsKey(location)) return false;
+  final gmrs = midlandReceiveGmrsChannel(location, frequencyMhz);
+  return gmrs != null && gmrs >= 15 && gmrs <= 22;
+}
+
+/// Why this MXT295 channel is not legal. Empty for every other radio.
+///
+/// The driver enforces the same rules in drivers/newchirp_mxt295.py.
+List<String> midlandGmrsIssues(String? model, RadioChannel channel) {
+  if (!showsMidlandChannelNumbers(model) || channel.cleared) return const [];
+  final issues = <String>[];
+  final label = channelNumberLabel(model, channel.location);
+  final name = label.startsWith('RPTR') ? label : 'Channel $label';
+  final fixedHz = midlandFixedRxHz(channel.location);
+  if (fixedHz != null &&
+      (channel.frequency * 1000000).round() != fixedHz) {
+    issues.add('$name must stay on ${mhzLabelFromHz(fixedHz)} MHz.');
+  }
+  final location = channel.location;
+  if (location >= 8 && location <= 14) {
+    if (channel.duplex != 'off' || !_isZeroMhz(channel.offset)) {
+      issues.add(
+        'Channels 8 through 14 stay receive only. Duplex stays off.',
+      );
+    }
+    return issues;
+  }
+  if (isMidlandRepeaterRow(model, location)) {
+    if (channel.duplex != '+' || !_isPlusFiveMhz(channel.offset)) {
+      issues.add('Repeater rows use a +5 MHz offset.');
+    }
+    return issues;
+  }
+  if (location >= 1 && location <= 7 &&
+      (channel.duplex != '' || !_isZeroMhz(channel.offset))) {
+    issues.add('Channels 1 through 14 stay simplex.');
+    return issues;
+  }
+  final picked = gmrsChannelForHz((channel.frequency * 1000000).round());
+  if (location > 30 &&
+      picked != null &&
+      picked <= 14 &&
+      (channel.duplex != '' || !_isZeroMhz(channel.offset))) {
+    issues.add('Channels 1 through 14 stay simplex.');
+    return issues;
+  }
+  if (channel.duplex == '+') {
+    if (!_isPlusFiveMhz(channel.offset)) {
+      issues.add('Repeater offset must be +5 MHz.');
+    } else if (!isGmrsRepeaterOutputMhz(channel.frequency)) {
+      issues.add(
+        'A +5 MHz offset is only for GMRS repeater frequencies '
+        '462.550 through 462.725 MHz.',
+      );
+    }
+  } else if (channel.duplex == '' || channel.duplex == 'off') {
+    if (!_isZeroMhz(channel.offset)) {
+      issues.add('Offset must be 0 unless duplex is +5 MHz.');
+    }
+  } else {
+    issues.add(
+      'This radio only allows simplex, receive only (off), '
+      'or a +5 MHz repeater.',
+    );
+  }
+  return issues;
+}
+
 class RadioChannel {
   RadioChannel({
     required this.location,
@@ -175,6 +471,83 @@ class RadioChannel {
     step = 5;
     skip = '';
     power = '';
+    comment = '';
+    extras.clear();
+  }
+
+  /// Sets this row to one of the 22 GMRS receive channels.
+  ///
+  /// The row starts simplex with no offset. Choosing duplex + later
+  /// sets the offset to 5 MHz. Fixed rows 1 through 22 do not move.
+  void useGmrsReceiveChannel(int channelNumber) {
+    if (cleared || _midlandGmrsChannel(location) != null) return;
+    final hz = gmrsStandardRxHz(channelNumber);
+    if (hz == null) return;
+    frequency = hz / 1000000;
+    duplex = '';
+    offset = 0;
+  }
+
+  /// Snaps locked MXT295 fields to the legal GMRS values.
+  ///
+  /// Channels 23 through 99 keep their frequency. An illegal duplex on
+  /// those rows is left in place so the editor can explain it.
+  void prepareMxt295Editor() {
+    if (cleared) return;
+    final fixedHz = midlandFixedRxHz(location);
+    if (fixedHz != null) {
+      frequency = fixedHz / 1000000;
+    }
+    if (location >= 8 && location <= 14) {
+      duplex = 'off';
+      offset = 0;
+      return;
+    }
+    if (midlandRepeaterRxMhz.containsKey(location)) {
+      duplex = '+';
+      offset = 5;
+      return;
+    }
+    if (location >= 1 && location <= 7) {
+      duplex = '';
+      offset = 0;
+      return;
+    }
+    final picked = gmrsChannelForHz((frequency * 1000000).round());
+    if (location > 30 && picked != null && picked <= 14) {
+      duplex = '';
+      offset = 0;
+      return;
+    }
+    if (duplex == '+') {
+      offset = 5;
+    } else if (duplex == '' || duplex == 'off') {
+      offset = 0;
+    }
+  }
+
+  /// Puts the standard GMRS repeater back in this row and clears the name.
+  ///
+  /// Does nothing when [location] is not one of the eight repeater slots.
+  void restorePlainMidlandRepeater() {
+    final plainFrequency = midlandRepeaterRxMhz[location];
+    if (plainFrequency == null) return;
+    cleared = false;
+    name = '';
+    frequency = plainFrequency;
+    duplex = '+';
+    offset = 5;
+    tone = '';
+    txTone = 88.5;
+    rxTone = 88.5;
+    dtcs = 23;
+    dtcsPolarity = 'NN';
+    rxDtcs = 23;
+    crossMode = 'Tone->Tone';
+    mode = 'FM';
+    step = 12.5;
+    skip = 'S';
+    power = 'High';
     comment = '';
     extras.clear();
   }
@@ -255,7 +628,11 @@ class RadioChannel {
     return null;
   }
 
-  List<String> validate({int? minimumLocation, int? maximumLocation}) {
+  List<String> validate({
+    int? minimumLocation,
+    int? maximumLocation,
+    String? radioModel,
+  }) {
     final issues = <String>[];
     if (cleared) return issues;
     if (minimumLocation != null || maximumLocation != null) {
@@ -289,6 +666,7 @@ class RadioChannel {
       issues.add('Duplex value is not supported.');
     }
     if (name.length > 16) issues.add('Name may be too long for many radios.');
+    issues.addAll(midlandGmrsIssues(radioModel, this));
     return issues;
   }
 }

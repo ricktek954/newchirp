@@ -5,6 +5,210 @@ RadioChannel channelAt(int location) =>
     RadioChannel(location: location, name: 'CH $location', frequency: 146.52);
 
 void main() {
+  test('Midland MXT295 shows Midland channel numbers', () {
+    expect(channelNumberLabel('Baofeng_UV-5R', 16), '16');
+    expect(showsMidlandChannelNumbers('Baofeng_UV-5R'), isFalse);
+    expect(showsMidlandChannelNumbers(midlandMxt295Model), isTrue);
+    expect(channelNumberLabel(midlandMxt295Model, 1), '1');
+    expect(channelNumberLabel(midlandMxt295Model, 15), '15');
+    expect(channelNumberLabel(midlandMxt295Model, 16), 'RPTR 15');
+    expect(channelNumberLabel(midlandMxt295Model, 17), '16');
+    expect(channelNumberLabel(midlandMxt295Model, 18), 'RPTR 16');
+    expect(channelNumberLabel(midlandMxt295Model, 19), '17');
+    expect(channelNumberLabel(midlandMxt295Model, 29), '22');
+    expect(channelNumberLabel(midlandMxt295Model, 30), 'RPTR 22');
+    expect(channelNumberLabel(midlandMxt295Model, 31), '23');
+    expect(channelNumberLabel(midlandMxt295Model, 107), '99');
+    expect(channelNumberLabel(midlandMxt295Model, 0), '0');
+  });
+
+  test('Midland repeater rows reset to the plain GMRS repeater', () {
+    expect(isMidlandRepeaterRow('Baofeng_UV-5R', 16), isFalse);
+    expect(isMidlandRepeaterRow(midlandMxt295Model, 15), isFalse);
+    expect(isMidlandRepeaterRow(midlandMxt295Model, 17), isFalse);
+    expect(isMidlandRepeaterRow(midlandMxt295Model, 31), isFalse);
+    expect(isMidlandRepeaterRow(midlandMxt295Model, 16), isTrue);
+    expect(isMidlandRepeaterRow(midlandMxt295Model, 30), isTrue);
+    expect(midlandRepeaterRxMhz[16], 462.550);
+    expect(midlandRepeaterRxMhz[30], 462.725);
+
+    final row = RadioChannel(
+      location: 24,
+      name: 'CALICO',
+      frequency: 146.52,
+      duplex: '',
+      skip: '',
+      power: 'Low',
+    );
+    row.restorePlainMidlandRepeater();
+    expect(row.cleared, isFalse);
+    expect(row.name, isEmpty);
+    expect(row.frequency, 462.650);
+    expect(row.duplex, '+');
+    expect(row.offset, 5);
+    expect(row.tone, isEmpty);
+    expect(row.mode, 'FM');
+    expect(row.step, 12.5);
+    expect(row.skip, 'S');
+    expect(row.power, 'High');
+
+    final normal = channelAt(17);
+    normal.restorePlainMidlandRepeater();
+    expect(normal.name, 'CH 17');
+    expect(normal.frequency, 146.52);
+  });
+
+  test('MXT295 channels 1 through 22 stay on legal GMRS values', () {
+    expect(midlandFixedRxHz(1), 462562500);
+    expect(midlandFixedRxHz(7), 462712500);
+    expect(midlandFixedRxHz(8), 467562500);
+    expect(midlandFixedRxHz(14), 467712500);
+    expect(midlandFixedRxHz(15), 462550000);
+    expect(midlandFixedRxHz(16), 462550000);
+    expect(midlandFixedRxHz(17), 462575000);
+    expect(midlandFixedRxHz(29), 462725000);
+    expect(midlandFixedRxHz(30), 462725000);
+    expect(midlandFixedRxHz(31), isNull);
+    expect(mhzLabelFromHz(462562500), '462.562500');
+
+    for (var slot = 1; slot <= 30; slot++) {
+      final row = RadioChannel(
+        location: slot,
+        name: 'CH',
+        frequency: 146.52,
+        duplex: isMidlandRepeaterRow(midlandMxt295Model, slot) ? '+' : '',
+        offset: 0.6,
+      );
+      row.prepareMxt295Editor();
+      expect(
+        midlandGmrsIssues(midlandMxt295Model, row),
+        isEmpty,
+        reason: 'slot $slot',
+      );
+      expect((row.frequency * 1000000).round(), midlandFixedRxHz(slot));
+    }
+
+    final receiveOnly = RadioChannel(
+      location: 8,
+      name: 'GMRS 8',
+      frequency: 467.5625,
+      duplex: '',
+      offset: 0,
+    );
+    expect(
+      midlandGmrsIssues(midlandMxt295Model, receiveOnly).join('\n'),
+      contains('Duplex stays off'),
+    );
+    expect(midlandDuplexIsLocked(1), isTrue);
+    expect(midlandDuplexChoices(1, ''), {'': 'Simplex'});
+    expect(midlandDuplexIsLocked(8), isTrue);
+    expect(midlandDuplexChoices(8, 'off'), {'off': 'off'});
+    final simplexOnly = RadioChannel(
+      location: 3,
+      name: 'GMRS 3',
+      frequency: 462.6125,
+      duplex: 'off',
+      offset: 0,
+    );
+    simplexOnly.prepareMxt295Editor();
+    expect(simplexOnly.duplex, '');
+    expect(simplexOnly.offset, 0);
+    expect(gmrsChannelMenuLabel(1), 'GMRS Channel 1, 462.562500');
+    expect(gmrsChannelMenuLabel(16), 'GMRS Channel 16, 462.575000');
+    expect(
+      midlandReceiveChannelChoices(31, 462.575),
+      containsPair('16', 'GMRS Channel 16, 462.575000'),
+    );
+    expect(midlandReceiveChannelChoices(31, 462.575).length, 22);
+    expect(midlandReceiveChannelValue(31, 0), isEmpty);
+    expect(midlandReceiveChannelChoices(31, 0).keys.first, isEmpty);
+    expect(midlandReceiveChannelValue(31, 146.52), isEmpty);
+    expect(midlandReceiveChannelIsLocked(1), isTrue);
+    expect(midlandReceiveChannelIsLocked(31), isFalse);
+    receiveOnly.prepareMxt295Editor();
+    expect(receiveOnly.duplex, 'off');
+    expect(receiveOnly.offset, 0);
+    expect(receiveOnly.validate(radioModel: midlandMxt295Model), isEmpty);
+
+    final repeater = RadioChannel(
+      location: 16,
+      name: 'HIDESERT',
+      frequency: 462.55,
+      duplex: '-',
+      offset: 5,
+    );
+    expect(midlandDuplexIsLocked(16), isTrue);
+    repeater.prepareMxt295Editor();
+    expect(repeater.duplex, '+');
+    expect(repeater.offset, 5);
+    expect(midlandGmrsIssues(midlandMxt295Model, repeater), isEmpty);
+
+    final direct = RadioChannel(
+      location: 15,
+      name: 'GMRS 15',
+      frequency: 462.55,
+      duplex: 'split',
+      offset: 467.55,
+    );
+    direct.prepareMxt295Editor();
+    expect(direct.duplex, 'split');
+    expect(
+      midlandGmrsIssues(midlandMxt295Model, direct).join('\n'),
+      contains('only allows simplex'),
+    );
+    expect(midlandDuplexChoices(15, 'split').keys, contains('split'));
+    expect(midlandDuplexIsLocked(15), isFalse);
+
+    final extra = RadioChannel(
+      location: 38,
+      name: 'BIKE03',
+      frequency: 462.6125,
+      duplex: '+',
+      offset: 5,
+    );
+    expect(
+      midlandGmrsIssues(midlandMxt295Model, extra).join('\n'),
+      contains('stay simplex'),
+    );
+    extra.duplex = '';
+    extra.offset = 0;
+    expect(midlandGmrsIssues(midlandMxt295Model, extra), isEmpty);
+
+    final picked = RadioChannel(
+      location: 31,
+      name: 'NEW',
+      frequency: 146.52,
+    );
+    picked.useGmrsReceiveChannel(16);
+    expect(picked.frequency, 462.575);
+    expect(picked.duplex, isEmpty);
+    expect(picked.offset, 0);
+    expect(midlandCanSelectOffset(31, picked.frequency), isTrue);
+    picked.useGmrsReceiveChannel(4);
+    expect(picked.duplex, isEmpty);
+    expect(picked.offset, 0);
+    expect(
+      midlandDuplexIsLocked(31, frequencyMhz: picked.frequency),
+      isTrue,
+    );
+    expect(midlandCanSelectOffset(31, picked.frequency), isFalse);
+    expect(midlandReceiveChannelValue(31, picked.frequency), '4');
+
+    final otherRadio = channelAt(8);
+    otherRadio.duplex = '';
+    expect(midlandGmrsIssues('Baofeng_UV-5R', otherRadio), isEmpty);
+    expect(otherRadio.validate(radioModel: 'Baofeng_UV-5R'), isEmpty);
+  });
+
+  test('scan codes use the same words in the list and the editor', () {
+    expect(scanLabel(''), 'Include');
+    expect(scanLabel('S'), 'Skip');
+    expect(scanLabel('P'), 'Priority');
+    expect(scanLabel('X'), 'X');
+    expect(scanChoices(const ['', 'S']), {'': 'Include', 'S': 'Skip'});
+    expect(scanChoices(null).keys.toList(), ['', 'S', 'P']);
+  });
+
   test('provides the standard DTCS code set without a radio image', () {
     expect(standardDtcsCodes, hasLength(104));
     expect(standardDtcsCodes.first, 23);
