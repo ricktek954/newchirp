@@ -112,6 +112,7 @@
 - [_search](search.md)
 - [_searchAmateurInstead](searchAmateurInstead.md)
 - [_selectPage](selectPage.md)
+- [_selectRadioModel](selectRadioModel.md)
 - [_setColumnOrder](setColumnOrder.md)
 - [_setColumnWidth](setColumnWidth.md)
 - [_setResultSelected](setResultSelected.md)

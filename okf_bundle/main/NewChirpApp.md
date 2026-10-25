@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:54:38Z"
+timestamp: "2026-10-25T09:29:48Z"
 concept_id: main/NewChirpApp
 language: dart
 ---
@@ -27,7 +27,7 @@ class NewChirpApp
 - `build`
 
 ## Source
-Lines 216–278 in `main.dart`
+Lines 217–279 in `main.dart`
 
 ## Relationships
 

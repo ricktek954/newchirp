@@ -5,8 +5,8 @@
   "files": {
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1792893278355926458,
-      "hash": "62f40512db78673e6680c9b3ffbd4b741b27d23a14119b116cba39ad3b10f926",
+      "mtime_ns": 1792920588608649063,
+      "hash": "219ff9ab4a4a673c7bb87003ac6dde6dc051be6d7832230788b37b21a8315a1e",
       "concept_ids": [
         "main/ChannelApplyDialog",
         "main/ChannelApplyDialogState",
@@ -139,6 +139,7 @@
         "main/search",
         "main/searchAmateurInstead",
         "main/selectPage",
+        "main/selectRadioModel",
         "main/setColumnOrder",
         "main/setColumnWidth",
         "main/setResultSelected",
@@ -227,6 +228,58 @@
         "services/column_layout_store"
       ]
     },
+    "services/radio_bridge.dart": {
+      "path": "services/radio_bridge.dart",
+      "mtime_ns": 1792893400910621746,
+      "hash": "e28d5db36791c6801c0422708c879a5c04e3b2ecd077775ceff16110d6462b60",
+      "concept_ids": [
+        "services/radio_bridge/RadioBridge",
+        "services/radio_bridge/RadioBridgeException",
+        "services/radio_bridge/RadioCapabilities",
+        "services/radio_bridge/RadioInstructions",
+        "services/radio_bridge/RadioProgress",
+        "services/radio_bridge/RadioSettingNode",
+        "services/radio_bridge/RadioSettings",
+        "services/radio_bridge/RadioZone",
+        "services/radio_bridge/SerialPortInfo",
+        "services/radio_bridge/bundledAssetCandidates",
+        "services/radio_bridge/bundledResourcesDirectory",
+        "services/radio_bridge/cancelActive",
+        "services/radio_bridge/deduplicatePorts",
+        "services/radio_bridge/download",
+        "services/radio_bridge/findChirpSource",
+        "services/radio_bridge/findNewChirpDrivers",
+        "services/radio_bridge/findScsiHelper",
+        "services/radio_bridge/imageCapabilities",
+        "services/radio_bridge/imageInfo",
+        "services/radio_bridge/instructions",
+        "services/radio_bridge/loadAssetBytes",
+        "services/radio_bridge/loadModule",
+        "services/radio_bridge/massStoragePortDetails",
+        "services/radio_bridge/materializeBridge",
+        "services/radio_bridge/materializePythonDependencies",
+        "services/radio_bridge/models",
+        "services/radio_bridge/parseComPorts",
+        "services/radio_bridge/parseWindowsSerialPortDetails",
+        "services/radio_bridge/readImage",
+        "services/radio_bridge/readSettings",
+        "services/radio_bridge/resolvePython",
+        "services/radio_bridge/run",
+        "services/radio_bridge/runWithRuntime",
+        "services/radio_bridge/searchRepeaters",
+        "services/radio_bridge/serialPortDetails",
+        "services/radio_bridge/serialPorts",
+        "services/radio_bridge/strings",
+        "services/radio_bridge/toChangeJson",
+        "services/radio_bridge/toString",
+        "services/radio_bridge/unloadModule",
+        "services/radio_bridge/upload",
+        "services/radio_bridge/windowsSerialPortDetails",
+        "services/radio_bridge/windowsSerialPortNames",
+        "services/radio_bridge/writeSettings",
+        "services/radio_bridge"
+      ]
+    },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
       "mtime_ns": 1787526889854147624,
@@ -289,56 +342,27 @@
         "services/window_state_store"
       ]
     },
-    "services/radio_bridge.dart": {
-      "path": "services/radio_bridge.dart",
-      "mtime_ns": 1792893400910621746,
-      "hash": "e28d5db36791c6801c0422708c879a5c04e3b2ecd077775ceff16110d6462b60",
+    "widgets/radio_model_picker.dart": {
+      "path": "widgets/radio_model_picker.dart",
+      "mtime_ns": 1792920593259458136,
+      "hash": "7322cae3e796be8738eb41a22e15f1a687e3fa319f6804cdc66c4116926e07db",
       "concept_ids": [
-        "services/radio_bridge",
-        "services/radio_bridge/RadioBridgeException",
-        "services/radio_bridge/RadioInstructions",
-        "services/radio_bridge/RadioCapabilities",
-        "services/radio_bridge/RadioZone",
-        "services/radio_bridge/RadioProgress",
-        "services/radio_bridge/SerialPortInfo",
-        "services/radio_bridge/RadioSettingNode",
-        "services/radio_bridge/RadioSettings",
-        "services/radio_bridge/RadioBridge",
-        "services/radio_bridge/strings",
-        "services/radio_bridge/toString",
-        "services/radio_bridge/toChangeJson",
-        "services/radio_bridge/cancelActive",
-        "services/radio_bridge/serialPortDetails",
-        "services/radio_bridge/massStoragePortDetails",
-        "services/radio_bridge/deduplicatePorts",
-        "services/radio_bridge/serialPorts",
-        "services/radio_bridge/windowsSerialPortNames",
-        "services/radio_bridge/windowsSerialPortDetails",
-        "services/radio_bridge/parseWindowsSerialPortDetails",
-        "services/radio_bridge/parseComPorts",
-        "services/radio_bridge/models",
-        "services/radio_bridge/loadModule",
-        "services/radio_bridge/unloadModule",
-        "services/radio_bridge/instructions",
-        "services/radio_bridge/readImage",
-        "services/radio_bridge/imageInfo",
-        "services/radio_bridge/imageCapabilities",
-        "services/radio_bridge/download",
-        "services/radio_bridge/upload",
-        "services/radio_bridge/readSettings",
-        "services/radio_bridge/writeSettings",
-        "services/radio_bridge/run",
-        "services/radio_bridge/searchRepeaters",
-        "services/radio_bridge/runWithRuntime",
-        "services/radio_bridge/resolvePython",
-        "services/radio_bridge/bundledResourcesDirectory",
-        "services/radio_bridge/materializeBridge",
-        "services/radio_bridge/materializePythonDependencies",
-        "services/radio_bridge/loadAssetBytes",
-        "services/radio_bridge/bundledAssetCandidates",
-        "services/radio_bridge/findChirpSource",
-        "services/radio_bridge/findNewChirpDrivers",
-        "services/radio_bridge/findScsiHelper"
+        "widgets/radio_model_picker",
+        "widgets/radio_model_picker/RadioModelPicker",
+        "widgets/radio_model_picker/RadioModelPickerState",
+        "widgets/radio_model_picker/displayRadioModelName",
+        "widgets/radio_model_picker/compact",
+        "widgets/radio_model_picker/createState",
+        "widgets/radio_model_picker/initState",
+        "widgets/radio_model_picker/didUpdateWidget",
+        "widgets/radio_model_picker/dispose",
+        "widgets/radio_model_picker/setControllerText",
+        "widgets/radio_model_picker/handleFocusChange",
+        "widgets/radio_model_picker/handleSelected",
+        "widgets/radio_model_picker/matches",
+        "widgets/radio_model_picker/matchingModels",
+        "widgets/radio_model_picker/matchingModelCount",
+        "widgets/radio_model_picker/build"
       ]
     }
   },
@@ -988,7 +1012,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "f2bd60f290336df60ebb85f592e662258b497fd6ba86b5b46c2ddb76184779d0",
+      "edge_hash": "1c8f0e069f6289711f08e82be6964da8c074182b7deefbca576ea8864a67cd12",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -2486,7 +2510,143 @@
       "render_hash": "stale",
       "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
       "enriched": false
+    },
+    "widgets/radio_model_picker": {
+      "concept_id": "widgets/radio_model_picker",
+      "type": "Module",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "f5044a27ea0b47fd8477de87963a032fc8cb0c66bc094ca5180bb15719e4bf8b",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/RadioModelPicker": {
+      "concept_id": "widgets/radio_model_picker/RadioModelPicker",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/RadioModelPickerState": {
+      "concept_id": "widgets/radio_model_picker/RadioModelPickerState",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/displayRadioModelName": {
+      "concept_id": "widgets/radio_model_picker/displayRadioModelName",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/compact": {
+      "concept_id": "widgets/radio_model_picker/compact",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/createState": {
+      "concept_id": "widgets/radio_model_picker/createState",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/initState": {
+      "concept_id": "widgets/radio_model_picker/initState",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/didUpdateWidget": {
+      "concept_id": "widgets/radio_model_picker/didUpdateWidget",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/dispose": {
+      "concept_id": "widgets/radio_model_picker/dispose",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/setControllerText": {
+      "concept_id": "widgets/radio_model_picker/setControllerText",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/handleFocusChange": {
+      "concept_id": "widgets/radio_model_picker/handleFocusChange",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/handleSelected": {
+      "concept_id": "widgets/radio_model_picker/handleSelected",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/matches": {
+      "concept_id": "widgets/radio_model_picker/matches",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/matchingModels": {
+      "concept_id": "widgets/radio_model_picker/matchingModels",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/matchingModelCount": {
+      "concept_id": "widgets/radio_model_picker/matchingModelCount",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/build": {
+      "concept_id": "widgets/radio_model_picker/build",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "main/selectRadioModel": {
+      "concept_id": "main/selectRadioModel",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-25T01:56:41Z"
+  "generated_at": "2026-10-25T09:29:53Z"
 }

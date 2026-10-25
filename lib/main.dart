@@ -19,6 +19,7 @@ import 'services/radio_selection_store.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/window_state_store.dart';
+import 'widgets/radio_model_picker.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
@@ -622,6 +623,30 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (storedImage != null) {
       unawaited(_loadImageCapabilities(storedImage!));
     }
+  }
+
+  void _selectRadioModel(String model) {
+    String? storedImage;
+    setState(() {
+      _model = model;
+      _capabilities = null;
+      _radioZones = [];
+      _selectedZone = null;
+      _radioImage = _imageStore.hasForModel(model)
+          ? _imageStore.pathForModel(model)
+          : null;
+      storedImage = _radioImage;
+      _radioSettings = null;
+      _settingsDirty = false;
+      _settingsLoadedFromRadio = false;
+      _settingsLoadedModel = null;
+      _settingsLoadedImage = null;
+      _settingsError = null;
+    });
+    if (storedImage != null) {
+      unawaited(_loadImageCapabilities(storedImage!));
+    }
+    unawaited(_saveRadioSelection());
   }
 
   Future<void> _task(String label, Future<void> Function() action) async {
@@ -3938,51 +3963,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           ],
                         )
                       else
-                        DropdownButtonFormField<String>(
-                          initialValue: _models.contains(_model)
+                        RadioModelPicker(
+                          models: _models,
+                          selectedModel: _models.contains(_model)
                               ? _model
                               : null,
-                          decoration: InputDecoration(
-                            labelText:
-                                'Radio model (${_models.length} available)',
-                            prefixIcon: const Icon(
-                              Icons.settings_input_antenna,
-                            ),
-                          ),
-                          items: _models
-                              .map(
-                                (m) => DropdownMenuItem(
-                                  value: m,
-                                  child: Text(m.replaceAll('_', ' ')),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            final model = value;
-                            String? storedImage;
-                            setState(() {
-                              _model = model;
-                              _capabilities = null;
-                              _radioZones = [];
-                              _selectedZone = null;
-                              _radioImage =
-                                  model != null &&
-                                      _imageStore.hasForModel(model)
-                                  ? _imageStore.pathForModel(model)
-                                  : null;
-                              storedImage = _radioImage;
-                              _radioSettings = null;
-                              _settingsDirty = false;
-                              _settingsLoadedFromRadio = false;
-                              _settingsLoadedModel = null;
-                              _settingsLoadedImage = null;
-                              _settingsError = null;
-                            });
-                            if (storedImage != null) {
-                              unawaited(_loadImageCapabilities(storedImage!));
-                            }
-                            unawaited(_saveRadioSelection());
-                          },
+                          enabled: !_busy,
+                          onSelected: _selectRadioModel,
                         ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 22),
