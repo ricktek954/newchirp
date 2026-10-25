@@ -169,6 +169,14 @@ Use an SCU-56 USB cable or CT-163 serial cable on the DATA jack. Keep a complete
 microSD ALL backup before uploading. The radio-side menu entries are
 **59 Other -> This** for download and **58 This -> Other** for upload.
 
+### Experimental RT-950 support
+
+NewChirp also includes a read-only driver for the Radtel RT-950. Select
+**Radtel RT-950**, connect the USB programming cable, and download to inspect
+the 960 channel memories. Uploads are disabled because the CPS write path has
+not yet been independently validated. Protocol details and reverse-engineering
+evidence are recorded in `docs/RT950_PROTOCOL.md`.
+
 ## Code knowledge graph
 
 This project keeps OKF knowledge bundles for coding agents:

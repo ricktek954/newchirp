@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T00:30:13Z"
+timestamp: "2026-10-25T00:47:08Z"
 concept_id: chirp_bridge/radio_for
 language: python
 ---
@@ -39,7 +39,7 @@ def radio_for(directory, model, port, progress_range = (0.0, 1.0), image = None,
 | `detect_serial` | `—` | `True` |
 
 ## Source
-Lines 590–629 in `chirp_bridge.py`
+Lines 593–632 in `chirp_bridge.py`
 
 ## Relationships
 

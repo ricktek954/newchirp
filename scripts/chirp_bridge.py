@@ -495,10 +495,12 @@ def apply_json(radio, mem, item):
 def open_serial(radio_class, port):
     import serial
 
+    software_flow = getattr(radio_class, "XON_XOFF", False)
     if "://" in port:
         handle = serial.serial_for_url(port, do_not_open=True)
         handle.timeout = 0.25
         handle.rtscts = radio_class.HARDWARE_FLOW
+        handle.xonxoff = software_flow
         handle.rts = radio_class.WANTS_RTS
         handle.dtr = radio_class.WANTS_DTR
         handle.open()
@@ -509,6 +511,7 @@ def open_serial(radio_class, port):
         handle = serial.Serial(
             baudrate=radio_class.BAUD_RATE,
             rtscts=radio_class.HARDWARE_FLOW,
+            xonxoff=software_flow,
             timeout=0.25,
         )
         handle.rts = radio_class.WANTS_RTS
