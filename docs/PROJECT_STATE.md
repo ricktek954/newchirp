@@ -13,6 +13,9 @@ release requirements.
 - The macOS `1.0.19` release is built, signed, notarized, stapled, uploaded,
   and live. It includes RepeaterBook search/import, radio-model type-ahead,
   headless live-radio support, and the experimental NewChirp drivers.
+- Post-1.0.19 work adds an experimental read-only Retevis RT97L driver. The
+  serial protocol is implemented and offline-tested, but its provisional
+  channel map still requires validation on physical hardware.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not

@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-10-24
+Last updated: 2026-10-25
 
 ## Status definitions
 
@@ -21,6 +21,7 @@ Last updated: 2026-10-24
 | --- | --- | --- | --- | --- | --- | --- |
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
+| Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 
 ## Radio details
@@ -80,6 +81,24 @@ Last updated: 2026-10-24
   only the macOS IOKit helper has been compiled on this host
 - Next milestone: capture a `0x44010`-byte M100000 image from physical hardware
   and compare it byte-for-byte with a CPS export
+
+### Retevis RT97L
+
+- Maintained driver: `drivers/newchirp_rt97l.py`
+- Protocol notes: `docs/RT97L_PROTOCOL.md`
+- Evidence: public protocol analysis of the Windows RT97L programmer
+- Public analysis tree:
+  `378b6fb634edbd0b440c59fae201787b7473f599`
+- Transport: stock USB serial cable at 9600 8N1 with DTR and RTS asserted
+- Implemented: 256-byte live download and sixteen 16-byte channel records
+- Decoded: RX/TX frequencies, CTCSS/DCS, power, scan status, and read-only
+  per-channel squelch, channel mode, compand, scan-add, and channel-lock fields
+- Read/write state: download implemented with synthetic serial tests; every
+  write operation is disabled
+- Remaining uncertainty: the channel byte map is provisional, global settings
+  and password encoding are unknown, and no physical download has completed
+- Next milestone: compare a complete physical image and official CPS export,
+  then correct the channel flags and settings byte map
 
 ## Reusable NewChirp transport work
 
