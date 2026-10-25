@@ -8,6 +8,7 @@ import 'package:newchirp/main.dart';
 import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/models/repeater_search.dart';
 import 'package:newchirp/services/column_layout_store.dart';
+import 'package:newchirp/services/file_save_warning_store.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 import 'package:newchirp/services/update_checker.dart';
 
@@ -15,14 +16,20 @@ var _layoutTest = 0;
 NewChirpApp testApp({
   UpdateChecker? updateChecker,
   bool checkForUpdatesOnStartup = false,
-}) => NewChirpApp(
-  columnLayoutStore: ColumnLayoutStore(
-    path:
-        '${Directory.systemTemp.path}/newchirp-widget-layout-$pid-${_layoutTest++}.json',
-  ),
-  updateChecker: updateChecker,
-  checkForUpdatesOnStartup: checkForUpdatesOnStartup,
-);
+}) {
+  final id = _layoutTest++;
+  return NewChirpApp(
+    columnLayoutStore: ColumnLayoutStore(
+      path: '${Directory.systemTemp.path}/newchirp-widget-layout-$pid-$id.json',
+    ),
+    fileSaveWarningStore: FileSaveWarningStore(
+      path:
+          '${Directory.systemTemp.path}/newchirp-widget-save-warning-$pid-$id.json',
+    ),
+    updateChecker: updateChecker,
+    checkForUpdatesOnStartup: checkForUpdatesOnStartup,
+  );
+}
 
 class _FakeUpdateChecker extends UpdateChecker {
   _FakeUpdateChecker(this.result);
