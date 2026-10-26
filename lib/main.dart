@@ -5172,6 +5172,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   final _longitudeController = TextEditingController();
   final _distanceController = TextEditingController();
   final _resultFilterController = TextEditingController();
+  final _countyFilterController = TextEditingController();
   String _state = 'New York';
   String _service = 'all';
   bool _fmOnly = true;
@@ -5182,6 +5183,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   String? _error;
   RepeaterSearchResults? _results;
   final Set<RepeaterSearchResult> _selected = {};
+  final Set<String> _selectedCounties = {};
   RepeaterSortOrder _sortOrder = RepeaterSortOrder.source;
   Size? _dialogSize;
   final MapController _mapController = MapController();
@@ -5193,6 +5195,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     _longitudeController.dispose();
     _distanceController.dispose();
     _resultFilterController.dispose();
+    _countyFilterController.dispose();
     _mapController.dispose();
     super.dispose();
   }
@@ -5229,6 +5232,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _error = null;
       _results = null;
       _selected.clear();
+      _selectedCounties.clear();
       _status = 'Searching RepeaterBook…';
     });
     try {
@@ -5264,6 +5268,107 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
 
   List<RadioChannel> get _selectedChannels {
     return [for (final result in _selected) result.channel.copy()];
+  }
+
+  List<String> get _availableCounties {
+    final counties = {
+      for (final result in _results?.results ?? const <RepeaterSearchResult>[])
+        if (result.county.trim().isNotEmpty) result.county.trim(),
+    }.toList();
+    counties.sort(
+      (left, right) => left.toLowerCase().compareTo(right.toLowerCase()),
+    );
+    return counties;
+  }
+
+  Future<void> _chooseCounties() async {
+    final counties = _availableCounties;
+    if (counties.isEmpty) return;
+    final selected = Set<String>.of(_selectedCounties);
+    _countyFilterController.clear();
+    var countyQuery = '';
+    final result = await showDialog<Set<String>>(
+      context: context,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) {
+          final visibleCounties = counties
+              .where(
+                (county) =>
+                    countyQuery.isEmpty ||
+                    county.toLowerCase().contains(countyQuery),
+              )
+              .toList();
+          return AlertDialog(
+            title: const Text('Filter counties'),
+            content: SizedBox(
+              width: 460,
+              height: 420,
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _countyFilterController,
+                    autofocus: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Find a county',
+                      prefixIcon: Icon(Icons.search),
+                    ),
+                    onChanged: (value) => setDialogState(
+                      () => countyQuery = value.trim().toLowerCase(),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () => setDialogState(selected.clear),
+                      child: const Text('Clear all'),
+                    ),
+                  ),
+                  Expanded(
+                    child: visibleCounties.isEmpty
+                        ? const Center(child: Text('No matching counties.'))
+                        : ListView.builder(
+                            itemCount: visibleCounties.length,
+                            itemBuilder: (context, index) {
+                              final county = visibleCounties[index];
+                              return CheckboxListTile(
+                                dense: true,
+                                value: selected.contains(county),
+                                title: Text(county),
+                                onChanged: (checked) => setDialogState(() {
+                                  if (checked == true) {
+                                    selected.add(county);
+                                  } else {
+                                    selected.remove(county);
+                                  }
+                                }),
+                              );
+                            },
+                          ),
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text('Cancel'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(dialogContext, selected),
+                child: const Text('Apply'),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+    if (!mounted || result == null) return;
+    setState(() {
+      _selectedCounties
+        ..clear()
+        ..addAll(result);
+    });
   }
 
   void _searchAmateurInstead() {
@@ -5437,6 +5542,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     final visibleResults = filterRepeaterResults(
       sortedResults,
       _resultFilterController.text,
+      counties: _selectedCounties,
     );
     final size = MediaQuery.sizeOf(context);
     final maxWidth = size.width - 24;
@@ -5705,27 +5811,49 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                           ],
                           if (results != null) ...[
                             const SizedBox(height: 8),
-                            TextField(
-                              controller: _resultFilterController,
-                              onChanged: (_) => setState(() {}),
-                              decoration: InputDecoration(
-                                isDense: true,
-                                labelText: 'Filter loaded results',
-                                hintText:
-                                    'City, county, callsign, mode, service, or frequency',
-                                prefixIcon: const Icon(
-                                  Icons.filter_alt_outlined,
-                                ),
-                                suffixIcon: _resultFilterController.text.isEmpty
-                                    ? null
-                                    : IconButton(
-                                        tooltip: 'Clear result filter',
-                                        onPressed: () => setState(
-                                          _resultFilterController.clear,
-                                        ),
-                                        icon: const Icon(Icons.close),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _resultFilterController,
+                                    onChanged: (_) => setState(() {}),
+                                    decoration: InputDecoration(
+                                      isDense: true,
+                                      labelText: 'Filter loaded results',
+                                      hintText:
+                                          'City, county, callsign, mode, service, or frequency',
+                                      prefixIcon: const Icon(
+                                        Icons.filter_alt_outlined,
                                       ),
-                              ),
+                                      suffixIcon:
+                                          _resultFilterController.text.isEmpty
+                                          ? null
+                                          : IconButton(
+                                              tooltip: 'Clear result filter',
+                                              onPressed: () => setState(
+                                                _resultFilterController.clear,
+                                              ),
+                                              icon: const Icon(Icons.close),
+                                            ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                OutlinedButton.icon(
+                                  onPressed: _availableCounties.isEmpty
+                                      ? null
+                                      : _chooseCounties,
+                                  icon: const Icon(
+                                    Icons.location_city_outlined,
+                                  ),
+                                  label: Text(
+                                    _selectedCounties.isEmpty
+                                        ? 'All counties'
+                                        : '${_selectedCounties.length} '
+                                              '${_selectedCounties.length == 1 ? 'county' : 'counties'}',
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                           const SizedBox(height: 10),

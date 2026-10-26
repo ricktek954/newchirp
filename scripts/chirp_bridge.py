@@ -126,6 +126,9 @@ def load_chirp(
     if module_path:
         _load_module(os.path.abspath(module_path), directory)
     if newchirp_driver_dir and os.path.isdir(newchirp_driver_dir):
+        # NewChirp drivers may intentionally replace a bundled CHIRP driver
+        # while preserving its stable model identifier.
+        directory.enable_reregistrations()
         for driver_path in sorted(
             glob.glob(os.path.join(newchirp_driver_dir, "*.py"))
         ):

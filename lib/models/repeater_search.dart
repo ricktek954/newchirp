@@ -32,16 +32,25 @@ List<RepeaterSearchResult> sortRepeaterResults(
 
 List<RepeaterSearchResult> filterRepeaterResults(
   Iterable<RepeaterSearchResult> results,
-  String query,
-) {
+  String query, {
+  Set<String> counties = const {},
+}) {
+  final selectedCounties = counties
+      .map((county) => county.trim().toLowerCase())
+      .where((county) => county.isNotEmpty)
+      .toSet();
   final terms = query
       .trim()
       .toLowerCase()
       .split(RegExp(r'\s+'))
       .where((term) => term.isNotEmpty)
       .toList();
-  if (terms.isEmpty) return results.toList();
+  if (terms.isEmpty && selectedCounties.isEmpty) return results.toList();
   return results.where((result) {
+    if (selectedCounties.isNotEmpty &&
+        !selectedCounties.contains(result.county.trim().toLowerCase())) {
+      return false;
+    }
     final haystack = [
       result.service,
       result.callsign,

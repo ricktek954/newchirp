@@ -30,3 +30,4 @@ Lines 560–561 in `newchirp_mass_storage.py`
 | Type | Target |
 |------|--------|
 | related | [newchirp_mass_storage](/newchirp_mass_storage.md) |
+| called_by | [main](/chirp_bridge/main.md) |

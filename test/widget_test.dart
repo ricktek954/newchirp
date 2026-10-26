@@ -219,6 +219,28 @@ void main() {
     );
     await tester.tap(find.text('List'));
     await tester.pump();
+
+    await tester.tap(find.text('All counties'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Erie'));
+    await tester.pump();
+    await tester.tap(find.text('Apply'));
+    await tester.pumpAndSettle();
+    expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
+    expect(find.text('W4BUG — Point of Americas'), findsNothing);
+    expect(find.text('1 county'), findsOneWidget);
+
+    await tester.tap(find.text('1 county'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Clear all'));
+    await tester.pump();
+    await tester.tap(find.text('Broward'));
+    await tester.pump();
+    await tester.tap(find.text('Apply'));
+    await tester.pumpAndSettle();
+    expect(find.text('WB2ECR — Buffalo'), findsNothing);
+    expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
+
     final resultFilter = find.byWidgetPredicate(
       (widget) =>
           widget is TextField &&

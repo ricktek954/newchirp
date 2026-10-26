@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-10-25
+Last updated: 2026-10-26
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -13,6 +13,8 @@ release requirements.
   and live. It includes the experimental read-only Retevis RT97L driver.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
+- Post-1.0.20 work adds a multi-county RepeaterBook filter and a TS-2000
+  write-command timeout override awaiting physical upload validation.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not

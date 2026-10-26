@@ -60,6 +60,7 @@
 - [_channelRow](channelRow.md)
 - [_checkForUpdates](checkForUpdates.md)
 - [_chooseChannelApplyMode](chooseChannelApplyMode.md)
+- [_chooseCounties](chooseCounties.md)
 - [_clampWindowState](clampWindowState.md)
 - [_clearChannel](clearChannel.md)
 - [_columns](columns.md)

@@ -36,3 +36,5 @@ Lines 458–459 in `newchirp_mass_storage.py`
 | Type | Target |
 |------|--------|
 | related | [RapMassStorageRadio](/newchirp_mass_storage/RapMassStorageRadio.md) |
+| called_by | [main](/chirp_bridge/main.md) |
+| called_by | [radio_for](/chirp_bridge/radio_for.md) |

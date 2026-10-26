@@ -22,6 +22,7 @@ Last updated: 2026-10-25
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
+| Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 
 ## Radio details
@@ -99,6 +100,22 @@ Last updated: 2026-10-25
   and password encoding are unknown, and no physical download has completed
 - Next milestone: compare a complete physical image and official CPS export,
   then correct the channel flags and settings byte map
+
+### Kenwood TS-2000
+
+- Maintainer: NewChirp override of the upstream CHIRP live CAT driver
+- Maintained file: `drivers/newchirp_ts2000.py`
+- Transport: Kenwood live CAT serial connection
+- Evidence: CHIRP's `ts2000.py` driver and a field report from a TS-2000 owner
+- Hardware verified: channel download succeeds
+- Field issue: channel upload can exceed the shared Kenwood live driver's
+  one-second command-response ceiling
+- Change: NewChirp retains the upstream protocol implementation but allows up
+  to five seconds for `MW`/`MC` write commands
+- Write status: protocol-level tests pass; upload/read-back retest on physical
+  hardware is required before calling the timeout fix hardware-verified
+- Next milestone: TS-2000 owner retest with both a small loadset and the full
+  258-channel loadset, followed by a read-back comparison
 
 ## Reusable NewChirp transport work
 

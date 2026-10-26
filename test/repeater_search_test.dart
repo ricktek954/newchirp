@@ -81,5 +81,21 @@ void main() {
       ).map((result) => result.callsign),
       ['W3'],
     );
+    expect(
+      filterRepeaterResults(
+        results,
+        '',
+        counties: {'BROWARD'},
+      ).map((result) => result.callsign),
+      ['W3', 'W2'],
+    );
+    expect(
+      filterRepeaterResults(
+        results,
+        '',
+        counties: {'Broward', 'Palm Beach'},
+      ).map((result) => result.callsign),
+      ['W3', 'W1', 'W2'],
+    );
   });
 }

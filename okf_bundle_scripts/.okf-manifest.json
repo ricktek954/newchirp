@@ -14,44 +14,6 @@
         "build_macos_dmg"
       ]
     },
-    "chirp_bridge.py": {
-      "path": "chirp_bridge.py",
-      "mtime_ns": 1792893254084322294,
-      "hash": "c9746367d50f2fc13ddd36dcb670d208f4938b226fddc83978549d87e73314ff",
-      "concept_ids": [
-        "chirp_bridge/apply_json",
-        "chirp_bridge/apply_setting_changes",
-        "chirp_bridge/bridge_error_message",
-        "chirp_bridge/channel_context",
-        "chirp_bridge/channel_radio_for",
-        "chirp_bridge/emit_progress",
-        "chirp_bridge/emit_read_ready",
-        "chirp_bridge/extra_field_doc",
-        "chirp_bridge/extra_fields_json",
-        "chirp_bridge/features_json",
-        "chirp_bridge/fetch_repeaterbook_data",
-        "chirp_bridge/headless_live_adapter",
-        "chirp_bridge/load_chirp",
-        "chirp_bridge/load_module",
-        "chirp_bridge/main",
-        "chirp_bridge/memory_json",
-        "chirp_bridge/normalize_repeaterbook_query",
-        "chirp_bridge/open_serial",
-        "chirp_bridge/radio_for",
-        "chirp_bridge/radio_from_image",
-        "chirp_bridge/repeaterbook_cache_path",
-        "chirp_bridge/repeaterbook_item_to_channel",
-        "chirp_bridge/repeaterbook_resource_name",
-        "chirp_bridge/repeaterbook_tone",
-        "chirp_bridge/search_repeaterbook",
-        "chirp_bridge/setting_doc",
-        "chirp_bridge/setting_value_json",
-        "chirp_bridge/settings_payload",
-        "chirp_bridge/settings_tree_json",
-        "chirp_bridge/status_progress",
-        "chirp_bridge"
-      ]
-    },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
       "mtime_ns": 1787526889873622751,
@@ -79,26 +41,64 @@
       "mtime_ns": 1792893456081463146,
       "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
       "concept_ids": [
-        "newchirp_mass_storage",
+        "newchirp_mass_storage/CS750Profile",
+        "newchirp_mass_storage/LinuxScsiPassthrough",
+        "newchirp_mass_storage/MacScsiPassthrough",
+        "newchirp_mass_storage/MassStorageError",
+        "newchirp_mass_storage/RapMassStorageRadio",
+        "newchirp_mass_storage/ScsiPassthrough",
+        "newchirp_mass_storage/WindowsScsiPassthrough",
+        "newchirp_mass_storage/close",
+        "newchirp_mass_storage/command",
         "newchirp_mass_storage/helper_path",
         "newchirp_mass_storage/init",
-        "newchirp_mass_storage/read_exact",
-        "newchirp_mass_storage/transfer",
-        "newchirp_mass_storage/close",
         "newchirp_mass_storage/list_devices",
-        "newchirp_mass_storage/rap_packet",
         "newchirp_mass_storage/parse_rap_packet",
-        "newchirp_mass_storage/send",
-        "newchirp_mass_storage/receive",
-        "newchirp_mass_storage/command",
+        "newchirp_mass_storage/rap_packet",
         "newchirp_mass_storage/read_codeplug",
-        "newchirp_mass_storage/MassStorageError",
-        "newchirp_mass_storage/MacScsiPassthrough",
-        "newchirp_mass_storage/WindowsScsiPassthrough",
-        "newchirp_mass_storage/LinuxScsiPassthrough",
-        "newchirp_mass_storage/ScsiPassthrough",
-        "newchirp_mass_storage/RapMassStorageRadio",
-        "newchirp_mass_storage/CS750Profile"
+        "newchirp_mass_storage/read_exact",
+        "newchirp_mass_storage/receive",
+        "newchirp_mass_storage/send",
+        "newchirp_mass_storage/transfer",
+        "newchirp_mass_storage"
+      ]
+    },
+    "chirp_bridge.py": {
+      "path": "chirp_bridge.py",
+      "mtime_ns": 1792994775443639969,
+      "hash": "3cc369b318b27abcb41bdec7738eef98d0caa4f0c58c60249e5920c7482cb5ab",
+      "concept_ids": [
+        "chirp_bridge",
+        "chirp_bridge/emit_progress",
+        "chirp_bridge/bridge_error_message",
+        "chirp_bridge/status_progress",
+        "chirp_bridge/load_module",
+        "chirp_bridge/load_chirp",
+        "chirp_bridge/memory_json",
+        "chirp_bridge/extra_fields_json",
+        "chirp_bridge/extra_field_doc",
+        "chirp_bridge/features_json",
+        "chirp_bridge/setting_doc",
+        "chirp_bridge/setting_value_json",
+        "chirp_bridge/settings_tree_json",
+        "chirp_bridge/apply_setting_changes",
+        "chirp_bridge/apply_json",
+        "chirp_bridge/open_serial",
+        "chirp_bridge/headless_live_adapter",
+        "chirp_bridge/radio_for",
+        "chirp_bridge/emit_read_ready",
+        "chirp_bridge/radio_from_image",
+        "chirp_bridge/channel_context",
+        "chirp_bridge/channel_radio_for",
+        "chirp_bridge/repeaterbook_resource_name",
+        "chirp_bridge/repeaterbook_cache_path",
+        "chirp_bridge/fetch_repeaterbook_data",
+        "chirp_bridge/repeaterbook_tone",
+        "chirp_bridge/repeaterbook_item_to_channel",
+        "chirp_bridge/normalize_repeaterbook_query",
+        "chirp_bridge/search_repeaterbook",
+        "chirp_bridge/settings_payload",
+        "chirp_bridge/main"
       ]
     }
   },
@@ -524,7 +524,7 @@
       "type": "Function",
       "resource": "newchirp_mass_storage.py",
       "render_hash": "stale",
-      "edge_hash": "7b54cbf7a325d0fbf8f4ae383bd355e95be9529647064865f122394e871ef1ba",
+      "edge_hash": "69831fbd198a1b781f44dc4a751175aa5e17228c1ad98839c50f3c31ab703133",
       "enriched": false
     },
     "newchirp_mass_storage/list_macos": {
@@ -556,7 +556,7 @@
       "type": "Function",
       "resource": "newchirp_mass_storage.py",
       "render_hash": "stale",
-      "edge_hash": "bc9afc54ce28e83e16df6ee9982fa97781b86371cf46883cfb9be06205e9db20",
+      "edge_hash": "3bb8a0b0ed48c8f2599384f9a2fd292b9a23965f29ad75f0b7f7fe87732d06d4",
       "enriched": false
     },
     "newchirp_mass_storage/rap_packet": {
@@ -620,7 +620,7 @@
       "type": "Class",
       "resource": "newchirp_mass_storage.py",
       "render_hash": "stale",
-      "edge_hash": "c78434dd0f39c033982ea8749518c6ebf1b6c14fe02d00e8b995d221b6ced4e9",
+      "edge_hash": "5cff261434b41f6dd1c5b3cf659a97ae0281f79e4aa6e5d634b78c02428709c5",
       "enriched": false
     },
     "newchirp_mass_storage/RapMassStorageRadio": {
@@ -672,5 +672,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-10-25T01:57:36Z"
+  "generated_at": "2026-10-26T06:06:16Z"
 }
