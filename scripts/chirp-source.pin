@@ -1,0 +1,6 @@
+# Pinned CHIRP source for release builds.
+# commit is one full commit from https://github.com/kk7ds/chirp
+# sha256 is the codeload tarball for that commit, before NewChirp patches.
+# Change both together. Do not point this file at a branch.
+commit 21e42e4518c167548af90ed7f9edf75e516c491a
+sha256 3d7d4424c0133a3cac5838c743b7f6ae7fe57d0ca27cb458664796039f4083a0

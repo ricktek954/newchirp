@@ -5,7 +5,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 BUILD_SUPPORT_DIR="${NEWCHIRP_BUILD_SUPPORT_DIR:-$PROJECT_DIR/build_support}"
 CACHE_DIR="$BUILD_SUPPORT_DIR/cache"
-DEFAULT_SOURCE="${CHIRP_SOURCE:-${NEWCHIRP_CHIRP_SOURCE:-$PROJECT_DIR/../chirp-20260626}}"
 CURRENT_VERSION_FILE="$BUILD_SUPPORT_DIR/chirp-version.txt"
 
 mkdir -p "$BUILD_SUPPORT_DIR" "$CACHE_DIR"
@@ -64,63 +63,100 @@ open(path, "w", encoding="utf-8").write(text)
 PY
 }
 
-LATEST_LOCATION="$(curl -fsSI -o /dev/null -w '%{redirect_url}' \
-  'https://archive.chirpmyradio.com/download?stream=next' 2>/dev/null || true)"
-if [[ -z "$LATEST_LOCATION" ]]; then
-  LATEST_LOCATION="$(curl -sI \
-    'https://archive.chirpmyradio.com/download?stream=next' 2>/dev/null \
-    | tr -d '\r' \
-    | awk 'tolower($1) == "location:" {print $2}' \
-    | head -1)"
-fi
-
-LATEST_VERSION="$(printf '%s\n' "$LATEST_LOCATION" \
-  | sed -n 's#.*next-\([0-9]\{8\}\).*#\1#p')"
-if [[ -z "$LATEST_VERSION" ]]; then
-  echo "Unable to determine the latest CHIRP version from upstream." >&2
+PIN_FILE="$SCRIPT_DIR/chirp-source.pin"
+if [[ ! -f "$PIN_FILE" ]]; then
+  echo "CHIRP pin file is missing: $PIN_FILE" >&2
   exit 1
 fi
 
-if [[ -s "$CURRENT_VERSION_FILE" ]]; then
-  CURRENT_VERSION="$(cat "$CURRENT_VERSION_FILE")"
-else
-  CURRENT_VERSION=""
-  if [[ -f "$DEFAULT_SOURCE/chirp/__init__.py" ]]; then
-    CURRENT_VERSION="$(sed -n 's/.*next-\([0-9]\{8\}\).*/\1/p' \
-      "$DEFAULT_SOURCE/chirp/__init__.py" 2>/dev/null | head -1)"
+COMMIT="$(awk '/^commit / {print $2; exit}' "$PIN_FILE")"
+EXPECTED_SHA="$(awk '/^sha256 / {print $2; exit}' "$PIN_FILE")"
+if [[ ! "$COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+  echo "CHIRP pin commit must be 40 hex characters." >&2
+  exit 1
+fi
+if [[ ! "$EXPECTED_SHA" =~ ^[0-9a-f]{64}$ ]]; then
+  echo "CHIRP pin sha256 must be 64 hex characters." >&2
+  exit 1
+fi
+
+ARCHIVE="$CACHE_DIR/chirp-$COMMIT.tar.gz"
+TARGET_DIR="$BUILD_SUPPORT_DIR/chirp-$COMMIT"
+URL="https://codeload.github.com/kk7ds/chirp/tar.gz/$COMMIT"
+
+download_pinned_archive() {
+  echo "Downloading pinned CHIRP commit $COMMIT..." >&2
+  local partial="$ARCHIVE.partial"
+  rm -f "$partial"
+  curl -fL --retry 3 -o "$partial" "$URL"
+  mv "$partial" "$ARCHIVE"
+}
+
+verify_pinned_archive() {
+  "${NEWCHIRP_PYTHON:-python3}" - "$ARCHIVE" "$EXPECTED_SHA" <<'PY'
+import hashlib
+import sys
+import tarfile
+
+archive, expected = sys.argv[1], sys.argv[2]
+digest = hashlib.sha256(open(archive, "rb").read()).hexdigest()
+if digest != expected:
+    print("CHIRP archive checksum does not match the pin.", file=sys.stderr)
+    print("Expected %s" % expected, file=sys.stderr)
+    print("Actual   %s" % digest, file=sys.stderr)
+    sys.exit(2)
+
+def unsafe_path(value):
+    if not isinstance(value, str) or not value:
+        return True
+    name = value.replace("\\", "/")
+    if "\n" in name or "\r" in name or "\0" in name:
+        return True
+    # A drive letter can escape the extract folder on Windows.
+    if len(name) >= 2 and name[0].isalpha() and name[1] == ":":
+        return True
+    parts = [part for part in name.split("/") if part]
+    return name.startswith("/") or any(part == ".." for part in parts)
+
+with tarfile.open(archive, "r:gz") as bundle:
+    for member in bundle.getmembers():
+        if unsafe_path(member.name):
+            print("CHIRP archive has an unsafe path: %s" % member.name, file=sys.stderr)
+            sys.exit(3)
+        if (member.issym() or member.islnk()) and unsafe_path(member.linkname):
+            print("CHIRP archive has an unsafe link: %s" % member.name, file=sys.stderr)
+            sys.exit(3)
+PY
+}
+
+if [[ ! -f "$ARCHIVE" ]]; then
+  download_pinned_archive
+fi
+set +e
+verify_pinned_archive
+pin_status=$?
+set -e
+if [[ "$pin_status" -ne 0 ]]; then
+  rm -f "$ARCHIVE"
+  if [[ "$pin_status" -ne 2 ]]; then
+    exit 1
   fi
-  CURRENT_VERSION="${CURRENT_VERSION:-20260626}"
+  download_pinned_archive
+  verify_pinned_archive
 fi
 
-if [[ "$LATEST_VERSION" -le "$CURRENT_VERSION" ]]; then
-  if [[ -d "$BUILD_SUPPORT_DIR/chirp-$CURRENT_VERSION/chirp" ]]; then
-    echo "$BUILD_SUPPORT_DIR/chirp-$CURRENT_VERSION"
-  else
-    echo "$DEFAULT_SOURCE"
-  fi
-  exit 0
-fi
-
-TARGET_DIR="$BUILD_SUPPORT_DIR/chirp-$LATEST_VERSION"
-if [[ ! -d "$TARGET_DIR/chirp" ]]; then
-  ARCHIVE="$CACHE_DIR/chirp-master.tar.gz"
-  echo "Downloading CHIRP master source for next-$LATEST_VERSION..." >&2
-  curl -fL --retry 3 -o "$ARCHIVE" \
-    "https://codeload.github.com/kk7ds/chirp/tar.gz/refs/heads/master"
-
-  TMP_DIR="$(mktemp -d "$BUILD_SUPPORT_DIR/chirp-extract.XXXXXX")"
-  tar -xzf "$ARCHIVE" -C "$TMP_DIR" --strip-components=1
-  rm -rf "$TARGET_DIR"
-  mv "$TMP_DIR" "$TARGET_DIR"
-fi
+TMP_DIR="$(mktemp -d "$BUILD_SUPPORT_DIR/chirp-extract.XXXXXX")"
+tar -xzf "$ARCHIVE" -C "$TMP_DIR" --strip-components=1
+rm -rf "$TARGET_DIR"
+mv "$TMP_DIR" "$TARGET_DIR"
 
 apply_newchirp_patches "$TARGET_DIR"
 
 if [[ ! -d "$TARGET_DIR/chirp" ]]; then
-  echo "Downloaded CHIRP source is missing the chirp package." >&2
+  echo "Pinned CHIRP source is missing the chirp package." >&2
   exit 1
 fi
 
-printf '%s\n' "$LATEST_VERSION" > "$CURRENT_VERSION_FILE"
-echo "Updated CHIRP to next-$LATEST_VERSION" >&2
+printf '%s\n' "$COMMIT" > "$CURRENT_VERSION_FILE"
+echo "Using pinned CHIRP commit $COMMIT" >&2
 echo "$TARGET_DIR"
