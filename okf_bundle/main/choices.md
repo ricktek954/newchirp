@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T07:04:31Z"
+timestamp: "2026-10-26T12:18:22Z"
 concept_id: main/choices
 language: dart
 ---
@@ -23,7 +23,7 @@ Mapchoiceschoices
 ```
 
 ## Source
-Lines 6925–6928 in `main.dart`
+Lines 7209–7212 in `main.dart`
 
 ## Relationships
 

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T07:04:31Z"
+timestamp: "2026-10-26T12:18:22Z"
 concept_id: main/NewChirpHome
 language: dart
 ---
@@ -27,7 +27,7 @@ class NewChirpHome
 - `createState`
 
 ## Source
-Lines 281–297 in `main.dart`
+Lines 290–308 in `main.dart`
 
 ## Relationships
 

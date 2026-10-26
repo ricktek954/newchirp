@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T21:43:18Z"
+timestamp: "2026-10-26T12:16:01Z"
 concept_id: models/radio_channel/copy
 language: dart
 ---
@@ -24,7 +24,7 @@ RadioChannelcopy()
 ```
 
 ## Source
-Lines 159–159 in `models/radio_channel.dart`
+Lines 455–455 in `models/radio_channel.dart`
 
 ## Relationships
 

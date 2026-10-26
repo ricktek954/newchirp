@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T07:04:31Z"
+timestamp: "2026-10-26T12:18:22Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -24,6 +24,7 @@ class _NewChirpHomeState
 
 ## Methods
 
+- `_rememberChannelImageBaseline`
 - `invalid`
 - `initState`
 - `_loadColumnLayout`
@@ -60,7 +61,10 @@ class _NewChirpHomeState
 - `_moveChannel`
 - `_findRepeaters`
 - `_showNoEmptyChannelSlot`
+- `_loadFileSaveWarning`
+- `_confirmFileSaveDoesNotWriteRadio`
 - `_saveCsv`
+- `_saveCsvNow`
 - `_confirmReplaceLibrary`
 - `_newLibrary`
 - `_useGmrsStarter`
@@ -83,9 +87,12 @@ class _NewChirpHomeState
 - `_confirmOverwriteChannel`
 - `_deleteChannel`
 - `_clearChannel`
+- `_keepMidlandRepeater`
+- `_noteRepeaterRowKept`
 - `_downloadRadio`
 - `_confirmRadioInstructions`
 - `_loadRadioInstructions`
+- `_discardChannelLibraryChanges`
 - `_uploadRadio`
 - `_transferTask`
 - `_reportTransferProgress`
@@ -115,7 +122,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 299–4089 in `main.dart`
+Lines 310–4306 in `main.dart`
 
 ## Relationships
 

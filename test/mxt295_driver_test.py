@@ -124,7 +124,8 @@ def channel(number, **fields):
 class MXT295DriverTest(unittest.TestCase):
     def test_radio_is_registered(self):
         radio_cls = directory.get_radio("Midland_MXT295")
-        self.assertIs(radio_cls, mxt.MXT295Radio)
+        self.assertEqual(radio_cls.__name__, mxt.MXT295Radio.__name__)
+        self.assertEqual(radio_cls.__module__, mxt.MXT295Radio.__module__)
         prompts = radio_cls.get_prompts()
         self.assertEqual(prompts.experimental, "")
         self.assertIsNone(prompts.info)

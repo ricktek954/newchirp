@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:56:40Z"
+timestamp: "2026-10-26T12:15:28Z"
 concept_id: services/radio_bridge/readImage
 language: dart
 ---
@@ -24,7 +24,7 @@ FuturereadImagereadImage
 ```
 
 ## Source
-Lines 466–476 in `services/radio_bridge.dart`
+Lines 471–481 in `services/radio_bridge.dart`
 
 ## Relationships
 

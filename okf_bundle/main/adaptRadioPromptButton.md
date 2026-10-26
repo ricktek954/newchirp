@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T07:04:31Z"
+timestamp: "2026-10-26T12:18:22Z"
 concept_id: main/adaptRadioPromptButton
 language: dart
 ---
@@ -23,7 +23,7 @@ StringadaptRadioPromptButton(String message, String buttonLabel)
 ```
 
 ## Source
-Lines 28–28 in `main.dart`
+Lines 34–34 in `main.dart`
 
 ## Relationships
 

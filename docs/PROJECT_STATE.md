@@ -15,8 +15,10 @@ release requirements.
   channel-table vertical scrollbar.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
-- The experimental GM-32 and TS-2000 changes still require physical-radio
-  validation before they should be described as hardware-tested.
+- The experimental GM-32 has physical read/write evidence from 2026-10-25.
+  The TS-2000 write-timeout fix still needs a physical upload/read-back retest.
+- The Midland MXT295 has completed physical read and write testing and remains
+  labeled experimental.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not
@@ -92,6 +94,10 @@ Linux artifacts:
   **Help > Load CHIRP driver module…** for the current session.
 - Loaded modules can add or override radio drivers; the radio catalog refreshes
   after loading and unloading.
+- User-loaded CHIRP modules run behind a macOS Seatbelt or Linux bubblewrap
+  sandbox; Windows refuses module loading until it can provide an equivalent
+  sandbox.
+- CHIRP release downloads are pinned to one commit and verified by SHA-256.
 - FT-60 reads now tell the user to hold PTT only after the serial port is open,
   with read-specific recovery guidance if the initial frame times out.
 - RepeaterBook search supports amateur and GMRS results, optional proximity
@@ -105,10 +111,16 @@ Linux artifacts:
 - Added experimental read-only Retevis RT97L support with 16-channel parsing,
   CTCSS/DCS decoding, and hardware-safe upload blocking.
 - Added an experimental Baofeng GM-32 profile derived from the official
-  UV-32 CPS, including DTR/RTS handling and ten bank-name records.
+  UV-32 CPS, including DTR/RTS handling, ten bank-name records, GMRS channel
+  rules, and physical read/write evidence.
+- Added an experimental Midland MXT295 driver with physical read/write
+  evidence, Midland channel numbering, and Radio & Modes settings.
 - Fixed TS-2000 uploads that exceeded the stock one-second command timeout.
 - Kept the channel-table vertical scrollbar pinned to the visible right edge
   while the columns scroll horizontally.
+- Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
+  warning that distinguishes files from radio writes, and Channel Library
+  Discard/Write controls tied to the stored radio image.
 
 ## macOS 1.0.21 verification status
 

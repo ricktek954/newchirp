@@ -8,9 +8,9 @@ tags:
   - "type:Class"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:56:40Z"
+timestamp: "2026-10-26T12:15:28Z"
 concept_id: services/radio_bridge/RadioProgress
 language: dart
 ---
@@ -24,7 +24,7 @@ class RadioProgress
 ```
 
 ## Source
-Lines 142–147 in `services/radio_bridge.dart`
+Lines 144–149 in `services/radio_bridge.dart`
 
 ## Relationships
 

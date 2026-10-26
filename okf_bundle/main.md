@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Module"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:codex/handle-open-prs"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T07:04:31Z"
+timestamp: "2026-10-26T12:18:22Z"
 concept_id: main
 language: dart
 ---
@@ -25,6 +25,7 @@ language: dart
 | related | [NewChirpHome](/main/NewChirpHome.md) |
 | related | [_NewChirpHomeState](/main/NewChirpHomeState.md) |
 | related | [_Sidebar](/main/Sidebar.md) |
+| related | [_ProgrammerCredit](/main/ProgrammerCredit.md) |
 | related | [_Logo](/main/Logo.md) |
 | related | [_NavItem](/main/NavItem.md) |
 | related | [_TransferOverlay](/main/TransferOverlay.md) |
@@ -84,6 +85,7 @@ language: dart
 | related | [_WindowStateManager](/main/WindowStateManager.md) |
 | related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |
+| related | [_rememberChannelImageBaseline](/main/rememberChannelImageBaseline.md) |
 | related | [invalid](/main/invalid.md) |
 | related | [initState](/main/initState.md) |
 | related | [_loadColumnLayout](/main/loadColumnLayout.md) |
@@ -120,7 +122,10 @@ language: dart
 | related | [_moveChannel](/main/moveChannel.md) |
 | related | [_findRepeaters](/main/findRepeaters.md) |
 | related | [_showNoEmptyChannelSlot](/main/showNoEmptyChannelSlot.md) |
+| related | [_loadFileSaveWarning](/main/loadFileSaveWarning.md) |
+| related | [_confirmFileSaveDoesNotWriteRadio](/main/confirmFileSaveDoesNotWriteRadio.md) |
 | related | [_saveCsv](/main/saveCsv.md) |
+| related | [_saveCsvNow](/main/saveCsvNow.md) |
 | related | [_confirmReplaceLibrary](/main/confirmReplaceLibrary.md) |
 | related | [_newLibrary](/main/newLibrary.md) |
 | related | [_useGmrsStarter](/main/useGmrsStarter.md) |
@@ -143,9 +148,12 @@ language: dart
 | related | [_confirmOverwriteChannel](/main/confirmOverwriteChannel.md) |
 | related | [_deleteChannel](/main/deleteChannel.md) |
 | related | [_clearChannel](/main/clearChannel.md) |
+| related | [_keepMidlandRepeater](/main/keepMidlandRepeater.md) |
+| related | [_noteRepeaterRowKept](/main/noteRepeaterRowKept.md) |
 | related | [_downloadRadio](/main/downloadRadio.md) |
 | related | [_confirmRadioInstructions](/main/confirmRadioInstructions.md) |
 | related | [_loadRadioInstructions](/main/loadRadioInstructions.md) |
+| related | [_discardChannelLibraryChanges](/main/discardChannelLibraryChanges.md) |
 | related | [_uploadRadio](/main/uploadRadio.md) |
 | related | [_transferTask](/main/transferTask.md) |
 | related | [_reportTransferProgress](/main/reportTransferProgress.md) |
@@ -173,6 +181,7 @@ language: dart
 | related | [_buildRadioSettings](/main/buildRadioSettings.md) |
 | related | [_buildRadioSettingsGroup](/main/buildRadioSettingsGroup.md) |
 | related | [_buildRadio](/main/buildRadio.md) |
+| related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
