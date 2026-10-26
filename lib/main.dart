@@ -14,11 +14,13 @@ import 'models/radio_channel.dart';
 import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
+import 'services/file_save_warning_store.dart';
 import 'services/radio_image_store.dart';
 import 'services/radio_selection_store.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/window_state_store.dart';
+import 'widgets/file_save_warning_dialog.dart';
 import 'widgets/radio_model_picker.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
@@ -219,12 +221,14 @@ class NewChirpApp extends StatelessWidget {
     super.key,
     this.columnLayoutStore,
     this.radioSelectionStore,
+    this.fileSaveWarningStore,
     this.updateChecker,
     this.checkForUpdatesOnStartup = true,
   });
 
   final ColumnLayoutStore? columnLayoutStore;
   final RadioSelectionStore? radioSelectionStore;
+  final FileSaveWarningStore? fileSaveWarningStore;
   final UpdateChecker? updateChecker;
   final bool checkForUpdatesOnStartup;
 
@@ -271,6 +275,7 @@ class NewChirpApp extends StatelessWidget {
       home: NewChirpHome(
         columnLayoutStore: columnLayoutStore,
         radioSelectionStore: radioSelectionStore,
+        fileSaveWarningStore: fileSaveWarningStore,
         updateChecker: updateChecker,
         checkForUpdatesOnStartup: checkForUpdatesOnStartup,
       ),
@@ -283,12 +288,14 @@ class NewChirpHome extends StatefulWidget {
     super.key,
     this.columnLayoutStore,
     this.radioSelectionStore,
+    this.fileSaveWarningStore,
     this.updateChecker,
     this.checkForUpdatesOnStartup = true,
   });
 
   final ColumnLayoutStore? columnLayoutStore;
   final RadioSelectionStore? radioSelectionStore;
+  final FileSaveWarningStore? fileSaveWarningStore;
   final UpdateChecker? updateChecker;
   final bool checkForUpdatesOnStartup;
 
@@ -302,6 +309,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       widget.columnLayoutStore ?? ColumnLayoutStore();
   late final _radioSelectionStore =
       widget.radioSelectionStore ?? RadioSelectionStore();
+  late final _fileSaveWarningStore =
+      widget.fileSaveWarningStore ?? FileSaveWarningStore();
   late final _updateChecker = widget.updateChecker ?? UpdateChecker();
   final _imageStore = RadioImageStore();
   Future<void>? _radioSelectionLoad;
@@ -344,6 +353,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   List<String> _columnOrder = [];
   final Map<String, double> _columnWidths = {};
   bool _columnLayoutTouched = false;
+  Future<void>? _fileSaveWarningLoad;
+  bool _hideFileSaveWarning = false;
+  bool _savingLibrary = false;
   List<RadioChannel> _channelClipboard = [];
   final Set<int> _clearedLocations = {};
   final List<_LibraryState> _undoStack = [];
@@ -380,6 +392,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
     _syncMenuState();
     _loadColumnLayout();
+    _fileSaveWarningLoad = _loadFileSaveWarning();
     _radioSelectionLoad = _loadRadioSelection();
     _refreshPorts();
     if (widget.checkForUpdatesOnStartup) {
@@ -1157,7 +1170,48 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
   }
 
+  Future<void> _loadFileSaveWarning() async {
+    final hidden = await _fileSaveWarningStore.isHidden();
+    if (!mounted) return;
+    _hideFileSaveWarning = hidden;
+  }
+
+  Future<bool> _confirmFileSaveDoesNotWriteRadio() async {
+    await _fileSaveWarningLoad;
+    if (!mounted || _hideFileSaveWarning) {
+      return mounted && _hideFileSaveWarning;
+    }
+    final hideNextTime = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const FileSaveWarningDialog(),
+    );
+    if (hideNextTime == null || !mounted) return false;
+    if (hideNextTime) {
+      _hideFileSaveWarning = true;
+      try {
+        await _fileSaveWarningStore.hide();
+      } on FileSystemException {
+        // Remembering the choice should not block the file save.
+        _hideFileSaveWarning = false;
+      }
+    }
+    return mounted;
+  }
+
   Future<void> _saveCsv({bool saveAs = false}) async {
+    if (_savingLibrary) return;
+    _savingLibrary = true;
+    try {
+      await _saveCsvNow(saveAs: saveAs);
+    } finally {
+      _savingLibrary = false;
+    }
+  }
+
+  Future<void> _saveCsvNow({required bool saveAs}) async {
+    if (!await _confirmFileSaveDoesNotWriteRadio()) return;
+    if (!mounted) return;
     var path = _libraryPath;
     if (saveAs || path == null) {
       const type = XTypeGroup(label: 'CHIRP CSV', extensions: ['csv']);
