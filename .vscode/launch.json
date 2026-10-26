@@ -21,6 +21,7 @@
       "flutterMode": "debug",
       "preLaunchTask": "Update CHIRP source",
       "env": {
+        "PATH": "${workspaceFolder}/.tool/cmake-3.31.6-linux-x86_64/bin:${workspaceFolder}/.tool/bin:${workspaceFolder}/.tool/flutter/bin:${env:PATH}",
         "CHIRP_SOURCE": "${workspaceFolder}/../chirp-20260626"
       }
     },

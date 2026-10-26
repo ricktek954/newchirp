@@ -4,13 +4,25 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 NEWCHIRP_OKF_VENV_DIR="${NEWCHIRP_OKF_VENV_DIR:-/tmp/newchirp-okf-venv}"
-NEWCHIRP_OKF_PYTHON="${NEWCHIRP_OKF_PYTHON:-/opt/homebrew/bin/python3}"
 OKF_BIN="$NEWCHIRP_OKF_VENV_DIR/bin/okf"
+
+find_okf_python() {
+  if [[ -n "${NEWCHIRP_OKF_PYTHON:-}" ]]; then
+    printf '%s\n' "$NEWCHIRP_OKF_PYTHON"
+  elif [[ -x /opt/homebrew/bin/python3 ]]; then
+    printf '%s\n' /opt/homebrew/bin/python3
+  elif command -v python3 >/dev/null 2>&1; then
+    command -v python3
+  else
+    echo "Unable to find python3. Set NEWCHIRP_OKF_PYTHON to a Python 3 executable." >&2
+    return 127
+  fi
+}
 
 bootstrap_okf() {
   if [[ ! -x "$OKF_BIN" ]]; then
     echo "Creating OKF venv at $NEWCHIRP_OKF_VENV_DIR"
-    "$NEWCHIRP_OKF_PYTHON" -m venv "$NEWCHIRP_OKF_VENV_DIR"
+    "$(find_okf_python)" -m venv "$NEWCHIRP_OKF_VENV_DIR"
     "$NEWCHIRP_OKF_VENV_DIR/bin/pip" install --upgrade "okf-generator==0.1.53"
   fi
 }
