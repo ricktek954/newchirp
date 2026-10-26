@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "build_support/chirp-20261023"
 PYTHON_VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 MEM_SIZE = 0x8380
+IMAGE = Path.home() / "Downloads/gm32/Baofeng_UV-32_20261025.img"
 ENCRYPTION_KEY = b"CO 7"
 READ_RANGES = (
     (0x0000, 0x8040),
@@ -63,6 +64,23 @@ def _record(rx, tx, name):
     record[16:20] = b"\xff" * 4
     record[20:32] = name.encode("ascii").ljust(12, b"\xff")
     return bytes(record)
+
+
+def _memory(radio, number, freq, **overrides):
+    from chirp import chirp_common
+
+    mem = chirp_common.Memory()
+    mem.number = number
+    mem.freq = freq
+    mem.name = overrides.pop("name", "GM32")
+    mem.duplex = overrides.pop("duplex", "")
+    mem.offset = overrides.pop("offset", 0)
+    mem.mode = overrides.pop("mode", "FM")
+    mem.power = overrides.pop("power", radio.POWER_LEVELS[0])
+    mem.tuning_step = 5.0
+    for name, value in overrides.items():
+        setattr(mem, name, value)
+    return mem
 
 
 def _expected_addresses():
@@ -133,6 +151,13 @@ class GM32DriverTest(unittest.TestCase):
             str(ROOT / "drivers"),
         )
         cls.radio_class = cls.directory.get_radio("Baofeng_GM-32")
+
+    def setUp(self):
+        from chirp import memmap
+
+        self.radio = self.radio_class(
+            memmap.MemoryMapBytes(b"\xff" * MEM_SIZE)
+        )
 
     def _radio_from_memory(self, memory):
         from chirp import memmap
@@ -212,7 +237,167 @@ class GM32DriverTest(unittest.TestCase):
         self.assertTrue(
             bytes(serial.memory[0x14:0x20]).startswith(b"POMPANO")
         )
+    def test_model_prompts_and_features(self):
+        prompts = self.radio_class.get_prompts()
+        self.assertIn("experimental", prompts.experimental.lower())
+        self.assertIn("Turn off the radio", prompts.pre_download)
+        self.assertIn("Turn off the radio", prompts.pre_upload)
+        self.assertIn("backup", prompts.experimental.lower())
+        self.assertIn("tested on a radio", prompts.experimental.lower())
+        self.assertFalse(self.radio_class._gmrs)
 
+        features = self.radio.get_features()
+        self.assertEqual(features.memory_bounds, (1, 1000))
+        self.assertEqual(features.valid_duplexes, ["", "+", "off"])
+        self.assertTrue(features.has_settings)
+        self.assertTrue(features.has_bank)
+        self.assertEqual(
+            [str(level) for level in features.valid_power_levels],
+            ["High", "Low", "Medium"],
+        )
 
+    def test_channel_8_is_forced_simplex_narrow_low(self):
+        mem = _memory(
+            self.radio,
+            8,
+            467562500,
+            duplex="+",
+            offset=5000000,
+            mode="FM",
+            power=self.radio.POWER_LEVELS[0],
+        )
+        self.assertEqual(self.radio.validate_memory(mem), [])
+        self.assertEqual(mem.duplex, "+")
+        self.radio.set_memory(mem)
+        stored = self.radio.get_memory(8)
+        self.assertEqual(stored.duplex, "")
+        self.assertEqual(stored.offset, 0)
+        self.assertEqual(stored.mode, "NFM")
+        self.assertEqual(str(stored.power), "Low")
+
+    def test_channel_8_receive_only_stays_off_and_narrow(self):
+        mem = _memory(
+            self.radio,
+            9,
+            467587500,
+            duplex="off",
+            mode="FM",
+            power=self.radio.POWER_LEVELS[0],
+        )
+        self.radio.set_memory(mem)
+        stored = self.radio.get_memory(9)
+        self.assertEqual(stored.duplex, "off")
+        self.assertEqual(stored.mode, "NFM")
+        self.assertEqual(str(stored.power), "Low")
+
+    def test_repeater_output_keeps_plus_five(self):
+        mem = _memory(
+            self.radio,
+            16,
+            462575000,
+            duplex="+",
+            offset=600000,
+        )
+        self.radio.set_memory(mem)
+        stored = self.radio.get_memory(16)
+        self.assertEqual(stored.duplex, "+")
+        self.assertEqual(stored.offset, 5000000)
+
+    def test_repeater_output_minus_becomes_simplex(self):
+        mem = _memory(
+            self.radio,
+            16,
+            462575000,
+            duplex="-",
+            offset=5000000,
+        )
+        self.assertEqual(self.radio.validate_memory(mem), [])
+        self.assertEqual(mem.duplex, "-")
+        self.radio.set_memory(mem)
+        stored = self.radio.get_memory(16)
+        self.assertEqual(stored.duplex, "")
+        self.assertEqual(stored.offset, 0)
+
+    def test_simplex_channels_drop_a_shift(self):
+        mem = _memory(
+            self.radio,
+            1,
+            462562500,
+            duplex="+",
+            offset=5000000,
+        )
+        self.radio.set_memory(mem)
+        stored = self.radio.get_memory(1)
+        self.assertEqual(stored.duplex, "")
+        self.assertEqual(stored.offset, 0)
+
+    def test_repeater_input_cannot_use_plus(self):
+        mem = _memory(self.radio, 40, 467550000, duplex="+", offset=5000000)
+        self.radio.set_memory(mem)
+        stored = self.radio.get_memory(40)
+        self.assertEqual(stored.duplex, "")
+        self.assertEqual(stored.offset, 0)
+        self.assertFalse(stored.empty)
+
+    def test_non_gmrs_frequency_is_receive_only(self):
+        mem = _memory(
+            self.radio,
+            31,
+            470550000,
+            name="HAMs",
+            duplex="",
+            mode="FM",
+            power=self.radio.POWER_LEVELS[0],
+        )
+        self.radio.set_memory(mem)
+        stored = self.radio.get_memory(31)
+        self.assertEqual(stored.name, "HAMs")
+        self.assertEqual(stored.freq, 470550000)
+        self.assertEqual(stored.duplex, "off")
+        self.assertEqual(stored.offset, 0)
+        self.assertEqual(stored.mode, "FM")
+        self.assertEqual(str(stored.power), "High")
+
+    def test_unset_frequency_is_stored_empty(self):
+        mem = _memory(self.radio, 50, 0, name="NEW 50")
+        mem.empty = False
+        self.assertEqual(self.radio.validate_memory(mem), [])
+        self.radio.set_memory(mem)
+        self.assertTrue(self.radio.get_memory(50).empty)
+
+    @unittest.skipUnless(IMAGE.is_file(), "GM-32 sample image is not in Downloads")
+    def test_sample_image_keeps_uv32_identity_and_gm32_write_rules(self):
+        from chirp.settings import RadioSettingGroup
+
+        opened = self.directory.get_radio_by_image(str(IMAGE))
+        self.assertEqual(opened.MODEL, "UV-32")
+        self.assertNotIsInstance(opened, self.radio_class)
+
+        radio = self.radio_class(str(IMAGE))
+        channel8 = radio.get_memory(8)
+        self.assertEqual(channel8.freq, 467562500)
+        self.assertEqual(channel8.duplex, "")
+        self.assertEqual(channel8.mode, "NFM")
+        self.assertEqual(str(channel8.power), "Low")
+
+        ranchino = radio.get_memory(25)
+        self.assertIn("Ranchino", ranchino.name)
+
+        hams = radio.get_memory(31)
+        self.assertIn("HAM", hams.name.upper())
+        self.assertEqual(hams.freq, 470550000)
+        self.assertEqual(hams.duplex, "")
+        radio.set_memory(hams)
+        stored = radio.get_memory(31)
+        self.assertEqual(stored.duplex, "off")
+        self.assertIn("HAM", stored.name.upper())
+
+        labels = [
+            group.get_shortname()
+            for group in radio.get_settings()
+            if isinstance(group, RadioSettingGroup)
+        ]
+        self.assertIn("Basic Settings", labels)
+        self.assertIn("Bank names", labels)
 if __name__ == "__main__":
     unittest.main()

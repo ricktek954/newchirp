@@ -11,6 +11,7 @@ import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'models/channel_image_baseline.dart';
+import 'models/gm32_channel.dart';
 import 'models/radio_channel.dart';
 import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
@@ -1579,12 +1580,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       return;
     }
     final midland = showsMidlandChannelNumbers(_model);
+    final gm32 = isBaofengGm32(_model);
+    final specializedReceive = midland || gm32;
     final channel = RadioChannel(
       location: location,
       name: 'NEW $location',
-      frequency: midland ? 0 : 146.52,
+      frequency: specializedReceive ? 0 : 146.52,
       duplex: '',
-      offset: midland ? 0 : 0.6,
+      offset: specializedReceive ? 0 : 0.6,
     );
     _recordHistory();
     setState(() {
@@ -2622,8 +2625,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (channelIndex < 0 || channelIndex >= _channels.length) return;
     if (_channels[channelIndex].cleared) return;
     final draft = _channels[channelIndex].copy();
+    var enterFrequency = false;
     if (showsMidlandChannelNumbers(_model)) {
       draft.prepareMxt295Editor();
+    }
+    if (isBaofengGm32(_model)) {
+      enterFrequency = gm32NeedsFrequencyBox(draft);
+      applyGm32Rules(draft);
     }
     await showDialog<void>(
       context: context,
@@ -2657,6 +2665,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 channel: draft,
                 radioModel: _model,
                 capabilities: _capabilities,
+                enteringFrequency: enterFrequency,
+                onEnteringFrequency: (value) => enterFrequency = value,
                 onChanged: changed,
                 onSave: save,
                 onClose: () => Navigator.pop(dialogContext),
@@ -4414,10 +4424,7 @@ class _ProgrammerCredit extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        SelectableText(
-          email,
-          style: const TextStyle(color: Colors.black54),
-        ),
+        SelectableText(email, style: const TextStyle(color: Colors.black54)),
       ],
     );
   }
@@ -6643,9 +6650,8 @@ class _ChannelTableState extends State<_ChannelTable> {
       _ChannelColumn(
         'RX FREQUENCY',
         126,
-        (channel) => channel.frequency <= 0
-            ? ''
-            : channel.frequency.toStringAsFixed(6),
+        (channel) =>
+            channel.frequency <= 0 ? '' : channel.frequency.toStringAsFixed(6),
         help: 'Receive frequency: the frequency the radio listens on.',
       ),
       _ChannelColumn(
@@ -7150,10 +7156,14 @@ class _ChannelEditor extends StatelessWidget {
     required this.onSave,
     required this.onDelete,
     required this.onClose,
+    this.enteringFrequency = false,
+    this.onEnteringFrequency,
   });
   final RadioChannel channel;
   final String? radioModel;
   final RadioCapabilities? capabilities;
+  final bool enteringFrequency;
+  final ValueChanged<bool>? onEnteringFrequency;
   final void Function(VoidCallback) onChanged;
   final VoidCallback onSave;
   final VoidCallback onDelete;
@@ -7161,6 +7171,8 @@ class _ChannelEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gm32 = isBaofengGm32(radioModel);
+    final narrowLow = gm32 && gm32RequiresNarrowLow(channel);
     final issues = channel.validate(
       minimumLocation: capabilities?.memoryStart,
       maximumLocation: capabilities?.memoryEnd,
@@ -7175,7 +7187,25 @@ class _ChannelEditor extends StatelessWidget {
           channel.location,
           frequencyMhz: channel.frequency,
         );
-    final blocking = midlandGmrsIssues(radioModel, channel);
+    if (gm32 && gm32FrequencyIsUnset(channel.frequency)) {
+      issues.removeWhere((issue) => issue.startsWith('Frequency must be'));
+    }
+    if (gm32) issues.addAll(gm32ChannelIssues(radioModel, channel));
+    final receiveValue = gm32
+        ? gm32ReceiveValue(channel, enteringFrequency: enteringFrequency)
+        : '';
+    final showManualFrequency =
+        !gm32 || receiveValue == gm32ManualFrequencyValue;
+    final receiveOnly =
+        gm32 &&
+        channel.duplex == 'off' &&
+        !gm32FrequencyIsUnset(channel.frequency) &&
+        gmrsChannelNumber(channel) == null &&
+        !isGmrsRepeaterInputHz((channel.frequency * 1000000).round());
+    final blocking = <String>[
+      if (midland) ...midlandGmrsIssues(radioModel, channel),
+      if (gm32) ...gm32ChannelIssues(radioModel, channel),
+    ];
     Map<String, String> choices(
       List<String>? values,
       Map<String, String> fallback,
@@ -7293,7 +7323,37 @@ class _ChannelEditor extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                if (midland)
+                if (gm32) ...[
+                  _ChoiceField(
+                    key: ValueKey('gm32-receive-$receiveValue'),
+                    label: 'Receive channel',
+                    value: receiveValue,
+                    choices: gm32ReceiveChoices(
+                      channel,
+                      enteringFrequency: enteringFrequency,
+                    ),
+                    onValue: (value) => onChanged(() {
+                      final entering = value == gm32ManualFrequencyValue;
+                      onEnteringFrequency?.call(entering);
+                      if (entering || value.isEmpty) return;
+                      final number = int.tryParse(value);
+                      if (number != null) {
+                        useGm32ReceiveChannel(channel, number);
+                      }
+                    }),
+                  ),
+                  const SizedBox(height: 12),
+                  if (showManualFrequency)
+                    _NumberField(
+                      label: 'Receive frequency (MHz)',
+                      value: channel.frequency,
+                      decimals: 6,
+                      onValue: (v) => onChanged(() {
+                        channel.frequency = v;
+                        applyGm32Rules(channel);
+                      }),
+                    ),
+                ] else if (midland) ...[
                   _ChoiceField(
                     key: ValueKey(
                       'rx-${channel.location}-${channel.frequency}',
@@ -7313,23 +7373,30 @@ class _ChannelEditor extends StatelessWidget {
                       if (picked == null) return;
                       onChanged(() => channel.useGmrsReceiveChannel(picked));
                     },
-                  )
-                else
+                  ),
+                ] else ...[
                   _NumberField(
                     label: 'Receive frequency (MHz)',
                     value: channel.frequency,
                     decimals: 6,
                     onValue: (v) => onChanged(() => channel.frequency = v),
                   ),
+                ],
                 const SizedBox(height: 12),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: _ChoiceField(
-                        key: ValueKey(
-                          'dup-${channel.location}-${channel.duplex}-${channel.frequency}',
-                        ),
+                        key: midland
+                            ? ValueKey(
+                                'dup-${channel.location}-${channel.duplex}-${channel.frequency}',
+                              )
+                            : gm32
+                            ? ValueKey(
+                                'gm32-duplex-${gm32DuplexChoices(channel).keys.join()}-${channel.duplex}',
+                              )
+                            : null,
                         label: 'Duplex',
                         value: channel.duplex,
                         enabled: !duplexLocked,
@@ -7339,6 +7406,8 @@ class _ChannelEditor extends StatelessWidget {
                                 channel.duplex,
                                 frequencyMhz: channel.frequency,
                               )
+                            : gm32
+                            ? gm32DuplexChoices(channel)
                             : choices(capabilities?.duplexes, const {
                                 '': 'Simplex',
                                 '+': '+ shift',
@@ -7349,6 +7418,7 @@ class _ChannelEditor extends StatelessWidget {
                         onValue: (v) => onChanged(() {
                           channel.duplex = v;
                           if (midland) channel.offset = v == '+' ? 5 : 0;
+                          if (gm32) applyGm32Rules(channel);
                         }),
                       ),
                     ),
@@ -7360,12 +7430,19 @@ class _ChannelEditor extends StatelessWidget {
                             : 'Offset (MHz)',
                         value: channel.offset,
                         decimals: 6,
-                        readOnly: midland,
+                        readOnly: midland || gm32,
                         onValue: (v) => onChanged(() => channel.offset = v),
                       ),
                     ),
                   ],
                 ),
+                if (receiveOnly) ...[
+                  const SizedBox(height: 8),
+                  const Text(
+                    'This frequency is receive-only. The GM-32 transmits on GMRS channels.',
+                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                  ),
+                ],
                 const SizedBox(height: 12),
                 _ChoiceField(
                   label: 'Tone mode',
@@ -7477,14 +7554,17 @@ class _ChannelEditor extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _ChoiceField(
+                        key: narrowLow ? const ValueKey('gm32-mode-nfm') : null,
                         label: 'Mode',
                         value: channel.mode,
-                        choices: choices(capabilities?.modes, const {
-                          'FM': 'FM',
-                          'NFM': 'NFM',
-                          'AM': 'AM',
-                          'DV': 'Digital voice',
-                        }),
+                        choices: narrowLow
+                            ? const {'NFM': 'NFM'}
+                            : choices(capabilities?.modes, const {
+                                'FM': 'FM',
+                                'NFM': 'NFM',
+                                'AM': 'AM',
+                                'DV': 'Digital voice',
+                              }),
                         onValue: (v) => onChanged(() => channel.mode = v),
                       ),
                     ),
@@ -7516,9 +7596,12 @@ class _ChannelEditor extends StatelessWidget {
                 if ((capabilities?.powers ?? const []).isNotEmpty) ...[
                   const SizedBox(height: 12),
                   _ChoiceField(
+                    key: narrowLow ? const ValueKey('gm32-power-low') : null,
                     label: 'Transmit power',
                     value: channel.power,
-                    choices: choices(capabilities!.powers, const {}),
+                    choices: narrowLow
+                        ? const {'Low': 'Low'}
+                        : choices(capabilities!.powers, const {}),
                     onValue: (v) => onChanged(() => channel.power = v),
                   ),
                 ],
