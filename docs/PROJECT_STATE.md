@@ -9,12 +9,14 @@ release requirements.
 ## Resume here
 
 - The Linux `1.0.20` release is built, uploaded, and live as DEB.
-- The macOS `1.0.20` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes the experimental read-only Retevis RT97L driver.
+- The macOS `1.0.21` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes the experimental Baofeng GM-32 profile, the TS-2000
+  write-timeout override, multi-county repeater filtering, and the fixed
+  channel-table vertical scrollbar.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
-- Post-1.0.20 work adds a multi-county RepeaterBook filter and a TS-2000
-  write-command timeout override awaiting physical upload validation.
+- The experimental GM-32 and TS-2000 changes still require physical-radio
+  validation before they should be described as hardware-tested.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not
@@ -27,10 +29,9 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Latest source commit fetched from GitHub: `0e71009`
-  (`Release macOS 1.0.20`)
+- Release source commit: `8e4f7e5` (`Bump version to 1.0.21`)
 - Open pull requests: none
-- Checked-out source version: `1.0.20+20`
+- Checked-out source version: `1.0.21+21`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -44,19 +45,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.20 |
+| macOS | 1.0.21 |
 | Windows | 1.0.18 |
 | Linux | 1.0.20 |
 | Legacy shared manifest version | 1.0.17 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.20.dmg`
-- Version/build: `1.0.20` / `20`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.21.dmg`
+- Version/build: `1.0.21` / `21`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `ff854e6a9c5aceab45d725aa733da66281443a1fdda55b3fcd7b1d866c10b351`
-- Notarization submission: `23a6ca49-ed22-49fd-a30c-6e2b7e238dcc`
+  `3283bcea0e4df62d038042abf2e2288ac781c6a9aa5e66182672b457a84e4f49`
+- Size: `91,667,505` bytes
+- Notarization submission: `c67daefe-ad4e-4063-970e-38c1fcbfaa67`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -102,17 +104,24 @@ Linux artifacts:
   plus reusable raw SCSI/RAP transport for compatible radios.
 - Added experimental read-only Retevis RT97L support with 16-channel parsing,
   CTCSS/DCS decoding, and hardware-safe upload blocking.
+- Added an experimental Baofeng GM-32 profile derived from the official
+  UV-32 CPS, including DTR/RTS handling and ten bank-name records.
+- Fixed TS-2000 uploads that exceeded the stock one-second command timeout.
+- Kept the channel-table vertical scrollbar pinned to the visible right edge
+  while the columns scroll horizontally.
 
-## macOS 1.0.20 verification status
+## macOS 1.0.21 verification status
 
-Full verification before the macOS `1.0.20` release:
+Full verification before the macOS `1.0.21` release:
 
 - `flutter analyze`: clean
-- `flutter test`: all 83 tests passed
-- `python3 test/chirp_bridge_upload_test.py -v`: all 14 tests passed
-- `python3 test/rt97l_driver_test.py -v`: all 5 tests passed
+- `flutter test`: all 86 tests passed
+- Python test discovery: all 40 tests passed
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.21` / `21`
+- Main executable architectures: `arm64` and `x86_64`
 - Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.21`
 
 ## Linux 1.0.17 verification status
 
