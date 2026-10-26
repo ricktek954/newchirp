@@ -8,11 +8,11 @@ release requirements.
 
 ## Resume here
 
-- The Linux `1.0.20` release is built, uploaded, and live as DEB.
-- The macOS `1.0.21` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes the experimental Baofeng GM-32 profile, the TS-2000
-  write-timeout override, multi-county repeater filtering, and the fixed
-  channel-table vertical scrollbar.
+- The Linux `1.0.22` release is live as DEB.
+- The macOS `1.0.22` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes CHIRP source pinning/checksum verification, the loaded
+  module sandbox, the experimental Midland MXT295 driver, GM-32 GMRS editor
+  rules, Channel Library Discard/Write controls, and the file-save warning.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -31,9 +31,9 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Release source commit: `8e4f7e5` (`Bump version to 1.0.21`)
+- Release source commit: `75fc74d` (`Bump version to 1.0.22`)
 - Open pull requests: none
-- Checked-out source version: `1.0.21+21`
+- Checked-out source version: `1.0.22+22`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -47,31 +47,31 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.21 |
-| Windows | 1.0.18 |
-| Linux | 1.0.20 |
-| Legacy shared manifest version | 1.0.17 |
+| macOS | 1.0.22 |
+| Windows | 1.0.20 |
+| Linux | 1.0.22 |
+| Legacy shared manifest version | 1.0.20 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.21.dmg`
-- Version/build: `1.0.21` / `21`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.22.dmg`
+- Version/build: `1.0.22` / `22`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `3283bcea0e4df62d038042abf2e2288ac781c6a9aa5e66182672b457a84e4f49`
-- Size: `91,667,505` bytes
-- Notarization submission: `c67daefe-ad4e-4063-970e-38c1fcbfaa67`
+  `9c156b57259851bd7916f87f50e5f43f6cea5d56846c5811f162bf9a5ec4814c`
+- Size: `81,773,395` bytes
+- Notarization submission: `09ac111e-a711-4a6c-9f4e-f44d518ed1e5`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.20.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.22.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.20.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.22.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.20.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.22.AppImage`
 
 ## Recently completed
 
@@ -122,18 +122,21 @@ Linux artifacts:
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
 
-## macOS 1.0.21 verification status
+## macOS 1.0.22 verification status
 
-Full verification before the macOS `1.0.21` release:
+Full verification before the macOS `1.0.22` release:
 
 - `flutter analyze`: clean
-- `flutter test`: all 86 tests passed
-- Python test discovery: all 40 tests passed
+- `flutter test`: all 119 tests passed
+- Python test discovery: all 68 tests passed, 2 skipped
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
-- App version/build in the mounted DMG: `1.0.21` / `21`
+- App version/build in the mounted DMG: `1.0.22` / `22`
 - Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
 - Server SHA-256 matched the final stapled DMG
-- `/api/releases/latest` reports macOS `1.0.21`
+- `/api/releases/latest` reports macOS `1.0.22`
 
 ## Linux 1.0.17 verification status
 
