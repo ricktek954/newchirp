@@ -19,6 +19,10 @@ PROGRESS_PREFIX = "__NEWCHIRP_PROGRESS__ "
 MANUAL_READ_READY_MESSAGE = (
     "Listening for the radio - hold PTT for one second."
 )
+# A session writes progress on the same stdout stream as its JSON replies.
+# One-shot jobs leave this as None and keep progress on stderr.
+_SESSION_STDOUT = None
+_MAX_SESSION_REQUEST = 65536
 
 # CHIRP normally redirects stdout and stderr to ~/.chirp/debug.log when it is
 # launched without a terminal. The bridge owns those streams as its JSON/error
@@ -35,6 +39,14 @@ def emit_progress(label, fraction=None):
             payload["fraction"] = max(0.0, min(1.0, float(fraction)))
         except (TypeError, ValueError):
             pass
+    stream = _SESSION_STDOUT
+    if stream is not None:
+        message = {"type": "progress", "label": payload["label"]}
+        if "fraction" in payload:
+            message["fraction"] = payload["fraction"]
+        stream.write(json.dumps(message, separators=(",", ":")) + "\n")
+        stream.flush()
+        return
     sys.stderr.write(
         PROGRESS_PREFIX + json.dumps(payload, separators=(",", ":")) + "\n"
     )
@@ -946,6 +958,470 @@ def settings_payload(radio):
     }
 
 
+def execute_command(directory, args):
+    if args.command == "list-models":
+        return {"models": sorted(directory.DRV_TO_RADIO.keys())}
+    if args.command == "list-interfaces":
+        try:
+            from newchirp_mass_storage import list_devices
+
+            interfaces = list_devices()
+        except Exception:
+            interfaces = []
+        return {"interfaces": interfaces}
+    if args.command == "model-info":
+        prompts = directory.get_radio(args.model).get_prompts()
+        return {
+            "info": prompts.info,
+            "experimental": prompts.experimental,
+            "preDownload": prompts.pre_download,
+            "preUpload": prompts.pre_upload,
+        }
+    if args.command == "repeaterbook-search":
+        emit_progress("Searching RepeaterBook...", 0.04)
+        payload = search_repeaterbook(
+            country=args.country,
+            state=args.state,
+            service=args.service,
+            query=args.filter,
+            latitude=args.latitude,
+            longitude=args.longitude,
+            distance=args.distance,
+            fm_only=args.fm_only,
+            open_only=args.open_only,
+            limit=max(1, min(args.limit, 500)),
+        )
+        emit_progress("RepeaterBook search complete.", 1.0)
+        return payload
+    if args.command == "read-image":
+        image_path = os.path.abspath(args.image)
+        radio = directory.get_radio_by_image(image_path)
+        try:
+            model = directory.get_driver(radio.__class__)
+        except Exception:
+            model = directory.radio_class_id(radio.__class__)
+        channel_radio, zones, selected_zone = channel_context(radio, args.zone)
+        channels = []
+        if not args.metadata_only:
+            start, end = channel_radio.get_features().memory_bounds
+            for location in range(start, end + 1):
+                mem = channel_radio.get_memory(location)
+                if not mem.empty:
+                    channels.append(memory_json(mem))
+        return {
+            "model": model,
+            "channels": channels,
+            "imagePath": image_path,
+            "zones": zones,
+            "zone": selected_zone,
+            "features": features_json(channel_radio),
+        }
+    if args.command == "read-settings":
+        if args.port is not None:
+            radio = radio_for(
+                directory,
+                args.model,
+                args.port,
+                progress_range=(0.02, 0.97),
+            )
+            try:
+                emit_read_ready(radio)
+                radio.sync_in()
+                fd, image = tempfile.mkstemp(
+                    prefix="newchirp-", suffix=".img"
+                )
+                os.close(fd)
+                radio.save_mmap(image)
+                payload = settings_payload(radio)
+                payload["imagePath"] = image
+                emit_progress("Radio settings read.", 1.0)
+                return payload
+            finally:
+                radio.pipe.close()
+        radio = radio_from_image(directory, args.model, args.image)
+        return settings_payload(radio)
+    if args.command == "download":
+        progress_range = (0.02, 0.92)
+    elif args.command == "upload":
+        progress_range = (0.10, 0.98)
+    else:
+        progress_range = (0.12, 0.97)
+    is_write = args.command in ("upload", "write-settings")
+    radio = radio_for(
+        directory,
+        args.model,
+        args.port,
+        progress_range=progress_range,
+        image=args.image if is_write else None,
+        detect_serial=not is_write,
+    )
+    try:
+        if args.command == "download":
+            emit_read_ready(radio)
+            radio.sync_in()
+            emit_progress("Saving the radio image...", 0.93)
+            fd, image = tempfile.mkstemp(prefix="newchirp-", suffix=".img")
+            os.close(fd)
+            radio.save_mmap(image)
+            channel_radio, zones, selected_zone = channel_context(
+                radio, args.zone
+            )
+            start, end = channel_radio.get_features().memory_bounds
+            locations = list(range(start, end + 1))
+            channels = []
+            for index, location in enumerate(locations):
+                mem = channel_radio.get_memory(location)
+                if not mem.empty:
+                    channels.append(memory_json(mem))
+                if locations and (
+                    index % 20 == 0 or index == len(locations) - 1
+                ):
+                    emit_progress(
+                        "Building the channel list...",
+                        0.94 + 0.05 * (index + 1) / len(locations),
+                    )
+            emit_progress("Read complete.", 1.0)
+            return {
+                "channels": channels,
+                "imagePath": image,
+                "zones": zones,
+                "zone": selected_zone,
+                "features": features_json(channel_radio),
+            }
+        elif args.command == "upload":
+            emit_progress("Preparing channels...", 0.02)
+            radio.load_mmap(args.image)
+            channel_radio, zones, selected_zone = channel_context(
+                radio, args.zone
+            )
+            with open(args.channels, encoding="utf-8") as handle:
+                items = json.load(handle)
+            from chirp import chirp_common
+            skipped = []
+            adjusted = []
+            for index, item in enumerate(items):
+                requested_name = str(item.get("name", ""))
+                filtered_name = channel_radio.filter_name(requested_name)
+                item = dict(item)
+                item["name"] = filtered_name
+                try:
+                    mem = channel_radio.get_memory(int(item["location"]))
+                except Exception:
+                    mem = chirp_common.Memory()
+                try:
+                    locked_fields = apply_json(channel_radio, mem, item)
+                    errors = channel_radio.validate_memory(mem)
+                    if errors:
+                        if locked_fields:
+                            skipped.append({
+                                "location": int(item["location"]),
+                                "name": filtered_name,
+                                "reason": (
+                                    "locked field(s): %s left a required "
+                                    "value unchanged" % ", ".join(locked_fields)
+                                ),
+                                "skipped": True,
+                            })
+                            continue
+                        raise RuntimeError(
+                            f"Channel {mem.number}: {errors[0]}")
+                    channel_radio.set_memory(mem)
+                    if locked_fields or filtered_name != requested_name:
+                        adjusted.append({
+                            "location": int(item["location"]),
+                            "name": filtered_name,
+                            "fields": locked_fields,
+                            "nameFrom": requested_name,
+                            "nameTo": filtered_name,
+                        })
+                except chirp_common.ImmutableValueError as exc:
+                    skipped.append({
+                        "location": int(item["location"]),
+                        "name": filtered_name,
+                        "reason": str(exc),
+                        "skipped": True,
+                    })
+                if items and (
+                    index % 10 == 0 or index == len(items) - 1
+                ):
+                    emit_progress(
+                        "Preparing channels...",
+                        0.03 + 0.06 * (index + 1) / len(items),
+                    )
+            cleared = [
+                int(part) for part in args.cleared.split(",") if part.strip()
+            ]
+            for location in cleared:
+                try:
+                    mem = channel_radio.get_memory(location)
+                    mem.empty = True
+                    channel_radio.set_memory(mem)
+                except Exception:
+                    continue
+            emit_progress("Writing the image to the radio...", 0.10)
+            radio.sync_out()
+            emit_progress("Saving the updated image...", 0.99)
+            radio.save_mmap(args.image)
+            emit_progress("Write complete.", 1.0)
+            return {
+                "ok": True,
+                "skipped": skipped,
+                "adjusted": adjusted,
+            }
+        else:
+            emit_progress("Preparing radio settings...", 0.02)
+            radio.load_mmap(args.image)
+            with open(args.settings, encoding="utf-8") as handle:
+                payload = json.load(handle)
+            settings = radio.get_settings()
+            if settings is None:
+                raise RuntimeError(
+                    "This radio does not expose global settings."
+                )
+            changes = payload.get("changes", [])
+            apply_setting_changes(settings, changes)
+            emit_progress("Applying settings...", 0.10)
+            radio.set_settings(settings)
+            emit_progress("Writing settings to the radio...", 0.12)
+            radio.sync_out()
+            emit_progress("Saving the updated image...", 0.99)
+            radio.save_mmap(args.image)
+            emit_progress("Settings write complete.", 1.0)
+            return {"ok": True, "changed": len(changes)}
+    finally:
+        radio.pipe.close()
+
+
+_COMMAND_FIELDS = {
+    "list-models": set(),
+    "list-interfaces": set(),
+    "model-info": {"model"},
+    "repeaterbook-search": {
+        "country",
+        "state",
+        "service",
+        "filter",
+        "latitude",
+        "longitude",
+        "distance",
+        "fm_only",
+        "open_only",
+        "limit",
+    },
+    "read-image": {"image", "metadata_only", "zone"},
+    "download": {"model", "port", "zone"},
+    "upload": {"model", "port", "zone", "image", "channels", "cleared"},
+    "read-settings": {"model", "image", "port"},
+    "write-settings": {"model", "port", "image", "settings"},
+}
+_REQUIRED_FIELDS = {
+    "model-info": {"model"},
+    "repeaterbook-search": {"state"},
+    "read-image": {"image"},
+    "download": {"model", "port"},
+    "upload": {"model", "port", "image", "channels"},
+    "read-settings": {"model"},
+    "write-settings": {"model", "port", "image", "settings"},
+}
+_STRING_FIELDS = {
+    "model",
+    "country",
+    "state",
+    "service",
+    "filter",
+    "image",
+    "port",
+    "channels",
+    "cleared",
+    "settings",
+}
+_BOOL_FIELDS = {"metadata_only", "fm_only", "open_only"}
+_INT_FIELDS = {"zone", "limit"}
+_FLOAT_FIELDS = {"latitude", "longitude", "distance"}
+_NAMESPACE_DEFAULTS = {
+    "country": "United States",
+    "service": "all",
+    "filter": "",
+    "latitude": None,
+    "longitude": None,
+    "distance": None,
+    "fm_only": False,
+    "open_only": False,
+    "limit": 200,
+    "metadata_only": False,
+    "zone": None,
+    "image": None,
+    "port": None,
+    "channels": None,
+    "cleared": "",
+    "settings": None,
+    "model": None,
+    "state": None,
+}
+
+
+def _session_value(name, value):
+    if name in _STRING_FIELDS:
+        if not isinstance(value, str) or "\x00" in value:
+            raise RuntimeError("Invalid radio helper value.")
+        return value
+    if name in _BOOL_FIELDS:
+        if not isinstance(value, bool):
+            raise RuntimeError("Invalid radio helper value.")
+        return value
+    if name in _INT_FIELDS:
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise RuntimeError("Invalid radio helper value.")
+        return value
+    if name in _FLOAT_FIELDS:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise RuntimeError("Invalid radio helper value.")
+        return float(value)
+    raise RuntimeError("Invalid radio helper value.")
+
+
+def _request_id(payload):
+    request_id = payload.get("id")
+    if isinstance(request_id, bool) or not isinstance(request_id, (int, str)):
+        return None
+    if isinstance(request_id, str) and not request_id:
+        return None
+    return request_id
+
+
+def request_to_namespace(payload):
+    """Turn one stdin command into the same options a one-shot job would use."""
+    if not isinstance(payload, dict):
+        raise RuntimeError("Radio helper request was not understood.")
+    command = payload.get("command")
+    if command not in _COMMAND_FIELDS:
+        raise RuntimeError("Unknown radio helper command.")
+    allowed = set(_COMMAND_FIELDS[command])
+    allowed.update(("command", "id"))
+    if any(key not in allowed for key in payload):
+        raise RuntimeError("Radio helper request was not understood.")
+    if _request_id(payload) is None:
+        raise RuntimeError("Radio helper request was not understood.")
+    values = {}
+    for name in _COMMAND_FIELDS[command]:
+        if name not in payload:
+            continue
+        values[name] = _session_value(name, payload[name])
+    missing = [
+        name for name in _REQUIRED_FIELDS.get(command, ()) if name not in values
+    ]
+    if missing:
+        raise RuntimeError("Radio helper request is missing a value.")
+    if command == "read-settings":
+        has_image = "image" in values
+        has_port = "port" in values
+        if has_image == has_port:
+            raise RuntimeError("Radio helper request was not understood.")
+    if values.get("service", "all") not in ("amateur", "gmrs", "all"):
+        raise RuntimeError("Radio helper request was not understood.")
+    namespace = dict(_NAMESPACE_DEFAULTS)
+    namespace.update(values)
+    namespace["command"] = command
+    return argparse.Namespace(**namespace)
+
+
+def _write_session(message):
+    stream = _SESSION_STDOUT
+    if stream is None:
+        raise RuntimeError("Radio helper session is not ready.")
+    stream.write(json.dumps(message, separators=(",", ":")) + "\n")
+    stream.flush()
+
+
+def _session_result(request_id, result):
+    _write_session({
+        "type": "result",
+        "id": request_id,
+        "ok": True,
+        "result": result,
+    })
+
+
+def _session_failure(request_id, message):
+    _write_session({
+        "type": "result",
+        "id": request_id,
+        "ok": False,
+        "error": message,
+    })
+
+
+def serve_session(args):
+    """Load the driver catalog once, then answer one JSON command per line.
+
+    Commands arrive on stdin from the NewChirp process only. This does not
+    open a network port. A loaded CHIRP module stays on the one-shot path.
+    """
+    global _SESSION_STDOUT
+    real_stdout = sys.stdout
+    sys.stdout = sys.stderr
+    try:
+        directory = load_chirp(
+            args.source,
+            args.vendor,
+            args.newchirp_driver_dir,
+            None,
+        )
+    except Exception as exc:
+        print(bridge_error_message(exc), file=sys.stderr)
+        raise SystemExit(1)
+    _SESSION_STDOUT = real_stdout
+    try:
+        _write_session({"type": "ready", "pid": os.getpid()})
+        for raw in sys.stdin:
+            line = raw.strip()
+            if not line:
+                continue
+            if len(line) > _MAX_SESSION_REQUEST:
+                _session_failure(None, "The radio helper request is too large.")
+                continue
+            try:
+                payload = json.loads(line)
+            except ValueError:
+                _session_failure(None, "Radio helper request was not valid JSON.")
+                continue
+            if not isinstance(payload, dict):
+                _session_failure(None, "Radio helper request was not understood.")
+                continue
+            request_id = _request_id(payload)
+            if payload.get("command") == "quit":
+                if set(payload) - {"command", "id"}:
+                    _session_failure(
+                        request_id,
+                        "Radio helper request was not understood.",
+                    )
+                    continue
+                _session_result(request_id, {})
+                return
+            try:
+                command_args = request_to_namespace(payload)
+                result = execute_command(directory, command_args)
+                if not isinstance(result, dict):
+                    raise RuntimeError(
+                        "The radio helper returned an invalid response."
+                    )
+            except Exception as exc:
+                model = payload.get("model")
+                if not isinstance(model, str):
+                    model = None
+                command = payload.get("command")
+                if not isinstance(command, str):
+                    command = None
+                _session_failure(
+                    request_id,
+                    bridge_error_message(exc, command, model),
+                )
+                continue
+            _session_result(request_id, result)
+    finally:
+        _SESSION_STDOUT = None
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source", required=True)
@@ -955,7 +1431,12 @@ def main():
         "--module",
         help="Load a session-scoped CHIRP .py or .mod module",
     )
-    sub = parser.add_subparsers(dest="command", required=True)
+    parser.add_argument(
+        "--session",
+        action="store_true",
+        help="Load CHIRP once and answer JSON commands on stdin",
+    )
+    sub = parser.add_subparsers(dest="command", required=False)
     sub.add_parser("list-models")
     sub.add_parser("list-interfaces")
     model_info = sub.add_parser("model-info")
@@ -997,6 +1478,15 @@ def main():
     write_settings.add_argument("--image", required=True)
     write_settings.add_argument("--settings", required=True)
     args = parser.parse_args()
+    if args.session:
+        if args.command is not None:
+            parser.error("--session does not take a command")
+        if args.module:
+            parser.error("--session cannot load a CHIRP module")
+        serve_session(args)
+        return
+    if not args.command:
+        parser.error("a command is required")
     try:
         directory = load_chirp(
             args.source,
@@ -1004,243 +1494,7 @@ def main():
             args.newchirp_driver_dir,
             args.module,
         )
-        if args.command == "list-models":
-            print(json.dumps({"models": sorted(directory.DRV_TO_RADIO.keys())}))
-            return
-        if args.command == "list-interfaces":
-            try:
-                from newchirp_mass_storage import list_devices
-
-                interfaces = list_devices()
-            except Exception:
-                interfaces = []
-            print(json.dumps({"interfaces": interfaces}))
-            return
-        if args.command == "model-info":
-            prompts = directory.get_radio(args.model).get_prompts()
-            print(json.dumps({
-                "info": prompts.info,
-                "experimental": prompts.experimental,
-                "preDownload": prompts.pre_download,
-                "preUpload": prompts.pre_upload,
-            }))
-            return
-        if args.command == "repeaterbook-search":
-            emit_progress("Searching RepeaterBook...", 0.04)
-            print(json.dumps(search_repeaterbook(
-                country=args.country,
-                state=args.state,
-                service=args.service,
-                query=args.filter,
-                latitude=args.latitude,
-                longitude=args.longitude,
-                distance=args.distance,
-                fm_only=args.fm_only,
-                open_only=args.open_only,
-                limit=max(1, min(args.limit, 500)),
-            )))
-            emit_progress("RepeaterBook search complete.", 1.0)
-            return
-        if args.command == "read-image":
-            image_path = os.path.abspath(args.image)
-            radio = directory.get_radio_by_image(image_path)
-            try:
-                model = directory.get_driver(radio.__class__)
-            except Exception:
-                model = directory.radio_class_id(radio.__class__)
-            channel_radio, zones, selected_zone = channel_context(radio, args.zone)
-            channels = []
-            if not args.metadata_only:
-                start, end = channel_radio.get_features().memory_bounds
-                for location in range(start, end + 1):
-                    mem = channel_radio.get_memory(location)
-                    if not mem.empty:
-                        channels.append(memory_json(mem))
-            print(json.dumps({
-                "model": model,
-                "channels": channels,
-                "imagePath": image_path,
-                "zones": zones,
-                "zone": selected_zone,
-                "features": features_json(channel_radio),
-            }))
-            return
-        if args.command == "read-settings":
-            if args.port is not None:
-                radio = radio_for(
-                    directory,
-                    args.model,
-                    args.port,
-                    progress_range=(0.02, 0.97),
-                )
-                try:
-                    emit_read_ready(radio)
-                    radio.sync_in()
-                    fd, image = tempfile.mkstemp(
-                        prefix="newchirp-", suffix=".img"
-                    )
-                    os.close(fd)
-                    radio.save_mmap(image)
-                    payload = settings_payload(radio)
-                    payload["imagePath"] = image
-                    emit_progress("Radio settings read.", 1.0)
-                    print(json.dumps(payload))
-                finally:
-                    radio.pipe.close()
-            else:
-                radio = radio_from_image(directory, args.model, args.image)
-                print(json.dumps(settings_payload(radio)))
-            return
-        if args.command == "download":
-            progress_range = (0.02, 0.92)
-        elif args.command == "upload":
-            progress_range = (0.10, 0.98)
-        else:
-            progress_range = (0.12, 0.97)
-        is_write = args.command in ("upload", "write-settings")
-        radio = radio_for(
-            directory,
-            args.model,
-            args.port,
-            progress_range=progress_range,
-            image=args.image if is_write else None,
-            detect_serial=not is_write,
-        )
-        try:
-            if args.command == "download":
-                emit_read_ready(radio)
-                radio.sync_in()
-                emit_progress("Saving the radio image...", 0.93)
-                fd, image = tempfile.mkstemp(prefix="newchirp-", suffix=".img")
-                os.close(fd)
-                radio.save_mmap(image)
-                channel_radio, zones, selected_zone = channel_context(
-                    radio, args.zone
-                )
-                start, end = channel_radio.get_features().memory_bounds
-                locations = list(range(start, end + 1))
-                channels = []
-                for index, location in enumerate(locations):
-                    mem = channel_radio.get_memory(location)
-                    if not mem.empty:
-                        channels.append(memory_json(mem))
-                    if locations and (
-                        index % 20 == 0 or index == len(locations) - 1
-                    ):
-                        emit_progress(
-                            "Building the channel list...",
-                            0.94 + 0.05 * (index + 1) / len(locations),
-                        )
-                emit_progress("Read complete.", 1.0)
-                print(json.dumps({
-                    "channels": channels,
-                    "imagePath": image,
-                    "zones": zones,
-                    "zone": selected_zone,
-                    "features": features_json(channel_radio),
-                }))
-            elif args.command == "upload":
-                emit_progress("Preparing channels...", 0.02)
-                radio.load_mmap(args.image)
-                channel_radio, zones, selected_zone = channel_context(
-                    radio, args.zone
-                )
-                with open(args.channels, encoding="utf-8") as handle:
-                    items = json.load(handle)
-                from chirp import chirp_common
-                skipped = []
-                adjusted = []
-                for index, item in enumerate(items):
-                    requested_name = str(item.get("name", ""))
-                    filtered_name = channel_radio.filter_name(requested_name)
-                    item = dict(item)
-                    item["name"] = filtered_name
-                    try:
-                        mem = channel_radio.get_memory(int(item["location"]))
-                    except Exception:
-                        mem = chirp_common.Memory()
-                    try:
-                        locked_fields = apply_json(channel_radio, mem, item)
-                        errors = channel_radio.validate_memory(mem)
-                        if errors:
-                            if locked_fields:
-                                skipped.append({
-                                    "location": int(item["location"]),
-                                    "name": filtered_name,
-                                    "reason": (
-                                        "locked field(s): %s left a required "
-                                        "value unchanged" % ", ".join(locked_fields)
-                                    ),
-                                    "skipped": True,
-                                })
-                                continue
-                            raise RuntimeError(
-                                f"Channel {mem.number}: {errors[0]}")
-                        channel_radio.set_memory(mem)
-                        if locked_fields or filtered_name != requested_name:
-                            adjusted.append({
-                                "location": int(item["location"]),
-                                "name": filtered_name,
-                                "fields": locked_fields,
-                                "nameFrom": requested_name,
-                                "nameTo": filtered_name,
-                            })
-                    except chirp_common.ImmutableValueError as exc:
-                        skipped.append({
-                            "location": int(item["location"]),
-                            "name": filtered_name,
-                            "reason": str(exc),
-                            "skipped": True,
-                        })
-                    if items and (
-                        index % 10 == 0 or index == len(items) - 1
-                    ):
-                        emit_progress(
-                            "Preparing channels...",
-                            0.03 + 0.06 * (index + 1) / len(items),
-                        )
-                cleared = [
-                    int(part) for part in args.cleared.split(",") if part.strip()
-                ]
-                for location in cleared:
-                    try:
-                        mem = channel_radio.get_memory(location)
-                        mem.empty = True
-                        channel_radio.set_memory(mem)
-                    except Exception:
-                        continue
-                emit_progress("Writing the image to the radio...", 0.10)
-                radio.sync_out()
-                emit_progress("Saving the updated image...", 0.99)
-                radio.save_mmap(args.image)
-                emit_progress("Write complete.", 1.0)
-                print(json.dumps({
-                    "ok": True,
-                    "skipped": skipped,
-                    "adjusted": adjusted,
-                }))
-            else:
-                emit_progress("Preparing radio settings...", 0.02)
-                radio.load_mmap(args.image)
-                with open(args.settings, encoding="utf-8") as handle:
-                    payload = json.load(handle)
-                settings = radio.get_settings()
-                if settings is None:
-                    raise RuntimeError(
-                        "This radio does not expose global settings."
-                    )
-                changes = payload.get("changes", [])
-                apply_setting_changes(settings, changes)
-                emit_progress("Applying settings...", 0.10)
-                radio.set_settings(settings)
-                emit_progress("Writing settings to the radio...", 0.12)
-                radio.sync_out()
-                emit_progress("Saving the updated image...", 0.99)
-                radio.save_mmap(args.image)
-                emit_progress("Settings write complete.", 1.0)
-                print(json.dumps({"ok": True, "changed": len(changes)}))
-        finally:
-            radio.pipe.close()
+        print(json.dumps(execute_command(directory, args)))
     except Exception as exc:
         print(
             bridge_error_message(

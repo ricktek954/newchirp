@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ffi' show Abi;
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../models/radio_channel.dart';
 import '../models/repeater_search.dart';
 import 'module_sandbox.dart';
+import 'radio_helper_session.dart';
 
 const _progressPrefix = '__NEWCHIRP_PROGRESS__ ';
 
@@ -261,6 +262,7 @@ class RadioBridge {
   final String? newDriversPath;
   String? _loadedModulePath;
   final ModuleSandbox _moduleSandbox = ModuleSandbox();
+  final RadioHelperSession _helper = RadioHelperSession();
   Process? _activeProcess;
   bool _cancelRequested = false;
 
@@ -269,9 +271,24 @@ class RadioBridge {
 
   bool cancelActive() {
     _cancelRequested = true;
-    final process = _activeProcess;
-    return process == null || process.kill(ProcessSignal.sigterm);
+    final oneShot = _activeProcess;
+    final sessionResult = _helper.killActive();
+    if (oneShot == null) return sessionResult;
+    return oneShot.kill(ProcessSignal.sigterm);
   }
+
+  /// Stops the shared helper. The next radio job starts a fresh one.
+  void close() {
+    _helper.stop();
+    _activeProcess?.kill(ProcessSignal.sigterm);
+    _activeProcess = null;
+  }
+
+  @visibleForTesting
+  int? get debugHelperPid => _helper.pid;
+
+  @visibleForTesting
+  int get debugPythonProbeCount => _helper.pythonProbeCount;
 
   Future<List<SerialPortInfo>> serialPortDetails() async {
     final interfaces = await _massStoragePortDetails();
@@ -443,6 +460,8 @@ class RadioBridge {
       throw RadioBridgeException('The selected CHIRP module was not found.');
     }
     final previous = _loadedModulePath;
+    // A module runs in its own sandbox. Do not hand it to the shared helper.
+    _helper.stop();
     _loadedModulePath = path;
     try {
       return await models();
@@ -455,6 +474,7 @@ class RadioBridge {
 
   void unloadModule() {
     _loadedModulePath = null;
+    _helper.stop();
     unawaited(_moduleSandbox.dispose());
   }
 
@@ -665,12 +685,37 @@ class RadioBridge {
     List<String> args, {
     void Function(RadioProgress)? onProgress,
   }) async {
-    final runtime = await Directory.systemTemp.createTemp('newchirp-run-');
-    try {
-      return await _runWithRuntime(args, runtime, onProgress: onProgress);
-    } finally {
-      if (await runtime.exists()) await runtime.delete(recursive: true);
+    _cancelRequested = false;
+    if (_loadedModulePath != null) {
+      final runtime = await Directory.systemTemp.createTemp('newchirp-run-');
+      try {
+        return await _runWithRuntime(args, runtime, onProgress: onProgress);
+      } finally {
+        if (await runtime.exists()) await runtime.delete(recursive: true);
+      }
     }
+    final python = await _resolvePython();
+    return _helper.run(
+      args: args,
+      source: _findChirpSource(),
+      newDrivers: _findNewChirpDrivers(),
+      scsiHelper: _findScsiHelper(),
+      python: python,
+      onProgress: onProgress,
+      materialize: () async {
+        final runtime = await Directory.systemTemp.createTemp(
+          'newchirp-helper-',
+        );
+        try {
+          final script = await _materializeBridge(runtime);
+          final vendor = await _materializePythonDependencies(runtime);
+          return (script: script, vendor: vendor, runtime: runtime);
+        } catch (error) {
+          if (await runtime.exists()) await runtime.delete(recursive: true);
+          rethrow;
+        }
+      },
+    );
   }
 
   Future<RepeaterSearchResults> searchRepeaters({
@@ -803,20 +848,12 @@ class RadioBridge {
       if (identical(_activeProcess, process)) _activeProcess = null;
     }
     if (exitCode != 0) {
-      final details = stderr.isNotEmpty ? stderr : stdout;
-      if ((exitCode & 0xFFFFFFFF) == 0xC0000005) {
-        throw RadioBridgeException(
-          'NewChirp\u2019s radio helper crashed while communicating with the '
-          'radio (Windows access violation, exit code 0xC0000005).\n\n'
-          'Unplug and reconnect the programming cable, put the radio back in '
-          'CLONE mode, and try again. If it keeps happening, restart NewChirp '
-          'and the computer before retrying.',
-        );
-      }
       throw RadioBridgeException(
-        details.isEmpty
-            ? 'Radio bridge failed with exit code $exitCode.'
-            : details,
+        describeRadioHelperExit(
+          exitCode: exitCode,
+          stderr: stderr,
+          stdout: stdout,
+        ),
       );
     }
     final output = stdout;
@@ -833,49 +870,9 @@ class RadioBridge {
 
   /// The bundled CHIRP tree uses Python 3.10+ syntax, so prefer an interpreter
   /// that is new enough even when an older system Python is first on PATH.
-  Future<String> _resolvePython() async {
-    final configured = Platform.environment['NEWCHIRP_PYTHON'];
-    final resources = _bundledResourcesDirectory();
-    final macRuntime = switch (Abi.current()) {
-      Abi.macosArm64 => 'python-arm64',
-      Abi.macosX64 => 'python-x64',
-      _ => null,
-    };
-    final candidates = <String>[
-      if (configured != null && configured.isNotEmpty) configured,
-      if (resources != null && Platform.isWindows)
-        '${resources.path}/python/python.exe',
-      if (resources != null && Platform.isMacOS && macRuntime != null)
-        '${resources.path}/$macRuntime/bin/python3',
-      if (resources != null && !Platform.isWindows && !Platform.isMacOS)
-        '${resources.path}/python/bin/python3',
-      if (resources != null && Platform.isMacOS)
-        '${resources.path}/python/bin/python3',
-      if (Platform.isMacOS) '/opt/homebrew/bin/python3',
-      if (Platform.isMacOS) '/usr/local/bin/python3',
-      if (Platform.isWindows) 'python',
-      'python3',
-    ];
-    for (final candidate in candidates) {
-      try {
-        final result = await Process.run(candidate, [
-          '-c',
-          'import sys; print("%d.%d" % sys.version_info[:2])',
-        ]);
-        if (result.exitCode != 0) continue;
-        final parts = '${result.stdout}'.trim().split('.');
-        final major = int.tryParse(parts.first);
-        final minor = int.tryParse(parts.length > 1 ? parts[1] : '0');
-        if (major != null &&
-            minor != null &&
-            (major > 3 || (major == 3 && minor >= 10))) {
-          return candidate;
-        }
-      } on ProcessException {
-        // Candidate is not available; try the next interpreter.
-      }
-    }
-    return 'python3';
+  /// The choice is remembered for this app session.
+  Future<String> _resolvePython() {
+    return _helper.resolvePython(_bundledResourcesDirectory());
   }
 
   Directory? _bundledResourcesDirectory() {
