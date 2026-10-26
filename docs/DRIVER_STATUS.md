@@ -23,6 +23,7 @@ Last updated: 2026-10-25
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
+| Baofeng GM-32 | `drivers/newchirp_gm32.py` | Same clone link as the Baofeng UV-32, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 
 ## Radio details
 
@@ -99,6 +100,39 @@ Last updated: 2026-10-25
   and password encoding are unknown, and no physical download has completed
 - Next milestone: compare a complete physical image and official CPS export,
   then correct the channel flags and settings byte map
+
+### Baofeng GM-32
+
+- Maintained driver: `drivers/newchirp_gm32.py`
+- Base radio: Baofeng UV-32. The GM-32 answers the same ident
+  (`PROGRAMCOLORPROU`, fingerprint `UV32PRO`) and uses that memory map.
+  Pick Baofeng GM-32 before a read. An image saved as UV-32 still opens as
+  a UV-32.
+- Cable steps: turn the radio off, connect the cable, turn the radio on,
+  then download or upload
+- Evidence captures, kept in Downloads and not committed:
+  - `/Users/randybrown/Downloads/gm32/Baofeng_UV-32_20261025.img`
+    `92d5f133bde5303741b4f01a073e6927265871ccb3253df8d8a9a73295d3eb8c`
+  - `/Users/randybrown/Downloads/gm32/gm32-read.pcap`
+    `b647bfe1af426f74ea1def3b531a5504c61f55bcb4a4a679bb35308d4da0d338`
+  - `/Users/randybrown/Downloads/gm32/gm32-write.pcap`
+    `6fee9dafc5c6f282d1cd10b51a3c1905e44d026c8f6da204e32382811e0fa7ab`
+- Implemented: 1000 memories, the UV-32 settings pages, and the ten bank
+  names. Bank membership stays the fixed UV-32 layout.
+- Write policy: GMRS 1-7 stay simplex. GMRS 8-14 may be simplex or
+  receive-only, and they are stored narrowband on Low. GMRS 15-22 may be
+  simplex, a +5 MHz repeater, or receive-only. Repeater inputs may be
+  simplex or receive-only. Any other frequency is stored receive-only.
+  A channel with no frequency is left empty.
+- Read policy: the channel list shows the stored image. The editor and a
+  write apply the GMRS rules.
+- Hardware validation: a read and a write were tested successfully on
+  2026-10-25. The driver stays experimental. These captures show the
+  UV-32 programming link.
+- Next milestone: on later writes, confirm channels 8-14 stay simplex
+  unless set receive-only, a non-GMRS channel such as the sample image
+  channel 31 (HAMs, 470.550 MHz) becomes receive-only, and settings plus
+  bank names survive.
 
 ## Reusable NewChirp transport work
 

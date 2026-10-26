@@ -10,6 +10,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'models/gm32_channel.dart';
 import 'models/radio_channel.dart';
 import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
@@ -1488,10 +1489,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _showNoEmptyChannelSlot();
       return;
     }
+    final gm32 = isBaofengGm32(_model);
     final channel = RadioChannel(
       location: location,
       name: 'NEW $location',
-      frequency: 146.52,
+      frequency: gm32 ? 0 : 146.52,
+      offset: gm32 ? 0 : 0.6,
     );
     _recordHistory();
     setState(() {
@@ -2445,6 +2448,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (channelIndex < 0 || channelIndex >= _channels.length) return;
     if (_channels[channelIndex].cleared) return;
     final draft = _channels[channelIndex].copy();
+    var enterFrequency = false;
+    if (isBaofengGm32(_model)) {
+      enterFrequency = gm32NeedsFrequencyBox(draft);
+      applyGm32Rules(draft);
+    }
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -2476,6 +2484,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               child: _ChannelEditor(
                 channel: draft,
                 capabilities: _capabilities,
+                radioModel: _model,
+                enteringFrequency: enterFrequency,
+                onEnteringFrequency: (value) => enterFrequency = value,
                 onChanged: changed,
                 onSave: save,
                 onClose: () => Navigator.pop(dialogContext),
@@ -6774,9 +6785,15 @@ class _ChannelEditor extends StatelessWidget {
     required this.onSave,
     required this.onDelete,
     required this.onClose,
+    this.radioModel,
+    this.enteringFrequency = false,
+    this.onEnteringFrequency,
   });
   final RadioChannel channel;
   final RadioCapabilities? capabilities;
+  final String? radioModel;
+  final bool enteringFrequency;
+  final ValueChanged<bool>? onEnteringFrequency;
   final void Function(VoidCallback) onChanged;
   final VoidCallback onSave;
   final VoidCallback onDelete;
@@ -6784,10 +6801,28 @@ class _ChannelEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gm32 = isBaofengGm32(radioModel);
+    final narrowLow = gm32 && gm32RequiresNarrowLow(channel);
     final issues = channel.validate(
       minimumLocation: capabilities?.memoryStart,
       maximumLocation: capabilities?.memoryEnd,
     );
+    if (gm32 && gm32FrequencyIsUnset(channel.frequency)) {
+      issues.removeWhere((issue) => issue.startsWith('Frequency must be'));
+    }
+    if (gm32) issues.addAll(gm32ChannelIssues(radioModel, channel));
+    final saveBlocked = gm32 && issues.isNotEmpty;
+    final receiveValue = gm32
+        ? gm32ReceiveValue(channel, enteringFrequency: enteringFrequency)
+        : '';
+    final showManualFrequency =
+        !gm32 || receiveValue == gm32ManualFrequencyValue;
+    final receiveOnly =
+        gm32 &&
+        channel.duplex == 'off' &&
+        !gm32FrequencyIsUnset(channel.frequency) &&
+        gmrsChannelNumber(channel) == null &&
+        !isGmrsRepeaterInputHz((channel.frequency * 1000000).round());
     Map<String, String> choices(
       List<String>? values,
       Map<String, String> fallback,
@@ -6897,27 +6932,63 @@ class _ChannelEditor extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 12),
-                _NumberField(
-                  label: 'Receive frequency (MHz)',
-                  value: channel.frequency,
-                  decimals: 6,
-                  onValue: (v) => onChanged(() => channel.frequency = v),
-                ),
-                const SizedBox(height: 12),
+                if (gm32) ...[
+                  _ChoiceField(
+                    key: ValueKey('gm32-receive-$receiveValue'),
+                    label: 'Receive channel',
+                    value: receiveValue,
+                    choices: gm32ReceiveChoices(
+                      channel,
+                      enteringFrequency: enteringFrequency,
+                    ),
+                    onValue: (value) => onChanged(() {
+                      final entering = value == gm32ManualFrequencyValue;
+                      onEnteringFrequency?.call(entering);
+                      if (entering || value.isEmpty) return;
+                      final number = int.tryParse(value);
+                      if (number != null) {
+                        useGm32ReceiveChannel(channel, number);
+                      }
+                    }),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+                if (showManualFrequency) ...[
+                  _NumberField(
+                    label: 'Receive frequency (MHz)',
+                    value: channel.frequency,
+                    decimals: 6,
+                    onValue: (v) => onChanged(() {
+                      channel.frequency = v;
+                      if (gm32) applyGm32Rules(channel);
+                    }),
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 Row(
                   children: [
                     Expanded(
                       child: _ChoiceField(
+                        key: gm32
+                            ? ValueKey(
+                                'gm32-duplex-${gm32DuplexChoices(channel).keys.join()}-${channel.duplex}',
+                              )
+                            : null,
                         label: 'Duplex',
                         value: channel.duplex,
-                        choices: choices(capabilities?.duplexes, const {
-                          '': 'Simplex',
-                          '+': '+ shift',
-                          '-': '− shift',
-                          'split': 'Split',
-                          'off': 'TX off',
+                        choices: gm32
+                            ? gm32DuplexChoices(channel)
+                            : choices(capabilities?.duplexes, const {
+                                '': 'Simplex',
+                                '+': '+ shift',
+                                '-': '− shift',
+                                'split': 'Split',
+                                'off': 'TX off',
+                              }),
+                        onValue: (v) => onChanged(() {
+                          channel.duplex = v;
+                          if (gm32) applyGm32Rules(channel);
                         }),
-                        onValue: (v) => onChanged(() => channel.duplex = v),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -6928,11 +6999,19 @@ class _ChannelEditor extends StatelessWidget {
                             : 'Offset (MHz)',
                         value: channel.offset,
                         decimals: 6,
+                        readOnly: gm32,
                         onValue: (v) => onChanged(() => channel.offset = v),
                       ),
                     ),
                   ],
                 ),
+                if (receiveOnly) ...[
+                  const SizedBox(height: 8),
+                  const Text(
+                    'This frequency is receive-only. The GM-32 transmits on GMRS channels.',
+                    style: TextStyle(color: Colors.black54, fontSize: 12),
+                  ),
+                ],
                 const SizedBox(height: 12),
                 _ChoiceField(
                   label: 'Tone mode',
@@ -7044,14 +7123,17 @@ class _ChannelEditor extends StatelessWidget {
                   children: [
                     Expanded(
                       child: _ChoiceField(
+                        key: narrowLow ? const ValueKey('gm32-mode-nfm') : null,
                         label: 'Mode',
                         value: channel.mode,
-                        choices: choices(capabilities?.modes, const {
-                          'FM': 'FM',
-                          'NFM': 'NFM',
-                          'AM': 'AM',
-                          'DV': 'Digital voice',
-                        }),
+                        choices: narrowLow
+                            ? const {'NFM': 'NFM'}
+                            : choices(capabilities?.modes, const {
+                                'FM': 'FM',
+                                'NFM': 'NFM',
+                                'AM': 'AM',
+                                'DV': 'Digital voice',
+                              }),
                         onValue: (v) => onChanged(() => channel.mode = v),
                       ),
                     ),
@@ -7087,9 +7169,12 @@ class _ChannelEditor extends StatelessWidget {
                 if ((capabilities?.powers ?? const []).isNotEmpty) ...[
                   const SizedBox(height: 12),
                   _ChoiceField(
+                    key: narrowLow ? const ValueKey('gm32-power-low') : null,
                     label: 'Transmit power',
                     value: channel.power,
-                    choices: choices(capabilities!.powers, const {}),
+                    choices: narrowLow
+                        ? const {'Low': 'Low'}
+                        : choices(capabilities!.powers, const {}),
                     onValue: (v) => onChanged(() => channel.power = v),
                   ),
                 ],
@@ -7147,7 +7232,7 @@ class _ChannelEditor extends StatelessWidget {
                 TextButton(onPressed: onClose, child: const Text('Cancel')),
                 const Spacer(),
                 FilledButton.icon(
-                  onPressed: onSave,
+                  onPressed: saveBlocked ? null : onSave,
                   icon: const Icon(Icons.check, size: 18),
                   label: const Text('Save channel'),
                 ),
@@ -7307,12 +7392,14 @@ class _NumberField extends StatefulWidget {
     required this.value,
     required this.onValue,
     required this.decimals,
+    this.readOnly = false,
   });
   final String label;
   final String? documentation;
   final double value;
   final ValueChanged<double> onValue;
   final int decimals;
+  final bool readOnly;
 
   @override
   State<_NumberField> createState() => _NumberFieldState();
@@ -7364,11 +7451,14 @@ class _NumberFieldState extends State<_NumberField> {
   Widget build(BuildContext context) => TextFormField(
     controller: _controller,
     focusNode: _focusNode,
+    readOnly: widget.readOnly,
     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-    onChanged: (text) {
-      final parsed = double.tryParse(text);
-      if (parsed != null) widget.onValue(parsed);
-    },
+    onChanged: widget.readOnly
+        ? null
+        : (text) {
+            final parsed = double.tryParse(text);
+            if (parsed != null) widget.onValue(parsed);
+          },
     decoration: InputDecoration(
       labelText: widget.label,
       suffixIcon: widget.documentation == null
@@ -7380,6 +7470,7 @@ class _NumberFieldState extends State<_NumberField> {
 
 class _ChoiceField extends StatelessWidget {
   const _ChoiceField({
+    super.key,
     required this.label,
     this.documentation,
     required this.value,
