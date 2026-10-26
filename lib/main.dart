@@ -10,6 +10,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'models/channel_image_baseline.dart';
 import 'models/radio_channel.dart';
 import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
@@ -19,6 +20,7 @@ import 'services/radio_selection_store.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/window_state_store.dart';
+import 'widgets/channel_library_image_bar.dart';
 import 'widgets/radio_model_picker.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
@@ -346,6 +348,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   bool _columnLayoutTouched = false;
   List<RadioChannel> _channelClipboard = [];
   final Set<int> _clearedLocations = {};
+  ChannelImageBaseline? _channelImageBaseline;
   final List<_LibraryState> _undoStack = [];
   final List<_LibraryState> _redoStack = [];
 
@@ -355,6 +358,28 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   List<RadioChannel> get _activeChannels =>
       _channels.where((channel) => !channel.cleared).toList();
+
+  ChannelImageMatch get _channelImageMatch => channelImageMatch(
+    imagePath: _radioImage,
+    zone: _selectedZone,
+    channels: _channels,
+    cleared: _clearedLocations,
+    baseline: _channelImageBaseline,
+  );
+
+  void _rememberChannelImageBaseline({required bool fromRadio}) {
+    final image = _radioImage;
+    if (image == null) {
+      _channelImageBaseline = null;
+      return;
+    }
+    _channelImageBaseline = ChannelImageBaseline(
+      imagePath: image,
+      zone: _selectedZone,
+      signature: channelListSignature(_channels, _clearedLocations),
+      loadedFromRadio: fromRadio,
+    );
+  }
 
   bool get _settingsHaveInvalidValues {
     bool invalid(RadioSettingNode node) {
@@ -551,6 +576,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _libraryOpen = true;
       _dirty = false;
       _page = 0;
+      _rememberChannelImageBaseline(fromRadio: false);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _channelTableKey.currentState?.revealSelectedChannel();
@@ -993,6 +1019,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _settingsLoadedModel = null;
         _settingsLoadedImage = null;
         _settingsError = null;
+        _rememberChannelImageBaseline(fromRadio: false);
       });
       unawaited(_saveRadioSelection());
     });
@@ -1707,6 +1734,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           _settingsLoadedFromRadio = false;
           _settingsLoadedModel = null;
           _settingsLoadedImage = null;
+          _rememberChannelImageBaseline(fromRadio: true);
         });
       },
     );
@@ -1775,6 +1803,33 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     } finally {
       if (mounted) setState(() => _busy = false);
     }
+  }
+
+  Future<void> _discardChannelLibraryChanges() async {
+    final image = _radioImage;
+    if (_busy ||
+        image == null ||
+        _channelImageMatch != ChannelImageMatch.differs) {
+      return;
+    }
+    final zone = _channelImageBaseline?.zone;
+    await _task('Restoring channels from the stored radio image…', () async {
+      final imported = await _bridge.readImage(image, zone: zone);
+      if (!mounted || _radioImage != image) return;
+      _recordHistory();
+      setState(() {
+        _channels = [...imported.channels]
+          ..sort((left, right) => left.location.compareTo(right.location));
+        _selected = _channels.isEmpty ? -1 : 0;
+        _clearedLocations.clear();
+        _capabilities = imported.capabilities;
+        _radioZones = imported.zones;
+        _selectedZone = imported.zone;
+        _libraryOpen = true;
+        _dirty = false;
+        _rememberChannelImageBaseline(fromRadio: false);
+      });
+    });
   }
 
   Future<void> _uploadRadio() async {
@@ -1865,6 +1920,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           if (index >= 0) _channels[index].name = name;
         }
         _dirty = false;
+        _rememberChannelImageBaseline(fromRadio: false);
       });
     });
     if (changes.isNotEmpty && mounted) {
@@ -2538,6 +2594,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final invalid = _activeChannels
         .where((channel) => _channelIssues(channel).isNotEmpty)
         .length;
+    final imageMatch = _channelImageMatch;
     final storedImageReady =
         _model != null &&
         _radioImage != null &&
@@ -2776,6 +2833,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ],
               ),
             ),
+          ),
+          const SizedBox(height: 12),
+          ChannelLibraryImageBar(
+            match: imageMatch,
+            canDiscard: imageMatch == ChannelImageMatch.differs && !_busy,
+            canWrite:
+                imageMatch == ChannelImageMatch.differs &&
+                !_busy &&
+                invalid == 0,
+            showConnect: _port == null,
+            onDiscard: () => unawaited(_discardChannelLibraryChanges()),
+            onWrite: () => unawaited(_uploadRadio()),
+            onConnect: _openRadioConnection,
           ),
         ],
       ),
