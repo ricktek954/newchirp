@@ -134,4 +134,38 @@ void main() {
 
     expect(selectedModel, 'Yaesu_FTM-150R');
   });
+
+  testWidgets('radio model picker handles the full catalog-sized result set', (
+    tester,
+  ) async {
+    final models = List<String>.generate(
+      565,
+      (index) => 'Vendor${index}_RT-${index.toString().padLeft(3, '0')}',
+    );
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: RadioModelPicker(
+            models: models,
+            selectedModel: models.first,
+            onSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    final field = find.byKey(const ValueKey('radio-model-typeahead-field'));
+    await tester.tap(field);
+    for (final query in ['R', 'RT', 'RT-1', 'RT-12']) {
+      await tester.enterText(field, query);
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('radio-model-typeahead-options')),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }

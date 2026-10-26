@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _matchingModels
+title: _matchesForQuery
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T09:29:53Z"
-concept_id: widgets/radio_model_picker/matchingModels
+timestamp: "2026-10-26T06:23:38Z"
+concept_id: widgets/radio_model_picker/matchesForQuery
 language: dart
 ---
 
-# _matchingModels
+# _matchesForQuery
 
 ## Signature
 
 ```dart
-List_matchingModels_matchingModels
+_RadioModelMatches_matchesForQuery(String query)
 ```
 
 ## Source
-Lines 119–119 in `widgets/radio_model_picker.dart`
+Lines 135–135 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _matches
+title: _searchHelperFor
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T09:29:53Z"
-concept_id: widgets/radio_model_picker/matches
+timestamp: "2026-10-26T06:23:38Z"
+concept_id: widgets/radio_model_picker/searchHelperFor
 language: dart
 ---
 
-# _matches
+# _searchHelperFor
 
 ## Signature
 
 ```dart
-bool_matches(String model, String query)
+String_searchHelperFor_searchHelperFor
 ```
 
 ## Source
-Lines 104–104 in `widgets/radio_model_picker.dart`
+Lines 169–169 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T09:29:53Z"
+timestamp: "2026-10-26T06:23:38Z"
 concept_id: widgets/radio_model_picker
 language: dart
 ---
@@ -21,19 +21,20 @@ language: dart
 
 | Type | Target |
 |------|--------|
+| related | [_RadioModelCandidate](/widgets/radio_model_picker/RadioModelCandidate.md) |
+| related | [_RadioModelMatches](/widgets/radio_model_picker/RadioModelMatches.md) |
 | related | [RadioModelPicker](/widgets/radio_model_picker/RadioModelPicker.md) |
 | related | [_RadioModelPickerState](/widgets/radio_model_picker/RadioModelPickerState.md) |
 | related | [displayRadioModelName](/widgets/radio_model_picker/displayRadioModelName.md) |
-| related | [compact](/widgets/radio_model_picker/compact.md) |
+| related | [_RadioModelCandidate](/widgets/radio_model_picker/RadioModelCandidate.md) |
 | related | [createState](/widgets/radio_model_picker/createState.md) |
 | related | [initState](/widgets/radio_model_picker/initState.md) |
 | related | [didUpdateWidget](/widgets/radio_model_picker/didUpdateWidget.md) |
 | related | [dispose](/widgets/radio_model_picker/dispose.md) |
+| related | [_buildCandidates](/widgets/radio_model_picker/buildCandidates.md) |
 | related | [_setControllerText](/widgets/radio_model_picker/setControllerText.md) |
 | related | [_handleFocusChange](/widgets/radio_model_picker/handleFocusChange.md) |
 | related | [_handleSelected](/widgets/radio_model_picker/handleSelected.md) |
-| related | [_matches](/widgets/radio_model_picker/matches.md) |
-| related | [compact](/widgets/radio_model_picker/compact.md) |
-| related | [_matchingModels](/widgets/radio_model_picker/matchingModels.md) |
-| related | [_matchingModelCount](/widgets/radio_model_picker/matchingModelCount.md) |
+| related | [_matchesForQuery](/widgets/radio_model_picker/matchesForQuery.md) |
+| related | [_searchHelperFor](/widgets/radio_model_picker/searchHelperFor.md) |
 | related | [build](/widgets/radio_model_picker/build.md) |

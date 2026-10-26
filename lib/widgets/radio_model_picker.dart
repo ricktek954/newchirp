@@ -2,8 +2,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const int _maxVisibleRadioModels = 100;
+const double _optionHeight = 48;
 
 String displayRadioModelName(String model) => model.replaceAll('_', ' ');
+
+class _RadioModelCandidate {
+  _RadioModelCandidate(this.model)
+    : foldedLabel = model.replaceAll('_', ' ').toLowerCase(),
+      compactLabel = model
+          .replaceAll('_', ' ')
+          .toLowerCase()
+          .replaceAll(RegExp(r'[\s_-]+'), '');
+
+  final String model;
+  final String foldedLabel;
+  final String compactLabel;
+}
+
+class _RadioModelMatches {
+  const _RadioModelMatches(this.count, this.visible);
+
+  final int count;
+  final List<String> visible;
+}
 
 class RadioModelPicker extends StatefulWidget {
   const RadioModelPicker({
@@ -26,13 +47,17 @@ class RadioModelPicker extends StatefulWidget {
 class _RadioModelPickerState extends State<RadioModelPicker> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
-  String _query = '';
+  late final ValueNotifier<String> _query;
+  List<_RadioModelCandidate> _candidates = const [];
+  String? _cachedQuery;
+  _RadioModelMatches? _cachedMatches;
 
   @override
   void initState() {
     super.initState();
-    _query = _selectedLabel;
-    _controller = TextEditingController(text: _query);
+    _query = ValueNotifier(_selectedLabel);
+    _candidates = _buildCandidates();
+    _controller = TextEditingController(text: _query.value);
     _focusNode = FocusNode(debugLabel: 'Radio model type-ahead')
       ..addListener(_handleFocusChange);
   }
@@ -40,11 +65,15 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
   @override
   void didUpdateWidget(RadioModelPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.selectedModel != widget.selectedModel ||
-        !listEquals(oldWidget.models, widget.models)) {
+    if (!listEquals(oldWidget.models, widget.models)) {
+      _candidates = _buildCandidates();
+      _cachedQuery = null;
+      _cachedMatches = null;
+    }
+    if (oldWidget.selectedModel != widget.selectedModel) {
       final nextQuery = _selectedLabel;
-      if (!_focusNode.hasFocus || _query != nextQuery) {
-        _query = nextQuery;
+      if (!_focusNode.hasFocus || _query.value != nextQuery) {
+        _query.value = nextQuery;
         _setControllerText(nextQuery);
       }
     }
@@ -55,6 +84,7 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     _focusNode
       ..removeListener(_handleFocusChange)
       ..dispose();
+    _query.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -63,6 +93,9 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     final selectedModel = widget.selectedModel;
     return selectedModel == null ? '' : displayRadioModelName(selectedModel);
   }
+
+  List<_RadioModelCandidate> _buildCandidates() =>
+      widget.models.map(_RadioModelCandidate.new).toList(growable: false);
 
   void _setControllerText(String value) {
     _controller.value = TextEditingValue(
@@ -83,50 +116,59 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
       if (!mounted ||
           _focusNode.hasFocus ||
           _controller.text == _selectedLabel) {
+        if (mounted) setState(() {});
         return;
       }
-      setState(() {
-        _query = _selectedLabel;
-        _setControllerText(_query);
-      });
+      _query.value = _selectedLabel;
+      _setControllerText(_selectedLabel);
+      setState(() {});
     });
   }
 
   void _handleSelected(String model) {
     final label = displayRadioModelName(model);
-    setState(() {
-      _query = label;
-      _setControllerText(label);
-    });
+    _query.value = label;
+    _setControllerText(label);
     widget.onSelected(model);
   }
 
-  bool _matches(String model, String query) {
-    final label = displayRadioModelName(model).toLowerCase();
+  _RadioModelMatches _matchesForQuery(String query) {
     final foldedQuery = query.trim().toLowerCase();
-    if (foldedQuery.isEmpty || label.contains(foldedQuery)) return true;
+    if (_cachedQuery == foldedQuery && _cachedMatches != null) {
+      return _cachedMatches!;
+    }
 
     final terms = foldedQuery
         .split(RegExp(r'\s+'))
-        .where((term) => term.isNotEmpty);
-    if (terms.every(label.contains)) return true;
+        .where((term) => term.isNotEmpty)
+        .toList(growable: false);
+    final compactQuery = foldedQuery.replaceAll(RegExp(r'[\s_-]+'), '');
+    var count = 0;
+    final visible = <String>[];
 
-    String compact(String value) => value.replaceAll(RegExp(r'[\s_-]+'), '');
-    final compactQuery = compact(foldedQuery);
-    return compactQuery.isNotEmpty && compact(label).contains(compactQuery);
+    for (final candidate in _candidates) {
+      final matches =
+          foldedQuery.isEmpty ||
+          candidate.foldedLabel.contains(foldedQuery) ||
+          terms.every(candidate.foldedLabel.contains) ||
+          (compactQuery.isNotEmpty &&
+              candidate.compactLabel.contains(compactQuery));
+      if (!matches) continue;
+      count++;
+      if (visible.length < _maxVisibleRadioModels) {
+        visible.add(candidate.model);
+      }
+    }
+
+    final result = _RadioModelMatches(count, List.unmodifiable(visible));
+    _cachedQuery = foldedQuery;
+    _cachedMatches = result;
+    return result;
   }
 
-  List<String> _matchingModels(String query) => widget.models
-      .where((model) => _matches(model, query))
-      .take(_maxVisibleRadioModels)
-      .toList(growable: false);
-
-  int _matchingModelCount(String query) =>
-      widget.models.where((model) => _matches(model, query)).length;
-
-  String? get _searchHelper {
-    if (!_focusNode.hasFocus || _query.trim().isEmpty) return null;
-    final count = _matchingModelCount(_query);
+  String? _searchHelperFor(String query) {
+    if (!_focusNode.hasFocus || query.trim().isEmpty) return null;
+    final count = _matchesForQuery(query).count;
     if (count == 0) return 'No radio models match this search.';
     if (count > _maxVisibleRadioModels) {
       return 'Showing the first $_maxVisibleRadioModels of $count matches. '
@@ -142,38 +184,47 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
       textEditingController: _controller,
       focusNode: _focusNode,
       displayStringForOption: displayRadioModelName,
-      optionsBuilder: (value) => _matchingModels(value.text),
+      optionsBuilder: (value) => _matchesForQuery(value.text).visible,
       onSelected: _handleSelected,
       fieldViewBuilder:
           (context, textEditingController, focusNode, onFieldSubmitted) {
-            return TextField(
-              key: const ValueKey('radio-model-typeahead-field'),
-              controller: textEditingController,
-              focusNode: focusNode,
-              enabled: widget.enabled,
-              selectAllOnFocus: true,
-              autocorrect: false,
-              enableSuggestions: false,
-              textInputAction: TextInputAction.search,
-              onChanged: (value) => setState(() => _query = value),
-              onSubmitted: (_) => onFieldSubmitted(),
-              decoration: InputDecoration(
-                labelText: 'Radio model (${widget.models.length} available)',
-                hintText: 'Start typing a manufacturer or model',
-                helperText: _searchHelper,
-                prefixIcon: const Icon(Icons.settings_input_antenna),
-                suffixIcon: Icon(
-                  Icons.manage_search,
-                  color: widget.enabled
-                      ? colorScheme.onSurfaceVariant
-                      : colorScheme.onSurface.withValues(alpha: 0.38),
-                ),
-              ),
+            return ValueListenableBuilder<String>(
+              valueListenable: _query,
+              builder: (context, query, _) {
+                return TextField(
+                  key: const ValueKey('radio-model-typeahead-field'),
+                  controller: textEditingController,
+                  focusNode: focusNode,
+                  enabled: widget.enabled,
+                  selectAllOnFocus: true,
+                  autocorrect: false,
+                  enableSuggestions: false,
+                  textInputAction: TextInputAction.search,
+                  onChanged: (value) => _query.value = value,
+                  onSubmitted: (_) => onFieldSubmitted(),
+                  decoration: InputDecoration(
+                    labelText:
+                        'Radio model (${widget.models.length} available)',
+                    hintText: 'Start typing a manufacturer or model',
+                    helperText: _searchHelperFor(query),
+                    prefixIcon: const Icon(Icons.settings_input_antenna),
+                    suffixIcon: Icon(
+                      Icons.manage_search,
+                      color: widget.enabled
+                          ? colorScheme.onSurfaceVariant
+                          : colorScheme.onSurface.withValues(alpha: 0.38),
+                    ),
+                  ),
+                );
+              },
             );
           },
       optionsViewBuilder: (context, onSelected, options) {
         final visibleOptions = options.toList(growable: false);
         final highlightedIndex = AutocompleteHighlightedOption.of(context);
+        final menuHeight = (visibleOptions.length * _optionHeight + 8)
+            .clamp(0.0, 360.0)
+            .toDouble();
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -182,12 +233,12 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
             color: colorScheme.surface,
             clipBehavior: Clip.antiAlias,
             borderRadius: BorderRadius.circular(10),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxHeight: 360),
+            child: SizedBox(
+              height: menuHeight,
               child: Scrollbar(
                 child: ListView.builder(
                   padding: const EdgeInsets.symmetric(vertical: 4),
-                  shrinkWrap: true,
+                  itemExtent: _optionHeight,
                   itemCount: visibleOptions.length,
                   itemBuilder: (context, index) {
                     final model = visibleOptions[index];

@@ -2,19 +2,20 @@
 
 ## Classs
 
+- [_RadioModelMatches](RadioModelMatches.md)
 - [_RadioModelPickerState](RadioModelPickerState.md)
 - [RadioModelPicker](RadioModelPicker.md)
 
 ## Functions
 
+- [_buildCandidates](buildCandidates.md)
 - [_handleFocusChange](handleFocusChange.md)
 - [_handleSelected](handleSelected.md)
-- [_matches](matches.md)
-- [_matchingModelCount](matchingModelCount.md)
-- [_matchingModels](matchingModels.md)
+- [_matchesForQuery](matchesForQuery.md)
+- [_RadioModelCandidate](RadioModelCandidate.md)
+- [_searchHelperFor](searchHelperFor.md)
 - [_setControllerText](setControllerText.md)
 - [build](build.md)
-- [compact](compact.md)
 - [createState](createState.md)
 - [didUpdateWidget](didUpdateWidget.md)
 - [displayRadioModelName](displayRadioModelName.md)

@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 286 concepts across 4 domains and 11 modules'
+description: 'Top-level OKF summary: 287 concepts across 4 domains and 11 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-26T06:09:14Z'
+timestamp: '2026-10-26T06:23:38Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 286 concepts | 4 domains | 11 modules
+> OKF v0.2 bundle | 287 concepts | 4 domains | 11 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
 | Function | 223 |
-| Class | 51 |
+| Class | 52 |
 | Module | 11 |
 | Enum | 1 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 286 |
+| dart | 287 |
 
 ## Domain Map
 
@@ -48,9 +48,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/radio_image_store](services/radio_image_store/index.md) (6 concepts)
 - [services/radio_selection_store](services/radio_selection_store/index.md) (6 concepts)
 
-### [widgets](widgets/index.md) — 16 concepts
+### [widgets](widgets/index.md) — 17 concepts
 
-- [widgets/radio_model_picker](widgets/radio_model_picker/index.md) (16 concepts)
+- [widgets/radio_model_picker](widgets/radio_model_picker/index.md) (17 concepts)
 
 ## Key Concepts
 

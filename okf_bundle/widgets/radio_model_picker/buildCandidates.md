@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: compact
+title: _buildCandidates
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T09:29:53Z"
-concept_id: widgets/radio_model_picker/compact
+timestamp: "2026-10-26T06:23:38Z"
+concept_id: widgets/radio_model_picker/buildCandidates
 language: dart
 ---
 
-# compact
+# _buildCandidates
 
 ## Signature
 
 ```dart
-Stringcompact(String value)
+List_buildCandidates_buildCandidates
 ```
 
 ## Source
-Lines 114–114 in `widgets/radio_model_picker.dart`
+Lines 97–97 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 
