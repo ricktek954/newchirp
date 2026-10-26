@@ -2307,16 +2307,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           style: const TextStyle(color: Colors.black54),
                         ),
                         const SizedBox(height: 3),
-                        const Text(
-                          'Rick Lopez · Lead Programmer',
-                          style: TextStyle(
-                            color: Color(0xFF1F7455),
-                            fontWeight: FontWeight.w600,
-                          ),
+                        const _ProgrammerCredit(
+                          roleLine: 'Rick Lopez · Lead Programmer',
+                          email: 'rick@newchirp.net',
                         ),
-                        const SelectableText(
-                          'rick@newchirp.net',
-                          style: TextStyle(color: Colors.black54),
+                        const SizedBox(height: 8),
+                        const _ProgrammerCredit(
+                          roleLine: 'Randolpho Cafe · Contributor',
+                          email: '[redacted-email]',
                         ),
                         const SizedBox(height: 12),
                         Align(
@@ -4184,6 +4182,33 @@ class _Sidebar extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _ProgrammerCredit extends StatelessWidget {
+  const _ProgrammerCredit({required this.roleLine, required this.email});
+
+  final String roleLine;
+  final String email;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          roleLine,
+          style: const TextStyle(
+            color: Color(0xFF1F7455),
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        SelectableText(
+          email,
+          style: const TextStyle(color: Colors.black54),
+        ),
+      ],
     );
   }
 }
