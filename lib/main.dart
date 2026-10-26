@@ -1116,6 +1116,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   List<String> _channelIssues(RadioChannel channel) => channel.validate(
     minimumLocation: _capabilities?.memoryStart,
     maximumLocation: _capabilities?.memoryEnd,
+    radioModel: _model,
   );
 
   void _sortChannelsByLocation() {
@@ -1577,10 +1578,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _showNoEmptyChannelSlot();
       return;
     }
+    final midland = showsMidlandChannelNumbers(_model);
     final channel = RadioChannel(
       location: location,
       name: 'NEW $location',
-      frequency: 146.52,
+      frequency: midland ? 0 : 146.52,
+      duplex: '',
+      offset: midland ? 0 : 0.6,
     );
     _recordHistory();
     setState(() {
@@ -1644,11 +1648,23 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   void _cutChannel(int index) {
     if (index < 0 || index >= _channels.length) return;
     if (_channels[index].cleared) return;
+    final channel = _channels[index];
+    if (isMidlandRepeaterRow(_model, channel.location)) {
+      _recordHistory();
+      setState(() {
+        _channelClipboard = [channel.copy()];
+        _keepMidlandRepeater(channel);
+        _selected = index;
+        _dirty = true;
+      });
+      _noteRepeaterRowKept(channel);
+      return;
+    }
     _recordHistory();
     setState(() {
-      _channelClipboard = [_channels[index].copy()];
-      _channels[index].clear();
-      _clearedLocations.add(_channels[index].location);
+      _channelClipboard = [channel.copy()];
+      channel.clear();
+      _clearedLocations.add(channel.location);
       _selected = index;
       _dirty = true;
     });
@@ -1679,7 +1695,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         icon: const Icon(Icons.warning_amber_rounded, color: Color(0xFFC46A15)),
-        title: Text('Overwrite channel ${channel.location}?'),
+        title: Text(
+          'Overwrite channel ${channelNumberLabel(_model, channel.location)}?',
+        ),
         content: Text(
           channel.name.isEmpty
               ? 'This channel contains data. Pasting will replace it.'
@@ -1701,9 +1719,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   void _deleteChannel() {
-    if (_current == null) return;
-    final location = _current!.location;
-    final wasCleared = _current!.cleared;
+    final channel = _current;
+    if (channel == null) return;
+    if (isMidlandRepeaterRow(_model, channel.location)) {
+      _recordHistory();
+      setState(() {
+        _keepMidlandRepeater(channel);
+        _dirty = true;
+      });
+      _noteRepeaterRowKept(channel);
+      return;
+    }
+    final location = channel.location;
+    final wasCleared = channel.cleared;
     _recordHistory();
     setState(() {
       _channels.removeAt(_selected);
@@ -1722,14 +1750,46 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   void _clearChannel(int index) {
     if (index < 0 || index >= _channels.length) return;
     if (_channels[index].cleared) return;
+    final channel = _channels[index];
+    if (isMidlandRepeaterRow(_model, channel.location)) {
+      _recordHistory();
+      setState(() {
+        _keepMidlandRepeater(channel);
+        _selected = index;
+        _dirty = true;
+      });
+      _noteRepeaterRowKept(channel);
+      return;
+    }
     _recordHistory();
-    final location = _channels[index].location;
+    final location = channel.location;
     setState(() {
-      _channels[index].clear();
+      channel.clear();
       _clearedLocations.add(location);
       _selected = index;
       _dirty = true;
     });
+  }
+
+  void _keepMidlandRepeater(RadioChannel channel) {
+    channel.restorePlainMidlandRepeater();
+    _clearedLocations.remove(channel.location);
+  }
+
+  void _noteRepeaterRowKept(RadioChannel channel) {
+    final label = channelNumberLabel(_model, channel.location);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(
+            '$label stays in the radio. The name is cleared and the '
+            'plain repeater frequency is back.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 3),
+        ),
+      );
   }
 
   Future<void> _downloadRadio() async {
@@ -1898,9 +1958,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (_port == null || _model == null || _radioImage == null) return;
     final issues = _activeChannels
         .expand(
-          (channel) => _channelIssues(
-            channel,
-          ).map((issue) => '${channel.location}: $issue'),
+          (channel) => _channelIssues(channel).map(
+            (issue) =>
+                '${channelNumberLabel(_model, channel.location)}: $issue',
+          ),
         )
         .toList();
     if (issues.isNotEmpty) {
@@ -2561,6 +2622,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (channelIndex < 0 || channelIndex >= _channels.length) return;
     if (_channels[channelIndex].cleared) return;
     final draft = _channels[channelIndex].copy();
+    if (showsMidlandChannelNumbers(_model)) {
+      draft.prepareMxt295Editor();
+    }
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -2591,6 +2655,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               height: MediaQuery.sizeOf(context).height * 0.82,
               child: _ChannelEditor(
                 channel: draft,
+                radioModel: _model,
                 capabilities: _capabilities,
                 onChanged: changed,
                 onSave: save,
@@ -2613,14 +2678,23 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<bool> _confirmDeleteChannel(RadioChannel channel) async {
+    final kept = isMidlandRepeaterRow(_model, channel.location);
+    final label = channelNumberLabel(_model, channel.location);
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (context) => AlertDialog(
-        icon: const Icon(Icons.delete_outline, color: Color(0xFF9B3D34)),
-        title: Text('Delete channel ${channel.location}?'),
+        icon: Icon(
+          kept ? Icons.restart_alt : Icons.delete_outline,
+          color: kept ? null : const Color(0xFF9B3D34),
+        ),
+        title: Text(kept ? 'Reset $label?' : 'Delete channel $label?'),
         content: Text(
-          channel.name.isEmpty
+          kept
+              ? 'Repeater rows 15 through 22 stay in the radio. '
+                    'The name is cleared and the plain GMRS repeater '
+                    'frequency is put back.'
+              : channel.name.isEmpty
               ? 'This channel will be removed from the current configuration.'
               : '“${channel.name}” will be removed from the current configuration.',
         ),
@@ -2630,11 +2704,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             child: const Text('Cancel'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF9B3D34),
-            ),
+            style: kept
+                ? null
+                : FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF9B3D34),
+                  ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Delete channel'),
+            child: Text(kept ? 'Reset repeater' : 'Delete channel'),
           ),
         ],
       ),
@@ -2869,6 +2945,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             key: _channelTableKey,
                             entries: visible,
                             selected: _selected,
+                            radioModel: _model,
                             capabilities: _capabilities,
                             columnOrder: _columnOrder,
                             columnWidths: _columnWidths,
@@ -6411,6 +6488,7 @@ class _ChannelTable extends StatefulWidget {
     super.key,
     required this.entries,
     required this.selected,
+    required this.radioModel,
     required this.capabilities,
     required this.columnOrder,
     required this.columnWidths,
@@ -6430,6 +6508,7 @@ class _ChannelTable extends StatefulWidget {
 
   final List<MapEntry<int, RadioChannel>> entries;
   final int selected;
+  final String? radioModel;
   final RadioCapabilities? capabilities;
   final List<String> columnOrder;
   final Map<String, double> columnWidths;
@@ -6549,9 +6628,11 @@ class _ChannelTableState extends State<_ChannelTable> {
     final columns = <_ChannelColumn>[
       _ChannelColumn(
         '#',
-        52,
-        (channel) => '${channel.location}',
-        help: 'Memory channel number or slot stored in the radio.',
+        showsMidlandChannelNumbers(widget.radioModel) ? 96 : 52,
+        (channel) => channelNumberLabel(widget.radioModel, channel.location),
+        help: showsMidlandChannelNumbers(widget.radioModel)
+            ? 'Midland channel number. Repeater rows are labeled RPTR.'
+            : 'Memory channel number or slot stored in the radio.',
       ),
       _ChannelColumn(
         'NAME',
@@ -6562,7 +6643,9 @@ class _ChannelTableState extends State<_ChannelTable> {
       _ChannelColumn(
         'RX FREQUENCY',
         126,
-        (channel) => channel.frequency.toStringAsFixed(6),
+        (channel) => channel.frequency <= 0
+            ? ''
+            : channel.frequency.toStringAsFixed(6),
         help: 'Receive frequency: the frequency the radio listens on.',
       ),
       _ChannelColumn(
@@ -6671,7 +6754,7 @@ class _ChannelTableState extends State<_ChannelTable> {
       _ChannelColumn(
         'SCAN',
         72,
-        (channel) => channel.skip.isEmpty ? 'Include' : channel.skip,
+        (channel) => scanLabel(channel.skip),
         help: 'Whether the channel is included in scanning.',
       ),
       _ChannelColumn(
@@ -6858,7 +6941,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     final isCleared = entry.value.cleared;
     final canDrag = widget.reorderEnabled && !isCleared;
     final dragLabel = entry.value.name.isEmpty
-        ? 'Channel ${entry.value.location}'
+        ? 'Channel ${channelNumberLabel(widget.radioModel, entry.value.location)}'
         : entry.value.name;
     return DragTarget<int>(
       onWillAcceptWithDetails: (details) =>
@@ -7061,6 +7144,7 @@ class _ChannelTableState extends State<_ChannelTable> {
 class _ChannelEditor extends StatelessWidget {
   const _ChannelEditor({
     required this.channel,
+    required this.radioModel,
     required this.capabilities,
     required this.onChanged,
     required this.onSave,
@@ -7068,6 +7152,7 @@ class _ChannelEditor extends StatelessWidget {
     required this.onClose,
   });
   final RadioChannel channel;
+  final String? radioModel;
   final RadioCapabilities? capabilities;
   final void Function(VoidCallback) onChanged;
   final VoidCallback onSave;
@@ -7079,7 +7164,18 @@ class _ChannelEditor extends StatelessWidget {
     final issues = channel.validate(
       minimumLocation: capabilities?.memoryStart,
       maximumLocation: capabilities?.memoryEnd,
+      radioModel: radioModel,
     );
+    final midland = showsMidlandChannelNumbers(radioModel);
+    final receiveLocked =
+        midland && midlandReceiveChannelIsLocked(channel.location);
+    final duplexLocked =
+        midland &&
+        midlandDuplexIsLocked(
+          channel.location,
+          frequencyMhz: channel.frequency,
+        );
+    final blocking = midlandGmrsIssues(radioModel, channel);
     Map<String, String> choices(
       List<String>? values,
       Map<String, String> fallback,
@@ -7121,6 +7217,7 @@ class _ChannelEditor extends StatelessWidget {
     final usesRxDtcs =
         channel.tone == 'DTCS' ||
         (channel.tone == 'Cross' && channel.crossMode.endsWith('DTCS'));
+    final repeaterRow = isMidlandRepeaterRow(radioModel, channel.location);
     return Card(
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -7142,10 +7239,10 @@ class _ChannelEditor extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: onDelete,
-                  tooltip: 'Delete channel',
-                  icon: const Icon(
-                    Icons.delete_outline,
-                    color: Color(0xFF9B3D34),
+                  tooltip: repeaterRow ? 'Reset repeater' : 'Delete channel',
+                  icon: Icon(
+                    repeaterRow ? Icons.restart_alt : Icons.delete_outline,
+                    color: repeaterRow ? null : const Color(0xFF9B3D34),
                   ),
                 ),
                 IconButton(
@@ -7162,15 +7259,26 @@ class _ChannelEditor extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
-                      child: _NumberField(
-                        label: 'Location',
-                        value: channel.location.toDouble(),
-                        decimals: 0,
-                        onValue: (v) =>
-                            onChanged(() => channel.location = v.toInt()),
-                      ),
+                      child: showsMidlandChannelNumbers(radioModel)
+                          ? _TextField(
+                              label: 'Channel',
+                              value: channelNumberLabel(
+                                radioModel,
+                                channel.location,
+                              ),
+                              readOnly: true,
+                              onValue: (_) {},
+                            )
+                          : _NumberField(
+                              label: 'Location',
+                              value: channel.location.toDouble(),
+                              decimals: 0,
+                              onValue: (v) =>
+                                  onChanged(() => channel.location = v.toInt()),
+                            ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
@@ -7179,37 +7287,69 @@ class _ChannelEditor extends StatelessWidget {
                         label: 'Name',
                         value: channel.name,
                         maxLength: capabilities?.nameLength,
-                        helperText: capabilities?.uppercaseNames == true
-                            ? 'This radio stores channel names in uppercase. '
-                                  'NewChirp converts them when writing.'
-                            : null,
                         onValue: (v) => onChanged(() => channel.name = v),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                _NumberField(
-                  label: 'Receive frequency (MHz)',
-                  value: channel.frequency,
-                  decimals: 6,
-                  onValue: (v) => onChanged(() => channel.frequency = v),
-                ),
+                if (midland)
+                  _ChoiceField(
+                    key: ValueKey(
+                      'rx-${channel.location}-${channel.frequency}',
+                    ),
+                    label: 'Receive channel',
+                    value: midlandReceiveChannelValue(
+                      channel.location,
+                      channel.frequency,
+                    ),
+                    enabled: !receiveLocked,
+                    choices: midlandReceiveChannelChoices(
+                      channel.location,
+                      channel.frequency,
+                    ),
+                    onValue: (v) {
+                      final picked = int.tryParse(v);
+                      if (picked == null) return;
+                      onChanged(() => channel.useGmrsReceiveChannel(picked));
+                    },
+                  )
+                else
+                  _NumberField(
+                    label: 'Receive frequency (MHz)',
+                    value: channel.frequency,
+                    decimals: 6,
+                    onValue: (v) => onChanged(() => channel.frequency = v),
+                  ),
                 const SizedBox(height: 12),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: _ChoiceField(
+                        key: ValueKey(
+                          'dup-${channel.location}-${channel.duplex}-${channel.frequency}',
+                        ),
                         label: 'Duplex',
                         value: channel.duplex,
-                        choices: choices(capabilities?.duplexes, const {
-                          '': 'Simplex',
-                          '+': '+ shift',
-                          '-': '− shift',
-                          'split': 'Split',
-                          'off': 'TX off',
+                        enabled: !duplexLocked,
+                        choices: midland
+                            ? midlandDuplexChoices(
+                                channel.location,
+                                channel.duplex,
+                                frequencyMhz: channel.frequency,
+                              )
+                            : choices(capabilities?.duplexes, const {
+                                '': 'Simplex',
+                                '+': '+ shift',
+                                '-': '− shift',
+                                'split': 'Split',
+                                'off': 'TX off',
+                              }),
+                        onValue: (v) => onChanged(() {
+                          channel.duplex = v;
+                          if (midland) channel.offset = v == '+' ? 5 : 0;
                         }),
-                        onValue: (v) => onChanged(() => channel.duplex = v),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -7220,6 +7360,7 @@ class _ChannelEditor extends StatelessWidget {
                             : 'Offset (MHz)',
                         value: channel.offset,
                         decimals: 6,
+                        readOnly: midland,
                         onValue: (v) => onChanged(() => channel.offset = v),
                       ),
                     ),
@@ -7369,11 +7510,7 @@ class _ChannelEditor extends StatelessWidget {
                 _ChoiceField(
                   label: 'Scan',
                   value: channel.skip,
-                  choices: choices(capabilities?.skips, const {
-                    '': 'Include',
-                    'S': 'Skip',
-                    'P': 'Priority',
-                  }),
+                  choices: scanChoices(capabilities?.skips),
                   onValue: (v) => onChanged(() => channel.skip = v),
                 ),
                 if ((capabilities?.powers ?? const []).isNotEmpty) ...[
@@ -7439,7 +7576,7 @@ class _ChannelEditor extends StatelessWidget {
                 TextButton(onPressed: onClose, child: const Text('Cancel')),
                 const Spacer(),
                 FilledButton.icon(
-                  onPressed: onSave,
+                  onPressed: blocking.isEmpty ? onSave : null,
                   icon: const Icon(Icons.check, size: 18),
                   label: const Text('Save channel'),
                 ),
@@ -7459,16 +7596,16 @@ class _TextField extends StatefulWidget {
     required this.onValue,
     this.maxLines = 1,
     this.maxLength,
-    this.helperText,
     this.documentation,
+    this.readOnly = false,
   });
   final String label;
   final String value;
   final ValueChanged<String> onValue;
   final int maxLines;
   final int? maxLength;
-  final String? helperText;
   final String? documentation;
+  final bool readOnly;
   @override
   State<_TextField> createState() => _TextFieldState();
 }
@@ -7498,12 +7635,12 @@ class _TextFieldState extends State<_TextField> {
   @override
   Widget build(BuildContext context) => TextField(
     controller: controller,
+    readOnly: widget.readOnly,
     maxLines: widget.maxLines,
     maxLength: widget.maxLength,
-    onChanged: widget.onValue,
+    onChanged: widget.readOnly ? null : widget.onValue,
     decoration: InputDecoration(
       labelText: widget.label,
-      helperText: widget.helperText,
       suffixIcon: widget.documentation == null
           ? null
           : _ExtraFieldHelp(documentation: widget.documentation!),
@@ -7599,12 +7736,14 @@ class _NumberField extends StatefulWidget {
     required this.value,
     required this.onValue,
     required this.decimals,
+    this.readOnly = false,
   });
   final String label;
   final String? documentation;
   final double value;
   final ValueChanged<double> onValue;
   final int decimals;
+  final bool readOnly;
 
   @override
   State<_NumberField> createState() => _NumberFieldState();
@@ -7656,11 +7795,14 @@ class _NumberFieldState extends State<_NumberField> {
   Widget build(BuildContext context) => TextFormField(
     controller: _controller,
     focusNode: _focusNode,
+    readOnly: widget.readOnly,
     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-    onChanged: (text) {
-      final parsed = double.tryParse(text);
-      if (parsed != null) widget.onValue(parsed);
-    },
+    onChanged: widget.readOnly
+        ? null
+        : (text) {
+            final parsed = double.tryParse(text);
+            if (parsed != null) widget.onValue(parsed);
+          },
     decoration: InputDecoration(
       labelText: widget.label,
       suffixIcon: widget.documentation == null
@@ -7672,17 +7814,20 @@ class _NumberFieldState extends State<_NumberField> {
 
 class _ChoiceField extends StatelessWidget {
   const _ChoiceField({
+    super.key,
     required this.label,
     this.documentation,
     required this.value,
     required this.choices,
     required this.onValue,
+    this.enabled = true,
   });
   final String label;
   final String? documentation;
   final String value;
   final Map<String, String> choices;
   final ValueChanged<String> onValue;
+  final bool enabled;
   @override
   Widget build(BuildContext context) {
     final safeValue = choices.containsKey(value) ? value : choices.keys.first;
@@ -7703,9 +7848,11 @@ class _ChoiceField extends StatelessWidget {
             ),
           )
           .toList(),
-      onChanged: (v) {
-        if (v != null) onValue(v);
-      },
+      onChanged: enabled
+          ? (v) {
+              if (v != null) onValue(v);
+            }
+          : null,
     );
   }
 }

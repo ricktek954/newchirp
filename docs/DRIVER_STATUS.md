@@ -25,6 +25,7 @@ Last updated: 2026-10-26
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes, CPS-derived | Yes, hardware pending | Yes | Experimental |
+| Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 
 ## Radio details
 
@@ -142,6 +143,28 @@ Last updated: 2026-10-26
   hardware is required before calling the timeout fix hardware-verified
 - Next milestone: TS-2000 owner retest with both a small loadset and the full
   258-channel loadset, followed by a read-back comparison
+
+### Midland MXT295
+
+- Maintained driver: `drivers/newchirp_mxt295.py`
+- Device help: MXPG15 USB-A to USB-C cable (CH340) on the radio base. Bluetooth mic off. 12 volt power.
+- Image identity: `SMP558`
+- Transport: clone serial at 115200 8N1. 107 channel slots of 32 bytes from `0x0000`, then one 32-byte block at `0xE000`. The gap is never written.
+- Evidence: Randy's 2026-10-24 MXPG15 read and write, plus MXT Pro V1.0 (the programming program's Radio & Modes list)
+- Read capture SHA-256: `3c17101b1e7c538daac06ed845480bcab399cd53aeb7ae422a3cc876537b0a77`
+- Write capture SHA-256: `9d09bbd9e5b0a9a0ecdc9aa3dcdb3978dc13efefeda6c466b8cc14e4313b447f`
+- MXT Pro setup SHA-256: `4e3abc15f9339875efa842973b9291797186624754e9bb389e7fb046118419b1`
+- MXT Pro program SHA-256: `569602016f3857da1acfbab8ecfed2a1b86bd26819b0b74314b7e08c2b611a3d`
+- Implemented: channel read and write, Midland channel numbers, and the Radio & Modes settings (VOX, Roger Beep, Call Tone, Backlight, Backlight Color, Repeater, Dual Watch Pro Channel, SQ Level, Key Beep, Mic Gain)
+- GMRS limits: channels 1 through 22 stay on their FCC frequencies. The channel editor picks a receive channel from the 22 GMRS channels. Picking one starts simplex with offset 0. Choosing duplex + sets the offset to 5 MHz. Channels 1 through 7 stay simplex. Channels 8 through 14 stay receive only (duplex off). Channels 23 through 99 pick one of those 22 receive channels.
+- Settings live in the first 10 bytes at `0xE000`. The other 22 bytes in that block are kept as read.
+- Mic Gain is stored with the other settings. The Midland guide says it is only used by the MXT115P.
+- Read/write state: a full image upload is implemented. NewChirp has written this radio several times, and those writes worked. Settings edits stay in the saved image until someone uses Write settings, which sends the whole image.
+- Hardware validation: several NewChirp uploads to this MXT295 succeeded. The byte map was first checked against the captured read.
+- Read warning: the Midland driver is experimental, download and check channels before an upload, and keep a backup of your radio from the Midland program. Steps: 12 volt power, Bluetooth mic off, MXPG15 on the radio base.
+- Write warning: the Midland driver is experimental. Make a backup before using it to change the radio.
+- Next milestone: none for a first write. That write has already succeeded more than once. The app still warns that the driver is experimental.
+- Website catalog: not listed
 
 ## Reusable NewChirp transport work
 
