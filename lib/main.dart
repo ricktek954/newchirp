@@ -23,7 +23,7 @@ import 'widgets/radio_model_picker.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
-const String _newChirpVersion = '1.0.20';
+const String _newChirpVersion = '1.0.21';
 
 String adaptRadioPromptButton(String message, String buttonLabel) {
   final normalized = message
