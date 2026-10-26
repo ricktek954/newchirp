@@ -43,6 +43,7 @@ class NewChirpLoadedModule${suffix}Radio(chirp_common.CloneModeRadio):
       });
 
       final bridge = RadioBridge(sourcePath: source);
+      addTearDown(bridge.close);
       final models = await bridge.loadModule(module.path);
 
       expect(bridge.loadedModulePath, module.path);
@@ -67,6 +68,7 @@ class NewChirpLoadedModule${suffix}Radio(chirp_common.CloneModeRadio):
     });
 
     final bridge = RadioBridge(sourcePath: source);
+    addTearDown(bridge.close);
 
     await expectLater(
       () => bridge.loadModule(module.path),
@@ -107,6 +109,7 @@ class NewChirpOverrideRadio(chirp_common.CloneModeRadio):
     });
 
     final bridge = RadioBridge(sourcePath: source);
+    addTearDown(bridge.close);
     await bridge.loadModule(module.path);
     final instructions = await bridge.instructions('Yaesu_FT-857_897');
 
@@ -124,6 +127,7 @@ class NewChirpOverrideRadio(chirp_common.CloneModeRadio):
     });
 
     final bridge = RadioBridge(sourcePath: source);
+    addTearDown(bridge.close);
 
     await expectLater(
       () => bridge.loadModule(module.path),
@@ -165,6 +169,7 @@ class NewChirpSandboxProbe(chirp_common.CloneModeRadio):
     });
 
     final bridge = RadioBridge(sourcePath: source);
+    addTearDown(bridge.close);
     addTearDown(bridge.unloadModule);
     final models = await bridge.loadModule(module.path);
 

@@ -883,6 +883,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   @override
   void dispose() {
+    _bridge.close();
     _searchController.dispose();
     _settingsScrollController.dispose();
     super.dispose();
