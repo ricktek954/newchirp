@@ -419,6 +419,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   List<RadioChannel> _channelClipboard = [];
   final Set<int> _clearedLocations = {};
   ChannelImageBaseline? _channelImageBaseline;
+  final ChannelLibraryStatsCache _channelStats = ChannelLibraryStatsCache();
   final List<_LibraryState> _undoStack = [];
   final List<_LibraryState> _redoStack = [];
 
@@ -481,15 +482,25 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     ];
   }
 
-  ChannelImageMatch get _channelImageMatch => channelImageMatch(
+  ChannelLibrarySnapshot get _channelLibrarySnapshot => _channelStats.read(
     imagePath: _radioImage,
     zone: _selectedZone,
     channels: _channels,
     cleared: _clearedLocations,
     baseline: _channelImageBaseline,
+    memoryStart: _capabilities?.memoryStart,
+    memoryEnd: _capabilities?.memoryEnd,
+    radioModel: _model,
   );
 
+  ChannelImageMatch get _channelImageMatch => _channelLibrarySnapshot.match;
+
+  void _markChannelLibraryDirty() {
+    _channelStats.markDirty();
+  }
+
   void _rememberChannelImageBaseline({required bool fromRadio}) {
+    _markChannelLibraryDirty();
     final image = _radioImage;
     if (image == null) {
       _channelImageBaseline = null;
@@ -590,6 +601,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _clearedLocations
         ..clear()
         ..addAll(state.clearedLocations);
+      _markChannelLibraryDirty();
     });
   }
 
@@ -640,6 +652,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _radioImage = _imageStore.pathForModel(model);
         storedImage = _radioImage;
       }
+      _markChannelLibraryDirty();
     });
     if (storedImage != null) {
       unawaited(_loadImageCapabilities(storedImage!));
@@ -654,6 +667,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _capabilities = info.capabilities;
         _radioZones = info.zones;
         _selectedZone = info.zone;
+        _markChannelLibraryDirty();
       });
     } catch (_) {
       // Stored images still support transfer; capabilities are an enhancement.
@@ -780,6 +794,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           _radioImage = _imageStore.pathForModel(model);
           storedImage = _radioImage;
         }
+        _markChannelLibraryDirty();
       });
     });
     if (storedImage != null) {
@@ -809,6 +824,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _settingsLoadedModel = null;
       _settingsLoadedImage = null;
       _settingsError = null;
+      _markChannelLibraryDirty();
     });
     if (storedImage != null) {
       unawaited(_loadImageCapabilities(storedImage!));
@@ -1143,6 +1159,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _settingsLoadedModel = null;
         _settingsLoadedImage = null;
         _settingsError = null;
+        _markChannelLibraryDirty();
       });
       await _saveRadioSelection();
     });
@@ -1167,6 +1184,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _settingsLoadedModel = null;
         _settingsLoadedImage = null;
         _settingsError = null;
+        _markChannelLibraryDirty();
       });
       await _saveRadioSelection();
     });
@@ -1267,6 +1285,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _radioZones = [];
         _selectedZone = null;
         _clearedLocations.clear();
+        _markChannelLibraryDirty();
       });
       return;
     }
@@ -1289,6 +1308,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       for (var location = mode.startAt; location <= last; location++) {
         _clearedLocations.remove(location);
       }
+      _markChannelLibraryDirty();
     });
   }
 
@@ -1343,6 +1363,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         );
       _selected = toIndex;
       _dirty = true;
+      _markChannelLibraryDirty();
     });
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -1384,6 +1405,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _sortChannelsByLocation();
       _selected = _channels.indexOf(moved);
       _dirty = true;
+      _markChannelLibraryDirty();
     });
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -1441,6 +1463,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           ? -1
           : _channels.indexOf(selectedChannel);
       _dirty = true;
+      _markChannelLibraryDirty();
     });
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -1490,6 +1513,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           ? -1
           : _channels.indexOf(selectedChannel);
       _dirty = true;
+      _markChannelLibraryDirty();
     });
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -1644,6 +1668,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _capabilities = null;
       _radioZones = [];
       _selectedZone = null;
+      _markChannelLibraryDirty();
     });
   }
 
@@ -1811,7 +1836,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           setState(() {
             _radioSettings = settings;
             _settingsLoadedModel = model;
-            if (storedImage != null) _radioImage = storedImage;
+            if (storedImage != null) {
+              _radioImage = storedImage;
+              _markChannelLibraryDirty();
+            }
             _settingsLoadedImage = _radioImage;
             _settingsLoadedFromRadio = settings.hasSettings;
             _settingsDirty = false;
@@ -2036,6 +2064,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _query = '';
       _selected = _channels.indexOf(channel);
       _dirty = true;
+      _markChannelLibraryDirty();
     });
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -2104,6 +2133,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _sortChannelsByLocation();
       _selected = _channels.indexOf(copy);
       _dirty = true;
+      _markChannelLibraryDirty();
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _channelTableKey.currentState?.revealSelectedChannel();
@@ -2129,6 +2159,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _keepMidlandRepeater(channel);
         _selected = index;
         _dirty = true;
+        _markChannelLibraryDirty();
       });
       _noteRepeaterRowKept(channel);
       return;
@@ -2140,6 +2171,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _clearedLocations.add(channel.location);
       _selected = index;
       _dirty = true;
+      _markChannelLibraryDirty();
     });
   }
 
@@ -2167,6 +2199,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _selected = _channels.indexOf(pasted);
       _dirty = true;
       _clearedLocations.remove(location);
+      _markChannelLibraryDirty();
     });
   }
 
@@ -2207,6 +2240,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       setState(() {
         _keepMidlandRepeater(channel);
         _dirty = true;
+        _markChannelLibraryDirty();
       });
       _noteRepeaterRowKept(channel);
       return;
@@ -2223,6 +2257,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       }
       _selected = _channels.isEmpty ? -1 : index.clamp(0, _channels.length - 1);
       _dirty = true;
+      _markChannelLibraryDirty();
     });
   }
 
@@ -2236,6 +2271,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _keepMidlandRepeater(channel);
         _selected = index;
         _dirty = true;
+        _markChannelLibraryDirty();
       });
       _noteRepeaterRowKept(channel);
       return;
@@ -2266,6 +2302,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _selected = replacement;
       }
       _dirty = true;
+      _markChannelLibraryDirty();
     });
   }
 
@@ -3376,6 +3413,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               _sortChannelsByLocation();
               _selected = _channels.indexOf(saved);
               _dirty = true;
+              _markChannelLibraryDirty();
             });
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted) {
@@ -3466,10 +3504,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Widget _buildLibrary() {
     final visible = _channelTableRows();
-    final invalid = _activeChannels
-        .where((channel) => _channelIssues(channel).isNotEmpty)
-        .length;
-    final imageMatch = _channelImageMatch;
+    final libraryStats = _channelLibrarySnapshot;
+    final invalid = libraryStats.needsAttention;
+    final imageMatch = libraryStats.match;
     final storedImageReady =
         _model != null &&
         _radioImage != null &&
@@ -3482,13 +3519,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             children: [
               _Metric(
                 label: 'Channels',
-                value: '${_activeChannels.length}',
+                value: '${libraryStats.activeCount}',
                 icon: Icons.radio,
               ),
               const SizedBox(width: 12),
               _Metric(
                 label: 'Scan enabled',
-                value: '${_activeChannels.where((c) => c.skip.isEmpty).length}',
+                value: '${libraryStats.scanEnabledCount}',
                 icon: Icons.radar,
               ),
               const SizedBox(width: 12),

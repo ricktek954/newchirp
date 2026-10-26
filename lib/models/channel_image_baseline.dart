@@ -75,3 +75,139 @@ String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.matchesImage => 'Channels match the stored radio image.',
   ChannelImageMatch.differs => 'Unsaved channel changes',
 };
+
+/// Channel counts and the radio-image match for one library refresh.
+class ChannelLibrarySnapshot {
+  const ChannelLibrarySnapshot({
+    required this.match,
+    required this.needsAttention,
+    required this.activeCount,
+    required this.scanEnabledCount,
+  });
+
+  static const empty = ChannelLibrarySnapshot(
+    match: ChannelImageMatch.noImage,
+    needsAttention: 0,
+    activeCount: 0,
+    scanEnabledCount: 0,
+  );
+
+  final ChannelImageMatch match;
+  final int needsAttention;
+  final int activeCount;
+  final int scanEnabledCount;
+}
+
+ChannelLibrarySnapshot channelLibrarySnapshot({
+  required String? imagePath,
+  required int? zone,
+  required List<RadioChannel> channels,
+  required Iterable<int> cleared,
+  required ChannelImageBaseline? baseline,
+  required int? memoryStart,
+  required int? memoryEnd,
+  required String? radioModel,
+}) {
+  var activeCount = 0;
+  var scanEnabledCount = 0;
+  var needsAttention = 0;
+  for (final channel in channels) {
+    if (channel.cleared) continue;
+    activeCount++;
+    if (channel.skip.isEmpty) scanEnabledCount++;
+    if (channel
+        .validate(
+          minimumLocation: memoryStart,
+          maximumLocation: memoryEnd,
+          radioModel: radioModel,
+        )
+        .isNotEmpty) {
+      needsAttention++;
+    }
+  }
+  return ChannelLibrarySnapshot(
+    match: channelImageMatch(
+      imagePath: imagePath,
+      zone: zone,
+      channels: channels,
+      cleared: cleared,
+      baseline: baseline,
+    ),
+    needsAttention: needsAttention,
+    activeCount: activeCount,
+    scanEnabledCount: scanEnabledCount,
+  );
+}
+
+/// Remembers the last library snapshot so search and row selection can skip it.
+///
+/// Call [markDirty] after an in-place channel edit.
+/// [read] also refreshes when the image, zone, baseline, radio, memory
+/// limits, channel list, or cleared-slot count changes.
+class ChannelLibraryStatsCache {
+  var _dirty = true;
+  ChannelLibrarySnapshot _snapshot = ChannelLibrarySnapshot.empty;
+  List<RadioChannel>? _channels;
+  int _channelCount = -1;
+  Iterable<int>? _cleared;
+  int _clearedCount = -1;
+  String? _imagePath;
+  int? _zone;
+  ChannelImageBaseline? _baseline;
+  int? _memoryStart;
+  int? _memoryEnd;
+  String? _radioModel;
+
+  void markDirty() {
+    _dirty = true;
+  }
+
+  ChannelLibrarySnapshot read({
+    required String? imagePath,
+    required int? zone,
+    required List<RadioChannel> channels,
+    required Iterable<int> cleared,
+    required ChannelImageBaseline? baseline,
+    required int? memoryStart,
+    required int? memoryEnd,
+    required String? radioModel,
+  }) {
+    final sameInputs =
+        !_dirty &&
+        identical(channels, _channels) &&
+        channels.length == _channelCount &&
+        identical(cleared, _cleared) &&
+        cleared.length == _clearedCount &&
+        imagePath == _imagePath &&
+        zone == _zone &&
+        identical(baseline, _baseline) &&
+        memoryStart == _memoryStart &&
+        memoryEnd == _memoryEnd &&
+        radioModel == _radioModel;
+    if (sameInputs) return _snapshot;
+
+    final snapshot = channelLibrarySnapshot(
+      imagePath: imagePath,
+      zone: zone,
+      channels: channels,
+      cleared: cleared,
+      baseline: baseline,
+      memoryStart: memoryStart,
+      memoryEnd: memoryEnd,
+      radioModel: radioModel,
+    );
+    _dirty = false;
+    _channels = channels;
+    _channelCount = channels.length;
+    _cleared = cleared;
+    _clearedCount = cleared.length;
+    _imagePath = imagePath;
+    _zone = zone;
+    _baseline = baseline;
+    _memoryStart = memoryStart;
+    _memoryEnd = memoryEnd;
+    _radioModel = radioModel;
+    _snapshot = snapshot;
+    return snapshot;
+  }
+}
