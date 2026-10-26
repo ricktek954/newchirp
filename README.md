@@ -101,11 +101,15 @@ the detected model is selected.
 module for the current NewChirp session and refreshes the radio catalog. Modules
 can replace built-in drivers or add experimental driver classes.
 
-CHIRP modules are executable Python code and are not sandboxed. Loading an
-untrusted or incompatible module can damage the computer, a radio, or both.
-Only load modules from a source you trust. NewChirp does not automatically
-download, remember, or reload modules after the app closes. This feature loads
-desktop CHIRP drivers; it does not flash or install radio firmware.
+CHIRP modules are executable Python code. NewChirp runs a loaded module in a
+sandbox that blocks the home folder, other drives, and the network. The module
+can still use the selected radio and the files for this session. A bad module
+can still damage the radio. Only load a module from a source you trust.
+NewChirp does not automatically download, remember, or reload modules after
+the app closes. On Windows, module loading is refused because NewChirp cannot
+sandbox it there yet. On Linux, bubblewrap (`bwrap`) must be installed or
+loading is refused. This feature loads desktop CHIRP drivers; it does not
+flash or install radio firmware.
 
 ## Verify and build
 

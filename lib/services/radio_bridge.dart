@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:ffi' show Abi;
 import 'dart:io';
@@ -6,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import '../models/radio_channel.dart';
 import '../models/repeater_search.dart';
+import 'module_sandbox.dart';
 
 const _progressPrefix = '__NEWCHIRP_PROGRESS__ ';
 
@@ -258,6 +260,7 @@ class RadioBridge {
   final String? sourcePath;
   final String? newDriversPath;
   String? _loadedModulePath;
+  final ModuleSandbox _moduleSandbox = ModuleSandbox();
   Process? _activeProcess;
   bool _cancelRequested = false;
 
@@ -445,12 +448,14 @@ class RadioBridge {
       return await models();
     } catch (_) {
       _loadedModulePath = previous;
+      if (previous == null) await _moduleSandbox.dispose();
       rethrow;
     }
   }
 
   void unloadModule() {
     _loadedModulePath = null;
+    unawaited(_moduleSandbox.dispose());
   }
 
   Future<RadioInstructions> instructions(String model) async {
@@ -710,28 +715,52 @@ class RadioBridge {
     final newDrivers = _findNewChirpDrivers();
     final python = await _resolvePython();
     final scsiHelper = _findScsiHelper();
+    final arguments = <String>[
+      script,
+      '--source',
+      source,
+      '--vendor',
+      vendor,
+      if (newDrivers != null) ...['--newchirp-driver-dir', newDrivers],
+      if (_loadedModulePath != null) ...['--module', _loadedModulePath!],
+      ...args,
+    ];
     late final Process process;
     try {
-      process = await Process.start(
-        python,
-        [
-          script,
-          '--source',
-          source,
-          '--vendor',
-          vendor,
-          if (newDrivers != null) ...['--newchirp-driver-dir', newDrivers],
-          if (_loadedModulePath != null) ...['--module', _loadedModulePath!],
-          ...args,
-        ],
-        environment: {'NEWCHIRP_SCSI_HELPER': ?scsiHelper},
-        includeParentEnvironment: true,
-      );
+      if (_loadedModulePath != null) {
+        final launch = await _moduleSandbox.prepare(
+          python: python,
+          chirpSource: source,
+          driverDir: newDrivers,
+          wheel: vendor,
+          bridge: script,
+          modulePath: _loadedModulePath!,
+          arguments: arguments,
+        );
+        process = await Process.start(
+          launch.executable,
+          launch.arguments,
+          workingDirectory: launch.workingDirectory,
+          environment: launch.environment,
+          includeParentEnvironment: false,
+        );
+      } else {
+        process = await Process.start(
+          python,
+          arguments,
+          environment: {'NEWCHIRP_SCSI_HELPER': ?scsiHelper},
+          includeParentEnvironment: true,
+        );
+      }
+    } on ModuleSandboxException catch (error) {
+      throw RadioBridgeException(error.message);
     } on ProcessException catch (error) {
-      throw RadioBridgeException(
-        'NewChirp could not start its CHIRP helper. Python 3 was not found '
-        'or could not be launched (${error.message}).',
-      );
+      final detail = _loadedModulePath == null
+          ? 'NewChirp could not start its CHIRP helper. Python 3 was not found '
+                'or could not be launched (${error.message}).'
+          : 'NewChirp could not start the CHIRP module sandbox '
+                '(${error.message}).';
+      throw RadioBridgeException(detail);
     }
     _activeProcess = process;
     if (_cancelRequested) process.kill(ProcessSignal.sigterm);

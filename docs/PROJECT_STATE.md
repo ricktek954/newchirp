@@ -151,9 +151,12 @@ Full verification before the Linux `1.0.17` release:
   selector appear to offer only `88.5`.
 - CHIRP drivers can expose additional subdevice types beyond the zones handled
   for the TK-880.
-- CHIRP modules execute arbitrary Python without sandboxing. Only trusted
-  modules should be loaded, and modules requiring packages not bundled with
-  NewChirp may fail to import.
+- CHIRP modules run in a sandbox that blocks the home folder, other drives,
+  and the network. A module can still use the selected radio and this
+  session's files, and a bad module can still damage the radio. Windows
+  refuses to load a module until a real Windows sandbox exists. Linux needs
+  bubblewrap (`bwrap`). Modules that need packages NewChirp does not bundle
+  may fail to import.
 - The macOS raw SCSI helper for experimental mass-storage radios is currently
   compiled for Apple Silicon only; live CS750 reads on Intel Macs still need a
   universal or x86_64 helper build and hardware validation.
