@@ -511,6 +511,32 @@ void main() {
     expect(find.text('Data from RepeaterBook.com'), findsNothing);
   });
 
+  testWidgets('channel library shows a locked radio image bar', (tester) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    expect(
+      find.text(
+        'No stored radio image. Read the radio before writing channels.',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      tester
+          .widget<TextButton>(find.byKey(const Key('channel-library-discard')))
+          .onPressed,
+      isNull,
+    );
+    expect(find.text('Connect radio to write'), findsOneWidget);
+    expect(find.text('Write settings to radio'), findsNothing);
+  });
+
   testWidgets('opens the GMRS starter only when selected', (tester) async {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1;
