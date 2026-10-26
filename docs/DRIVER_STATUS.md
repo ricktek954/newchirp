@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-10-25
+Last updated: 2026-10-26
 
 ## Status definitions
 
@@ -24,6 +24,7 @@ Last updated: 2026-10-25
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
+| Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes, CPS-derived | Yes, hardware pending | Yes | Experimental |
 
 ## Radio details
 
@@ -100,6 +101,31 @@ Last updated: 2026-10-25
   and password encoding are unknown, and no physical download has completed
 - Next milestone: compare a complete physical image and official CPS export,
   then correct the channel flags and settings byte map
+
+### Baofeng GM-32
+
+- Maintained driver: `drivers/newchirp_gm32.py`
+- Protocol notes: `docs/GM32_PROTOCOL.md`
+- Evidence: official Baofeng BF-UVs Pro CPS v1.4.7 managed metadata and CIL
+- CPS executable SHA-256:
+  `9bd0a5eaa01d2cdda2ffe5b65d6cc7b7e71008f8fef99739794e5f02556ed06a`
+- Transport: UV-32 clone serial at 115200 8N1
+- Modem control: DTR and RTS asserted, matching the CPS; no flow control
+- Implemented: shared UV-32 channel, VFO, DTMF, radio settings, and ten
+  16-byte bank-name records
+- CPS block map: `0x0000-0x803F`, `0x9000-0x903F`, `0xA000-0xA2BF`, and
+  `0xD000-0xD03F`
+- Read/write state: both implemented with exact CPS block ranges
+- Cold-start symptom: an affected reporter stalls near the beginning of a
+  download and then receives no response; the CPS asserts DTR/RTS while
+  upstream UV-32 leaves them deasserted in NewChirp
+- Hardware validation: pending; this profile must not be called
+  hardware-tested until channel names, bank names, settings, and restore all
+  pass a physical read-back
+- Website catalog: listed as experimental in both the Baofeng section and
+  New Experimental Radio Support
+- Next milestone: have the reporter save an unedited image, perform a
+  controlled name/bank/settings upload, and read the image back for comparison
 
 ### Kenwood TS-2000
 
