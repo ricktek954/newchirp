@@ -48,6 +48,7 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
   late final TextEditingController _controller;
   late final FocusNode _focusNode;
   late final ValueNotifier<String> _query;
+  late final ScrollController _optionsScrollController;
   List<_RadioModelCandidate> _candidates = const [];
   String? _cachedQuery;
   _RadioModelMatches? _cachedMatches;
@@ -58,6 +59,7 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     _query = ValueNotifier(_selectedLabel);
     _candidates = _buildCandidates();
     _controller = TextEditingController(text: _query.value);
+    _optionsScrollController = ScrollController();
     _focusNode = FocusNode(debugLabel: 'Radio model type-ahead')
       ..addListener(_handleFocusChange);
   }
@@ -85,6 +87,7 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
       ..removeListener(_handleFocusChange)
       ..dispose();
     _query.dispose();
+    _optionsScrollController.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -236,7 +239,10 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
             child: SizedBox(
               height: menuHeight,
               child: Scrollbar(
+                controller: _optionsScrollController,
                 child: ListView.builder(
+                  key: const ValueKey('radio-model-typeahead-list'),
+                  controller: _optionsScrollController,
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   itemExtent: _optionHeight,
                   itemCount: visibleOptions.length,

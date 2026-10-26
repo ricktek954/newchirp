@@ -166,6 +166,11 @@ void main() {
       find.byKey(const ValueKey('radio-model-typeahead-options')),
       findsOneWidget,
     );
+    await tester.drag(
+      find.byKey(const ValueKey('radio-model-typeahead-list')),
+      const Offset(0, -240),
+    );
+    await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
 }
