@@ -162,19 +162,41 @@ void main() {
         '',
       ];
       for (final url in rejected) {
-        expect(
-          trustedDownloadUrl(url),
-          officialDownloadPageUrl,
-          reason: url,
-        );
+        expect(trustedDownloadUrl(url), officialDownloadPageUrl, reason: url);
       }
       expect(trustedDownloadUrl(null), officialDownloadPageUrl);
+    });
+
+    test('allows the official download page and its # section', () {
+      expect(isAllowedDownloadUrl('https://newchirp.net/#download'), isTrue);
+      expect(isAllowedDownloadUrl(officialDownloadPageUrl), isTrue);
+      expect(
+        isAllowedDownloadUrl(
+          'https://newchirp.net/downloads/NewChirp-1.0.22.dmg',
+        ),
+        isTrue,
+      );
+      expect(
+        isAllowedDownloadUrl('https://newchirp.net/#https://evil.example'),
+        isTrue,
+      );
+    });
+
+    test('blocks other sites, including ones that use a # section', () {
+      expect(isAllowedDownloadUrl('https://evil.example/#download'), isFalse);
+      expect(
+        isAllowedDownloadUrl('https://newchirp.net.evil.com/#download'),
+        isFalse,
+      );
+      expect(isAllowedDownloadUrl('http://newchirp.net/#download'), isFalse);
+      expect(isAllowedDownloadUrl('#download'), isFalse);
     });
 
     test('does not launch a page outside newchirp.net', () async {
       expect(await openExternalUrl('https://evil.example/setup.exe'), isFalse);
       expect(await openExternalUrl('calc.exe'), isFalse);
       expect(await openExternalUrl('http://newchirp.net/#download'), isFalse);
+      expect(await openExternalUrl('https://evil.example/#download'), isFalse);
     });
   });
 }

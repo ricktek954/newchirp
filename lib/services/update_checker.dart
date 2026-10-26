@@ -198,12 +198,14 @@ List<int> _versionParts(String version) {
 const String officialDownloadPageUrl = 'https://newchirp.net/#download';
 
 /// True when [url] is an https link on newchirp.net, with no login or odd port.
+///
+/// A #section is allowed. Dart reports isAbsolute as false for that address,
+/// so this check cannot use isAbsolute. The download page uses #download.
 bool isAllowedDownloadUrl(String url) {
   final trimmed = url.trim();
   if (trimmed.isEmpty || trimmed.contains(RegExp(r'[\s\\]'))) return false;
   final uri = Uri.tryParse(trimmed);
-  if (uri == null || !uri.isAbsolute) return false;
-  if (uri.scheme != 'https') return false;
+  if (uri == null || uri.scheme != 'https') return false;
   if (uri.userInfo.isNotEmpty) return false;
   if (uri.host != 'newchirp.net') return false;
   if (uri.hasPort && uri.port != 443) return false;
@@ -234,17 +236,18 @@ Future<bool> openExternalUrl(String url) async {
   final allowed = trustedDownloadUrl(url);
   if (!isAllowedDownloadUrl(allowed)) return false;
   try {
+    final ProcessResult result;
     if (Platform.isMacOS) {
-      await Process.run('/usr/bin/open', [allowed]);
+      result = await Process.run('/usr/bin/open', [allowed]);
     } else if (Platform.isWindows) {
-      await Process.run(r'C:\Windows\System32\rundll32.exe', [
+      result = await Process.run(r'C:\Windows\System32\rundll32.exe', [
         'url.dll,FileProtocolHandler',
         allowed,
       ]);
     } else {
-      await Process.run('xdg-open', [allowed]);
+      result = await Process.run('xdg-open', [allowed]);
     }
-    return true;
+    return result.exitCode == 0;
   } on ProcessException {
     return false;
   }

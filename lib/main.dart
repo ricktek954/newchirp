@@ -2409,41 +2409,69 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _showUpdateAvailable(UpdateCheckResult result) {
     final downloadUrl = trustedDownloadUrl(result.releaseUrl);
+    var opening = false;
+    var openFailed = false;
     return showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Update available'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'NewChirp ${result.latestVersion} is available. '
-              'You are running ${result.currentVersion}.',
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (dialogContext, setDialogState) => AlertDialog(
+          title: const Text('Update available'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'NewChirp ${result.latestVersion} is available. '
+                'You are running ${result.currentVersion}.',
+              ),
+              const SizedBox(height: 12),
+              const Text('This opens:'),
+              const SizedBox(height: 4),
+              SelectableText(
+                downloadUrl,
+                style: const TextStyle(color: Colors.black54),
+              ),
+              if (openFailed) ...[
+                const SizedBox(height: 12),
+                Text(
+                  'NewChirp could not open that page. Copy the address above '
+                  'and paste it into your web browser.',
+                  style: TextStyle(
+                    color: Theme.of(dialogContext).colorScheme.error,
+                  ),
+                ),
+              ],
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('Later'),
             ),
-            const SizedBox(height: 12),
-            const Text('This opens:'),
-            const SizedBox(height: 4),
-            SelectableText(
-              downloadUrl,
-              style: const TextStyle(color: Colors.black54),
+            FilledButton.icon(
+              onPressed: opening
+                  ? null
+                  : () async {
+                      setDialogState(() {
+                        opening = true;
+                        openFailed = false;
+                      });
+                      final opened = await openExternalUrl(downloadUrl);
+                      if (!dialogContext.mounted) return;
+                      if (opened) {
+                        Navigator.pop(dialogContext);
+                        return;
+                      }
+                      setDialogState(() {
+                        opening = false;
+                        openFailed = true;
+                      });
+                    },
+              icon: const Icon(Icons.download_outlined),
+              label: const Text('Open download page'),
             ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Later'),
-          ),
-          FilledButton.icon(
-            onPressed: () {
-              unawaited(openExternalUrl(downloadUrl));
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.download_outlined),
-            label: const Text('Open download page'),
-          ),
-        ],
       ),
     );
   }
