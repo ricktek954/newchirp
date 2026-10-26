@@ -23,6 +23,7 @@ import 'services/module_sandbox.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/window_state_store.dart';
+import 'widgets/channel_grid_layout.dart';
 import 'widgets/channel_library_image_bar.dart';
 import 'widgets/file_save_warning_dialog.dart';
 import 'widgets/radio_model_picker.dart';
@@ -322,7 +323,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   final _channelTableKey = GlobalKey<_ChannelTableState>();
   final _settingsScrollController = ScrollController();
   List<RadioChannel> _channels = [];
-  int _selected = -1;
+  final _selectedChannel = ChannelSelection(-1);
+  int _selectedIndex = -1;
+  int get _selected => _selectedIndex;
+  set _selected(int value) {
+    _selectedIndex = value;
+    _selectedChannel.choose(value);
+  }
+
   int _page = 0;
   String _query = '';
   String _libraryName = 'NewChirp';
@@ -617,15 +625,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   void _setColumnWidth(String id, double width) {
-    setState(() {
-      _columnLayoutTouched = true;
-      _columnWidths[id] = width;
-    });
+    _columnLayoutTouched = true;
+    _columnWidths[id] = width;
     unawaited(_saveColumnLayout());
   }
 
   @override
   void dispose() {
+    _selectedChannel.dispose();
     _searchController.dispose();
     _settingsScrollController.dispose();
     super.dispose();
@@ -779,17 +786,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               children: [
                 SelectableText(
                   presentation.summary,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    height: 1.35,
-                  ),
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w600, height: 1.35),
                 ),
                 if (presentation.technical != null) ...[
                   const SizedBox(height: 12),
                   Theme(
-                    data: Theme.of(
-                      context,
-                    ).copyWith(dividerColor: Colors.transparent),
+                    data: Theme.of(context)
+                        .copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       childrenPadding: const EdgeInsets.only(top: 4, bottom: 8),
@@ -2230,11 +2234,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               _ => 'Radio settings',
                             },
                             minimalSubtitle: switch (_page) {
-                              2 =>
-                                'Application information and open-source licenses',
+                              2 => 'Application information and open-source licenses',
                               3 => 'Part 95 FRS/GMRS channel plan',
-                              _ =>
-                                'Radio-wide options exposed by the selected driver',
+                              _ => 'Radio-wide options exposed by the selected driver',
                             },
                             showPrint: _page == 3,
                             onPrint: _printFrequencyReference,
@@ -2283,16 +2285,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             children: [
               Text(
                 'What would you like to do?',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: Theme.of(context).textTheme.headlineMedium
+                    ?.copyWith(fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 8),
               Text(
                 'Open an existing CHIRP file or read channels directly from your radio.',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
+                style: Theme.of(context).textTheme.bodyLarge
+                    ?.copyWith(color: Colors.black54),
               ),
               const SizedBox(height: 24),
               LayoutBuilder(
@@ -2309,8 +2309,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         width: cardWidth,
                         icon: Icons.folder_open_outlined,
                         title: 'Load configuration',
-                        description:
-                            'Open a CHIRP CSV or native image file and continue editing.',
+                        description: 'Open a CHIRP CSV or native image file and continue editing.',
                         buttonLabel: 'Open file',
                         onPressed: _openLibraryFile,
                         help:
@@ -2321,8 +2320,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         width: cardWidth,
                         icon: Icons.settings_input_antenna,
                         title: 'Read channels from a radio',
-                        description:
-                            'Connect a programming cable and import the radio’s current channels.',
+                        description: 'Connect a programming cable and import the radio’s current channels.',
                         buttonLabel: 'Connect radio',
                         onPressed: _openRadioConnection,
                         help:
@@ -2334,8 +2332,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         width: cardWidth,
                         icon: Icons.travel_explore,
                         title: 'Find nearby repeaters',
-                        description:
-                            'Search RepeaterBook and add amateur or GMRS channels.',
+                        description: 'Search RepeaterBook and add amateur or GMRS channels.',
                         buttonLabel: 'Find repeaters',
                         onPressed: _findRepeaters,
                         help:
@@ -2595,8 +2592,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 context: context,
                                 applicationName: 'NewChirp',
                                 applicationVersion: _newChirpVersion,
-                                applicationLegalese:
-                                    'CHIRP is licensed under GPL-3.0-or-later. NewChirp is not affiliated with or endorsed by the CHIRP project.',
+                                applicationLegalese: 'CHIRP is licensed under GPL-3.0-or-later. NewChirp is not affiliated with or endorsed by the CHIRP project.',
                               ),
                               icon: const Icon(Icons.description_outlined),
                               label: const Text('View complete licenses'),
@@ -2954,15 +2950,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         : _ChannelTable(
                             key: _channelTableKey,
                             entries: visible,
-                            selected: _selected,
+                            selection: _selectedChannel,
                             radioModel: _model,
                             capabilities: _capabilities,
                             columnOrder: _columnOrder,
                             columnWidths: _columnWidths,
                             onColumnOrderChanged: _setColumnOrder,
                             onColumnWidthChanged: _setColumnWidth,
-                            onSelect: (index) =>
-                                setState(() => _selected = index),
+                            onSelect: (index) => _selected = index,
                             clipboardNotEmpty: _channelClipboard.isNotEmpty,
                             onCopy: _copyChannel,
                             onCut: _cutChannel,
@@ -2972,7 +2967,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             onMove: _moveChannel,
                             reorderEnabled: _query.isEmpty,
                             onOpen: (index) {
-                              setState(() => _selected = index);
+                              _selected = index;
                               _showChannelEditor(index);
                             },
                           ),
@@ -3459,17 +3454,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             children: [
               Text(
                 'GMRS & FRS Frequency Reference',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: green,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(color: green, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 5),
               Text(
                 'United States Part 95 channel plan - color-coded by frequency band and power class.',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: muted),
+                style: Theme.of(context).textTheme.bodyMedium
+                    ?.copyWith(color: muted),
               ),
               const SizedBox(height: 14),
               Wrap(
@@ -3533,10 +3525,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               const SizedBox(height: 20),
               Text(
                 'Repeater Pairs (GMRS Only)',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: green,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(color: green, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 8),
               Card(
@@ -3678,17 +3668,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               children: [
                 Text(
                   'Radio settings',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: Theme.of(context).textTheme.headlineSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Adjust radio-wide options such as squelch, backlight, VOX, '
                   'and other controls exposed by the selected CHIRP driver.',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
+                  style: Theme.of(context).textTheme.bodyLarge
+                      ?.copyWith(color: Colors.black54),
                 ),
                 const SizedBox(height: 20),
                 Card(
@@ -4027,16 +4015,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             children: [
               Text(
                 'Radio connection',
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
+                style: Theme.of(context).textTheme.headlineSmall
+                    ?.copyWith(fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 6),
               Text(
                 'Read channels from the radio first, edit them in the library, then write the verified image back.',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
+                style: Theme.of(context).textTheme.bodyLarge
+                    ?.copyWith(color: Colors.black54),
               ),
               const SizedBox(height: 20),
               if (_chirpModuleName != null) ...[
@@ -6062,8 +6048,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     decoration: InputDecoration(
                                       isDense: true,
                                       labelText: 'Filter loaded results',
-                                      hintText:
-                                          'City, county, callsign, mode, service, or frequency',
+                                      hintText: 'City, county, callsign, mode, service, or frequency',
                                       prefixIcon: const Icon(
                                         Icons.filter_alt_outlined,
                                       ),
@@ -6494,7 +6479,7 @@ class _ChannelTable extends StatefulWidget {
   const _ChannelTable({
     super.key,
     required this.entries,
-    required this.selected,
+    required this.selection,
     required this.radioModel,
     required this.capabilities,
     required this.columnOrder,
@@ -6514,7 +6499,7 @@ class _ChannelTable extends StatefulWidget {
   });
 
   final List<MapEntry<int, RadioChannel>> entries;
-  final int selected;
+  final ChannelSelection selection;
   final String? radioModel;
   final RadioCapabilities? capabilities;
   final List<String> columnOrder;
@@ -6537,17 +6522,26 @@ class _ChannelTable extends StatefulWidget {
 }
 
 class _ChannelTableState extends State<_ChannelTable> {
+  static const _dragHandleWidth = 30.0;
+
   final _horizontalController = ScrollController();
   final _verticalController = ScrollController();
-  final Map<String, double> _workingWidths = {};
+  final _widths = ColumnWidthSlots();
+  final _tableWidthKey = GlobalKey<ChannelTableWidthState>();
   final Map<String, double> _resizeStartX = {};
   final Map<String, double> _resizeStartWidth = {};
+  bool _resizeActive = false;
+  List<_ChannelColumn>? _cachedColumns;
+  (String?, bool, int, int, int)? _columnToken;
+  List<RadioChannel>? _signatureChannels;
+  List<int>? _signatureLengths;
+  int _signatureHash = 0;
 
   void revealSelectedChannel() {
     if (!_verticalController.hasClients) return;
     final position = _verticalController.position;
     final selectedIndex = widget.entries.indexWhere(
-      (entry) => entry.key == widget.selected,
+      (entry) => entry.key == widget.selection.value,
     );
     if (selectedIndex < 0) return;
     final rowsAfter = widget.entries.length - selectedIndex - 1;
@@ -6572,6 +6566,7 @@ class _ChannelTableState extends State<_ChannelTable> {
 
   @override
   void dispose() {
+    _widths.dispose();
     _horizontalController.dispose();
     _verticalController.dispose();
     super.dispose();
@@ -6629,7 +6624,99 @@ class _ChannelTableState extends State<_ChannelTable> {
     });
   }
 
+  int _extrasSignature(List<MapEntry<int, RadioChannel>> entries) {
+    final previousChannels = _signatureChannels;
+    final previousLengths = _signatureLengths;
+    if (previousChannels != null &&
+        previousLengths != null &&
+        previousChannels.length == entries.length) {
+      var same = true;
+      for (var i = 0; i < entries.length; i++) {
+        final channel = entries[i].value;
+        if (!identical(channel, previousChannels[i]) ||
+            channel.extras.length != previousLengths[i]) {
+          same = false;
+          break;
+        }
+      }
+      if (same) return _signatureHash;
+    }
+
+    var hash = entries.length;
+    final channels = List<RadioChannel>.generate(
+      entries.length,
+      (index) => entries[index].value,
+      growable: false,
+    );
+    final lengths = List<int>.filled(entries.length, 0);
+    for (var i = 0; i < channels.length; i++) {
+      final extras = channels[i].extras;
+      lengths[i] = extras.length;
+      hash = Object.hash(hash, identityHashCode(channels[i]), extras.length);
+      for (final field in extras) {
+        hash = Object.hash(hash, field.name, field.label, field.documentation);
+      }
+    }
+    _signatureChannels = channels;
+    _signatureLengths = lengths;
+    _signatureHash = hash;
+    return hash;
+  }
+
   List<_ChannelColumn> _columns() {
+    final widths = Object.hashAll(
+      widget.columnWidths.entries.map(
+        (entry) => Object.hash(entry.key, entry.value),
+      ),
+    );
+    final token = (
+      widget.radioModel,
+      widget.capabilities?.hasTuningStep ?? true,
+      _extrasSignature(widget.entries),
+      Object.hashAll(widget.columnOrder),
+      widths,
+    );
+    final cached = _cachedColumns;
+    if (cached != null && _columnToken == token) return cached;
+    _columnToken = token;
+    final columns = _buildColumns();
+    _cachedColumns = columns;
+    return columns;
+  }
+
+  double _sum(List<_ChannelColumn> columns) {
+    var total = _dragHandleWidth;
+    for (final column in columns) {
+      total += _widths.read(column.id, column.width);
+    }
+    return total;
+  }
+
+  void _rememberWidth(String id, double width) {
+    _widths.write(id, width);
+    final columns = _cachedColumns;
+    if (columns != null) {
+      for (final column in columns) {
+        if (column.id == id) {
+          column.width = width;
+          break;
+        }
+      }
+    }
+    _tableWidthKey.currentState?.resize(_sum(columns ?? const []));
+  }
+
+  void _finishColumnResize(String id) {
+    if (!_resizeStartWidth.containsKey(id)) return;
+    _resizeActive = false;
+    final width = _widths.read(id, _resizeStartWidth[id] ?? 48);
+    _resizeStartX.remove(id);
+    _resizeStartWidth.remove(id);
+    if (!mounted) return;
+    widget.onColumnWidthChanged(id, width);
+  }
+
+  List<_ChannelColumn> _buildColumns() {
     String inactive(bool active, Object value) => active ? '$value' : '—';
     final showStep = widget.capabilities?.hasTuningStep ?? true;
     final columns = <_ChannelColumn>[
@@ -6728,8 +6815,7 @@ class _ChannelTableState extends State<_ChannelTable> {
           channel.duplex.isNotEmpty && channel.duplex != 'off',
           channel.offset.toStringAsFixed(6),
         ),
-        help:
-            'Frequency offset, or the independent transmit frequency for split.',
+        help: 'Frequency offset, or the independent transmit frequency for split.',
       ),
       _ChannelColumn(
         'CROSS MODE',
@@ -6741,8 +6827,7 @@ class _ChannelTableState extends State<_ChannelTable> {
         'MODE',
         68,
         (channel) => channel.mode,
-        help:
-            'Voice modulation: FM, narrowband FM, or AM depending on the radio.',
+        help: 'Voice modulation: FM, narrowband FM, or AM depending on the radio.',
       ),
       if (showStep)
         _ChannelColumn(
@@ -6786,15 +6871,7 @@ class _ChannelTableState extends State<_ChannelTable> {
         _ChannelColumn(
           extra.value.label.toUpperCase(),
           96,
-          (channel) {
-            final matches = channel.extras.where(
-              (field) => field.name == extra.key,
-            );
-            if (matches.isEmpty) return '—';
-            final value = matches.first.value;
-            if (value is bool) return value ? 'On' : 'Off';
-            return value?.toString() ?? '—';
-          },
+          (channel) => channel.extraFieldText(extra.key),
           id: 'extra:${extra.key}',
           help:
               extra.value.documentation ??
@@ -6811,10 +6888,14 @@ class _ChannelTableState extends State<_ChannelTable> {
         widget.columnOrder[index]: index,
     };
     for (final column in columns) {
-      column.width =
-          _workingWidths[column.id] ??
-          widget.columnWidths[column.id] ??
-          column.width;
+      final saved = widget.columnWidths[column.id];
+      if (saved != null) column.width = saved;
+      final slot = _widths.slot(column.id, column.width);
+      if (_resizeActive) {
+        column.width = slot.value;
+      } else if (slot.value != column.width) {
+        slot.value = column.width;
+      }
     }
     columns.sort((left, right) {
       final leftRank = configuredOrder[left.id];
@@ -6855,86 +6936,92 @@ class _ChannelTableState extends State<_ChannelTable> {
       ),
     );
 
+    final width = _widths.slot(column.id, column.width);
+    final handle = MouseRegion(
+      cursor: SystemMouseCursors.resizeColumn,
+      child: GestureDetector(
+        key: ValueKey('resize-${column.id}'),
+        behavior: HitTestBehavior.opaque,
+        onHorizontalDragDown: (details) {
+          _resizeActive = true;
+          _resizeStartX[column.id] = details.globalPosition.dx;
+          _resizeStartWidth[column.id] = width.value;
+        },
+        onHorizontalDragUpdate: (details) {
+          final startX = _resizeStartX[column.id] ?? details.globalPosition.dx;
+          final startWidth = _resizeStartWidth[column.id] ?? width.value;
+          final next = (startWidth + details.globalPosition.dx - startX)
+              .clamp(48.0, 480.0)
+              .toDouble();
+          _rememberWidth(column.id, next);
+        },
+        onHorizontalDragEnd: (_) => _finishColumnResize(column.id),
+        onHorizontalDragCancel: () => _finishColumnResize(column.id),
+        child: const Align(
+          alignment: Alignment.centerRight,
+          child: VerticalDivider(
+            width: 1,
+            thickness: 1,
+            color: Color(0xFFD8DEDA),
+          ),
+        ),
+      ),
+    );
     return DragTarget<String>(
       onWillAcceptWithDetails: (details) => details.data != column.id,
       onAcceptWithDetails: (details) =>
           _moveColumn(details.data, column.id, columns),
-      builder: (context, candidates, rejected) => SizedBox(
-        width: column.width,
-        height: 42,
-        child: Stack(
-          children: [
-            Positioned.fill(
-              right: 8,
-              child: Tooltip(
-                message: column.help == null
-                    ? 'Drag to reorder column'
-                    : '${column.help}\n\nDrag to reorder column',
-                waitDuration: const Duration(milliseconds: 350),
-                child: Draggable<String>(
-                  data: column.id,
-                  axis: Axis.horizontal,
-                  feedback: Material(
-                    elevation: 4,
-                    color: const Color(0xFFE8F3ED),
-                    child: SizedBox(
-                      width: column.width,
-                      height: 42,
-                      child: label(),
+      builder: (context, candidates, rejected) =>
+          ValueListenableBuilder<double>(
+            valueListenable: width,
+            builder: (context, liveWidth, child) => SizedBox(
+              width: liveWidth,
+              height: 42,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    right: 8,
+                    child: Tooltip(
+                      message: column.help == null
+                          ? 'Drag to reorder column'
+                          : '${column.help}\n\nDrag to reorder column',
+                      waitDuration: const Duration(milliseconds: 350),
+                      child: Draggable<String>(
+                        data: column.id,
+                        axis: Axis.horizontal,
+                        feedback: Material(
+                          elevation: 4,
+                          color: const Color(0xFFE8F3ED),
+                          child: SizedBox(
+                            width: liveWidth,
+                            height: 42,
+                            child: label(),
+                          ),
+                        ),
+                        childWhenDragging: Opacity(
+                          opacity: 0.35,
+                          child: label(),
+                        ),
+                        child: label(
+                          color: candidates.isEmpty
+                              ? null
+                              : const Color(0xFFD7EAE1),
+                        ),
+                      ),
                     ),
                   ),
-                  childWhenDragging: Opacity(opacity: 0.35, child: label()),
-                  child: label(
-                    color: candidates.isEmpty ? null : const Color(0xFFD7EAE1),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: 8,
+                    child: child!,
                   ),
-                ),
+                ],
               ),
             ),
-            Positioned(
-              right: 0,
-              top: 0,
-              bottom: 0,
-              width: 8,
-              child: MouseRegion(
-                cursor: SystemMouseCursors.resizeColumn,
-                child: GestureDetector(
-                  key: ValueKey('resize-${column.id}'),
-                  behavior: HitTestBehavior.opaque,
-                  onHorizontalDragDown: (details) {
-                    _resizeStartX[column.id] = details.globalPosition.dx;
-                    _resizeStartWidth[column.id] = column.width;
-                  },
-                  onHorizontalDragUpdate: (details) {
-                    final startX =
-                        _resizeStartX[column.id] ?? details.globalPosition.dx;
-                    final startWidth =
-                        _resizeStartWidth[column.id] ?? column.width;
-                    final width =
-                        (startWidth + details.globalPosition.dx - startX)
-                            .clamp(48.0, 480.0)
-                            .toDouble();
-                    setState(() => _workingWidths[column.id] = width);
-                  },
-                  onHorizontalDragEnd: (_) {
-                    final width = _workingWidths[column.id] ?? column.width;
-                    widget.onColumnWidthChanged(column.id, width);
-                    _resizeStartX.remove(column.id);
-                    _resizeStartWidth.remove(column.id);
-                  },
-                  child: const Align(
-                    alignment: Alignment.centerRight,
-                    child: VerticalDivider(
-                      width: 1,
-                      thickness: 1,
-                      color: Color(0xFFD8DEDA),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+            child: handle,
+          ),
     );
   }
 
@@ -6949,134 +7036,129 @@ class _ChannelTableState extends State<_ChannelTable> {
     final dragLabel = entry.value.name.isEmpty
         ? 'Channel ${channelNumberLabel(widget.radioModel, entry.value.location)}'
         : entry.value.name;
-    return DragTarget<int>(
-      onWillAcceptWithDetails: (details) =>
-          widget.reorderEnabled && details.data != entry.key,
-      onAcceptWithDetails: (details) => widget.onMove(details.data, entry.key),
-      builder: (context, candidates, rejected) {
-        final isDropTarget = candidates.isNotEmpty;
-        return Listener(
-          behavior: HitTestBehavior.opaque,
-          onPointerDown: (_) => widget.onSelect(entry.key),
-          child: GestureDetector(
-            onSecondaryTapDown: (details) =>
-                _showRowMenu(context, entry.key, details.globalPosition),
-            child: Tooltip(
-              message: isCleared
-                  ? 'Empty channel'
-                  : 'Double-click to edit channel',
-              child: InkWell(
-                onDoubleTap: () => widget.onOpen(entry.key),
-                child: Container(
-                  height: 45,
-                  color: isDropTarget
-                      ? const Color(0xFFD7EAE1)
-                      : entry.key == widget.selected
-                      ? const Color(0xFFE8F3ED)
-                      : isCleared
-                      ? const Color(0xFFFAFAFA)
-                      : Colors.white,
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: dragHandleWidth,
-                        child: Draggable<int>(
-                          data: entry.key,
-                          maxSimultaneousDrags: canDrag ? 1 : 0,
-                          onDragStarted: () => widget.onSelect(entry.key),
-                          feedback: Material(
-                            elevation: 6,
-                            color: const Color(0xFF1F7455),
-                            borderRadius: BorderRadius.circular(8),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 14,
-                                vertical: 9,
-                              ),
-                              child: Text(
-                                'Move $dragLabel',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                          childWhenDragging: Opacity(
-                            opacity: 0.3,
-                            child: Icon(
-                              Icons.drag_indicator,
-                              size: 18,
-                              color: Colors.grey.shade500,
-                            ),
-                          ),
-                          child: MouseRegion(
-                            cursor: canDrag
-                                ? SystemMouseCursors.grab
-                                : SystemMouseCursors.basic,
-                            child: Tooltip(
-                              message: canDrag
-                                  ? 'Drag to rearrange channel'
-                                  : 'Clear search to rearrange channels',
-                              child: Icon(
-                                Icons.drag_indicator,
-                                size: 18,
-                                color: canDrag
-                                    ? Colors.black45
-                                    : Colors.black26,
-                              ),
-                            ),
-                          ),
+    return RepaintBoundary(
+      key: ValueKey('channel-row-${entry.key}'),
+      child: DragTarget<int>(
+        onWillAcceptWithDetails: (details) =>
+            widget.reorderEnabled && details.data != entry.key,
+        onAcceptWithDetails: (details) =>
+            widget.onMove(details.data, entry.key),
+        builder: (context, candidates, rejected) {
+          final cells = Row(
+            children: [
+              SizedBox(
+                width: dragHandleWidth,
+                child: Draggable<int>(
+                  data: entry.key,
+                  maxSimultaneousDrags: canDrag ? 1 : 0,
+                  onDragStarted: () => widget.onSelect(entry.key),
+                  feedback: Material(
+                    elevation: 6,
+                    color: const Color(0xFF1F7455),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 9,
+                      ),
+                      child: Text(
+                        'Move $dragLabel',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      for (final column in columns)
-                        SizedBox(
-                          width: column.width,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                isCleared && column.label != '#'
-                                    ? '—'
-                                    : column.value(entry.value),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: column.label == 'NAME'
-                                      ? FontWeight.w600
-                                      : FontWeight.w400,
-                                  color: isCleared
-                                      ? Colors.black38
-                                      : column.label == '#'
-                                      ? Colors.black54
-                                      : null,
-                                  fontFeatures: column.label == 'RX FREQUENCY'
-                                      ? const [FontFeature.tabularFigures()]
-                                      : null,
-                                ),
-                              ),
-                            ),
-                          ),
+                    ),
+                  ),
+                  childWhenDragging: Opacity(
+                    opacity: 0.3,
+                    child: Icon(
+                      Icons.drag_indicator,
+                      size: 18,
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  child: MouseRegion(
+                    cursor: canDrag
+                        ? SystemMouseCursors.grab
+                        : SystemMouseCursors.basic,
+                    child: Tooltip(
+                      message: canDrag
+                          ? 'Drag to rearrange channel'
+                          : 'Clear search to rearrange channels',
+                      child: Icon(
+                        Icons.drag_indicator,
+                        size: 18,
+                        color: canDrag ? Colors.black45 : Colors.black26,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              for (final column in columns)
+                ColumnWidthBox(
+                  width: _widths.slot(column.id, column.width),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        isCleared && column.label != '#'
+                            ? '—'
+                            : column.value(entry.value),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: column.label == 'NAME'
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                          color: isCleared
+                              ? Colors.black38
+                              : column.label == '#'
+                              ? Colors.black54
+                              : null,
+                          fontFeatures: column.label == 'RX FREQUENCY'
+                              ? const [FontFeature.tabularFigures()]
+                              : null,
                         ),
-                    ],
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          );
+          return Listener(
+            behavior: HitTestBehavior.opaque,
+            onPointerDown: (_) => widget.onSelect(entry.key),
+            child: GestureDetector(
+              onSecondaryTapDown: (details) =>
+                  _showRowMenu(context, entry.key, details.globalPosition),
+              child: Tooltip(
+                message: isCleared
+                    ? 'Empty channel'
+                    : 'Double-click to edit channel',
+                child: InkWell(
+                  onDoubleTap: () => widget.onOpen(entry.key),
+                  child: ChannelRowFrame(
+                    selection: widget.selection,
+                    index: entry.key,
+                    dropTarget: candidates.isNotEmpty,
+                    cleared: isCleared,
+                    child: cells,
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    const dragHandleWidth = 30.0;
     final columns = _columns();
-    final tableWidth =
-        dragHandleWidth +
-        columns.fold<double>(0, (sum, column) => sum + column.width);
+    final tableWidth = _sum(columns);
     return LayoutBuilder(
       builder: (context, constraints) => Scrollbar(
         key: const ValueKey('channel-vertical-scrollbar'),
@@ -7095,18 +7177,20 @@ class _ChannelTableState extends State<_ChannelTable> {
           child: SingleChildScrollView(
             controller: _horizontalController,
             scrollDirection: Axis.horizontal,
-            child: SizedBox(
+            child: ChannelTableWidth(
+              key: _tableWidthKey,
               width: tableWidth,
               height: constraints.maxHeight,
+              holdWidth: _resizeActive,
               child: Column(
                 children: [
                   ColoredBox(
                     color: const Color(0xFFF3F6F4),
                     child: Row(
                       children: [
-                        SizedBox(
-                          width: dragHandleWidth,
-                          child: const Tooltip(
+                        const SizedBox(
+                          width: _dragHandleWidth,
+                          child: Tooltip(
                             message: 'Drag rows to rearrange channels',
                             child: Icon(
                               Icons.drag_indicator,
@@ -7131,7 +7215,7 @@ class _ChannelTableState extends State<_ChannelTable> {
                           context,
                           entry,
                           columns,
-                          dragHandleWidth,
+                          _dragHandleWidth,
                         );
                       },
                     ),

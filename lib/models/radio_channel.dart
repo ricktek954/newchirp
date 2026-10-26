@@ -306,8 +306,7 @@ Map<String, String> midlandDuplexChoices(
     allowed = {'off': 'off'};
   } else if (midlandRepeaterRxMhz.containsKey(location)) {
     allowed = {'+': '+'};
-  } else if ((location >= 1 && location <= 7) ||
-      (gmrs != null && gmrs <= 14)) {
+  } else if ((location >= 1 && location <= 7) || (gmrs != null && gmrs <= 14)) {
     allowed = {'': 'Simplex'};
   } else {
     allowed = {'': 'Simplex', '+': '+', 'off': 'off'};
@@ -347,16 +346,13 @@ List<String> midlandGmrsIssues(String? model, RadioChannel channel) {
   final label = channelNumberLabel(model, channel.location);
   final name = label.startsWith('RPTR') ? label : 'Channel $label';
   final fixedHz = midlandFixedRxHz(channel.location);
-  if (fixedHz != null &&
-      (channel.frequency * 1000000).round() != fixedHz) {
+  if (fixedHz != null && (channel.frequency * 1000000).round() != fixedHz) {
     issues.add('$name must stay on ${mhzLabelFromHz(fixedHz)} MHz.');
   }
   final location = channel.location;
   if (location >= 8 && location <= 14) {
     if (channel.duplex != 'off' || !_isZeroMhz(channel.offset)) {
-      issues.add(
-        'Channels 8 through 14 stay receive only. Duplex stays off.',
-      );
+      issues.add('Channels 8 through 14 stay receive only. Duplex stays off.');
     }
     return issues;
   }
@@ -366,7 +362,8 @@ List<String> midlandGmrsIssues(String? model, RadioChannel channel) {
     }
     return issues;
   }
-  if (location >= 1 && location <= 7 &&
+  if (location >= 1 &&
+      location <= 7 &&
       (channel.duplex != '' || !_isZeroMhz(channel.offset))) {
     issues.add('Channels 1 through 14 stay simplex.');
     return issues;
@@ -443,6 +440,41 @@ class RadioChannel {
   String power;
   String comment;
   List<ChannelExtraField> extras;
+
+  Map<String, ChannelExtraField>? _extrasByName;
+  List<ChannelExtraField>? _indexedExtras;
+  int _extrasByNameLength = -1;
+
+  /// The first extra field with [name], or null when this channel has none.
+  ///
+  /// The lookup is remembered until the extras list is replaced or its length
+  /// changes. A later edit of that field's value is still visible, because the
+  /// remembered entry points at the field itself. The first field with a
+  /// repeated name wins.
+  ChannelExtraField? extraByName(String name) {
+    final source = extras;
+    if (_extrasByName == null ||
+        _extrasByNameLength != source.length ||
+        !identical(_indexedExtras, source)) {
+      final indexed = <String, ChannelExtraField>{};
+      for (final field in source) {
+        indexed.putIfAbsent(field.name, () => field);
+      }
+      _extrasByName = indexed;
+      _extrasByNameLength = source.length;
+      _indexedExtras = source;
+    }
+    return _extrasByName![name];
+  }
+
+  /// Grid text for the extra field named [name].
+  String extraFieldText(String name) {
+    final field = extraByName(name);
+    if (field == null) return '—';
+    final value = field.value;
+    if (value is bool) return value ? 'On' : 'Off';
+    return value?.toString() ?? '—';
+  }
 
   double? get transmitFrequency {
     if (duplex == 'off') return null;
