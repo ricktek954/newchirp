@@ -4099,6 +4099,7 @@ class _Sidebar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: const Key('left-menu-rail'),
       width: 216,
       color: const Color(0xFF172C24),
       padding: const EdgeInsets.fromLTRB(14, 22, 14, 16),
@@ -4127,13 +4128,6 @@ class _Sidebar extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           _NavItem(
-            label: 'Channel library',
-            icon: Icons.table_rows_outlined,
-            selected: page == 0,
-            onTap: () => onPage(0),
-          ),
-          const SizedBox(height: 6),
-          _NavItem(
             label: 'Radio connection',
             icon: Icons.settings_input_antenna,
             selected: page == 1,
@@ -4141,10 +4135,10 @@ class _Sidebar extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           _NavItem(
-            label: 'Find repeaters',
-            icon: Icons.travel_explore,
-            selected: false,
-            onTap: onFindRepeaters,
+            label: 'Channel library',
+            icon: Icons.table_rows_outlined,
+            selected: page == 0,
+            onTap: () => onPage(0),
           ),
           const SizedBox(height: 6),
           _NavItem(
@@ -4152,6 +4146,13 @@ class _Sidebar extends StatelessWidget {
             icon: Icons.tune,
             selected: page == 4,
             onTap: () => onPage(4),
+          ),
+          const SizedBox(height: 6),
+          _NavItem(
+            label: 'Find repeaters',
+            icon: Icons.travel_explore,
+            selected: false,
+            onTap: onFindRepeaters,
           ),
           const SizedBox(height: 6),
           _NavItem(

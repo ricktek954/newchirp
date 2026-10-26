@@ -459,6 +459,36 @@ void main() {
     expect(find.text('GMRS 1'), findsNothing);
   });
 
+  testWidgets('left menu follows read, channels, then settings', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+
+    const labels = [
+      'Radio connection',
+      'Channel library',
+      'Radio settings',
+      'Find repeaters',
+      'Frequency reference',
+      'About & licenses',
+    ];
+    final rail = find.byKey(const Key('left-menu-rail'));
+    var previousTop = -1.0;
+    for (final label in labels) {
+      final item = find.descendant(of: rail, matching: find.text(label));
+      expect(item, findsOneWidget);
+      final top = tester.getTopLeft(item).dy;
+      expect(top, greaterThan(previousTop));
+      previousTop = top;
+    }
+  });
+
   testWidgets('Find repeaters opens from the left navigation', (tester) async {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1;
