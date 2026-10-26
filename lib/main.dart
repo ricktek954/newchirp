@@ -6832,42 +6832,48 @@ class _ChannelTableState extends State<_ChannelTable> {
         columns.fold<double>(0, (sum, column) => sum + column.width);
     return LayoutBuilder(
       builder: (context, constraints) => Scrollbar(
-        controller: _horizontalController,
+        key: const ValueKey('channel-vertical-scrollbar'),
+        controller: _verticalController,
         thumbVisibility: true,
-        scrollbarOrientation: ScrollbarOrientation.bottom,
+        scrollbarOrientation: ScrollbarOrientation.right,
         notificationPredicate: (notification) =>
-            notification.metrics.axis == Axis.horizontal,
-        child: SingleChildScrollView(
+            notification.metrics.axis == Axis.vertical,
+        child: Scrollbar(
+          key: const ValueKey('channel-horizontal-scrollbar'),
           controller: _horizontalController,
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            width: tableWidth,
-            height: constraints.maxHeight,
-            child: Column(
-              children: [
-                ColoredBox(
-                  color: const Color(0xFFF3F6F4),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: dragHandleWidth,
-                        child: const Tooltip(
-                          message: 'Drag rows to rearrange channels',
-                          child: Icon(
-                            Icons.drag_indicator,
-                            size: 18,
-                            color: Colors.black45,
+          thumbVisibility: true,
+          scrollbarOrientation: ScrollbarOrientation.bottom,
+          notificationPredicate: (notification) =>
+              notification.metrics.axis == Axis.horizontal,
+          child: SingleChildScrollView(
+            controller: _horizontalController,
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+              width: tableWidth,
+              height: constraints.maxHeight,
+              child: Column(
+                children: [
+                  ColoredBox(
+                    color: const Color(0xFFF3F6F4),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: dragHandleWidth,
+                          child: const Tooltip(
+                            message: 'Drag rows to rearrange channels',
+                            child: Icon(
+                              Icons.drag_indicator,
+                              size: 18,
+                              color: Colors.black45,
+                            ),
                           ),
                         ),
-                      ),
-                      for (final column in columns)
-                        _headerCell(column, columns),
-                    ],
+                        for (final column in columns)
+                          _headerCell(column, columns),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: Scrollbar(
-                    controller: _verticalController,
+                  Expanded(
                     child: ListView.builder(
                       controller: _verticalController,
                       itemExtent: 45,
@@ -6883,9 +6889,9 @@ class _ChannelTableState extends State<_ChannelTable> {
                       },
                     ),
                   ),
-                ),
-                const SizedBox(height: 10),
-              ],
+                  const SizedBox(height: 10),
+                ],
+              ),
             ),
           ),
         ),

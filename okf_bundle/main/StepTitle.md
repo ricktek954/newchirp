@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T06:09:13Z"
+timestamp: "2026-10-26T07:01:39Z"
 concept_id: main/StepTitle
 language: dart
 ---
@@ -27,7 +27,7 @@ class _StepTitle
 - `build`
 
 ## Source
-Lines 7564–7599 in `main.dart`
+Lines 7570–7605 in `main.dart`
 
 ## Relationships
 

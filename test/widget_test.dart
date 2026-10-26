@@ -703,6 +703,60 @@ void main() {
     expect(gmrs22.dy, lessThan(gmrs1.dy));
   });
 
+  testWidgets('vertical channel scrollbar stays at the visible table edge', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    final verticalScrollbar = find.byKey(
+      const ValueKey('channel-vertical-scrollbar'),
+    );
+    final horizontalScrollbar = find.byKey(
+      const ValueKey('channel-horizontal-scrollbar'),
+    );
+    final horizontalViewport = find.descendant(
+      of: horizontalScrollbar,
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is SingleChildScrollView &&
+            widget.scrollDirection == Axis.horizontal,
+      ),
+    );
+
+    expect(verticalScrollbar, findsOneWidget);
+    expect(
+      find.ancestor(
+        of: verticalScrollbar,
+        matching: find.byWidgetPredicate(
+          (widget) =>
+              widget is SingleChildScrollView &&
+              widget.scrollDirection == Axis.horizontal,
+        ),
+      ),
+      findsNothing,
+    );
+    expect(horizontalViewport, findsOneWidget);
+    expect(
+      tester.getRect(verticalScrollbar).right,
+      closeTo(tester.getRect(horizontalViewport).right, 1),
+    );
+
+    await tester.drag(horizontalViewport, const Offset(-800, 0));
+    await tester.pumpAndSettle();
+
+    expect(
+      tester.getRect(verticalScrollbar).right,
+      closeTo(tester.getRect(horizontalViewport).right, 1),
+    );
+  });
+
   testWidgets('dragging a channel rearranges and renumbers the rows', (
     tester,
   ) async {
