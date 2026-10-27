@@ -4,6 +4,7 @@
 
 - [chirp_csv](chirp_csv/index.md)
 - [column_layout_store](column_layout_store/index.md)
+- [diagnostic_log](diagnostic_log/index.md)
 - [file_save_warning_store](file_save_warning_store/index.md)
 - [module_sandbox](module_sandbox/index.md)
 - [mototrbo_cps2_xml](mototrbo_cps2_xml/index.md)
@@ -18,6 +19,7 @@
 
 - [chirp_csv](chirp_csv.md)
 - [column_layout_store](column_layout_store.md)
+- [diagnostic_log](diagnostic_log.md)
 - [file_save_warning_store](file_save_warning_store.md)
 - [module_sandbox](module_sandbox.md)
 - [mototrbo_cps2_xml](mototrbo_cps2_xml.md)

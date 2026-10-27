@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
@@ -16,6 +17,7 @@ import 'models/radio_channel.dart';
 import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
+import 'services/diagnostic_log.dart';
 import 'services/file_save_warning_store.dart';
 import 'services/radio_image_store.dart';
 import 'services/radio_selection_store.dart';
@@ -27,6 +29,7 @@ import 'services/update_installer.dart';
 import 'services/window_state_store.dart';
 import 'widgets/channel_library_image_bar.dart';
 import 'widgets/file_save_warning_dialog.dart';
+import 'widgets/error_report_dialog.dart';
 import 'widgets/radio_model_picker.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
@@ -74,6 +77,29 @@ String adaptRadioPromptButton(String message, String buttonLabel) {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final diagnosticLog = DiagnosticLog();
+  unawaited(diagnosticLog.initialize());
+  diagnosticLog.record(
+    'app',
+    'NewChirp started',
+    context: {
+      'version': _newChirpVersion,
+      'os': Platform.operatingSystemVersion,
+    },
+  );
+  FlutterError.onError = (details) {
+    diagnosticLog.recordError(
+      'flutter',
+      details.exception,
+      details.stack ?? StackTrace.current,
+      context: {'library': details.library ?? ''},
+    );
+    FlutterError.presentError(details);
+  };
+  ui.PlatformDispatcher.instance.onError = (error, stack) {
+    diagnosticLog.recordError('platform', error, stack);
+    return false;
+  };
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks(const [
       'CHIRP',
@@ -84,7 +110,7 @@ Future<void> main() async {
     );
   });
   if (Platform.isLinux) {
-    runApp(const NewChirpApp());
+    runApp(NewChirpApp(diagnosticLog: diagnosticLog));
     return;
   }
   await windowManager.ensureInitialized();
@@ -107,7 +133,7 @@ Future<void> main() async {
     await windowManager.focus();
     windowStateManager.start();
   });
-  runApp(const NewChirpApp());
+  runApp(NewChirpApp(diagnosticLog: diagnosticLog));
 }
 
 Future<WindowState?> _clampWindowState(WindowState? state) async {
@@ -240,6 +266,7 @@ class NewChirpApp extends StatelessWidget {
     this.updateChecker,
     this.updateInstaller,
     this.exitForUpdate,
+    this.diagnosticLog,
     this.checkForUpdatesOnStartup = true,
   });
 
@@ -249,6 +276,7 @@ class NewChirpApp extends StatelessWidget {
   final UpdateChecker? updateChecker;
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
+  final DiagnosticLog? diagnosticLog;
   final bool checkForUpdatesOnStartup;
 
   @override
@@ -298,6 +326,7 @@ class NewChirpApp extends StatelessWidget {
         updateChecker: updateChecker,
         updateInstaller: updateInstaller,
         exitForUpdate: exitForUpdate,
+        diagnosticLog: diagnosticLog,
         checkForUpdatesOnStartup: checkForUpdatesOnStartup,
       ),
     );
@@ -313,6 +342,7 @@ class NewChirpHome extends StatefulWidget {
     this.updateChecker,
     this.updateInstaller,
     this.exitForUpdate,
+    this.diagnosticLog,
     this.checkForUpdatesOnStartup = true,
   });
 
@@ -322,6 +352,7 @@ class NewChirpHome extends StatefulWidget {
   final UpdateChecker? updateChecker;
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
+  final DiagnosticLog? diagnosticLog;
   final bool checkForUpdatesOnStartup;
 
   @override
@@ -339,6 +370,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   late final _updateChecker = widget.updateChecker ?? UpdateChecker();
   late final _updateInstaller =
       widget.updateInstaller ?? const UpdateInstaller();
+  late final _diagnosticLog = widget.diagnosticLog ?? DiagnosticLog();
   final _imageStore = RadioImageStore();
   Future<void>? _radioSelectionLoad;
   final _searchController = TextEditingController();
@@ -756,6 +788,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   void _selectRadioModel(String model) {
+    _diagnosticLog.record(
+      'radio',
+      'Radio model selected',
+      context: {'model': model, 'port': _port ?? ''},
+    );
     String? storedImage;
     setState(() {
       _model = model;
@@ -855,9 +892,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _showActionError(Object error) {
     final presentation = _actionErrorPresentation(error);
+    _diagnosticLog.recordError(
+      'action-error',
+      error,
+      StackTrace.current,
+      context: {
+        'page': _page,
+        'radio': _model ?? '',
+        'port': _port ?? '',
+        'library': _libraryName,
+      },
+    );
     return showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Couldn’t complete that action'),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 620),
@@ -918,10 +966,42 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Close'),
           ),
+          FilledButton.icon(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              unawaited(
+                _showErrorReport(
+                  summary: presentation.summary,
+                  technical: presentation.technical,
+                ),
+              );
+            },
+            icon: const Icon(Icons.bug_report_outlined),
+            label: const Text('Submit Error Report'),
+          ),
         ],
+      ),
+    );
+  }
+
+  Future<void> _showErrorReport({required String summary, String? technical}) {
+    _diagnosticLog.record(
+      'report',
+      'Error report dialog opened',
+      context: {'radio': _model ?? '', 'page': _page},
+    );
+    return showDialog<void>(
+      context: context,
+      builder: (context) => ErrorReportDialog(
+        diagnosticLog: _diagnosticLog,
+        summary: summary,
+        technical: technical,
+        radio: _model ?? 'No radio selected',
+        version: _newChirpVersion,
+        cable: _port == null ? 'No serial port selected' : 'Serial port $_port',
       ),
     );
   }
@@ -934,6 +1014,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final file = await openFile(acceptedTypeGroups: const [type]);
     if (file == null) return;
     final lowerPath = file.path.toLowerCase();
+    _diagnosticLog.record(
+      'file',
+      'Open file selected',
+      context: {'name': file.name},
+    );
     final isXml = lowerPath.endsWith('.xml');
     if (!lowerPath.endsWith('.csv') && !isXml) {
       await _importChirpImage(file);
@@ -2364,6 +2449,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _uploadRadio() async {
     if (_port == null || _model == null || _radioImage == null) return;
+    _diagnosticLog.record(
+      'radio',
+      'Radio write started',
+      context: {
+        'model': _model!,
+        'port': _port!,
+        'channels': _activeChannels.length,
+      },
+    );
     final issues = _activeChannels
         .expand(
           (channel) => _channelIssues(channel).map(
@@ -2453,6 +2547,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _dirty = false;
         _rememberChannelImageBaseline(fromRadio: false);
       });
+      _diagnosticLog.record(
+        'radio',
+        'Radio write completed',
+        context: {
+          'model': _model!,
+          'port': _port!,
+          'adjustments': changes.length,
+        },
+      );
     });
     if (changes.isNotEmpty && mounted) {
       await showDialog<void>(

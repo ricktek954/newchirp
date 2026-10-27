@@ -36,6 +36,7 @@ implementation history, architecture, known risks, and prioritized next work.
 - macOS, Windows, and Linux Flutter projects
 - In-app update download, installation, and restart against the newchirp.net
   release manifest
+- One-click error reports with a recent, privacy-conscious diagnostic log
 
 ## Updates
 
@@ -83,6 +84,17 @@ When cutting a desktop release, bump both app version locations so they agree:
 Then upload the versioned artifact for that platform. The website discovers it
 without a code or release-constant change, and other platforms can keep serving
 their previous versions.
+
+## Diagnostic reports
+
+When an action fails, the desktop app records a bounded session log and offers
+**Submit Error Report**. The report includes the application and OS versions,
+selected radio and serial port, recent operational events, and stack traces.
+It does not intentionally record channel contents or loaded files. Submission
+requires the user's email address and goes through the NewChirp bug-report API.
+
+The current session log is also stored under the platform log directory, such
+as `~/Library/Logs/NewChirp/diagnostics.jsonl` on macOS.
 
 ## Run
 
