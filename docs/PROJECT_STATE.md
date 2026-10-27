@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-10-26
+Last updated: 2026-10-27
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -9,10 +9,10 @@ release requirements.
 ## Resume here
 
 - The Linux `1.0.22` release is live as DEB.
-- The macOS `1.0.22` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes CHIRP source pinning/checksum verification, the loaded
-  module sandbox, the experimental Midland MXT295 driver, GM-32 GMRS editor
-  rules, Channel Library Discard/Write controls, and the file-save warning.
+- The macOS `1.0.23` release is built, signed, notarized, stapled, uploaded,
+  and live. It adds one-click in-app download, installation, and restart for
+  future releases, plus MOTOTRBO CPS2 XML import and the latest channel-slot
+  editing and RT97L wake-up changes.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -31,9 +31,9 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Release source commit: `75fc74d` (`Bump version to 1.0.22`)
+- Release source commit: `71e1bfb` (`Bump version to 1.0.23`)
 - Open pull requests: none
-- Checked-out source version: `1.0.22+22`
+- Checked-out source version: `1.0.23+23`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -47,20 +47,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.22 |
+| macOS | 1.0.23 |
 | Windows | 1.0.20 |
 | Linux | 1.0.22 |
 | Legacy shared manifest version | 1.0.20 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.22.dmg`
-- Version/build: `1.0.22` / `22`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.23.dmg`
+- Version/build: `1.0.23` / `23`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `9c156b57259851bd7916f87f50e5f43f6cea5d56846c5811f162bf9a5ec4814c`
-- Size: `81,773,395` bytes
-- Notarization submission: `09ac111e-a711-4a6c-9f4e-f44d518ed1e5`
+  `3b617c3e6b27c2839d59838b892e55dd3a2d7f7aa74f6df8cb25d47c2c1d2afc`
+- Size: `81,896,914` bytes
+- Notarization submission: `392b259d-1155-4dad-bd8d-3850ecf7b228`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -93,6 +93,10 @@ Linux artifacts:
   install flow. macOS verifies the replacement app before relaunching;
   Windows requires a valid Authenticode signature; Linux hands the downloaded
   package to the native package manager.
+- Added read-only MOTOTRBO CPS2 Zone XML import for conventional analog and
+  DMR channels.
+- Added persistent empty-slot visibility, placement-aware channel insertion,
+  and direct drag or menu movement between radio memory slots.
 - Bundled Linux and Windows Python runtime hashes are pinned in build scripts.
 - CHIRP `.py` and `.mod` driver modules can be loaded from
   **Help > Load CHIRP driver module…** for the current session.
@@ -126,21 +130,21 @@ Linux artifacts:
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
 
-## macOS 1.0.22 verification status
+## macOS 1.0.23 verification status
 
-Full verification before the macOS `1.0.22` release:
+Full verification before the macOS `1.0.23` release:
 
 - `flutter analyze`: clean
-- `flutter test`: all 119 tests passed
-- Python test discovery: all 68 tests passed, 2 skipped
+- `flutter test`: all 132 tests passed
+- Python test discovery: all 70 tests passed, 2 skipped
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
-- App version/build in the mounted DMG: `1.0.22` / `22`
+- App version/build in the mounted DMG: `1.0.23` / `23`
 - Main executable architectures: `arm64` and `x86_64`
 - Bundled Python: `3.13.15` for both architectures
 - Bundled CHIRP commit:
   `21e42e4518c167548af90ed7f9edf75e516c491a`
 - Server SHA-256 matched the final stapled DMG
-- `/api/releases/latest` reports macOS `1.0.22`
+- `/api/releases/latest` reports macOS `1.0.23`
 
 ## Linux 1.0.17 verification status
 
@@ -184,9 +188,8 @@ Full verification before the Linux `1.0.17` release:
   can be enabled.
 - Forum like counts and website-side ranking are a separate website project,
   not part of this Flutter repository.
-- The direct updater has automated coverage but has not yet been exercised from
-  one installed public release to the next. Test that path when publishing the
-  release immediately after 1.0.22.
+- The direct updater is first shipped in 1.0.23 and has automated coverage.
+  Exercise the full in-app update path from 1.0.23 when publishing 1.0.24.
 - The roadmap in `docs/SOFTWARE_ROADMAP.md` is older than this handoff and
   contains stale release-status items. Update it when doing broader roadmap
   maintenance.
