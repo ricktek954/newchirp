@@ -11,6 +11,7 @@
 - [radio_image_store](radio_image_store/index.md)
 - [radio_selection_store](radio_selection_store/index.md)
 - [update_checker](update_checker/index.md)
+- [update_installer](update_installer/index.md)
 - [window_state_store](window_state_store/index.md)
 
 ## Modules
@@ -24,4 +25,5 @@
 - [radio_image_store](radio_image_store.md)
 - [radio_selection_store](radio_selection_store.md)
 - [update_checker](update_checker.md)
+- [update_installer](update_installer.md)
 - [window_state_store](window_state_store.md)

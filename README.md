@@ -34,14 +34,18 @@ implementation history, architecture, known risks, and prioritized next work.
 - Hover definitions for channel-column abbreviations and a searchable Help glossary
 - Restore stock channels from the bundled CHIRP GMRS config
 - macOS, Windows, and Linux Flutter projects
-- In-app "Check for updates" against the newchirp.net download manifest
+- In-app update download, installation, and restart against the newchirp.net
+  release manifest
 
 ## Updates
 
 NewChirp checks newchirp.net for a newer release on startup and from
 **Help > Check for updates**. Startup checks stay quiet when the app is current
-or offline; an available update opens the download page. The app reads a JSON
-manifest (default `https://newchirp.net/api/releases/latest`) shaped like:
+or offline. When an installer is available, one **Download and install**
+button downloads it with progress, starts the native installer, closes
+NewChirp, and reopens the updated app. The user does not need to visit the
+download page. The app reads a JSON manifest (default
+`https://newchirp.net/api/releases/latest`) shaped like:
 
 ```json
 {
@@ -49,8 +53,8 @@ manifest (default `https://newchirp.net/api/releases/latest`) shaped like:
   "release_url": "https://newchirp.net/#download",
   "downloads": { "windows": "...", "macos": "...", "linux": "..." },
   "platforms": {
-    "windows": { "version": "1.0.8", "download_url": "..." },
-    "macos": { "version": "1.0.7", "download_url": "..." },
+    "windows": { "version": "1.0.8", "download_url": "...", "sha256": "..." },
+    "macos": { "version": "1.0.7", "download_url": "...", "sha256": "..." },
     "linux": { "version": "1.0.7", "download_url": "..." }
   }
 }
@@ -59,10 +63,17 @@ manifest (default `https://newchirp.net/api/releases/latest`) shaped like:
 The app reads its own entry from `platforms`, so each platform can publish on
 its own schedule. The top-level `version` is the newest release shared by all
 desktop platforms and remains for older clients that only understand that
-field. `release_url` (or `url`) is optional and is opened when the user accepts
-the update. The installed version is `_newChirpVersion` in `lib/main.dart` and
-should be kept in sync with `version` in `pubspec.yaml`. The check logic lives
-in `lib/services/update_checker.dart`.
+field. Direct artifacts and redirects are restricted to HTTPS on
+`newchirp.net`. An optional per-platform `sha256` is verified before
+installation. macOS also verifies the downloaded app's code signature,
+notarization, and bundle identifier. Windows requires a valid Authenticode
+signature. `release_url` (or `url`) remains the fallback when no installable
+artifact is available.
+
+The installed version is `_newChirpVersion` in `lib/main.dart` and should be
+kept in sync with `version` in `pubspec.yaml`. Update checking lives in
+`lib/services/update_checker.dart`; downloading and platform installation live
+in `lib/services/update_installer.dart`.
 
 When cutting a desktop release, bump both app version locations so they agree:
 

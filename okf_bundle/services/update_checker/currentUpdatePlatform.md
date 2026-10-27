@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _currentPlatformKey
+title: currentUpdatePlatform
 resource: services/update_checker.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:03:09Z"
-concept_id: services/update_checker/currentPlatformKey
+timestamp: "2026-10-27T13:42:17Z"
+concept_id: services/update_checker/currentUpdatePlatform
 language: dart
 ---
 
-# _currentPlatformKey
+# currentUpdatePlatform
 
 ## Signature
 
 ```dart
-String_currentPlatformKey()
+StringcurrentUpdatePlatform()
 ```
 
 ## Source
-Lines 162–162 in `services/update_checker.dart`
+Lines 217–217 in `services/update_checker.dart`
 
 ## Relationships
 

@@ -81,6 +81,69 @@ void main() {
       expect(macos.updateAvailable, isFalse);
     });
 
+    test('returns the direct platform installer and checksum', () async {
+      final uri = await serve(
+        jsonEncode({
+          'version': '1.0.7',
+          'platforms': {
+            'macos': {
+              'version': '1.0.8',
+              'download_url':
+                  'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
+              'sha256':
+                  'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+            },
+          },
+        }),
+      );
+
+      final result = await UpdateChecker(
+        manifestUri: uri,
+        platform: 'macos',
+      ).check('1.0.7');
+
+      expect(
+        result.downloadUrl,
+        'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
+      );
+      expect(
+        result.sha256,
+        'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+      );
+    });
+
+    test('uses legacy downloads when platform metadata has no URL', () async {
+      final uri = await serve(
+        jsonEncode({
+          'version': '1.0.8',
+          'downloads': {
+            'macos': 'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
+          },
+          'checksums': {
+            'macos':
+                'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+          },
+          'platforms': {
+            'macos': {'version': '1.0.8'},
+          },
+        }),
+      );
+
+      final result = await UpdateChecker(
+        manifestUri: uri,
+        platform: 'macos',
+      ).check('1.0.7');
+
+      expect(
+        result.downloadUrl,
+        'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
+      );
+      expect(
+        result.sha256,
+        'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
+      );
+    });
+
     test('accepts platform versions without a legacy version', () async {
       final uri = await serve(
         jsonEncode({
@@ -162,11 +225,7 @@ void main() {
         '',
       ];
       for (final url in rejected) {
-        expect(
-          trustedDownloadUrl(url),
-          officialDownloadPageUrl,
-          reason: url,
-        );
+        expect(trustedDownloadUrl(url), officialDownloadPageUrl, reason: url);
       }
       expect(trustedDownloadUrl(null), officialDownloadPageUrl);
     });
@@ -175,6 +234,63 @@ void main() {
       expect(await openExternalUrl('https://evil.example/setup.exe'), isFalse);
       expect(await openExternalUrl('calc.exe'), isFalse);
       expect(await openExternalUrl('http://newchirp.net/#download'), isFalse);
+    });
+  });
+
+  group('trustedUpdateArtifactUrl', () {
+    test('accepts only the native package extension for the platform', () {
+      expect(
+        trustedUpdateArtifactUrl(
+          'https://newchirp.net/downloads/NewChirp-1.0.23.dmg',
+          platform: 'macos',
+        ),
+        'https://newchirp.net/downloads/NewChirp-1.0.23.dmg',
+      );
+      expect(
+        trustedUpdateArtifactUrl(
+          'https://newchirp.net/downloads/NewChirp-Installer-1.0.23.exe',
+          platform: 'windows',
+        ),
+        'https://newchirp.net/downloads/NewChirp-Installer-1.0.23.exe',
+      );
+      expect(
+        trustedUpdateArtifactUrl(
+          'https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.deb',
+          platform: 'linux',
+        ),
+        'https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.deb',
+      );
+      expect(
+        trustedUpdateArtifactUrl(
+          'https://newchirp.net/downloads/NewChirp-1.0.23.dmg',
+          platform: 'windows',
+        ),
+        isNull,
+      );
+    });
+
+    test('rejects untrusted hosts and insecure downloads', () {
+      expect(
+        trustedUpdateArtifactUrl(
+          'https://evil.example/NewChirp-1.0.23.dmg',
+          platform: 'macos',
+        ),
+        isNull,
+      );
+      expect(
+        trustedUpdateArtifactUrl(
+          'http://newchirp.net/downloads/NewChirp-1.0.23.dmg',
+          platform: 'macos',
+        ),
+        isNull,
+      );
+      expect(
+        trustedUpdateArtifactUrl(
+          'https://newchirp.net/downloads/NewChirp-1.0.23.dmg#fragment',
+          platform: 'macos',
+        ),
+        isNull,
+      );
     });
   });
 }

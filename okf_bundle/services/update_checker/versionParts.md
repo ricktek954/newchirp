@@ -10,7 +10,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:03:09Z"
+timestamp: "2026-10-27T13:42:17Z"
 concept_id: services/update_checker/versionParts
 language: dart
 ---
@@ -24,7 +24,7 @@ List_versionParts_versionParts
 ```
 
 ## Source
-Lines 186–186 in `services/update_checker.dart`
+Lines 241–241 in `services/update_checker.dart`
 
 ## Relationships
 

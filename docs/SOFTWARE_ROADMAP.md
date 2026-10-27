@@ -428,8 +428,8 @@ flutter run -d macos
 - [ ] Add optional recent files and restore-last-workflow behavior without
   automatically loading a starter library.
 - [ ] Add localization infrastructure.
-- [ ] Consider an update mechanism after signing and release hosting are
-  established.
+- [x] Add an in-app updater that downloads the platform artifact, installs it,
+  and reopens NewChirp without requiring a visit to the download page.
 - [ ] Add telemetry only if explicitly chosen, privacy-reviewed, disclosed, and
   opt-in. There is currently no telemetry.
 

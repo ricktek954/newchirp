@@ -11,10 +11,13 @@ import 'package:newchirp/services/column_layout_store.dart';
 import 'package:newchirp/services/file_save_warning_store.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 import 'package:newchirp/services/update_checker.dart';
+import 'package:newchirp/services/update_installer.dart';
 
 var _layoutTest = 0;
 NewChirpApp testApp({
   UpdateChecker? updateChecker,
+  UpdateInstaller? updateInstaller,
+  Future<void> Function()? exitForUpdate,
   bool checkForUpdatesOnStartup = false,
 }) {
   final id = _layoutTest++;
@@ -27,6 +30,8 @@ NewChirpApp testApp({
           '${Directory.systemTemp.path}/newchirp-widget-save-warning-$pid-$id.json',
     ),
     updateChecker: updateChecker,
+    updateInstaller: updateInstaller,
+    exitForUpdate: exitForUpdate,
     checkForUpdatesOnStartup: checkForUpdatesOnStartup,
   );
 }
@@ -44,6 +49,36 @@ class _FailingUpdateChecker extends UpdateChecker {
   @override
   Future<UpdateCheckResult> check(String currentVersion) async {
     throw UpdateCheckException('Update service unavailable.');
+  }
+}
+
+class _FakeUpdateInstaller extends UpdateInstaller {
+  int downloadCount = 0;
+  int installCount = 0;
+  UpdateCheckResult? downloaded;
+  DownloadedUpdate? installed;
+
+  @override
+  Future<DownloadedUpdate> download(
+    UpdateCheckResult update, {
+    UpdateProgressCallback? onProgress,
+  }) async {
+    downloadCount++;
+    downloaded = update;
+    onProgress?.call(
+      const UpdateDownloadProgress(receivedBytes: 50, totalBytes: 100),
+    );
+    return DownloadedUpdate(
+      path: '/tmp/NewChirp-${update.latestVersion}.dmg',
+      platform: 'macos',
+      version: update.latestVersion,
+    );
+  }
+
+  @override
+  Future<void> install(DownloadedUpdate update) async {
+    installCount++;
+    installed = update;
   }
 }
 
@@ -339,7 +374,48 @@ void main() {
 
     expect(find.text('Update available'), findsOneWidget);
     expect(find.textContaining('NewChirp 1.0.4 is available'), findsOneWidget);
-    expect(find.text('https://newchirp.net/#download'), findsOneWidget);
+    expect(find.text('Open download page'), findsOneWidget);
+    expect(find.text('Download and install'), findsNothing);
+  });
+
+  testWidgets('startup update downloads, installs, and requests restart', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final installer = _FakeUpdateInstaller();
+    var exited = false;
+
+    await tester.pumpWidget(
+      testApp(
+        updateChecker: _FakeUpdateChecker(
+          const UpdateCheckResult(
+            currentVersion: '1.0.3',
+            latestVersion: '1.0.4',
+            releaseUrl: 'https://newchirp.net/#download',
+            downloadUrl: 'https://newchirp.net/downloads/NewChirp-1.0.4.dmg',
+          ),
+        ),
+        updateInstaller: installer,
+        exitForUpdate: () async => exited = true,
+        checkForUpdatesOnStartup: true,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('NewChirp 1.0.4 is ready'), findsOneWidget);
+    expect(find.text('Download and install'), findsOneWidget);
+
+    await tester.tap(find.text('Download and install'));
+    await tester.pumpAndSettle();
+
+    expect(installer.downloadCount, 1);
+    expect(installer.installCount, 1);
+    expect(installer.installed?.version, '1.0.4');
+    expect(exited, isTrue);
+    expect(find.text('Update available'), findsNothing);
   });
 
   testWidgets('startup update check hides an off-site download link', (
@@ -357,6 +433,7 @@ void main() {
             currentVersion: '1.0.3',
             latestVersion: '1.0.4',
             releaseUrl: 'https://evil.example/setup.exe',
+            downloadUrl: 'https://evil.example/NewChirp-1.0.4.dmg',
           ),
         ),
         checkForUpdatesOnStartup: true,
@@ -364,8 +441,9 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('https://newchirp.net/#download'), findsOneWidget);
+    expect(find.text('Open download page'), findsOneWidget);
     expect(find.text('https://evil.example/setup.exe'), findsNothing);
+    expect(find.text('Download and install'), findsNothing);
   });
 
   testWidgets('startup update failures stay quiet', (tester) async {

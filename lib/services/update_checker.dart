@@ -9,6 +9,8 @@ class UpdateCheckResult {
     required this.currentVersion,
     required this.latestVersion,
     required this.releaseUrl,
+    this.downloadUrl,
+    this.sha256,
   });
 
   final String currentVersion;
@@ -16,6 +18,12 @@ class UpdateCheckResult {
 
   /// Page a user should open to download the newest release, when published.
   final String? releaseUrl;
+
+  /// Direct installer artifact published for this platform, when available.
+  final String? downloadUrl;
+
+  /// Optional SHA-256 of the installer artifact.
+  final String? sha256;
 
   bool get updateAvailable =>
       compareVersions(latestVersion, currentVersion) > 0;
@@ -84,11 +92,19 @@ class UpdateChecker {
           .timeout(_timeout);
       final manifest = _parseManifest(body);
       final platformRelease =
-          manifest.platforms[_platform ?? _currentPlatformKey()];
+          manifest.platforms[_platform ?? currentUpdatePlatform()];
+      final latestVersion = platformRelease?.version ?? manifest.version;
+      if (latestVersion == null || latestVersion.isEmpty) {
+        throw const FormatException(
+          'Manifest is missing a version for this platform.',
+        );
+      }
       return UpdateCheckResult(
         currentVersion: currentVersion,
-        latestVersion: platformRelease?.version ?? manifest.version,
+        latestVersion: latestVersion,
         releaseUrl: manifest.releaseUrl,
+        downloadUrl: platformRelease?.downloadUrl,
+        sha256: platformRelease?.sha256,
       );
     } on UpdateCheckException {
       rethrow;
@@ -122,17 +138,50 @@ class UpdateChecker {
         if (platformVersion is! String || platformVersion.trim().isEmpty) {
           continue;
         }
-        platforms[key] = _PlatformRelease(version: platformVersion.trim());
+        final downloadUrl = value['download_url'] ?? value['downloadUrl'];
+        final sha256 = value['sha256'];
+        platforms[key] = _PlatformRelease(
+          version: platformVersion.trim(),
+          downloadUrl: downloadUrl is String && downloadUrl.trim().isNotEmpty
+              ? downloadUrl.trim()
+              : null,
+          sha256: sha256 is String && sha256.trim().isNotEmpty
+              ? sha256.trim()
+              : null,
+        );
       }
     }
-    if ((version is! String || version.trim().isEmpty) && platforms.isEmpty) {
+    final fallbackVersion = version is String && version.trim().isNotEmpty
+        ? version.trim()
+        : null;
+    final downloadValues = decoded['downloads'];
+    final checksumValues = decoded['sha256'] ?? decoded['checksums'];
+    if (fallbackVersion != null && downloadValues is Map) {
+      for (final entry in downloadValues.entries) {
+        final key = entry.key;
+        final value = entry.value;
+        if (key is! String || value is! String || value.trim().isEmpty) {
+          continue;
+        }
+        final existing = platforms[key];
+        final checksum = checksumValues is Map ? checksumValues[key] : null;
+        platforms[key] = _PlatformRelease(
+          version: existing?.version ?? fallbackVersion,
+          downloadUrl: existing?.downloadUrl ?? value.trim(),
+          sha256:
+              existing?.sha256 ??
+              (checksum is String && checksum.trim().isNotEmpty
+                  ? checksum.trim()
+                  : null),
+        );
+      }
+    }
+    if (fallbackVersion == null && platforms.isEmpty) {
       throw const FormatException('Manifest is missing a version.');
     }
     final urlValue = decoded['release_url'] ?? decoded['url'];
     return _ReleaseManifest(
-      version: version is String && version.trim().isNotEmpty
-          ? version.trim()
-          : platforms.values.first.version,
+      version: fallbackVersion ?? platforms.values.first.version,
       platforms: platforms,
       releaseUrl: urlValue is String && urlValue.trim().isNotEmpty
           ? urlValue.trim()
@@ -148,18 +197,24 @@ class _ReleaseManifest {
     this.releaseUrl,
   });
 
-  final String version;
+  final String? version;
   final Map<String, _PlatformRelease> platforms;
   final String? releaseUrl;
 }
 
 class _PlatformRelease {
-  const _PlatformRelease({required this.version});
+  const _PlatformRelease({
+    required this.version,
+    this.downloadUrl,
+    this.sha256,
+  });
 
   final String version;
+  final String? downloadUrl;
+  final String? sha256;
 }
 
-String _currentPlatformKey() {
+String currentUpdatePlatform() {
   if (Platform.isWindows) return 'windows';
   if (Platform.isMacOS) return 'macos';
   if (Platform.isLinux) return 'linux';
@@ -221,6 +276,34 @@ String trustedDownloadUrl(String? raw) {
     path: uri.path,
     query: uri.hasQuery ? uri.query : null,
     fragment: uri.hasFragment ? uri.fragment : null,
+  ).toString();
+}
+
+/// File extension used by an installable desktop update for [platform].
+String? updateArtifactExtension([String? platform]) {
+  return switch (platform ?? currentUpdatePlatform()) {
+    'macos' => '.dmg',
+    'windows' => '.exe',
+    'linux' => '.deb',
+    _ => null,
+  };
+}
+
+/// Validated installer URL for [platform], or null when it is not installable.
+///
+/// The artifact must be HTTPS on newchirp.net and have the native desktop
+/// package extension. Fragments are discarded before the URL is used.
+String? trustedUpdateArtifactUrl(String? raw, {String? platform}) {
+  final extension = updateArtifactExtension(platform);
+  if (extension == null || !isAllowedDownloadUrl(raw ?? '')) return null;
+  final trusted = trustedDownloadUrl(raw);
+  final uri = Uri.parse(trusted);
+  if (!uri.path.toLowerCase().endsWith(extension)) return null;
+  return Uri(
+    scheme: 'https',
+    host: 'newchirp.net',
+    path: uri.path,
+    query: uri.hasQuery ? uri.query : null,
   ).toString();
 }
 

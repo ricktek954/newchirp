@@ -10,7 +10,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:03:09Z"
+timestamp: "2026-10-27T13:42:17Z"
 concept_id: services/update_checker
 language: dart
 ---
@@ -26,11 +26,13 @@ language: dart
 | related | [UpdateChecker](/services/update_checker/UpdateChecker.md) |
 | related | [_ReleaseManifest](/services/update_checker/ReleaseManifest.md) |
 | related | [_PlatformRelease](/services/update_checker/PlatformRelease.md) |
-| related | [_currentPlatformKey](/services/update_checker/currentPlatformKey.md) |
+| related | [currentUpdatePlatform](/services/update_checker/currentUpdatePlatform.md) |
 | related | [compareVersions](/services/update_checker/compareVersions.md) |
 | related | [_versionParts](/services/update_checker/versionParts.md) |
 | related | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) |
 | related | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) |
+| related | [updateArtifactExtension](/services/update_checker/updateArtifactExtension.md) |
+| related | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) |
 | related | [openExternalUrl](/services/update_checker/openExternalUrl.md) |
 | related | [toString](/services/update_checker/toString.md) |
 | related | [UpdateCheckException](/services/update_checker/UpdateCheckException.md) |

@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:03:09Z"
+timestamp: "2026-10-27T13:42:17Z"
 concept_id: services/update_checker/check
 language: dart
 ---
@@ -35,7 +35,7 @@ usable launcher is available. The launched address is rebuilt as https on
 newchirp.net, so a tricky string cannot change the site.
 
 ## Source
-Lines 70–70 in `services/update_checker.dart`
+Lines 78–78 in `services/update_checker.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T10:52:32Z"
+timestamp: "2026-10-27T13:45:49Z"
 concept_id: main/systemPrinters
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_systemPrinters_systemPrinters
 ```
 
 ## Source
-Lines 3615–3615 in `main.dart`
+Lines 3824–3824 in `main.dart`
 
 ## Relationships
 

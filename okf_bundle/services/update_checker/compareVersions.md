@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-24T18:03:09Z"
+timestamp: "2026-10-27T13:42:17Z"
 concept_id: services/update_checker/compareVersions
 language: dart
 ---
@@ -34,7 +34,7 @@ Returns a positive number when [a] is newer than [b], a negative number
 when [a] is older, and zero when they are equivalent.
 
 ## Source
-Lines 174–174 in `services/update_checker.dart`
+Lines 229–229 in `services/update_checker.dart`
 
 ## Relationships
 

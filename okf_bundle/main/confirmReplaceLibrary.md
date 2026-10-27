@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T10:52:32Z"
+timestamp: "2026-10-27T13:45:49Z"
 concept_id: main/confirmReplaceLibrary
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_confirmReplaceLibrary_confirmReplaceLibrary
 ```
 
 ## Source
-Lines 1488–1488 in `main.dart`
+Lines 1510–1510 in `main.dart`
 
 ## Relationships
 

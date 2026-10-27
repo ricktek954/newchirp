@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T10:52:32Z"
+timestamp: "2026-10-27T13:45:49Z"
 concept_id: main/copyChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ void_copyChannel(int index)
 ```
 
 ## Source
-Lines 2001–2001 in `main.dart`
+Lines 2023–2023 in `main.dart`
 
 ## Relationships
 

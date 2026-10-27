@@ -62,9 +62,15 @@ Name: "{group}\Uninstall {#MyAppName}"; Filename: "{uninstallexe}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\newchirp.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\newchirp.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\newchirp.exe"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall runasoriginaluser; Check: ShouldLaunchAfterUpdate
 
 [Code]
+function ShouldLaunchAfterUpdate: Boolean;
+begin
+  Result := (not WizardSilent) or
+    (ExpandConstant('{param:LAUNCHAPP|0}') = '1');
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 var
   ResultCode: Integer;

@@ -23,6 +23,7 @@ import 'services/module_sandbox.dart';
 import 'services/mototrbo_cps2_xml.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
+import 'services/update_installer.dart';
 import 'services/window_state_store.dart';
 import 'widgets/channel_library_image_bar.dart';
 import 'widgets/file_save_warning_dialog.dart';
@@ -31,6 +32,15 @@ import 'widgets/radio_model_picker.dart';
 const _menuChannel = MethodChannel('newchirp/menu');
 
 const String _newChirpVersion = '1.0.22';
+
+String _formatBytes(int bytes) {
+  if (bytes < 1024) return '$bytes B';
+  final kilobytes = bytes / 1024;
+  if (kilobytes < 1024) return '${kilobytes.toStringAsFixed(1)} KB';
+  final megabytes = kilobytes / 1024;
+  if (megabytes < 1024) return '${megabytes.toStringAsFixed(1)} MB';
+  return '${(megabytes / 1024).toStringAsFixed(2)} GB';
+}
 
 String adaptRadioPromptButton(String message, String buttonLabel) {
   final normalized = message
@@ -228,6 +238,8 @@ class NewChirpApp extends StatelessWidget {
     this.radioSelectionStore,
     this.fileSaveWarningStore,
     this.updateChecker,
+    this.updateInstaller,
+    this.exitForUpdate,
     this.checkForUpdatesOnStartup = true,
   });
 
@@ -235,6 +247,8 @@ class NewChirpApp extends StatelessWidget {
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
   final UpdateChecker? updateChecker;
+  final UpdateInstaller? updateInstaller;
+  final Future<void> Function()? exitForUpdate;
   final bool checkForUpdatesOnStartup;
 
   @override
@@ -282,6 +296,8 @@ class NewChirpApp extends StatelessWidget {
         radioSelectionStore: radioSelectionStore,
         fileSaveWarningStore: fileSaveWarningStore,
         updateChecker: updateChecker,
+        updateInstaller: updateInstaller,
+        exitForUpdate: exitForUpdate,
         checkForUpdatesOnStartup: checkForUpdatesOnStartup,
       ),
     );
@@ -295,6 +311,8 @@ class NewChirpHome extends StatefulWidget {
     this.radioSelectionStore,
     this.fileSaveWarningStore,
     this.updateChecker,
+    this.updateInstaller,
+    this.exitForUpdate,
     this.checkForUpdatesOnStartup = true,
   });
 
@@ -302,6 +320,8 @@ class NewChirpHome extends StatefulWidget {
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
   final UpdateChecker? updateChecker;
+  final UpdateInstaller? updateInstaller;
+  final Future<void> Function()? exitForUpdate;
   final bool checkForUpdatesOnStartup;
 
   @override
@@ -317,6 +337,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   late final _fileSaveWarningStore =
       widget.fileSaveWarningStore ?? FileSaveWarningStore();
   late final _updateChecker = widget.updateChecker ?? UpdateChecker();
+  late final _updateInstaller =
+      widget.updateInstaller ?? const UpdateInstaller();
   final _imageStore = RadioImageStore();
   Future<void>? _radioSelectionLoad;
   final _searchController = TextEditingController();
@@ -2791,44 +2813,231 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _showUpdateAvailable(UpdateCheckResult result) {
-    final downloadUrl = trustedDownloadUrl(result.releaseUrl);
+    final installerUrl = trustedUpdateArtifactUrl(result.downloadUrl);
+    final downloadPageUrl = trustedDownloadUrl(result.releaseUrl);
     return showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Update available'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              'NewChirp ${result.latestVersion} is available. '
-              'You are running ${result.currentVersion}.',
-            ),
-            const SizedBox(height: 12),
-            const Text('This opens:'),
-            const SizedBox(height: 4),
-            SelectableText(
-              downloadUrl,
-              style: const TextStyle(color: Colors.black54),
-            ),
-          ],
+      builder: (dialogContext) => AlertDialog(
+        title: Text(
+          installerUrl == null
+              ? 'Update available'
+              : 'NewChirp ${result.latestVersion} is ready',
+        ),
+        content: Text(
+          installerUrl == null
+              ? 'NewChirp ${result.latestVersion} is available. '
+                    'You are running ${result.currentVersion}.\n\n'
+                    'Open the download page to get the right installer for '
+                    'your computer.'
+              : 'You are running ${result.currentVersion}. '
+                    'NewChirp can download and install ${result.latestVersion} '
+                    'for you, then reopen automatically. No visit to the '
+                    'website is required.',
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Later'),
           ),
-          FilledButton.icon(
-            onPressed: () {
-              unawaited(openExternalUrl(downloadUrl));
-              Navigator.pop(context);
-            },
-            icon: const Icon(Icons.download_outlined),
-            label: const Text('Open download page'),
-          ),
+          if (installerUrl == null)
+            FilledButton.icon(
+              onPressed: () {
+                unawaited(openExternalUrl(downloadPageUrl));
+                Navigator.pop(dialogContext);
+              },
+              icon: const Icon(Icons.open_in_new),
+              label: const Text('Open download page'),
+            )
+          else
+            FilledButton.icon(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                unawaited(_downloadAndInstallUpdate(result));
+              },
+              icon: const Icon(Icons.system_update_alt),
+              label: const Text('Download and install'),
+            ),
         ],
       ),
     );
+  }
+
+  Future<void> _downloadAndInstallUpdate(UpdateCheckResult result) async {
+    if (_busy || _transferActive || _savingLibrary) {
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Finish the current operation first'),
+          content: const Text(
+            'Wait for the current radio or file operation to finish before '
+            'installing NewChirp.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (_settingsDirty) {
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Save radio settings first'),
+          content: const Text(
+            'You have radio setting changes that have not been written. '
+            'Save those settings before installing the update.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    if (_dirty) {
+      final save = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Save your channel changes first'),
+          content: const Text(
+            'NewChirp will close to install the update. Save the current '
+            'channel list before continuing.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Later'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Save and continue'),
+            ),
+          ],
+        ),
+      );
+      if (save != true || !mounted) return;
+      await _saveCsv();
+      if (!mounted || _dirty) return;
+    }
+
+    final status = ValueNotifier<String>('Preparing the update download…');
+    final progress = ValueNotifier<UpdateDownloadProgress>(
+      const UpdateDownloadProgress(receivedBytes: 0),
+    );
+    NavigatorState? progressNavigator;
+    final progressDialog = showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        progressNavigator = Navigator.of(dialogContext);
+        return AlertDialog(
+          title: const Text('Installing NewChirp update'),
+          content: SizedBox(
+            width: 430,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                ValueListenableBuilder<String>(
+                  valueListenable: status,
+                  builder: (context, value, _) => Text(value),
+                ),
+                const SizedBox(height: 16),
+                ValueListenableBuilder<UpdateDownloadProgress>(
+                  valueListenable: progress,
+                  builder: (context, value, _) => LinearProgressIndicator(
+                    value: value.fraction,
+                    minHeight: 8,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                ValueListenableBuilder<UpdateDownloadProgress>(
+                  valueListenable: progress,
+                  builder: (context, value, _) => Text(
+                    value.totalBytes == null
+                        ? _formatBytes(value.receivedBytes)
+                        : '${_formatBytes(value.receivedBytes)} of '
+                              '${_formatBytes(value.totalBytes!)}',
+                    style: const TextStyle(color: Colors.black54),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'NewChirp will close and reopen automatically when the '
+                  'installer is ready.',
+                  style: TextStyle(color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    try {
+      final downloaded = await _updateInstaller.download(
+        result,
+        onProgress: (value) {
+          progress.value = value;
+          status.value = 'Downloading NewChirp ${result.latestVersion}…';
+        },
+      );
+      status.value =
+          'Verified. Starting the installer and restarting NewChirp…';
+      await _updateInstaller.install(downloaded);
+      progressNavigator?.pop();
+      await (widget.exitForUpdate ?? _exitForUpdate)();
+      await progressDialog;
+    } catch (error) {
+      progressNavigator?.pop();
+      await progressDialog;
+      final message = error is UpdateInstallException
+          ? error.message
+          : 'NewChirp could not prepare the update.';
+      if (!mounted) return;
+      final downloadPageUrl = trustedDownloadUrl(result.releaseUrl);
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Update could not be installed'),
+          content: Text(
+            '$message\n\nYou can still download the latest version from '
+            'newchirp.net.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+            FilledButton.icon(
+              onPressed: () {
+                unawaited(openExternalUrl(downloadPageUrl));
+                Navigator.pop(context);
+              },
+              icon: const Icon(Icons.open_in_new),
+              label: const Text('Open download page'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      status.dispose();
+      progress.dispose();
+    }
+  }
+
+  Future<void> _exitForUpdate() async {
+    exit(0);
   }
 
   Future<void> _showUpToDate(UpdateCheckResult result) => showDialog<void>(

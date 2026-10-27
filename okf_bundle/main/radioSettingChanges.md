@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T10:52:32Z"
+timestamp: "2026-10-27T13:45:49Z"
 concept_id: main/radioSettingChanges
 language: dart
 ---
@@ -23,7 +23,7 @@ List_radioSettingChanges_radioSettingChanges
 ```
 
 ## Source
-Lines 1719–1719 in `main.dart`
+Lines 1741–1741 in `main.dart`
 
 ## Relationships
 

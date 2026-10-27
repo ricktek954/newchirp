@@ -89,6 +89,10 @@ Linux artifacts:
   actual NewChirp button label.
 - Searchable abbreviation glossary and channel-header tooltips.
 - Update downloads are restricted to exact HTTPS URLs on `newchirp.net`.
+- The startup and Help-menu update checks now offer an in-app download and
+  install flow. macOS verifies the replacement app before relaunching;
+  Windows requires a valid Authenticode signature; Linux hands the downloaded
+  package to the native package manager.
 - Bundled Linux and Windows Python runtime hashes are pinned in build scripts.
 - CHIRP `.py` and `.mod` driver modules can be loaded from
   **Help > Load CHIRP driver module…** for the current session.
@@ -180,6 +184,9 @@ Full verification before the Linux `1.0.17` release:
   can be enabled.
 - Forum like counts and website-side ranking are a separate website project,
   not part of this Flutter repository.
+- The direct updater has automated coverage but has not yet been exercised from
+  one installed public release to the next. Test that path when publishing the
+  release immediately after 1.0.22.
 - The roadmap in `docs/SOFTWARE_ROADMAP.md` is older than this handoff and
   contains stale release-status items. Update it when doing broader roadmap
   maintenance.

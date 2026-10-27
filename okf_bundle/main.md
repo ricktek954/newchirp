@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T10:52:32Z"
+timestamp: "2026-10-27T13:45:49Z"
 concept_id: main
 language: dart
 ---
@@ -58,6 +58,7 @@ language: dart
 | related | [_ChoiceField](/main/ChoiceField.md) |
 | related | [_EmptyLibrary](/main/EmptyLibrary.md) |
 | related | [_StepTitle](/main/StepTitle.md) |
+| related | [_formatBytes](/main/formatBytes.md) |
 | related | [adaptRadioPromptButton](/main/adaptRadioPromptButton.md) |
 | related | [main](/main/main.md) |
 | related | [_clampWindowState](/main/clampWindowState.md) |
@@ -172,6 +173,8 @@ language: dart
 | related | [_buildWelcome](/main/buildWelcome.md) |
 | related | [_checkForUpdates](/main/checkForUpdates.md) |
 | related | [_showUpdateAvailable](/main/showUpdateAvailable.md) |
+| related | [_downloadAndInstallUpdate](/main/downloadAndInstallUpdate.md) |
+| related | [_exitForUpdate](/main/exitForUpdate.md) |
 | related | [_showUpToDate](/main/showUpToDate.md) |
 | related | [_buildAbout](/main/buildAbout.md) |
 | related | [_showChannelEditorAtLocation](/main/showChannelEditorAtLocation.md) |
