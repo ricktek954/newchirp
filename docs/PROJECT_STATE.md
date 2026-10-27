@@ -8,7 +8,7 @@ release requirements.
 
 ## Resume here
 
-- The Linux `1.0.22` release is live as DEB.
+- The Linux `1.0.23` DEB, RPM, and AppImage artifacts are live.
 - The macOS `1.0.23` release is built, signed, notarized, stapled, uploaded,
   and live. It adds one-click in-app download, installation, and restart for
   future releases, plus MOTOTRBO CPS2 XML import and the latest channel-slot
@@ -49,7 +49,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.23 |
 | Windows | 1.0.20 |
-| Linux | 1.0.22 |
+| Linux | 1.0.23 |
 | Legacy shared manifest version | 1.0.20 |
 
 macOS artifact:
@@ -67,11 +67,11 @@ macOS artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.22.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.22.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.22.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.AppImage`
 
 ## Recently completed
 
