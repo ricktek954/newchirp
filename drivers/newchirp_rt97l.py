@@ -115,6 +115,9 @@ class RT97LRadio(chirp_common.CloneModeRadio,
     BAUD_RATE = 9600
     WANTS_DTR = True
     WANTS_RTS = True
+    INITIAL_ACK_TIMEOUT = 3.0
+    WAKE_ACK_TIMEOUT = 1.0
+    WAKE_DELAY = 0.1
     _memsize = MEM_SIZE
 
     @classmethod
@@ -177,16 +180,55 @@ class RT97LRadio(chirp_common.CloneModeRadio,
             )
         return bytes(data)
 
+    def _wait_for_ack(self, timeout):
+        """Read until an ACK arrives or the timeout expires."""
+        deadline = time.monotonic() + timeout
+        unexpected = bytearray()
+        while time.monotonic() < deadline:
+            remaining = max(0.01, deadline - time.monotonic())
+            # Keep individual serial reads short so a non-ACK byte does not
+            # consume the entire handshake window.
+            self.pipe.timeout = min(0.25, remaining)
+            chunk = self.pipe.read(1)
+            if chunk == ACK:
+                return True, bytes(unexpected)
+            if chunk:
+                unexpected.extend(chunk)
+                # Preserve only a short diagnostic prefix.
+                del unexpected[:-16]
+            else:
+                time.sleep(min(0.01, remaining))
+        return False, bytes(unexpected)
+
     def _enter_programming_mode(self):
-        self.pipe.timeout = 2
+        self.pipe.timeout = 0.25
 
         # Unlike request/response CHIRP drivers, the RT97L announces itself
         # before the host transmits anything. Do not flush the input buffer
         # here or the initial ACK can be discarded.
-        if self._read_exact(1, timeout=2.0) != ACK:
-            raise errors.RadioNoResponse(
-                "The RT97L did not announce programming mode"
+        acknowledged, unexpected = self._wait_for_ack(self.INITIAL_ACK_TIMEOUT)
+        if not acknowledged:
+            # The reference implementation also uses STX as a wake-up. Some
+            # radios do not announce themselves until the host sends it.
+            self.pipe.write(STX)
+            time.sleep(self.WAKE_DELAY)
+            acknowledged, wake_unexpected = self._wait_for_ack(
+                self.WAKE_ACK_TIMEOUT,
             )
+            unexpected += wake_unexpected
+        if not acknowledged:
+            received = (
+                "no data"
+                if not unexpected
+                else "unexpected bytes %s" % unexpected.hex(" ")
+            )
+            raise errors.RadioNoResponse(
+                "The RT97L did not acknowledge programming mode, even after "
+                "an STX wake-up (%s). Close other radio software, power-cycle "
+                "the repeater, verify the programming cable, and retry."
+                % received
+            )
+
         self.pipe.write(STX)
         identity = self._read_exact(8)
         if identity[:2] != DEVICE_ID_PREFIX or identity[7:] != b"\xff":

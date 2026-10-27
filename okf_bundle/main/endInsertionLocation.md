@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _deleteChannel
+title: _endInsertionLocation
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
-concept_id: main/deleteChannel
+timestamp: "2026-10-27T10:52:32Z"
+concept_id: main/endInsertionLocation
 language: dart
 ---
 
-# _deleteChannel
+# _endInsertionLocation
 
 ## Signature
 
 ```dart
-void_deleteChannel()
+int_endInsertionLocation_endInsertionLocation
 ```
 
 ## Source
-Lines 1724–1724 in `main.dart`
+Lines 1805–1805 in `main.dart`
 
 ## Relationships
 

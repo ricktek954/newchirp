@@ -2,10 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 
 class ColumnLayout {
-  const ColumnLayout({required this.order, required this.widths});
+  const ColumnLayout({
+    required this.order,
+    required this.widths,
+    this.showEmptySlots = false,
+  });
 
   final List<String> order;
   final Map<String, double> widths;
+  final bool showEmptySlots;
 }
 
 class ColumnLayoutStore {
@@ -28,7 +33,11 @@ class ColumnLayoutStore {
           widths[entry.key.toString()] = width;
         }
       }
-      return ColumnLayout(order: order, widths: widths);
+      return ColumnLayout(
+        order: order,
+        widths: widths,
+        showEmptySlots: data['showEmptySlots'] == true,
+      );
     } on FormatException {
       return null;
     } on FileSystemException {
@@ -41,9 +50,10 @@ class ColumnLayoutStore {
     await file.parent.create(recursive: true);
     await file.writeAsString(
       jsonEncode({
-        'version': 1,
+        'version': 2,
         'order': layout.order,
         'widths': layout.widths,
+        'showEmptySlots': layout.showEmptySlots,
       }),
       flush: true,
     );

@@ -85,6 +85,36 @@ class FakeRT97LSerial:
         return bytes(result)
 
 
+class WakeOnStxRT97LSerial(FakeRT97LSerial):
+    """Simulate a radio that requires STX before announcing programming mode."""
+
+    def __init__(self, memory):
+        super().__init__(memory)
+        self.responses.clear()
+        self.wakeup_sent = False
+
+    def write(self, data):
+        data = bytes(data)
+        if data == b"\x02" and not self.wakeup_sent:
+            self.wakeup_sent = True
+            self.writes.append(data)
+            self.responses.append(b"\x06")
+            return
+        super().write(data)
+
+
+class SilentRT97LSerial(FakeRT97LSerial):
+    def __init__(self):
+        super().__init__(b"\xff" * 0x100)
+        self.responses.clear()
+
+    def read(self, _size):
+        return b""
+
+    def write(self, data):
+        self.writes.append(bytes(data))
+
+
 class RT97LDriverTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -133,6 +163,38 @@ class RT97LDriverTest(unittest.TestCase):
         self.assertEqual(reads[-1], b"R\x00\xe0\x20")
         self.assertTrue(serial.ended)
         self.assertEqual(radio._mmap.get(0, 4), _frequency_bytes(462_550_000))
+
+    def test_protocol_wakes_radio_when_initial_ack_is_missing(self):
+        serial = WakeOnStxRT97LSerial(b"\xff" * 0x100)
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+        radio.INITIAL_ACK_TIMEOUT = 0.01
+        radio.WAKE_ACK_TIMEOUT = 0.01
+        radio.WAKE_DELAY = 0
+
+        radio.sync_in()
+
+        self.assertEqual(serial.writes[:2], [b"\x02", b"\x02"])
+        self.assertEqual(
+            len([write for write in serial.writes if write[:1] == b"R"]),
+            8,
+        )
+        self.assertTrue(serial.ended)
+
+    def test_protocol_reports_failure_after_wakeup_when_radio_is_silent(self):
+        serial = SilentRT97LSerial()
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+        radio.INITIAL_ACK_TIMEOUT = 0.01
+        radio.WAKE_ACK_TIMEOUT = 0.01
+        radio.WAKE_DELAY = 0
+        from chirp import errors
+
+        with self.assertRaises(errors.RadioNoResponse) as raised:
+            radio.sync_in()
+
+        self.assertIn("STX wake-up", str(raised.exception))
+        self.assertEqual(serial.writes, [b"\x02"])
 
     def test_protocol_rejects_a_different_device(self):
         serial = FakeRT97LSerial(b"\xff" * 0x100)

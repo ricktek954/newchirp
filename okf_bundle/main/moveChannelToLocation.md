@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _showChannelEditor
+title: _moveChannelToLocation
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
-concept_id: main/showChannelEditor
+timestamp: "2026-10-27T10:52:32Z"
+concept_id: main/moveChannelToLocation
 language: dart
 ---
 
-# _showChannelEditor
+# _moveChannelToLocation
 
 ## Signature
 
 ```dart
-Future_showChannelEditor_showChannelEditor
+void_moveChannelToLocation(int fromIndex, int targetLocation)
 ```
 
 ## Source
-Lines 2624–2624 in `main.dart`
+Lines 1249–1249 in `main.dart`
 
 ## Relationships
 

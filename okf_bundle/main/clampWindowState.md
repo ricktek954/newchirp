@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
+timestamp: "2026-10-27T10:52:32Z"
 concept_id: main/clampWindowState
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_clampWindowState_clampWindowState
 ```
 
 ## Source
-Lines 102–102 in `main.dart`
+Lines 103–103 in `main.dart`
 
 ## Relationships
 

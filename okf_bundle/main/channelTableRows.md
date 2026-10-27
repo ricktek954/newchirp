@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _pasteChannel
+title: _channelTableRows
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
-concept_id: main/pasteChannel
+timestamp: "2026-10-27T10:52:32Z"
+concept_id: main/channelTableRows
 language: dart
 ---
 
-# _pasteChannel
+# _channelTableRows
 
 ## Signature
 
 ```dart
-Future_pasteChannel_pasteChannel
+List_channelTableRows_channelTableRows
 ```
 
 ## Source
-Lines 1676–1676 in `main.dart`
+Lines 378–378 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
+timestamp: "2026-10-27T10:52:32Z"
 concept_id: main/channelRow
 language: dart
 ---
@@ -23,12 +23,14 @@ Widget_channelRow(
     BuildContext context,
     MapEntry<int, RadioChannel> entry,
     List<_ChannelColumn> columns,
-    double dragHandleWidth,
-  )
+    double dragHandleWidth, {
+    required bool startsEmptyGroup,
+    required bool endsEmptyGroup,
+  })
 ```
 
 ## Source
-Lines 6941–6946 in `main.dart`
+Lines 7436–7443 in `main.dart`
 
 ## Relationships
 

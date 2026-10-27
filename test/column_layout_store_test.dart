@@ -15,6 +15,7 @@ void main() {
       const ColumnLayout(
         order: ['NAME', 'RX FREQUENCY', '#'],
         widths: {'NAME': 238, 'RX FREQUENCY': 144},
+        showEmptySlots: true,
       ),
     );
     final restored = await ColumnLayoutStore(path: path).load();
@@ -22,5 +23,6 @@ void main() {
     expect(restored?.order, ['NAME', 'RX FREQUENCY', '#']);
     expect(restored?.widths['NAME'], 238);
     expect(restored?.widths['RX FREQUENCY'], 144);
+    expect(restored?.showEmptySlots, isTrue);
   });
 }

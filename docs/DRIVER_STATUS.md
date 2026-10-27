@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-10-26
+Last updated: 2026-10-27
 
 ## Status definitions
 
@@ -26,6 +26,7 @@ Last updated: 2026-10-26
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
+| Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
 ## Radio details
 
@@ -98,10 +99,19 @@ Last updated: 2026-10-26
   per-channel squelch, channel mode, compand, scan-add, and channel-lock fields
 - Read/write state: download implemented with synthetic serial tests; every
   write operation is disabled
+- Field diagnostic 2026-10-27: NewChirp 1.0.20 opened the selected RT97L and
+  COM port, but the radio returned no initial ACK. The published reference
+  implementation retries with an STX wake-up when the ACK is missing;
+  NewChirp 1.0.20 did not.
+- Handshake change: NewChirp now waits up to three seconds for the initial
+  ACK, then sends STX as a wake-up and waits up to one second. If ACK arrives,
+  it starts the normal STX/identifier handshake. This path has offline serial
+  coverage but no physical-radio confirmation.
 - Remaining uncertainty: the channel byte map is provisional, global settings
   and password encoding are unknown, and no physical download has completed
-- Next milestone: compare a complete physical image and official CPS export,
-  then correct the channel flags and settings byte map
+- Next milestone: confirm the wake-up path on a physical RT97L, compare a
+  complete physical image and official CPS export, then correct the channel
+  flags and settings byte map
 
 ### Baofeng GM-32
 
@@ -185,6 +195,25 @@ Last updated: 2026-10-26
 - Write warning: the Midland driver is experimental. Make a backup before using it to change the radio.
 - Next milestone: none for a first write. That write has already succeeded more than once. The app still warns that the driver is experimental.
 - Website catalog: not listed
+
+### Motorola MOTOTRBO R7
+
+- Importer: `lib/services/mototrbo_cps2_xml.dart`
+- Format notes: `docs/MOTOTRBO_CPS2.md`
+- Evidence: public MOTOTRBO CPS 2.0 Zone XML structure and field names
+- Transport: file import of XML copied or exported from CPS 2.0
+- Implemented: conventional channel names, RX/TX frequencies, duplex,
+  receive-only state, analog CTCSS/DCS, bandwidth, power, scan state, comments,
+  and DMR color code, timeslot, contact, RX group list, and privacy-key
+  references
+- Read/write state: XML import only; direct radio communication and upload are
+  disabled
+- Hardware validation: none. The official CPS 2.0 installer requires a
+  Motorola account with software entitlement and has not been downloaded or
+  bundled by NewChirp.
+- Next milestone: import a redacted R7 CPS 2.0 Zone XML sample, compare every
+  field with CPS2, then research direct programming only if a physical R7,
+  entitled CPS installation, and compatible cable are available
 
 ## Reusable NewChirp transport work
 

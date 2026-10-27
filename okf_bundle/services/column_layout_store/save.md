@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:column_layout_store.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-10-27T10:21:41Z"
 concept_id: services/column_layout_store/save
 language: dart
 ---
@@ -24,7 +24,7 @@ Futuresavesave
 ```
 
 ## Source
-Lines 39–39 in `services/column_layout_store.dart`
+Lines 48–48 in `services/column_layout_store.dart`
 
 ## Relationships
 

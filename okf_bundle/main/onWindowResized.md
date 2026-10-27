@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
+timestamp: "2026-10-27T10:52:32Z"
 concept_id: main/onWindowResized
 language: dart
 ---
@@ -23,7 +23,7 @@ voidonWindowResized()
 ```
 
 ## Source
-Lines 173–173 in `main.dart`
+Lines 174–174 in `main.dart`
 
 ## Relationships
 

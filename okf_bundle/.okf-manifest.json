@@ -112,8 +112,8 @@
     },
     "services/column_layout_store.dart": {
       "path": "services/column_layout_store.dart",
-      "mtime_ns": 1787526889853744664,
-      "hash": "3cbc77b232410ab3567a72cdc0fc28a7edd906c0dc0c62cf73150e5e3172f566",
+      "mtime_ns": 1793096501033485563,
+      "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
       "concept_ids": [
         "services/column_layout_store/ColumnLayout",
         "services/column_layout_store/ColumnLayoutStore",
@@ -175,6 +175,30 @@
         "services/module_sandbox/serialPort",
         "services/module_sandbox/toString",
         "services/module_sandbox"
+      ]
+    },
+    "services/mototrbo_cps2_xml.dart": {
+      "path": "services/mototrbo_cps2_xml.dart",
+      "mtime_ns": 1793094681555739212,
+      "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
+      "concept_ids": [
+        "services/mototrbo_cps2_xml/CpsTone",
+        "services/mototrbo_cps2_xml/MototrboCps2Xml",
+        "services/mototrbo_cps2_xml/ToneKind",
+        "services/mototrbo_cps2_xml/addExtra",
+        "services/mototrbo_cps2_xml/applyAnalogTones",
+        "services/mototrbo_cps2_xml/boolean",
+        "services/mototrbo_cps2_xml/channel",
+        "services/mototrbo_cps2_xml/child",
+        "services/mototrbo_cps2_xml/decode",
+        "services/mototrbo_cps2_xml/display",
+        "services/mototrbo_cps2_xml/fields",
+        "services/mototrbo_cps2_xml/number",
+        "services/mototrbo_cps2_xml/numberOrNull",
+        "services/mototrbo_cps2_xml/text",
+        "services/mototrbo_cps2_xml/tone",
+        "services/mototrbo_cps2_xml/value",
+        "services/mototrbo_cps2_xml"
       ]
     },
     "services/radio_bridge.dart": {
@@ -339,8 +363,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793018251826857341,
-      "hash": "30bb912af49c50402eb2d3539cbc7170510ff8c58051878f6214d70541e29ac9",
+      "mtime_ns": 1793098352976683531,
+      "hash": "7a4e29b68a9526420ff985f2fa70b0b585e9830f02d438ef034ed58659be2130",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -362,6 +386,7 @@
         "main/LibraryState",
         "main/ChannelApplyDialog",
         "main/ChannelApplyDialogState",
+        "main/AddChannelPlacement",
         "main/RepeaterBookDialog",
         "main/RepeaterBookDialogState",
         "main/HelpButton",
@@ -406,6 +431,7 @@
         "main/scheduleSave",
         "main/build",
         "main/createState",
+        "main/channelTableRows",
         "main/rememberChannelImageBaseline",
         "main/initState",
         "main/loadColumnLayout",
@@ -422,6 +448,7 @@
         "main/saveRadioSelection",
         "main/setColumnOrder",
         "main/setColumnWidth",
+        "main/setShowEmptySlots",
         "main/dispose",
         "main/refreshPorts",
         "main/loadModels",
@@ -440,6 +467,9 @@
         "main/channelIssues",
         "main/sortChannelsByLocation",
         "main/moveChannel",
+        "main/moveChannelToLocation",
+        "main/insertEmptySlotBefore",
+        "main/removeEmptySlot",
         "main/findRepeaters",
         "main/showNoEmptyChannelSlot",
         "main/loadFileSaveWarning",
@@ -458,14 +488,18 @@
         "main/markRadioSettingsChanged",
         "main/radioSettingChanges",
         "main/writeRadioSettings",
+        "main/newChannelAt",
+        "main/endInsertionLocation",
+        "main/chooseAddChannelPlacement",
+        "main/insertChannelAt",
         "main/addChannel",
         "main/duplicateChannel",
         "main/duplicateChannelAt",
         "main/copyChannel",
         "main/cutChannel",
-        "main/pasteChannel",
+        "main/pasteChannelAtLocation",
         "main/confirmOverwriteChannel",
-        "main/deleteChannel",
+        "main/deleteChannelAt",
         "main/clearChannel",
         "main/keepMidlandRepeater",
         "main/noteRepeaterRowKept",
@@ -482,7 +516,7 @@
         "main/showUpdateAvailable",
         "main/showUpToDate",
         "main/buildAbout",
-        "main/showChannelEditor",
+        "main/showChannelEditorAtLocation",
         "main/confirmDeleteChannel",
         "main/buildLibrary",
         "main/printFrequencyReference",
@@ -1158,7 +1192,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "2d58dd7f6ebf17be6e672818f72ba47268f7d20203f608ebba6670b21a9760eb",
+      "edge_hash": "31fd94ae12391b270dc80689f65691ef2b67236719290a513f708d12d712ab26",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -3680,7 +3714,247 @@
       "render_hash": "stale",
       "edge_hash": "a7b67a94f95ed7aa9783248845136651989bbcbf5b45dc58a862bdafaf5d318c",
       "enriched": false
+    },
+    "services/mototrbo_cps2_xml": {
+      "concept_id": "services/mototrbo_cps2_xml",
+      "type": "Module",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9fb6a3b9e46e91bdfd45f79132959bc47999b2b2a39e123380dec27ea48976cb",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/MototrboCps2Xml": {
+      "concept_id": "services/mototrbo_cps2_xml/MototrboCps2Xml",
+      "type": "Class",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/ToneKind": {
+      "concept_id": "services/mototrbo_cps2_xml/ToneKind",
+      "type": "Enum",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/CpsTone": {
+      "concept_id": "services/mototrbo_cps2_xml/CpsTone",
+      "type": "Class",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/decode": {
+      "concept_id": "services/mototrbo_cps2_xml/decode",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/channel": {
+      "concept_id": "services/mototrbo_cps2_xml/channel",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/applyAnalogTones": {
+      "concept_id": "services/mototrbo_cps2_xml/applyAnalogTones",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/tone": {
+      "concept_id": "services/mototrbo_cps2_xml/tone",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/child": {
+      "concept_id": "services/mototrbo_cps2_xml/child",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/fields": {
+      "concept_id": "services/mototrbo_cps2_xml/fields",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/text": {
+      "concept_id": "services/mototrbo_cps2_xml/text",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/value": {
+      "concept_id": "services/mototrbo_cps2_xml/value",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/display": {
+      "concept_id": "services/mototrbo_cps2_xml/display",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/number": {
+      "concept_id": "services/mototrbo_cps2_xml/number",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/boolean": {
+      "concept_id": "services/mototrbo_cps2_xml/boolean",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/addExtra": {
+      "concept_id": "services/mototrbo_cps2_xml/addExtra",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "services/mototrbo_cps2_xml/numberOrNull": {
+      "concept_id": "services/mototrbo_cps2_xml/numberOrNull",
+      "type": "Function",
+      "resource": "services/mototrbo_cps2_xml.dart",
+      "render_hash": "stale",
+      "edge_hash": "9419efbfffe2ecebf1a52cdb5f272fff07319a765e4e0031f68e25a27c8e5647",
+      "enriched": false
+    },
+    "main/setShowEmptySlots": {
+      "concept_id": "main/setShowEmptySlots",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/channelTableRows": {
+      "concept_id": "main/channelTableRows",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/newChannelAt": {
+      "concept_id": "main/newChannelAt",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/pasteChannelAtLocation": {
+      "concept_id": "main/pasteChannelAtLocation",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/deleteChannelAt": {
+      "concept_id": "main/deleteChannelAt",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/showChannelEditorAtLocation": {
+      "concept_id": "main/showChannelEditorAtLocation",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/moveChannelToLocation": {
+      "concept_id": "main/moveChannelToLocation",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/insertEmptySlotBefore": {
+      "concept_id": "main/insertEmptySlotBefore",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/removeEmptySlot": {
+      "concept_id": "main/removeEmptySlot",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/AddChannelPlacement": {
+      "concept_id": "main/AddChannelPlacement",
+      "type": "Enum",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/endInsertionLocation": {
+      "concept_id": "main/endInsertionLocation",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/chooseAddChannelPlacement": {
+      "concept_id": "main/chooseAddChannelPlacement",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/insertChannelAt": {
+      "concept_id": "main/insertChannelAt",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-26T12:37:32Z"
+  "generated_at": "2026-10-27T10:52:34Z"
 }

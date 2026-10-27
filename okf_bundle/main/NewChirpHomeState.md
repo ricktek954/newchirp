@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
+timestamp: "2026-10-27T10:52:32Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -24,6 +24,7 @@ class _NewChirpHomeState
 
 ## Methods
 
+- `_channelTableRows`
 - `_rememberChannelImageBaseline`
 - `invalid`
 - `initState`
@@ -41,6 +42,7 @@ class _NewChirpHomeState
 - `_saveRadioSelection`
 - `_setColumnOrder`
 - `_setColumnWidth`
+- `_setShowEmptySlots`
 - `dispose`
 - `_refreshPorts`
 - `_loadModels`
@@ -59,6 +61,9 @@ class _NewChirpHomeState
 - `_channelIssues`
 - `_sortChannelsByLocation`
 - `_moveChannel`
+- `_moveChannelToLocation`
+- `_insertEmptySlotBefore`
+- `_removeEmptySlot`
 - `_findRepeaters`
 - `_showNoEmptyChannelSlot`
 - `_loadFileSaveWarning`
@@ -78,14 +83,18 @@ class _NewChirpHomeState
 - `_radioSettingChanges`
 - `walk`
 - `_writeRadioSettings`
+- `_newChannelAt`
+- `_endInsertionLocation`
+- `_chooseAddChannelPlacement`
+- `_insertChannelAt`
 - `_addChannel`
 - `_duplicateChannel`
 - `_duplicateChannelAt`
 - `_copyChannel`
 - `_cutChannel`
-- `_pasteChannel`
+- `_pasteChannelAtLocation`
 - `_confirmOverwriteChannel`
-- `_deleteChannel`
+- `_deleteChannelAt`
 - `_clearChannel`
 - `_keepMidlandRepeater`
 - `_noteRepeaterRowKept`
@@ -103,7 +112,7 @@ class _NewChirpHomeState
 - `_showUpdateAvailable`
 - `_showUpToDate`
 - `_buildAbout`
-- `_showChannelEditor`
+- `_showChannelEditorAtLocation`
 - `changed`
 - `save`
 - `_confirmDeleteChannel`
@@ -122,7 +131,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 310–4306 in `main.dart`
+Lines 311–4777 in `main.dart`
 
 ## Relationships
 

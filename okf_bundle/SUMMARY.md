@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 389 concepts across 4 domains and 17 modules'
+description: 'Top-level OKF summary: 416 concepts across 4 domains and 18 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-26T12:37:32Z'
+timestamp: '2026-10-27T10:52:34Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 389 concepts | 4 domains | 17 modules
+> OKF v0.2 bundle | 416 concepts | 4 domains | 18 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 310 |
-| Class | 60 |
-| Module | 17 |
-| Enum | 2 |
+| Function | 332 |
+| Class | 62 |
+| Module | 18 |
+| Enum | 4 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 389 |
+| dart | 416 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 167 concepts
+### [main.dart](main.dart/index.md) — 177 concepts
 
-- [main](main/index.md) (167 concepts)
+- [main](main/index.md) (177 concepts)
 
 ### [models](models/index.md) — 62 concepts
 
@@ -40,17 +40,17 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (5 concepts)
 
-### [services](services/index.md) — 135 concepts
+### [services](services/index.md) — 152 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (45 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (35 concepts)
+- [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/update_checker](services/update_checker/index.md) (15 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (10 concepts)
 - [services/window_state_store](services/window_state_store/index.md) (7 concepts)
 - [services/column_layout_store](services/column_layout_store/index.md) (6 concepts)
 - [services/radio_image_store](services/radio_image_store/index.md) (6 concepts)
-- [services/radio_selection_store](services/radio_selection_store/index.md) (6 concepts)
-- *…and 1 more modules*
+- *…and 2 more modules*
 
 ### [widgets](widgets/index.md) — 25 concepts
 
@@ -65,6 +65,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
 | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
+| [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
 | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
@@ -83,7 +84,6 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [_midlandGmrsChannel](/models/radio_channel/midlandGmrsChannel.md) | Function | `models/radio_channel.dart` | Midland channel 1-22 for a memory slot. Slots 31-107 are not… |
 | [midlandFixedRxHz](/models/radio_channel/midlandFixedRxHz.md) | Function | `models/radio_channel.dart` | Official receive frequency in Hz for MXT295 channels 1 throu… |
 | [midlandGmrsIssues](/models/radio_channel/midlandGmrsIssues.md) | Function | `models/radio_channel.dart` | Why this MXT295 channel is not legal. Empty for every other … |
-| [gmrsStandardRxHz](/models/radio_channel/gmrsStandardRxHz.md) | Function | `models/radio_channel.dart` | Official receive frequency in Hz for one of the 22 GMRS chan… |
 
 ## Usage with OpenCode
 

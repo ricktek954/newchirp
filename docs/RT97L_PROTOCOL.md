@@ -21,7 +21,8 @@ in this repository.
 
 - 9600 baud, 8 data bits, no parity, one stop bit
 - DTR and RTS asserted
-- Device response timeout: approximately 1 second; NewChirp allows 2 seconds
+- Device response timeout: approximately 1 second; NewChirp allows 3 seconds
+  for the initial acknowledgement
 
 The stock programming cable uses a USB-to-serial adapter with a DB9 connector.
 
@@ -35,6 +36,12 @@ The stock programming cable uses a USB-to-serial adapter with a DB9 connector.
 
 NewChirp does not flush the serial input before step 1 because doing so can
 discard the initial ACK.
+
+The published reference tool also handles a radio that does not send the
+initial ACK. In that case it sends STX as a wake-up, waits for ACK, and then
+sends STX again to begin the normal handshake. NewChirp uses the same fallback
+with a one-second wake-up acknowledgement window. The fallback is covered by
+offline serial tests; it still needs confirmation on physical hardware.
 
 ## Read framing
 

@@ -20,6 +20,7 @@ import 'services/file_save_warning_store.dart';
 import 'services/radio_image_store.dart';
 import 'services/radio_selection_store.dart';
 import 'services/module_sandbox.dart';
+import 'services/mototrbo_cps2_xml.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/window_state_store.dart';
@@ -356,6 +357,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   int _settingsGeneration = 0;
   List<String> _columnOrder = [];
   final Map<String, double> _columnWidths = {};
+  bool _showEmptySlots = false;
   bool _columnLayoutTouched = false;
   Future<void>? _fileSaveWarningLoad;
   bool _hideFileSaveWarning = false;
@@ -372,6 +374,58 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   List<RadioChannel> get _activeChannels =>
       _channels.where((channel) => !channel.cleared).toList();
+
+  List<MapEntry<int, RadioChannel>> _channelTableRows() {
+    final needle = _query.trim().toLowerCase();
+    if (needle.isNotEmpty) {
+      return _channels
+          .where(
+            (channel) =>
+                !channel.cleared &&
+                (channel.name.toLowerCase().contains(needle) ||
+                    channel.frequency.toString().contains(needle) ||
+                    channel.comment.toLowerCase().contains(needle) ||
+                    channel.location.toString().contains(needle)),
+          )
+          .map((channel) => MapEntry(channel.location, channel))
+          .toList()
+        ..sort((left, right) => left.key.compareTo(right.key));
+    }
+
+    final byLocation = {
+      for (final channel in _channels) channel.location: channel,
+    };
+    if (!_showEmptySlots) {
+      return byLocation.entries
+          .where((entry) => !entry.value.cleared)
+          .map((entry) => MapEntry(entry.key, entry.value))
+          .toList()
+        ..sort((left, right) => left.key.compareTo(right.key));
+    }
+
+    int? minimum = _capabilities?.memoryStart;
+    int? maximum = _capabilities?.memoryEnd;
+    if (minimum == null || maximum == null || maximum < minimum) {
+      if (byLocation.isEmpty) return [];
+      final locations = byLocation.keys.toList()..sort();
+      minimum = locations.first;
+      maximum = locations.last;
+    }
+
+    return [
+      for (var location = minimum; location <= maximum; location++)
+        MapEntry(
+          location,
+          byLocation[location] ??
+              RadioChannel(
+                location: location,
+                name: '',
+                frequency: 0,
+                cleared: true,
+              ),
+        ),
+    ];
+  }
 
   ChannelImageMatch get _channelImageMatch => channelImageMatch(
     imagePath: _radioImage,
@@ -437,13 +491,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _columnWidths
         ..clear()
         ..addAll(layout.widths);
+      _showEmptySlots = layout.showEmptySlots;
     });
   }
 
   Future<void> _saveColumnLayout() async {
     try {
       await _columnLayoutStore.save(
-        ColumnLayout(order: _columnOrder, widths: Map.of(_columnWidths)),
+        ColumnLayout(
+          order: _columnOrder,
+          widths: Map.of(_columnWidths),
+          showEmptySlots: _showEmptySlots,
+        ),
       );
     } on FileSystemException {
       // Layout persistence should never interrupt editing the radio.
@@ -620,6 +679,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     setState(() {
       _columnLayoutTouched = true;
       _columnWidths[id] = width;
+    });
+    unawaited(_saveColumnLayout());
+  }
+
+  void _setShowEmptySlots(bool show) {
+    setState(() {
+      _columnLayoutTouched = true;
+      _showEmptySlots = show;
     });
     unawaited(_saveColumnLayout());
   }
@@ -839,18 +906,23 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _openLibraryFile() async {
     const type = XTypeGroup(
-      label: 'CHIRP files',
-      extensions: ['csv', 'img', 'icf', 'itm', 'd72'],
+      label: 'CHIRP and MOTOTRBO files',
+      extensions: ['csv', 'img', 'icf', 'itm', 'd72', 'xml'],
     );
     final file = await openFile(acceptedTypeGroups: const [type]);
     if (file == null) return;
-    if (!file.path.toLowerCase().endsWith('.csv')) {
+    final lowerPath = file.path.toLowerCase();
+    final isXml = lowerPath.endsWith('.xml');
+    if (!lowerPath.endsWith('.csv') && !isXml) {
       await _importChirpImage(file);
       return;
     }
     late final List<RadioChannel> channels;
     try {
-      channels = ChirpCsv.decode(await file.readAsString());
+      final source = await file.readAsString();
+      channels = isXml
+          ? MototrboCps2Xml.decode(source)
+          : ChirpCsv.decode(source);
     } catch (error) {
       if (mounted) await _showActionError(error);
       return;
@@ -866,7 +938,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
     final mode = _libraryOpen && _channels.isNotEmpty
         ? await _chooseChannelApplyMode(
-            label: 'CSV channels',
+            label: isXml ? 'MOTOTRBO CPS 2.0 channels' : 'CSV channels',
             count: channels.length,
           )
         : const _ChannelApplyMode(replaceAll: true, startAt: 1);
@@ -878,7 +950,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         channels,
         mode,
         libraryName: file.name.replaceFirst(
-          RegExp(r'\.csv$', caseSensitive: false),
+          RegExp(r'\.(?:csv|xml)$', caseSensitive: false),
           '',
         ),
         libraryPath: file.path,
@@ -1172,6 +1244,150 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _channelTableKey.currentState?.revealSelectedChannel();
     });
+  }
+
+  void _moveChannelToLocation(int fromIndex, int targetLocation) {
+    if (_query.isNotEmpty ||
+        fromIndex < 0 ||
+        fromIndex >= _channels.length ||
+        _channels[fromIndex].cleared) {
+      return;
+    }
+    final moved = _channels[fromIndex];
+    final previousLocation = moved.location;
+    if (previousLocation == targetLocation) return;
+
+    _recordHistory();
+    setState(() {
+      _channels.removeWhere(
+        (channel) =>
+            channel.location == targetLocation &&
+            channel.cleared &&
+            !identical(channel, moved),
+      );
+      moved.location = targetLocation;
+      _clearedLocations
+        ..remove(targetLocation)
+        ..add(previousLocation);
+      _sortChannelsByLocation();
+      _selected = _channels.indexOf(moved);
+      _dirty = true;
+    });
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('Moved ${moved.name} to channel $targetLocation'),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _channelTableKey.currentState?.revealSelectedChannel();
+    });
+  }
+
+  void _insertEmptySlotBefore(int location) {
+    if (_query.isNotEmpty) return;
+    if (showsMidlandChannelNumbers(_model)) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text(
+              'This radio has fixed channel locations, so empty slots '
+              'cannot be inserted.',
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      return;
+    }
+    final maximum = _capabilities?.memoryEnd;
+    if (maximum != null &&
+        _channels.any((channel) => channel.location >= maximum)) {
+      _showNoEmptyChannelSlot();
+      return;
+    }
+
+    final selectedChannel = _current;
+    _recordHistory();
+    setState(() {
+      for (final channel in _channels) {
+        if (channel.location >= location) channel.location += 1;
+      }
+      final shiftedClears =
+          _clearedLocations
+              .map((cleared) => cleared >= location ? cleared + 1 : cleared)
+              .toSet()
+            ..add(location);
+      _clearedLocations
+        ..clear()
+        ..addAll(shiftedClears);
+      _sortChannelsByLocation();
+      _selected = selectedChannel == null
+          ? -1
+          : _channels.indexOf(selectedChannel);
+      _dirty = true;
+    });
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('Inserted an empty slot before channel $location'),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+  }
+
+  void _removeEmptySlot(int location) {
+    if (_query.isNotEmpty) return;
+    if (showsMidlandChannelNumbers(_model)) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text(
+              'This radio has fixed channel locations, so empty slots '
+              'cannot be removed.',
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      return;
+    }
+
+    final selectedChannel = _current;
+    _recordHistory();
+    setState(() {
+      _channels.removeWhere((channel) => channel.location == location);
+      for (final channel in _channels) {
+        if (channel.location > location) channel.location -= 1;
+      }
+      final shiftedClears = <int>{};
+      for (final cleared in _clearedLocations) {
+        if (cleared < location) shiftedClears.add(cleared);
+        if (cleared > location) shiftedClears.add(cleared - 1);
+      }
+      _clearedLocations
+        ..clear()
+        ..addAll(shiftedClears);
+      _sortChannelsByLocation();
+      _selected = selectedChannel == null
+          ? -1
+          : _channels.indexOf(selectedChannel);
+      _dirty = true;
+    });
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('Removed empty slot $location'),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+        ),
+      );
   }
 
   Future<void> _findRepeaters() async {
@@ -1573,24 +1789,134 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _loadRadioSettings(force: true);
   }
 
-  void _addChannel() {
-    final location = _nextChannelLocation();
-    if (location == null) {
-      _showNoEmptyChannelSlot();
-      return;
-    }
+  RadioChannel _newChannelAt(int location) {
     final midland = showsMidlandChannelNumbers(_model);
     final gm32 = isBaofengGm32(_model);
     final specializedReceive = midland || gm32;
-    final channel = RadioChannel(
+    return RadioChannel(
       location: location,
       name: 'NEW $location',
       frequency: specializedReceive ? 0 : 146.52,
       duplex: '',
       offset: specializedReceive ? 0 : 0.6,
     );
+  }
+
+  int? _endInsertionLocation() {
+    final minimum = _capabilities?.memoryStart ?? 1;
+    final maximum = _capabilities?.memoryEnd;
+    final active = _activeChannels;
+    final location = active.isEmpty
+        ? minimum
+        : active
+                  .map((channel) => channel.location)
+                  .reduce((left, right) => left > right ? left : right) +
+              1;
+    if (maximum != null && location > maximum) return null;
+    return location;
+  }
+
+  Future<_AddChannelPlacement?> _chooseAddChannelPlacement() {
+    final selected = _current;
+    final endLocation = _endInsertionLocation();
+    final canInsertAround =
+        selected != null && !showsMidlandChannelNumbers(_model);
+    final selectedLabel = selected == null
+        ? 'Select a channel first'
+        : 'Channel ${channelNumberLabel(_model, selected.location)}';
+    final aroundSubtitle = selected == null
+        ? selectedLabel
+        : showsMidlandChannelNumbers(_model)
+        ? 'This radio has fixed channel locations.'
+        : '$selectedLabel and following channels move down one slot.';
+    return showDialog<_AddChannelPlacement>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Where should the new channel go?'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              key: const ValueKey('add-channel-at-end'),
+              enabled: endLocation != null,
+              leading: const Icon(Icons.last_page),
+              title: const Text('At the end'),
+              subtitle: Text(
+                endLocation == null
+                    ? 'No free slot follows the final channel.'
+                    : 'Use channel $endLocation after the final channel.',
+              ),
+              onTap: () => Navigator.pop(context, _AddChannelPlacement.end),
+            ),
+            ListTile(
+              key: const ValueKey('add-channel-before-selected'),
+              enabled: canInsertAround,
+              leading: const Icon(Icons.vertical_align_top),
+              title: const Text('Before the selected channel'),
+              subtitle: Text(aroundSubtitle),
+              onTap: () =>
+                  Navigator.pop(context, _AddChannelPlacement.beforeSelected),
+            ),
+            ListTile(
+              key: const ValueKey('add-channel-after-selected'),
+              enabled: canInsertAround,
+              leading: const Icon(Icons.vertical_align_bottom),
+              title: const Text('After the selected channel'),
+              subtitle: Text(aroundSubtitle),
+              onTap: () =>
+                  Navigator.pop(context, _AddChannelPlacement.afterSelected),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _insertChannelAt(int location) {
+    final minimum = _capabilities?.memoryStart;
+    final maximum = _capabilities?.memoryEnd;
+    if (maximum != null && location > maximum) {
+      _showNoEmptyChannelSlot();
+      return;
+    }
+    if (minimum != null && location < minimum) {
+      _showNoEmptyChannelSlot();
+      return;
+    }
+    final occupied = _channels.any(
+      (channel) => channel.location == location && !channel.cleared,
+    );
+    if (occupied &&
+        maximum != null &&
+        _channels.any((channel) => channel.location >= maximum)) {
+      _showNoEmptyChannelSlot();
+      return;
+    }
+
+    final channel = _newChannelAt(location);
     _recordHistory();
     setState(() {
+      if (occupied) {
+        for (final existing in _channels) {
+          if (existing.location >= location) existing.location += 1;
+        }
+        final shiftedClears = _clearedLocations
+            .map((cleared) => cleared >= location ? cleared + 1 : cleared)
+            .toSet();
+        _clearedLocations
+          ..clear()
+          ..addAll(shiftedClears);
+      } else {
+        _channels.removeWhere(
+          (existing) => existing.location == location && existing.cleared,
+        );
+      }
       _clearedLocations.remove(location);
       _channels.add(channel);
       _sortChannelsByLocation();
@@ -1611,6 +1937,38 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _channelTableKey.currentState?.revealSelectedChannel();
     });
+  }
+
+  Future<void> _addChannel() async {
+    final placement = await _chooseAddChannelPlacement();
+    if (!mounted || placement == null) return;
+    if (placement != _AddChannelPlacement.end &&
+        showsMidlandChannelNumbers(_model)) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(
+            content: Text(
+              'This radio has fixed channel locations. New channels can only '
+              'be added after the final channel.',
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      return;
+    }
+    final selected = _current;
+    final location = switch (placement) {
+      _AddChannelPlacement.end => _endInsertionLocation(),
+      _AddChannelPlacement.beforeSelected => selected?.location,
+      _AddChannelPlacement.afterSelected =>
+        selected == null ? null : selected.location + 1,
+    };
+    if (location == null) {
+      _showNoEmptyChannelSlot();
+      return;
+    }
+    _insertChannelAt(location);
   }
 
   void _duplicateChannel() {
@@ -1673,22 +2031,30 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
-  Future<void> _pasteChannel(int index) async {
-    if (_channelClipboard.isEmpty || index < 0 || index >= _channels.length) {
+  Future<void> _pasteChannelAtLocation(int location) async {
+    if (_channelClipboard.isEmpty) {
       return;
     }
-    final target = _channels[index];
-    if (!target.cleared) {
+    final index = _channels.indexWhere(
+      (channel) => channel.location == location,
+    );
+    final target = index >= 0 ? _channels[index] : null;
+    if (target != null && !target.cleared) {
       final confirmed = await _confirmOverwriteChannel(target);
       if (!confirmed || !mounted) return;
     }
-    final pasted = _channelClipboard.first.copy()..location = target.location;
+    final pasted = _channelClipboard.first.copy()..location = location;
     _recordHistory();
     setState(() {
-      _channels[index] = pasted;
-      _selected = index;
+      if (index >= 0) {
+        _channels[index] = pasted;
+      } else {
+        _channels.add(pasted);
+        _sortChannelsByLocation();
+      }
+      _selected = _channels.indexOf(pasted);
       _dirty = true;
-      _clearedLocations.remove(target.location);
+      _clearedLocations.remove(location);
     });
   }
 
@@ -1721,9 +2087,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return confirmed == true;
   }
 
-  void _deleteChannel() {
-    final channel = _current;
-    if (channel == null) return;
+  void _deleteChannelAt(int index) {
+    if (index < 0 || index >= _channels.length) return;
+    final channel = _channels[index];
     if (isMidlandRepeaterRow(_model, channel.location)) {
       _recordHistory();
       setState(() {
@@ -1737,15 +2103,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final wasCleared = channel.cleared;
     _recordHistory();
     setState(() {
-      _channels.removeAt(_selected);
+      _channels.removeAt(index);
       if (wasCleared) {
         _clearedLocations.remove(location);
       } else {
         _clearedLocations.add(location);
       }
-      _selected = _channels.isEmpty
-          ? -1
-          : _selected.clamp(0, _channels.length - 1);
+      _selected = _channels.isEmpty ? -1 : index.clamp(0, _channels.length - 1);
       _dirty = true;
     });
   }
@@ -1769,7 +2133,26 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     setState(() {
       channel.clear();
       _clearedLocations.add(location);
-      _selected = index;
+      if (_showEmptySlots) {
+        _selected = index;
+      } else {
+        var replacement = -1;
+        for (var next = index + 1; next < _channels.length; next++) {
+          if (!_channels[next].cleared) {
+            replacement = next;
+            break;
+          }
+        }
+        if (replacement < 0) {
+          for (var previous = index - 1; previous >= 0; previous--) {
+            if (!_channels[previous].cleared) {
+              replacement = previous;
+              break;
+            }
+          }
+        }
+        _selected = replacement;
+      }
       _dirty = true;
     });
   }
@@ -2621,10 +3004,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
-  Future<void> _showChannelEditor(int channelIndex) async {
-    if (channelIndex < 0 || channelIndex >= _channels.length) return;
-    if (_channels[channelIndex].cleared) return;
-    final draft = _channels[channelIndex].copy();
+  Future<void> _showChannelEditorAtLocation(int location) async {
+    final initialIndex = _channels.indexWhere(
+      (channel) => channel.location == location,
+    );
+    final existing = initialIndex >= 0 ? _channels[initialIndex] : null;
+    final draft = existing != null && !existing.cleared
+        ? existing.copy()
+        : _newChannelAt(location);
     var enterFrequency = false;
     if (showsMidlandChannelNumbers(_model)) {
       draft.prepareMxt295Editor();
@@ -2641,10 +3028,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           void changed(VoidCallback update) => setDialogState(() => update());
 
           void save() {
-            final saved = draft.copy();
+            final saved = draft.copy()..cleared = false;
             _recordHistory();
             setState(() {
-              _channels[channelIndex] = saved;
+              final currentIndex = _channels.indexWhere(
+                (channel) => channel.location == location,
+              );
+              if (currentIndex >= 0) {
+                _channels[currentIndex] = saved;
+              } else {
+                _channels.add(saved);
+              }
+              _clearedLocations
+                ..remove(location)
+                ..remove(saved.location);
               _sortChannelsByLocation();
               _selected = _channels.indexOf(saved);
               _dirty = true;
@@ -2665,17 +3062,25 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 channel: draft,
                 radioModel: _model,
                 capabilities: _capabilities,
+                canDelete: existing != null,
                 enteringFrequency: enterFrequency,
                 onEnteringFrequency: (value) => enterFrequency = value,
                 onChanged: changed,
                 onSave: save,
                 onClose: () => Navigator.pop(dialogContext),
                 onDelete: () async {
+                  final currentIndex = _channels.indexWhere(
+                    (channel) => channel.location == location,
+                  );
+                  if (currentIndex < 0) {
+                    Navigator.pop(dialogContext);
+                    return;
+                  }
                   final confirmed = await _confirmDeleteChannel(
-                    _channels[channelIndex],
+                    _channels[currentIndex],
                   );
                   if (confirmed && dialogContext.mounted) {
-                    _deleteChannel();
+                    _deleteChannelAt(currentIndex);
                     Navigator.pop(dialogContext);
                   }
                 },
@@ -2729,14 +3134,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Widget _buildLibrary() {
-    final visible = _channels.asMap().entries.where((entry) {
-      final q = _query.toLowerCase();
-      return q.isEmpty ||
-          !entry.value.cleared &&
-              (entry.value.name.toLowerCase().contains(q) ||
-                  entry.value.frequency.toString().contains(q) ||
-                  entry.value.comment.toLowerCase().contains(q));
-    }).toList();
+    final visible = _channelTableRows();
     final invalid = _activeChannels
         .where((channel) => _channelIssues(channel).isNotEmpty)
         .length;
@@ -2889,7 +3287,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     padding: const EdgeInsets.all(14),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final compact = constraints.maxWidth < 480;
+                        final compact = constraints.maxWidth < 780;
                         return Row(
                           children: [
                             Expanded(
@@ -2917,6 +3315,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 tooltip: 'Add channel',
                                 icon: const Icon(Icons.add),
                               ),
+                              const SizedBox(width: 4),
+                              FilterChip(
+                                key: const ValueKey('show-empty-slots-toggle'),
+                                selected: _showEmptySlots,
+                                onSelected: _setShowEmptySlots,
+                                avatar: const Icon(Icons.space_bar, size: 17),
+                                label: const Text('Slots'),
+                                tooltip:
+                                    'Show every memory slot, including empty ones',
+                              ),
                             ] else ...[
                               OutlinedButton.icon(
                                 onPressed: _duplicateChannel,
@@ -2929,17 +3337,31 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 icon: const Icon(Icons.add),
                                 label: const Text('Add channel'),
                               ),
+                              const SizedBox(width: 8),
+                              FilterChip(
+                                key: const ValueKey('show-empty-slots-toggle'),
+                                selected: _showEmptySlots,
+                                onSelected: _setShowEmptySlots,
+                                avatar: const Icon(Icons.space_bar, size: 17),
+                                label: const Text('Show empty slots'),
+                                tooltip:
+                                    'Show every memory slot, including empty ones',
+                              ),
                             ],
                             const SizedBox(width: 2),
                             const _HelpButton(
                               title: 'Channel editing',
                               details:
-                                  'Add creates a channel in the next available radio memory slot. '
+                                  'Add lets you place a new channel at the end, before the '
+                                  'selected channel, or after it. Before and after shift following '
+                                  'channels through the radio memory slots. '
                                   'Duplicate copies the selected row, and Delete removes it after '
                                   'confirmation. Double-click any row to edit all of its fields. '
                                   'Right-click a row to copy, cut, paste, duplicate, or clear it. '
                                   'Drag the handle at the left edge of a row to move it; intervening '
                                   'channels shift through the same memory slots. '
+                                  'Show empty slots keeps the radio memory layout visible; '
+                                  'double-click an empty slot to create a channel there. '
                                   'Clear removes it from the radio on the next write. Use '
                                   'Cmd/Ctrl+Z to undo and Cmd/Ctrl+Shift+Z to redo.',
                             ),
@@ -2954,26 +3376,75 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         : _ChannelTable(
                             key: _channelTableKey,
                             entries: visible,
-                            selected: _selected,
+                            selected: _current?.location ?? -1,
                             radioModel: _model,
                             capabilities: _capabilities,
                             columnOrder: _columnOrder,
                             columnWidths: _columnWidths,
                             onColumnOrderChanged: _setColumnOrder,
                             onColumnWidthChanged: _setColumnWidth,
-                            onSelect: (index) =>
-                                setState(() => _selected = index),
+                            onSelect: (location) {
+                              final index = _channels.indexWhere(
+                                (channel) => channel.location == location,
+                              );
+                              if (index >= 0) {
+                                setState(() => _selected = index);
+                              }
+                            },
                             clipboardNotEmpty: _channelClipboard.isNotEmpty,
-                            onCopy: _copyChannel,
-                            onCut: _cutChannel,
-                            onPaste: _pasteChannel,
-                            onDuplicate: _duplicateChannelAt,
-                            onClear: _clearChannel,
-                            onMove: _moveChannel,
+                            onCopy: (location) {
+                              final index = _channels.indexWhere(
+                                (channel) => channel.location == location,
+                              );
+                              if (index >= 0) _copyChannel(index);
+                            },
+                            onCut: (location) {
+                              final index = _channels.indexWhere(
+                                (channel) => channel.location == location,
+                              );
+                              if (index >= 0) _cutChannel(index);
+                            },
+                            onPaste: _pasteChannelAtLocation,
+                            onDuplicate: (location) {
+                              final index = _channels.indexWhere(
+                                (channel) => channel.location == location,
+                              );
+                              if (index >= 0) _duplicateChannelAt(index);
+                            },
+                            onClear: (location) {
+                              final index = _channels.indexWhere(
+                                (channel) => channel.location == location,
+                              );
+                              if (index >= 0) _clearChannel(index);
+                            },
+                            onMove: (fromLocation, toLocation) {
+                              final fromIndex = _channels.indexWhere(
+                                (channel) => channel.location == fromLocation,
+                              );
+                              final toIndex = _channels.indexWhere(
+                                (channel) => channel.location == toLocation,
+                              );
+                              if (fromIndex < 0) return;
+                              if (toIndex >= 0 && !_channels[toIndex].cleared) {
+                                _moveChannel(fromIndex, toIndex);
+                              } else {
+                                _moveChannelToLocation(fromIndex, toLocation);
+                              }
+                            },
+                            onInsertEmptyBefore: _insertEmptySlotBefore,
+                            onRemoveEmpty: _removeEmptySlot,
                             reorderEnabled: _query.isEmpty,
-                            onOpen: (index) {
-                              setState(() => _selected = index);
-                              _showChannelEditor(index);
+                            reorderDisabledMessage: _query.isNotEmpty
+                                ? 'Clear search to rearrange channels'
+                                : 'Rearrange channels',
+                            onOpen: (location) {
+                              final index = _channels.indexWhere(
+                                (channel) => channel.location == location,
+                              );
+                              if (index >= 0) {
+                                setState(() => _selected = index);
+                              }
+                              unawaited(_showChannelEditorAtLocation(location));
                             },
                           ),
                   ),
@@ -5342,6 +5813,8 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
   }
 }
 
+enum _AddChannelPlacement { end, beforeSelected, afterSelected }
+
 const _repeaterStates = <String>[
   'Alabama',
   'Alaska',
@@ -6509,7 +6982,10 @@ class _ChannelTable extends StatefulWidget {
     required this.onDuplicate,
     required this.onClear,
     required this.onMove,
+    required this.onInsertEmptyBefore,
+    required this.onRemoveEmpty,
     required this.reorderEnabled,
+    required this.reorderDisabledMessage,
     required this.onOpen,
   });
 
@@ -6529,7 +7005,10 @@ class _ChannelTable extends StatefulWidget {
   final ValueChanged<int> onDuplicate;
   final ValueChanged<int> onClear;
   final void Function(int fromIndex, int toIndex) onMove;
+  final ValueChanged<int> onInsertEmptyBefore;
+  final ValueChanged<int> onRemoveEmpty;
   final bool reorderEnabled;
+  final String reorderDisabledMessage;
   final ValueChanged<int> onOpen;
 
   @override
@@ -6603,6 +7082,16 @@ class _ChannelTableState extends State<_ChannelTable> {
           child: const Text('Duplicate'),
         ),
         PopupMenuItem(
+          value: 5,
+          enabled: !isCleared && widget.reorderEnabled,
+          child: const Text('Insert empty slot before'),
+        ),
+        PopupMenuItem(
+          value: 6,
+          enabled: isCleared && widget.reorderEnabled,
+          child: const Text('Remove empty slot'),
+        ),
+        PopupMenuItem(
           value: 4,
           enabled: !isCleared,
           child: const Text('Clear channel'),
@@ -6624,6 +7113,12 @@ class _ChannelTableState extends State<_ChannelTable> {
           break;
         case 4:
           widget.onClear(index);
+          break;
+        case 5:
+          widget.onInsertEmptyBefore(index);
+          break;
+        case 6:
+          widget.onRemoveEmpty(index);
           break;
       }
     });
@@ -6942,14 +7437,17 @@ class _ChannelTableState extends State<_ChannelTable> {
     BuildContext context,
     MapEntry<int, RadioChannel> entry,
     List<_ChannelColumn> columns,
-    double dragHandleWidth,
-  ) {
+    double dragHandleWidth, {
+    required bool startsEmptyGroup,
+    required bool endsEmptyGroup,
+  }) {
     final isCleared = entry.value.cleared;
     final canDrag = widget.reorderEnabled && !isCleared;
     final dragLabel = entry.value.name.isEmpty
         ? 'Channel ${channelNumberLabel(widget.radioModel, entry.value.location)}'
         : entry.value.name;
     return DragTarget<int>(
+      key: ValueKey('channel-slot-${entry.key}'),
       onWillAcceptWithDetails: (details) =>
           widget.reorderEnabled && details.data != entry.key,
       onAcceptWithDetails: (details) => widget.onMove(details.data, entry.key),
@@ -6963,7 +7461,7 @@ class _ChannelTableState extends State<_ChannelTable> {
                 _showRowMenu(context, entry.key, details.globalPosition),
             child: Tooltip(
               message: isCleared
-                  ? 'Empty channel'
+                  ? 'Empty memory slot. Double-click to create a channel.'
                   : 'Double-click to edit channel',
               child: InkWell(
                 onDoubleTap: () => widget.onOpen(entry.key),
@@ -6976,6 +7474,16 @@ class _ChannelTableState extends State<_ChannelTable> {
                       : isCleared
                       ? const Color(0xFFFAFAFA)
                       : Colors.white,
+                  foregroundDecoration: BoxDecoration(
+                    border: Border(
+                      top: startsEmptyGroup
+                          ? const BorderSide(color: Color(0xFFD8DEDA))
+                          : BorderSide.none,
+                      bottom: endsEmptyGroup
+                          ? const BorderSide(color: Color(0xFFD8DEDA))
+                          : BorderSide.none,
+                    ),
+                  ),
                   child: Row(
                     children: [
                       SizedBox(
@@ -7017,7 +7525,7 @@ class _ChannelTableState extends State<_ChannelTable> {
                             child: Tooltip(
                               message: canDrag
                                   ? 'Drag to rearrange channel'
-                                  : 'Clear search to rearrange channels',
+                                  : widget.reorderDisabledMessage,
                               child: Icon(
                                 Icons.drag_indicator,
                                 size: 18,
@@ -7037,15 +7545,24 @@ class _ChannelTableState extends State<_ChannelTable> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                isCleared && column.label != '#'
-                                    ? '—'
+                                isCleared
+                                    ? column.label == '#'
+                                          ? column.value(entry.value)
+                                          : column.label == 'NAME'
+                                          ? 'Empty slot'
+                                          : '—'
                                     : column.value(entry.value),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontWeight: column.label == 'NAME'
-                                      ? FontWeight.w600
+                                      ? isCleared
+                                            ? FontWeight.w400
+                                            : FontWeight.w600
                                       : FontWeight.w400,
+                                  fontStyle: isCleared && column.label == 'NAME'
+                                      ? FontStyle.italic
+                                      : null,
                                   color: isCleared
                                       ? Colors.black38
                                       : column.label == '#'
@@ -7127,11 +7644,23 @@ class _ChannelTableState extends State<_ChannelTable> {
                       itemCount: widget.entries.length,
                       itemBuilder: (context, index) {
                         final entry = widget.entries[index];
+                        final previous = index > 0
+                            ? widget.entries[index - 1].value
+                            : null;
+                        final next = index + 1 < widget.entries.length
+                            ? widget.entries[index + 1].value
+                            : null;
                         return _channelRow(
                           context,
                           entry,
                           columns,
                           dragHandleWidth,
+                          startsEmptyGroup:
+                              entry.value.cleared &&
+                              (previous == null || !previous.cleared),
+                          endsEmptyGroup:
+                              entry.value.cleared &&
+                              (next == null || !next.cleared),
                         );
                       },
                     ),
@@ -7156,6 +7685,7 @@ class _ChannelEditor extends StatelessWidget {
     required this.onSave,
     required this.onDelete,
     required this.onClose,
+    this.canDelete = true,
     this.enteringFrequency = false,
     this.onEnteringFrequency,
   });
@@ -7168,6 +7698,7 @@ class _ChannelEditor extends StatelessWidget {
   final VoidCallback onSave;
   final VoidCallback onDelete;
   final VoidCallback onClose;
+  final bool canDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -7267,14 +7798,15 @@ class _ChannelEditor extends StatelessWidget {
                   tooltip: 'Abbreviations & terms',
                   icon: const Icon(Icons.menu_book_outlined),
                 ),
-                IconButton(
-                  onPressed: onDelete,
-                  tooltip: repeaterRow ? 'Reset repeater' : 'Delete channel',
-                  icon: Icon(
-                    repeaterRow ? Icons.restart_alt : Icons.delete_outline,
-                    color: repeaterRow ? null : const Color(0xFF9B3D34),
+                if (canDelete)
+                  IconButton(
+                    onPressed: onDelete,
+                    tooltip: repeaterRow ? 'Reset repeater' : 'Delete channel',
+                    icon: Icon(
+                      repeaterRow ? Icons.restart_alt : Icons.delete_outline,
+                      color: repeaterRow ? null : const Color(0xFF9B3D34),
+                    ),
                   ),
-                ),
                 IconButton(
                   onPressed: onClose,
                   tooltip: 'Close editor',
@@ -7563,6 +8095,7 @@ class _ChannelEditor extends StatelessWidget {
                                 'FM': 'FM',
                                 'NFM': 'NFM',
                                 'AM': 'AM',
+                                'DMR': 'DMR (MOTOTRBO)',
                                 'DV': 'Digital voice',
                               }),
                         onValue: (v) => onChanged(() => channel.mode = v),

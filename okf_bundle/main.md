@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:37:31Z"
+timestamp: "2026-10-27T10:52:32Z"
 concept_id: main
 language: dart
 ---
@@ -39,6 +39,7 @@ language: dart
 | related | [_LibraryState](/main/LibraryState.md) |
 | related | [_ChannelApplyDialog](/main/ChannelApplyDialog.md) |
 | related | [_ChannelApplyDialogState](/main/ChannelApplyDialogState.md) |
+| related | [_AddChannelPlacement](/main/AddChannelPlacement.md) |
 | related | [RepeaterBookDialog](/main/RepeaterBookDialog.md) |
 | related | [_RepeaterBookDialogState](/main/RepeaterBookDialogState.md) |
 | related | [_HelpButton](/main/HelpButton.md) |
@@ -85,6 +86,7 @@ language: dart
 | related | [_WindowStateManager](/main/WindowStateManager.md) |
 | related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |
+| related | [_channelTableRows](/main/channelTableRows.md) |
 | related | [_rememberChannelImageBaseline](/main/rememberChannelImageBaseline.md) |
 | related | [invalid](/main/invalid.md) |
 | related | [initState](/main/initState.md) |
@@ -102,6 +104,7 @@ language: dart
 | related | [_saveRadioSelection](/main/saveRadioSelection.md) |
 | related | [_setColumnOrder](/main/setColumnOrder.md) |
 | related | [_setColumnWidth](/main/setColumnWidth.md) |
+| related | [_setShowEmptySlots](/main/setShowEmptySlots.md) |
 | related | [dispose](/main/dispose.md) |
 | related | [_refreshPorts](/main/refreshPorts.md) |
 | related | [_loadModels](/main/loadModels.md) |
@@ -120,6 +123,9 @@ language: dart
 | related | [_channelIssues](/main/channelIssues.md) |
 | related | [_sortChannelsByLocation](/main/sortChannelsByLocation.md) |
 | related | [_moveChannel](/main/moveChannel.md) |
+| related | [_moveChannelToLocation](/main/moveChannelToLocation.md) |
+| related | [_insertEmptySlotBefore](/main/insertEmptySlotBefore.md) |
+| related | [_removeEmptySlot](/main/removeEmptySlot.md) |
 | related | [_findRepeaters](/main/findRepeaters.md) |
 | related | [_showNoEmptyChannelSlot](/main/showNoEmptyChannelSlot.md) |
 | related | [_loadFileSaveWarning](/main/loadFileSaveWarning.md) |
@@ -139,14 +145,18 @@ language: dart
 | related | [_radioSettingChanges](/main/radioSettingChanges.md) |
 | related | [walk](/main/walk.md) |
 | related | [_writeRadioSettings](/main/writeRadioSettings.md) |
+| related | [_newChannelAt](/main/newChannelAt.md) |
+| related | [_endInsertionLocation](/main/endInsertionLocation.md) |
+| related | [_chooseAddChannelPlacement](/main/chooseAddChannelPlacement.md) |
+| related | [_insertChannelAt](/main/insertChannelAt.md) |
 | related | [_addChannel](/main/addChannel.md) |
 | related | [_duplicateChannel](/main/duplicateChannel.md) |
 | related | [_duplicateChannelAt](/main/duplicateChannelAt.md) |
 | related | [_copyChannel](/main/copyChannel.md) |
 | related | [_cutChannel](/main/cutChannel.md) |
-| related | [_pasteChannel](/main/pasteChannel.md) |
+| related | [_pasteChannelAtLocation](/main/pasteChannelAtLocation.md) |
 | related | [_confirmOverwriteChannel](/main/confirmOverwriteChannel.md) |
-| related | [_deleteChannel](/main/deleteChannel.md) |
+| related | [_deleteChannelAt](/main/deleteChannelAt.md) |
 | related | [_clearChannel](/main/clearChannel.md) |
 | related | [_keepMidlandRepeater](/main/keepMidlandRepeater.md) |
 | related | [_noteRepeaterRowKept](/main/noteRepeaterRowKept.md) |
@@ -164,7 +174,7 @@ language: dart
 | related | [_showUpdateAvailable](/main/showUpdateAvailable.md) |
 | related | [_showUpToDate](/main/showUpToDate.md) |
 | related | [_buildAbout](/main/buildAbout.md) |
-| related | [_showChannelEditor](/main/showChannelEditor.md) |
+| related | [_showChannelEditorAtLocation](/main/showChannelEditorAtLocation.md) |
 | related | [_changed](/main/changed.md) |
 | related | [save](/main/save.md) |
 | related | [_confirmDeleteChannel](/main/confirmDeleteChannel.md) |

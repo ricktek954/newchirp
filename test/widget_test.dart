@@ -586,6 +586,9 @@ void main() {
 
     await tester.tap(find.text('Add channel'));
     await tester.pumpAndSettle();
+    expect(find.text('Where should the new channel go?'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('add-channel-at-end')));
+    await tester.pumpAndSettle();
 
     final after = tester.state<ScrollableState>(verticalList).position;
     expect(after.pixels, greaterThan(beforePixels));
@@ -601,6 +604,84 @@ void main() {
 
     await tester.pump(const Duration(seconds: 3));
     await tester.pumpAndSettle();
+  });
+
+  testWidgets('adding before or after selected shifts memory locations', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+    await tester.tap(find.text('GMRS 2'));
+    await tester.pump();
+
+    await tester.tap(find.text('Add channel'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('add-channel-before-selected')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-2')),
+        matching: find.text('NEW 2'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-3')),
+        matching: find.text('GMRS 2'),
+      ),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.text('Add channel'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('add-channel-after-selected')));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-3')),
+        matching: find.text('NEW 3'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-4')),
+        matching: find.text('GMRS 2'),
+      ),
+      findsOneWidget,
+    );
+
+    final clearedRow = await tester.startGesture(
+      tester.getCenter(find.text('NEW 3')),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await clearedRow.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Clear channel'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('channel-slot-3')), findsNothing);
+    expect(find.text('Empty slot'), findsNothing);
+
+    await tester.tap(find.byKey(const ValueKey('show-empty-slots-toggle')));
+    await tester.pumpAndSettle();
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-3')),
+        matching: find.text('Empty slot'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('double-clicking a channel opens the modal editor', (
@@ -1170,6 +1251,165 @@ void main() {
     expect(find.text('GMRS 1'), findsNothing);
   });
 
+  testWidgets('empty memory slots can be shown and filled in place', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Delete channel'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete channel'));
+    await tester.pumpAndSettle();
+
+    final emptySlot = find.byKey(const ValueKey('channel-slot-3'));
+    expect(emptySlot, findsNothing);
+
+    await tester.tap(find.byKey(const ValueKey('show-empty-slots-toggle')));
+    await tester.pumpAndSettle();
+
+    expect(emptySlot, findsOneWidget);
+    expect(find.text('Empty slot'), findsOneWidget);
+
+    await tester.tap(emptySlot);
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tap(emptySlot);
+    await tester.pumpAndSettle();
+
+    expect(find.text('Channel details'), findsOneWidget);
+    expect(find.byTooltip('Delete channel'), findsNothing);
+    expect(find.text('NEW 3'), findsOneWidget);
+
+    await tester.tap(find.text('Save channel'));
+    await tester.pumpAndSettle();
+
+    expect(emptySlot, findsOneWidget);
+    expect(find.text('NEW 3'), findsWidgets);
+  });
+
+  testWidgets('channels can be dragged into empty memory slots', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Delete channel'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Delete channel'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('show-empty-slots-toggle')));
+    await tester.pumpAndSettle();
+
+    final source = find.descendant(
+      of: find.byKey(const ValueKey('channel-slot-4')),
+      matching: find.byTooltip('Drag to rearrange channel'),
+    );
+    final target = find.byKey(const ValueKey('channel-slot-3'));
+    final gesture = await tester.startGesture(tester.getCenter(source));
+    await tester.pump();
+    await gesture.moveTo(tester.getCenter(target));
+    await tester.pump();
+    await gesture.up();
+    await tester.pumpAndSettle();
+
+    expect(find.text('Moved GMRS 4 to channel 3'), findsOneWidget);
+    expect(
+      find.descendant(of: target, matching: find.text('GMRS 4')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: target, matching: find.text('Empty slot')),
+      findsNothing,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-4')),
+        matching: find.text('Empty slot'),
+      ),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('empty slots can be inserted and removed without dragging', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    var gesture = await tester.startGesture(
+      tester.getCenter(find.text('GMRS 2')),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Insert empty slot before'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-3')),
+        matching: find.text('GMRS 2'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.byKey(const ValueKey('channel-slot-2')), findsNothing);
+    expect(
+      find.text('Inserted an empty slot before channel 2'),
+      findsOneWidget,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('show-empty-slots-toggle')));
+    await tester.pumpAndSettle();
+    final emptySlot = find.byKey(const ValueKey('channel-slot-2'));
+    expect(
+      find.descendant(of: emptySlot, matching: find.text('Empty slot')),
+      findsOneWidget,
+    );
+
+    gesture = await tester.startGesture(
+      tester.getCenter(emptySlot),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Remove empty slot'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(of: emptySlot, matching: find.text('GMRS 2')),
+      findsOneWidget,
+    );
+    expect(find.text('Empty slot'), findsNothing);
+  });
+
   testWidgets('welcome screen fits the default macOS window', (tester) async {
     tester.view.physicalSize = const Size(800, 600);
     tester.view.devicePixelRatio = 1;
@@ -1212,14 +1452,8 @@ void main() {
       findsNWidgets(2),
     );
     expect(find.textContaining('rick@newchirp.net'), findsNWidgets(2));
-    expect(
-      find.textContaining('Randolpho Cafe · Contributor'),
-      findsOneWidget,
-    );
-    expect(
-      find.textContaining('[redacted-email]'),
-      findsOneWidget,
-    );
+    expect(find.textContaining('Randolpho Cafe · Contributor'), findsOneWidget);
+    expect(find.textContaining('[redacted-email]'), findsOneWidget);
   });
 
   testWidgets('frequency reference is available from the sidebar', (

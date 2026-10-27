@@ -13,6 +13,8 @@ implementation history, architecture, known risks, and prioritized next work.
 - CSV/GMRS template insertion starting at any channel number
 - Searchable channel library with validation and detailed editing
 - Drag-and-drop channel rearrangement across the radio's occupied memory slots
+- Optional empty-slot view that keeps memory gaps visible and lets a channel
+  be created directly in a specific slot
 - Right-click copy, cut, paste, and duplicate for channel rows
 - Right-click clear channel, which clears it from the radio on the next write
 - Undo/redo with keyboard shortcuts
@@ -90,10 +92,12 @@ GUI requirements.
 Always read a radio before writing it. NewChirp intentionally keeps writing
 locked until a matching radio image has been downloaded in the current session.
 
-Use **Open file** to load either a CHIRP-compatible CSV or a native CHIRP image
-such as `.img`, `.icf`, `.itm`, or `.d72`. Native images use CHIRP model
-detection, retain the original image for radio transfer, and unlock upload when
-the detected model is selected.
+Use **Open file** to load a CHIRP-compatible CSV, a MOTOTRBO CPS 2.0 Zone XML
+export, or a native CHIRP image such as `.img`, `.icf`, `.itm`, or `.d72`.
+CPS 2.0 XML is read-only and imports conventional channels, including basic
+analog and DMR fields. Native CHIRP images use model detection, retain the
+original image for radio transfer, and unlock upload when the detected model is
+selected.
 
 ### Experimental CHIRP modules
 
