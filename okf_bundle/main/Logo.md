@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T14:01:33Z"
+timestamp: "2026-10-28T09:16:58Z"
 concept_id: main/Logo
 language: dart
 ---
@@ -27,7 +27,7 @@ class _Logo
 - `build`
 
 ## Source
-Lines 5113–5125 in `main.dart`
+Lines 5216–5228 in `main.dart`
 
 ## Relationships
 

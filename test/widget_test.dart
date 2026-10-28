@@ -69,8 +69,8 @@ class _FakeUpdateInstaller extends UpdateInstaller {
       const UpdateDownloadProgress(receivedBytes: 50, totalBytes: 100),
     );
     return DownloadedUpdate(
-      path: '/tmp/NewChirp-${update.latestVersion}.dmg',
-      platform: 'macos',
+      path: '/tmp/NewChirp-linux-x64-${update.latestVersion}.deb',
+      platform: 'linux',
       version: update.latestVersion,
     );
   }
@@ -363,7 +363,7 @@ void main() {
         updateChecker: _FakeUpdateChecker(
           const UpdateCheckResult(
             currentVersion: '1.0.3',
-            latestVersion: '1.0.4',
+            latestVersion: '9.9.9',
             releaseUrl: 'https://newchirp.net/#download',
           ),
         ),
@@ -373,7 +373,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Update available'), findsOneWidget);
-    expect(find.textContaining('NewChirp 1.0.4 is available'), findsOneWidget);
+    expect(find.textContaining('NewChirp 9.9.9 is available'), findsOneWidget);
     expect(find.text('Open download page'), findsOneWidget);
     expect(find.text('Download and install'), findsNothing);
   });
@@ -393,9 +393,10 @@ void main() {
         updateChecker: _FakeUpdateChecker(
           const UpdateCheckResult(
             currentVersion: '1.0.3',
-            latestVersion: '1.0.4',
+            latestVersion: '9.9.9',
             releaseUrl: 'https://newchirp.net/#download',
-            downloadUrl: 'https://newchirp.net/downloads/NewChirp-1.0.4.dmg',
+            downloadUrl:
+                'https://newchirp.net/downloads/NewChirp-linux-x64-9.9.9.deb',
           ),
         ),
         updateInstaller: installer,
@@ -405,7 +406,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('NewChirp 1.0.4 is ready'), findsOneWidget);
+    expect(find.text('NewChirp 9.9.9 is ready'), findsOneWidget);
     expect(find.text('Download and install'), findsOneWidget);
 
     await tester.tap(find.text('Download and install'));
@@ -413,7 +414,7 @@ void main() {
 
     expect(installer.downloadCount, 1);
     expect(installer.installCount, 1);
-    expect(installer.installed?.version, '1.0.4');
+    expect(installer.installed?.version, '9.9.9');
     expect(exited, isTrue);
     expect(find.text('Update available'), findsNothing);
   });
@@ -431,9 +432,10 @@ void main() {
         updateChecker: _FakeUpdateChecker(
           const UpdateCheckResult(
             currentVersion: '1.0.3',
-            latestVersion: '1.0.4',
+            latestVersion: '9.9.9',
             releaseUrl: 'https://evil.example/setup.exe',
-            downloadUrl: 'https://evil.example/NewChirp-1.0.4.dmg',
+            downloadUrl:
+                'https://evil.example/NewChirp-linux-x64-9.9.9.deb',
           ),
         ),
         checkForUpdatesOnStartup: true,

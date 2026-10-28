@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T14:01:33Z"
+timestamp: "2026-10-28T09:16:58Z"
 concept_id: main/channelDetail
 language: dart
 ---
@@ -23,7 +23,7 @@ String_channelDetail(RepeaterSearchResult result)
 ```
 
 ## Source
-Lines 6303–6303 in `main.dart`
+Lines 6406–6406 in `main.dart`
 
 ## Relationships
 

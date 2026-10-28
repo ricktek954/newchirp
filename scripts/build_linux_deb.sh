@@ -118,7 +118,7 @@ Section: hamradio
 Priority: optional
 Architecture: $DEB_ARCH
 Maintainer: Rick Lopez <rick@newchirp.net>
-Depends: libc6, libgtk-3-0, libglib2.0-0, libstdc++6, libgcc-s1
+Depends: libc6, libgtk-3-0, libglib2.0-0, libstdc++6, libgcc-s1, libegl1, libgles2
 Installed-Size: $INSTALLED_SIZE
 Homepage: https://newchirp.net/
 Description: Desktop radio programmer for amateur and GMRS radios

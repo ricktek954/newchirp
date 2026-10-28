@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T14:01:33Z"
+timestamp: "2026-10-28T09:16:58Z"
 concept_id: main/legendItem
 language: dart
 ---
@@ -23,7 +23,7 @@ WidgetlegendItem(Color color, String label)
 ```
 
 ## Source
-Lines 4110–4110 in `main.dart`
+Lines 4213–4213 in `main.dart`
 
 ## Relationships
 

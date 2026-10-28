@@ -87,8 +87,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y \
             clang cmake ninja-build pkg-config \
-            libgtk-3-dev liblzma-dev libstdc++-12-dev
-      - name: Build Debian package
+            libgtk-3-dev liblzma-dev libstdc++-12-dev \
+            libegl1 libgles2 libegl-mesa0 libgl1-mesa-dri rpm
+          curl -fsSL \
+            https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage \
+            -o /tmp/appimagetool-x86_64.AppImage
+          chmod +x /tmp/appimagetool-x86_64.AppImage
+      - name: Build Linux packages
         shell: bash
         run: |
           set -euo pipefail
@@ -105,12 +110,28 @@ jobs:
           bash scripts/build_linux_deb.sh \
             --bundle-dir "$BUNDLE" \
             --output "build/NewChirp-linux-x64-${VERSION}.deb"
+          bash scripts/build_linux_rpm.sh \
+            --bundle-dir "$BUNDLE" \
+            --output "build/NewChirp-linux-x64-${VERSION}.rpm"
+          bash scripts/build_linux_appimage.sh \
+            --bundle-dir "$BUNDLE" \
+            --appimagetool /tmp/appimagetool-x86_64.AppImage \
+            --output "build/NewChirp-linux-x64-${VERSION}.AppImage"
           dpkg-deb --field "build/NewChirp-linux-x64-${VERSION}.deb" Version \
             | grep -Fx "${VERSION}-1"
+          dpkg-deb --field "build/NewChirp-linux-x64-${VERSION}.deb" Depends \
+            | grep -E 'libegl1.*libgles2|libgles2.*libegl1'
+          rpm -qp --requires "build/NewChirp-linux-x64-${VERSION}.rpm" \
+            | grep -Fx 'libEGL.so.1()(64bit)'
+          rpm -qp --requires "build/NewChirp-linux-x64-${VERSION}.rpm" \
+            | grep -Fx 'libGLESv2.so.2()(64bit)'
       - uses: actions/upload-artifact@v4
         with:
           name: linux
-          path: build/NewChirp-linux-x64-*.deb
+          path: |
+            build/NewChirp-linux-x64-*.deb
+            build/NewChirp-linux-x64-*.rpm
+            build/NewChirp-linux-x64-*.AppImage
           if-no-files-found: error
 
   publish:

@@ -8,11 +8,17 @@ OKF_BIN="$NEWCHIRP_OKF_VENV_DIR/bin/okf"
 
 find_okf_python() {
   if [[ -n "${NEWCHIRP_OKF_PYTHON:-}" ]]; then
-    printf '%s\n' "$NEWCHIRP_OKF_PYTHON"
+    if [[ -x "$NEWCHIRP_OKF_PYTHON" ]]; then
+      printf '%s\n' "$NEWCHIRP_OKF_PYTHON"
+      return 0
+    fi
+    echo "Ignoring NEWCHIRP_OKF_PYTHON=$NEWCHIRP_OKF_PYTHON because it is not executable." >&2
+  fi
+
+  if command -v python3 >/dev/null 2>&1; then
+    command -v python3
   elif [[ -x /opt/homebrew/bin/python3 ]]; then
     printf '%s\n' /opt/homebrew/bin/python3
-  elif command -v python3 >/dev/null 2>&1; then
-    command -v python3
   else
     echo "Unable to find python3. Set NEWCHIRP_OKF_PYTHON to a Python 3 executable." >&2
     return 127

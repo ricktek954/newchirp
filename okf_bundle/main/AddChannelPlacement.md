@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Enum"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T14:01:33Z"
+timestamp: "2026-10-28T09:16:58Z"
 concept_id: main/AddChannelPlacement
 language: dart
 ---
@@ -32,7 +32,7 @@ enum _AddChannelPlacement
 - `afterSelected`
 
 ## Source
-Lines 6025–6025 in `main.dart`
+Lines 6128–6128 in `main.dart`
 
 ## Relationships
 

@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 432 concepts across 4 domains and 19 modules'
-git_branch: main
+description: 'Top-level OKF summary: 454 concepts across 4 domains and 21 modules'
+git_branch: HEAD
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-27T14:01:34Z'
+timestamp: '2026-10-28T09:17:16Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 432 concepts | 4 domains | 19 modules
+> OKF v0.2 bundle | 454 concepts | 4 domains | 21 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 343 |
-| Class | 66 |
-| Module | 19 |
+| Function | 359 |
+| Class | 70 |
+| Module | 21 |
 | Enum | 4 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 432 |
+| dart | 454 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 180 concepts
+### [main.dart](main.dart/index.md) — 181 concepts
 
-- [main](main/index.md) (180 concepts)
+- [main](main/index.md) (181 concepts)
 
 ### [models](models/index.md) — 62 concepts
 
@@ -40,21 +40,22 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (5 concepts)
 
-### [services](services/index.md) — 165 concepts
+### [services](services/index.md) — 179 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (45 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (35 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/update_checker](services/update_checker/index.md) (17 concepts)
+- [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
 - [services/update_installer](services/update_installer/index.md) (11 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (10 concepts)
 - [services/window_state_store](services/window_state_store/index.md) (7 concepts)
-- [services/column_layout_store](services/column_layout_store/index.md) (6 concepts)
-- *…and 3 more modules*
+- *…and 4 more modules*
 
-### [widgets](widgets/index.md) — 25 concepts
+### [widgets](widgets/index.md) — 32 concepts
 
 - [widgets/radio_model_picker](widgets/radio_model_picker/index.md) (17 concepts)
+- [widgets/error_report_dialog](widgets/error_report_dialog/index.md) (7 concepts)
 - [widgets/file_save_warning_dialog](widgets/file_save_warning_dialog/index.md) (5 concepts)
 - [widgets/channel_library_image_bar](widgets/channel_library_image_bar/index.md) (3 concepts)
 

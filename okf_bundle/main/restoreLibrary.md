@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T14:01:33Z"
+timestamp: "2026-10-28T09:16:58Z"
 concept_id: main/restoreLibrary
 language: dart
 ---
@@ -23,7 +23,7 @@ void_restoreLibrary(_LibraryState state)
 ```
 
 ## Source
-Lines 547–547 in `main.dart`
+Lines 579–579 in `main.dart`
 
 ## Relationships
 

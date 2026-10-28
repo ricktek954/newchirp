@@ -141,6 +141,7 @@
 - [_showAbbreviationGlossary](showAbbreviationGlossary.md)
 - [_showActionError](showActionError.md)
 - [_showChannelEditorAtLocation](showChannelEditorAtLocation.md)
+- [_showErrorReport](showErrorReport.md)
 - [_showNoEmptyChannelSlot](showNoEmptyChannelSlot.md)
 - [_showRowMenu](showRowMenu.md)
 - [_showUpdateAvailable](showUpdateAvailable.md)
