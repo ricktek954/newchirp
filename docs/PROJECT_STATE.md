@@ -13,13 +13,10 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.24` source is prepared for release with the TS-2000
-  diagnostics and without the unapproved document-tab feature. Build, sign,
-  notarize, and publish the DMG from this Mac before recording it as live.
-- The macOS `1.0.23` release is built, signed, notarized, stapled, uploaded,
-  and live. It adds one-click in-app download, installation, and restart for
-  future releases, plus MOTOTRBO CPS2 XML import and the latest channel-slot
-  editing and RT97L wake-up changes.
+- The macOS `1.0.24` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes the TS-2000 settings/diagnostic fixes and removes the
+  unapproved document-tab implementation. It was released alongside an
+  experimental Android TD-BL-1 tester announcement.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -40,7 +37,7 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Release source: the committed macOS `1.0.24` source on `main`
+- Release source commit: `634de680` (`Prepare macOS 1.0.24 release`)
 - Open pull requests: none
 - Checked-out source version: `1.0.24+24`
 - macOS builds are pinned to CocoaPods with
@@ -56,20 +53,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.23 |
+| macOS | 1.0.24 |
 | Windows | 1.0.21 |
 | Linux | 1.0.25 |
 | Legacy shared manifest version | 1.0.21 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.23.dmg`
-- Version/build: `1.0.23` / `23`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.24.dmg`
+- Version/build: `1.0.24` / `24`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `3b617c3e6b27c2839d59838b892e55dd3a2d7f7aa74f6df8cb25d47c2c1d2afc`
-- Size: `81,896,914` bytes
-- Notarization submission: `392b259d-1155-4dad-bd8d-3850ecf7b228`
+  `93f182a7c18ae9b025a36168deb6327422059492e7ca1830995b6f47b7b24cf4`
+- Size: `81,940,618` bytes
+- Notarization submission: `150c499c-25bc-433c-8fae-246b275f4dc8`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -97,6 +94,10 @@ Linux 1.0.25 SHA-256:
 
 ## Recently completed
 
+- Published macOS `1.0.24` as a universal signed, notarized, stapled DMG.
+  Verified the embedded version, Python runtimes, CHIRP pin, TS-2000 override,
+  strict code signatures, Gatekeeper assessment, server checksum, and live
+  platform manifest.
 - Published Linux `1.0.25` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. The Pacman package targets Arch/Omarchy and
   declares `libglvnd` and `mesa` dependencies for OpenGL runtime support.
@@ -164,6 +165,23 @@ Linux 1.0.25 SHA-256:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.24 verification status
+
+Full verification before the macOS `1.0.24` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 135 tests passed
+- Python test discovery: 75 tests passed, 2 fixture-dependent tests skipped
+- Bridge upload/settings suite: all 14 tests passed
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.24` / `24`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.24`
 
 ## macOS 1.0.23 verification status
 
