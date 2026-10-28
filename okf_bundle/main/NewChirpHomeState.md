@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T09:18:53Z"
+timestamp: "2026-10-28T10:59:47Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -32,6 +32,14 @@ class _NewChirpHomeState
 - `_saveColumnLayout`
 - `_snapshotLibrary`
 - `_restoreLibrary`
+- `_allocateDocumentId`
+- `_captureActiveDocument`
+- `_applyDocumentState`
+- `_switchDocument`
+- `_openDocument`
+- `_openBlankDocument`
+- `_resetDocumentState`
+- `_closeDocument`
 - `_recordHistory`
 - `_undo`
 - `_redo`
@@ -57,6 +65,7 @@ class _NewChirpHomeState
 - `_unloadChirpModule`
 - `_importChirpImage`
 - `_chooseChannelApplyMode`
+- `_ensureActiveDocument`
 - `_applyChannels`
 - `_nextChannelLocation`
 - `_channelIssues`
@@ -134,7 +143,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 362–5089 in `main.dart`
+Lines 362–5304 in `main.dart`
 
 ## Relationships
 

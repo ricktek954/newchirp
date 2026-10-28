@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T09:18:53Z"
+timestamp: "2026-10-28T10:59:47Z"
 concept_id: main
 language: dart
 ---
@@ -34,9 +34,14 @@ language: dart
 | related | [_RadioSettingFieldState](/main/RadioSettingFieldState.md) |
 | related | [_GlossaryDialog](/main/GlossaryDialog.md) |
 | related | [_GlossaryDialogState](/main/GlossaryDialogState.md) |
+| related | [_DocumentTabs](/main/DocumentTabs.md) |
+| related | [_DocumentTabButton](/main/DocumentTabButton.md) |
 | related | [_TopBar](/main/TopBar.md) |
 | related | [_ChannelApplyMode](/main/ChannelApplyMode.md) |
 | related | [_LibraryState](/main/LibraryState.md) |
+| related | [_DocumentTab](/main/DocumentTab.md) |
+| related | [_ErrorReportDialog](/main/ErrorReportDialog.md) |
+| related | [_ErrorReportDialogState](/main/ErrorReportDialogState.md) |
 | related | [_ChannelApplyDialog](/main/ChannelApplyDialog.md) |
 | related | [_ChannelApplyDialogState](/main/ChannelApplyDialogState.md) |
 | related | [_AddChannelPlacement](/main/AddChannelPlacement.md) |
@@ -95,6 +100,14 @@ language: dart
 | related | [_saveColumnLayout](/main/saveColumnLayout.md) |
 | related | [_snapshotLibrary](/main/snapshotLibrary.md) |
 | related | [_restoreLibrary](/main/restoreLibrary.md) |
+| related | [_allocateDocumentId](/main/allocateDocumentId.md) |
+| related | [_captureActiveDocument](/main/captureActiveDocument.md) |
+| related | [_applyDocumentState](/main/applyDocumentState.md) |
+| related | [_switchDocument](/main/switchDocument.md) |
+| related | [_openDocument](/main/openDocument.md) |
+| related | [_openBlankDocument](/main/openBlankDocument.md) |
+| related | [_resetDocumentState](/main/resetDocumentState.md) |
+| related | [_closeDocument](/main/closeDocument.md) |
 | related | [_recordHistory](/main/recordHistory.md) |
 | related | [_undo](/main/undo.md) |
 | related | [_redo](/main/redo.md) |
@@ -120,6 +133,7 @@ language: dart
 | related | [_unloadChirpModule](/main/unloadChirpModule.md) |
 | related | [_importChirpImage](/main/importChirpImage.md) |
 | related | [_chooseChannelApplyMode](/main/chooseChannelApplyMode.md) |
+| related | [_ensureActiveDocument](/main/ensureActiveDocument.md) |
 | related | [_applyChannels](/main/applyChannels.md) |
 | related | [_nextChannelLocation](/main/nextChannelLocation.md) |
 | related | [_channelIssues](/main/channelIssues.md) |
@@ -213,7 +227,14 @@ language: dart
 | related | [dispose](/main/dispose.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
+| related | [build](/main/build.md) |
+| related | [build](/main/build.md) |
 | related | [_buildHelpMenu](/main/buildHelpMenu.md) |
+| related | [_DocumentTab](/main/DocumentTab.md) |
+| related | [createState](/main/createState.md) |
+| related | [dispose](/main/dispose.md) |
+| related | [_submit](/main/submit.md) |
+| related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |
 | related | [initState](/main/initState.md) |
 | related | [dispose](/main/dispose.md) |

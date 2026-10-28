@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 454 concepts across 4 domains and 21 modules'
+description: 'Top-level OKF summary: 471 concepts across 4 domains and 21 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-28T09:18:57Z'
+timestamp: '2026-10-28T10:59:49Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 454 concepts | 4 domains | 21 modules
+> OKF v0.2 bundle | 471 concepts | 4 domains | 21 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 359 |
-| Class | 70 |
+| Function | 372 |
+| Class | 74 |
 | Module | 21 |
 | Enum | 4 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 454 |
+| dart | 471 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 181 concepts
+### [main.dart](main.dart/index.md) — 196 concepts
 
-- [main](main/index.md) (181 concepts)
+- [main](main/index.md) (196 concepts)
 
 ### [models](models/index.md) — 62 concepts
 
@@ -40,7 +40,7 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (5 concepts)
 
-### [services](services/index.md) — 179 concepts
+### [services](services/index.md) — 181 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (45 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (35 concepts)
@@ -49,7 +49,7 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
 - [services/update_installer](services/update_installer/index.md) (11 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (10 concepts)
-- [services/window_state_store](services/window_state_store/index.md) (7 concepts)
+- [services/radio_image_store](services/radio_image_store/index.md) (8 concepts)
 - *…and 4 more modules*
 
 ### [widgets](widgets/index.md) — 32 concepts

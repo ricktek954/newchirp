@@ -387,16 +387,17 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     final installer = _FakeUpdateInstaller();
     var exited = false;
+    final extension = updateArtifactExtension()!;
 
     await tester.pumpWidget(
       testApp(
         updateChecker: _FakeUpdateChecker(
-          const UpdateCheckResult(
+          UpdateCheckResult(
             currentVersion: '1.0.3',
             latestVersion: '9.9.9',
             releaseUrl: 'https://newchirp.net/#download',
             downloadUrl:
-                'https://newchirp.net/downloads/NewChirp-linux-x64-9.9.9.deb',
+                'https://newchirp.net/downloads/NewChirp-9.9.9$extension',
           ),
         ),
         updateInstaller: installer,
@@ -627,7 +628,7 @@ void main() {
     await tester.pumpAndSettle();
     await openGmrsStarter(tester);
 
-    expect(find.text('GMRS Starter Library'), findsOneWidget);
+    expect(find.text('GMRS Starter Library'), findsNWidgets(2));
     expect(find.text('Add channel'), findsOneWidget);
     expect(find.text('GMRS 1'), findsWidgets);
     expect(find.text('TX TONE'), findsOneWidget);
@@ -1120,7 +1121,7 @@ void main() {
     expect(tester.getTopLeft(tone).dx, lessThan(tester.getTopLeft(name).dx));
   });
 
-  testWidgets('New confirms before discarding the current channel list', (
+  testWidgets('New opens a blank tab and preserves the current library', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1440, 900);
@@ -1136,14 +1137,14 @@ void main() {
     await tester.tap(find.text('Blank configuration'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Start a new blank configuration?'), findsOneWidget);
-    expect(find.text('GMRS 1'), findsWidgets);
+    expect(find.text('Untitled Library'), findsWidgets);
+    expect(find.text('GMRS 1'), findsNothing);
 
-    await tester.tap(find.text('Discard and continue'));
+    await tester.tap(find.text('GMRS Starter Library'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Untitled Library'), findsOneWidget);
-    expect(find.text('GMRS 1'), findsNothing);
+    expect(find.text('GMRS Starter Library'), findsNWidgets(2));
+    expect(find.text('GMRS 1'), findsWidgets);
   });
 
   testWidgets('GMRS starter remains available from the New menu', (
@@ -1167,7 +1168,7 @@ void main() {
 
     await tester.tap(find.text('Apply'));
     await tester.pumpAndSettle();
-    expect(find.text('GMRS Starter Library'), findsOneWidget);
+    expect(find.text('GMRS Starter Library'), findsNWidgets(2));
     expect(find.text('GMRS 1'), findsWidgets);
   });
 

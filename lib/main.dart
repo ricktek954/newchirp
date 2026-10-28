@@ -413,6 +413,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   final Map<String, double> _columnWidths = {};
   bool _showEmptySlots = false;
   bool _columnLayoutTouched = false;
+  final List<_DocumentTab> _documentTabs = [];
+  int? _activeDocumentId;
+  int _nextDocumentId = 1;
   Future<void>? _fileSaveWarningLoad;
   bool _hideFileSaveWarning = false;
   bool _savingLibrary = false;
@@ -591,6 +594,230 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ..clear()
         ..addAll(state.clearedLocations);
     });
+  }
+
+  int get _activeDocumentIndex {
+    final id = _activeDocumentId;
+    return id == null
+        ? -1
+        : _documentTabs.indexWhere((document) => document.id == id);
+  }
+
+  _DocumentTab? get _activeDocument {
+    final index = _activeDocumentIndex;
+    return index < 0 ? null : _documentTabs[index];
+  }
+
+  int _allocateDocumentId() => _nextDocumentId++;
+
+  void _captureActiveDocument() {
+    final document = _activeDocument;
+    if (document == null) return;
+    document
+      ..library = _snapshotLibrary()
+      ..model = _model
+      ..radioImage = _radioImage
+      ..radioSettings = _radioSettings
+      ..settingsDirty = _settingsDirty
+      ..settingsLoadedFromRadio = _settingsLoadedFromRadio
+      ..settingsLoadedModel = _settingsLoadedModel
+      ..settingsLoadedImage = _settingsLoadedImage
+      ..channelImageBaseline = _channelImageBaseline
+      ..page = _page
+      ..query = _query
+      ..undoStack = List.of(_undoStack)
+      ..redoStack = List.of(_redoStack);
+  }
+
+  void _applyDocumentState(_DocumentTab document) {
+    final library = document.library;
+    _channels = library.channels.map((channel) => channel.copy()).toList();
+    _selected = library.selected;
+    _libraryName = library.libraryName;
+    _libraryPath = library.libraryPath;
+    _libraryOpen = library.libraryOpen;
+    _dirty = library.dirty;
+    _capabilities = library.capabilities;
+    _radioZones = List.of(library.zones);
+    _selectedZone = library.selectedZone;
+    _clearedLocations
+      ..clear()
+      ..addAll(library.clearedLocations);
+    _model = document.model;
+    _radioImage = document.radioImage;
+    _radioSettings = document.radioSettings;
+    _settingsDirty = document.settingsDirty;
+    _settingsLoadedFromRadio = document.settingsLoadedFromRadio;
+    _settingsLoadedModel = document.settingsLoadedModel;
+    _settingsLoadedImage = document.settingsLoadedImage;
+    _settingsLoading = false;
+    _settingsError = null;
+    _settingsGeneration++;
+    _channelImageBaseline = document.channelImageBaseline;
+    _page = document.page;
+    _query = document.query;
+    _searchController.text = document.query;
+    _selected = _channels.isEmpty
+        ? -1
+        : _selected.clamp(0, _channels.length - 1).toInt();
+    _undoStack
+      ..clear()
+      ..addAll(document.undoStack);
+    _redoStack
+      ..clear()
+      ..addAll(document.redoStack);
+    _status = 'Ready';
+  }
+
+  void _switchDocument(int id) {
+    if (_busy || id == _activeDocumentId) return;
+    final target = _documentTabs
+        .where((document) => document.id == id)
+        .firstOrNull;
+    if (target == null) return;
+    _captureActiveDocument();
+    setState(() {
+      _activeDocumentId = target.id;
+      _applyDocumentState(target);
+    });
+    _syncMenuState();
+  }
+
+  void _openDocument({
+    required List<RadioChannel> channels,
+    required String libraryName,
+    String? libraryPath,
+    String? model,
+    String? radioImage,
+    RadioCapabilities? capabilities,
+    List<RadioZone> zones = const [],
+    int? selectedZone,
+    ChannelImageBaseline? channelImageBaseline,
+    int? documentId,
+  }) {
+    _captureActiveDocument();
+    final id = documentId ?? _allocateDocumentId();
+    final sortedChannels = channels.map((channel) => channel.copy()).toList()
+      ..sort((left, right) => left.location.compareTo(right.location));
+    final document = _DocumentTab(
+      id: id,
+      library: _LibraryState(
+        channels: sortedChannels,
+        selected: sortedChannels.isEmpty ? -1 : 0,
+        libraryName: libraryName,
+        libraryPath: libraryPath,
+        libraryOpen: true,
+        dirty: false,
+        capabilities: capabilities,
+        zones: List.of(zones),
+        selectedZone: selectedZone,
+        clearedLocations: <int>{},
+      ),
+      model: model,
+      radioImage: radioImage,
+      radioSettings: null,
+      settingsDirty: false,
+      settingsLoadedFromRadio: false,
+      settingsLoadedModel: null,
+      settingsLoadedImage: null,
+      channelImageBaseline: channelImageBaseline,
+      page: 0,
+      query: '',
+      undoStack: const [],
+      redoStack: const [],
+    );
+    setState(() {
+      _documentTabs.add(document);
+      _activeDocumentId = id;
+      _applyDocumentState(document);
+    });
+    _syncMenuState();
+  }
+
+  void _openBlankDocument({String name = 'Untitled Library'}) {
+    _openDocument(channels: const [], libraryName: name);
+  }
+
+  void _resetDocumentState() {
+    _channels = [];
+    _selected = -1;
+    _page = 0;
+    _query = '';
+    _searchController.clear();
+    _libraryName = 'NewChirp';
+    _libraryPath = null;
+    _libraryOpen = false;
+    _dirty = false;
+    _model = null;
+    _radioImage = null;
+    _capabilities = null;
+    _radioZones = [];
+    _selectedZone = null;
+    _radioSettings = null;
+    _settingsLoading = false;
+    _settingsError = null;
+    _settingsDirty = false;
+    _settingsLoadedFromRadio = false;
+    _settingsLoadedModel = null;
+    _settingsLoadedImage = null;
+    _settingsGeneration++;
+    _channelImageBaseline = null;
+    _clearedLocations.clear();
+    _undoStack.clear();
+    _redoStack.clear();
+    _status = 'Ready';
+  }
+
+  Future<void> _closeDocument(int id) async {
+    if (_busy) return;
+    _captureActiveDocument();
+    final index = _documentTabs.indexWhere((document) => document.id == id);
+    if (index < 0) return;
+    final document = _documentTabs[index];
+    if (document.dirty) {
+      final close = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: const Icon(
+            Icons.warning_amber_rounded,
+            color: Color(0xFFC46A15),
+          ),
+          title: Text('Close “${document.library.libraryName}”?'),
+          content: const Text(
+            'This tab has unsaved changes. Closing it will discard those '
+            'changes from the current session.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Keep tab'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Discard and close'),
+            ),
+          ],
+        ),
+      );
+      if (close != true || !mounted) return;
+    }
+
+    final closingActive = id == _activeDocumentId;
+    setState(() {
+      _documentTabs.removeAt(index);
+      if (_documentTabs.isEmpty) {
+        _activeDocumentId = null;
+        _resetDocumentState();
+        return;
+      }
+      if (closingActive) {
+        final nextIndex = index.clamp(0, _documentTabs.length - 1);
+        final next = _documentTabs[nextIndex];
+        _activeDocumentId = next.id;
+        _applyDocumentState(next);
+      }
+    });
+    _syncMenuState();
   }
 
   void _recordHistory() {
@@ -1043,19 +1270,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       return;
     }
 
-    final mode = _libraryOpen && _channels.isNotEmpty
-        ? await _chooseChannelApplyMode(
-            label: isXml ? 'MOTOTRBO CPS 2.0 channels' : 'CSV channels',
-            count: channels.length,
-          )
-        : const _ChannelApplyMode(replaceAll: true, startAt: 1);
-    if (mode == null || !mounted) return;
-
-    await _task('Importing ${file.name}…', () async {
-      _recordHistory();
-      _applyChannels(
-        channels,
-        mode,
+    await _task('Opening ${file.name}…', () async {
+      _openDocument(
+        channels: channels,
         libraryName: file.name.replaceFirst(
           RegExp(r'\.(?:csv|xml)$', caseSensitive: false),
           '',
@@ -1184,42 +1401,36 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       return;
     }
     if (!mounted) return;
-    final proceed = await _confirmReplaceLibrary(
-      destination: 'this CHIRP image',
-    );
-    if (!proceed || !mounted) return;
 
     await _task('Opening ${file.name}…', () async {
+      final documentId = _allocateDocumentId();
       String storedImage;
       try {
-        storedImage = await _imageStore.saveForModel(
+        storedImage = await _imageStore.saveForDocument(
           imported.model,
           imported.imagePath,
+          documentId,
         );
       } catch (error) {
         if (mounted) await _showActionError(error);
         return;
       }
       if (!mounted) return;
-      _recordHistory();
-      _applyChannels(
-        imported.channels,
-        const _ChannelApplyMode(replaceAll: true, startAt: 1),
+      _openDocument(
+        channels: imported.channels,
         libraryName: file.name.replaceFirst(RegExp(r'\.[^.]+$'), ''),
+        libraryPath: file.path,
+        model: imported.model,
+        radioImage: storedImage,
+        capabilities: imported.capabilities,
+        zones: imported.zones,
+        selectedZone: imported.zone,
+        documentId: documentId,
       );
       setState(() {
-        _model = imported.model;
-        _radioImage = storedImage;
-        _capabilities = imported.capabilities;
-        _radioZones = imported.zones;
-        _selectedZone = imported.zone;
         if (!_models.contains(imported.model)) {
           _models = [..._models, imported.model]..sort();
         }
-        _radioSettings = null;
-        _settingsLoadedModel = null;
-        _settingsLoadedImage = null;
-        _settingsError = null;
         _rememberChannelImageBaseline(fromRadio: false);
       });
       unawaited(_saveRadioSelection());
@@ -1241,12 +1452,48 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  void _ensureActiveDocument() {
+    if (_activeDocument != null) return;
+    final id = _allocateDocumentId();
+    _documentTabs.add(
+      _DocumentTab(
+        id: id,
+        library: const _LibraryState(
+          channels: [],
+          selected: -1,
+          libraryName: 'Untitled Library',
+          libraryPath: null,
+          libraryOpen: true,
+          dirty: false,
+          capabilities: null,
+          zones: [],
+          selectedZone: null,
+          clearedLocations: <int>{},
+        ),
+        model: _model,
+        radioImage: _radioImage,
+        radioSettings: null,
+        settingsDirty: false,
+        settingsLoadedFromRadio: false,
+        settingsLoadedModel: null,
+        settingsLoadedImage: null,
+        channelImageBaseline: null,
+        page: 0,
+        query: '',
+        undoStack: const [],
+        redoStack: const [],
+      ),
+    );
+    _activeDocumentId = id;
+  }
+
   void _applyChannels(
     List<RadioChannel> incoming,
     _ChannelApplyMode mode, {
     required String libraryName,
     String? libraryPath,
   }) {
+    _ensureActiveDocument();
     if (mode.replaceAll) {
       final sorted = [...incoming]
         ..sort((left, right) => left.location.compareTo(right.location));
@@ -1621,25 +1868,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _newLibrary() async {
-    if (!await _confirmReplaceLibrary(
-      destination: 'a new blank configuration',
-    )) {
-      return;
-    }
-    _recordHistory();
-    setState(() {
-      _channels = [];
-      _selected = -1;
-      _clearedLocations.clear();
-      _libraryName = 'Untitled Library';
-      _libraryPath = null;
-      _libraryOpen = true;
-      _page = 0;
-      _dirty = false;
-      _capabilities = null;
-      _radioZones = [];
-      _selectedZone = null;
-    });
+    _openBlankDocument();
   }
 
   Future<void> _useGmrsStarter() async {
@@ -2287,34 +2516,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _downloadRadio() async {
     if (_port == null || _model == null) return;
-    if (_libraryOpen && _channels.isNotEmpty) {
-      final replace = await showDialog<bool>(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => AlertDialog(
-          icon: const Icon(
-            Icons.warning_amber_rounded,
-            color: Color(0xFFC46A15),
-          ),
-          title: const Text('Replace current channel list?'),
-          content: const Text(
-            'Reading channels from the radio will replace the current channel list. '
-            'Save it as a CSV first if you want to keep it.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('Read channels'),
-            ),
-          ],
-        ),
-      );
-      if (replace != true || !mounted) return;
-    }
+    _diagnosticLog.record(
+      'radio',
+      'Radio read started',
+      context: {'model': _model!, 'port': _port!, 'zone': _selectedZone ?? ''},
+    );
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
     if (!await _confirmRadioInstructions(instructions, writing: false)) return;
@@ -2327,30 +2533,34 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           zone: _selectedZone,
           onProgress: _reportTransferProgress,
         );
-        final storedImage = await _imageStore.saveForModel(
+        final documentId = _allocateDocumentId();
+        final storedImage = await _imageStore.saveForDocument(
           _model!,
           result.imagePath,
+          documentId,
+        );
+        _openDocument(
+          channels: result.channels,
+          libraryName: _model!.replaceAll('_', ' '),
+          model: _model,
+          radioImage: storedImage,
+          capabilities: result.capabilities,
+          zones: result.zones,
+          selectedZone: result.zone,
+          documentId: documentId,
         );
         setState(() {
-          _channels = [...result.channels]
-            ..sort((left, right) => left.location.compareTo(right.location));
-          _clearedLocations.clear();
-          _selected = _channels.isEmpty ? -1 : 0;
-          _radioImage = storedImage;
-          _capabilities = result.capabilities;
-          _radioZones = result.zones;
-          _selectedZone = result.zone;
-          _libraryName = _model!.replaceAll('_', ' ');
-          _libraryOpen = true;
-          _dirty = false;
-          _page = 0;
-          _radioSettings = null;
-          _settingsDirty = false;
-          _settingsLoadedFromRadio = false;
-          _settingsLoadedModel = null;
-          _settingsLoadedImage = null;
           _rememberChannelImageBaseline(fromRadio: true);
         });
+        _diagnosticLog.record(
+          'radio',
+          'Radio read completed',
+          context: {
+            'model': _model!,
+            'port': _port!,
+            'channels': result.channels.length,
+          },
+        );
       },
     );
   }
@@ -2747,6 +2957,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             showPrint: _page == 3,
                             onPrint: _printFrequencyReference,
                           ),
+                          if (_documentTabs.isNotEmpty)
+                            _DocumentTabs(
+                              tabs: _documentTabs,
+                              activeId: _activeDocumentId,
+                              activeName: _libraryName,
+                              activeDirty: _dirty || _settingsDirty,
+                              busy: _busy,
+                              onSelect: _switchDocument,
+                              onClose: (id) => unawaited(_closeDocument(id)),
+                              onNew: _newLibrary,
+                            ),
                           Expanded(
                             child: switch (_page) {
                               0 =>
@@ -3451,10 +3672,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         .where((channel) => _channelIssues(channel).isNotEmpty)
         .length;
     final imageMatch = _channelImageMatch;
-    final storedImageReady =
-        _model != null &&
-        _radioImage != null &&
-        _radioImage == _imageStore.pathForModel(_model!);
+    final storedImageReady = _model != null && _radioImage != null;
     return Padding(
       padding: const EdgeInsets.all(22),
       child: Column(
@@ -4795,10 +5013,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Widget _buildRadio() {
-    final storedImageReady =
-        _model != null &&
-        _radioImage != null &&
-        _radioImage == _imageStore.pathForModel(_model!);
+    final storedImageReady = _model != null && _radioImage != null;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(22),
       child: Align(
@@ -5726,6 +5941,183 @@ class _GlossaryDialogState extends State<_GlossaryDialog> {
   }
 }
 
+class _DocumentTabs extends StatelessWidget {
+  const _DocumentTabs({
+    required this.tabs,
+    required this.activeId,
+    required this.activeName,
+    required this.activeDirty,
+    required this.busy,
+    required this.onSelect,
+    required this.onClose,
+    required this.onNew,
+  });
+
+  final List<_DocumentTab> tabs;
+  final int? activeId;
+  final String activeName;
+  final bool activeDirty;
+  final bool busy;
+  final ValueChanged<int> onSelect;
+  final ValueChanged<int> onClose;
+  final VoidCallback onNew;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 44,
+      decoration: const BoxDecoration(
+        color: Color(0xFFF7F9F7),
+        border: Border(
+          top: BorderSide(color: Color(0xFFE1E7E3)),
+          bottom: BorderSide(color: Color(0xFFD8DEDA)),
+        ),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  for (final tab in tabs)
+                    _DocumentTabButton(
+                      label: tab.id == activeId
+                          ? activeName
+                          : tab.library.libraryName,
+                      dirty: tab.id == activeId ? activeDirty : tab.dirty,
+                      active: tab.id == activeId,
+                      closeEnabled: !busy,
+                      onSelect: () => onSelect(tab.id),
+                      onClose: () => onClose(tab.id),
+                    ),
+                ],
+              ),
+            ),
+          ),
+          const VerticalDivider(width: 1, color: Color(0xFFD8DEDA)),
+          Tooltip(
+            message: busy
+                ? 'Wait for the current operation to finish'
+                : 'New tab',
+            child: InkWell(
+              onTap: busy ? null : onNew,
+              child: const SizedBox(
+                width: 42,
+                height: 43,
+                child: Icon(Icons.add, size: 19),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DocumentTabButton extends StatelessWidget {
+  const _DocumentTabButton({
+    required this.label,
+    required this.dirty,
+    required this.active,
+    required this.closeEnabled,
+    required this.onSelect,
+    required this.onClose,
+  });
+
+  final String label;
+  final bool dirty;
+  final bool active;
+  final bool closeEnabled;
+  final VoidCallback onSelect;
+  final VoidCallback onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 270),
+      decoration: BoxDecoration(
+        color: active ? Colors.white : Colors.transparent,
+        border: Border(
+          right: const BorderSide(color: Color(0xFFE1E7E3)),
+          bottom: BorderSide(
+            color: active ? const Color(0xFF1F7455) : Colors.transparent,
+            width: 2,
+          ),
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          InkWell(
+            onTap: onSelect,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(14, 0, 5, 0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.description_outlined,
+                    size: 15,
+                    color: active
+                        ? const Color(0xFF1F7455)
+                        : const Color(0xFF6C7D75),
+                  ),
+                  const SizedBox(width: 7),
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 170),
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: active ? FontWeight.w700 : FontWeight.w500,
+                        color: active
+                            ? const Color(0xFF172C24)
+                            : const Color(0xFF52645B),
+                      ),
+                    ),
+                  ),
+                  if (dirty) ...[
+                    const SizedBox(width: 6),
+                    const Text(
+                      '•',
+                      style: TextStyle(
+                        color: Color(0xFFC46A15),
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+          Tooltip(
+            message: closeEnabled ? 'Close $label' : 'Operation in progress',
+            child: InkWell(
+              onTap: closeEnabled ? onClose : null,
+              borderRadius: BorderRadius.circular(12),
+              child: Padding(
+                padding: const EdgeInsets.all(6),
+                child: Icon(
+                  Icons.close,
+                  size: 14,
+                  color: closeEnabled
+                      ? const Color(0xFF6C7D75)
+                      : const Color(0xFFB8C2BD),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 5),
+        ],
+      ),
+    );
+  }
+}
+
 class _TopBar extends StatelessWidget {
   const _TopBar({
     required this.libraryName,
@@ -6009,6 +6401,255 @@ class _LibraryState {
   final List<RadioZone> zones;
   final int? selectedZone;
   final Set<int> clearedLocations;
+}
+
+class _DocumentTab {
+  _DocumentTab({
+    required this.id,
+    required this.library,
+    required this.model,
+    required this.radioImage,
+    required this.radioSettings,
+    required this.settingsDirty,
+    required this.settingsLoadedFromRadio,
+    required this.settingsLoadedModel,
+    required this.settingsLoadedImage,
+    required this.channelImageBaseline,
+    required this.page,
+    required this.query,
+    required this.undoStack,
+    required this.redoStack,
+  });
+
+  final int id;
+  _LibraryState library;
+  String? model;
+  String? radioImage;
+  RadioSettings? radioSettings;
+  bool settingsDirty;
+  bool settingsLoadedFromRadio;
+  String? settingsLoadedModel;
+  String? settingsLoadedImage;
+  ChannelImageBaseline? channelImageBaseline;
+  int page;
+  String query;
+  List<_LibraryState> undoStack;
+  List<_LibraryState> redoStack;
+
+  bool get dirty => library.dirty || settingsDirty;
+}
+
+class _ErrorReportDialog extends StatefulWidget {
+  const _ErrorReportDialog({
+    required this.diagnosticLog,
+    required this.summary,
+    required this.technical,
+    required this.radio,
+    required this.version,
+    required this.cable,
+  });
+
+  final DiagnosticLog diagnosticLog;
+  final String summary;
+  final String? technical;
+  final String radio;
+  final String version;
+  final String cable;
+
+  @override
+  State<_ErrorReportDialog> createState() => _ErrorReportDialogState();
+}
+
+class _ErrorReportDialogState extends State<_ErrorReportDialog> {
+  final _emailController = TextEditingController();
+  final _descriptionController = TextEditingController();
+  bool _sending = false;
+  bool _sent = false;
+  String? _error;
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submit() async {
+    final email = _emailController.text.trim();
+    if (!email.contains('@') || email.startsWith('@') || email.endsWith('@')) {
+      setState(() => _error = 'Enter a valid email address.');
+      return;
+    }
+    setState(() {
+      _sending = true;
+      _error = null;
+    });
+    final notes = _descriptionController.text.trim();
+    final description = [
+      'Reported error: ${widget.summary}',
+      if (widget.technical != null && widget.technical!.trim().isNotEmpty)
+        'Technical details:\n${widget.technical}',
+      if (notes.isNotEmpty) 'Reporter notes:\n$notes',
+    ].join('\n\n');
+    try {
+      await widget.diagnosticLog.submit(
+        email: email,
+        description: description,
+        radio: widget.radio,
+        version: widget.version,
+        cable: widget.cable,
+      );
+      widget.diagnosticLog.record(
+        'report',
+        'Error report submitted',
+        context: {'radio': widget.radio, 'version': widget.version},
+      );
+      if (mounted) setState(() => _sent = true);
+    } on DiagnosticReportException catch (error) {
+      widget.diagnosticLog.record(
+        'report',
+        'Error report submission failed: $error',
+      );
+      if (mounted) setState(() => _error = error.message);
+    } on Object {
+      if (mounted) {
+        setState(() => _error = 'Could not send the error report.');
+      }
+    } finally {
+      if (mounted) setState(() => _sending = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final diagnosticPreview = widget.diagnosticLog.buildReport(
+      maxCharacters: 6000,
+    );
+    return AlertDialog(
+      title: Text(_sent ? 'Error report sent' : 'Submit error report'),
+      content: SizedBox(
+        width: 620,
+        child: SingleChildScrollView(
+          child: _sent
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.check_circle_outline,
+                        color: Color(0xFF1F7455),
+                        size: 44,
+                      ),
+                      SizedBox(height: 14),
+                      Text(
+                        'Thanks. The diagnostic log and error details were '
+                        'sent to the NewChirp developer.',
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                )
+              : Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      widget.summary,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      decoration: const InputDecoration(
+                        labelText: 'Your email',
+                        helperText:
+                            'Used only if the developer needs more information.',
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    TextField(
+                      controller: _descriptionController,
+                      minLines: 3,
+                      maxLines: 6,
+                      maxLength: 3500,
+                      decoration: const InputDecoration(
+                        labelText: 'What were you trying to do?',
+                        alignLabelWithHint: true,
+                      ),
+                    ),
+                    const Text(
+                      'The report includes app and operating-system versions, '
+                      'the selected radio and serial port, and recent '
+                      'diagnostic events. Channel contents and loaded files '
+                      'are not logged.',
+                      style: TextStyle(color: Colors.black54, height: 1.4),
+                    ),
+                    const SizedBox(height: 8),
+                    ExpansionTile(
+                      tilePadding: EdgeInsets.zero,
+                      title: Text(
+                        'Preview ${widget.diagnosticLog.entryCount} diagnostic events',
+                        style: const TextStyle(fontSize: 13),
+                      ),
+                      childrenPadding: const EdgeInsets.only(bottom: 8),
+                      children: [
+                        Container(
+                          width: double.infinity,
+                          constraints: const BoxConstraints(maxHeight: 220),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF3F5F4),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: SingleChildScrollView(
+                            child: SelectableText(
+                              diagnosticPreview.isEmpty
+                                  ? 'No diagnostic events recorded.'
+                                  : diagnosticPreview,
+                              style: const TextStyle(
+                                fontFamily: 'monospace',
+                                fontSize: 10.5,
+                                height: 1.4,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_error != null) ...[
+                      const SizedBox(height: 10),
+                      Text(
+                        _error!,
+                        style: const TextStyle(color: Color(0xFF9B3D34)),
+                      ),
+                    ],
+                  ],
+                ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: _sending ? null : () => Navigator.pop(context),
+          child: Text(_sent ? 'Close' : 'Cancel'),
+        ),
+        if (!_sent)
+          FilledButton.icon(
+            onPressed: _sending ? null : _submit,
+            icon: _sending
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(Icons.send_outlined),
+            label: Text(_sending ? 'Sending…' : 'Send report'),
+          ),
+      ],
+    );
+  }
 }
 
 class _ChannelApplyDialog extends StatefulWidget {

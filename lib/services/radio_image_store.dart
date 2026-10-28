@@ -13,11 +13,27 @@ class RadioImageStore {
     return destination.path;
   }
 
+  Future<String> saveForDocument(
+    String model,
+    String sourcePath,
+    int documentId,
+  ) async {
+    final destination = File(pathForDocument(model, documentId));
+    await destination.parent.create(recursive: true);
+    await File(sourcePath).copy(destination.path);
+    return destination.path;
+  }
+
   bool hasForModel(String model) => File(pathForModel(model)).existsSync();
 
   String pathForModel(String model) {
     final safeModel = model.replaceAll(RegExp(r'[^A-Za-z0-9_.-]'), '_');
     return '${_imageDirectory().path}/$safeModel.img';
+  }
+
+  String pathForDocument(String model, int documentId) {
+    final safeModel = model.replaceAll(RegExp(r'[^A-Za-z0-9_.-]'), '_');
+    return '${_imageDirectory().path}/$safeModel-tab-$documentId.img';
   }
 
   Directory _imageDirectory() {
