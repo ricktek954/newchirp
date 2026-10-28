@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 70 concepts across 4 domains and 4 modules'
+description: 'Top-level OKF summary: 86 concepts across 4 domains and 4 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-26T06:06:16Z'
+timestamp: '2026-10-28T11:08:20Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 70 concepts | 4 domains | 4 modules
+> OKF v0.2 bundle | 86 concepts | 4 domains | 4 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 58 |
-| Class | 8 |
+| Function | 72 |
+| Class | 10 |
 | Module | 4 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 70 |
+| python | 86 |
 
 ## Domain Map
 
@@ -32,9 +32,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [build_macos_dmg](build_macos_dmg/index.md) (4 concepts) — Build a styled NewChirp macOS DMG with a drag-to-Applications window.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 31 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 47 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (31 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (47 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [generate_gmrs_frs_pdf.py](generate_gmrs_frs_pdf.py/index.md) — 15 concepts
 
@@ -53,10 +53,12 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [extra_field_doc](/chirp_bridge/extra_field_doc.md) | Function | `chirp_bridge.py` | Return CHIRP's documentation or a concise fallback for commo… |
 | [emit_progress](/chirp_bridge/emit_progress.md) | Function | `chirp_bridge.py` | Send structured transfer progress without touching the JSON … |
 | [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
+| [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
 | [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
 | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) | Function | `chirp_bridge.py` | Give a live radio the file-backed interfaces NewChirp requir… |
 | [emit_read_ready](/chirp_bridge/emit_read_ready.md) | Function | `chirp_bridge.py` | Tell the user when a manual PTT-triggered clone read can beg… |
 | [channel_context](/chirp_bridge/channel_context.md) | Function | `chirp_bridge.py` | Return the selected channel owner plus available radio zones… |
+| [RadioCommunicationTrace](/chirp_bridge/RadioCommunicationTrace.md) | Class | `chirp_bridge.py` | Keep a bounded, privacy-safe view of recent serial exchanges… |
 | [normalize_repeaterbook_query](/chirp_bridge/normalize_repeaterbook_query.md) | Function | `chirp_bridge.py` | Treat location words like "Broward County" as a county name. |
 | [RapMassStorageRadio](/newchirp_mass_storage/RapMassStorageRadio.md) | Class | `newchirp_mass_storage.py` | Generic command-response session over a raw SCSI transport. |
 | [radio_from_image](/chirp_bridge/radio_from_image.md) | Function | `chirp_bridge.py` | Build a driver instance backed only by a saved radio image. |

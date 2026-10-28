@@ -10,7 +10,7 @@ tags:
   - "domain:radio_image_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T19:31:34Z"
+timestamp: "2026-10-28T11:17:10Z"
 concept_id: services/radio_image_store/saveForModel
 language: dart
 ---
@@ -24,7 +24,7 @@ FuturesaveForModelsaveForModel
 ```
 
 ## Source
-Lines 9–9 in `services/radio_image_store.dart`
+Lines 8–8 in `services/radio_image_store.dart`
 
 ## Relationships
 

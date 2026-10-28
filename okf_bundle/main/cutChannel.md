@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/cutChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ void_cutChannel(int index)
 ```
 
 ## Source
-Lines 2345–2345 in `main.dart`
+Lines 2121–2121 in `main.dart`
 
 ## Relationships
 

@@ -16,6 +16,7 @@ import time
 import urllib.error
 import urllib.request
 PROGRESS_PREFIX = "__NEWCHIRP_PROGRESS__ "
+RADIO_TRACE_MARKER = "\n\nRadio communication trace:\n"
 MANUAL_READ_READY_MESSAGE = (
     "Listening for the radio - hold PTT for one second."
 )
@@ -24,6 +25,150 @@ MANUAL_READ_READY_MESSAGE = (
 # launched without a terminal. The bridge owns those streams as its JSON/error
 # protocol, so keep them attached to the parent process.
 os.environ.setdefault("CHIRP_TESTENV", "1")
+
+
+class RadioCommunicationTrace:
+    """Keep a bounded, privacy-safe view of recent serial exchanges."""
+
+    def __init__(self, max_entries=80):
+        self.max_entries = max_entries
+        self._entries = []
+        self._pending = None
+
+    @staticmethod
+    def _command_summary(data):
+        try:
+            raw = bytes(data)
+        except (TypeError, ValueError):
+            return "<invalid serial data>"
+        if not raw:
+            return "<empty write>"
+        try:
+            text = raw.decode("cp1252").strip("\r\n")
+        except UnicodeDecodeError:
+            return "<binary command, %i bytes>" % len(raw)
+        body = text.split(";", 1)[0].strip()
+        if not body or not all(32 <= ord(char) < 127 for char in body):
+            return "<binary command, %i bytes>" % len(raw)
+        upper = body.upper()
+        memory = re.match(r"^(M[WRA])\s*([01]?),?(\d{3})", upper)
+        if memory:
+            return "%s memory=%s" % (memory.group(1), memory.group(3))
+        token = re.match(r"^[A-Z~]+", upper)
+        command = token.group(0) if token else ""
+        if command.startswith("AL~EEPEL"):
+            return "AL~EEPEL"
+        return command[:12] or "<text command>"
+
+    def begin(self, data):
+        self._finish_pending()
+        self._pending = {
+            "command": self._command_summary(data),
+            "started": time.monotonic(),
+            "response": bytearray(),
+        }
+
+    def received(self, data):
+        if self._pending is None or not data:
+            return
+        self._pending["response"].extend(data)
+        if any(delimiter in data for delimiter in (b";", b"\r", b"\n")):
+            self._finish_pending()
+
+    def _finish_pending(self):
+        pending = self._pending
+        if pending is None:
+            return
+        self._pending = None
+        response = bytes(pending["response"])
+        if pending["command"] == "ID":
+            identifier = re.search(
+                r"ID\s*([A-Z0-9_-]+)",
+                response.decode("ascii", errors="replace").upper(),
+            )
+            result = (
+                "radio id=%s" % identifier.group(1)
+                if identifier
+                else "response complete"
+            )
+        elif response.strip() in (
+            b"N;",
+            b"?;",
+            b"N\r",
+            b"?\r",
+            b"N\n",
+            b"?\n",
+        ):
+            result = "radio refused"
+        elif any(delimiter in response for delimiter in (b";", b"\r", b"\n")):
+            result = "response complete"
+        elif response:
+            result = "incomplete response (%i bytes)" % len(response)
+        else:
+            result = "no response"
+        self._entries.append({
+            "command": pending["command"],
+            "result": result,
+            "elapsed": max(0.0, time.monotonic() - pending["started"]),
+        })
+        if len(self._entries) > self.max_entries:
+            del self._entries[: len(self._entries) - self.max_entries]
+
+    def format(self):
+        self._finish_pending()
+        if not self._entries:
+            return ""
+        first = max(0, len(self._entries) - 30)
+        lines = []
+        for index, entry in enumerate(self._entries[first:], start=first + 1):
+            lines.append(
+                "%i. %s | %s | %.2fs"
+                % (
+                    index,
+                    entry["command"],
+                    entry["result"],
+                    entry["elapsed"],
+                )
+            )
+        return "\n".join(lines)
+
+
+RADIO_TRACE = RadioCommunicationTrace()
+
+
+class TracedSerial:
+    """Delegate a serial port while recording sanitized CAT transactions."""
+
+    def __init__(self, serial_port, trace):
+        object.__setattr__(self, "_serial_port", serial_port)
+        object.__setattr__(self, "_trace", trace)
+
+    def __getattr__(self, name):
+        return getattr(self._serial_port, name)
+
+    def __setattr__(self, name, value):
+        if name in ("_serial_port", "_trace"):
+            object.__setattr__(self, name, value)
+        else:
+            setattr(self._serial_port, name, value)
+
+    def write(self, data):
+        self._trace.begin(data)
+        return self._serial_port.write(data)
+
+    def read(self, size=1):
+        data = self._serial_port.read(size)
+        self._trace.received(data)
+        return data
+
+    def close(self):
+        return self._serial_port.close()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.close()
 
 
 def emit_progress(label, fraction=None):
@@ -49,11 +194,14 @@ def bridge_error_message(exc, command=None, model=None):
         and model == "Yaesu_FT-60"
         and "no response from radio" in message.lower()
     ):
-        return (
+        message = (
             "No response from the FT-60. Leave the radio on its F8 CLONE "
             "screen, read again, and hold PTT only after the transfer window "
             'says "%s"' % MANUAL_READ_READY_MESSAGE
         )
+    trace = RADIO_TRACE.format()
+    if trace:
+        message += RADIO_TRACE_MARKER + trace
     return message
 
 
@@ -620,7 +768,7 @@ def radio_for(
 
         handle = ScsiPassthrough(port)
     else:
-        handle = open_serial(radio_class, port)
+        handle = TracedSerial(open_serial(radio_class, port), RADIO_TRACE)
     try:
         if detect_serial and transport_kind != "scsi_rap":
             try:
@@ -936,12 +1084,16 @@ def search_repeaterbook(
     }
 
 
+def has_global_settings(radio):
+    return bool(getattr(radio.get_features(), "has_settings", False))
+
+
 def settings_payload(radio):
+    if not has_global_settings(radio):
+        return {"hasSettings": False, "settings": []}
     settings = radio.get_settings()
     return {
-        "hasSettings": bool(
-            getattr(radio.get_features(), "has_settings", False)
-        ),
+        "hasSettings": True,
         "settings": settings_tree_json(settings or []),
     }
 
@@ -1074,6 +1226,13 @@ def main():
                     progress_range=(0.02, 0.97),
                 )
                 try:
+                    if not has_global_settings(radio):
+                        emit_progress(
+                            "This radio does not expose global settings.",
+                            1.0,
+                        )
+                        print(json.dumps(settings_payload(radio)))
+                        return
                     emit_read_ready(radio)
                     radio.sync_in()
                     fd, image = tempfile.mkstemp(
@@ -1221,14 +1380,14 @@ def main():
                 }))
             else:
                 emit_progress("Preparing radio settings...", 0.02)
+                if not has_global_settings(radio):
+                    raise RuntimeError(
+                        "This radio does not expose global settings."
+                    )
                 radio.load_mmap(args.image)
                 with open(args.settings, encoding="utf-8") as handle:
                     payload = json.load(handle)
                 settings = radio.get_settings()
-                if settings is None:
-                    raise RuntimeError(
-                        "This radio does not expose global settings."
-                    )
                 changes = payload.get("changes", [])
                 apply_setting_changes(settings, changes)
                 emit_progress("Applying settings...", 0.10)

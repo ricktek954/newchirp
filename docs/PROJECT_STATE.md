@@ -21,6 +21,8 @@ release requirements.
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
   The TS-2000 write-timeout fix still needs a physical upload/read-back retest.
+  TS-2000 settings reads now report unsupported cleanly, and failed serial
+  operations include a sanitized command trace for support reports.
 - The Midland MXT295 has completed physical read and write testing and remains
   labeled experimental.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
@@ -149,6 +151,11 @@ Linux 1.0.25 SHA-256:
 - Added an experimental Midland MXT295 driver with physical read/write
   evidence, Midland channel numbering, and Radio & Modes settings.
 - Fixed TS-2000 uploads that exceeded the stock one-second command timeout.
+- TS-2000 settings requests now stop with a clear unsupported message instead
+  of downloading all channels and failing in `get_settings()`.
+- Radio bridge failures now include a bounded communication trace with the
+  failed command, memory location, timing, result, and detected radio ID while
+  omitting channel contents.
 - Kept the channel-table vertical scrollbar pinned to the visible right edge
   while the columns scroll horizontally.
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save

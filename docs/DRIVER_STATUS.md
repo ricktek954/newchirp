@@ -169,10 +169,16 @@ Last updated: 2026-10-27
   one-second command-response ceiling
 - Change: NewChirp retains the upstream protocol implementation but allows up
   to five seconds for `MW`/`MC` write commands
+- Settings: the TS-2000 does not expose radio-wide settings through CHIRP.
+  NewChirp now reports that state without first downloading all 290 channels.
+- Diagnostics: serial errors include a bounded CAT trace with the failed
+  operation and memory location, elapsed time, refusal/no-response result,
+  and detected radio ID. Channel contents are not recorded.
 - Write status: protocol-level tests pass; upload/read-back retest on physical
   hardware is required before calling the timeout fix hardware-verified
 - Next milestone: TS-2000 owner retest with both a small loadset and the full
-  258-channel loadset, followed by a read-back comparison
+  258-channel loadset, followed by a read-back comparison and submission of
+  the generated communication trace if either write fails
 
 ### Midland MXT295
 

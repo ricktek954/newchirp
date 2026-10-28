@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/home/rlopez/newchirp.net/lib",
+  "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
   "files": {
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335031684395,
       "hash": "4b6e8df7a97001c618d9eda6e5cbb377be9721bffa4a13092f395a9c96ca9856",
       "concept_ids": [
         "models/channel_image_baseline/ChannelImageBaseline",
@@ -17,7 +17,7 @@
     },
     "models/gm32_channel.dart": {
       "path": "models/gm32_channel.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335031773185,
       "hash": "930587b2146e7df167512e071e8c2a52387e0aca8a87d54116de682213854a61",
       "concept_ids": [
         "models/gm32_channel/applyGm32Rules",
@@ -39,7 +39,7 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335031912642,
       "hash": "2b0d69a072a71bcdc94481ae73848c6d41b28696164a407bdc54934d8d3e853c",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
@@ -81,7 +81,7 @@
     },
     "models/repeater_search.dart": {
       "path": "models/repeater_search.dart",
-      "mtime_ns": 1792998403736859026,
+      "mtime_ns": 1792994833647699723,
       "hash": "7cd3d653aa325c11c2fc0a3566bffa289e69df60559cd43254bb6c2d7bdf1543",
       "concept_ids": [
         "models/repeater_search/RepeaterSearchResult",
@@ -95,7 +95,7 @@
     },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
-      "mtime_ns": 1791109641575079505,
+      "mtime_ns": 1787526889853586163,
       "hash": "1d0d2204b57a9fe4753793712ec972cdd40ba6099dca82b4b249a2165a80806f",
       "concept_ids": [
         "services/chirp_csv/ChirpCsv",
@@ -112,7 +112,7 @@
     },
     "services/column_layout_store.dart": {
       "path": "services/column_layout_store.dart",
-      "mtime_ns": 1793109703288279614,
+      "mtime_ns": 1793096501033485563,
       "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
       "concept_ids": [
         "services/column_layout_store/ColumnLayout",
@@ -125,7 +125,7 @@
     },
     "services/diagnostic_log.dart": {
       "path": "services/diagnostic_log.dart",
-      "mtime_ns": 1793179018197438614,
+      "mtime_ns": 1793130032990764166,
       "hash": "a558b6c5fba1da4f792851526694cce02c803df8a52bd71c4f1897c809974b7b",
       "concept_ids": [
         "services/diagnostic_log/DiagnosticEntry",
@@ -146,7 +146,7 @@
     },
     "services/file_save_warning_store.dart": {
       "path": "services/file_save_warning_store.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335032074140,
       "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
       "concept_ids": [
         "services/file_save_warning_store/FileSaveWarningStore",
@@ -158,7 +158,7 @@
     },
     "services/module_sandbox.dart": {
       "path": "services/module_sandbox.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335032207764,
       "hash": "abf07dfa5b65de0c46cb0332ee1c6a18ab3c22b062c361abe643301a4a8ea9d9",
       "concept_ids": [
         "services/module_sandbox/ModuleSandbox",
@@ -200,7 +200,7 @@
     },
     "services/mototrbo_cps2_xml.dart": {
       "path": "services/mototrbo_cps2_xml.dart",
-      "mtime_ns": 1793109703288279614,
+      "mtime_ns": 1793094681555739212,
       "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
       "concept_ids": [
         "services/mototrbo_cps2_xml/CpsTone",
@@ -224,61 +224,61 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1793185829435599666,
+      "mtime_ns": 1793187642060516997,
       "hash": "9ef5fe5b9b012ce20c5df56caaf1589fe2fc0d95a508ed74d42398507bcf5872",
       "concept_ids": [
-        "services/radio_bridge/isBenignBridgeStderrLine",
-        "services/radio_bridge",
+        "services/radio_bridge/RadioBridge",
         "services/radio_bridge/RadioBridgeException",
-        "services/radio_bridge/RadioInstructions",
         "services/radio_bridge/RadioCapabilities",
-        "services/radio_bridge/RadioZone",
+        "services/radio_bridge/RadioInstructions",
         "services/radio_bridge/RadioProgress",
-        "services/radio_bridge/SerialPortInfo",
         "services/radio_bridge/RadioSettingNode",
         "services/radio_bridge/RadioSettings",
-        "services/radio_bridge/RadioBridge",
-        "services/radio_bridge/strings",
-        "services/radio_bridge/toString",
-        "services/radio_bridge/toChangeJson",
-        "services/radio_bridge/cancelActive",
-        "services/radio_bridge/serialPortDetails",
-        "services/radio_bridge/massStoragePortDetails",
-        "services/radio_bridge/deduplicatePorts",
-        "services/radio_bridge/serialPorts",
-        "services/radio_bridge/windowsSerialPortNames",
-        "services/radio_bridge/windowsSerialPortDetails",
-        "services/radio_bridge/parseWindowsSerialPortDetails",
-        "services/radio_bridge/parseComPorts",
-        "services/radio_bridge/models",
-        "services/radio_bridge/loadModule",
-        "services/radio_bridge/unloadModule",
-        "services/radio_bridge/instructions",
-        "services/radio_bridge/readImage",
-        "services/radio_bridge/imageInfo",
-        "services/radio_bridge/imageCapabilities",
-        "services/radio_bridge/download",
-        "services/radio_bridge/upload",
-        "services/radio_bridge/readSettings",
-        "services/radio_bridge/writeSettings",
-        "services/radio_bridge/run",
-        "services/radio_bridge/searchRepeaters",
-        "services/radio_bridge/runWithRuntime",
-        "services/radio_bridge/resolvePython",
-        "services/radio_bridge/bundledResourcesDirectory",
-        "services/radio_bridge/materializeBridge",
-        "services/radio_bridge/materializePythonDependencies",
-        "services/radio_bridge/loadAssetBytes",
+        "services/radio_bridge/RadioZone",
+        "services/radio_bridge/SerialPortInfo",
         "services/radio_bridge/bundledAssetCandidates",
+        "services/radio_bridge/bundledResourcesDirectory",
+        "services/radio_bridge/cancelActive",
+        "services/radio_bridge/deduplicatePorts",
+        "services/radio_bridge/download",
         "services/radio_bridge/findChirpSource",
         "services/radio_bridge/findNewChirpDrivers",
-        "services/radio_bridge/findScsiHelper"
+        "services/radio_bridge/findScsiHelper",
+        "services/radio_bridge/imageCapabilities",
+        "services/radio_bridge/imageInfo",
+        "services/radio_bridge/instructions",
+        "services/radio_bridge/isBenignBridgeStderrLine",
+        "services/radio_bridge/loadAssetBytes",
+        "services/radio_bridge/loadModule",
+        "services/radio_bridge/massStoragePortDetails",
+        "services/radio_bridge/materializeBridge",
+        "services/radio_bridge/materializePythonDependencies",
+        "services/radio_bridge/models",
+        "services/radio_bridge/parseComPorts",
+        "services/radio_bridge/parseWindowsSerialPortDetails",
+        "services/radio_bridge/readImage",
+        "services/radio_bridge/readSettings",
+        "services/radio_bridge/resolvePython",
+        "services/radio_bridge/run",
+        "services/radio_bridge/runWithRuntime",
+        "services/radio_bridge/searchRepeaters",
+        "services/radio_bridge/serialPortDetails",
+        "services/radio_bridge/serialPorts",
+        "services/radio_bridge/strings",
+        "services/radio_bridge/toChangeJson",
+        "services/radio_bridge/toString",
+        "services/radio_bridge/unloadModule",
+        "services/radio_bridge/upload",
+        "services/radio_bridge/windowsSerialPortDetails",
+        "services/radio_bridge/windowsSerialPortNames",
+        "services/radio_bridge/writeSettings",
+        "services/radio_bridge"
       ]
     },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
-      "mtime_ns": 1793185829332536030,
-      "hash": "9f993e2185a5eab2d3395c6a503e96232367fc4fdc6970923a0088179bfef37f",
+      "mtime_ns": 1793187642181438904,
+      "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
       "concept_ids": [
         "services/radio_image_store/RadioImageStore",
         "services/radio_image_store/hasForModel",
@@ -292,7 +292,7 @@
     },
     "services/radio_selection_store.dart": {
       "path": "services/radio_selection_store.dart",
-      "mtime_ns": 1791109641575292000,
+      "mtime_ns": 1787526889854243083,
       "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
       "concept_ids": [
         "services/radio_selection_store/RadioSelection",
@@ -305,7 +305,7 @@
     },
     "services/update_checker.dart": {
       "path": "services/update_checker.dart",
-      "mtime_ns": 1793109703288928523,
+      "mtime_ns": 1793108537805732404,
       "hash": "510d41ff3141e3d416b5c4e41eb9671f944ebba727f53a21d73b17324f43dc75",
       "concept_ids": [
         "services/update_checker/PlatformRelease",
@@ -329,7 +329,7 @@
     },
     "services/update_installer.dart": {
       "path": "services/update_installer.dart",
-      "mtime_ns": 1793109703288928523,
+      "mtime_ns": 1793108770906624056,
       "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
       "concept_ids": [
         "services/update_installer/DownloadedUpdate",
@@ -347,7 +347,7 @@
     },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
-      "mtime_ns": 1791109641575292000,
+      "mtime_ns": 1787526889854324166,
       "hash": "86c6b4a01b10d3a881e9437259adb1984e015cf75e552fdaa395c8b89c7fffb0",
       "concept_ids": [
         "services/window_state_store/WindowState",
@@ -361,7 +361,7 @@
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335032510969,
       "hash": "4f46618ae2168ef10a8d93a47b5936a1e209a7cef65952f2c160b30aa844cc85",
       "concept_ids": [
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
@@ -371,7 +371,7 @@
     },
     "widgets/error_report_dialog.dart": {
       "path": "widgets/error_report_dialog.dart",
-      "mtime_ns": 1793179018197438614,
+      "mtime_ns": 1793130184137193467,
       "hash": "1ff6ddb8d7c1b0114196d8f4a5ba6eb79af5bdcaee1c8ba900de0e08f532bec7",
       "concept_ids": [
         "widgets/error_report_dialog/ErrorReportDialog",
@@ -385,7 +385,7 @@
     },
     "widgets/file_save_warning_dialog.dart": {
       "path": "widgets/file_save_warning_dialog.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335032590801,
       "hash": "b6627d11b8cd15e4712b3b3cc786602d60504246f5bc4ce890afbe2c33c6f729",
       "concept_ids": [
         "widgets/file_save_warning_dialog/FileSaveWarningDialog",
@@ -397,7 +397,7 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1792998403736859026,
+      "mtime_ns": 1792996577728614718,
       "hash": "4986a894d7464afd9ceaad5f82f002ad76f307ef4ca374487203ea0645299371",
       "concept_ids": [
         "widgets/radio_model_picker/RadioModelCandidate",
@@ -421,8 +421,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793185829434535592,
-      "hash": "b2897ea5dc89c7d43050c2e41c4de9c7eb2e664a4a25dc0823ab4d9db0cf8b15",
+      "mtime_ns": 1793187675918499965,
+      "hash": "c7cc5734b3279a004837bd2fc81a5573afc5accc41ef206272bde6aa4f3780f3",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -439,12 +439,9 @@
         "main/RadioSettingFieldState",
         "main/GlossaryDialog",
         "main/GlossaryDialogState",
-        "main/DocumentTabs",
-        "main/DocumentTabButton",
         "main/TopBar",
         "main/ChannelApplyMode",
         "main/LibraryState",
-        "main/DocumentTab",
         "main/ErrorReportDialog",
         "main/ErrorReportDialogState",
         "main/ChannelApplyDialog",
@@ -502,14 +499,6 @@
         "main/saveColumnLayout",
         "main/snapshotLibrary",
         "main/restoreLibrary",
-        "main/allocateDocumentId",
-        "main/captureActiveDocument",
-        "main/applyDocumentState",
-        "main/switchDocument",
-        "main/openDocument",
-        "main/openBlankDocument",
-        "main/resetDocumentState",
-        "main/closeDocument",
         "main/recordHistory",
         "main/undo",
         "main/redo",
@@ -535,7 +524,6 @@
         "main/unloadChirpModule",
         "main/importChirpImage",
         "main/chooseChannelApplyMode",
-        "main/ensureActiveDocument",
         "main/applyChannels",
         "main/nextChannelLocation",
         "main/channelIssues",
@@ -1269,7 +1257,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "c055e1e88df0d672deb7e18fbb5f64deca2fe8797c36da56497dc9c8f8de4f08",
+      "edge_hash": "5bf6d4e8a05d19f9ab3646c619fddc727ac7475bed884cde2ddb3889aa08bcca",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -4489,5 +4477,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-10-28T11:10:46Z"
+  "generated_at": "2026-10-28T11:41:17Z"
 }

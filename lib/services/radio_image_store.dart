@@ -1,8 +1,7 @@
 import 'dart:io';
 
 class RadioImageStore {
-  RadioImageStore({Directory? rootDirectory})
-    : _rootDirectory = rootDirectory;
+  RadioImageStore({Directory? rootDirectory}) : _rootDirectory = rootDirectory;
 
   final Directory? _rootDirectory;
 
@@ -33,16 +32,14 @@ class RadioImageStore {
 
   String pathForDocument(String model, int documentId) {
     final safeModel = model.replaceAll(RegExp(r'[^A-Za-z0-9_.-]'), '_');
-    return '${_imageDirectory().path}/$safeModel-tab-$documentId.img';
+    return '${_imageDirectory().path}/$safeModel-document-$documentId.img';
   }
 
   Directory _imageDirectory() {
     if (_rootDirectory != null) return _rootDirectory;
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';
-      return Directory(
-        '$home/Library/Application Support/NewChirp/images',
-      );
+      return Directory('$home/Library/Application Support/NewChirp/images');
     }
     if (Platform.isWindows) {
       final appData =

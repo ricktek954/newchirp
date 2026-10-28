@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/HelpButton
 language: dart
 ---
@@ -27,7 +27,7 @@ class _HelpButton
 - `build`
 
 ## Source
-Lines 7759–7792 in `main.dart`
+Lines 7360–7393 in `main.dart`
 
 ## Relationships
 

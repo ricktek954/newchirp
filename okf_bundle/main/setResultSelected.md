@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/setResultSelected
 language: dart
 ---
@@ -23,7 +23,7 @@ void_setResultSelected(RepeaterSearchResult result, bool selected)
 ```
 
 ## Source
-Lines 7058–7058 in `main.dart`
+Lines 6659–6659 in `main.dart`
 
 ## Relationships
 

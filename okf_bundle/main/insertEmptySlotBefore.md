@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/insertEmptySlotBefore
 language: dart
 ---
@@ -23,7 +23,7 @@ void_insertEmptySlotBefore(int location)
 ```
 
 ## Source
-Lines 1644–1644 in `main.dart`
+Lines 1402–1402 in `main.dart`
 
 ## Relationships
 

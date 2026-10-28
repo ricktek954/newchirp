@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T06:06:15Z"
+timestamp: "2026-10-28T11:08:19Z"
 concept_id: chirp_bridge/fetch_repeaterbook_data
 language: python
 ---
@@ -40,7 +40,7 @@ Fetch RepeaterBook's CHIRP-compatible compressed database.
 | `state` | `—` | `—` |
 
 ## Source
-Lines 711–750 in `chirp_bridge.py`
+Lines 859–898 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -50,4 +50,6 @@ Lines 711–750 in `chirp_bridge.py`
 | calls | [repeaterbook_resource_name](/chirp_bridge/repeaterbook_resource_name.md) |
 | calls | [repeaterbook_cache_path](/chirp_bridge/repeaterbook_cache_path.md) |
 | calls | [emit_progress](/chirp_bridge/emit_progress.md) |
+| calls | [read](/chirp_bridge/read.md) |
+| calls | [write](/chirp_bridge/write.md) |
 | called_by | [search_repeaterbook](/chirp_bridge/search_repeaterbook.md) |

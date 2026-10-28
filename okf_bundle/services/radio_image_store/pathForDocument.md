@@ -10,7 +10,7 @@ tags:
   - "domain:radio_image_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T19:31:34Z"
+timestamp: "2026-10-28T11:17:10Z"
 concept_id: services/radio_image_store/pathForDocument
 language: dart
 ---
@@ -24,7 +24,7 @@ StringpathForDocument(String model, int documentId)
 ```
 
 ## Source
-Lines 34–34 in `services/radio_image_store.dart`
+Lines 33–33 in `services/radio_image_store.dart`
 
 ## Relationships
 

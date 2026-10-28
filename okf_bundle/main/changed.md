@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/changed
 language: dart
 ---
@@ -23,7 +23,7 @@ void_changed(String text)
 ```
 
 ## Source
-Lines 5679–5679 in `main.dart`
+Lines 5493–5493 in `main.dart`
 
 ## Relationships
 

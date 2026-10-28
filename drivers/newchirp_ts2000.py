@@ -7,9 +7,10 @@
 
 """Kenwood TS-2000 live driver with longer write-command tolerance."""
 
+import re
 import time
 
-from chirp import directory
+from chirp import directory, errors
 from chirp.drivers import kenwood_live
 from chirp.drivers.ts2000 import TS2000Radio as ChirpTS2000Radio
 
@@ -60,12 +61,22 @@ class TS2000Radio(ChirpTS2000Radio):
                     "TS-2000 command timed out after %.1f seconds",
                     timeout,
                 )
-                break
+                command = cmd.strip()
+                memory = re.match(r"^(M[WRA])([01]?),?(\d{3})", command)
+                label = command[:12]
+                if memory:
+                    label = "%s memory %s" % (
+                        memory.group(1),
+                        memory.group(3),
+                    )
+                raise errors.RadioNoResponse(
+                    "The Kenwood TS-2000 did not answer %s within %.1f "
+                    "seconds. Power-cycle the radio, reconnect the cable, "
+                    "and try the write again." % (label, timeout)
+                )
 
         if result.endswith(self.LAST_DELIMITER[0]):
             kenwood_live.LOG.debug("RADIO->PC: %r", result.strip())
             result = result[:-1]
-        else:
-            kenwood_live.LOG.error("TS-2000 gave up waiting for a response")
 
         return result.strip()

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/restoreLibrary
 language: dart
 ---
@@ -23,7 +23,7 @@ void_restoreLibrary(_LibraryState state)
 ```
 
 ## Source
-Lines 582–582 in `main.dart`
+Lines 579–579 in `main.dart`
 
 ## Relationships
 

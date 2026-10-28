@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/useGmrsStarter
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_useGmrsStarter_useGmrsStarter
 ```
 
 ## Source
-Lines 1874–1874 in `main.dart`
+Lines 1650–1650 in `main.dart`
 
 ## Relationships
 

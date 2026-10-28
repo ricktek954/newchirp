@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/RadioSettingField
 language: dart
 ---
@@ -27,7 +27,7 @@ class _RadioSettingField
 - `createState`
 
 ## Source
-Lines 5629–5641 in `main.dart`
+Lines 5443–5455 in `main.dart`
 
 ## Relationships
 

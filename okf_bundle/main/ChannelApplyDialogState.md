@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/ChannelApplyDialogState
 language: dart
 ---
@@ -30,7 +30,7 @@ class _ChannelApplyDialogState
 - `_apply`
 
 ## Source
-Lines 6670–6767 in `main.dart`
+Lines 6271–6368 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-28T11:41:15Z"
 concept_id: main/showRowMenu
 language: dart
 ---
@@ -23,7 +23,7 @@ void_showRowMenu(BuildContext context, int index, Offset position)
 ```
 
 ## Source
-Lines 8012–8012 in `main.dart`
+Lines 7613–7613 in `main.dart`
 
 ## Relationships
 

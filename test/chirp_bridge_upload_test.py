@@ -268,7 +268,8 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(radio.MODEL, "TS-2000")
         self.assertTrue(hasattr(radio, "sync_in"))
         self.assertTrue(hasattr(radio, "sync_out"))
-        self.assertIs(radio._live_radio.pipe, serial)
+        self.assertIsInstance(radio._live_radio.pipe, bridge.TracedSerial)
+        self.assertIs(radio._live_radio.pipe._serial_port, serial)
         self.assertTrue(
             issubclass(
                 self.directory.get_radio("Kenwood_TS-2000"),
