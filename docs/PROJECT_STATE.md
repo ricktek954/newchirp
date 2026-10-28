@@ -13,6 +13,9 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
+- The macOS `1.0.24` source is prepared for release with the TS-2000
+  diagnostics and without the unapproved document-tab feature. Build, sign,
+  notarize, and publish the DMG from this Mac before recording it as live.
 - The macOS `1.0.23` release is built, signed, notarized, stapled, uploaded,
   and live. It adds one-click in-app download, installation, and restart for
   future releases, plus MOTOTRBO CPS2 XML import and the latest channel-slot
@@ -37,9 +40,9 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Release source commit: `632b3bd` (`Prepare Linux 1.0.25 release`)
+- Release source: the committed macOS `1.0.24` source on `main`
 - Open pull requests: none
-- Checked-out source version: `1.0.25+25`
+- Checked-out source version: `1.0.24+24`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
