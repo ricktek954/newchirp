@@ -87,6 +87,7 @@ Summary:        Desktop radio programmer for amateur and GMRS radios
 License:        GPL-3.0-or-later
 URL:            https://newchirp.net/
 BuildArch:      $RPM_ARCH
+AutoReqProv:    no
 Requires:       glibc, gtk3, glib2, libstdc++, libgcc, $GL_REQUIRES
 
 %description

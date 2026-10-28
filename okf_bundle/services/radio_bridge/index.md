@@ -17,6 +17,7 @@
 - [_findChirpSource](findChirpSource.md)
 - [_findNewChirpDrivers](findNewChirpDrivers.md)
 - [_findScsiHelper](findScsiHelper.md)
+- [_isBenignBridgeStderrLine](isBenignBridgeStderrLine.md)
 - [_loadAssetBytes](loadAssetBytes.md)
 - [_massStoragePortDetails](massStoragePortDetails.md)
 - [_materializeBridge](materializeBridge.md)

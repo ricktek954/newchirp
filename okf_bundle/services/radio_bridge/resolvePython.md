@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:15:28Z"
+timestamp: "2026-10-28T11:10:29Z"
 concept_id: services/radio_bridge/resolvePython
 language: dart
 ---
@@ -32,7 +32,7 @@ The bundled CHIRP tree uses Python 3.10+ syntax, so prefer an interpreter
 that is new enough even when an older system Python is first on PATH.
 
 ## Source
-Lines 836–836 in `services/radio_bridge.dart`
+Lines 843–843 in `services/radio_bridge.dart`
 
 ## Relationships
 

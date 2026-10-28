@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:15:28Z"
+timestamp: "2026-10-28T11:10:29Z"
 concept_id: services/radio_bridge/download
 language: dart
 ---
@@ -24,7 +24,7 @@ Futuredownloaddownload
 ```
 
 ## Source
-Lines 535–549 in `services/radio_bridge.dart`
+Lines 541–555 in `services/radio_bridge.dart`
 
 ## Relationships
 

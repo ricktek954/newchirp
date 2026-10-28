@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T10:59:47Z"
+timestamp: "2026-10-28T11:10:29Z"
 concept_id: main/GlossaryDialog
 language: dart
 ---
