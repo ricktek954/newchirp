@@ -155,7 +155,13 @@ copy_host_library libEGL_mesa.so.0
 if [[ -f /usr/share/glvnd/egl_vendor.d/50_mesa.json ]]; then
   cp /usr/share/glvnd/egl_vendor.d/50_mesa.json "$APPDIR/usr/share/glvnd/egl_vendor.d/"
 fi
-for driver in /usr/lib/dri/swrast_dri.so /usr/lib/dri/kms_swrast_dri.so; do
+for driver in \
+  /usr/lib/dri/swrast_dri.so \
+  /usr/lib/dri/kms_swrast_dri.so \
+  /usr/lib/x86_64-linux-gnu/dri/swrast_dri.so \
+  /usr/lib/x86_64-linux-gnu/dri/kms_swrast_dri.so \
+  /usr/lib/aarch64-linux-gnu/dri/swrast_dri.so \
+  /usr/lib/aarch64-linux-gnu/dri/kms_swrast_dri.so; do
   if [[ -r "$driver" ]]; then
     cp -L "$driver" "$APPDIR/opt/newchirp/dri/$(basename "$driver")"
     copy_library_dependencies "$driver"

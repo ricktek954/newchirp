@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-10-27
+Last updated: 2026-10-28
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,7 +8,7 @@ release requirements.
 
 ## Resume here
 
-- The Linux `1.0.23` DEB, RPM, and AppImage artifacts are live.
+- The Linux `1.0.24` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The macOS `1.0.23` release is built, signed, notarized, stapled, uploaded,
   and live. It adds one-click in-app download, installation, and restart for
   future releases, plus MOTOTRBO CPS2 XML import and the latest channel-slot
@@ -25,7 +25,7 @@ release requirements.
   include it unless the next task intentionally changes dependencies.
 - After rebooting, run `git fetch origin` and inspect new commits before
   choosing the next task.
-- Build only for this Mac unless the user explicitly requests otherwise.
+- Build release artifacts only on their native platform.
 
 ## Repository state
 
@@ -48,9 +48,9 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.23 |
-| Windows | 1.0.20 |
-| Linux | 1.0.23 |
-| Legacy shared manifest version | 1.0.20 |
+| Windows | 1.0.21 |
+| Linux | 1.0.24 |
+| Legacy shared manifest version | 1.0.21 |
 
 macOS artifact:
 
@@ -67,14 +67,32 @@ macOS artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.pkg.tar.zst`
+
+Linux 1.0.24 SHA-256:
+
+- DEB:
+  `1f496b51f0f2fa90a744b76288258d945ba7133426c8e1b5caaac2212b56c928`
+- RPM:
+  `44b374b8a39e12b6c94a3202d9c76e7e36663f87458faed5be8b0ea19d3e9033`
+- AppImage:
+  `9e89a29d62673ef8228ff61cc4d3a044e10b5733f554abf274a9bc2f37ba4e99`
+- Pacman:
+  `b7847076770a5f18f9e1b4ff4b8837740511a554b74597527457a4230506f387`
 
 ## Recently completed
 
+- Published Linux `1.0.24` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts. The Pacman package targets Arch/Omarchy and
+  declares `libglvnd` and `mesa` dependencies for OpenGL runtime support.
+- Fixed the AppImage builder to bundle architecture-specific Mesa software
+  rasterizer drivers from Debian/Ubuntu library paths.
 - Native CHIRP image import for `.img`, `.icf`, `.itm`, and `.d72`.
 - Radio-aware channel slots and table sorting by memory location.
 - Drag-and-drop channel rearrangement through occupied radio memory slots.
