@@ -29,6 +29,7 @@ Every production installer build must contain and expose its version.
    - Debian: `NewChirp-linux-x64-1.0.3.deb`
    - RPM: `NewChirp-linux-x64-1.0.3.rpm`
    - AppImage: `NewChirp-linux-x64-1.0.3.AppImage`
+   - Pacman: `NewChirp-linux-x64-1.0.3.pkg.tar.zst`
 4. Never overwrite a previously released versioned artifact.
 5. Upload to `/opt/newchirp/public/downloads/` with the versioned filename.
 6. Verify the embedded version after building.
@@ -40,8 +41,18 @@ The website uses the version in the filename as its source of truth. Each
 versioned artifact becomes that platform's current download as soon as it is
 uploaded, so platform versions can differ. The update manifest's per-platform
 entries are authoritative; its top-level `version` remains the newest release
-shared by Windows, macOS, and Linux for older clients. The `.rpm` and AppImage
-extra buttons appear when matching files are present.
+shared by Windows, macOS, and Linux for older clients. The `.rpm`, AppImage,
+and Pacman extra buttons appear when matching files are present.
+
+The Linux download page must distinguish each package format. Keep the helper
+text and badges near the matching download:
+
+- DEB: Ubuntu / Debian / Mint.
+- RPM: Fedora / RHEL / openSUSE.
+- AppImage: Portable Linux or double-click run.
+- Pacman: Arch / Omarchy / Manjaro, with a copyable
+  `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
+  command. Do not label the Pacman package as AppImage.
 
 Build release artifacts only on their native platform:
 

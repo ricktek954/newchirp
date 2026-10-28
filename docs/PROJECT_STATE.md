@@ -8,7 +8,11 @@ release requirements.
 
 ## Resume here
 
-- The Linux `1.0.24` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.25` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
+  and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
+  copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
+  helper under that row.
 - The macOS `1.0.23` release is built, signed, notarized, stapled, uploaded,
   and live. It adds one-click in-app download, installation, and restart for
   future releases, plus MOTOTRBO CPS2 XML import and the latest channel-slot
@@ -31,9 +35,9 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- Release source commit: `71e1bfb` (`Bump version to 1.0.23`)
+- Release source commit: `632b3bd` (`Prepare Linux 1.0.25 release`)
 - Open pull requests: none
-- Checked-out source version: `1.0.23+23`
+- Checked-out source version: `1.0.25+25`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -49,7 +53,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.23 |
 | Windows | 1.0.21 |
-| Linux | 1.0.24 |
+| Linux | 1.0.25 |
 | Legacy shared manifest version | 1.0.21 |
 
 macOS artifact:
@@ -67,30 +71,33 @@ macOS artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.24.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.pkg.tar.zst`
 
-Linux 1.0.24 SHA-256:
+Linux 1.0.25 SHA-256:
 
 - DEB:
-  `1f496b51f0f2fa90a744b76288258d945ba7133426c8e1b5caaac2212b56c928`
+  `2a2670dfc9cf4460f2c74b536635fbd8b9e40373c0c12c8b641c357b156d9cbd`
 - RPM:
-  `44b374b8a39e12b6c94a3202d9c76e7e36663f87458faed5be8b0ea19d3e9033`
+  `f0357074a94bd6883b7feb0345f581e7f474a88af69fdbd8a5812e7f97779fd5`
 - AppImage:
-  `9e89a29d62673ef8228ff61cc4d3a044e10b5733f554abf274a9bc2f37ba4e99`
+  `f90284a83270ed243bc3d265cb5fcf4694e11ef7f20cf6ab613d8ba2e0222d44`
 - Pacman:
-  `b7847076770a5f18f9e1b4ff4b8837740511a554b74597527457a4230506f387`
+  `b2586bf996f54fe456e2edc1d2bcf4ef6d3270774fdfea811e06e9399d64b1d7`
 
 ## Recently completed
 
-- Published Linux `1.0.24` with DEB, RPM, AppImage, and Pacman
+- Published Linux `1.0.25` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. The Pacman package targets Arch/Omarchy and
   declares `libglvnd` and `mesa` dependencies for OpenGL runtime support.
+- Fixed the live Linux downloads page so AppImage and Pacman are separate
+  rows. The Pacman row is labeled Arch/Omarchy/Manjaro and includes the
+  copyable `sudo pacman -U` install command.
 - Fixed the AppImage builder to bundle architecture-specific Mesa software
   rasterizer drivers from Debian/Ubuntu library paths.
 - Native CHIRP image import for `.img`, `.icf`, `.itm`, and `.d72`.
