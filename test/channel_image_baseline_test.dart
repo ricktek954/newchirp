@@ -123,6 +123,73 @@ void main() {
     );
   });
 
+  test('library stats stay cached until the channels change', () {
+    final channels = [
+      _channel(1, 'A'),
+      RadioChannel(location: 2, name: 'B', frequency: 146.52, skip: 'S'),
+    ];
+    final cleared = <int>{};
+    final baseline = ChannelImageBaseline(
+      imagePath: '/tmp/radio.img',
+      zone: 0,
+      signature: channelListSignature(channels, cleared),
+      loadedFromRadio: true,
+    );
+    final cache = ChannelLibraryStatsCache();
+
+    ChannelLibrarySnapshot read({
+      List<RadioChannel>? nextChannels,
+      int? zone = 0,
+      int? memoryEnd,
+    }) {
+      return cache.read(
+        imagePath: '/tmp/radio.img',
+        zone: zone,
+        channels: nextChannels ?? channels,
+        cleared: cleared,
+        baseline: baseline,
+        memoryStart: 1,
+        memoryEnd: memoryEnd,
+        radioModel: null,
+      );
+    }
+
+    final first = read();
+    expect(first.match, ChannelImageMatch.matchesRadio);
+    expect(first.activeCount, 2);
+    expect(first.scanEnabledCount, 1);
+    expect(first.needsAttention, 0);
+    expect(identical(first, read()), isTrue);
+
+    channels[0].name = 'Edited';
+    expect(identical(first, read()), isTrue);
+
+    cache.markDirty();
+    final edited = read();
+    expect(identical(first, edited), isFalse);
+    expect(edited.match, ChannelImageMatch.differs);
+    expect(edited.needsAttention, 0);
+
+    channels[0].frequency = 0;
+    final invalid = read();
+    expect(identical(edited, invalid), isTrue);
+    cache.markDirty();
+    expect(read().needsAttention, 1);
+
+    final replaced = [_channel(1, 'A')];
+    final afterReplace = read(nextChannels: replaced);
+    expect(afterReplace.activeCount, 1);
+    expect(afterReplace.match, ChannelImageMatch.differs);
+
+    final otherZone = read(zone: 1);
+    expect(otherZone.match, ChannelImageMatch.notLoaded);
+    expect(identical(otherZone, read(zone: 1)), isTrue);
+
+    final bounded = read(memoryEnd: 0);
+    expect(bounded.needsAttention, 2);
+    expect(identical(bounded, read(memoryEnd: 0)), isTrue);
+  });
+
   testWidgets('channel image bar enables actions only when channels differ', (
     tester,
   ) async {
