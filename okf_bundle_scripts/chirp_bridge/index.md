@@ -33,6 +33,7 @@
 - [format](format.md)
 - [has_global_settings](has_global_settings.md)
 - [headless_live_adapter](headless_live_adapter.md) — Give a live radio the file-backed interfaces NewChirp requires.
+- [live_channel_context](live_channel_context.md) — Choose a live-radio subdevice without probing every memory slot.
 - [load_chirp](load_chirp.md)
 - [main](main.md)
 - [memory_json](memory_json.md)

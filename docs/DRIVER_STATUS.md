@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-10-27
+Last updated: 2026-10-29
 
 ## Status definitions
 
@@ -26,6 +26,7 @@ Last updated: 2026-10-27
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
+| Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
 ## Radio details
@@ -179,6 +180,30 @@ Last updated: 2026-10-27
 - Next milestone: TS-2000 owner retest with both a small loadset and the full
   258-channel loadset, followed by a read-back comparison and submission of
   the generated communication trace if either write fails
+
+### Icom IC-9700
+
+- Maintainer: NewChirp override of the upstream CHIRP live CI-V driver
+- Maintained file: `drivers/newchirp_icom9700.py`
+- Transport: Icom CI-V over USB serial, 8N1, no hardware flow control
+- Baud detection: 19200, 115200, 9600, 38400, 57600, and 4800
+- Implemented: all channel fields, band views, satellite view, and settings
+  provided by the pinned upstream CHIRP `Icom9700Radio` implementation
+- Read/write policy: unchanged from upstream CHIRP. This override only
+  validates the connection and does not alter channel memory encoding.
+- Connection policy: a baud rate is accepted only after a CI-V memory response
+  has the controller address `E0`, radio address `A2`, command `1A`, and
+  subcommand `00`. Band and satellite views reuse the parent connection.
+- Evidence: pinned CHIRP source
+  `21e42e4518c167548af90ed7f9edf75e516c491a`, upstream IC-9700 CI-V format,
+  and the 2026-10-29 NewChirp 1.0.23 report from [redacted-email] showing incomplete
+  responses on COM13
+- Driver SHA-256:
+  `ab65a5b0699585d042257b727dc18003d0d5c41f649ed83dfdff659973d5a4d0`
+- Hardware validation: none. The field report did not complete a read.
+- Next milestone: luc retests after confirming CI-V address `A2h`, USB baud
+  rate 115200, `Unlink from [REMOTE]`, and `CI-V Transceive off`; then record
+  a successful multi-band read and separate read/write validation
 
 ### Midland MXT295
 

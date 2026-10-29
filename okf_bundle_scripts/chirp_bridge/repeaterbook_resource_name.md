@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T09:56:23Z"
+timestamp: "2026-10-29T10:03:21Z"
 concept_id: chirp_bridge/repeaterbook_resource_name
 language: python
 ---
@@ -33,7 +33,7 @@ def repeaterbook_resource_name(service, country, state)
 | `state` | `—` | `—` |
 
 ## Source
-Lines 888–892 in `chirp_bridge.py`
+Lines 943–947 in `chirp_bridge.py`
 
 ## Relationships
 

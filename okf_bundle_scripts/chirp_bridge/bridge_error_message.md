@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T09:56:23Z"
+timestamp: "2026-10-29T10:03:21Z"
 concept_id: chirp_bridge/bridge_error_message
 language: python
 ---
@@ -40,7 +40,7 @@ Add safe, command-specific recovery guidance to bridge failures.
 | `model` | `—` | `None` |
 
 ## Source
-Lines 189–205 in `chirp_bridge.py`
+Lines 202–218 in `chirp_bridge.py`
 
 ## Relationships
 

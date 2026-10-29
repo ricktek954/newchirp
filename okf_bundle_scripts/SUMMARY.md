@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 90 concepts across 4 domains and 4 modules'
+description: 'Top-level OKF summary: 91 concepts across 4 domains and 4 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-29T09:56:23Z'
+timestamp: '2026-10-29T10:03:22Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 90 concepts | 4 domains | 4 modules
+> OKF v0.2 bundle | 91 concepts | 4 domains | 4 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 76 |
+| Function | 77 |
 | Class | 10 |
 | Module | 4 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 90 |
+| python | 91 |
 
 ## Domain Map
 
@@ -32,9 +32,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [build_macos_dmg](build_macos_dmg/index.md) (4 concepts) — Build a styled NewChirp macOS DMG with a drag-to-Applications window.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 51 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 52 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (51 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (52 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [generate_gmrs_frs_pdf.py](generate_gmrs_frs_pdf.py/index.md) — 15 concepts
 
@@ -58,6 +58,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
 | [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
 | [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
+| [live_channel_context](/chirp_bridge/live_channel_context.md) | Function | `chirp_bridge.py` | Choose a live-radio subdevice without probing every memory s… |
 | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) | Function | `chirp_bridge.py` | Give a live radio the file-backed interfaces NewChirp requir… |
 | [emit_read_ready](/chirp_bridge/emit_read_ready.md) | Function | `chirp_bridge.py` | Tell the user when a manual PTT-triggered clone read can beg… |
 | [channel_context](/chirp_bridge/channel_context.md) | Function | `chirp_bridge.py` | Return the selected channel owner plus available radio zones… |
@@ -69,7 +70,6 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) | Function | `chirp_bridge.py` | Fetch RepeaterBook's CHIRP-compatible compressed database. |
 | [erase_memory_with_extras](/chirp_bridge/erase_memory_with_extras.md) | Function | `chirp_bridge.py` | Erase a channel and remove its metadata-backed fields. |
 | [channel_radio_for](/chirp_bridge/channel_radio_for.md) | Function | `chirp_bridge.py` | Return the radio object that owns channel memories. |
-| [CS750Profile](/newchirp_mass_storage/CS750Profile.md) | Class | `newchirp_mass_storage.py` | Read-only CS750 RAP profile and codeplug transfer. |
 
 ## Usage with OpenCode
 

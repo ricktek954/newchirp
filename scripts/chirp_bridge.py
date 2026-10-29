@@ -43,6 +43,19 @@ class RadioCommunicationTrace:
             return "<invalid serial data>"
         if not raw:
             return "<empty write>"
+        if len(raw) >= 6 and raw[:2] == b"\xfe\xfe":
+            command = raw[4]
+            subcommand = raw[5]
+            if command == 0xFA:
+                return "CI-V echo probe (%i bytes)" % len(raw)
+            label = "CI-V %02x->%02x cmd=%02x" % (
+                raw[2],
+                raw[3],
+                command,
+            )
+            if subcommand != 0xFD:
+                label += "/%02x" % subcommand
+            return "%s (%i bytes)" % (label, len(raw))
         try:
             text = raw.decode("cp1252").strip("\r\n")
         except UnicodeDecodeError:
@@ -783,6 +796,32 @@ def headless_live_adapter(live_radio):
     return HeadlessLiveAdapter(live_radio)
 
 
+def live_channel_context(radio, zone=None):
+    """Choose a live-radio subdevice without probing every memory slot."""
+    from chirp import chirp_common
+
+    if not isinstance(radio, chirp_common.LiveRadio):
+        return radio, [], None
+    features = radio.get_features()
+    if not features.has_sub_devices:
+        return radio, [], None
+    subdevices = radio.get_sub_devices()
+    if not subdevices:
+        return radio, [], None
+
+    zones = []
+    for index, subdevice in enumerate(subdevices):
+        start, end = subdevice.get_features().memory_bounds
+        name = str(getattr(subdevice, "VARIANT", "")).strip()
+        zones.append({
+            "index": index,
+            "name": name or "Zone %i" % (index + 1),
+            "channelCount": max(0, end - start + 1),
+        })
+    selected = zone if zone is not None and 0 <= zone < len(subdevices) else 0
+    return subdevices[selected], zones, selected
+
+
 def radio_for(
     directory,
     model,
@@ -790,6 +829,7 @@ def radio_for(
     progress_range=(0.0, 1.0),
     image=None,
     detect_serial=True,
+    channel_zone=None,
 ):
     from chirp import chirp_common
 
@@ -819,7 +859,19 @@ def radio_for(
                 pass
         radio = radio_class(handle)
         if isinstance(radio, chirp_common.LiveRadio):
-            radio = headless_live_adapter(radio)
+            if channel_zone is None:
+                radio = headless_live_adapter(radio)
+            else:
+                channel_radio, zones, selected_zone = live_channel_context(
+                    radio, channel_zone
+                )
+                radio = headless_live_adapter(channel_radio)
+                if zones:
+                    radio._newchirp_zone_context = (
+                        channel_radio,
+                        zones,
+                        selected_zone,
+                    )
         # CHIRP's status callbacks become structured progress events on
         # stderr, leaving stdout available for the final JSON response.
         radio.status_fn = lambda status: status_progress(
@@ -849,6 +901,9 @@ def radio_from_image(directory, model, image):
 
 def channel_context(radio, zone=None):
     """Return the selected channel owner plus available radio zones."""
+    live_context = getattr(radio, "_newchirp_zone_context", None)
+    if live_context is not None:
+        return live_context
     features = radio.get_features()
     if not features.has_sub_devices:
         return radio, [], None
@@ -1306,6 +1361,11 @@ def main():
             progress_range=progress_range,
             image=args.image if is_write else None,
             detect_serial=not is_write,
+            channel_zone=(
+                (args.zone if args.zone is not None else 0)
+                if args.command in ("download", "upload")
+                else None
+            ),
         )
         try:
             if args.command == "download":

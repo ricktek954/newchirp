@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T09:56:23Z"
+timestamp: "2026-10-29T10:03:21Z"
 concept_id: chirp_bridge/setattr
 language: python
 ---
@@ -33,7 +33,7 @@ def __setattr__(self, name, value)
 | `value` | `—` | `—` |
 
 ## Source
-Lines 149–153 in `chirp_bridge.py`
+Lines 162–166 in `chirp_bridge.py`
 
 ## Relationships
 
