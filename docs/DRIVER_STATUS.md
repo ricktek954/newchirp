@@ -26,6 +26,7 @@ Last updated: 2026-10-29
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
@@ -185,6 +186,29 @@ Last updated: 2026-10-29
 - Next milestone: retest with the affected adapter, record the PASSSTA reply
   bytes if it still fails, then repeat a complete read and verified write with
   both a working cable and the affected cable.
+
+### Baofeng UV-9R
+
+- Maintainer: NewChirp override of the upstream CHIRP `UV9R` driver
+- Maintained file: `drivers/newchirp_uv9r.py`
+- Transport: CHIRP WP970I clone serial at 9600 8N1
+- Implemented: all channel, VFO, settings, and memory-map behavior from the
+  pinned upstream CHIRP `UV9R` implementation
+- Read/write policy: read behavior is unchanged. Upload resends the identical
+  16-byte block at the same address up to three times when the radio does not
+  return the expected `06` acknowledgment. An exhausted retry reports the
+  exact block address.
+- Evidence: upstream CHIRP `baofeng_wp970i.py` and the 2026-10-29 NewChirp
+  1.0.24 report from [redacted-email]. The second radio completed a 92-channel
+  read but did not acknowledge the first upload block; another UV-9R Pro could
+  both read and write.
+- Driver SHA-256:
+  `3aa4900f5f747bee95996ce530286a93bd0a6612d8d39f8b1d70727d0aac24e1`
+- Hardware validation: none for this retry override. The upstream layout has
+  existing hardware use, but the reported newer unit has not completed a write.
+- Next milestone: affected owner retests an unmodified read image. If writing
+  still fails, upload that image and the vendor CPS installer so the changed
+  chipset’s write command can be reverse engineered.
 
 ### Kenwood TS-2000
 
