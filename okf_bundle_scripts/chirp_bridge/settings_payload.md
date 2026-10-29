@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:08:19Z"
+timestamp: "2026-10-29T09:56:23Z"
 concept_id: chirp_bridge/settings_payload
 language: python
 ---
@@ -29,7 +29,7 @@ def settings_payload(radio)
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1091–1098 in `chirp_bridge.py`
+Lines 1133–1140 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:08:19Z"
+timestamp: "2026-10-29T09:56:23Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -35,6 +35,10 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [_load_module](/chirp_bridge/load_module.md) |
 | related | [load_chirp](/chirp_bridge/load_chirp.md) |
 | related | [memory_json](/chirp_bridge/memory_json.md) |
+| related | [external_memory_owner](/chirp_bridge/external_memory_owner.md) |
+| related | [memory_with_extras](/chirp_bridge/memory_with_extras.md) |
+| related | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) |
+| related | [erase_memory_with_extras](/chirp_bridge/erase_memory_with_extras.md) |
 | related | [extra_fields_json](/chirp_bridge/extra_fields_json.md) |
 | related | [extra_field_doc](/chirp_bridge/extra_field_doc.md) |
 | related | [features_json](/chirp_bridge/features_json.md) |

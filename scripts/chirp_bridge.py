@@ -320,6 +320,48 @@ def memory_json(mem):
     }
 
 
+def external_memory_owner(radio):
+    """Return the object that owns metadata for a radio or channel subdevice."""
+    from chirp import chirp_common
+
+    if not isinstance(radio, chirp_common.ExternalMemoryProperties):
+        return None
+    if hasattr(radio, "_metadata"):
+        return radio
+    parent = getattr(radio, "_parent", None)
+    if (
+        isinstance(parent, chirp_common.ExternalMemoryProperties)
+        and hasattr(parent, "_metadata")
+    ):
+        return parent
+    return radio
+
+
+def memory_with_extras(radio, number):
+    """Load a channel plus CHIRP's metadata-backed fields such as comments."""
+    memory = radio.get_memory(number)
+    owner = external_memory_owner(radio)
+    if owner is not None:
+        memory = owner.get_memory_extra(memory)
+    return memory
+
+
+def set_memory_with_extras(radio, memory):
+    """Write a channel and persist fields CHIRP stores outside radio memory."""
+    radio.set_memory(memory)
+    owner = external_memory_owner(radio)
+    if owner is not None:
+        owner.set_memory_extra(memory)
+
+
+def erase_memory_with_extras(radio, number):
+    """Erase a channel and remove its metadata-backed fields."""
+    radio.erase_memory(number)
+    owner = external_memory_owner(radio)
+    if owner is not None:
+        owner.erase_memory_extra(number)
+
+
 def extra_fields_json(mem):
     from chirp.settings import (
         RadioSettingValueBoolean,
@@ -1205,7 +1247,7 @@ def main():
             if not args.metadata_only:
                 start, end = channel_radio.get_features().memory_bounds
                 for location in range(start, end + 1):
-                    mem = channel_radio.get_memory(location)
+                    mem = memory_with_extras(channel_radio, location)
                     if not mem.empty:
                         channels.append(memory_json(mem))
             print(json.dumps({
@@ -1280,7 +1322,7 @@ def main():
                 locations = list(range(start, end + 1))
                 channels = []
                 for index, location in enumerate(locations):
-                    mem = channel_radio.get_memory(location)
+                    mem = memory_with_extras(channel_radio, location)
                     if not mem.empty:
                         channels.append(memory_json(mem))
                     if locations and (
@@ -1335,7 +1377,7 @@ def main():
                                 continue
                             raise RuntimeError(
                                 f"Channel {mem.number}: {errors[0]}")
-                        channel_radio.set_memory(mem)
+                        set_memory_with_extras(channel_radio, mem)
                         if locked_fields or filtered_name != requested_name:
                             adjusted.append({
                                 "location": int(item["location"]),
@@ -1363,9 +1405,7 @@ def main():
                 ]
                 for location in cleared:
                     try:
-                        mem = channel_radio.get_memory(location)
-                        mem.empty = True
-                        channel_radio.set_memory(mem)
+                        erase_memory_with_extras(channel_radio, location)
                     except Exception:
                         continue
                 emit_progress("Writing the image to the radio...", 0.10)

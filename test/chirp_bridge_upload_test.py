@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib.util
 import struct
 import sys
+import tempfile
 import unittest
 from collections import deque
 from pathlib import Path
@@ -228,6 +229,43 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertIn("Busy Channel Lockout", fields["bcl"])
         self.assertIn("PTT ID", fields["pttid"])
         self.assertIn("S-CODE", fields["scode"])
+
+    def test_metadata_backed_channel_comments_round_trip(self):
+        image = SOURCE / "tests/images/Yaesu_FT-60.img"
+        radio = self.directory.get_radio_by_image(str(image))
+        memory = radio.get_memory(1)
+        self.assertFalse(memory.empty)
+        memory.comment = "Spirit Mountain - Peak Radio Association"
+
+        bridge.set_memory_with_extras(radio, memory)
+        with tempfile.TemporaryDirectory() as directory:
+            saved = Path(directory) / "ft60-comments.img"
+            radio.save_mmap(str(saved))
+            reopened = self.directory.get_radio_by_image(str(saved))
+
+            restored = bridge.memory_with_extras(reopened, 1)
+            self.assertEqual(restored.comment, memory.comment)
+
+            bridge.erase_memory_with_extras(reopened, 1)
+            self.assertTrue(reopened.get_memory(1).empty)
+            self.assertNotIn(
+                "0001_comment",
+                reopened.metadata.get("mem_extra", {}),
+            )
+
+    def test_channel_subdevice_comments_use_parent_metadata(self):
+        image = SOURCE / "tests/images/Kenwood_TK-880.img"
+        radio = self.directory.get_radio_by_image(str(image))
+        channel_radio, _zones, _selected_zone = bridge.channel_context(radio)
+        radio.metadata = {
+            "mem_extra": {
+                "0001_comment": "Zone A repeater",
+            }
+        }
+
+        restored = bridge.memory_with_extras(channel_radio, 1)
+
+        self.assertEqual(restored.comment, "Zone A repeater")
 
     def test_live_radio_gets_headless_sync_interface(self):
         from chirp import chirp_common

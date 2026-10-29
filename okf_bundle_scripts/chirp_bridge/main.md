@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:08:19Z"
+timestamp: "2026-10-29T09:56:23Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 1101–1412 in `chirp_bridge.py`
+Lines 1143–1452 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -40,9 +40,12 @@ Lines 1101–1412 in `chirp_bridge.py`
 | calls | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | calls | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |
 | calls | [search_repeaterbook](/chirp_bridge/search_repeaterbook.md) |
+| calls | [memory_with_extras](/chirp_bridge/memory_with_extras.md) |
 | calls | [settings_payload](/chirp_bridge/settings_payload.md) |
 | calls | [apply_setting_changes](/chirp_bridge/apply_setting_changes.md) |
 | calls | [features_json](/chirp_bridge/features_json.md) |
 | calls | [has_global_settings](/chirp_bridge/has_global_settings.md) |
 | calls | [memory_json](/chirp_bridge/memory_json.md) |
 | calls | [apply_json](/chirp_bridge/apply_json.md) |
+| calls | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) |
+| calls | [erase_memory_with_extras](/chirp_bridge/erase_memory_with_extras.md) |

@@ -24,6 +24,8 @@
 - [close](close.md)
 - [emit_progress](emit_progress.md) — Send structured transfer progress without touching the JSON stdout.
 - [emit_read_ready](emit_read_ready.md) — Tell the user when a manual PTT-triggered clone read can begin.
+- [erase_memory_with_extras](erase_memory_with_extras.md) — Erase a channel and remove its metadata-backed fields.
+- [external_memory_owner](external_memory_owner.md) — Return the object that owns metadata for a radio or channel subdevice.
 - [extra_field_doc](extra_field_doc.md) — Return CHIRP's documentation or a concise fallback for common terms.
 - [extra_fields_json](extra_fields_json.md)
 - [features_json](features_json.md)
@@ -34,6 +36,7 @@
 - [load_chirp](load_chirp.md)
 - [main](main.md)
 - [memory_json](memory_json.md)
+- [memory_with_extras](memory_with_extras.md) — Load a channel plus CHIRP's metadata-backed fields such as comments.
 - [normalize_repeaterbook_query](normalize_repeaterbook_query.md) — Treat location words like "Broward County" as a county name.
 - [open_serial](open_serial.md)
 - [radio_for](radio_for.md)
@@ -45,6 +48,7 @@
 - [repeaterbook_resource_name](repeaterbook_resource_name.md)
 - [repeaterbook_tone](repeaterbook_tone.md)
 - [search_repeaterbook](search_repeaterbook.md)
+- [set_memory_with_extras](set_memory_with_extras.md) — Write a channel and persist fields CHIRP stores outside radio memory.
 - [setting_doc](setting_doc.md)
 - [setting_value_json](setting_value_json.md)
 - [settings_payload](settings_payload.md)

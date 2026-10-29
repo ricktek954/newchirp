@@ -65,8 +65,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793185699368691426,
-      "hash": "4d816d16de8159a96dfdc14cc045a79955a69987550d24d6c93352f970d4dca3",
+      "mtime_ns": 1793267783272240494,
+      "hash": "385dafde1323cebd9c1fda62f2ec0c90fee0c96e8512805e90302182daabd171",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -88,6 +88,10 @@
         "chirp_bridge/load_module",
         "chirp_bridge/load_chirp",
         "chirp_bridge/memory_json",
+        "chirp_bridge/external_memory_owner",
+        "chirp_bridge/memory_with_extras",
+        "chirp_bridge/set_memory_with_extras",
+        "chirp_bridge/erase_memory_with_extras",
         "chirp_bridge/extra_fields_json",
         "chirp_bridge/extra_field_doc",
         "chirp_bridge/features_json",
@@ -124,7 +128,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "5b5e1f7e629960493f8b109053fbf86f08007e80210d1b3699563c32ca9de9f2",
+      "edge_hash": "fdce18fc78f60e8ddb34ae149e61dd506a0cabf215af5ee9d40f5d36bfe5150e",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -252,7 +256,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "a98862206ab3e6946410161719c519e80372bfcea6b417a637e03a6a380792fe",
+      "edge_hash": "da23b716b0fdc116123999117d8019556d5fdf8a9512c239952dfe29bc020a05",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -814,7 +818,39 @@
       "render_hash": "stale",
       "edge_hash": "5318f671b04c20e1375e43dc8fb4d205d501d2a135fb319fd9d9c023353e06c0",
       "enriched": false
+    },
+    "chirp_bridge/memory_with_extras": {
+      "concept_id": "chirp_bridge/memory_with_extras",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "5cf4787ed968aa592bbffdd50c266db739a6ca63b1997c56466e61ad27e5c44f",
+      "enriched": false
+    },
+    "chirp_bridge/set_memory_with_extras": {
+      "concept_id": "chirp_bridge/set_memory_with_extras",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "5cf4787ed968aa592bbffdd50c266db739a6ca63b1997c56466e61ad27e5c44f",
+      "enriched": false
+    },
+    "chirp_bridge/erase_memory_with_extras": {
+      "concept_id": "chirp_bridge/erase_memory_with_extras",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "5cf4787ed968aa592bbffdd50c266db739a6ca63b1997c56466e61ad27e5c44f",
+      "enriched": false
+    },
+    "chirp_bridge/external_memory_owner": {
+      "concept_id": "chirp_bridge/external_memory_owner",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "72cd39f1ae026c827fba320f76cc239fc9870a8987dddef0e6f9751a647453f1",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-28T11:08:20Z"
+  "generated_at": "2026-10-29T09:56:23Z"
 }
