@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:57:35Z"
+timestamp: "2026-10-29T11:04:49Z"
 concept_id: chirp_bridge/channel_context
 language: python
 ---
@@ -38,7 +38,7 @@ Return the selected channel owner plus available radio zones.
 | `zone` | `—` | `None` |
 
 ## Source
-Lines 933–966 in `chirp_bridge.py`
+Lines 944–977 in `chirp_bridge.py`
 
 ## Relationships
 

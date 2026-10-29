@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:57:35Z"
+timestamp: "2026-10-29T11:04:49Z"
 concept_id: chirp_bridge/write
 language: python
 ---
@@ -31,7 +31,7 @@ def write(self, data)
 | `data` | `—` | `—` |
 
 ## Source
-Lines 168–170 in `chirp_bridge.py`
+Lines 179–181 in `chirp_bridge.py`
 
 ## Relationships
 

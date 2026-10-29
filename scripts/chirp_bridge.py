@@ -116,7 +116,18 @@ class RadioCommunicationTrace:
         elif any(delimiter in response for delimiter in (b";", b"\r", b"\n")):
             result = "response complete"
         elif response:
-            result = "incomplete response (%i bytes)" % len(response)
+            if pending["command"] in (
+                "PSEARCH",
+                "PASSSTA",
+                "SYSINFO",
+                "PROGRAM",
+            ):
+                preview = response[:32].hex(" ")
+                if len(response) > 32:
+                    preview += " …"
+                result = "reply=%s (%i bytes)" % (preview, len(response))
+            else:
+                result = "incomplete response (%i bytes)" % len(response)
         else:
             result = "no response"
         self._entries.append({

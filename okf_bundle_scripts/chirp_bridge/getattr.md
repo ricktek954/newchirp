@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:57:35Z"
+timestamp: "2026-10-29T11:04:49Z"
 concept_id: chirp_bridge/getattr
 language: python
 ---
@@ -31,7 +31,7 @@ def __getattr__(self, name)
 | `name` | `—` | `—` |
 
 ## Source
-Lines 159–160 in `chirp_bridge.py`
+Lines 170–171 in `chirp_bridge.py`
 
 ## Relationships
 

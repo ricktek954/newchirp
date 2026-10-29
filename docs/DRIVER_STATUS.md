@@ -25,6 +25,7 @@ Last updated: 2026-10-29
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
+| Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
@@ -158,6 +159,32 @@ Last updated: 2026-10-29
   unless set receive-only, a non-GMRS channel such as the sample image
   channel 31 (HAMs, 470.550 MHz) becomes receive-only, and settings plus
   bank names survive.
+
+### Baofeng DM-32UV
+
+- Maintainer: NewChirp override of the upstream CHIRP `DM32UV` driver
+- Maintained file: `drivers/newchirp_dm32uv.py`
+- Transport: 115200 8N1 with DTR and RTS asserted; no hardware flow control
+- Implemented: all 4,000 channels, zones, analog and DMR channel fields,
+  contacts, RX groups, scan lists, privacy-key references, and settings
+  provided by the pinned upstream CHIRP implementation
+- Read/write policy: unchanged from upstream CHIRP. This override changes
+  only serial timing, PASSSTA retry handling, and diagnostics.
+- Serial policy: set one short device timeout per connection, enforce command
+  deadlines in the read loop, and retry the read-only PASSSTA query up to
+  three times. A malformed final response reports its hexadecimal bytes.
+- Evidence: upstream CHIRP commit
+  `832d349e050fbdcde50185f77cdb34fbe5bab57a`, vendor CPS v1.60 protocol
+  work recorded by the upstream driver author, and CHIRP issue 12652
+  documenting intermittent DM-32UV failures with some FTDI adapters
+- Driver SHA-256:
+  `e9b3140cf62ae06a2c51676607cb3050b19db25ae458c5d124253111597f8df8`
+- Hardware validation: the upstream driver completed read and write tests on
+  firmware DM32.01.01.047. This NewChirp timing and retry override has
+  synthetic serial coverage but no physical revalidation.
+- Next milestone: retest with the affected adapter, record the PASSSTA reply
+  bytes if it still fails, then repeat a complete read and verified write with
+  both a working cable and the affected cable.
 
 ### Kenwood TS-2000
 
