@@ -21,6 +21,7 @@
 - [bridge_error_message](bridge_error_message.md) — Add safe, command-specific recovery guidance to bridge failures.
 - [channel_context](channel_context.md) — Return the selected channel owner plus available radio zones.
 - [channel_radio_for](channel_radio_for.md) — Return the radio object that owns channel memories.
+- [channel_validation_message](channel_validation_message.md) — Add a frequency suggestion to CHIRP's unsupported-step error.
 - [close](close.md)
 - [emit_progress](emit_progress.md) — Send structured transfer progress without touching the JSON stdout.
 - [emit_read_ready](emit_read_ready.md) — Tell the user when a manual PTT-triggered clone read can begin.
@@ -38,6 +39,7 @@
 - [main](main.md)
 - [memory_json](memory_json.md)
 - [memory_with_extras](memory_with_extras.md) — Load a channel plus CHIRP's metadata-backed fields such as comments.
+- [nearest_programmable_frequency](nearest_programmable_frequency.md) — Return the closest frequency representable by one of the steps.
 - [normalize_repeaterbook_query](normalize_repeaterbook_query.md) — Treat location words like "Broward County" as a county name.
 - [open_serial](open_serial.md)
 - [radio_for](radio_for.md)

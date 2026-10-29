@@ -306,8 +306,7 @@ Map<String, String> midlandDuplexChoices(
     allowed = {'off': 'off'};
   } else if (midlandRepeaterRxMhz.containsKey(location)) {
     allowed = {'+': '+'};
-  } else if ((location >= 1 && location <= 7) ||
-      (gmrs != null && gmrs <= 14)) {
+  } else if ((location >= 1 && location <= 7) || (gmrs != null && gmrs <= 14)) {
     allowed = {'': 'Simplex'};
   } else {
     allowed = {'': 'Simplex', '+': '+', 'off': 'off'};
@@ -347,16 +346,13 @@ List<String> midlandGmrsIssues(String? model, RadioChannel channel) {
   final label = channelNumberLabel(model, channel.location);
   final name = label.startsWith('RPTR') ? label : 'Channel $label';
   final fixedHz = midlandFixedRxHz(channel.location);
-  if (fixedHz != null &&
-      (channel.frequency * 1000000).round() != fixedHz) {
+  if (fixedHz != null && (channel.frequency * 1000000).round() != fixedHz) {
     issues.add('$name must stay on ${mhzLabelFromHz(fixedHz)} MHz.');
   }
   final location = channel.location;
   if (location >= 8 && location <= 14) {
     if (channel.duplex != 'off' || !_isZeroMhz(channel.offset)) {
-      issues.add(
-        'Channels 8 through 14 stay receive only. Duplex stays off.',
-      );
+      issues.add('Channels 8 through 14 stay receive only. Duplex stays off.');
     }
     return issues;
   }
@@ -366,7 +362,8 @@ List<String> midlandGmrsIssues(String? model, RadioChannel channel) {
     }
     return issues;
   }
-  if (location >= 1 && location <= 7 &&
+  if (location >= 1 &&
+      location <= 7 &&
       (channel.duplex != '' || !_isZeroMhz(channel.offset))) {
     issues.add('Channels 1 through 14 stay simplex.');
     return issues;
@@ -632,6 +629,8 @@ class RadioChannel {
     int? minimumLocation,
     int? maximumLocation,
     String? radioModel,
+    List<double> validTuningSteps = const [],
+    bool hasTuningStep = true,
   }) {
     final issues = <String>[];
     if (cleared) return issues;
@@ -666,9 +665,55 @@ class RadioChannel {
       issues.add('Duplex value is not supported.');
     }
     if (name.length > 16) issues.add('Name may be too long for many radios.');
+    if (hasTuningStep && validTuningSteps.isNotEmpty && frequency > 0) {
+      final frequencyHz = (frequency * 1000000).round();
+      final stepSupported = validTuningSteps.any(
+        (step) => _frequencyFitsStep(frequencyHz, step),
+      );
+      if (!stepSupported) {
+        final nearest = _nearestFrequencyForSteps(
+          frequencyHz,
+          validTuningSteps,
+        );
+        final suggestion = nearest == null
+            ? ''
+            : ' Nearest supported frequency: '
+                  '${(nearest / 1000000).toStringAsFixed(6)} MHz.';
+        issues.add(
+          'Frequency ${frequency.toStringAsFixed(6)} MHz cannot be '
+          'programmed on this radio.$suggestion',
+        );
+      }
+    }
     issues.addAll(midlandGmrsIssues(radioModel, this));
     return issues;
   }
+}
+
+bool _frequencyFitsStep(int frequencyHz, double stepKhz) {
+  final stepHz = (stepKhz * 1000).round();
+  if (stepHz <= 0) return false;
+  if ((stepKhz - 8.33).abs() < 0.001) {
+    return const {8330, 8333, 16660, 16666}.contains(frequencyHz % 25000);
+  }
+  return frequencyHz % stepHz == 0;
+}
+
+int? _nearestFrequencyForSteps(int frequencyHz, List<double> steps) {
+  int? nearest;
+  var nearestDistance = 1 << 62;
+  for (final stepKhz in steps) {
+    if ((stepKhz - 8.33).abs() < 0.001) continue;
+    final stepHz = (stepKhz * 1000).round();
+    if (stepHz <= 0) continue;
+    final candidate = ((frequencyHz / stepHz).round() * stepHz);
+    final distance = (candidate - frequencyHz).abs();
+    if (distance < nearestDistance) {
+      nearest = candidate;
+      nearestDistance = distance;
+    }
+  }
+  return nearest;
 }
 
 class ChannelExtraField {

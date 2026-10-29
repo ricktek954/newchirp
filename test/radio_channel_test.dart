@@ -174,11 +174,7 @@ void main() {
     extra.offset = 0;
     expect(midlandGmrsIssues(midlandMxt295Model, extra), isEmpty);
 
-    final picked = RadioChannel(
-      location: 31,
-      name: 'NEW',
-      frequency: 146.52,
-    );
+    final picked = RadioChannel(location: 31, name: 'NEW', frequency: 146.52);
     picked.useGmrsReceiveChannel(16);
     expect(picked.frequency, 462.575);
     expect(picked.duplex, isEmpty);
@@ -187,10 +183,7 @@ void main() {
     picked.useGmrsReceiveChannel(4);
     expect(picked.duplex, isEmpty);
     expect(picked.offset, 0);
-    expect(
-      midlandDuplexIsLocked(31, frequencyMhz: picked.frequency),
-      isTrue,
-    );
+    expect(midlandDuplexIsLocked(31, frequencyMhz: picked.frequency), isTrue);
     expect(midlandCanSelectOffset(31, picked.frequency), isFalse);
     expect(midlandReceiveChannelValue(31, picked.frequency), '4');
 
@@ -265,6 +258,33 @@ void main() {
     );
     expect(
       channelAt(107).validate(minimumLocation: 1, maximumLocation: 199),
+      isEmpty,
+    );
+  });
+
+  test('frequency validation names the nearest supported tuning step', () {
+    const uv5rSteps = [2.5, 5.0, 6.25, 10.0, 12.5, 20.0, 25.0, 50.0];
+    final unsupported = RadioChannel(
+      location: 1,
+      name: 'BAD',
+      frequency: 462.1245,
+    );
+
+    final issues = unsupported.validate(validTuningSteps: uv5rSteps);
+
+    expect(issues, hasLength(1));
+    expect(issues.single, contains('462.124500 MHz'));
+    expect(issues.single, contains('462.125000 MHz'));
+    expect(
+      RadioChannel(
+        location: 1,
+        name: 'GOOD',
+        frequency: 462.125,
+      ).validate(validTuningSteps: uv5rSteps),
+      isEmpty,
+    );
+    expect(
+      unsupported.validate(validTuningSteps: uv5rSteps, hasTuningStep: false),
       isEmpty,
     );
   });

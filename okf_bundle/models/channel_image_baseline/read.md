@@ -10,7 +10,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:53:15Z"
+timestamp: "2026-10-29T10:57:13Z"
 concept_id: models/channel_image_baseline/read
 language: dart
 ---
@@ -29,11 +29,13 @@ ChannelLibrarySnapshotread({
     required int? memoryStart,
     required int? memoryEnd,
     required String? radioModel,
+    List<double> validTuningSteps = const [],
+    bool hasTuningStep = true,
   })
 ```
 
 ## Source
-Lines 165–174 in `models/channel_image_baseline.dart`
+Lines 170–181 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

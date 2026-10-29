@@ -491,6 +491,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     memoryStart: _capabilities?.memoryStart,
     memoryEnd: _capabilities?.memoryEnd,
     radioModel: _model,
+    validTuningSteps: _capabilities?.steps ?? const [],
+    hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
 
   ChannelImageMatch get _channelImageMatch => _channelLibrarySnapshot.match;
@@ -1322,6 +1324,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     minimumLocation: _capabilities?.memoryStart,
     maximumLocation: _capabilities?.memoryEnd,
     radioModel: _model,
+    validTuningSteps: _capabilities?.steps ?? const [],
+    hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
 
   void _sortChannelsByLocation() {
@@ -8299,6 +8303,8 @@ class _ChannelEditor extends StatelessWidget {
       minimumLocation: capabilities?.memoryStart,
       maximumLocation: capabilities?.memoryEnd,
       radioModel: radioModel,
+      validTuningSteps: capabilities?.steps ?? const [],
+      hasTuningStep: capabilities?.hasTuningStep ?? true,
     );
     final midland = showsMidlandChannelNumbers(radioModel);
     final receiveLocked =

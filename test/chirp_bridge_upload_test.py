@@ -9,6 +9,7 @@ import tempfile
 import unittest
 from collections import deque
 from pathlib import Path
+from types import SimpleNamespace
 from unittest import mock
 
 
@@ -512,6 +513,16 @@ class FrequencyPrecisionTest(unittest.TestCase):
 
         self.assertEqual(memory.freq, 131325000)
         self.assertEqual(radio.validate_memory(memory), [])
+
+    def test_unsupported_frequency_error_names_nearest_programmable_value(self):
+        message = bridge.channel_validation_message(
+            SimpleNamespace(freq=462124500),
+            ["Unable to find a supported tuning step for 462.124500"],
+            [2.5, 5.0, 6.25, 10.0, 12.5, 25.0],
+        )
+
+        self.assertIn("Nearest frequency", message)
+        self.assertIn("462.125000 MHz", message)
 
 
 if __name__ == "__main__":

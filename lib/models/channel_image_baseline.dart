@@ -107,6 +107,8 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
   required int? memoryStart,
   required int? memoryEnd,
   required String? radioModel,
+  List<double> validTuningSteps = const [],
+  bool hasTuningStep = true,
 }) {
   var activeCount = 0;
   var scanEnabledCount = 0;
@@ -120,6 +122,8 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
           minimumLocation: memoryStart,
           maximumLocation: memoryEnd,
           radioModel: radioModel,
+          validTuningSteps: validTuningSteps,
+          hasTuningStep: hasTuningStep,
         )
         .isNotEmpty) {
       needsAttention++;
@@ -157,6 +161,7 @@ class ChannelLibraryStatsCache {
   int? _memoryStart;
   int? _memoryEnd;
   String? _radioModel;
+  int _tuningStepsHash = 0;
 
   void markDirty() {
     _dirty = true;
@@ -171,7 +176,13 @@ class ChannelLibraryStatsCache {
     required int? memoryStart,
     required int? memoryEnd,
     required String? radioModel,
+    List<double> validTuningSteps = const [],
+    bool hasTuningStep = true,
   }) {
+    final tuningStepsHash = Object.hash(
+      Object.hashAll(validTuningSteps),
+      hasTuningStep,
+    );
     final sameInputs =
         !_dirty &&
         identical(channels, _channels) &&
@@ -183,7 +194,8 @@ class ChannelLibraryStatsCache {
         identical(baseline, _baseline) &&
         memoryStart == _memoryStart &&
         memoryEnd == _memoryEnd &&
-        radioModel == _radioModel;
+        radioModel == _radioModel &&
+        tuningStepsHash == _tuningStepsHash;
     if (sameInputs) return _snapshot;
 
     final snapshot = channelLibrarySnapshot(
@@ -195,6 +207,8 @@ class ChannelLibraryStatsCache {
       memoryStart: memoryStart,
       memoryEnd: memoryEnd,
       radioModel: radioModel,
+      validTuningSteps: validTuningSteps,
+      hasTuningStep: hasTuningStep,
     );
     _dirty = false;
     _channels = channels;
@@ -207,6 +221,7 @@ class ChannelLibraryStatsCache {
     _memoryStart = memoryStart;
     _memoryEnd = memoryEnd;
     _radioModel = radioModel;
+    _tuningStepsHash = tuningStepsHash;
     _snapshot = snapshot;
     return snapshot;
   }

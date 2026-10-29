@@ -2,9 +2,11 @@
 
 ## Functions
 
+- [_frequencyFitsStep](frequencyFitsStep.md)
 - [_isPlusFiveMhz](isPlusFiveMhz.md)
 - [_isZeroMhz](isZeroMhz.md)
 - [_midlandGmrsChannel](midlandGmrsChannel.md) — Midland channel 1-22 for a memory slot. Slots 31-107 are not fixed.
+- [_nearestFrequencyForSteps](nearestFrequencyForSteps.md)
 - [ChannelExtraField](ChannelExtraField.md)
 - [channelNumberLabel](channelNumberLabel.md) — Channel number shown in the list.
 - [clear](clear.md)

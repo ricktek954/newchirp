@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:16:01Z"
+timestamp: "2026-10-29T10:57:43Z"
 concept_id: models/radio_channel/nextAvailableLocation
 language: dart
 ---
@@ -24,7 +24,7 @@ intnextAvailableLocationnextAvailableLocation
 ```
 
 ## Source
-Lines 604–608 in `models/radio_channel.dart`
+Lines 601–605 in `models/radio_channel.dart`
 
 ## Relationships
 

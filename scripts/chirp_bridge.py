@@ -698,6 +698,37 @@ def apply_json(radio, mem, item):
     return skipped_fields
 
 
+def nearest_programmable_frequency(frequency_hz, steps_khz):
+    """Return the closest frequency representable by one of the steps."""
+    nearest = None
+    nearest_distance = None
+    for step_khz in steps_khz:
+        if abs(float(step_khz) - 8.33) < 0.001:
+            continue
+        step_hz = int(round(float(step_khz) * 1000))
+        if step_hz <= 0:
+            continue
+        candidate = int(round(frequency_hz / step_hz)) * step_hz
+        distance = abs(candidate - frequency_hz)
+        if nearest_distance is None or distance < nearest_distance:
+            nearest = candidate
+            nearest_distance = distance
+    return nearest
+
+
+def channel_validation_message(memory, errors, steps_khz):
+    """Add a frequency suggestion to CHIRP's unsupported-step error."""
+    message = str(errors[0])
+    if message.startswith("Unable to find a supported tuning step for "):
+        nearest = nearest_programmable_frequency(memory.freq, steps_khz)
+        if nearest is not None:
+            message += (
+                "\nNearest frequency supported by this radio: %.6f MHz."
+                % (nearest / 1_000_000)
+            )
+    return message
+
+
 def open_serial(radio_class, port):
     import serial
 
@@ -1436,7 +1467,17 @@ def main():
                                 })
                                 continue
                             raise RuntimeError(
-                                f"Channel {mem.number}: {errors[0]}")
+                                "Channel %s: %s"
+                                % (
+                                    mem.number,
+                                    channel_validation_message(
+                                        mem,
+                                        errors,
+                                        channel_radio.get_features()
+                                        .valid_tuning_steps,
+                                    ),
+                                )
+                            )
                         set_memory_with_extras(channel_radio, mem)
                         if locked_fields or filtered_name != requested_name:
                             adjusted.append({

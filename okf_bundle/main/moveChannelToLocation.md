@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:53:15Z"
+timestamp: "2026-10-29T10:57:08Z"
 concept_id: main/moveChannelToLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ void_moveChannelToLocation(int fromIndex, int targetLocation)
 ```
 
 ## Source
-Lines 1382–1382 in `main.dart`
+Lines 1386–1386 in `main.dart`
 
 ## Relationships
 

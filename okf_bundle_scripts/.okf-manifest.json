@@ -65,8 +65,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793268201883334389,
-      "hash": "04f24e07879e378bc7e44feb5174332b036ed57041fe4a6fed4e088f536bcf22",
+      "mtime_ns": 1793271455668946195,
+      "hash": "f96b231a8cd9f5ad9f29a43be0fb0bc7f28cf610e1287078c19ebde9ae68b417",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -100,6 +100,8 @@
         "chirp_bridge/settings_tree_json",
         "chirp_bridge/apply_setting_changes",
         "chirp_bridge/apply_json",
+        "chirp_bridge/nearest_programmable_frequency",
+        "chirp_bridge/channel_validation_message",
         "chirp_bridge/open_serial",
         "chirp_bridge/headless_live_adapter",
         "chirp_bridge/live_channel_context",
@@ -129,7 +131,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "4572280aaf030a0f1aea17400b16c8a4c163412d120ff7db79e44116825b9c73",
+      "edge_hash": "e00603469287ca32e58f55bdc333fb3ae252025386afd71c30e15bb5735d4fa3",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -257,7 +259,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "da23b716b0fdc116123999117d8019556d5fdf8a9512c239952dfe29bc020a05",
+      "edge_hash": "4d40925d005fbf4e35c837ed6e1e017cb88ce0863df4f3a948435b97a0356b5f",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -859,7 +861,23 @@
       "render_hash": "stale",
       "edge_hash": "f30f60bdc352103a4ded1ea6bdaae9cb50e805685bba8ee63ed923ede55356aa",
       "enriched": false
+    },
+    "chirp_bridge/nearest_programmable_frequency": {
+      "concept_id": "chirp_bridge/nearest_programmable_frequency",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "3502f80c6e1967a8dd8dd98434e36316a0bdbd92554d6dfc048371978daa6de0",
+      "enriched": false
+    },
+    "chirp_bridge/channel_validation_message": {
+      "concept_id": "chirp_bridge/channel_validation_message",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "3b0164d00c39f0dc529756c570518af67c2d3533b4bad247e83b0dbbfde42987",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-29T10:03:22Z"
+  "generated_at": "2026-10-29T10:57:36Z"
 }

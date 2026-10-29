@@ -190,6 +190,30 @@ void main() {
     expect(identical(bounded, read(memoryEnd: 0)), isTrue);
   });
 
+  test('library stats refresh when tuning-step capabilities change', () {
+    final channels = [_channel(1, 'A')..frequency = 462.1245];
+    final cache = ChannelLibraryStatsCache();
+
+    ChannelLibrarySnapshot read(List<double> steps) => cache.read(
+      imagePath: null,
+      zone: null,
+      channels: channels,
+      cleared: const <int>[],
+      baseline: null,
+      memoryStart: 1,
+      memoryEnd: 128,
+      radioModel: 'Baofeng_UV-5R',
+      validTuningSteps: steps,
+    );
+
+    final unknownSteps = read(const []);
+    expect(unknownSteps.needsAttention, 0);
+
+    final uv5rSteps = read(const [2.5, 5.0, 6.25, 10.0, 12.5, 25.0]);
+    expect(uv5rSteps.needsAttention, 1);
+    expect(identical(unknownSteps, uv5rSteps), isFalse);
+  });
+
   testWidgets('channel image bar enables actions only when channels differ', (
     tester,
   ) async {

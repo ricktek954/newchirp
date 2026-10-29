@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:16:01Z"
+timestamp: "2026-10-29T10:57:43Z"
 concept_id: models/radio_channel
 language: dart
 ---
@@ -46,6 +46,8 @@ language: dart
 | related | [midlandDuplexIsLocked](/models/radio_channel/midlandDuplexIsLocked.md) |
 | related | [midlandCanSelectOffset](/models/radio_channel/midlandCanSelectOffset.md) |
 | related | [midlandGmrsIssues](/models/radio_channel/midlandGmrsIssues.md) |
+| related | [_frequencyFitsStep](/models/radio_channel/frequencyFitsStep.md) |
+| related | [_nearestFrequencyForSteps](/models/radio_channel/nearestFrequencyForSteps.md) |
 | related | [gmrsStarterChannels](/models/radio_channel/gmrsStarterChannels.md) |
 | related | [copy](/models/radio_channel/copy.md) |
 | related | [clear](/models/radio_channel/clear.md) |
