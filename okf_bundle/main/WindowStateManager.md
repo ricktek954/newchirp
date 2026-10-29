@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:33Z"
+timestamp: "2026-10-29T13:13:45Z"
 concept_id: main/WindowStateManager
 language: dart
 ---
@@ -23,7 +23,7 @@ _WindowStateManager(this._store, this._initial)
 ```
 
 ## Source
-Lines 188–188 in `main.dart`
+Lines 189–189 in `main.dart`
 
 ## Relationships
 

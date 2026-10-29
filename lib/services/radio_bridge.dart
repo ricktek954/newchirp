@@ -691,6 +691,7 @@ class RadioBridge {
   }
 
   Future<RepeaterSearchResults> searchRepeaters({
+    required String country,
     required String state,
     required String service,
     String filter = '',
@@ -703,6 +704,8 @@ class RadioBridge {
   }) async {
     final data = await _run([
       'repeaterbook-search',
+      '--country',
+      country,
       '--state',
       state,
       '--service',

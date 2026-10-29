@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:33Z"
+timestamp: "2026-10-29T13:13:45Z"
 concept_id: main/channelRow
 language: dart
 ---
@@ -30,7 +30,7 @@ Widget_channelRow(
 ```
 
 ## Source
-Lines 8040–8047 in `main.dart`
+Lines 8055–8062 in `main.dart`
 
 ## Relationships
 

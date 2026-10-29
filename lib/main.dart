@@ -14,6 +14,7 @@ import 'package:window_manager/window_manager.dart';
 import 'models/channel_image_baseline.dart';
 import 'models/gm32_channel.dart';
 import 'models/radio_channel.dart';
+import 'models/repeater_regions.dart';
 import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
@@ -2912,7 +2913,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         buttonLabel: 'Find repeaters',
                         onPressed: _findRepeaters,
                         help:
-                            'Search RepeaterBook by state and optional location, '
+                            'Search RepeaterBook by country, region, and optional location, '
                             'preview matching repeaters, and add selected channels '
                             'to the current library.',
                       ),
@@ -6419,63 +6420,6 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
 
 enum _AddChannelPlacement { end, beforeSelected, afterSelected }
 
-const _repeaterStates = <String>[
-  'Alabama',
-  'Alaska',
-  'Arizona',
-  'Arkansas',
-  'California',
-  'Colorado',
-  'Connecticut',
-  'Delaware',
-  'District of Columbia',
-  'Florida',
-  'Georgia',
-  'Guam',
-  'Hawaii',
-  'Idaho',
-  'Illinois',
-  'Indiana',
-  'Iowa',
-  'Kansas',
-  'Kentucky',
-  'Louisiana',
-  'Maine',
-  'Maryland',
-  'Massachusetts',
-  'Michigan',
-  'Minnesota',
-  'Mississippi',
-  'Missouri',
-  'Montana',
-  'Nebraska',
-  'Nevada',
-  'New Hampshire',
-  'New Jersey',
-  'New Mexico',
-  'New York',
-  'North Carolina',
-  'North Dakota',
-  'Ohio',
-  'Oklahoma',
-  'Oregon',
-  'Pennsylvania',
-  'Puerto Rico',
-  'Rhode Island',
-  'South Carolina',
-  'South Dakota',
-  'Tennessee',
-  'Texas',
-  'Utah',
-  'Vermont',
-  'Virgin Islands',
-  'Virginia',
-  'Washington',
-  'West Virginia',
-  'Wisconsin',
-  'Wyoming',
-];
-
 class RepeaterBookDialog extends StatefulWidget {
   const RepeaterBookDialog({super.key, required this.bridge});
 
@@ -6492,6 +6436,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   final _distanceController = TextEditingController();
   final _resultFilterController = TextEditingController();
   final _countyFilterController = TextEditingController();
+  String _country = 'United States';
   String _state = 'New York';
   String _service = 'all';
   bool _fmOnly = true;
@@ -6506,6 +6451,24 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   RepeaterSortOrder _sortOrder = RepeaterSortOrder.source;
   Size? _dialogSize;
   final MapController _mapController = MapController();
+
+  List<String> get _regions => repeaterRegionsForCountry(_country);
+
+  bool get _supportsGmrs => repeaterCountrySupportsGmrs(_country);
+
+  void _selectCountry(String country) {
+    final regions = repeaterRegionsForCountry(country);
+    setState(() {
+      _country = country;
+      _state = regions.first;
+      _service = repeaterCountrySupportsGmrs(country) ? _service : 'amateur';
+      _results = null;
+      _selected.clear();
+      _selectedCounties.clear();
+      _error = null;
+      _status = '';
+    });
+  }
 
   @override
   void dispose() {
@@ -6556,6 +6519,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     });
     try {
       final results = await widget.bridge.searchRepeaters(
+        country: _country,
         state: _state,
         service: _service,
         filter: _filterController.text.trim(),
@@ -6572,7 +6536,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() {
         _results = results;
         if (results.results.isEmpty) {
-          _error = _service == 'gmrs'
+          _error = _country == 'United States' && _service == 'gmrs'
               ? 'No matching GMRS repeaters were found. RepeaterBook may '
                     'not have a GMRS listing for this area yet.'
               : 'No matching repeaters were found.';
@@ -6923,16 +6887,17 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             children: [
                               Expanded(
                                 child: DropdownButtonFormField<String>(
+                                  key: ValueKey('repeater-country-$_country'),
                                   isExpanded: true,
-                                  initialValue: _state,
+                                  initialValue: _country,
                                   decoration: const InputDecoration(
-                                    labelText: 'State or territory',
+                                    labelText: 'Country',
                                   ),
-                                  items: _repeaterStates
+                                  items: repeaterCountryChoices
                                       .map(
-                                        (state) => DropdownMenuItem(
-                                          value: state,
-                                          child: Text(state),
+                                        (country) => DropdownMenuItem(
+                                          value: country,
+                                          child: Text(country),
                                         ),
                                       )
                                       .toList(),
@@ -6940,39 +6905,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       ? null
                                       : (value) {
                                           if (value != null) {
-                                            setState(() => _state = value);
-                                          }
-                                        },
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              SizedBox(
-                                width: 190,
-                                child: DropdownButtonFormField<String>(
-                                  isExpanded: true,
-                                  initialValue: _service,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Service',
-                                  ),
-                                  items: const [
-                                    DropdownMenuItem(
-                                      value: 'all',
-                                      child: Text('Amateur + GMRS'),
-                                    ),
-                                    DropdownMenuItem(
-                                      value: 'amateur',
-                                      child: Text('Amateur (ham)'),
-                                    ),
-                                    DropdownMenuItem(
-                                      value: 'gmrs',
-                                      child: Text('GMRS'),
-                                    ),
-                                  ],
-                                  onChanged: _loading
-                                      ? null
-                                      : (value) {
-                                          if (value != null) {
-                                            setState(() => _service = value);
+                                            _selectCountry(value);
                                           }
                                         },
                                 ),
@@ -6982,6 +6915,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 width: 165,
                                 child:
                                     DropdownButtonFormField<RepeaterSortOrder>(
+                                      key: ValueKey(
+                                        'repeater-sort-$_sortOrder',
+                                      ),
                                       isExpanded: true,
                                       initialValue: _sortOrder,
                                       decoration: const InputDecoration(
@@ -7007,6 +6943,85 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         }
                                       },
                                     ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: DropdownButtonFormField<String>(
+                                  key: ValueKey(
+                                    'repeater-region-$_country-$_state',
+                                  ),
+                                  isExpanded: true,
+                                  initialValue: _state,
+                                  decoration: InputDecoration(
+                                    labelText: _regions.length == 1
+                                        ? 'Region'
+                                        : 'State or province',
+                                  ),
+                                  items: _regions
+                                      .map(
+                                        (region) => DropdownMenuItem(
+                                          value: region,
+                                          child: Text(region),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: _loading || _regions.length == 1
+                                      ? null
+                                      : (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              _state = value;
+                                              _results = null;
+                                              _selected.clear();
+                                              _selectedCounties.clear();
+                                            });
+                                          }
+                                        },
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              SizedBox(
+                                width: 190,
+                                child: DropdownButtonFormField<String>(
+                                  key: ValueKey(
+                                    'repeater-service-$_country-$_service',
+                                  ),
+                                  isExpanded: true,
+                                  initialValue: _service,
+                                  decoration: const InputDecoration(
+                                    labelText: 'Service',
+                                  ),
+                                  items: const [
+                                    DropdownMenuItem(
+                                      value: 'all',
+                                      child: Text('Amateur + GMRS'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'amateur',
+                                      child: Text('Amateur (ham)'),
+                                    ),
+                                    DropdownMenuItem(
+                                      value: 'gmrs',
+                                      child: Text('GMRS'),
+                                    ),
+                                  ],
+                                  onChanged: _loading || !_supportsGmrs
+                                      ? null
+                                      : (value) {
+                                          if (value != null) {
+                                            setState(() {
+                                              _service = value;
+                                              _results = null;
+                                              _selected.clear();
+                                              _selectedCounties.clear();
+                                            });
+                                          }
+                                        },
+                                ),
                               ),
                             ],
                           ),

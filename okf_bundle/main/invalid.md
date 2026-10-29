@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:33Z"
+timestamp: "2026-10-29T13:13:45Z"
 concept_id: main/invalid
 language: dart
 ---
@@ -23,7 +23,7 @@ boolinvalid(RadioSettingNode node)
 ```
 
 ## Source
-Lines 523–523 in `main.dart`
+Lines 524–524 in `main.dart`
 
 ## Relationships
 

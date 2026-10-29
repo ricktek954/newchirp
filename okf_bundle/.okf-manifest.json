@@ -5,8 +5,8 @@
   "files": {
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793278593397400666,
-      "hash": "2b5bbbbba3ff3675db89d190193788cf8d4689776696c2ff6b404468f4a79cb5",
+      "mtime_ns": 1793279625867039401,
+      "hash": "e6f77331d702ee3c58146f25ca0a880abcbdc7fedbadf2aa25b9f50aebcf2821",
       "concept_ids": [
         "main/AddChannelPlacement",
         "main/ChannelApplyDialog",
@@ -163,6 +163,7 @@
         "main/scheduleSave",
         "main/search",
         "main/searchAmateurInstead",
+        "main/selectCountry",
         "main/selectPage",
         "main/selectRadioModel",
         "main/setColumnOrder",
@@ -194,6 +195,22 @@
         "main/walk",
         "main/writeRadioSettings",
         "main"
+      ]
+    },
+    "models/channel_image_baseline.dart": {
+      "path": "models/channel_image_baseline.dart",
+      "mtime_ns": 1793278597006813742,
+      "hash": "fdf16769b2c1f2881909a2b487c06279e49c186d3eb74b60f183aa1d625503e6",
+      "concept_ids": [
+        "models/channel_image_baseline/ChannelImageBaseline",
+        "models/channel_image_baseline/ChannelImageMatch",
+        "models/channel_image_baseline/ChannelLibrarySnapshot",
+        "models/channel_image_baseline/ChannelLibraryStatsCache",
+        "models/channel_image_baseline/channelImageStatusText",
+        "models/channel_image_baseline/channelListSignature",
+        "models/channel_image_baseline/markDirty",
+        "models/channel_image_baseline/read",
+        "models/channel_image_baseline"
       ]
     },
     "models/gm32_channel.dart": {
@@ -418,8 +435,8 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1793275606527759964,
-      "hash": "80297be799c8d5abe657a290e45bb895f09ae2f0e3be62128c523dc6ab1fa21a",
+      "mtime_ns": 1793279470480907172,
+      "hash": "05d430df1e35f245a84a5452ab993e950d3c053ea43f95d8ff6cb5509fa83582",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
         "services/radio_bridge/RadioBridgeException",
@@ -613,22 +630,14 @@
         "widgets/radio_model_picker"
       ]
     },
-    "models/channel_image_baseline.dart": {
-      "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1793278597006813742,
-      "hash": "fdf16769b2c1f2881909a2b487c06279e49c186d3eb74b60f183aa1d625503e6",
+    "models/repeater_regions.dart": {
+      "path": "models/repeater_regions.dart",
+      "mtime_ns": 1793279635809410075,
+      "hash": "415e26419d3a185ae82a5f22060bbd4dd2f880ad284c3587e03a02e64aa15c15",
       "concept_ids": [
-        "models/channel_image_baseline",
-        "models/channel_image_baseline/ChannelImageBaseline",
-        "models/channel_image_baseline/ChannelImageMatch",
-        "models/channel_image_baseline/ChannelLibrarySnapshot",
-        "models/channel_image_baseline/ChannelLibraryStatsCache",
-        "models/channel_image_baseline/channelListSignature",
-        "models/channel_image_baseline/channelImageMatch",
-        "models/channel_image_baseline/channelImageStatusText",
-        "models/channel_image_baseline/channelLibrarySnapshot",
-        "models/channel_image_baseline/markDirty",
-        "models/channel_image_baseline/read"
+        "models/repeater_regions",
+        "models/repeater_regions/repeaterRegionsForCountry",
+        "models/repeater_regions/repeaterCountrySupportsGmrs"
       ]
     }
   },
@@ -1278,7 +1287,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "50d88c19615becd544adde0019f958e4654f4b081d142681a4be718fb1ee3c1a",
+      "edge_hash": "e1147ee765a840a0e8f8d6d40469689f6974ce6baf1e2f35f8829960376e10f7",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -4600,7 +4609,39 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "models/repeater_regions": {
+      "concept_id": "models/repeater_regions",
+      "type": "Module",
+      "resource": "models/repeater_regions.dart",
+      "render_hash": "stale",
+      "edge_hash": "a3886fc50e27743b97a17eb201fbe71dc59768a66e19a4366e40afc2e5aa5489",
+      "enriched": false
+    },
+    "models/repeater_regions/repeaterRegionsForCountry": {
+      "concept_id": "models/repeater_regions/repeaterRegionsForCountry",
+      "type": "Function",
+      "resource": "models/repeater_regions.dart",
+      "render_hash": "stale",
+      "edge_hash": "f436183fe8b6804b91a2271d70dbbdee0acfe2877b61417bdf9fa22f7057ce1e",
+      "enriched": false
+    },
+    "models/repeater_regions/repeaterCountrySupportsGmrs": {
+      "concept_id": "models/repeater_regions/repeaterCountrySupportsGmrs",
+      "type": "Function",
+      "resource": "models/repeater_regions.dart",
+      "render_hash": "stale",
+      "edge_hash": "f436183fe8b6804b91a2271d70dbbdee0acfe2877b61417bdf9fa22f7057ce1e",
+      "enriched": false
+    },
+    "main/selectCountry": {
+      "concept_id": "main/selectCountry",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-29T12:56:37Z"
+  "generated_at": "2026-10-29T13:13:56Z"
 }

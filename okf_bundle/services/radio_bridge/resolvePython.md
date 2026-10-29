@@ -11,7 +11,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:06:46Z"
+timestamp: "2026-10-29T13:11:10Z"
 concept_id: services/radio_bridge/resolvePython
 language: dart
 ---
@@ -32,7 +32,7 @@ The bundled CHIRP tree uses Python 3.10+ syntax, so prefer an interpreter
 that is new enough even when an older system Python is first on PATH.
 
 ## Source
-Lines 854–854 in `services/radio_bridge.dart`
+Lines 857–857 in `services/radio_bridge.dart`
 
 ## Relationships
 

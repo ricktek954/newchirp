@@ -1,44 +1,45 @@
 ---
-description: 'Top-level OKF summary: 474 concepts across 4 domains and 22 modules'
+description: 'Top-level OKF summary: 476 concepts across 4 domains and 23 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-29T12:56:37Z'
+timestamp: '2026-10-29T13:13:56Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 474 concepts | 4 domains | 22 modules
+> OKF v0.2 bundle | 476 concepts | 4 domains | 23 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 372 |
+| Function | 373 |
 | Class | 74 |
-| Module | 22 |
+| Module | 23 |
 | Enum | 6 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 474 |
+| dart | 476 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 186 concepts
+### [main.dart](main.dart/index.md) — 187 concepts
 
-- [main](main/index.md) (186 concepts)
+- [main](main/index.md) (187 concepts)
 
-### [models](models/index.md) — 70 concepts
+### [models](models/index.md) — 71 concepts
 
 - [models/radio_channel](models/radio_channel/index.md) (37 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
-- [models/channel_image_baseline](models/channel_image_baseline/index.md) (11 concepts)
+- [models/channel_image_baseline](models/channel_image_baseline/index.md) (9 concepts)
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
+- [models/repeater_regions](models/repeater_regions/index.md) (3 concepts)
 
 ### [services](services/index.md) — 186 concepts
 
@@ -65,15 +66,15 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
-| [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) | Class | `models/channel_image_baseline.dart` | Remembers the last library snapshot so search and row select… |
+| [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
 | [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
 | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
+| [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
-| [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |

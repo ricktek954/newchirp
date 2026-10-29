@@ -83,8 +83,13 @@ class _FakeUpdateInstaller extends UpdateInstaller {
 }
 
 class _FakeRepeaterBridge extends RadioBridge {
+  String? lastCountry;
+  String? lastState;
+  String? lastService;
+
   @override
   Future<RepeaterSearchResults> searchRepeaters({
+    required String country,
     required String state,
     required String service,
     String filter = '',
@@ -95,6 +100,9 @@ class _FakeRepeaterBridge extends RadioBridge {
     bool openOnly = true,
     void Function(RadioProgress)? onProgress,
   }) async {
+    lastCountry = country;
+    lastState = state;
+    lastService = service;
     final channel = RadioChannel(
       location: 1,
       name: 'Buffalo',
@@ -223,6 +231,7 @@ void main() {
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
     List<RadioChannel>? selected;
+    final bridge = _FakeRepeaterBridge();
 
     await tester.pumpWidget(
       MaterialApp(
@@ -232,8 +241,7 @@ void main() {
               onPressed: () async {
                 selected = await showDialog<List<RadioChannel>>(
                   context: context,
-                  builder: (context) =>
-                      RepeaterBookDialog(bridge: _FakeRepeaterBridge()),
+                  builder: (context) => RepeaterBookDialog(bridge: bridge),
                 );
               },
               child: const Text('Open repeater search'),
@@ -247,8 +255,11 @@ void main() {
     await tester.tap(find.text('Search'));
     await tester.pumpAndSettle();
 
+    expect(bridge.lastCountry, 'United States');
+    expect(bridge.lastService, 'all');
     expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
     expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
+    await tester.ensureVisible(find.text('Map'));
     await tester.tap(find.text('Map'));
     await tester.pump();
     final allMarkers = tester.widget<MarkerLayer>(find.byType(MarkerLayer));
@@ -587,7 +598,8 @@ void main() {
     await tester.tap(find.text('Find repeaters').first);
     await tester.pumpAndSettle();
 
-    expect(find.text('State or territory'), findsOneWidget);
+    expect(find.text('Country'), findsOneWidget);
+    expect(find.text('State or province'), findsOneWidget);
     expect(find.text('Data from RepeaterBook.com'), findsNothing);
   });
 

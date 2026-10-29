@@ -134,6 +134,7 @@
 - [_scheduleSave](scheduleSave.md)
 - [_search](search.md)
 - [_searchAmateurInstead](searchAmateurInstead.md)
+- [_selectCountry](selectCountry.md)
 - [_selectPage](selectPage.md)
 - [_selectRadioModel](selectRadioModel.md)
 - [_setColumnOrder](setColumnOrder.md)

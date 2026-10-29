@@ -1009,7 +1009,15 @@ def channel_radio_for(radio, zone=None):
 
 
 def repeaterbook_resource_name(service, country, state):
-    service = "gmrs" if str(service).lower() == "gmrs" else ""
+    country = str(country).strip()
+    state = str(state).strip()
+    if country not in ("United States", "Canada", "Mexico"):
+        state = "all"
+    service = (
+        "gmrs"
+        if country == "United States" and str(service).lower() == "gmrs"
+        else ""
+    )
     country_key = str(country).strip().lower().replace(" ", "_")
     state_key = str(state).strip().lower().replace(" ", "_")
     return "rb%s-%s-%s.json" % (service, country_key, state_key)
@@ -1152,6 +1160,8 @@ def search_repeaterbook(
     open_only=False,
     limit=200,
 ):
+    if country != "United States":
+        service = "amateur"
     query = normalize_repeaterbook_query(query)
     has_origin = latitude is not None and longitude is not None
     matches = []

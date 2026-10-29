@@ -11,7 +11,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:06:46Z"
+timestamp: "2026-10-29T13:11:10Z"
 concept_id: services/radio_bridge/windowsSerialPortNames
 language: dart
 ---

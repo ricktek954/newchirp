@@ -473,6 +473,44 @@ class UploadHandshakeTest(unittest.TestCase):
             "east baton rouge",
         )
 
+    def test_repeaterbook_country_resources_use_supported_region_rules(self):
+        self.assertEqual(
+            bridge.repeaterbook_resource_name(
+                "amateur",
+                "Canada",
+                "Ontario",
+            ),
+            "rb-canada-ontario.json",
+        )
+        self.assertEqual(
+            bridge.repeaterbook_resource_name(
+                "gmrs",
+                "Germany",
+                "Bavaria",
+            ),
+            "rb-germany-all.json",
+        )
+
+    def test_non_us_repeaterbook_search_uses_amateur_service(self):
+        calls = []
+
+        def fetch(service, country, state):
+            calls.append((service, country, state))
+            return {"results": []}
+
+        with mock.patch.object(
+            bridge,
+            "fetch_repeaterbook_data",
+            side_effect=fetch,
+        ):
+            bridge.search_repeaterbook(
+                "Canada",
+                "Ontario",
+                service="all",
+            )
+
+        self.assertEqual(calls, [("amateur", "Canada", "Ontario")])
+
     def test_repeaterbook_all_services_combines_results(self):
         def item(callsign, frequency, latitude, longitude):
             return {
