@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-29T12:06:46Z"
 concept_id: services/radio_bridge/massStoragePortDetails
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_massStoragePortDetails_massStoragePortDetails
 ```
 
 ## Source
-Lines 307–307 in `services/radio_bridge.dart`
+Lines 318–318 in `services/radio_bridge.dart`
 
 ## Relationships
 

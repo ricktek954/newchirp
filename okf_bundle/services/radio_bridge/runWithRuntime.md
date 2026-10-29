@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:radio_bridge.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:10:29Z"
+timestamp: "2026-10-29T12:06:46Z"
 concept_id: services/radio_bridge/runWithRuntime
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_runWithRuntime_runWithRuntime
 ```
 
 ## Source
-Lines 712–716 in `services/radio_bridge.dart`
+Lines 723–727 in `services/radio_bridge.dart`
 
 ## Relationships
 

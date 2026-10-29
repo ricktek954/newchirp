@@ -1,37 +1,42 @@
 ---
 okf_version: "0.2"
-type: Class
-title: ChannelLibrarySnapshot
-description: Channel counts and the radio-image match for one library refresh.
+type: Function
+title: channelLibrarySnapshot
 resource: models/channel_image_baseline.dart
 tags:
   - "lang:dart"
-  - "type:Class"
+  - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:57:13Z"
-concept_id: models/channel_image_baseline/ChannelLibrarySnapshot
+timestamp: "2026-10-29T12:07:26Z"
+concept_id: models/channel_image_baseline/channelLibrarySnapshot
 language: dart
 ---
 
-# ChannelLibrarySnapshot
-
-Channel counts and the radio-image match for one library refresh.
+# channelLibrarySnapshot
 
 ## Signature
 
 ```dart
-class ChannelLibrarySnapshot
+ChannelLibrarySnapshotchannelLibrarySnapshot({
+  required String? imagePath,
+  required int? zone,
+  required List<RadioChannel> channels,
+  required Iterable<int> cleared,
+  required ChannelImageBaseline? baseline,
+  required int? memoryStart,
+  required int? memoryEnd,
+  required String? radioModel,
+  List<double> validTuningSteps = const [],
+  List<({double startMhz, double endMhz})> validBands = const [],
+  bool hasTuningStep = true,
+})
 ```
 
-## Docstring
-
-Channel counts and the radio-image match for one library refresh.
-
 ## Source
-Lines 80–99 in `models/channel_image_baseline.dart`
+Lines 101–113 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

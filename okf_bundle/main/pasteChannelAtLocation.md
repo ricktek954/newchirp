@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T11:12:42Z"
+timestamp: "2026-10-29T12:06:54Z"
 concept_id: main/pasteChannelAtLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_pasteChannelAtLocation_pasteChannelAtLocation
 ```
 
 ## Source
-Lines 2183–2183 in `main.dart`
+Lines 2185–2185 in `main.dart`
 
 ## Relationships
 

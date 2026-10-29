@@ -107,4 +107,17 @@ void main() {
     expect(capabilities.memoryStart, 1);
     expect(capabilities.memoryEnd, 199);
   });
+
+  test('parses supported frequency bands', () {
+    final capabilities = RadioCapabilities.fromJson({
+      'validBands': [
+        {'startMhz': 108, 'endMhz': 136},
+        {'startMhz': 400, 'endMhz': 520},
+      ],
+    });
+
+    expect(capabilities.validBands, hasLength(2));
+    expect(capabilities.validBands.first.startMhz, 108);
+    expect(capabilities.validBands.last.endMhz, 520);
+  });
 }

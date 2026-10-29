@@ -630,6 +630,7 @@ class RadioChannel {
     int? maximumLocation,
     String? radioModel,
     List<double> validTuningSteps = const [],
+    List<({double startMhz, double endMhz})> validBands = const [],
     bool hasTuningStep = true,
   }) {
     final issues = <String>[];
@@ -684,6 +685,23 @@ class RadioChannel {
           'programmed on this radio.$suggestion',
         );
       }
+    }
+    if (frequency > 0 &&
+        validBands.isNotEmpty &&
+        !validBands.any(
+          (band) => band.startMhz <= frequency && frequency < band.endMhz,
+        )) {
+      final ranges = validBands
+          .map(
+            (band) =>
+                '${band.startMhz.toStringAsFixed(3)}-'
+                '${band.endMhz.toStringAsFixed(3)}',
+          )
+          .join(' MHz, ');
+      issues.add(
+        'Frequency ${frequency.toStringAsFixed(6)} MHz is outside this '
+        'radio’s supported ranges: $ranges MHz.',
+      );
     }
     issues.addAll(midlandGmrsIssues(radioModel, this));
     return issues;

@@ -533,6 +533,13 @@ def features_json(radio):
         "memoryEnd": memory_end,
         "nameLength": features.valid_name_length,
         "validCharacters": features.valid_characters,
+        "validBands": [
+            {
+                "startMhz": start / 1_000_000,
+                "endMhz": end / 1_000_000,
+            }
+            for start, end in features.valid_bands
+        ],
         "hasTuningStep": features.has_tuning_step,
     }
 

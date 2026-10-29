@@ -214,6 +214,35 @@ void main() {
     expect(identical(unknownSteps, uv5rSteps), isFalse);
   });
 
+  test('library stats refresh when supported bands change', () {
+    final channels = [_channel(4, '900')..frequency = 927.525];
+    final cache = ChannelLibraryStatsCache();
+
+    ChannelLibrarySnapshot read(
+      List<({double startMhz, double endMhz})> bands,
+    ) => cache.read(
+      imagePath: null,
+      zone: null,
+      channels: channels,
+      cleared: const <int>[],
+      baseline: null,
+      memoryStart: 1,
+      memoryEnd: 199,
+      radioModel: 'Baofeng_5RM',
+      validBands: bands,
+    );
+
+    final unknownBands = read(const []);
+    expect(unknownBands.needsAttention, 0);
+
+    final fiveRmBands = read(const [
+      (startMhz: 108.0, endMhz: 136.0),
+      (startMhz: 400.0, endMhz: 520.0),
+    ]);
+    expect(fiveRmBands.needsAttention, 1);
+    expect(identical(unknownBands, fiveRmBands), isFalse);
+  });
+
   testWidgets('channel image bar enables actions only when channels differ', (
     tester,
   ) async {

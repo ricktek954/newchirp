@@ -288,4 +288,33 @@ void main() {
       isEmpty,
     );
   });
+
+  test('frequency validation rejects channels outside the radio bands', () {
+    const bands = [
+      (startMhz: 108.0, endMhz: 136.0),
+      (startMhz: 136.0, endMhz: 174.0),
+      (startMhz: 200.0, endMhz: 260.0),
+      (startMhz: 350.0, endMhz: 390.0),
+      (startMhz: 400.0, endMhz: 520.0),
+    ];
+    final unsupported = RadioChannel(
+      location: 4,
+      name: '900',
+      frequency: 927.525,
+    );
+
+    final issues = unsupported.validate(validBands: bands);
+
+    expect(issues, hasLength(1));
+    expect(issues.single, contains('927.525000 MHz'));
+    expect(issues.single, contains('400.000-520.000 MHz'));
+    expect(
+      RadioChannel(
+        location: 4,
+        name: 'UHF',
+        frequency: 462.5625,
+      ).validate(validBands: bands),
+      isEmpty,
+    );
+  });
 }

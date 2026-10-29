@@ -1,43 +1,36 @@
 ---
 okf_version: "0.2"
-type: Enum
-title: ChannelImageMatch
+type: Function
+title: channelImageMatch
 resource: models/channel_image_baseline.dart
 tags:
   - "lang:dart"
-  - "type:Enum"
+  - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:57:13Z"
-concept_id: models/channel_image_baseline/ChannelImageMatch
+timestamp: "2026-10-29T12:07:26Z"
+concept_id: models/channel_image_baseline/channelImageMatch
 language: dart
 ---
 
-# ChannelImageMatch
+# channelImageMatch
 
 ## Signature
 
 ```dart
-enum ChannelImageMatch
+ChannelImageMatchchannelImageMatch({
+  required String? imagePath,
+  required int? zone,
+  required List<RadioChannel> channels,
+  required Iterable<int> cleared,
+  required ChannelImageBaseline? baseline,
+})
 ```
 
-## Methods
-
-- `noImage`
-- `noImage`
-- `notLoaded`
-- `notLoaded`
-- `matchesRadio`
-- `matchesRadio`
-- `matchesImage`
-- `matchesImage`
-- `differs`
-- `differs`
-
 ## Source
-Lines 24–30 in `models/channel_image_baseline.dart`
+Lines 45–51 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

@@ -342,6 +342,21 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(channel["txTone"], 151.4)
         self.assertIn("RepeaterBook: WB2ECR", channel["comment"])
 
+    def test_driver_frequency_bands_are_exported_in_mhz(self):
+        image = SOURCE / "tests/images/Baofeng_5RM.img"
+        radio = bridge.radio_from_image(
+            self.directory,
+            "Baofeng_5RM",
+            str(image),
+        )
+
+        bands = bridge.features_json(radio)["validBands"]
+
+        self.assertIn(
+            {"startMhz": 400.0, "endMhz": 520.0},
+            bands,
+        )
+
     def test_repeaterbook_search_filters_closed_results(self):
         items = [
             {

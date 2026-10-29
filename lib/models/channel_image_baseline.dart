@@ -108,6 +108,7 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
   required int? memoryEnd,
   required String? radioModel,
   List<double> validTuningSteps = const [],
+  List<({double startMhz, double endMhz})> validBands = const [],
   bool hasTuningStep = true,
 }) {
   var activeCount = 0;
@@ -123,6 +124,7 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
           maximumLocation: memoryEnd,
           radioModel: radioModel,
           validTuningSteps: validTuningSteps,
+          validBands: validBands,
           hasTuningStep: hasTuningStep,
         )
         .isNotEmpty) {
@@ -162,6 +164,7 @@ class ChannelLibraryStatsCache {
   int? _memoryEnd;
   String? _radioModel;
   int _tuningStepsHash = 0;
+  int _validBandsHash = 0;
 
   void markDirty() {
     _dirty = true;
@@ -177,11 +180,15 @@ class ChannelLibraryStatsCache {
     required int? memoryEnd,
     required String? radioModel,
     List<double> validTuningSteps = const [],
+    List<({double startMhz, double endMhz})> validBands = const [],
     bool hasTuningStep = true,
   }) {
     final tuningStepsHash = Object.hash(
       Object.hashAll(validTuningSteps),
       hasTuningStep,
+    );
+    final validBandsHash = Object.hashAll(
+      validBands.map((band) => Object.hash(band.startMhz, band.endMhz)),
     );
     final sameInputs =
         !_dirty &&
@@ -195,7 +202,8 @@ class ChannelLibraryStatsCache {
         memoryStart == _memoryStart &&
         memoryEnd == _memoryEnd &&
         radioModel == _radioModel &&
-        tuningStepsHash == _tuningStepsHash;
+        tuningStepsHash == _tuningStepsHash &&
+        validBandsHash == _validBandsHash;
     if (sameInputs) return _snapshot;
 
     final snapshot = channelLibrarySnapshot(
@@ -208,6 +216,7 @@ class ChannelLibraryStatsCache {
       memoryEnd: memoryEnd,
       radioModel: radioModel,
       validTuningSteps: validTuningSteps,
+      validBands: validBands,
       hasTuningStep: hasTuningStep,
     );
     _dirty = false;
@@ -222,6 +231,7 @@ class ChannelLibraryStatsCache {
     _memoryEnd = memoryEnd;
     _radioModel = radioModel;
     _tuningStepsHash = tuningStepsHash;
+    _validBandsHash = validBandsHash;
     _snapshot = snapshot;
     return snapshot;
   }

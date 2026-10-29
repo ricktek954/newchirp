@@ -78,6 +78,7 @@ class RadioCapabilities {
     required this.memoryEnd,
     required this.nameLength,
     required this.validCharacters,
+    required this.validBands,
     required this.hasTuningStep,
   });
 
@@ -94,6 +95,7 @@ class RadioCapabilities {
   final int? memoryEnd;
   final int nameLength;
   final String validCharacters;
+  final List<({double startMhz, double endMhz})> validBands;
   final bool hasTuningStep;
 
   bool get uppercaseNames =>
@@ -124,6 +126,15 @@ class RadioCapabilities {
       memoryEnd: (json['memoryEnd'] as num?)?.toInt(),
       nameLength: (json['nameLength'] as num?)?.toInt() ?? 16,
       validCharacters: '${json['validCharacters'] ?? ''}',
+      validBands: (json['validBands'] as List? ?? const [])
+          .whereType<Map>()
+          .map(
+            (band) => (
+              startMhz: (band['startMhz'] as num).toDouble(),
+              endMhz: (band['endMhz'] as num).toDouble(),
+            ),
+          )
+          .toList(),
       hasTuningStep: json['hasTuningStep'] as bool? ?? true,
     );
   }
