@@ -3,18 +3,6 @@
   "manifest_version": 2,
   "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
   "files": {
-    "models/channel_image_baseline.dart": {
-      "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1793017335031684395,
-      "hash": "4b6e8df7a97001c618d9eda6e5cbb377be9721bffa4a13092f395a9c96ca9856",
-      "concept_ids": [
-        "models/channel_image_baseline/ChannelImageBaseline",
-        "models/channel_image_baseline/ChannelImageMatch",
-        "models/channel_image_baseline/channelImageStatusText",
-        "models/channel_image_baseline/channelListSignature",
-        "models/channel_image_baseline"
-      ]
-    },
     "models/gm32_channel.dart": {
       "path": "models/gm32_channel.dart",
       "mtime_ns": 1793017335031773185,
@@ -419,10 +407,28 @@
         "widgets/radio_model_picker"
       ]
     },
+    "models/channel_image_baseline.dart": {
+      "path": "models/channel_image_baseline.dart",
+      "mtime_ns": 1793271195892131980,
+      "hash": "1261815c48cb2960d0df3c0b9f44bda9ffbb19b763a60d4be0696da529418232",
+      "concept_ids": [
+        "models/channel_image_baseline",
+        "models/channel_image_baseline/ChannelImageBaseline",
+        "models/channel_image_baseline/ChannelImageMatch",
+        "models/channel_image_baseline/ChannelLibrarySnapshot",
+        "models/channel_image_baseline/ChannelLibraryStatsCache",
+        "models/channel_image_baseline/channelListSignature",
+        "models/channel_image_baseline/channelImageMatch",
+        "models/channel_image_baseline/channelImageStatusText",
+        "models/channel_image_baseline/channelLibrarySnapshot",
+        "models/channel_image_baseline/markDirty",
+        "models/channel_image_baseline/read"
+      ]
+    },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793187675918499965,
-      "hash": "c7cc5734b3279a004837bd2fc81a5573afc5accc41ef206272bde6aa4f3780f3",
+      "mtime_ns": 1793271195890683463,
+      "hash": "509757103a76812752b608e6cf51024f44ef9188a56feb258764661e176dbcdc",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -493,6 +499,7 @@
         "main/build",
         "main/createState",
         "main/channelTableRows",
+        "main/markChannelLibraryDirty",
         "main/rememberChannelImageBaseline",
         "main/initState",
         "main/loadColumnLayout",
@@ -1257,7 +1264,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "5bf6d4e8a05d19f9ab3646c619fddc727ac7475bed884cde2ddb3889aa08bcca",
+      "edge_hash": "58c03c0272d2a68569f770945786ab79018f97f98e50bfc37dba4db7e3033fea",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -3097,7 +3104,7 @@
       "type": "Module",
       "resource": "models/channel_image_baseline.dart",
       "render_hash": "stale",
-      "edge_hash": "04c6d23255d4971bc335d521407916ab997eebc6d187e9afb58558e32c4aee25",
+      "edge_hash": "08aafe9ff36918e57293434d42b1e59675d5fc95aa50c91cb6ed00ebb17fb757",
       "enriched": false
     },
     "models/channel_image_baseline/ChannelImageBaseline": {
@@ -4475,7 +4482,55 @@
       "render_hash": "stale",
       "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
       "enriched": false
+    },
+    "models/channel_image_baseline/ChannelLibrarySnapshot": {
+      "concept_id": "models/channel_image_baseline/ChannelLibrarySnapshot",
+      "type": "Class",
+      "resource": "models/channel_image_baseline.dart",
+      "render_hash": "stale",
+      "edge_hash": "7e5196f48d46402f056a557ad53e7ebed49ef606e32e7e414cf925d3703d172b",
+      "enriched": false
+    },
+    "models/channel_image_baseline/ChannelLibraryStatsCache": {
+      "concept_id": "models/channel_image_baseline/ChannelLibraryStatsCache",
+      "type": "Class",
+      "resource": "models/channel_image_baseline.dart",
+      "render_hash": "stale",
+      "edge_hash": "7e5196f48d46402f056a557ad53e7ebed49ef606e32e7e414cf925d3703d172b",
+      "enriched": false
+    },
+    "models/channel_image_baseline/channelLibrarySnapshot": {
+      "concept_id": "models/channel_image_baseline/channelLibrarySnapshot",
+      "type": "Function",
+      "resource": "models/channel_image_baseline.dart",
+      "render_hash": "stale",
+      "edge_hash": "7e5196f48d46402f056a557ad53e7ebed49ef606e32e7e414cf925d3703d172b",
+      "enriched": false
+    },
+    "models/channel_image_baseline/markDirty": {
+      "concept_id": "models/channel_image_baseline/markDirty",
+      "type": "Function",
+      "resource": "models/channel_image_baseline.dart",
+      "render_hash": "stale",
+      "edge_hash": "7e5196f48d46402f056a557ad53e7ebed49ef606e32e7e414cf925d3703d172b",
+      "enriched": false
+    },
+    "models/channel_image_baseline/read": {
+      "concept_id": "models/channel_image_baseline/read",
+      "type": "Function",
+      "resource": "models/channel_image_baseline.dart",
+      "render_hash": "stale",
+      "edge_hash": "7e5196f48d46402f056a557ad53e7ebed49ef606e32e7e414cf925d3703d172b",
+      "enriched": false
+    },
+    "main/markChannelLibraryDirty": {
+      "concept_id": "main/markChannelLibraryDirty",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-28T11:41:17Z"
+  "generated_at": "2026-10-29T10:53:17Z"
 }

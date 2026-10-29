@@ -102,6 +102,7 @@
 - [_loadRadioInstructions](loadRadioInstructions.md)
 - [_loadRadioSelection](loadRadioSelection.md)
 - [_loadRadioSettings](loadRadioSettings.md)
+- [_markChannelLibraryDirty](markChannelLibraryDirty.md)
 - [_markRadioSettingsChanged](markRadioSettingsChanged.md)
 - [_moveChannel](moveChannel.md)
 - [_moveChannelToLocation](moveChannelToLocation.md)

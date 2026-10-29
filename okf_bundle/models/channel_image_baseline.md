@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:14:25Z"
+timestamp: "2026-10-29T10:53:15Z"
 concept_id: models/channel_image_baseline
 language: dart
 ---
@@ -23,6 +23,11 @@ language: dart
 |------|--------|
 | related | [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) |
 | related | [ChannelImageMatch](/models/channel_image_baseline/ChannelImageMatch.md) |
+| related | [ChannelLibrarySnapshot](/models/channel_image_baseline/ChannelLibrarySnapshot.md) |
+| related | [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) |
 | related | [channelListSignature](/models/channel_image_baseline/channelListSignature.md) |
 | related | [channelImageMatch](/models/channel_image_baseline/channelImageMatch.md) |
 | related | [channelImageStatusText](/models/channel_image_baseline/channelImageStatusText.md) |
+| related | [channelLibrarySnapshot](/models/channel_image_baseline/channelLibrarySnapshot.md) |
+| related | [markDirty](/models/channel_image_baseline/markDirty.md) |
+| related | [read](/models/channel_image_baseline/read.md) |

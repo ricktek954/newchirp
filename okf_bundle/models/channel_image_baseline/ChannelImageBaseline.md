@@ -9,9 +9,9 @@ tags:
   - "type:Class"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:14:25Z"
+timestamp: "2026-10-29T10:53:15Z"
 concept_id: models/channel_image_baseline/ChannelImageBaseline
 language: dart
 ---

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Module"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:41:15Z"
+timestamp: "2026-10-29T10:53:15Z"
 concept_id: main
 language: dart
 ---
@@ -90,6 +90,7 @@ language: dart
 | related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |
 | related | [_channelTableRows](/main/channelTableRows.md) |
+| related | [_markChannelLibraryDirty](/main/markChannelLibraryDirty.md) |
 | related | [_rememberChannelImageBaseline](/main/rememberChannelImageBaseline.md) |
 | related | [invalid](/main/invalid.md) |
 | related | [initState](/main/initState.md) |
