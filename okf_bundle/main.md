@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:57:08Z"
+timestamp: "2026-10-29T11:12:42Z"
 concept_id: main
 language: dart
 ---
@@ -68,6 +68,7 @@ language: dart
 | related | [walk](/main/walk.md) |
 | related | [_changed](/main/changed.md) |
 | related | [save](/main/save.md) |
+| related | [openInPdfViewer](/main/openInPdfViewer.md) |
 | related | [rowColor](/main/rowColor.md) |
 | related | [cell](/main/cell.md) |
 | related | [_headerCell](/main/headerCell.md) |
@@ -187,6 +188,7 @@ language: dart
 | related | [_confirmDeleteChannel](/main/confirmDeleteChannel.md) |
 | related | [_buildLibrary](/main/buildLibrary.md) |
 | related | [_printFrequencyReference](/main/printFrequencyReference.md) |
+| related | [openInPdfViewer](/main/openInPdfViewer.md) |
 | related | [_systemPrinters](/main/systemPrinters.md) |
 | related | [_defaultPrinterName](/main/defaultPrinterName.md) |
 | related | [_buildFrequencyReference](/main/buildFrequencyReference.md) |

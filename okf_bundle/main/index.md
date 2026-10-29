@@ -182,6 +182,7 @@
 - [onWindowMoved](onWindowMoved.md)
 - [onWindowResized](onWindowResized.md)
 - [onWindowUnmaximize](onWindowUnmaximize.md)
+- [openInPdfViewer](openInPdfViewer.md)
 - [resizeBy](resizeBy.md)
 - [revealSelectedChannel](revealSelectedChannel.md)
 - [rowColor](rowColor.md)

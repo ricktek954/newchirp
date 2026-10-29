@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T10:57:08Z"
+timestamp: "2026-10-29T11:12:42Z"
 concept_id: main/onWindowMoved
 language: dart
 ---
@@ -23,7 +23,7 @@ voidonWindowMoved()
 ```
 
 ## Source
-Lines 213–213 in `main.dart`
+Lines 214–214 in `main.dart`
 
 ## Relationships
 

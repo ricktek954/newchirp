@@ -19,6 +19,7 @@ import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
 import 'services/diagnostic_log.dart';
 import 'services/file_save_warning_store.dart';
+import 'services/local_file_opener.dart';
 import 'services/radio_image_store.dart';
 import 'services/radio_selection_store.dart';
 import 'services/module_sandbox.dart';
@@ -3857,41 +3858,45 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
     if (!mounted || !prepared) return;
 
-    final printers = await _systemPrinters();
-    if (printers.isEmpty) {
+    Future<void> openInPdfViewer({required bool noPrinters}) async {
       try {
-        final openResult = await Process.run('/usr/bin/open', [temp.path]);
-        if (openResult.exitCode != 0) {
-          throw Exception(
-            'Opening the reference PDF failed:\n'
-            '${openResult.stderr.toString().trim()}',
-          );
-        }
+        await openLocalFile(temp.path);
       } catch (error) {
         if (mounted) await _showActionError(error);
         return;
       }
-
-      if (mounted) {
-        await showDialog<void>(
-          context: context,
-          builder: (context) => AlertDialog(
-            icon: const Icon(Icons.print_outlined, color: Color(0xFFC46A15)),
-            title: const Text('No printers found'),
-            content: const Text(
-              'NewChirp could not find any system printers, so the reference '
-              'PDF was opened in your default PDF viewer. Use the viewer’s '
-              'Print command to print it.',
-            ),
-            actions: [
-              FilledButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
-              ),
-            ],
+      if (!mounted) return;
+      await showDialog<void>(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: const Icon(Icons.print_outlined, color: Color(0xFFC46A15)),
+          title: Text(noPrinters ? 'No printers found' : 'Reference opened'),
+          content: Text(
+            noPrinters
+                ? 'NewChirp could not find any system printers, so the '
+                      'reference PDF was opened in your default PDF viewer. '
+                      'Use the viewer’s Print command to print it.'
+                : 'The reference PDF was opened in your default PDF viewer. '
+                      'Use the viewer’s Print command to print it.',
           ),
-        );
-      }
+          actions: [
+            FilledButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (Platform.isWindows) {
+      await openInPdfViewer(noPrinters: false);
+      return;
+    }
+
+    final printers = await _systemPrinters();
+    if (printers.isEmpty) {
+      await openInPdfViewer(noPrinters: true);
       return;
     }
 
