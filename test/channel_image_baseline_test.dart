@@ -243,6 +243,30 @@ void main() {
     expect(identical(unknownBands, fiveRmBands), isFalse);
   });
 
+  test('library stats refresh when supported modes change', () {
+    final channels = [_channel(1, 'FUSION')..mode = 'DN'];
+    final cache = ChannelLibraryStatsCache();
+
+    ChannelLibrarySnapshot read(List<String> modes) => cache.read(
+      imagePath: null,
+      zone: null,
+      channels: channels,
+      cleared: const <int>[],
+      baseline: null,
+      memoryStart: 1,
+      memoryEnd: 199,
+      radioModel: 'Baofeng_UV-5R_Mini',
+      validModes: modes,
+    );
+
+    final unknownModes = read(const []);
+    expect(unknownModes.needsAttention, 0);
+
+    final analogOnly = read(const ['FM', 'NFM']);
+    expect(analogOnly.needsAttention, 1);
+    expect(identical(unknownModes, analogOnly), isFalse);
+  });
+
   testWidgets('channel image bar enables actions only when channels differ', (
     tester,
   ) async {

@@ -494,6 +494,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     radioModel: _model,
     validTuningSteps: _capabilities?.steps ?? const [],
     validBands: _capabilities?.validBands ?? const [],
+    validModes: _capabilities?.modes ?? const [],
     hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
 
@@ -1328,6 +1329,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     radioModel: _model,
     validTuningSteps: _capabilities?.steps ?? const [],
     validBands: _capabilities?.validBands ?? const [],
+    validModes: _capabilities?.modes ?? const [],
     hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
 
@@ -8312,6 +8314,7 @@ class _ChannelEditor extends StatelessWidget {
       radioModel: radioModel,
       validTuningSteps: capabilities?.steps ?? const [],
       validBands: capabilities?.validBands ?? const [],
+      validModes: capabilities?.modes ?? const [],
       hasTuningStep: capabilities?.hasTuningStep ?? true,
     );
     final midland = showsMidlandChannelNumbers(radioModel);

@@ -10,7 +10,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:07:26Z"
+timestamp: "2026-10-29T12:56:37Z"
 concept_id: models/channel_image_baseline/markDirty
 language: dart
 ---
@@ -24,7 +24,7 @@ voidmarkDirty()
 ```
 
 ## Source
-Lines 169–169 in `models/channel_image_baseline.dart`
+Lines 172–172 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

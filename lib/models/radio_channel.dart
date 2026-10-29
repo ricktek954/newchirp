@@ -631,6 +631,7 @@ class RadioChannel {
     String? radioModel,
     List<double> validTuningSteps = const [],
     List<({double startMhz, double endMhz})> validBands = const [],
+    List<String> validModes = const [],
     bool hasTuningStep = true,
   }) {
     final issues = <String>[];
@@ -664,6 +665,12 @@ class RadioChannel {
     }
     if (!const ['', '+', '-', 'split', 'off'].contains(duplex)) {
       issues.add('Duplex value is not supported.');
+    }
+    if (validModes.isNotEmpty && !validModes.contains(mode)) {
+      issues.add(
+        'Mode $mode is not supported by this radio. '
+        'Supported modes: ${validModes.join(', ')}.',
+      );
     }
     if (name.length > 16) issues.add('Name may be too long for many radios.');
     if (hasTuningStep && validTuningSteps.isNotEmpty && frequency > 0) {

@@ -342,6 +342,27 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(channel["txTone"], 151.4)
         self.assertIn("RepeaterBook: WB2ECR", channel["comment"])
 
+    def test_repeaterbook_prefers_fm_when_analog_is_available(self):
+        channel = bridge.repeaterbook_item_to_channel({
+            "Frequency": "146.865000",
+            "Input Freq": "146.265000",
+            "PL": "151.4",
+            "TSQ": "",
+            "Callsign": "WB2ECR",
+            "Landmark": "Buffalo",
+            "Nearest City": "Buffalo",
+            "County": "Erie",
+            "State": "New York",
+            "Use": "OPEN",
+            "Operational Status": "On-air",
+            "FM Analog": "Yes",
+            "DMR": "No",
+            "D-Star": "No",
+            "System Fusion": "Yes",
+        }, 1)
+
+        self.assertEqual(channel["mode"], "FM")
+
     def test_driver_frequency_bands_are_exported_in_mhz(self):
         image = SOURCE / "tests/images/Baofeng_5RM.img"
         radio = bridge.radio_from_image(

@@ -109,6 +109,7 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
   required String? radioModel,
   List<double> validTuningSteps = const [],
   List<({double startMhz, double endMhz})> validBands = const [],
+  List<String> validModes = const [],
   bool hasTuningStep = true,
 }) {
   var activeCount = 0;
@@ -125,6 +126,7 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
           radioModel: radioModel,
           validTuningSteps: validTuningSteps,
           validBands: validBands,
+          validModes: validModes,
           hasTuningStep: hasTuningStep,
         )
         .isNotEmpty) {
@@ -165,6 +167,7 @@ class ChannelLibraryStatsCache {
   String? _radioModel;
   int _tuningStepsHash = 0;
   int _validBandsHash = 0;
+  int _validModesHash = 0;
 
   void markDirty() {
     _dirty = true;
@@ -181,6 +184,7 @@ class ChannelLibraryStatsCache {
     required String? radioModel,
     List<double> validTuningSteps = const [],
     List<({double startMhz, double endMhz})> validBands = const [],
+    List<String> validModes = const [],
     bool hasTuningStep = true,
   }) {
     final tuningStepsHash = Object.hash(
@@ -190,6 +194,7 @@ class ChannelLibraryStatsCache {
     final validBandsHash = Object.hashAll(
       validBands.map((band) => Object.hash(band.startMhz, band.endMhz)),
     );
+    final validModesHash = Object.hashAll(validModes);
     final sameInputs =
         !_dirty &&
         identical(channels, _channels) &&
@@ -203,7 +208,8 @@ class ChannelLibraryStatsCache {
         memoryEnd == _memoryEnd &&
         radioModel == _radioModel &&
         tuningStepsHash == _tuningStepsHash &&
-        validBandsHash == _validBandsHash;
+        validBandsHash == _validBandsHash &&
+        validModesHash == _validModesHash;
     if (sameInputs) return _snapshot;
 
     final snapshot = channelLibrarySnapshot(
@@ -217,6 +223,7 @@ class ChannelLibraryStatsCache {
       radioModel: radioModel,
       validTuningSteps: validTuningSteps,
       validBands: validBands,
+      validModes: validModes,
       hasTuningStep: hasTuningStep,
     );
     _dirty = false;
@@ -232,6 +239,7 @@ class ChannelLibraryStatsCache {
     _radioModel = radioModel;
     _tuningStepsHash = tuningStepsHash;
     _validBandsHash = validBandsHash;
+    _validModesHash = validModesHash;
     _snapshot = snapshot;
     return snapshot;
   }

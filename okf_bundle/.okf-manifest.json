@@ -5,8 +5,8 @@
   "files": {
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793275614152763099,
-      "hash": "dbe1be26cff15bf76e1537996192c8bd2884383ba1f272a99cd072eac82adc68",
+      "mtime_ns": 1793278593397400666,
+      "hash": "2b5bbbbba3ff3675db89d190193788cf8d4689776696c2ff6b404468f4a79cb5",
       "concept_ids": [
         "main/AddChannelPlacement",
         "main/ChannelApplyDialog",
@@ -220,8 +220,8 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1793275610775255256,
-      "hash": "4fdad03e9251154af115744f6b8c1e9b635907d36d03db676ef492d280e47d9b",
+      "mtime_ns": 1793278589691445331,
+      "hash": "56425ef29ec1b280fd302f32ea6401a0f49a86dd1308624e8b258a2138a9f6f0",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
         "models/radio_channel/RadioChannel",
@@ -615,8 +615,8 @@
     },
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1793275646662645248,
-      "hash": "69351aa70b58f68b0e84eb527aa39736ff093148444ebeb68e33a03559367de1",
+      "mtime_ns": 1793278597006813742,
+      "hash": "fdf16769b2c1f2881909a2b487c06279e49c186d3eb74b60f183aa1d625503e6",
       "concept_ids": [
         "models/channel_image_baseline",
         "models/channel_image_baseline/ChannelImageBaseline",
@@ -4602,5 +4602,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-10-29T12:07:27Z"
+  "generated_at": "2026-10-29T12:56:37Z"
 }

@@ -317,4 +317,22 @@ void main() {
       isEmpty,
     );
   });
+
+  test('mode validation rejects modes the selected radio cannot use', () {
+    final digital = RadioChannel(
+      location: 1,
+      name: 'FUSION',
+      frequency: 146.52,
+      mode: 'DN',
+    );
+
+    final issues = digital.validate(validModes: const ['FM', 'NFM']);
+
+    expect(issues, hasLength(1));
+    expect(issues.single, contains('Mode DN is not supported'));
+    expect(issues.single, contains('FM, NFM'));
+
+    digital.mode = 'FM';
+    expect(digital.validate(validModes: const ['FM', 'NFM']), isEmpty);
+  });
 }

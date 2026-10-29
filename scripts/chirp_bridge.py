@@ -1096,7 +1096,9 @@ def repeaterbook_item_to_channel(item, number):
         repeaterbook_tone(item.get("PL")),
         repeaterbook_tone(item.get("TSQ")),
     )
-    if item.get("DMR") == "Yes":
+    if item.get("FM Analog") == "Yes":
+        memory.mode = "FM"
+    elif item.get("DMR") == "Yes":
         memory.mode = "DMR"
     elif item.get("D-Star") == "Yes":
         memory.mode = "DV"
