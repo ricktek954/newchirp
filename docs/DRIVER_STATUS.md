@@ -20,6 +20,7 @@ Last updated: 2026-10-29
 | Radio | Driver | Transport | Read | Write | Settings | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
+| Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
@@ -45,6 +46,26 @@ Last updated: 2026-10-29
   upload, then restore from a microSD ALL backup
 - Current gap: no repository record yet confirms hardware validation of this
   NewChirp-maintained layout
+
+### Yaesu FT-1D/2D/3D/5D clone-read timing
+
+- Maintained file: `drivers/newchirp_yaesu_clone.py`
+- Scope: the shared upstream CHIRP Yaesu clone reader used by the FT-1D,
+  FT-2D, FT-3D, and FT-5D families
+- Transport: 38400 8N1 clone serial with the radio in CLONE mode
+- Implemented: completion-first receive handling and a five-second idle limit
+- Read/write policy: read timeout ordering only. Channel image layout, write
+  behavior, and radio-specific fields are unchanged.
+- Evidence: upstream CHIRP `yaesu_clone.py` and the 2026-10-29 NewChirp 1.0.23
+  report from [redacted-email]. The FT5D completed its Send operation after
+  a 3.2-second final chunk, but the upstream reader checked its two-second
+  timeout before recognizing that the requested byte count was complete.
+- Driver SHA-256:
+  `0f144ce74ee905c6091a1c396fb249927b9998aa83e4febf3e401056f88a438d`
+- Hardware validation: none for this timing override.
+- Next milestone: FT5D owner retests a complete read with the cable on the
+  same COM port throughout; if it still times out, capture the progress
+  percentage and final read image size.
 
 ### Radtel RT-950
 
