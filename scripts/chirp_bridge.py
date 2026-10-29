@@ -223,6 +223,25 @@ def bridge_error_message(exc, command=None, model=None):
             "screen, read again, and hold PTT only after the transfer window "
             'says "%s"' % MANUAL_READ_READY_MESSAGE
         )
+    if (
+        command == "download"
+        and model in (
+            "Yaesu_FT2D_R",
+            "Yaesu_FT2D_Rv2",
+            "Yaesu_FT3D_R",
+            "Yaesu_FT5D_R",
+        )
+        and "no response from radio" in message.lower()
+    ):
+        message = (
+            "No response from the Yaesu radio. Turn the radio off, connect "
+            "the cable to its DATA terminal, then hold DISP while switching "
+            "it on so CLONE appears. Start the read again and press Send on "
+            "the radio only after NewChirp is ready. If it is already in "
+            "CLONE mode, select the COM port created by the Yaesu USB cable "
+            "and close Yaesu ADMS. COM1 may be a built-in serial port rather "
+            "than the programming cable."
+        )
     trace = RADIO_TRACE.format()
     if trace:
         message += RADIO_TRACE_MARKER + trace
