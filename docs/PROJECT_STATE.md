@@ -8,7 +8,7 @@ release requirements.
 
 ## Resume here
 
-- The Linux `1.0.25` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.26` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
@@ -34,11 +34,11 @@ release requirements.
 
 ## Repository state
 
-- Local path: `/Volumes/RICKEXT/desktop/newchirp`
+- Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Release source commit: `585d0733` (`Prepare macOS 1.0.25 release`)
+- Release source commit: current `main` after the Linux `1.0.26` release commit
 - Open pull requests: none
-- Checked-out source version: `1.0.25+25`
+- Checked-out source version: `1.0.26+26`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -54,7 +54,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.25 |
 | Windows | 1.0.23 |
-| Linux | 1.0.25 |
+| Linux | 1.0.26 |
 | Legacy shared manifest version | 1.0.23 |
 
 macOS artifact:
@@ -72,24 +72,24 @@ macOS artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.25.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.pkg.tar.zst`
 
-Linux 1.0.25 SHA-256:
+Linux 1.0.26 SHA-256:
 
 - DEB:
-  `2a2670dfc9cf4460f2c74b536635fbd8b9e40373c0c12c8b641c357b156d9cbd`
+  `bb72f9ed3b40440831b9d6a755efb9ded2b4aadb4e875feda63b23d2f8f36371`
 - RPM:
-  `f0357074a94bd6883b7feb0345f581e7f474a88af69fdbd8a5812e7f97779fd5`
+  `e7be56f4ff8406acc5a9ee512885ff8d383b3453d369beeb1c7fb3dc6d4172aa`
 - AppImage:
-  `f90284a83270ed243bc3d265cb5fcf4694e11ef7f20cf6ab613d8ba2e0222d44`
+  `bca743006f96f6c2eb8b62c4a3bc8b37e7bb79d893633a75c117ea2784d13470`
 - Pacman:
-  `b2586bf996f54fe456e2edc1d2bcf4ef6d3270774fdfea811e06e9399d64b1d7`
+  `d92cc64422a295c928985498f985da3f0ec9a8249a437a11c837d94b888ef017`
 
 ## Recently completed
 
@@ -101,9 +101,13 @@ Linux 1.0.25 SHA-256:
   Verified the embedded version, Python runtimes, CHIRP pin, TS-2000 override,
   strict code signatures, Gatekeeper assessment, server checksum, and live
   platform manifest.
-- Published Linux `1.0.25` with DEB, RPM, AppImage, and Pacman
+- Published Linux `1.0.26` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. The Pacman package targets Arch/Omarchy and
   declares `libglvnd` and `mesa` dependencies for OpenGL runtime support.
+- Verified Linux `1.0.26` with `flutter analyze`, `flutter test` (147 tests),
+  package metadata checks, matching server hashes, public HTTP 200 checks, and
+  container launch smoke tests for DEB on Ubuntu, AppImage on Ubuntu, RPM on
+  Fedora, and Pacman on Arch.
 - Fixed the live Linux downloads page so AppImage and Pacman are separate
   rows. The Pacman row is labeled Arch/Omarchy/Manjaro and includes the
   copyable `sudo pacman -U` install command.

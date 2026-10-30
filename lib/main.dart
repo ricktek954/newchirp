@@ -36,7 +36,7 @@ import 'widgets/radio_model_picker.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
-const String _newChirpVersion = '1.0.25';
+const String _newChirpVersion = '1.0.26';
 
 String _formatBytes(int bytes) {
   if (bytes < 1024) return '$bytes B';
