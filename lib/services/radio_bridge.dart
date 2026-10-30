@@ -210,6 +210,7 @@ class RadioSettingNode {
   final List<RadioSettingNode> children;
   Object? value;
   bool invalid = false;
+  bool changed = false;
 
   String get label => shortName.isEmpty ? name : shortName;
   bool get isGroup => kind == 'group';

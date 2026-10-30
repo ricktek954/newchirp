@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:11:19Z"
+timestamp: "2026-10-29T18:03:34Z"
 concept_id: chirp_bridge/extra_fields_json
 language: python
 ---
@@ -29,7 +29,7 @@ def extra_fields_json(mem)
 | `mem` | `—` | `—` |
 
 ## Source
-Lines 408–460 in `chirp_bridge.py`
+Lines 541–593 in `chirp_bridge.py`
 
 ## Relationships
 

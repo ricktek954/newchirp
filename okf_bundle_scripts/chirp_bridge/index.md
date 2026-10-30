@@ -41,10 +41,13 @@
 - [memory_with_extras](memory_with_extras.md) — Load a channel plus CHIRP's metadata-backed fields such as comments.
 - [nearest_programmable_frequency](nearest_programmable_frequency.md) — Return the closest frequency representable by one of the steps.
 - [normalize_repeaterbook_query](normalize_repeaterbook_query.md) — Treat location words like "Broward County" as a county name.
+- [normalize_upload_memory](normalize_upload_memory.md) — Apply safe coercions advertised by CHIRP validation warnings.
 - [open_serial](open_serial.md)
 - [radio_for](radio_for.md)
 - [radio_from_image](radio_from_image.md) — Build a driver instance backed only by a saved radio image.
 - [read](read.md)
+- [readline](readline.md)
+- [readlines](readlines.md)
 - [received](received.md)
 - [repeaterbook_cache_path](repeaterbook_cache_path.md)
 - [repeaterbook_item_to_channel](repeaterbook_item_to_channel.md)

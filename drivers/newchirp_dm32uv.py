@@ -15,6 +15,12 @@ from chirp.drivers import baofeng_dm32uv
 
 _current_xfer = baofeng_dm32uv._Link.xfer
 _original_xfer = getattr(_current_xfer, "newchirp_original", _current_xfer)
+_current_query_v = baofeng_dm32uv._Link.query_v
+_original_query_v = getattr(
+    _current_query_v,
+    "newchirp_original",
+    _current_query_v,
+)
 _current_construct = baofeng_dm32uv._Link.__init__
 _original_construct = getattr(
     _current_construct,
@@ -45,6 +51,32 @@ def _recv_with_deadline(self, length, timeout=0.5):
 
 
 def _xfer_with_passsta_retry(self, data, length, timeout=0.5):
+    if data == b"SYSINFO" and length == 1:
+        last_reply = b""
+        last_error = None
+        for attempt in range(3):
+            try:
+                response = _original_xfer(self, data, length, timeout)
+            except errors.RadioError as exc:
+                last_error = exc
+            else:
+                if response == b"\x06":
+                    return response
+                last_reply = response
+            if attempt < 2:
+                time.sleep(0.08)
+
+        detail = (
+            "reply %s" % last_reply.hex()
+            if last_reply
+            else str(last_error or "no reply")
+        )
+        raise errors.RadioError(
+            "Unexpected reply to SYSINFO after 3 attempts (%s). "
+            "Power-cycle the radio, reconnect the programming cable, close "
+            "the Baofeng CPS, and try the read again." % detail
+        )
+
     if data != b"PASSSTA" or length != 3:
         return _original_xfer(self, data, length, timeout)
 
@@ -78,8 +110,46 @@ def _xfer_with_passsta_retry(self, data, length, timeout=0.5):
     )
 
 
+def _query_v_with_retry(self, cmd):
+    """Retry read-only radio information queries with slower fragmentation."""
+    last_header = b""
+    last_body = b""
+
+    for attempt in range(3):
+        self.send(cmd)
+        header = self.recv(3, timeout=1.5)
+        body = (
+            self.recv(header[2], timeout=2.0)
+            if len(header) == 3
+            else b""
+        )
+        if (
+            len(header) == 3
+            and header[0] == 0x56
+            and len(body) == header[2]
+        ):
+            return body
+        last_header = header
+        last_body = body
+        if attempt < 2:
+            time.sleep(0.08)
+
+    message = (
+        "Bad reply to radio info query %s after 3 attempts "
+        "(header %s, body %i bytes)"
+        % (cmd.hex(), last_header.hex() or "empty", len(last_body))
+    )
+    raise baofeng_dm32uv._bad_reply(
+        message,
+        last_header[:1],
+        b"V",
+    )
+
+
 _xfer_with_passsta_retry.newchirp_passsta_retry = True
 _xfer_with_passsta_retry.newchirp_original = _original_xfer
+_query_v_with_retry.newchirp_query_retry = True
+_query_v_with_retry.newchirp_original = _original_query_v
 _link_init_with_fixed_timeout.newchirp_fixed_timeout = True
 _link_init_with_fixed_timeout.newchirp_original = _original_construct
 _recv_with_deadline.newchirp_deadline_read = True
@@ -93,6 +163,12 @@ if not getattr(
     False,
 ):
     baofeng_dm32uv._Link.xfer = _xfer_with_passsta_retry
+if not getattr(
+    baofeng_dm32uv._Link.query_v,
+    "newchirp_query_retry",
+    False,
+):
+    baofeng_dm32uv._Link.query_v = _query_v_with_retry
 
 
 directory.enable_reregistrations()

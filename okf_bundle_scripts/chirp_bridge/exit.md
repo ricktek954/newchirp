@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:11:19Z"
+timestamp: "2026-10-29T18:03:34Z"
 concept_id: chirp_bridge/exit
 language: python
 ---
@@ -35,7 +35,7 @@ def __exit__(self, exc_type, exc_value, traceback)
 | `traceback` | `—` | `—` |
 
 ## Source
-Lines 194–195 in `chirp_bridge.py`
+Lines 228–229 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:13:45Z"
+timestamp: "2026-10-29T17:47:35Z"
 concept_id: main/GlossaryDialogState
 language: dart
 ---
@@ -28,7 +28,7 @@ class _GlossaryDialogState
 - `build`
 
 ## Source
-Lines 5737–5807 in `main.dart`
+Lines 5761–5831 in `main.dart`
 
 ## Relationships
 

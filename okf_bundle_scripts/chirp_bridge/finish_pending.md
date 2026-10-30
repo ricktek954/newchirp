@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:11:19Z"
+timestamp: "2026-10-29T18:03:34Z"
 concept_id: chirp_bridge/finish_pending
 language: python
 ---
@@ -29,7 +29,7 @@ def _finish_pending(self)
 | `self` | `—` | `—` |
 
 ## Source
-Lines 91–139 in `chirp_bridge.py`
+Lines 103–163 in `chirp_bridge.py`
 
 ## Relationships
 

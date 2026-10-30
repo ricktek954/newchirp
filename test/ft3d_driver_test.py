@@ -3,6 +3,7 @@
 import importlib.util
 from pathlib import Path
 import sys
+from types import SimpleNamespace
 import unittest
 
 
@@ -35,6 +36,25 @@ class FT3DConnectionGuidanceTest(unittest.TestCase):
         self.assertIn("hold DISP", message)
         self.assertIn("press Send", message)
         self.assertIn("CLONE", message)
+
+    def test_read_ready_announces_the_radio_send_button(self):
+        bridge = _load_bridge()
+        progress = []
+        bridge.emit_progress = (
+            lambda label, fraction=None: progress.append((label, fraction))
+        )
+        radio = SimpleNamespace(
+            get_prompts=lambda: SimpleNamespace(
+                pre_download="After clicking OK in CHIRP, press [Send]."
+            )
+        )
+
+        bridge.emit_read_ready(radio)
+
+        self.assertEqual(
+            progress,
+            [(bridge.MANUAL_SEND_READY_MESSAGE, 0.01)],
+        )
 
     def test_foreign_model_keeps_the_original_error(self):
         bridge = _load_bridge()

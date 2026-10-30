@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:11:19Z"
+timestamp: "2026-10-29T18:03:34Z"
 concept_id: chirp_bridge/TracedSerial
 language: python
 ---
@@ -30,12 +30,14 @@ Delegate a serial port while recording sanitized CAT transactions.
 - `__setattr__`
 - `write`
 - `read`
+- `readline`
+- `readlines`
 - `close`
 - `__enter__`
 - `__exit__`
 
 ## Source
-Lines 163–195 in `chirp_bridge.py`
+Lines 187–229 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -47,6 +49,8 @@ Lines 163–195 in `chirp_bridge.py`
 | related | [__setattr__](/chirp_bridge/setattr.md) |
 | related | [write](/chirp_bridge/write.md) |
 | related | [read](/chirp_bridge/read.md) |
+| related | [readline](/chirp_bridge/readline.md) |
+| related | [readlines](/chirp_bridge/readlines.md) |
 | related | [close](/chirp_bridge/close.md) |
 | related | [__enter__](/chirp_bridge/enter.md) |
 | related | [__exit__](/chirp_bridge/exit.md) |

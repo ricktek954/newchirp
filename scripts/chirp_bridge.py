@@ -6,6 +6,7 @@ import glob
 import importlib.machinery
 import importlib.util
 import json
+import logging
 import lzma
 import math
 import os
@@ -15,16 +16,25 @@ import tempfile
 import time
 import urllib.error
 import urllib.request
+import warnings
 PROGRESS_PREFIX = "__NEWCHIRP_PROGRESS__ "
 RADIO_TRACE_MARKER = "\n\nRadio communication trace:\n"
 MANUAL_READ_READY_MESSAGE = (
     "Listening for the radio - hold PTT for one second."
+)
+MANUAL_SEND_READY_MESSAGE = (
+    "Radio is ready - press Send on the radio now."
 )
 
 # CHIRP normally redirects stdout and stderr to ~/.chirp/debug.log when it is
 # launched without a terminal. The bridge owns those streams as its JSON/error
 # protocol, so keep them attached to the parent process.
 os.environ.setdefault("CHIRP_TESTENV", "1")
+warnings.filterwarnings(
+    "ignore",
+    category=DeprecationWarning,
+    module=r"chirp(\.|$)",
+)
 
 
 class RadioCommunicationTrace:
@@ -56,6 +66,8 @@ class RadioCommunicationTrace:
             if subcommand != 0xFD:
                 label += "/%02x" % subcommand
             return "%s (%i bytes)" % (label, len(raw))
+        if len(raw) >= 4 and raw[:4] == b"\xab\xcd\x08\x00":
+            return "UV-K5 hello"
         try:
             text = raw.decode("cp1252").strip("\r\n")
         except UnicodeDecodeError:
@@ -95,15 +107,27 @@ class RadioCommunicationTrace:
         self._pending = None
         response = bytes(pending["response"])
         if pending["command"] == "ID":
+            text = response.decode("ascii", errors="replace").strip()
             identifier = re.search(
                 r"ID\s*([A-Z0-9_-]+)",
-                response.decode("ascii", errors="replace").upper(),
+                text.upper(),
             )
-            result = (
-                "radio id=%s" % identifier.group(1)
-                if identifier
-                else "response complete"
-            )
+            if identifier:
+                result = "radio id=%s" % identifier.group(1)
+            elif text and all(32 <= ord(char) < 127 for char in text):
+                result = "reply=%s" % text[:40]
+            elif response:
+                result = "reply=%s (%i bytes)" % (
+                    response[:20].hex(" "),
+                    len(response),
+                )
+            else:
+                result = "no response"
+        elif pending["command"] == "UV-K5 hello":
+            preview = response[:32].hex(" ")
+            if len(response) > 32:
+                preview += " …"
+            result = "reply=%s (%i bytes)" % (preview, len(response))
         elif response.strip() in (
             b"N;",
             b"?;",
@@ -185,6 +209,16 @@ class TracedSerial:
         self._trace.received(data)
         return data
 
+    def readline(self, size=-1):
+        data = self._serial_port.readline(size)
+        self._trace.received(data)
+        return data
+
+    def readlines(self, hint=-1):
+        lines = self._serial_port.readlines(hint)
+        self._trace.received(b"".join(lines))
+        return lines
+
     def close(self):
         return self._serial_port.close()
 
@@ -213,6 +247,24 @@ def emit_progress(label, fraction=None):
 def bridge_error_message(exc, command=None, model=None):
     """Add safe, command-specific recovery guidance to bridge failures."""
     message = str(exc).strip() or exc.__class__.__name__
+    lowered_message = message.lower()
+    if (
+        "permissionerror(13)" in lowered_message
+        or "access is denied" in lowered_message
+        or "permission denied" in lowered_message
+    ):
+        port_match = re.search(r"port '([^']+)'", message)
+        port = port_match.group(1) if port_match else "the selected serial port"
+        message = (
+            "Windows could not open %s because another program or driver "
+            "has it reserved. Close Baofeng CPS, CHIRP, terminal software, "
+            "and any vendor programmer before retrying. If the error "
+            "continues, unplug and reconnect the USB cable, refresh the "
+            "interface list, and select the COM port that appears for the "
+            "programming cable. Do not rely on an old saved port such as "
+            "COM100 if it did not newly appear when the cable was connected."
+            % port
+        )
     if (
         command in ("download", "read-settings")
         and model == "Yaesu_FT-60"
@@ -237,10 +289,73 @@ def bridge_error_message(exc, command=None, model=None):
             "No response from the Yaesu radio. Turn the radio off, connect "
             "the cable to its DATA terminal, then hold DISP while switching "
             "it on so CLONE appears. Start the read again and press Send on "
-            "the radio only after NewChirp is ready. If it is already in "
+            "the radio when NewChirp says \"%s\" If it is already in "
             "CLONE mode, select the COM port created by the Yaesu USB cable "
             "and close Yaesu ADMS. COM1 may be a built-in serial port rather "
             "than the programming cable."
+            % MANUAL_SEND_READY_MESSAGE
+        )
+    if (
+        command in ("download", "read-settings")
+        and model == "AOR_AR8200"
+        and "no response from radio" in message.lower()
+    ):
+        message = (
+            "No response from the AR8200. Use an AOR CC8200-compatible "
+            "RS-232 lead in the option socket, not a TTL handheld-radio "
+            "programming cable. In the radio's CONFIG menu, set REMOTE BPS "
+            "to 19200, 9600, or 4800 and set RMT-ID to 00; NewChirp scans "
+            "all three baud rates, but nonzero RMT-ID prevents normal "
+            "single-radio commands. Close other software using COM6, power "
+            "cycle the radio, and retry."
+        )
+    if (
+        command in ("download", "read-settings")
+        and model == "Retevis_RT1"
+        and "no response from radio" in message.lower()
+    ):
+        message = (
+            "No response from the RT1. Confirm that the exact model is "
+            "Retevis RT1 and not Retevis RT21: these are different radios "
+            "with different protocols. If the label says RT-21, go back and "
+            "select Retevis RT21 instead. The RT1 uses 2400 baud and a "
+            "PROGRAMa handshake; the RT21 uses 9600 baud and a PRMZUNE "
+            "handshake. Close any existing programming software before "
+            "retrying."
+        )
+    if (
+        command == "download"
+        and model == "Baofeng_BF-F8HP-PRO"
+        and "no response from radio" in message.lower()
+    ):
+        message = (
+            "No response from the BF-F8HP-PRO. Confirm that the radio label "
+            "includes PRO. The older BF-F8HP is a different model and uses "
+            "the separate Baofeng BF-F8HP entry. For the PRO, fully insert "
+            "the two-pin programming cable, turn the radio on to a normal "
+            "channel, close the Baofeng CPS, and keep COM4 selected. "
+            "NewChirp currently supports the PRO protocol through firmware "
+            "v0.52; if the radio has newer firmware, include the firmware "
+            "version shown on the radio in the support report."
+        )
+    if (
+        command == "download"
+        and model == "Baofeng_UV-5R_Mini"
+        and "no response from radio" in message.lower()
+    ):
+        message = (
+            "No response from the UV-5R Mini. Confirm the selected port is "
+            "the USB programming cable, not a built-in COM1 port: unplug the "
+            "cable, refresh interfaces, reconnect it, and select the COM port "
+            "that newly appears. Fully insert the two-pin cable, turn the "
+            "radio on to a normal channel, and close Baofeng CPS. If using "
+            "the radio through a Bluetooth serial port, select that Bluetooth "
+            "port instead of COM1. If COM3 disappears and reappears when the "
+            "cable is unplugged and reconnected, test the cable once with "
+            "Baofeng CPS. If the stock software also cannot read the radio, "
+            "replace the cable or install its CH340, CP210x, or FTDI driver. "
+            "If the stock software succeeds, report the cable model, COM-port "
+            "device name, and driver provider."
         )
     trace = RADIO_TRACE.format()
     if trace:
@@ -285,6 +400,8 @@ def _load_module(module_path, directory):
         raise RuntimeError("Invalid or unsupported CHIRP module file")
     module = importlib.util.module_from_spec(spec)
     sys.modules[module_name] = module
+    old_log_level = directory.LOG.level
+    directory.LOG.setLevel(logging.ERROR)
     try:
         spec.loader.exec_module(module)
     except Exception as exc:
@@ -293,6 +410,8 @@ def _load_module(module_path, directory):
             "Could not load CHIRP module %s: %s"
             % (os.path.basename(module_path), exc)
         ) from exc
+    finally:
+        directory.LOG.setLevel(old_log_level)
 
 
 def load_chirp(
@@ -314,29 +433,43 @@ def load_chirp(
         ) from exc
     from chirp import directory
     directory.import_drivers()
+    # chirp.drivers resets DeprecationWarning handling while it imports, so
+    # apply NewChirp's filter again before loading overrides or image data.
+    warnings.filterwarnings(
+        "ignore",
+        category=DeprecationWarning,
+        module=r"chirp(\.|$)",
+    )
     if module_path:
         _load_module(os.path.abspath(module_path), directory)
     if newchirp_driver_dir and os.path.isdir(newchirp_driver_dir):
         # NewChirp drivers may intentionally replace a bundled CHIRP driver
         # while preserving its stable model identifier.
         directory.enable_reregistrations()
-        for driver_path in sorted(
-            glob.glob(os.path.join(newchirp_driver_dir, "*.py"))
-        ):
-            module_name = os.path.splitext(os.path.basename(driver_path))[0]
-            if module_name.startswith("_"):
-                continue
-            full_name = "newchirp.drivers.%s" % module_name
-            spec = importlib.util.spec_from_file_location(
-                full_name, driver_path
-            )
-            if spec is None or spec.loader is None:
-                raise RuntimeError(
-                    "Could not load NewChirp driver %s" % driver_path
+        old_log_level = directory.LOG.level
+        directory.LOG.setLevel(logging.ERROR)
+        try:
+            for driver_path in sorted(
+                glob.glob(os.path.join(newchirp_driver_dir, "*.py"))
+            ):
+                module_name = os.path.splitext(
+                    os.path.basename(driver_path)
+                )[0]
+                if module_name.startswith("_"):
+                    continue
+                full_name = "newchirp.drivers.%s" % module_name
+                spec = importlib.util.spec_from_file_location(
+                    full_name, driver_path
                 )
-            module = importlib.util.module_from_spec(spec)
-            sys.modules[full_name] = module
-            spec.loader.exec_module(module)
+                if spec is None or spec.loader is None:
+                    raise RuntimeError(
+                        "Could not load NewChirp driver %s" % driver_path
+                    )
+                module = importlib.util.module_from_spec(spec)
+                sys.modules[full_name] = module
+                spec.loader.exec_module(module)
+        finally:
+            directory.LOG.setLevel(old_log_level)
     return directory
 
 
@@ -674,7 +807,7 @@ def settings_tree_json(elements, prefix=()):
 
 
 def apply_setting_changes(settings, changes):
-    from chirp.settings import RadioSetting
+    from chirp.settings import RadioSetting, RadioSettingValueList
 
     for change in changes:
         path = change.get("id")
@@ -694,7 +827,22 @@ def apply_setting_changes(settings, changes):
             )
         if not element.value.get_mutable():
             continue
-        element.value = change.get("value")
+        value = change.get("value")
+        if isinstance(element.value, RadioSettingValueList):
+            for option in element.value.get_options():
+                if option == value:
+                    break
+                if str(option) == str(value):
+                    value = option
+                    break
+        try:
+            element.value = value
+        except Exception as exc:
+            label = element.get_shortname() or element.get_name()
+            raise RuntimeError(
+                "Radio setting %r rejected value %r: %s"
+                % (label, value, exc)
+            ) from exc
 
 
 def apply_json(radio, mem, item):
@@ -764,6 +912,48 @@ def channel_validation_message(memory, errors, steps_khz):
                 % (nearest / 1_000_000)
             )
     return message
+
+
+def normalize_upload_memory(radio, memory):
+    """Apply safe coercions advertised by CHIRP validation warnings.
+
+    CHIRP distinguishes fatal errors from warnings that describe values the
+    driver will coerce. NewChirp used to abort on both, which made custom
+    receive-only GMRS and MURS channels impossible to upload.
+    """
+    from chirp import chirp_common
+
+    messages = radio.validate_memory(memory)
+    warnings, errors = chirp_common.split_validation_msgs(messages)
+    changed_fields = []
+    notes = []
+
+    for warning in warnings:
+        text = str(warning)
+        if (
+            text == 'Duplex must be "off" for this frequency'
+            and memory.duplex != "off"
+        ):
+            memory.duplex = "off"
+            memory.offset = 0
+            changed_fields.extend(("duplex", "offset"))
+            notes.append(
+                "frequency is outside the radio's transmit plan; "
+                "duplex was changed to TX off"
+            )
+        elif (
+            text == "Only simplex or +5 MHz offset allowed on GMRS"
+            and memory.offset != 5_000_000
+        ):
+            memory.offset = 5_000_000
+            changed_fields.append("offset")
+            notes.append("repeater offset was changed to +5 MHz")
+
+    if changed_fields:
+        messages = radio.validate_memory(memory)
+        warnings, errors = chirp_common.split_validation_msgs(messages)
+
+    return errors, warnings, sorted(set(changed_fields)), notes
 
 
 def open_serial(radio_class, port):
@@ -954,8 +1144,11 @@ def radio_for(
 def emit_read_ready(radio):
     """Tell the user when a manual PTT-triggered clone read can begin."""
     prompts = radio.get_prompts()
-    if "[PTT]" in (getattr(prompts, "pre_download", "") or ""):
+    pre_download = getattr(prompts, "pre_download", "") or ""
+    if "[PTT]" in pre_download:
         emit_progress(MANUAL_READ_READY_MESSAGE, 0.01)
+    elif "[Send]" in pre_download:
+        emit_progress(MANUAL_SEND_READY_MESSAGE, 0.01)
     else:
         emit_progress("Connecting to radio...", 0.01)
 
@@ -1491,6 +1684,7 @@ def main():
                 from chirp import chirp_common
                 skipped = []
                 adjusted = []
+                written = 0
                 for index, item in enumerate(items):
                     requested_name = str(item.get("name", ""))
                     filtered_name = channel_radio.filter_name(requested_name)
@@ -1502,39 +1696,57 @@ def main():
                         mem = chirp_common.Memory()
                     try:
                         locked_fields = apply_json(channel_radio, mem, item)
-                        errors = channel_radio.validate_memory(mem)
+                        (
+                            errors,
+                            warnings,
+                            normalized_fields,
+                            normalization_notes,
+                        ) = normalize_upload_memory(channel_radio, mem)
+                        if (errors or warnings) and locked_fields:
+                            skipped.append({
+                                "location": int(item["location"]),
+                                "name": filtered_name,
+                                "reason": (
+                                    "locked field(s): %s left a required "
+                                    "value unchanged" % ", ".join(locked_fields)
+                                ),
+                                "skipped": True,
+                            })
+                            continue
                         if errors:
-                            if locked_fields:
-                                skipped.append({
-                                    "location": int(item["location"]),
-                                    "name": filtered_name,
-                                    "reason": (
-                                        "locked field(s): %s left a required "
-                                        "value unchanged" % ", ".join(locked_fields)
-                                    ),
-                                    "skipped": True,
-                                })
-                                continue
-                            raise RuntimeError(
-                                "Channel %s: %s"
-                                % (
-                                    mem.number,
-                                    channel_validation_message(
-                                        mem,
-                                        errors,
-                                        channel_radio.get_features()
-                                        .valid_tuning_steps,
-                                    ),
-                                )
-                            )
+                            skipped.append({
+                                "location": int(item["location"]),
+                                "name": filtered_name,
+                                "reason": channel_validation_message(
+                                    mem,
+                                    errors,
+                                    channel_radio.get_features()
+                                    .valid_tuning_steps,
+                                ),
+                                "skipped": True,
+                            })
+                            continue
                         set_memory_with_extras(channel_radio, mem)
-                        if locked_fields or filtered_name != requested_name:
+                        written += 1
+                        if (
+                            locked_fields
+                            or normalized_fields
+                            or filtered_name != requested_name
+                        ):
+                            fields = sorted(
+                                set(locked_fields + normalized_fields)
+                            )
                             adjusted.append({
                                 "location": int(item["location"]),
                                 "name": filtered_name,
-                                "fields": locked_fields,
+                                "fields": fields,
                                 "nameFrom": requested_name,
                                 "nameTo": filtered_name,
+                                "reason": (
+                                    "; ".join(normalization_notes)
+                                    if normalization_notes
+                                    else None
+                                ),
                             })
                     except chirp_common.ImmutableValueError as exc:
                         skipped.append({
@@ -1550,6 +1762,17 @@ def main():
                             "Preparing channels...",
                             0.03 + 0.06 * (index + 1) / len(items),
                         )
+                if items and written == 0:
+                    detail = (
+                        " First incompatible channel: %s."
+                        % skipped[0]["reason"]
+                        if skipped
+                        else ""
+                    )
+                    raise RuntimeError(
+                        "None of the selected channels is compatible with "
+                        "this radio.%s" % detail
+                    )
                 cleared = [
                     int(part) for part in args.cleared.split(",") if part.strip()
                 ]

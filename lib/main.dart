@@ -1863,6 +1863,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   void _markRadioSettingsChanged(RadioSettingNode node) {
+    node.changed = true;
     setState(() => _settingsDirty = true);
   }
 
@@ -1873,7 +1874,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         for (final child in node.children) {
           walk(child);
         }
-      } else if (node.mutable && node.kind != 'unsupported') {
+      } else if (node.changed && node.mutable && node.kind != 'unsupported') {
         changes.add(node.toChangeJson());
       }
     }
@@ -2524,6 +2525,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         'channels': _activeChannels.length,
       },
     );
+    final invalidChannels = _activeChannels
+        .where((channel) => _channelIssues(channel).isNotEmpty)
+        .toList();
+    final compatibleCount = _activeChannels.length - invalidChannels.length;
     final issues = _activeChannels
         .expand(
           (channel) => _channelIssues(channel).map(
@@ -2533,20 +2538,35 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         )
         .toList();
     if (issues.isNotEmpty) {
-      await showDialog<void>(
+      final skipIncompatible = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Fix channel issues first'),
-          content: Text(issues.take(8).join('\n')),
+          title: const Text('Some channels are incompatible'),
+          content: SingleChildScrollView(
+            child: Text(
+              '${invalidChannels.length} of ${_activeChannels.length} '
+              'channels cannot be written to this radio.\n\n'
+              '${issues.take(8).join('\n')}'
+              '${issues.length > 8 ? '\n…and ${issues.length - 8} more.' : ''}'
+              '${compatibleCount > 0 ? '\n\nYou can skip the incompatible channels and write the other $compatibleCount.' : ''}',
+            ),
+          ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Review channels'),
             ),
+            if (compatibleCount > 0)
+              FilledButton(
+                key: const ValueKey('upload-skip-incompatible'),
+                onPressed: () => Navigator.pop(context, true),
+                child: const Text('Skip and write remaining'),
+              ),
           ],
         ),
       );
-      return;
+      if (skipIncompatible != true) return;
+      if (!mounted) return;
     }
     final uppercasesNames =
         _capabilities?.uppercaseNames == true &&
@@ -2563,8 +2583,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ),
         title: const Text('Write these channels to the radio?'),
         content: Text(
-          'This will program ${_activeChannels.length} channels on $_model '
+          'This will program $compatibleCount channels on $_model '
           'through $_port. Keep the radio connected and powered on.'
+          '${invalidChannels.isNotEmpty ? '\n\n${invalidChannels.length} incompatible channels will be left unchanged and listed after the write.' : ''}'
           '${uppercasesNames ? '\n\nLowercase channel names will be converted to uppercase because this radio only supports uppercase names.' : ''}',
         ),
         actions: [
@@ -2646,8 +2667,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       final name = entry['name'];
                       final reason = entry['reason'];
                       if (reason != null) {
-                        return 'Channel $location $name could not be '
-                            'written: $reason';
+                        if (entry['skipped'] == true) {
+                          return 'Channel $location $name could not be '
+                              'written: $reason';
+                        }
+                        return 'Channel $location $name: $reason.';
                       }
                       final notes = <String>[];
                       final nameFrom = entry['nameFrom'];
@@ -8362,11 +8386,12 @@ class _ChannelEditor extends StatelessWidget {
     ];
     Map<String, String> choices(
       List<String>? values,
-      Map<String, String> fallback,
-    ) {
+      Map<String, String> fallback, {
+      String emptyLabel = 'None',
+    }) {
       if (values == null || values.isEmpty) return fallback;
       return {
-        for (final value in values) value: value.isEmpty ? 'None' : value,
+        for (final value in values) value: value.isEmpty ? emptyLabel : value,
       };
     }
 
@@ -8569,7 +8594,7 @@ class _ChannelEditor extends StatelessWidget {
                                 '-': '− shift',
                                 'split': 'Split',
                                 'off': 'TX off',
-                              }),
+                              }, emptyLabel: 'Simplex'),
                         onValue: (v) => onChanged(() {
                           channel.duplex = v;
                           if (midland) channel.offset = v == '+' ? 5 : 0;

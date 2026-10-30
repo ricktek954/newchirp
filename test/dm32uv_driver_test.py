@@ -45,6 +45,23 @@ class _SequenceSerial:
         return response[:size]
 
 
+class _RetryQueryLink:
+    def __init__(self):
+        self.attempt = 0
+        self.commands = []
+
+    def send(self, data):
+        self.commands.append(data)
+        self.attempt += 1
+
+    def recv(self, size, timeout=0.5):
+        if self.attempt == 1:
+            return b"V"[:size]
+        if size == 3:
+            return b"V\x07\x05"[:size]
+        return b"ABCED"[:size]
+
+
 class DM32UVDriverTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -92,6 +109,24 @@ class DM32UVDriverTest(unittest.TestCase):
 
         self.assertEqual(len(serial.writes), 3)
 
+    def test_sysinfo_retries_a_bad_one_byte_reply(self):
+        serial = _SequenceSerial([b"\x15", b"\x06"])
+        link = self.driver.baofeng_dm32uv._Link(serial)
+
+        reply = link.xfer(b"SYSINFO", 1)
+
+        self.assertEqual(reply, b"\x06")
+        self.assertEqual(serial.writes, [b"SYSINFO", b"SYSINFO"])
+
+    def test_sysinfo_failure_reports_the_reply_byte(self):
+        serial = _SequenceSerial([b"\x15"] * 3)
+        link = self.driver.baofeng_dm32uv._Link(serial)
+
+        with self.assertRaisesRegex(Exception, r"reply 15"):
+            link.xfer(b"SYSINFO", 1)
+
+        self.assertEqual(len(serial.writes), 3)
+
     def test_trace_shows_handshake_response_bytes(self):
         trace = self.bridge.RadioCommunicationTrace()
 
@@ -100,6 +135,17 @@ class DM32UVDriverTest(unittest.TestCase):
         report = trace.format()
 
         self.assertIn("reply=06 00 00 (3 bytes)", report)
+
+    def test_info_query_retries_fragmented_reply(self):
+        link = _RetryQueryLink()
+
+        response = self.driver.baofeng_dm32uv._Link.query_v(
+            link,
+            b"V\x00\x00\x00\x07",
+        )
+
+        self.assertEqual(response, b"ABCED")
+        self.assertEqual(link.commands, [b"V\x00\x00\x00\x07"] * 2)
 
 
 if __name__ == "__main__":

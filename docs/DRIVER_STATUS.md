@@ -24,6 +24,8 @@ Last updated: 2026-10-29
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
+| Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -191,22 +193,54 @@ Last updated: 2026-10-29
   contacts, RX groups, scan lists, privacy-key references, and settings
   provided by the pinned upstream CHIRP implementation
 - Read/write policy: unchanged from upstream CHIRP. This override changes
-  only serial timing, PASSSTA retry handling, and diagnostics.
+  only serial timing, read-only handshake retry handling, and diagnostics.
 - Serial policy: set one short device timeout per connection, enforce command
-  deadlines in the read loop, and retry the read-only PASSSTA query up to
-  three times. A malformed final response reports its hexadecimal bytes.
+  deadlines in the read loop, retry the read-only PASSSTA query up to three
+  times, retry SYSINFO up to three times, and retry fragmented `V`
+  radio-information queries up to three times. Information queries allow up
+  to 1.5 seconds for the header and two seconds for the body. A malformed
+  final response reports its hexadecimal reply bytes.
 - Evidence: upstream CHIRP commit
   `832d349e050fbdcde50185f77cdb34fbe5bab57a`, vendor CPS v1.60 protocol
   work recorded by the upstream driver author, and CHIRP issue 12652
-  documenting intermittent DM-32UV failures with some FTDI adapters
+  documenting intermittent DM-32UV failures with some FTDI adapters. The
+  2026-10-28 report from [redacted-email] returned only the first byte of
+  the `V00000007` information reply after the previous 0.5-second window.
+  A second report from [redacted-email] reached a slow, retried PSEARCH
+  sequence and received a non-ACK SYSINFO reply.
 - Driver SHA-256:
-  `e9b3140cf62ae06a2c51676607cb3050b19db25ae458c5d124253111597f8df8`
+  `96bf74adfb0f561f17499c1687444ca47bbf7e14074c0e25732db9adb1beaa4f`
 - Hardware validation: the upstream driver completed read and write tests on
   firmware DM32.01.01.047. This NewChirp timing and retry override has
   synthetic serial coverage but no physical revalidation.
-- Next milestone: retest with the affected adapter, record the PASSSTA reply
-  bytes if it still fails, then repeat a complete read and verified write with
-  both a working cable and the affected cable.
+- Next milestone: retest with the affected adapters, record the SYSINFO reply
+  or `V` query header and body bytes if it still fails, then repeat a complete
+  read and verified write with both a working cable and the affected cable.
+
+### Quansheng UV-K5 family
+
+- Maintainer: NewChirp override of the upstream CHIRP UV-K5 handshake helpers
+- Maintained file: `drivers/newchirp_uvk5.py`
+- Transport: UV-K5 framed serial at 38400 8N1
+- Implemented: all channel, settings, and variant behavior from the pinned
+  upstream CHIRP UV-K5 implementation
+- Read/write policy: unchanged. Unknown firmware continues to use CHIRP's
+  read-only restricted profile and remains blocked from memory or settings
+  writes.
+- Identification policy: retry a missing or non-printable firmware reply up to
+  five times, accept a fully printable version field without requiring a
+  trailing non-printable byte, and report bounded reply bytes if all attempts
+  fail.
+- Evidence: upstream CHIRP `uvk5.py` and the 2026-10-28 NewChirp 1.0.22 report
+  from [redacted-email] showing a complete 16-byte hello reply while the
+  selected UV-K5 unsupported profile reported that it could not determine the
+  firmware version
+- Driver SHA-256:
+  `f2c98269c04030de71c5e228edc036b5925137ba0b3af3e714c12025b88da3b4`
+- Hardware validation: none for this identification override.
+- Next milestone: affected owner retests after restarting the radio in normal
+  mode; if it still fails, submit the hexadecimal `UV-K5 hello` reply and the
+  firmware string shown by the radio.
 
 ### Baofeng UV-9R
 
@@ -252,6 +286,29 @@ Last updated: 2026-10-29
 - Next milestone: TS-2000 owner retest with both a small loadset and the full
   258-channel loadset, followed by a read-back comparison and submission of
   the generated communication trace if either write fails
+
+### Kenwood TH-D75
+
+- Maintainer: NewChirp override of the upstream CHIRP `THD75Radio` driver
+- Maintained file: `drivers/newchirp_thd75.py`
+- Transport: Kenwood PC/CAT commands through the TH-D75 USB programming cable;
+  auto-baud from 9600 through 57,600, then clone transfers at 57,600
+- Implemented: all channel, D-STAR, bank, and MCP-D75 image behavior provided
+  by the pinned upstream CHIRP driver
+- Read/write policy: unchanged from upstream CHIRP. This override changes only
+  CAT response handling.
+- CAT policy: accept a two-second reply window and ignore one exact command
+  echo before accepting the radio response. A missing second response still
+  fails normally.
+- Evidence: upstream CHIRP `thd74.py` and the 2026-10-29 NewChirp 1.0.23 report
+  from [redacted-email] showing ID-like replies at every baud without a
+  recognized model response
+- Driver SHA-256:
+  `1eecb3f3a4b30db37a2a23127e01695a3edc6c32d76948c71dce1f1114d910b5`
+- Hardware validation: none for this echo/slow-response override.
+- Next milestone: affected owner retests with MCP-D75 closed and the same
+  COM port selected throughout. If it still fails, submit the new ID reply
+  text so the adapter echo behavior can be distinguished from radio settings.
 
 ### Icom IC-9700
 

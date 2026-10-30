@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:11:19Z"
+timestamp: "2026-10-29T18:03:34Z"
 concept_id: chirp_bridge/close
 language: python
 ---
@@ -29,7 +29,7 @@ def close(self)
 | `self` | `—` | `—` |
 
 ## Source
-Lines 188–189 in `chirp_bridge.py`
+Lines 222–223 in `chirp_bridge.py`
 
 ## Relationships
 

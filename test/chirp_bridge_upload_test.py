@@ -22,6 +22,7 @@ SOURCE = (
 VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 TD_H3_IMAGE = SOURCE / "tests/images/TIDRADIO_TD-H3.img"
 A36PLUS_IMAGE = SOURCE / "tests/images/Talkpod_A36plus.img"
+GMRS_V2_IMAGE = SOURCE / "tests/images/BTECH_GMRS-V2.img"
 
 spec = importlib.util.spec_from_file_location(
     "newchirp_chirp_bridge", ROOT / "scripts/chirp_bridge.py"
@@ -70,6 +71,20 @@ class FakeTDH3Serial:
             else:
                 self._responses[0] = chunk[take:]
         return bytes(result)
+
+    def close(self):
+        pass
+
+
+class FakeLineSerial:
+    def __init__(self, response):
+        self.response = response
+
+    def write(self, data):
+        return len(data)
+
+    def readline(self, _size=-1):
+        return self.response
 
     def close(self):
         pass
@@ -204,6 +219,95 @@ class UploadHandshakeTest(unittest.TestCase):
             ),
         )
 
+    def test_ar8200_timeout_checks_rs232_lead_and_remote_id(self):
+        message = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(),
+            command="download",
+            model="AOR_AR8200",
+        )
+
+        self.assertIn("CC8200-compatible", message)
+        self.assertIn("RMT-ID to 00", message)
+        self.assertIn("REMOTE BPS", message)
+
+    def test_rt1_timeout_distinguishes_rt21(self):
+        message = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(),
+            command="download",
+            model="Retevis_RT1",
+        )
+
+        self.assertIn("select Retevis RT21", message)
+        self.assertIn("2400 baud", message)
+        self.assertIn("9600 baud", message)
+        self.assertIn("PRMZUNE", message)
+
+    def test_f8hp_pro_timeout_checks_exact_model_and_firmware(self):
+        message = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(),
+            command="download",
+            model="Baofeng_BF-F8HP-PRO",
+        )
+
+        self.assertIn("includes PRO", message)
+        self.assertIn("separate Baofeng BF-F8HP entry", message)
+        self.assertIn("firmware v0.52", message)
+
+    def test_uv5r_mini_timeout_checks_for_the_usb_com_port(self):
+        message = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(),
+            command="download",
+            model="Baofeng_UV-5R_Mini",
+        )
+
+        self.assertIn("not a built-in COM1 port", message)
+        self.assertIn("newly appears", message)
+        self.assertIn("Bluetooth serial port", message)
+
+    def test_setting_error_names_the_rejected_setting_and_value(self):
+        from chirp.settings import RadioSetting, RadioSettingValueList
+
+        setting = RadioSetting(
+            "squelch",
+            "Squelch",
+            RadioSettingValueList(["Off", "1", "2"], current_index=0),
+        )
+
+        with self.assertRaisesRegex(
+            RuntimeError,
+            r"Radio setting 'Squelch' rejected value '3'",
+        ):
+            bridge.apply_setting_changes(
+                [setting],
+                [{"id": [0], "value": "3"}],
+            )
+
+    def test_numeric_choice_restores_the_driver_option_type(self):
+        from chirp.settings import RadioSetting, RadioSettingValueList
+
+        setting = RadioSetting(
+            "squelch",
+            "Squelch",
+            RadioSettingValueList(list(range(0, 9)), current_index=3),
+        )
+
+        bridge.apply_setting_changes(
+            [setting],
+            [{"id": [0], "value": "3"}],
+        )
+
+        self.assertEqual(setting.value.get_value(), 3)
+
+    def test_trace_records_readline_data(self):
+        trace = bridge.RadioCommunicationTrace()
+        serial = bridge.TracedSerial(FakeLineSerial(b"\xff"), trace)
+
+        serial.write(b"VR\r")
+        self.assertEqual(serial.readline(), b"\xff")
+
+        rendered = trace.format()
+        self.assertIn("VR | incomplete response (1 bytes)", rendered)
+
     def test_bridge_error_does_not_require_a_model_argument(self):
         message = bridge.bridge_error_message(
             RuntimeError("catalog failed"),
@@ -212,6 +316,21 @@ class UploadHandshakeTest(unittest.TestCase):
         )
 
         self.assertEqual(message, "catalog failed")
+
+    def test_serial_access_denied_explains_port_ownership(self):
+        message = bridge.bridge_error_message(
+            RuntimeError(
+                "could not open port 'COM100': "
+                "PermissionError(13, 'Access is denied.', None, 5)"
+            ),
+            command="read-settings",
+            model="Baofeng_DM-32UV",
+        )
+
+        self.assertIn("COM100", message)
+        self.assertIn("another program or driver", message)
+        self.assertIn("Close Baofeng CPS", message)
+        self.assertIn("old saved port", message)
 
     def test_common_extra_fields_include_documentation(self):
         image = SOURCE / "tests/images/Baofeng_UV-5R_Mini.img"
@@ -597,6 +716,91 @@ class FrequencyPrecisionTest(unittest.TestCase):
 
         self.assertIn("Nearest frequency", message)
         self.assertIn("462.125000 MHz", message)
+
+    def test_custom_gmrs_v2_channel_is_written_as_receive_only(self):
+        radio = bridge.radio_from_image(
+            self.directory,
+            "BTECH_GMRS-V2",
+            str(GMRS_V2_IMAGE),
+        )
+        memory = radio.get_memory(31)
+        item = bridge.memory_json(memory)
+        item.update({
+            "location": 31,
+            "name": "CUSTOM",
+            "frequency": 155.0,
+            "duplex": "",
+            "offset": 0,
+        })
+
+        locked_fields = bridge.apply_json(radio, memory, item)
+        errors, warnings, fields, notes = bridge.normalize_upload_memory(
+            radio,
+            memory,
+        )
+
+        self.assertEqual(locked_fields, [])
+        self.assertEqual(errors, [])
+        self.assertEqual(warnings, [])
+        self.assertEqual(fields, ["duplex", "offset"])
+        self.assertIn("TX off", notes[0])
+        self.assertEqual(memory.duplex, "off")
+        self.assertEqual(memory.offset, 0)
+
+        bridge.set_memory_with_extras(radio, memory)
+        stored = radio.get_memory(31)
+        self.assertEqual(stored.freq, 155000000)
+        self.assertEqual(stored.duplex, "off")
+        self.assertEqual(stored.offset, 0)
+
+    def test_standard_gmrs_v2_simplex_channel_is_unchanged(self):
+        radio = bridge.radio_from_image(
+            self.directory,
+            "BTECH_GMRS-V2",
+            str(GMRS_V2_IMAGE),
+        )
+        memory = radio.get_memory(15)
+
+        errors, warnings, fields, notes = bridge.normalize_upload_memory(
+            radio,
+            memory,
+        )
+
+        self.assertEqual(errors, [])
+        self.assertEqual(warnings, [])
+        self.assertEqual(fields, [])
+        self.assertEqual(notes, [])
+        self.assertEqual(memory.duplex, "")
+        self.assertEqual(memory.offset, 0)
+
+    def test_gmrs_v2_normalization_does_not_hide_fatal_errors(self):
+        radio = bridge.radio_from_image(
+            self.directory,
+            "BTECH_GMRS-V2",
+            str(GMRS_V2_IMAGE),
+        )
+        memory = radio.get_memory(31)
+        item = bridge.memory_json(memory)
+        item.update({
+            "location": 31,
+            "name": "CUSTOM",
+            "frequency": 155.0,
+            "duplex": "",
+            "offset": 0,
+            "mode": "AM",
+        })
+
+        bridge.apply_json(radio, memory, item)
+        errors, warnings, fields, notes = bridge.normalize_upload_memory(
+            radio,
+            memory,
+        )
+
+        self.assertTrue(errors)
+        self.assertEqual(warnings, [])
+        self.assertEqual(fields, ["duplex", "offset"])
+        self.assertTrue(notes)
+        self.assertIn("Mode AM not supported", str(errors[0]))
 
 
 if __name__ == "__main__":

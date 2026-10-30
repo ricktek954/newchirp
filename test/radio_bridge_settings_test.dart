@@ -33,6 +33,7 @@ void main() {
     final setting = group.children.single;
     expect(setting.label, 'Squelch');
     expect(setting.options, ['Off', '1', '3']);
+    expect(setting.changed, isFalse);
     expect(setting.toChangeJson(), {
       'id': [0, 0],
       'value': '3',

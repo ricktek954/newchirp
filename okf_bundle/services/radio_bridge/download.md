@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:11:10Z"
+timestamp: "2026-10-29T17:46:45Z"
 concept_id: services/radio_bridge/download
 language: dart
 ---
@@ -24,7 +24,7 @@ Futuredownloaddownload
 ```
 
 ## Source
-Lines 552–566 in `services/radio_bridge.dart`
+Lines 553–567 in `services/radio_bridge.dart`
 
 ## Relationships
 
