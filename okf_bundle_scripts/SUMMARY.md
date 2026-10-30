@@ -1,9 +1,9 @@
 ---
 description: 'Top-level OKF summary: 97 concepts across 4 domains and 4 modules'
-git_branch: fix/email-triage-20261030
+git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-30T23:32:26Z'
+timestamp: '2026-10-30T23:47:55Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---

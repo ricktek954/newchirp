@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/settings_tree_json
 language: python
 ---
@@ -31,7 +31,7 @@ def settings_tree_json(elements, prefix = ())
 | `prefix` | `—` | `()` |
 
 ## Source
-Lines 775–817 in `chirp_bridge.py`
+Lines 796–838 in `chirp_bridge.py`
 
 ## Relationships
 

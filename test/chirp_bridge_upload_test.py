@@ -318,19 +318,35 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(message, "catalog failed")
 
     def test_serial_access_denied_explains_port_ownership(self):
-        message = bridge.bridge_error_message(
-            RuntimeError(
-                "could not open port 'COM100': "
-                "PermissionError(13, 'Access is denied.', None, 5)"
-            ),
-            command="read-settings",
-            model="Baofeng_DM-32UV",
-        )
+        with mock.patch.object(bridge.sys, "platform", "win32"):
+            message = bridge.bridge_error_message(
+                RuntimeError(
+                    "could not open port 'COM100': "
+                    "PermissionError(13, 'Access is denied.', None, 5)"
+                ),
+                command="read-settings",
+                model="Baofeng_DM-32UV",
+            )
 
         self.assertIn("COM100", message)
         self.assertIn("another program or driver", message)
         self.assertIn("Close Baofeng CPS", message)
         self.assertIn("old saved port", message)
+
+    def test_linux_serial_access_denied_names_linux(self):
+        with mock.patch.object(bridge.sys, "platform", "linux"):
+            message = bridge.bridge_error_message(
+                RuntimeError(
+                    "could not open port '/dev/ttyUSB0': "
+                    "PermissionError(13, 'Permission denied', None, 13)"
+                ),
+                command="download",
+                model="Quansheng_UV-K5",
+            )
+
+        self.assertIn("Linux could not open /dev/ttyUSB0", message)
+        self.assertIn("dialout", message)
+        self.assertNotIn("Windows", message)
 
     def test_common_extra_fields_include_documentation(self):
         image = SOURCE / "tests/images/Baofeng_UV-5R_Mini.img"

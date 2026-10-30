@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/repeaterbook_item_to_channel
 language: python
 ---
@@ -31,7 +31,7 @@ def repeaterbook_item_to_channel(item, number)
 | `number` | `—` | `—` |
 
 ## Source
-Lines 1289–1341 in `chirp_bridge.py`
+Lines 1310–1362 in `chirp_bridge.py`
 
 ## Relationships
 

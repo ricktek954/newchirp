@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/repeaterbook_cache_path
 language: python
 ---
@@ -29,7 +29,7 @@ def repeaterbook_cache_path(resource)
 | `resource` | `—` | `—` |
 
 ## Source
-Lines 1230–1233 in `chirp_bridge.py`
+Lines 1251–1254 in `chirp_bridge.py`
 
 ## Relationships
 

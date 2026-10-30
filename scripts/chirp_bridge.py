@@ -255,16 +255,37 @@ def bridge_error_message(exc, command=None, model=None):
     ):
         port_match = re.search(r"port '([^']+)'", message)
         port = port_match.group(1) if port_match else "the selected serial port"
-        message = (
-            "Windows could not open %s because another program or driver "
-            "has it reserved. Close Baofeng CPS, CHIRP, terminal software, "
-            "and any vendor programmer before retrying. If the error "
-            "continues, unplug and reconnect the USB cable, refresh the "
-            "interface list, and select the COM port that appears for the "
-            "programming cable. Do not rely on an old saved port such as "
-            "COM100 if it did not newly appear when the cable was connected."
-            % port
-        )
+        if sys.platform.startswith("linux"):
+            message = (
+                "Linux could not open %s because the port is denied or "
+                "already in use. Close CHIRP, terminal software, ModemManager, "
+                "and any vendor programmer before retrying. If this is a "
+                "permissions error, add your user to the dialout group with "
+                "`sudo usermod -aG dialout $USER`, then log out and back in "
+                "before reconnecting the cable."
+                % port
+            )
+        elif sys.platform == "darwin":
+            message = (
+                "macOS could not open %s because the port is denied or "
+                "already in use. Close CHIRP, terminal software, and any "
+                "vendor programmer before retrying. If the error continues, "
+                "unplug and reconnect the USB cable, refresh the interface "
+                "list, and select the serial device that appears for the "
+                "programming cable."
+                % port
+            )
+        else:
+            message = (
+                "Windows could not open %s because another program or driver "
+                "has it reserved. Close Baofeng CPS, CHIRP, terminal software, "
+                "and any vendor programmer before retrying. If the error "
+                "continues, unplug and reconnect the USB cable, refresh the "
+                "interface list, and select the COM port that appears for the "
+                "programming cable. Do not rely on an old saved port such as "
+                "COM100 if it did not newly appear when the cable was connected."
+                % port
+            )
     if (
         command in ("download", "read-settings")
         and model == "Yaesu_FT-60"

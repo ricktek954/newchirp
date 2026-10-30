@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/extra_field_doc
 language: python
 ---
@@ -36,7 +36,7 @@ Return CHIRP's documentation or a concise fallback for common terms.
 | `setting` | `—` | `—` |
 
 ## Source
-Lines 651–660 in `chirp_bridge.py`
+Lines 672–681 in `chirp_bridge.py`
 
 ## Relationships
 

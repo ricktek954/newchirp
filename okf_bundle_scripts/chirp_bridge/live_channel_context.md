@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/live_channel_context
 language: python
 ---
@@ -38,7 +38,7 @@ Choose a live-radio subdevice without probing every memory slot.
 | `zone` | `—` | `None` |
 
 ## Source
-Lines 1068–1091 in `chirp_bridge.py`
+Lines 1089–1112 in `chirp_bridge.py`
 
 ## Relationships
 

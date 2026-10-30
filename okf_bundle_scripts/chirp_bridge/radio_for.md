@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/radio_for
 language: python
 ---
@@ -41,7 +41,7 @@ def radio_for(directory, model, port, progress_range = (0.0, 1.0), image = None,
 | `channel_zone` | `—` | `None` |
 
 ## Source
-Lines 1094–1152 in `chirp_bridge.py`
+Lines 1115–1173 in `chirp_bridge.py`
 
 ## Relationships
 

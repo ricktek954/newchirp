@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/erase_memory_with_extras
 language: python
 ---
@@ -38,7 +38,7 @@ Erase a channel and remove its metadata-backed fields.
 | `number` | `—` | `—` |
 
 ## Source
-Lines 544–549 in `chirp_bridge.py`
+Lines 565–570 in `chirp_bridge.py`
 
 ## Relationships
 

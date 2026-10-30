@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:47:12Z"
 concept_id: chirp_bridge/memory_json
 language: python
 ---
@@ -29,7 +29,7 @@ def memory_json(mem)
 | `mem` | `—` | `—` |
 
 ## Source
-Lines 487–507 in `chirp_bridge.py`
+Lines 508–528 in `chirp_bridge.py`
 
 ## Relationships
 
