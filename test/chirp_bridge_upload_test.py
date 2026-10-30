@@ -350,6 +350,14 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertIn("PTT ID", fields["pttid"])
         self.assertIn("S-CODE", fields["scode"])
 
+    def test_driver_specific_live_modes_are_accepted_by_memory_map(self):
+        from chirp import chirp_common
+
+        for mode in ("DR", "R-CW"):
+            memory = chirp_common.Memory()
+            memory.mode = mode
+            self.assertEqual(memory.mode, mode)
+
     def test_metadata_backed_channel_comments_round_trip(self):
         image = SOURCE / "tests/images/Yaesu_FT-60.img"
         radio = self.directory.get_radio_by_image(str(image))

@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T18:03:34Z"
+timestamp: "2026-10-30T23:31:36Z"
 concept_id: chirp_bridge/headless_live_adapter
 language: python
 ---
@@ -36,7 +36,7 @@ Give a live radio the file-backed interfaces NewChirp requires.
 | `live_radio` | `—` | `—` |
 
 ## Source
-Lines 992–1054 in `chirp_bridge.py`
+Lines 1003–1065 in `chirp_bridge.py`
 
 ## Relationships
 

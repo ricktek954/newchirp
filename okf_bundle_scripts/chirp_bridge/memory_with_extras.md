@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T18:03:34Z"
+timestamp: "2026-10-30T23:31:36Z"
 concept_id: chirp_bridge/memory_with_extras
 language: python
 ---
@@ -38,7 +38,7 @@ Load a channel plus CHIRP's metadata-backed fields such as comments.
 | `number` | `—` | `—` |
 
 ## Source
-Lines 516–522 in `chirp_bridge.py`
+Lines 527–533 in `chirp_bridge.py`
 
 ## Relationships
 

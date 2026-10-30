@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/scripts",
+  "source_root": "/private/tmp/newchirp-email-triage-fixes/scripts",
   "files": {
     "build_macos_dmg.py": {
       "path": "build_macos_dmg.py",
-      "mtime_ns": 1792753027569896057,
+      "mtime_ns": 1793403084447701410,
       "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
       "concept_ids": [
         "build_macos_dmg/build_background",
@@ -16,7 +16,7 @@
     },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1787526889873622751,
+      "mtime_ns": 1793403084448700913,
       "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
       "concept_ids": [
         "generate_gmrs_frs_pdf/PdfWriter",
@@ -38,7 +38,7 @@
     },
     "newchirp_mass_storage.py": {
       "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1792893456081463146,
+      "mtime_ns": 1793403084448781621,
       "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
       "concept_ids": [
         "newchirp_mass_storage/CS750Profile",
@@ -65,8 +65,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793297014537366601,
-      "hash": "f086691a5a2285bec09053732dce04f999b9ac36a2fd840d34082a19b168bd5a",
+      "mtime_ns": 1793403096105689293,
+      "hash": "28c80b0f7c0d64d96c94896b6fbcdf92d1d9993f7d777fde4889fd1a70a088a0",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -88,6 +88,7 @@
         "chirp_bridge/bridge_error_message",
         "chirp_bridge/status_progress",
         "chirp_bridge/load_module",
+        "chirp_bridge/allow_driver_specific_modes",
         "chirp_bridge/load_chirp",
         "chirp_bridge/memory_json",
         "chirp_bridge/external_memory_owner",
@@ -134,7 +135,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "32568b41506867857d6f19ae787bc3d6b6587b02009aec16ed8653cd105ad1c8",
+      "edge_hash": "c5ecca1949dd6c93fd54688993982fb2b694f15ad030dc0677528eb3c89f197b",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -158,7 +159,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "0b788ccbb17e01e76a985ea5a1f0fb2b49f9b729bf2dffde8fb4b44e10ce682a",
+      "edge_hash": "bbb2f2ea7d1415830bf078d65f4f68098b815242e27b419ec545f6a4a3660343",
       "enriched": false
     },
     "chirp_bridge/memory_json": {
@@ -904,7 +905,15 @@
       "render_hash": "stale",
       "edge_hash": "ce2b2c4b45928a634e43822e2ec175e706ad69b6768c5c1231258a8b6a56a262",
       "enriched": false
+    },
+    "chirp_bridge/allow_driver_specific_modes": {
+      "concept_id": "chirp_bridge/allow_driver_specific_modes",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "8aa8fdb1b459587776dee4b9c57cb1577d7beadf7da79a62c68c8ac6fe2df34d",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-29T18:03:35Z"
+  "generated_at": "2026-10-30T23:32:26Z"
 }

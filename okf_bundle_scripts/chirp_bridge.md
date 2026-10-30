@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Module"
   - "module:chirp_bridge.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T18:03:34Z"
+timestamp: "2026-10-30T23:31:36Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -33,6 +33,7 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |
 | related | [status_progress](/chirp_bridge/status_progress.md) |
 | related | [_load_module](/chirp_bridge/load_module.md) |
+| related | [_allow_driver_specific_modes](/chirp_bridge/allow_driver_specific_modes.md) |
 | related | [load_chirp](/chirp_bridge/load_chirp.md) |
 | related | [memory_json](/chirp_bridge/memory_json.md) |
 | related | [external_memory_owner](/chirp_bridge/external_memory_owner.md) |

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T10:22:35Z"
+timestamp: "2026-10-30T23:31:39Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -136,7 +136,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 364–5193 in `main.dart`
+Lines 364–5171 in `main.dart`
 
 ## Relationships
 

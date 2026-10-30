@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:29Z"
+timestamp: "2026-10-30T23:31:36Z"
 concept_id: models/radio_channel/scanLabel
 language: dart
 ---
@@ -31,7 +31,7 @@ StringscanLabel(String skip)
 Word shown for a stored scan code. Unknown codes stay visible.
 
 ## Source
-Lines 115–115 in `models/radio_channel.dart`
+Lines 168–168 in `models/radio_channel.dart`
 
 ## Relationships
 

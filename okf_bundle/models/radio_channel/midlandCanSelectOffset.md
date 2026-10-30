@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:29Z"
+timestamp: "2026-10-30T23:31:36Z"
 concept_id: models/radio_channel/midlandCanSelectOffset
 language: dart
 ---
@@ -33,7 +33,7 @@ Offset can be chosen only for GMRS channels 15 through 22.
 Repeater rows stay on +5 MHz, so that choice is not open there.
 
 ## Source
-Lines 333–333 in `models/radio_channel.dart`
+Lines 386–386 in `models/radio_channel.dart`
 
 ## Relationships
 

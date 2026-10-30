@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:29Z"
+timestamp: "2026-10-30T23:31:36Z"
 concept_id: models/radio_channel
 language: dart
 ---

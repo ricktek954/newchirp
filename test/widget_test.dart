@@ -797,7 +797,7 @@ void main() {
     expect(find.text('Receive frequency (MHz)'), findsOneWidget);
   });
 
-  testWidgets('editor provides standard DTCS codes without radio metadata', (
+  testWidgets('editor provides standard tones without radio metadata', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1440, 900);
@@ -838,6 +838,23 @@ void main() {
     final values = dtcsButton.items!.map((item) => item.value).toList();
     expect(values, hasLength(standardDtcsCodes.length));
     expect(values, containsAll(['23', '25', '131', '754']));
+
+    tester
+        .widget<DropdownButtonFormField<String>>(dropdown('Tone mode'))
+        .onChanged!('Tone');
+    await tester.pumpAndSettle();
+
+    final toneButton = tester.widget<DropdownButton<String>>(
+      find.descendant(
+        of: dropdown('Transmit tone (Hz)'),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is DropdownButton<String>,
+        ),
+      ),
+    );
+    final tones = toneButton.items!.map((item) => item.value).toList();
+    expect(tones, hasLength(standardCtcssTones.length));
+    expect(tones, containsAll(['88.5', '100.0', '254.1']));
   });
 
   testWidgets('channel editor save commits and close cancels unsaved changes', (

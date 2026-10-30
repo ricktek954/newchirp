@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:fix/email-triage-20261030"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:29Z"
+timestamp: "2026-10-30T23:31:36Z"
 concept_id: models/radio_channel/midlandDuplexChoices
 language: dart
 ---
@@ -36,7 +36,7 @@ any other row also stays simplex. The current value stays in the list
 when it is not legal, so the editor shows what is stored.
 
 ## Source
-Lines 296–300 in `models/radio_channel.dart`
+Lines 349–353 in `models/radio_channel.dart`
 
 ## Relationships
 

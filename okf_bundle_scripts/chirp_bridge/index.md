@@ -12,6 +12,7 @@
 - [__getattr__](getattr.md)
 - [__init__](init.md)
 - [__setattr__](setattr.md)
+- [_allow_driver_specific_modes](allow_driver_specific_modes.md) — Permit declared radio modes rejected by CHIRP's shared memory map.
 - [_command_summary](command_summary.md)
 - [_finish_pending](finish_pending.md)
 - [_load_module](load_module.md)

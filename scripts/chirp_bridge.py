@@ -414,6 +414,16 @@ def _load_module(module_path, directory):
         directory.LOG.setLevel(old_log_level)
 
 
+def _allow_driver_specific_modes():
+    """Permit declared radio modes rejected by CHIRP's shared memory map."""
+    from chirp import chirp_common
+
+    valid = tuple(chirp_common.Memory._valid_map["mode"])
+    extra = tuple(mode for mode in ("DR", "R-CW") if mode not in valid)
+    if extra:
+        chirp_common.Memory._valid_map["mode"] = valid + extra
+
+
 def load_chirp(
     source, vendor, newchirp_driver_dir=None, module_path=None
 ):
@@ -433,6 +443,7 @@ def load_chirp(
         ) from exc
     from chirp import directory
     directory.import_drivers()
+    _allow_driver_specific_modes()
     # chirp.drivers resets DeprecationWarning handling while it imports, so
     # apply NewChirp's filter again before loading overrides or image data.
     warnings.filterwarnings(
