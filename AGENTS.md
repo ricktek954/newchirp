@@ -54,6 +54,11 @@ text and badges near the matching download:
   `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   command. Do not label the Pacman package as AppImage.
 
+When Android minimum support changes, update every public website reference at
+the same time, including the Android download card, hero/platform copy, mobile
+guide, and beginner guide. The download-card helper text must match the current
+Android minimum, for example `Android 9+ beta build`.
+
 Build release artifacts only on their native platform:
 
 - Build the Windows installer on Windows.
