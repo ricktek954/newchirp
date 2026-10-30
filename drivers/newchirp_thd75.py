@@ -16,6 +16,9 @@ from chirp.drivers import thd74
 COMMAND_TIMEOUT = 2.0
 
 
+directory.enable_reregistrations()
+
+
 @directory.register
 class THD75Radio(thd74.THD75Radio):
     """TH-D75 with echo-tolerant and slower CAT responses."""

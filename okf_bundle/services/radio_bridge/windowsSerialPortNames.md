@@ -11,7 +11,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T17:46:45Z"
+timestamp: "2026-10-30T23:44:03Z"
 concept_id: services/radio_bridge/windowsSerialPortNames
 language: dart
 ---
@@ -32,7 +32,7 @@ Windows: read the live COM ports from the SERIALCOMM registry key, then
 fall back to .NET's SerialPort.GetPortNames() so only real ports show up.
 
 ## Source
-Lines 351–351 in `services/radio_bridge.dart`
+Lines 352–352 in `services/radio_bridge.dart`
 
 ## Relationships
 

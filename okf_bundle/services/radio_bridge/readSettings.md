@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T17:46:45Z"
+timestamp: "2026-10-30T23:44:03Z"
 concept_id: services/radio_bridge/readSettings
 language: dart
 ---
@@ -24,7 +24,7 @@ FuturereadSettingsreadSettings
 ```
 
 ## Source
-Lines 633–638 in `services/radio_bridge.dart`
+Lines 634–639 in `services/radio_bridge.dart`
 
 ## Relationships
 

@@ -40,10 +40,11 @@ class RadioBridgeException implements Exception {
   String toString() => message;
 }
 
-bool _isBenignBridgeStderrLine(String line) {
+bool isBenignBridgeStderrLine(String line) {
   final trimmed = line.trim();
   return trimmed.startsWith("Replacing existing driver id '") ||
-      trimmed.startsWith('Replacing existing driver id "');
+      trimmed.startsWith('Replacing existing driver id "') ||
+      trimmed.startsWith('Replacing existing driver id `');
 }
 
 class RadioInstructions {
@@ -792,7 +793,7 @@ class RadioBridge {
         .transform(const LineSplitter())
         .forEach((line) {
           if (!line.startsWith(_progressPrefix)) {
-            if (_isBenignBridgeStderrLine(line)) return;
+            if (isBenignBridgeStderrLine(line)) return;
             stderrLines.add(line);
             return;
           }

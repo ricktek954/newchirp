@@ -4,6 +4,7 @@ from collections import deque
 import importlib
 import importlib.util
 from pathlib import Path
+import subprocess
 import sys
 import unittest
 from unittest import mock
@@ -73,6 +74,24 @@ class THD75DriverTest(unittest.TestCase):
             self.radio_class.__module__,
             "newchirp.drivers.newchirp_thd75",
         )
+
+    def test_driver_can_replace_bundled_thd75_first(self):
+        script = f"""
+import importlib.util
+import pathlib
+import sys
+sys.path.insert(0, {str(SOURCE)!r})
+from chirp.drivers import thd74
+from chirp import directory
+assert directory.get_radio("Kenwood_TH-D75") is thd74.THD75Radio
+path = pathlib.Path({str(ROOT / "drivers" / "newchirp_thd75.py")!r})
+spec = importlib.util.spec_from_file_location("order_check_thd75", path)
+module = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = module
+spec.loader.exec_module(module)
+assert directory.get_radio("Kenwood_TH-D75").__name__ == "THD75Radio"
+"""
+        subprocess.run([sys.executable, "-c", script], check=True)
 
     def test_echoed_id_is_skipped(self):
         radio = self.radio_class(None)

@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T17:46:45Z"
+timestamp: "2026-10-30T23:44:03Z"
 concept_id: services/radio_bridge/findScsiHelper
 language: dart
 ---
@@ -24,7 +24,7 @@ String_findScsiHelper_findScsiHelper
 ```
 
 ## Source
-Lines 1003–1003 in `services/radio_bridge.dart`
+Lines 1004–1004 in `services/radio_bridge.dart`
 
 ## Relationships
 
