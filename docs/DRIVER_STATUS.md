@@ -304,7 +304,7 @@ Last updated: 2026-10-29
   from [redacted-email] showing ID-like replies at every baud without a
   recognized model response
 - Driver SHA-256:
-  `1eecb3f3a4b30db37a2a23127e01695a3edc6c32d76948c71dce1f1114d910b5`
+  `afd8176a9f3389addfee863462086938aa59cda57e7d361feda9dde04a85ab91`
 - Hardware validation: none for this echo/slow-response override.
 - Next milestone: affected owner retests with MCP-D75 closed and the same
   COM port selected throughout. If it still fails, submit the new ID reply
