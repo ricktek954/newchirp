@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 530 concepts across 4 domains and 27 modules'
+description: 'Top-level OKF summary: 533 concepts across 4 domains and 27 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-31T09:39:29Z'
+timestamp: '2026-10-31T10:32:14Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 530 concepts | 4 domains | 27 modules
+> OKF v0.2 bundle | 533 concepts | 4 domains | 27 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 409 |
-| Class | 88 |
+| Function | 410 |
+| Class | 90 |
 | Module | 27 |
 | Enum | 6 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 530 |
+| dart | 533 |
 
 ## Domain Map
 
@@ -55,9 +55,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/radio_image_store](services/radio_image_store/index.md) (8 concepts)
 - *…and 6 more modules*
 
-### [widgets](widgets/index.md) — 55 concepts
+### [widgets](widgets/index.md) — 58 concepts
 
-- [widgets/radio_model_picker](widgets/radio_model_picker/index.md) (25 concepts)
+- [widgets/radio_model_picker](widgets/radio_model_picker/index.md) (28 concepts)
 - [widgets/radio_mapping_dialog](widgets/radio_mapping_dialog/index.md) (15 concepts)
 - [widgets/error_report_dialog](widgets/error_report_dialog/index.md) (7 concepts)
 - [widgets/file_save_warning_dialog](widgets/file_save_warning_dialog/index.md) (5 concepts)
