@@ -375,6 +375,31 @@
         "services/repeater_search_preferences_store"
       ]
     },
+    "services/update_checker.dart": {
+      "path": "services/update_checker.dart",
+      "mtime_ns": 1793457104390767480,
+      "hash": "529e8c81263d771702ba7a9d00c8bddb76640b079a9e2eaed3673214703e4a6f",
+      "concept_ids": [
+        "services/update_checker/PlatformRelease",
+        "services/update_checker/ReleaseManifest",
+        "services/update_checker/UpdateCheckException",
+        "services/update_checker/UpdateCheckResult",
+        "services/update_checker/UpdateChecker",
+        "services/update_checker/check",
+        "services/update_checker/compareVersions",
+        "services/update_checker/currentUpdatePlatform",
+        "services/update_checker/isAllowedDownloadUrl",
+        "services/update_checker/launchExternalUrl",
+        "services/update_checker/openExternalUrl",
+        "services/update_checker/parseManifest",
+        "services/update_checker/toString",
+        "services/update_checker/trustedDownloadUrl",
+        "services/update_checker/trustedUpdateArtifactUrl",
+        "services/update_checker/updateArtifactExtension",
+        "services/update_checker/versionParts",
+        "services/update_checker"
+      ]
+    },
     "services/update_installer.dart": {
       "path": "services/update_installer.dart",
       "mtime_ns": 1793108770906624056,
@@ -502,8 +527,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793457104390105976,
-      "hash": "425952c18b6ffd800e159d8e1ce3dd226b48c77815bbbe6e5efecfab13d1bafb",
+      "mtime_ns": 1793457701203044490,
+      "hash": "a01e9c7190e1a9b1d45178d1d7f053328319df7100ec3bc64e4579b5cef637a1",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -700,31 +725,6 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
-      ]
-    },
-    "services/update_checker.dart": {
-      "path": "services/update_checker.dart",
-      "mtime_ns": 1793457104390767480,
-      "hash": "529e8c81263d771702ba7a9d00c8bddb76640b079a9e2eaed3673214703e4a6f",
-      "concept_ids": [
-        "services/update_checker",
-        "services/update_checker/UpdateCheckResult",
-        "services/update_checker/UpdateCheckException",
-        "services/update_checker/UpdateChecker",
-        "services/update_checker/ReleaseManifest",
-        "services/update_checker/PlatformRelease",
-        "services/update_checker/currentUpdatePlatform",
-        "services/update_checker/compareVersions",
-        "services/update_checker/versionParts",
-        "services/update_checker/isAllowedDownloadUrl",
-        "services/update_checker/trustedDownloadUrl",
-        "services/update_checker/updateArtifactExtension",
-        "services/update_checker/trustedUpdateArtifactUrl",
-        "services/update_checker/openExternalUrl",
-        "services/update_checker/launchExternalUrl",
-        "services/update_checker/toString",
-        "services/update_checker/check",
-        "services/update_checker/parseManifest"
       ]
     }
   },
@@ -5274,5 +5274,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-10-31T14:31:45Z"
+  "generated_at": "2026-10-31T14:41:42Z"
 }
