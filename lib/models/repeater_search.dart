@@ -1,6 +1,6 @@
 import 'radio_channel.dart';
 
-enum RepeaterSortOrder { source, city, county }
+enum RepeaterSortOrder { source, frequency, callsignName, city, county }
 
 List<RepeaterSearchResult> sortRepeaterResults(
   Iterable<RepeaterSearchResult> results,
@@ -12,12 +12,23 @@ List<RepeaterSearchResult> sortRepeaterResults(
       left.toLowerCase().compareTo(right.toLowerCase());
   sorted.sort((left, right) {
     final primary = switch (order) {
+      RepeaterSortOrder.frequency => left.channel.frequency.compareTo(
+        right.channel.frequency,
+      ),
+      RepeaterSortOrder.callsignName => by(
+        left.callsign.isEmpty ? left.channel.name : left.callsign,
+        right.callsign.isEmpty ? right.channel.name : right.callsign,
+      ),
       RepeaterSortOrder.city => by(left.city, right.city),
       RepeaterSortOrder.county => by(left.county, right.county),
       RepeaterSortOrder.source => 0,
     };
     if (primary != 0) return primary;
     final secondary = switch (order) {
+      RepeaterSortOrder.frequency => by(left.callsign, right.callsign),
+      RepeaterSortOrder.callsignName => left.channel.frequency.compareTo(
+        right.channel.frequency,
+      ),
       RepeaterSortOrder.city => by(left.county, right.county),
       RepeaterSortOrder.county => by(left.city, right.city),
       RepeaterSortOrder.source => 0,

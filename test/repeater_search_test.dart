@@ -98,4 +98,40 @@ void main() {
       ['W3', 'W1', 'W2'],
     );
   });
+
+  test('sorts repeater results by frequency or callsign-name', () {
+    RepeaterSearchResult result(
+      String callsign,
+      String name,
+      double frequency,
+    ) => RepeaterSearchResult(
+      channel: RadioChannel(location: 1, name: name, frequency: frequency),
+      callsign: callsign,
+      city: 'City',
+      county: 'County',
+      state: 'State',
+      use: 'OPEN',
+      service: 'Amateur',
+    );
+    final results = [
+      result('W3XYZ', 'Zulu', 444.100),
+      result('', 'Alpha Repeater', 146.520),
+      result('W1ABC', 'Bravo', 146.520),
+    ];
+
+    expect(
+      sortRepeaterResults(
+        results,
+        RepeaterSortOrder.frequency,
+      ).map((result) => result.callsign),
+      ['', 'W1ABC', 'W3XYZ'],
+    );
+    expect(
+      sortRepeaterResults(
+        results,
+        RepeaterSortOrder.callsignName,
+      ).map((result) => result.callsign),
+      ['', 'W1ABC', 'W3XYZ'],
+    );
+  });
 }
