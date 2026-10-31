@@ -473,9 +473,15 @@ Last updated: 2026-10-31
 - Hardware validation: none. Offline tests cover registration, model
   discovery, read framing, end truncation, upload framing, and clone
   acknowledgement.
-- Next milestone: perform an unedited physical download for each model, save
-  the image and model ID, compare the channel/D-STAR regions against this
-  provisional map, then perform and read back a one-channel edit.
+- Field evidence 2026-10-31: Nick Hale's ID-50 (Windows, NewChirp 1.0.28,
+  COM4) completed a 55-byte model handshake and the clone-in transfer. The
+  transport then stopped while applying the provisional ID-4100 map because a
+  decoded channel mode was `???`, which is not a valid CHIRP mode. The raw
+  clone image was saved before map decoding; a failed read now reports that
+  image path so it can be sent for analysis without writing it back.
+- Next milestone: obtain Nick's saved E2 clone image and model revision,
+  recover the actual ID-50 channel/mode offsets, repeat the comparison for
+  ID-52, then perform and read back a one-channel edit.
 - Website catalog: must be listed as experimental for both radios.
 
 ### Icom IC-41S

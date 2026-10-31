@@ -78,8 +78,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793463533370516382,
-      "hash": "88adb2c44d909aecf902b365aa6cebc590b25585739fee3d5713672a5d4724d2",
+      "mtime_ns": 1793464162154271830,
+      "hash": "b94c002be9d980dc4662ce37ff897e111cd7a22cc87dd4b1036b7cc40cfd3b96",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -126,6 +126,7 @@
         "chirp_bridge/verify_live_write",
         "chirp_bridge/live_channel_context",
         "chirp_bridge/radio_for",
+        "chirp_bridge/download_decode_error_message",
         "chirp_bridge/emit_read_ready",
         "chirp_bridge/radio_from_image",
         "chirp_bridge/channel_context",
@@ -156,7 +157,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "9a67aa33dc5a4343f5cc0c7390ab5bac9c486b53ab7b4c85546fa88bab58f949",
+      "edge_hash": "0fdfbc6b78749d5a36c11cd09a91abb41901bb22719c1e2790cf9744f1eea013",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -284,7 +285,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "6edb79f97b86a1e0fd63af51b24e48f8ff1fb342e10e411b49f0e23fe923b446",
+      "edge_hash": "7fdad0f71c363564e76f97c0a02bc8692791fb30cbe4dd062f91d58114d60a54",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -1046,7 +1047,15 @@
       "render_hash": "stale",
       "edge_hash": "6f1f037802efd3bc49879606dffd872041d31dd5daadbf747d135cd8cde3b854",
       "enriched": false
+    },
+    "chirp_bridge/download_decode_error_message": {
+      "concept_id": "chirp_bridge/download_decode_error_message",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-31T16:18:54Z"
+  "generated_at": "2026-10-31T16:30:05Z"
 }

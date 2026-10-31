@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T16:18:53Z"
+timestamp: "2026-10-31T16:29:22Z"
 concept_id: chirp_bridge/nearest_programmable_frequency
 language: python
 ---

@@ -495,6 +495,18 @@ class UploadHandshakeTest(unittest.TestCase):
             memory.mode = mode
             self.assertEqual(memory.mode, mode)
 
+    def test_download_decode_failure_preserves_saved_image_path(self):
+        message = bridge.download_decode_error_message(
+            "Icom_ID-50",
+            r"C:\Users\Nick\AppData\Local\Temp\newchirp-id50.img",
+            ValueError("`???` is not in valid list"),
+        )
+
+        self.assertIn("downloaded successfully", message)
+        self.assertIn(r"newchirp-id50.img", message)
+        self.assertIn("Icom_ID-50 channel map", message)
+        self.assertIn("Do not write this image back", message)
+
     def test_metadata_backed_channel_comments_round_trip(self):
         image = SOURCE / "tests/images/Yaesu_FT-60.img"
         radio = self.directory.get_radio_by_image(str(image))
