@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-10-31T09:24:24Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 1822–2203 in `chirp_bridge.py`
+Lines 1834–2233 in `chirp_bridge.py`
 
 ## Relationships
 

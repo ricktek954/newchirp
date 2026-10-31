@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-10-31T09:26:54Z"
 concept_id: widgets/radio_model_picker/RadioModelPickerState
 language: dart
 ---
@@ -27,18 +27,12 @@ class _RadioModelPickerState
 
 - `initState`
 - `didUpdateWidget`
-- `dispose`
-- `_buildCandidates`
-- `_setControllerText`
-- `_handleFocusChange`
-- `_handleSelected`
-- `_showAllModels`
-- `_matchesForQuery`
-- `_searchHelperFor`
+- `_remember`
+- `_openPicker`
 - `build`
 
 ## Source
-Lines 47–314 in `widgets/radio_model_picker.dart`
+Lines 86–184 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

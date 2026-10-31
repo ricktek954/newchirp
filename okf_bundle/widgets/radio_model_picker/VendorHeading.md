@@ -1,30 +1,30 @@
 ---
 okf_version: "0.2"
-type: Function
-title: _buildCandidates
+type: Class
+title: _VendorHeading
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
-  - "type:Function"
+  - "type:Class"
   - "module:widgets"
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
-concept_id: widgets/radio_model_picker/buildCandidates
+timestamp: "2026-10-31T09:26:54Z"
+concept_id: widgets/radio_model_picker/VendorHeading
 language: dart
 ---
 
-# _buildCandidates
+# _VendorHeading
 
 ## Signature
 
 ```dart
-List_buildCandidates_buildCandidates
+class _VendorHeading
 ```
 
 ## Source
-Lines 100–100 in `widgets/radio_model_picker.dart`
+Lines 545–549 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 105 concepts across 4 domains and 4 modules
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-30T23:59:00Z'
+timestamp: '2026-10-31T09:24:25Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
@@ -55,17 +55,17 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [memory_with_extras](/chirp_bridge/memory_with_extras.md) | Function | `chirp_bridge.py` | Load a channel plus CHIRP's metadata-backed fields such as c… |
 | [extra_field_doc](/chirp_bridge/extra_field_doc.md) | Function | `chirp_bridge.py` | Return CHIRP's documentation or a concise fallback for commo… |
 | [emit_progress](/chirp_bridge/emit_progress.md) | Function | `chirp_bridge.py` | Send structured transfer progress without touching the JSON … |
-| [verify_live_write](/chirp_bridge/verify_live_write.md) | Function | `chirp_bridge.py` | Read back live memories so a rejected write cannot report su… |
 | [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
 | [_allow_driver_specific_modes](/chirp_bridge/allow_driver_specific_modes.md) | Function | `chirp_bridge.py` | Permit declared radio modes rejected by CHIRP's shared memor… |
+| [verify_live_write](/chirp_bridge/verify_live_write.md) | Function | `chirp_bridge.py` | Read back live memories so a rejected write cannot report su… |
 | [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
 | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) | Function | `chirp_bridge.py` | Apply bank/zone names and memberships to an already loaded i… |
-| [mapping_payload](/chirp_bridge/mapping_payload.md) | Function | `chirp_bridge.py` | Describe CHIRP's bank/zone models for an image or channel ow… |
 | [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
 | [live_channel_context](/chirp_bridge/live_channel_context.md) | Function | `chirp_bridge.py` | Choose a live-radio subdevice without probing every memory s… |
-| [live_memory_matches](/chirp_bridge/live_memory_matches.md) | Function | `chirp_bridge.py` | Compare fields that every live radio must retain after a wri… |
+| [mapping_payload](/chirp_bridge/mapping_payload.md) | Function | `chirp_bridge.py` | Describe CHIRP's bank/zone models for an image or channel ow… |
 | [nearest_programmable_frequency](/chirp_bridge/nearest_programmable_frequency.md) | Function | `chirp_bridge.py` | Return the closest frequency representable by one of the ste… |
 | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) | Function | `chirp_bridge.py` | Give a live radio the file-backed interfaces NewChirp requir… |
+| [live_memory_matches](/chirp_bridge/live_memory_matches.md) | Function | `chirp_bridge.py` | Compare fields that every live radio must retain after a wri… |
 | [emit_read_ready](/chirp_bridge/emit_read_ready.md) | Function | `chirp_bridge.py` | Tell the user when a manual PTT-triggered clone read can beg… |
 | [channel_validation_message](/chirp_bridge/channel_validation_message.md) | Function | `chirp_bridge.py` | Add a frequency suggestion to CHIRP's unsupported-step error… |
 | [normalize_upload_memory](/chirp_bridge/normalize_upload_memory.md) | Function | `chirp_bridge.py` | Apply safe coercions advertised by CHIRP validation warnings… |

@@ -500,6 +500,12 @@ def load_chirp(
             "Reinstall NewChirp so its support files are restored."
         ) from exc
     from chirp import directory
+
+    # Some packaged builds install NewChirp overrides beside CHIRP's own
+    # drivers. Reregistration must therefore be enabled before the initial
+    # directory scan, or an override such as TIDRADIO_TD-H3 collides with the
+    # upstream class while it is being imported.
+    directory.enable_reregistrations()
     directory.import_drivers()
     _allow_driver_specific_modes()
     # chirp.drivers resets DeprecationWarning handling while it imports, so
@@ -514,7 +520,13 @@ def load_chirp(
     if newchirp_driver_dir and os.path.isdir(newchirp_driver_dir):
         # NewChirp drivers may intentionally replace a bundled CHIRP driver
         # while preserving its stable model identifier.
-        directory.enable_reregistrations()
+        installed_driver_dir = os.path.realpath(
+            os.path.join(source, "chirp", "drivers")
+        )
+        requested_driver_dir = os.path.realpath(newchirp_driver_dir)
+        if requested_driver_dir == installed_driver_dir:
+            # The initial directory scan already loaded the overrides.
+            return directory
         old_log_level = directory.LOG.level
         directory.LOG.setLevel(logging.ERROR)
         try:
@@ -1879,7 +1891,25 @@ def main():
             args.module,
         )
         if args.command == "list-models":
-            print(json.dumps({"models": sorted(directory.DRV_TO_RADIO.keys())}))
+            models_by_vendor = {}
+            for identifier, radio_class in directory.DRV_TO_RADIO.items():
+                models_by_vendor.setdefault(
+                    str(radio_class.VENDOR), []
+                ).append(identifier)
+            vendors = [
+                {
+                    "name": vendor,
+                    "models": sorted(identifiers),
+                }
+                for vendor, identifiers in sorted(
+                    models_by_vendor.items(),
+                    key=lambda item: item[0].casefold(),
+                )
+            ]
+            print(json.dumps({
+                "models": sorted(directory.DRV_TO_RADIO.keys()),
+                "vendors": vendors,
+            }))
             return
         if args.command == "list-interfaces":
             try:

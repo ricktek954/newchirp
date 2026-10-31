@@ -218,6 +218,19 @@ mode from M100000/2000-channel radios. `.rdb` codeplugs saved by the official
 CPS can also be imported directly. Uploads remain disabled. Protocol and
 reverse-engineering notes are recorded in `docs/CS750_PROTOCOL.md`.
 
+### Experimental Icom ID-50 and ID-52 support
+
+NewChirp includes experimental read/write drivers for the Icom ID-50 and ID-52.
+They use the `IcomCloneFormat3` serial protocol recovered from Icom CS-50 1.03
+and CS-52 1.23 and preserve the complete downloaded image. The channel, bank,
+and D-STAR map is currently based on the closely related ID-4100 family and
+still requires physical readback validation.
+
+Reading and writing are enabled for users who accept the experimental risk.
+Download and save an unedited image first, verify that every displayed field is
+correct, and keep a known-good backup before uploading. Status and evidence are
+recorded in `docs/DRIVER_STATUS.md`.
+
 ## Code knowledge graph
 
 This project keeps OKF knowledge bundles for coding agents:

@@ -52,6 +52,39 @@ bool isBenignBridgeStderrLine(String line) {
       trimmed.startsWith('Replacing existing driver id `');
 }
 
+class RadioModelGroup {
+  const RadioModelGroup({required this.name, required this.models});
+
+  final String name;
+  final List<String> models;
+}
+
+class RadioModelCatalog {
+  const RadioModelCatalog({required this.models, required this.groups});
+
+  final List<String> models;
+  final List<RadioModelGroup> groups;
+
+  factory RadioModelCatalog.fromJson(Map<String, dynamic> json) {
+    final models = (json['models'] as List? ?? const [])
+        .map((model) => '$model')
+        .toList(growable: false);
+    final groups = (json['vendors'] as List? ?? const [])
+        .whereType<Map>()
+        .map(
+          (group) => RadioModelGroup(
+            name: '${group['name'] ?? ''}',
+            models: (group['models'] as List? ?? const [])
+                .map((model) => '$model')
+                .toList(growable: false),
+          ),
+        )
+        .where((group) => group.name.isNotEmpty && group.models.isNotEmpty)
+        .toList(growable: false);
+    return RadioModelCatalog(models: models, groups: groups);
+  }
+}
+
 class RadioInstructions {
   const RadioInstructions({
     required this.info,
@@ -452,8 +485,12 @@ class RadioBridge {
   }
 
   Future<List<String>> models() async {
+    return (await modelCatalog()).models;
+  }
+
+  Future<RadioModelCatalog> modelCatalog() async {
     final data = await _run(['list-models']);
-    return (data['models'] as List).cast<String>();
+    return RadioModelCatalog.fromJson(data);
   }
 
   Future<List<String>> loadModule(String path) async {

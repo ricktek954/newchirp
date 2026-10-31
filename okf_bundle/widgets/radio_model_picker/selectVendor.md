@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _RadioModelCandidate
+title: _selectVendor
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
-concept_id: widgets/radio_model_picker/RadioModelCandidate
+timestamp: "2026-10-31T09:26:54Z"
+concept_id: widgets/radio_model_picker/selectVendor
 language: dart
 ---
 
-# _RadioModelCandidate
+# _selectVendor
 
 ## Signature
 
 ```dart
-_RadioModelCandidate(this.model)
+void_selectVendor(String? vendor)
 ```
 
 ## Source
-Lines 10–10 in `widgets/radio_model_picker.dart`
+Lines 273–273 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

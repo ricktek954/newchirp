@@ -4,6 +4,8 @@
 
 - [RadioCapabilities](RadioCapabilities.md)
 - [RadioInstructions](RadioInstructions.md)
+- [RadioModelCatalog](RadioModelCatalog.md)
+- [RadioModelGroup](RadioModelGroup.md)
 - [RadioProgress](RadioProgress.md)
 - [RadioSettings](RadioSettings.md)
 - [RadioZone](RadioZone.md)
@@ -34,6 +36,7 @@
 - [instructions](instructions.md)
 - [isBenignBridgeStderrLine](isBenignBridgeStderrLine.md)
 - [loadModule](loadModule.md)
+- [modelCatalog](modelCatalog.md)
 - [models](models.md)
 - [parseWindowsSerialPortDetails](parseWindowsSerialPortDetails.md)
 - [RadioBridge](RadioBridge.md)
