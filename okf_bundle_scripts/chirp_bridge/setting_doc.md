@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:24:24Z"
+timestamp: "2026-10-31T16:18:53Z"
 concept_id: chirp_bridge/setting_doc
 language: python
 ---
@@ -29,7 +29,7 @@ def setting_doc(element)
 | `element` | `—` | `—` |
 
 ## Source
-Lines 761–768 in `chirp_bridge.py`
+Lines 766–773 in `chirp_bridge.py`
 
 ## Relationships
 

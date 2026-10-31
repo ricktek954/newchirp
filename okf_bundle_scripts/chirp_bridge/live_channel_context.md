@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:24:24Z"
+timestamp: "2026-10-31T16:18:53Z"
 concept_id: chirp_bridge/live_channel_context
 language: python
 ---
@@ -38,7 +38,7 @@ Choose a live-radio subdevice without probing every memory slot.
 | `zone` | `—` | `None` |
 
 ## Source
-Lines 1218–1241 in `chirp_bridge.py`
+Lines 1223–1246 in `chirp_bridge.py`
 
 ## Relationships
 
