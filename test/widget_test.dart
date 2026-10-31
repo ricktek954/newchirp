@@ -195,6 +195,38 @@ Future<void> openGmrsStarter(WidgetTester tester) async {
 }
 
 void main() {
+  test('persisted model does not enable transfer before catalog loads', () {
+    expect(radioModelSelectionReady(const [], 'Icom_IC-E90'), isFalse);
+    expect(
+      radioModelSelectionReady(const ['Icom_IC-E90'], 'Icom_IC-E90'),
+      isTrue,
+    );
+    expect(
+      radioModelSelectionReady(const ['Icom_IC-E90'], 'Baofeng_UV-5R'),
+      isFalse,
+    );
+  });
+
+  test(
+    'restored model loads the catalog without overriding user selection',
+    () {
+      expect(
+        shouldLoadRadioCatalogForRestoredSelection(const [], 'Icom_IC-E90'),
+        isTrue,
+      );
+      expect(
+        shouldLoadRadioCatalogForRestoredSelection(const [
+          'Icom_IC-E90',
+        ], 'Icom_IC-E90'),
+        isFalse,
+      );
+      expect(
+        shouldLoadRadioCatalogForRestoredSelection(const [], null),
+        isFalse,
+      );
+    },
+  );
+
   test('radio prompts use the actual NewChirp ready button', () {
     expect(
       adaptRadioPromptButton(

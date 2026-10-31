@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:41:41Z"
+timestamp: "2026-10-31T15:01:55Z"
 concept_id: main/restoreClipboardMappingsAt
 language: dart
 ---
@@ -23,7 +23,7 @@ void_restoreClipboardMappingsAt(int location)
 ```
 
 ## Source
-Lines 538–538 in `main.dart`
+Lines 552–552 in `main.dart`
 
 ## Relationships
 

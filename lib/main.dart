@@ -41,6 +41,17 @@ const _menuChannel = MethodChannel('newchirp/menu');
 
 const String _newChirpVersion = '1.0.28';
 
+bool radioModelSelectionReady(List<String> models, String? model) {
+  return model != null && models.contains(model);
+}
+
+bool shouldLoadRadioCatalogForRestoredSelection(
+  List<String> models,
+  String? model,
+) {
+  return model != null && models.isEmpty;
+}
+
 String _formatBytes(int bytes) {
   if (bytes < 1024) return '$bytes B';
   final kilobytes = bytes / 1024;
@@ -442,6 +453,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ? _channels[_selected]
       : null;
 
+  bool get _radioModelSelectedForTransfer =>
+      radioModelSelectionReady(_models, _model);
+
   List<RadioChannel> get _activeChannels =>
       _channels.where((channel) => !channel.cleared).toList();
 
@@ -604,7 +618,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _loadColumnLayout();
     _fileSaveWarningLoad = _loadFileSaveWarning();
     _radioSelectionLoad = _loadRadioSelection();
-    _refreshPorts();
+    unawaited(_prepareRestoredRadio());
     if (widget.checkForUpdatesOnStartup) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) unawaited(_checkForUpdates(startup: true));
@@ -909,6 +923,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
     if (storedImage != null) {
       unawaited(_loadImageCapabilities(storedImage!));
+    }
+  }
+
+  Future<void> _prepareRestoredRadio() async {
+    final radioSelectionLoad = _radioSelectionLoad;
+    if (radioSelectionLoad != null) await radioSelectionLoad;
+    if (!mounted) return;
+    await _refreshPorts();
+    if (!mounted) return;
+    if (shouldLoadRadioCatalogForRestoredSelection(_models, _model)) {
+      await _loadModels();
     }
   }
 
@@ -2500,7 +2525,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _downloadRadio() async {
-    if (_port == null || _model == null) return;
+    if (_port == null || !_radioModelSelectedForTransfer) return;
     if (_libraryOpen && _channels.isNotEmpty) {
       final replace = await showDialog<bool>(
         context: context,
@@ -2678,7 +2703,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _uploadRadio() async {
-    if (_port == null || _model == null || _radioImage == null) return;
+    if (_port == null ||
+        !_radioModelSelectedForTransfer ||
+        _radioImage == null) {
+      return;
+    }
     final activeLocations = _activeChannels
         .map((channel) => channel.location)
         .toSet();
@@ -5362,7 +5391,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           Expanded(
                             child: FilledButton.icon(
                               onPressed:
-                                  _busy || _port == null || _model == null
+                                  _busy ||
+                                      _port == null ||
+                                      !_radioModelSelectedForTransfer
                                   ? null
                                   : _downloadRadio,
                               icon: const Icon(Icons.south),
@@ -5375,7 +5406,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           const SizedBox(width: 12),
                           Expanded(
                             child: OutlinedButton.icon(
-                              onPressed: _busy || _radioImage == null
+                              onPressed:
+                                  _busy ||
+                                      _port == null ||
+                                      !_radioModelSelectedForTransfer ||
+                                      _radioImage == null
                                   ? null
                                   : _uploadRadio,
                               icon: const Icon(Icons.north),

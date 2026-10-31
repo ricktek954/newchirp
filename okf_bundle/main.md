@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:41:41Z"
+timestamp: "2026-10-31T15:01:55Z"
 concept_id: main
 language: dart
 ---
@@ -60,6 +60,8 @@ language: dart
 | related | [_ChoiceField](/main/ChoiceField.md) |
 | related | [_EmptyLibrary](/main/EmptyLibrary.md) |
 | related | [_StepTitle](/main/StepTitle.md) |
+| related | [radioModelSelectionReady](/main/radioModelSelectionReady.md) |
+| related | [shouldLoadRadioCatalogForRestoredSelection](/main/shouldLoadRadioCatalogForRestoredSelection.md) |
 | related | [_formatBytes](/main/formatBytes.md) |
 | related | [adaptRadioPromptButton](/main/adaptRadioPromptButton.md) |
 | related | [main](/main/main.md) |
@@ -120,6 +122,7 @@ language: dart
 | related | [dispose](/main/dispose.md) |
 | related | [_refreshPorts](/main/refreshPorts.md) |
 | related | [_loadModels](/main/loadModels.md) |
+| related | [_prepareRestoredRadio](/main/prepareRestoredRadio.md) |
 | related | [_selectRadioModel](/main/selectRadioModel.md) |
 | related | [_task](/main/task.md) |
 | related | [_friendlyActionError](/main/friendlyActionError.md) |

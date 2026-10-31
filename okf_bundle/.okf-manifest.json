@@ -527,8 +527,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793457701203044490,
-      "hash": "a01e9c7190e1a9b1d45178d1d7f053328319df7100ec3bc64e4579b5cef637a1",
+      "mtime_ns": 1793458915539458892,
+      "hash": "024e16d08b55dce1391fd85be11006168522f032b1f90104f588c3f49671d35d",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -571,6 +571,8 @@
         "main/ChoiceField",
         "main/EmptyLibrary",
         "main/StepTitle",
+        "main/radioModelSelectionReady",
+        "main/shouldLoadRadioCatalogForRestoredSelection",
         "main/formatBytes",
         "main/adaptRadioPromptButton",
         "main/main",
@@ -626,6 +628,7 @@
         "main/dispose",
         "main/refreshPorts",
         "main/loadModels",
+        "main/prepareRestoredRadio",
         "main/selectRadioModel",
         "main/task",
         "main/friendlyActionError",
@@ -1374,7 +1377,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "8fc500630069e890805db332b3a6eb4ef1e16de874638384e960f078ead709d5",
+      "edge_hash": "0ef1ce358054a461f28cdb59ce95f3699b4b3e432084c170953b98d18b8ca4e0",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -5272,7 +5275,39 @@
       "render_hash": "stale",
       "edge_hash": "65fa1c0d9985a476f5e611903a1939d4bd0fe0606483c3c6f570495f15f2ad72",
       "enriched": false
+    },
+    "main/radioModelSelectionReady": {
+      "concept_id": "main/radioModelSelectionReady",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/shouldLoadRadioCatalogForRestoredSelection": {
+      "concept_id": "main/shouldLoadRadioCatalogForRestoredSelection",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/loadModelsForRestoredSelection": {
+      "concept_id": "main/loadModelsForRestoredSelection",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/prepareRestoredRadio": {
+      "concept_id": "main/prepareRestoredRadio",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-31T14:41:42Z"
+  "generated_at": "2026-10-31T15:01:56Z"
 }
