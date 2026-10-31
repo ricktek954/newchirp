@@ -11,7 +11,7 @@ release requirements.
 - The Windows `1.0.29` installer is live. It restores and validates the saved
   radio and port on startup, and keeps the IC-E90/IC-T90A clone override,
   update-button link, and VC++ redistributable fixes from `1.0.27`/`1.0.28`.
-- The Linux `1.0.27` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.28` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
@@ -58,8 +58,8 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.28 |
 | Windows | 1.0.29 |
-| Linux | 1.0.27 |
-| Legacy shared manifest version | 1.0.27 |
+| Linux | 1.0.28 |
+| Legacy shared manifest version | 1.0.28 |
 
 macOS artifact:
 
@@ -85,27 +85,38 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.pkg.tar.zst`
 
-Linux 1.0.27 SHA-256:
+Linux 1.0.28 SHA-256:
 
 - DEB:
-  `fbbc1d38baf207738cdc6ead37f6fd379aadb24ebd373f42b1899b3fa22b025c`
+  `2a5427bd84483d375671ebfcc330e8287bc9642c97a9a5800d9415f88275bc59`
 - RPM:
-  `f0dc14360aa548cdb3bfe749a0f4d7b764f15a266410586b48d478ff00acdd94`
+  `9daf34f5cd76af67b7be8ee424a148e392fe70b35d4025d6afc05a5ae4efefb8`
 - AppImage:
-  `2505084dd6c8142d75b440b6a18f81e7a1a4613933277cea96fa653e203a04cd`
+  `e99ae1c9e26999b7df5fd0691fed17a3cf341149811c5757253bb65ed65b7dbe`
 - Pacman:
-  `f059d6d5eae5314caa679003b16ccbb5d118ff011b509be36818479ad5ec903a`
+  `bbbcb7e026c829adc5a8825e64e814a0f703be40ba61095d7073130b72bba529`
+
+Linux 1.0.28 sizes:
+
+- DEB: `48,272,396` bytes
+- RPM: `38,770,704` bytes
+- AppImage: `144,254,144` bytes
+- Pacman: `46,776,496` bytes
 
 ## Recently completed
 
+- Published Linux `1.0.28` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
+  package metadata, server checksums, public HTTP 200 checks, and live
+  platform manifest.
 - Published macOS `1.0.28` as a universal signed, notarized, stapled DMG.
   Verified the embedded version, saved-radio restoration flow, Python
   runtimes, CHIRP pin, IC-E90 and IC-41S driver bundles, strict code
