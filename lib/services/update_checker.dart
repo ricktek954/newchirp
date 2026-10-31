@@ -283,7 +283,8 @@ String trustedDownloadUrl(String? raw) {
 String? updateArtifactExtension([String? platform]) {
   return switch (platform ?? currentUpdatePlatform()) {
     'macos' => '.dmg',
-    'windows' => '.exe',
+    // Windows installers are not code-signed yet, so updates remain manual.
+    'windows' => null,
     'linux' => '.deb',
     _ => null,
   };

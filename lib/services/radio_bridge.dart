@@ -12,6 +12,10 @@ import 'module_sandbox.dart';
 
 const _progressPrefix = '__NEWCHIRP_PROGRESS__ ';
 
+/// CHIRP and native dependencies can emit legacy-encoded diagnostic bytes.
+/// Keep those bytes from aborting an otherwise valid radio operation.
+const bridgeProcessDecoder = Utf8Decoder(allowMalformed: true);
+
 const _windowsSerialPortDeviceScript = r'''
 $ports = @(
   Get-CimInstance Win32_PnPEntity |
@@ -801,14 +805,17 @@ class RadioBridge {
           launch.executable,
           launch.arguments,
           workingDirectory: launch.workingDirectory,
-          environment: launch.environment,
+          environment: {...launch.environment, 'PYTHONIOENCODING': 'utf-8'},
           includeParentEnvironment: false,
         );
       } else {
         process = await Process.start(
           python,
           arguments,
-          environment: {'NEWCHIRP_SCSI_HELPER': ?scsiHelper},
+          environment: {
+            'NEWCHIRP_SCSI_HELPER': ?scsiHelper,
+            'PYTHONIOENCODING': 'utf-8',
+          },
           includeParentEnvironment: true,
         );
       }
@@ -824,10 +831,10 @@ class RadioBridge {
     }
     _activeProcess = process;
     if (_cancelRequested) process.kill(ProcessSignal.sigterm);
-    final stdoutFuture = process.stdout.transform(utf8.decoder).join();
+    final stdoutFuture = process.stdout.transform(bridgeProcessDecoder).join();
     final stderrLines = <String>[];
     final stderrFuture = process.stderr
-        .transform(utf8.decoder)
+        .transform(bridgeProcessDecoder)
         .transform(const LineSplitter())
         .forEach((line) {
           if (!line.startsWith(_progressPrefix)) {

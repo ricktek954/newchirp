@@ -524,7 +524,7 @@ void main() {
     expect(find.text('Download and install'), findsNothing);
   });
 
-  testWidgets('startup update downloads, installs, and requests restart', (
+  testWidgets('startup update respects automatic update support', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1440, 900);
@@ -533,7 +533,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     final installer = _FakeUpdateInstaller();
     var exited = false;
-    final extension = updateArtifactExtension()!;
+    final extension = updateArtifactExtension();
 
     await tester.pumpWidget(
       testApp(
@@ -543,7 +543,7 @@ void main() {
             latestVersion: '9.9.9',
             releaseUrl: 'https://newchirp.net/#download',
             downloadUrl:
-                'https://newchirp.net/downloads/NewChirp-9.9.9$extension',
+                'https://newchirp.net/downloads/NewChirp-9.9.9${extension ?? '.exe'}',
           ),
         ),
         updateInstaller: installer,
@@ -552,6 +552,16 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
+
+    if (extension == null) {
+      expect(find.text('Update available'), findsOneWidget);
+      expect(find.text('Open download page'), findsOneWidget);
+      expect(find.text('Download and install'), findsNothing);
+      expect(installer.downloadCount, 0);
+      expect(installer.installCount, 0);
+      expect(exited, isFalse);
+      return;
+    }
 
     expect(find.text('NewChirp 9.9.9 is ready'), findsOneWidget);
     expect(find.text('Download and install'), findsOneWidget);
