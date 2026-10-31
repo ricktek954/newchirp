@@ -13,6 +13,14 @@ release requirements.
   pyserial text, preserves the radio image when channel-map decoding fails,
   reports an RT-950 model mismatch without retrying, and suppresses benign
   CHIRP driver replacement warnings. It keeps the `1.0.27`-`1.0.29` fixes.
+- The 2026-10-31 current-release retest sweep replied to all 31 unresolved
+  bug reports that predated the live Windows `1.0.30` or Linux/macOS `1.0.29`
+  releases. Each original was marked read and each `Sent` copy was verified
+  with `\Seen`. The unread report queue is now five current-build reports:
+  one DM-32UV firmware `.046` image-decoding failure needing the saved image,
+  three UV-5R Mini no-response reports needing cable and OEM-CPS details, and
+  one FT-70D connection report needing confirmation of the programming cable
+  and port.
 - The Linux `1.0.29` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
