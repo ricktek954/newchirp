@@ -14,6 +14,7 @@ import 'package:window_manager/window_manager.dart';
 import 'models/channel_image_baseline.dart';
 import 'models/gm32_channel.dart';
 import 'models/radio_channel.dart';
+import 'models/radio_mapping.dart';
 import 'models/repeater_regions.dart';
 import 'models/repeater_search.dart';
 import 'services/chirp_csv.dart';
@@ -22,6 +23,7 @@ import 'services/diagnostic_log.dart';
 import 'services/file_save_warning_store.dart';
 import 'services/local_file_opener.dart';
 import 'services/radio_image_store.dart';
+import 'services/repeater_search_preferences_store.dart';
 import 'services/radio_selection_store.dart';
 import 'services/module_sandbox.dart';
 import 'services/mototrbo_cps2_xml.dart';
@@ -33,6 +35,7 @@ import 'widgets/channel_library_image_bar.dart';
 import 'widgets/file_save_warning_dialog.dart';
 import 'widgets/error_report_dialog.dart';
 import 'widgets/radio_model_picker.dart';
+import 'widgets/radio_mapping_dialog.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
@@ -265,6 +268,7 @@ class NewChirpApp extends StatelessWidget {
     this.columnLayoutStore,
     this.radioSelectionStore,
     this.fileSaveWarningStore,
+    this.repeaterSearchPreferencesStore,
     this.updateChecker,
     this.updateInstaller,
     this.exitForUpdate,
@@ -275,6 +279,7 @@ class NewChirpApp extends StatelessWidget {
   final ColumnLayoutStore? columnLayoutStore;
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
+  final RepeaterSearchPreferencesStore? repeaterSearchPreferencesStore;
   final UpdateChecker? updateChecker;
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
@@ -325,6 +330,7 @@ class NewChirpApp extends StatelessWidget {
         columnLayoutStore: columnLayoutStore,
         radioSelectionStore: radioSelectionStore,
         fileSaveWarningStore: fileSaveWarningStore,
+        repeaterSearchPreferencesStore: repeaterSearchPreferencesStore,
         updateChecker: updateChecker,
         updateInstaller: updateInstaller,
         exitForUpdate: exitForUpdate,
@@ -341,6 +347,7 @@ class NewChirpHome extends StatefulWidget {
     this.columnLayoutStore,
     this.radioSelectionStore,
     this.fileSaveWarningStore,
+    this.repeaterSearchPreferencesStore,
     this.updateChecker,
     this.updateInstaller,
     this.exitForUpdate,
@@ -351,6 +358,7 @@ class NewChirpHome extends StatefulWidget {
   final ColumnLayoutStore? columnLayoutStore;
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
+  final RepeaterSearchPreferencesStore? repeaterSearchPreferencesStore;
   final UpdateChecker? updateChecker;
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
@@ -369,6 +377,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       widget.radioSelectionStore ?? RadioSelectionStore();
   late final _fileSaveWarningStore =
       widget.fileSaveWarningStore ?? FileSaveWarningStore();
+  late final _repeaterSearchPreferencesStore =
+      widget.repeaterSearchPreferencesStore ?? RepeaterSearchPreferencesStore();
   late final _updateChecker = widget.updateChecker ?? UpdateChecker();
   late final _updateInstaller =
       widget.updateInstaller ?? const UpdateInstaller();
@@ -397,6 +407,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   String? _chirpModuleName;
   RadioCapabilities? _capabilities;
   List<RadioZone> _radioZones = [];
+  List<RadioMappingModel> _radioMappings = [];
   int? _selectedZone;
   bool _transferActive = false;
   bool _transferCancelling = false;
@@ -419,6 +430,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   bool _hideFileSaveWarning = false;
   bool _savingLibrary = false;
   List<RadioChannel> _channelClipboard = [];
+  List<({int modelIndex, String mappingIndex})> _channelClipboardMappings = [];
   final Set<int> _clearedLocations = {};
   ChannelImageBaseline? _channelImageBaseline;
   final ChannelLibraryStatsCache _channelStats = ChannelLibraryStatsCache();
@@ -489,6 +501,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     zone: _selectedZone,
     channels: _channels,
     cleared: _clearedLocations,
+    mappingSignature: radioMappingsSignature(_radioMappings),
     baseline: _channelImageBaseline,
     memoryStart: _capabilities?.memoryStart,
     memoryEnd: _capabilities?.memoryEnd,
@@ -505,6 +518,49 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _channelStats.markDirty();
   }
 
+  void _remapRadioMappingChannels(Map<int, int?> changes) {
+    if (_radioMappings.isEmpty || changes.isEmpty) return;
+    _radioMappings = remapRadioMappingLocations(_radioMappings, changes);
+  }
+
+  List<({int modelIndex, String mappingIndex})> _mappingMembershipsAt(
+    int location,
+  ) {
+    return [
+      for (var modelIndex = 0; modelIndex < _radioMappings.length; modelIndex++)
+        for (final mapping in _radioMappings[modelIndex].mappings)
+          if (mapping.channelLocations.contains(location))
+            (modelIndex: modelIndex, mappingIndex: mapping.index),
+    ];
+  }
+
+  void _restoreClipboardMappingsAt(int location) {
+    if (_channelClipboardMappings.isEmpty) return;
+    final memberships = _channelClipboardMappings.toSet();
+    _radioMappings = [
+      for (var modelIndex = 0; modelIndex < _radioMappings.length; modelIndex++)
+        _radioMappings[modelIndex].copyWith(
+          mappings: [
+            for (final mapping in _radioMappings[modelIndex].mappings)
+              mapping.copyWith(
+                channelLocations: () {
+                  final locations = mapping.channelLocations
+                      .where((value) => value != location)
+                      .toList();
+                  if (memberships.contains((
+                    modelIndex: modelIndex,
+                    mappingIndex: mapping.index,
+                  ))) {
+                    locations.add(location);
+                  }
+                  return locations;
+                }(),
+              ),
+          ],
+        ),
+    ];
+  }
+
   void _rememberChannelImageBaseline({required bool fromRadio}) {
     _markChannelLibraryDirty();
     final image = _radioImage;
@@ -516,6 +572,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       imagePath: image,
       zone: _selectedZone,
       signature: channelListSignature(_channels, _clearedLocations),
+      mappingSignature: radioMappingsSignature(_radioMappings),
       loadedFromRadio: fromRadio,
     );
   }
@@ -589,6 +646,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     dirty: _dirty,
     capabilities: _capabilities,
     zones: List.of(_radioZones),
+    mappings: List.of(_radioMappings),
     selectedZone: _selectedZone,
     clearedLocations: Set.of(_clearedLocations),
   );
@@ -603,6 +661,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _dirty = state.dirty;
       _capabilities = state.capabilities;
       _radioZones = List.of(state.zones);
+      _radioMappings = List.of(state.mappings);
       _selectedZone = state.selectedZone;
       _clearedLocations
         ..clear()
@@ -652,6 +711,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _port = selection.port;
       _capabilities = null;
       _radioZones = [];
+      _radioMappings = [];
       _selectedZone = null;
       final model = selection.model;
       if (model != null && _imageStore.hasForModel(model)) {
@@ -672,6 +732,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       setState(() {
         _capabilities = info.capabilities;
         _radioZones = info.zones;
+        _radioMappings = info.mappings;
         _selectedZone = info.zone;
         _markChannelLibraryDirty();
       });
@@ -700,6 +761,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       String imagePath,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
+      List<RadioMappingModel> mappings,
       int? zone,
     })
     imported;
@@ -718,6 +780,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _clearedLocations.clear();
       _capabilities = imported.capabilities;
       _radioZones = imported.zones;
+      _radioMappings = imported.mappings;
       _selectedZone = imported.zone;
       _libraryName = '${model.replaceAll('_', ' ')} — ${zone.name}';
       _libraryPath = null;
@@ -729,6 +792,41 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) _channelTableKey.currentState?.revealSelectedChannel();
     });
+  }
+
+  Future<void> _editRadioMappings() async {
+    if (_busy || _radioMappings.isEmpty) return;
+    final edited = await showDialog<List<RadioMappingModel>>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => RadioMappingDialog(
+        models: _radioMappings,
+        channels: _activeChannels,
+        radioName: _model?.replaceAll('_', ' ') ?? 'this radio',
+      ),
+    );
+    if (!mounted || edited == null) return;
+    if (radioMappingsSignature(edited) ==
+        radioMappingsSignature(_radioMappings)) {
+      return;
+    }
+    _recordHistory();
+    setState(() {
+      _radioMappings = edited;
+      _dirty = true;
+      _markChannelLibraryDirty();
+    });
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Bank and zone changes are ready. Write them with the channels.',
+          ),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 3),
+        ),
+      );
   }
 
   Future<void> _saveRadioSelection() async {
@@ -791,9 +889,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       final models = await _bridge.models();
       setState(() {
         _models = models;
-        _model ??= models.firstOrNull;
+        if (_model != null && !models.contains(_model)) _model = null;
         _capabilities = null;
         _radioZones = [];
+        _radioMappings = [];
         _selectedZone = null;
         final model = _model;
         if (model != null && _imageStore.hasForModel(model)) {
@@ -819,6 +918,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _model = model;
       _capabilities = null;
       _radioZones = [];
+      _radioMappings = [];
       _selectedZone = null;
       _radioImage = _imageStore.hasForModel(model)
           ? _imageStore.pathForModel(model)
@@ -1154,6 +1254,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _model = null;
         _capabilities = null;
         _radioZones = [];
+        _radioMappings = [];
         _selectedZone = null;
         _radioImage = null;
         _radioSettings = null;
@@ -1179,6 +1280,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _model = null;
         _capabilities = null;
         _radioZones = [];
+        _radioMappings = [];
         _selectedZone = null;
         _radioImage = null;
         _radioSettings = null;
@@ -1200,6 +1302,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       String imagePath,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
+      List<RadioMappingModel> mappings,
       int? zone,
     })
     imported;
@@ -1238,6 +1341,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _radioImage = storedImage;
         _capabilities = imported.capabilities;
         _radioZones = imported.zones;
+        _radioMappings = imported.mappings;
         _selectedZone = imported.zone;
         if (!_models.contains(imported.model)) {
           _models = [..._models, imported.model]..sort();
@@ -1286,6 +1390,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _dirty = false;
         _capabilities = null;
         _radioZones = [];
+        _radioMappings = [];
         _selectedZone = null;
         _clearedLocations.clear();
         _markChannelLibraryDirty();
@@ -1328,6 +1433,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     validTuningSteps: _capabilities?.steps ?? const [],
     validBands: _capabilities?.validBands ?? const [],
     validModes: _capabilities?.modes ?? const [],
+    validToneModes: _capabilities?.toneModes ?? const [],
+    validCrossModes: _capabilities?.crossModes ?? const [],
     hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
 
@@ -1352,6 +1459,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         .where((location) => !representedSlots.contains(location))
         .toSet();
     final moved = _channels[fromIndex];
+    final oldLocations = {
+      for (final channel in _channels) channel: channel.location,
+    };
 
     _recordHistory();
     setState(() {
@@ -1368,6 +1478,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               .where((channel) => channel.cleared)
               .map((channel) => channel.location),
         );
+      _remapRadioMappingChannels({
+        for (final channel in _channels)
+          oldLocations[channel]!: channel.location,
+      });
       _selected = toIndex;
       _dirty = true;
       _markChannelLibraryDirty();
@@ -1399,6 +1513,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
     _recordHistory();
     setState(() {
+      final locationChanges = <int, int?>{
+        previousLocation: targetLocation,
+        targetLocation: null,
+      };
       _channels.removeWhere(
         (channel) =>
             channel.location == targetLocation &&
@@ -1406,6 +1524,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             !identical(channel, moved),
       );
       moved.location = targetLocation;
+      _remapRadioMappingChannels(locationChanges);
       _clearedLocations
         ..remove(targetLocation)
         ..add(previousLocation);
@@ -1454,9 +1573,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final selectedChannel = _current;
     _recordHistory();
     setState(() {
+      final locationChanges = <int, int?>{
+        location: null,
+        for (final channel in _channels)
+          if (channel.location >= location)
+            channel.location: channel.location + 1,
+      };
       for (final channel in _channels) {
         if (channel.location >= location) channel.location += 1;
       }
+      _remapRadioMappingChannels(locationChanges);
       final shiftedClears =
           _clearedLocations
               .map((cleared) => cleared >= location ? cleared + 1 : cleared)
@@ -1503,10 +1629,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final selectedChannel = _current;
     _recordHistory();
     setState(() {
+      final locationChanges = <int, int?>{
+        for (final channel in _channels)
+          if (channel.location >= location)
+            channel.location: channel.location - 1,
+        location: null,
+      };
       _channels.removeWhere((channel) => channel.location == location);
       for (final channel in _channels) {
         if (channel.location > location) channel.location -= 1;
       }
+      _remapRadioMappingChannels(locationChanges);
       final shiftedClears = <int>{};
       for (final cleared in _clearedLocations) {
         if (cleared < location) shiftedClears.add(cleared);
@@ -1536,7 +1669,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   Future<void> _findRepeaters() async {
     final channels = await showDialog<List<RadioChannel>>(
       context: context,
-      builder: (context) => RepeaterBookDialog(bridge: _bridge),
+      builder: (context) => RepeaterBookDialog(
+        bridge: _bridge,
+        preferencesStore: _repeaterSearchPreferencesStore,
+      ),
     );
     if (channels == null || channels.isEmpty || !mounted) return;
     final mode = _libraryOpen && _channels.isNotEmpty
@@ -1674,6 +1810,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _dirty = false;
       _capabilities = null;
       _radioZones = [];
+      _radioMappings = [];
       _selectedZone = null;
       _markChannelLibraryDirty();
     });
@@ -2050,7 +2187,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final channel = _newChannelAt(location);
     _recordHistory();
     setState(() {
+      final locationChanges = <int, int?>{location: null};
       if (occupied) {
+        locationChanges.addAll({
+          for (final existing in _channels)
+            if (existing.location >= location)
+              existing.location: existing.location + 1,
+        });
         for (final existing in _channels) {
           if (existing.location >= location) existing.location += 1;
         }
@@ -2066,6 +2209,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         );
       }
       _clearedLocations.remove(location);
+      _remapRadioMappingChannels(locationChanges);
       _channels.add(channel);
       _sortChannelsByLocation();
       _searchController.clear();
@@ -2153,6 +2297,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (_channels[index].cleared) return;
     setState(() {
       _channelClipboard = [_channels[index].copy()];
+      _channelClipboardMappings = [];
     });
   }
 
@@ -2164,6 +2309,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _recordHistory();
       setState(() {
         _channelClipboard = [channel.copy()];
+        _channelClipboardMappings = [];
         _keepMidlandRepeater(channel);
         _selected = index;
         _dirty = true;
@@ -2175,7 +2321,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _recordHistory();
     setState(() {
       _channelClipboard = [channel.copy()];
+      _channelClipboardMappings = _mappingMembershipsAt(channel.location);
       channel.clear();
+      _remapRadioMappingChannels({channel.location: null});
       _clearedLocations.add(channel.location);
       _selected = index;
       _dirty = true;
@@ -2207,6 +2355,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _selected = _channels.indexOf(pasted);
       _dirty = true;
       _clearedLocations.remove(location);
+      _restoreClipboardMappingsAt(location);
       _markChannelLibraryDirty();
     });
   }
@@ -2258,6 +2407,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _recordHistory();
     setState(() {
       _channels.removeAt(index);
+      _remapRadioMappingChannels({location: null});
       if (wasCleared) {
         _clearedLocations.remove(location);
       } else {
@@ -2288,6 +2438,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final location = channel.location;
     setState(() {
       channel.clear();
+      _remapRadioMappingChannels({location: null});
       _clearedLocations.add(location);
       if (_showEmptySlots) {
         _selected = index;
@@ -2394,6 +2545,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           _radioImage = storedImage;
           _capabilities = result.capabilities;
           _radioZones = result.zones;
+          _radioMappings = result.mappings;
           _selectedZone = result.zone;
           _libraryName = _model!.replaceAll('_', ' ');
           _libraryOpen = true;
@@ -2503,6 +2655,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _clearedLocations.clear();
         _capabilities = imported.capabilities;
         _radioZones = imported.zones;
+        _radioMappings = imported.mappings;
         _selectedZone = imported.zone;
         _libraryOpen = true;
         _dirty = false;
@@ -2513,6 +2666,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _uploadRadio() async {
     if (_port == null || _model == null || _radioImage == null) return;
+    final activeLocations = _activeChannels
+        .map((channel) => channel.location)
+        .toSet();
+    final mappingSignature = radioMappingsSignature(_radioMappings);
+    final mappingsChanged =
+        _radioMappings.isNotEmpty &&
+        mappingSignature != (_channelImageBaseline?.mappingSignature ?? '');
     _diagnosticLog.record(
       'radio',
       'Radio write started',
@@ -2520,6 +2680,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         'model': _model!,
         'port': _port!,
         'channels': _activeChannels.length,
+        'mappingsChanged': mappingsChanged,
       },
     );
     final invalidChannels = _activeChannels
@@ -2578,10 +2739,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           color: Color(0xFFC46A15),
           size: 32,
         ),
-        title: const Text('Write these channels to the radio?'),
+        title: Text(
+          mappingsChanged
+              ? 'Write these radio changes?'
+              : 'Write these channels to the radio?',
+        ),
         content: Text(
           'This will program $compatibleCount channels on $_model '
           'through $_port. Keep the radio connected and powered on.'
+          '${mappingsChanged ? '\n\nBank and zone changes will be written too.' : ''}'
           '${invalidChannels.isNotEmpty ? '\n\n${invalidChannels.length} incompatible channels will be left unchanged and listed after the write.' : ''}'
           '${uppercasesNames ? '\n\nLowercase channel names will be converted to uppercase because this radio only supports uppercase names.' : ''}',
         ),
@@ -2603,15 +2769,21 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (!await _confirmRadioInstructions(instructions, writing: true)) return;
     var changes = <Map<String, dynamic>>[];
     await _transferTask('Writing radio — do not disconnect…', () async {
-      changes = await _bridge.upload(
+      final result = await _bridge.upload(
         model: _model!,
         port: _port!,
         imagePath: _radioImage!,
         channels: _activeChannels,
         cleared: _clearedLocations.toList(),
+        mappings: mappingsChanged
+            ? _radioMappings
+                  .map((model) => model.retainingChannels(activeLocations))
+                  .toList()
+            : null,
         zone: _selectedZone,
         onProgress: _reportTransferProgress,
       );
+      changes = result.adjustments;
       final nameChanges = changes.where((entry) {
         final from = entry['nameFrom'];
         final to = entry['nameTo'];
@@ -2628,6 +2800,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           );
           if (index >= 0) _channels[index].name = name;
         }
+        _radioMappings = result.mappings;
         _dirty = false;
         _rememberChannelImageBaseline(fromRadio: false);
       });
@@ -3422,6 +3595,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             final saved = draft.copy()..cleared = false;
             _recordHistory();
             setState(() {
+              if (saved.location != location) {
+                _remapRadioMappingChannels({
+                  location: existing != null && !existing.cleared
+                      ? saved.location
+                      : null,
+                });
+              }
               final currentIndex = _channels.indexWhere(
                 (channel) => channel.location == location,
               );
@@ -3619,6 +3799,45 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               ),
             ),
           ],
+          if (_radioMappings.any((model) => model.mappings.isNotEmpty)) ...[
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                const Icon(
+                  Icons.account_tree_outlined,
+                  color: Color(0xFF1F7455),
+                ),
+                const SizedBox(width: 10),
+                OutlinedButton.icon(
+                  key: const ValueKey('edit-radio-mappings'),
+                  onPressed: _busy ? null : _editRadioMappings,
+                  icon: const Icon(Icons.edit_outlined),
+                  label: const Text('Edit banks / zones'),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    _radioMappings
+                        .map(
+                          (model) => '${model.name}: ${model.mappings.length}',
+                        )
+                        .join('  •  '),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const _HelpButton(
+                  title: 'Banks and zones',
+                  details:
+                      'Use this editor to rename zones or banks and choose '
+                      'which channel memories belong to each one. Some radios '
+                      'allow a channel in multiple zones. An empty “New zone” '
+                      'entry is created by adding a channel to it. Changes are '
+                      'written with the channels; review them before writing '
+                      'because membership follows the channel memory number.',
+                ),
+              ],
+            ),
+          ],
           if (_radioZones.isNotEmpty) ...[
             const SizedBox(height: 12),
             Row(
@@ -3634,7 +3853,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     key: ValueKey('radio-zone-$_selectedZone-$_radioImage'),
                     initialValue: _selectedZone,
                     decoration: const InputDecoration(
-                      labelText: 'Zone',
+                      labelText: 'Radio section',
                       isDense: true,
                     ),
                     items: _radioZones
@@ -3659,11 +3878,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ),
                 const SizedBox(width: 8),
                 const _HelpButton(
-                  title: 'Radio zones',
+                  title: 'Radio sections',
                   details:
-                      'This radio stores channels in separate zones. Choose a '
-                      'zone to view and edit its channels. Writing preserves '
-                      'the other zones in the saved radio image.',
+                      'This radio exposes separate channel sections or '
+                      'subdevices. Choose a section to view and edit its '
+                      'channels. Writing preserves the other sections in the '
+                      'saved radio image. Banks and zones are edited separately.',
                 ),
               ],
             ),
@@ -4957,6 +5177,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         children: [
                           Expanded(
                             child: DropdownButtonFormField<String>(
+                              key: ValueKey(
+                                'radio-interface-${_port ?? 'none'}-'
+                                '${_ports.map((port) => port.port).join('|')}',
+                              ),
                               initialValue:
                                   _ports.any((port) => port.port == _port)
                                   ? _port
@@ -5017,8 +5241,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         title: 'Choose the exact radio model',
                         help:
                             'Load the supported radio catalog and select the exact model. Using the '
-                            'wrong model can corrupt a radio. If a stored image already exists for '
-                            'this model, writing is unlocked without reading again.',
+                            'wrong model can corrupt a radio. Programming cables do not identify '
+                            'the attached radio, so NewChirp does not guess the model. If a stored '
+                            'image already exists for this model, writing is unlocked without '
+                            'reading again.',
                       ),
                       const SizedBox(height: 12),
                       if (_models.isEmpty)
@@ -6077,6 +6303,7 @@ class _LibraryState {
     required this.dirty,
     required this.capabilities,
     required this.zones,
+    required this.mappings,
     required this.selectedZone,
     required this.clearedLocations,
   });
@@ -6089,6 +6316,7 @@ class _LibraryState {
   final bool dirty;
   final RadioCapabilities? capabilities;
   final List<RadioZone> zones;
+  final List<RadioMappingModel> mappings;
   final int? selectedZone;
   final Set<int> clearedLocations;
 }
@@ -6422,9 +6650,14 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
 enum _AddChannelPlacement { end, beforeSelected, afterSelected }
 
 class RepeaterBookDialog extends StatefulWidget {
-  const RepeaterBookDialog({super.key, required this.bridge});
+  const RepeaterBookDialog({
+    super.key,
+    required this.bridge,
+    required this.preferencesStore,
+  });
 
   final RadioBridge bridge;
+  final RepeaterSearchPreferencesStore preferencesStore;
 
   @override
   State<RepeaterBookDialog> createState() => _RepeaterBookDialogState();
@@ -6440,8 +6673,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   String _country = 'United States';
   String _state = 'New York';
   String _service = 'all';
-  bool _fmOnly = true;
-  bool _openOnly = true;
+  bool _fmOnly = false;
+  bool _openOnly = false;
+  bool _preferencesTouched = false;
+  late final Future<void> _preferencesLoad;
   bool _mapView = false;
   bool _loading = false;
   String _status = '';
@@ -6456,6 +6691,21 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   List<String> get _regions => repeaterRegionsForCountry(_country);
 
   bool get _supportsGmrs => repeaterCountrySupportsGmrs(_country);
+
+  @override
+  void initState() {
+    super.initState();
+    _preferencesLoad = _loadPreferences();
+  }
+
+  Future<void> _loadPreferences() async {
+    final preferences = await widget.preferencesStore.load();
+    if (!mounted || _preferencesTouched) return;
+    setState(() {
+      _fmOnly = preferences.fmOnly;
+      _openOnly = preferences.openOnly;
+    });
+  }
 
   void _selectCountry(String country) {
     final regions = repeaterRegionsForCountry(country);
@@ -6484,6 +6734,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   }
 
   Future<void> _search() async {
+    await _preferencesLoad;
+    if (!mounted) return;
     final latitude = double.tryParse(_latitudeController.text.trim());
     final longitude = double.tryParse(_longitudeController.text.trim());
     final distance = double.tryParse(_distanceController.text.trim());
@@ -6510,6 +6762,14 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() => _error = 'Radius must be greater than zero.');
       return;
     }
+    try {
+      await widget.preferencesStore.save(
+        RepeaterSearchPreferences(openOnly: _openOnly, fmOnly: _fmOnly),
+      );
+    } on FileSystemException {
+      // Search preferences should never prevent a RepeaterBook query.
+    }
+    if (!mounted) return;
     setState(() {
       _loading = true;
       _error = null;
@@ -6537,10 +6797,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() {
         _results = results;
         if (results.results.isEmpty) {
-          _error = _country == 'United States' && _service == 'gmrs'
-              ? 'No matching GMRS repeaters were found. RepeaterBook may '
-                    'not have a GMRS listing for this area yet.'
-              : 'No matching repeaters were found.';
+          _error = _emptyResultsMessage(results.totalMatches);
         }
       });
     } catch (error) {
@@ -6550,8 +6807,43 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
   }
 
+  String _emptyResultsMessage(int totalMatches) {
+    if (totalMatches > 0) {
+      return 'RepeaterBook returned $totalMatches matching '
+          '${totalMatches == 1 ? 'repeater' : 'repeaters'}, but none could '
+          'be imported.';
+    }
+    final location = _state == 'All' ? _country : '$_state, $_country';
+    final radius = double.tryParse(_distanceController.text.trim());
+    final range = radius == null || radius <= 0
+        ? ' in $location'
+        : ' within ${radius.toStringAsFixed(radius == radius.roundToDouble() ? 0 : 1)} km '
+              'of your coordinates in $location';
+    if (_country == 'United States' && _service == 'gmrs') {
+      return 'No matching GMRS repeaters were found$range. RepeaterBook may '
+          'not have a GMRS listing for this area yet. Check that Country and '
+          'Region match your coordinates.';
+    }
+    final activeFilters = [if (_openOnly) 'open use', if (_fmOnly) 'FM analog'];
+    final filterHint = activeFilters.isEmpty
+        ? ''
+        : ' Active filters require ${activeFilters.join(' and ')}; try '
+              'turning them off.';
+    return 'No matching repeaters were found$range. Coordinates do not '
+        'change Country or Region; check that both match your location, '
+        'clear the location filter, or increase the radius.$filterHint';
+  }
+
   List<RadioChannel> get _selectedChannels {
-    return [for (final result in _selected) result.channel.copy()];
+    final results = _selected.toList()
+      ..sort(
+        (left, right) =>
+            left.channel.location.compareTo(right.channel.location),
+      );
+    return [
+      for (var index = 0; index < results.length; index++)
+        results[index].channel.copy()..location = index + 1,
+    ];
   }
 
   List<String> get _availableCounties {
@@ -7098,9 +7390,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 value: _openOnly,
                                 onChanged: _loading
                                     ? null
-                                    : (value) => setState(
-                                        () => _openOnly = value ?? false,
-                                      ),
+                                    : (value) => setState(() {
+                                        _preferencesTouched = true;
+                                        _openOnly = value ?? false;
+                                      }),
                               ),
                               CheckboxListTile(
                                 contentPadding: EdgeInsets.zero,
@@ -7111,9 +7404,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 value: _fmOnly,
                                 onChanged: _loading
                                     ? null
-                                    : (value) => setState(
-                                        () => _fmOnly = value ?? false,
-                                      ),
+                                    : (value) => setState(() {
+                                        _preferencesTouched = true;
+                                        _fmOnly = value ?? false;
+                                      }),
                               ),
                             ],
                           ),

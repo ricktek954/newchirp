@@ -10,7 +10,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:37Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: models/channel_image_baseline/read
 language: dart
 ---
@@ -25,6 +25,7 @@ ChannelLibrarySnapshotread({
     required int? zone,
     required List<RadioChannel> channels,
     required Iterable<int> cleared,
+    String mappingSignature = '',
     required ChannelImageBaseline? baseline,
     required int? memoryStart,
     required int? memoryEnd,
@@ -37,7 +38,7 @@ ChannelLibrarySnapshotread({
 ```
 
 ## Source
-Lines 176–189 in `models/channel_image_baseline.dart`
+Lines 186–200 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

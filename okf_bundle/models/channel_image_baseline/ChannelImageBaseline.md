@@ -11,7 +11,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:37Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: models/channel_image_baseline/ChannelImageBaseline
 language: dart
 ---
@@ -35,7 +35,7 @@ Screen edits are compared with this so Discard and Write follow the radio
 image, not whether a CSV file was saved.
 
 ## Source
-Lines 10–22 in `models/channel_image_baseline.dart`
+Lines 10–24 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

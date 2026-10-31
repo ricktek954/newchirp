@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-10-29
+Last updated: 2026-10-30
 
 ## Status definitions
 
@@ -30,7 +30,10 @@ Last updated: 2026-10-29
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
+| TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | CHIRP TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
+| Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
@@ -184,16 +187,76 @@ Last updated: 2026-10-29
   channel 31 (HAMs, 470.550 MHz) becomes receive-only, and settings plus
   bank names survive.
 
+### TIDRADIO TD-H3 family
+
+- Maintainer: NewChirp override of the upstream CHIRP `TDH3`, `TDH3_HAM`, and
+  `TDH3_GMRS` settings path
+- Maintained file: `drivers/newchirp_tdh3.py`
+- Transport: upstream CHIRP TD-H3 clone serial at 38400 8N1
+- Implemented: all channel, settings, and write behavior from the pinned
+  upstream TD-H3 drivers. The override normalizes a stored brightness value of
+  `0xFF`, which upstream treats as list index `-251`, to the brightest valid
+  display setting before building the settings UI.
+- Read/write policy: channel layout and write sequencing are unchanged.
+  Brightness normalization only changes an invalid value and prevents
+  unrelated shortcut-key changes from failing during settings serialization.
+- Evidence: pinned CHIRP `tdh8.py` SHA-256
+  `6cc013c387f4728df4db826cd758fad805fd855e43bc44e70e2004aac845cc6c`;
+  2026-10-30 NewChirp 1.0.25 report from [redacted-email]. The radio
+  stored `0xFF`; the upstream settings path reported an out-of-range index and
+  blocked a short-key change from Lamp to Monitor.
+- Hardware validation: none for the invalid-value normalization.
+- Next milestone: the reporter confirms that brightness displays as level 5
+  and the PF1 short-press Monitor setting writes successfully.
+
+### Radioddity DB35-G
+
+- Maintainer: NewChirp driver reverse engineered from the official Radioddity
+  DB-35G Programming Software 20251029V3
+- Maintained file: `drivers/newchirp_db35g.py`
+- Transport: 115200 8N1 through the rear microphone programming port
+- Handshake: `02 PROGRAM`, ACK `06`, then `02`, identity `SMP558 FF FF`,
+  then ACK `06`
+- Commands: 4-byte read/write headers followed by 16-byte pages. Read uses
+  `R + address:u16be + length:u8`; write uses
+  `W + address:u16be + length:u8 + data`; exit uses `62`.
+- Memory map: 80 channel pages from `0x0000`, then the settings page at
+  `0xE000`. NewChirp writes only those known pages and does not write the
+  undocumented gap between them.
+- Implemented: RX/TX frequency, CTSS/DCS including split tones, FM/NFM,
+  low/high power, scan include/skip, busy lock, squelch, NRC level, timeout
+  timer, key beep, Roger beep, and priority watch. Read is enabled.
+- Read/write policy: write encoding is implemented and offline-tested, but
+  upload is blocked in the driver until a physical radio read and controlled
+  write are verified.
+- Evidence: official CPS ZIP SHA-256
+  `114a74ab0810f7eb0a05a00d5cf1f205de36e6a4c91f2718ab5850947822847d`;
+  `model.xml` SHA-256
+  `6ee2463d1aff8e782b1fbb48bf8ec6b256f3f900558fa3649f056de064df842f`;
+  executable SHA-256
+  `4833286753c3cf2538a5f95db28be9881d5ad9056ae9f4e48c05eea799f9750b`
+- Driver SHA-256:
+  `9e2091e6d5ed230c0c6f87a8ecb2374480783f481a9032940d98a9047aacbaf7`
+- Hardware validation: none. The protocol, pages, tone values, and settings
+  are covered by synthetic transport tests only.
+- Next milestone: read a physical DB35-G, compare every channel and setting
+  against CPS, then write one modified channel page and verify it by reading
+  the radio back with CPS and NewChirp.
+
 ### Baofeng DM-32UV
 
 - Maintainer: NewChirp override of the upstream CHIRP `DM32UV` driver
 - Maintained file: `drivers/newchirp_dm32uv.py`
 - Transport: 115200 8N1 with DTR and RTS asserted; no hardware flow control
-- Implemented: all 4,000 channels, zones, analog and DMR channel fields,
-  contacts, RX groups, scan lists, privacy-key references, and settings
-  provided by the pinned upstream CHIRP implementation
-- Read/write policy: unchanged from upstream CHIRP. This override changes
-  only serial timing, read-only handshake retry handling, and diagnostics.
+- Implemented: all 4,000 channels, editable named zones with multi-zone channel
+  membership, analog and DMR channel fields, contacts, RX groups, scan lists,
+  privacy-key references, and settings provided by the pinned upstream CHIRP
+  implementation
+- Read/write policy: channel and zone writes use the upstream CHIRP image
+  policy. NewChirp applies zone create, rename, and membership changes to the
+  downloaded image before upload and returns the resulting mapping state to
+  the editor. This override changes only serial timing, read-only handshake
+  retry handling, and diagnostics.
 - Serial policy: set one short device timeout per connection, enforce command
   deadlines in the read loop, retry the read-only PASSSTA query up to three
   times, retry SYSINFO up to three times, and retry fragmented `V`
@@ -212,10 +275,15 @@ Last updated: 2026-10-29
   `96bf74adfb0f561f17499c1687444ca47bbf7e14074c0e25732db9adb1beaa4f`
 - Hardware validation: the upstream driver completed read and write tests on
   firmware DM32.01.01.047. This NewChirp timing and retry override has
-  synthetic serial coverage but no physical revalidation.
+  synthetic serial coverage but no physical revalidation. The NewChirp
+  Banks / Zones editor has offline image coverage for rename, creation, and
+  multi-zone membership; its radio write path has not been validated on
+  physical hardware.
 - Next milestone: retest with the affected adapters, record the SYSINFO reply
   or `V` query header and body bytes if it still fails, then repeat a complete
   read and verified write with both a working cable and the affected cable.
+  Include a zone rename, a spare-zone creation, a channel in two zones, and a
+  read-back comparison against the CHIRP CPS image.
 
 ### Quansheng UV-K5 family
 
@@ -355,6 +423,32 @@ Last updated: 2026-10-29
 - Write warning: the Midland driver is experimental. Make a backup before using it to change the radio.
 - Next milestone: none for a first write. That write has already succeeded more than once. The app still warns that the driver is experimental.
 - Website catalog: not listed
+
+### Wouxun KG-UVD1P / KG-UV2D
+
+- Driver: pinned upstream CHIRP `chirp/drivers/wouxun.py`, with NewChirp's
+  bridge applying a one-second serial timeout
+- Transport: CHIRP Wouxun clone serial at 9600 8N1
+- Implemented: the upstream KG-UVD1P channel image, settings, and write path.
+  Upstream describes this driver as covering KG-UVD1P, UV2, and UV3 family
+  radios, including the KG-UV2D.
+- Read policy: the identification and transfer sequence is unchanged. The
+  longer timeout only allows the first 64-byte page to finish arriving instead
+  of failing with `Failed to read full block (67!=68)`.
+- Write policy: stock CHIRP behavior. The timing override does not change the
+  image layout or write sequence.
+- Evidence: CHIRP `wouxun.py` SHA-256
+  `8bbb0edf5587cbeccb2a586d7a2b560f9fd4fb062cc45a9a080ff640f315b790`
+  and `wouxun_common.py` SHA-256
+  `50db3fe632e704950c3ffe4f0d7091c4053fce0360035ac684587bd15daf2b9e`;
+  2026-10-30 NewChirp 1.0.23 report from [redacted-email]. The radio
+  completed identification, then returned 67 bytes for the first 68-byte
+  block response.
+- Hardware validation: none for the timeout override.
+- Next milestone: the KG-UV2D owner power-cycles the radio and retests a full
+  read. If the block is still short, capture whether Wouxun CPS can read it and
+  provide the first response header bytes so the protocol variant can be
+  separated from a cable timing issue.
 
 ### Motorola MOTOTRBO R7
 

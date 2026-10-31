@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:47:12Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: chirp_bridge/fetch_repeaterbook_data
 language: python
 ---
@@ -40,7 +40,7 @@ Fetch RepeaterBook's CHIRP-compatible compressed database.
 | `state` | `—` | `—` |
 
 ## Source
-Lines 1257–1296 in `chirp_bridge.py`
+Lines 1576–1615 in `chirp_bridge.py`
 
 ## Relationships
 

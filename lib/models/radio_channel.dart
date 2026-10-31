@@ -685,6 +685,8 @@ class RadioChannel {
     List<double> validTuningSteps = const [],
     List<({double startMhz, double endMhz})> validBands = const [],
     List<String> validModes = const [],
+    List<String> validToneModes = const [],
+    List<String> validCrossModes = const [],
     bool hasTuningStep = true,
   }) {
     final issues = <String>[];
@@ -723,6 +725,21 @@ class RadioChannel {
       issues.add(
         'Mode $mode is not supported by this radio. '
         'Supported modes: ${validModes.join(', ')}.',
+      );
+    }
+    if (validToneModes.isNotEmpty && !validToneModes.contains(tone)) {
+      issues.add(
+        'Tone mode ${tone.isEmpty ? 'none' : tone} is not supported by this '
+        'radio. Supported tone modes: '
+        '${validToneModes.map((value) => value.isEmpty ? 'none' : value).join(', ')}.',
+      );
+    }
+    if (tone == 'Cross' &&
+        validCrossModes.isNotEmpty &&
+        !validCrossModes.contains(crossMode)) {
+      issues.add(
+        'Cross tone $crossMode is not supported by this radio. Supported '
+        'cross tones: ${validCrossModes.join(', ')}.',
       );
     }
     if (name.length > 16) issues.add('Name may be too long for many radios.');

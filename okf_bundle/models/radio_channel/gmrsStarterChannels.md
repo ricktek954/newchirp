@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: models/radio_channel/gmrsStarterChannels
 language: dart
 ---
@@ -24,7 +24,7 @@ ListgmrsStarterChannelsgmrsStarterChannels
 ```
 
 ## Source
-Lines 840–840 in `models/radio_channel.dart`
+Lines 857–857 in `models/radio_channel.dart`
 
 ## Relationships
 

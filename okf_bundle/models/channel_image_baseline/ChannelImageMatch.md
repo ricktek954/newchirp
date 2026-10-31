@@ -10,7 +10,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:37Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: models/channel_image_baseline/ChannelImageMatch
 language: dart
 ---
@@ -37,7 +37,7 @@ enum ChannelImageMatch
 - `differs`
 
 ## Source
-Lines 24–30 in `models/channel_image_baseline.dart`
+Lines 26–32 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

@@ -335,4 +335,32 @@ void main() {
     digital.mode = 'FM';
     expect(digital.validate(validModes: const ['FM', 'NFM']), isEmpty);
   });
+
+  test('tone validation rejects unsupported cross-tone repeaters', () {
+    final repeater = RadioChannel(
+      location: 15,
+      name: 'CROSS',
+      frequency: 146.94,
+      tone: 'Cross',
+      crossMode: 'Tone->Tone',
+      txTone: 100,
+      rxTone: 123,
+    );
+
+    final issues = repeater.validate(
+      validToneModes: const ['', 'Tone', 'TSQL', 'DTCS'],
+    );
+
+    expect(issues, hasLength(1));
+    expect(issues.single, contains('Tone mode Cross is not supported'));
+    expect(issues.single, contains('Tone, TSQL, DTCS'));
+
+    expect(
+      repeater.validate(
+        validToneModes: const ['', 'Tone', 'TSQL', 'DTCS', 'Cross'],
+        validCrossModes: const ['Tone->Tone'],
+      ),
+      isEmpty,
+    );
+  });
 }

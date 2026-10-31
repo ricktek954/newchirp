@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T06:36:17Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: widgets/radio_model_picker
 language: dart
 ---
@@ -35,6 +35,7 @@ language: dart
 | related | [_setControllerText](/widgets/radio_model_picker/setControllerText.md) |
 | related | [_handleFocusChange](/widgets/radio_model_picker/handleFocusChange.md) |
 | related | [_handleSelected](/widgets/radio_model_picker/handleSelected.md) |
+| related | [_showAllModels](/widgets/radio_model_picker/showAllModels.md) |
 | related | [_matchesForQuery](/widgets/radio_model_picker/matchesForQuery.md) |
 | related | [_searchHelperFor](/widgets/radio_model_picker/searchHelperFor.md) |
 | related | [build](/widgets/radio_model_picker/build.md) |

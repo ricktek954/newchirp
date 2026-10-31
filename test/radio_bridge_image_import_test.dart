@@ -102,6 +102,38 @@ void main() {
     },
   );
 
+  test('DM-32UV images expose editable CHIRP zones', () async {
+    final source = Directory('build_support/chirp-20261023').existsSync()
+        ? 'build_support/chirp-20261023'
+        : '../chirp-20260626';
+    final image = File('$source/tests/images/Baofeng_DM-32UV.img');
+    expect(await image.exists(), isTrue);
+
+    final imported = await RadioBridge(
+      sourcePath: source,
+      newDriversPath: 'drivers',
+    ).readImage(image.path);
+
+    expect(imported.model, 'Baofeng_DM-32UV');
+    expect(imported.mappings, hasLength(1));
+    expect(imported.mappings.single.name, 'Zones');
+    expect(imported.mappings.single.editable, isTrue);
+    expect(imported.mappings.single.multiple, isTrue);
+    expect(imported.mappings.single.mappings.map((mapping) => mapping.name), [
+      'Analog',
+      'Digital',
+      'New zone',
+    ]);
+    expect(
+      imported.mappings.single.mappings.first.channelLocations,
+      containsAll(<int>[1, 13]),
+    );
+    expect(
+      imported.mappings.single.mappings[1].channelLocations,
+      containsAll(<int>[10, 11, 12]),
+    );
+  });
+
   test('radio-specific fields include mouse-over documentation', () async {
     final source = Directory('build_support/chirp-20261023').existsSync()
         ? 'build_support/chirp-20261023'

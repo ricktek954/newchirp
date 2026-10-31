@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:39Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: main/main
 language: dart
 ---
@@ -23,7 +23,7 @@ Futuremainmain
 ```
 
 ## Source
-Lines 80–80 in `main.dart`
+Lines 83–83 in `main.dart`
 
 ## Relationships
 

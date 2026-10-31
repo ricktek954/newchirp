@@ -244,7 +244,7 @@ def emit_progress(label, fraction=None):
     sys.stderr.flush()
 
 
-def bridge_error_message(exc, command=None, model=None):
+def bridge_error_message(exc, command=None, model=None, port=None):
     """Add safe, command-specific recovery guidance to bridge failures."""
     message = str(exc).strip() or exc.__class__.__name__
     lowered_message = message.lower()
@@ -321,14 +321,17 @@ def bridge_error_message(exc, command=None, model=None):
         and model == "AOR_AR8200"
         and "no response from radio" in message.lower()
     ):
+        selected_port = str(port or "the selected COM port")
         message = (
             "No response from the AR8200. Use an AOR CC8200-compatible "
-            "RS-232 lead in the option socket, not a TTL handheld-radio "
-            "programming cable. In the radio's CONFIG menu, set REMOTE BPS "
-            "to 19200, 9600, or 4800 and set RMT-ID to 00; NewChirp scans "
-            "all three baud rates, but nonzero RMT-ID prevents normal "
-            "single-radio commands. Close other software using COM6, power "
-            "cycle the radio, and retry."
+            "RS-232 lead fully inserted in the option socket, not a TTL "
+            "handheld-radio programming cable. In the radio's CONFIG menu, "
+            "set REMOTE BPS to 19200, 9600, or 4800 and set RMT-ID to 00; "
+            "NewChirp scans all three baud rates, but nonzero RMT-ID prevents "
+            "normal single-radio commands. If command text is merely echoed "
+            "back, the radio or adapter is not processing remote commands. "
+            "Close other software using %s, power-cycle the radio, and retry."
+            % selected_port
         )
     if (
         command in ("download", "read-settings")
@@ -377,6 +380,40 @@ def bridge_error_message(exc, command=None, model=None):
             "replace the cable or install its CH340, CP210x, or FTDI driver. "
             "If the stock software succeeds, report the cable model, COM-port "
             "device name, and driver provider."
+        )
+    if (
+        command in ("download", "read-settings")
+        and model == "Wouxun_KG-UVD1P"
+        and (
+            "failed to read full block" in lowered_message
+            or "no response from radio" in lowered_message
+        )
+    ):
+        message = (
+            "The Wouxun KG-UV2D uses the KG-UVD1P radio entry. Fully insert "
+            "the programming cable, close Wouxun CPS or any other program "
+            "using the COM port, and power the radio off and on before "
+            "retrying. A failed clone can leave this radio family in "
+            "programming mode and unresponsive. If Windows assigns a new COM "
+            "port after reconnecting the cable, refresh the interface list "
+            "and select that new port. If it still fails, report whether the "
+            "original Wouxun CPS can read the same radio."
+        )
+    if (
+        command == "read-settings"
+        and model == "Icom_IC-2730A"
+        and (
+            "end-of-clone" in lowered_message
+            or "clone_end" in lowered_message
+            or "data stream stopped" in lowered_message
+        )
+    ):
+        message = (
+            "The IC-2730A stopped before completing the clone connection. "
+            "After writing channels, turn the radio off and back on to leave "
+            "clone mode, then reconnect the cable to the Speaker-2 jack and "
+            "try Read settings again. You can also use Load from stored image "
+            "to view the settings saved from the completed channel write."
         )
     trace = RADIO_TRACE.format()
     if trace:
@@ -988,13 +1025,23 @@ def normalize_upload_memory(radio, memory):
     return errors, warnings, sorted(set(changed_fields)), notes
 
 
+def serial_read_timeout(radio_class):
+    # Legacy Wouxun radios can take longer than CHIRP's 250 ms default to
+    # finish the first 64-byte memory page. A one-byte-late response otherwise
+    # appears as "Failed to read full block (67!=68)".
+    if getattr(radio_class, "MODEL", "") == "KG-UVD1P":
+        return 1.0
+    return 0.25
+
+
 def open_serial(radio_class, port):
     import serial
 
     software_flow = getattr(radio_class, "XON_XOFF", False)
+    timeout = serial_read_timeout(radio_class)
     if "://" in port:
         handle = serial.serial_for_url(port, do_not_open=True)
-        handle.timeout = 0.25
+        handle.timeout = timeout
         handle.rtscts = radio_class.HARDWARE_FLOW
         handle.xonxoff = software_flow
         handle.rts = radio_class.WANTS_RTS
@@ -1008,7 +1055,7 @@ def open_serial(radio_class, port):
             baudrate=radio_class.BAUD_RATE,
             rtscts=radio_class.HARDWARE_FLOW,
             xonxoff=software_flow,
-            timeout=0.25,
+            timeout=timeout,
         )
         handle.rts = radio_class.WANTS_RTS
         handle.dtr = radio_class.WANTS_DTR
@@ -1023,7 +1070,7 @@ def open_serial(radio_class, port):
 
 def headless_live_adapter(live_radio):
     """Give a live radio the file-backed interfaces NewChirp requires."""
-    from chirp import chirp_common
+    from chirp import chirp_common, errors
     from chirp.drivers import generic_csv
 
     class HeadlessLiveAdapter(generic_csv.CSVRadio):
@@ -1064,18 +1111,33 @@ def headless_live_adapter(live_radio):
 
         def sync_out(self):
             start, end = self._features.memory_bounds
+            written = []
             for number in range(start, end + 1):
                 memory = self.get_memory(number)
                 if memory.empty:
                     self._live_radio.erase_memory(number)
                 else:
                     self._live_radio.set_memory(memory)
+                    written.append(memory.dupe())
                 if self.status_fn:
                     status = chirp_common.Status()
                     status.cur = number
                     status.max = end
                     status.msg = "Writing to radio"
                     self.status_fn(status)
+            verify_live_write(self._live_radio, written, [])
+
+        def load_mmap(self, filename):
+            try:
+                return super().load_mmap(filename)
+            except errors.InvalidDataError as exc:
+                if str(exc) != "No channels found":
+                    raise
+                # Live radios are persisted as CSV snapshots. A freshly reset
+                # radio legitimately produces a header-only snapshot. Grow the
+                # CSV map to its full bounds so an upload can fill selected
+                # channels and erase the remaining slots.
+                self._grow(self._features.memory_bounds[1])
 
         def get_settings(self):
             return self._live_radio.get_settings()
@@ -1084,6 +1146,61 @@ def headless_live_adapter(live_radio):
             return self._live_radio.set_settings(settings)
 
     return HeadlessLiveAdapter(live_radio)
+
+
+def live_memory_matches(expected, actual):
+    """Compare fields that every live radio must retain after a write."""
+    if actual is None:
+        return False
+    if expected.empty or actual.empty:
+        return expected.empty == actual.empty
+    if (
+        int(expected.freq) != int(actual.freq)
+        or expected.mode != actual.mode
+        or expected.duplex != actual.duplex
+        or str(expected.name).rstrip() != str(actual.name).rstrip()
+    ):
+        return False
+    if expected.duplex in ("+", "-", "split"):
+        if int(expected.offset) != int(actual.offset):
+            return False
+    if expected.tmode != actual.tmode:
+        return False
+    if expected.tmode in ("Tone", "TSQL", "Cross"):
+        if abs(float(expected.rtone) - float(actual.rtone)) > 0.05:
+            return False
+    if expected.tmode in ("TSQL", "Cross"):
+        if abs(float(expected.ctone) - float(actual.ctone)) > 0.05:
+            return False
+    if expected.tmode == "Cross" and expected.cross_mode != actual.cross_mode:
+        return False
+    if expected.tmode == "DTCS":
+        if (
+            int(expected.dtcs) != int(actual.dtcs)
+            or expected.dtcs_polarity != actual.dtcs_polarity
+        ):
+            return False
+    return True
+
+
+def verify_live_write(live_radio, memories, cleared):
+    """Read back live memories so a rejected write cannot report success."""
+    failures = []
+    for expected in memories:
+        actual = live_radio.get_memory(expected.number)
+        if not live_memory_matches(expected, actual):
+            failures.append("channel %i" % expected.number)
+    for number in cleared:
+        if not live_radio.get_memory(number).empty:
+            failures.append("channel %i was not cleared" % number)
+    if failures:
+        detail = ", ".join(failures[:8])
+        if len(failures) > 8:
+            detail += " and %i more" % (len(failures) - 8)
+        raise RuntimeError(
+            "The radio acknowledged the transfer but did not retain the "
+            "changes: %s" % detail
+        )
 
 
 def live_channel_context(radio, zone=None):
@@ -1231,6 +1348,208 @@ def channel_context(radio, zone=None):
 def channel_radio_for(radio, zone=None):
     """Return the radio object that owns channel memories."""
     return channel_context(radio, zone)[0]
+
+
+def _mapping_index_key(index):
+    return str(index)
+
+
+def mapping_payload(radio):
+    """Describe CHIRP's bank/zone models for an image or channel owner."""
+    from chirp import chirp_common
+
+    models_json = []
+    for model_index, model in enumerate(radio.get_mapping_models()):
+        try:
+            editable = (
+                not isinstance(model, chirp_common.StaticBankModel)
+                and model.__class__.add_memory_to_mapping
+                is not chirp_common.MappingModel.add_memory_to_mapping
+                and model.__class__.remove_memory_from_mapping
+                is not chirp_common.MappingModel.remove_memory_from_mapping
+            )
+            mappings_json = []
+            for mapping in model.get_mappings():
+                members = model.get_mapping_memories(mapping)
+                locations = [int(memory.number) for memory in members]
+                mappings_json.append({
+                    "index": _mapping_index_key(mapping.get_index()),
+                    "name": str(mapping.get_name()),
+                    "channelLocations": list(dict.fromkeys(locations)),
+                    "nameEditable": (
+                        editable
+                        and callable(getattr(mapping, "set_name", None))
+                    ),
+                })
+        except Exception:
+            # A partial bank model is unsafe to edit: saving it could erase
+            # memberships that could not be read.
+            continue
+        models_json.append({
+            "index": model_index,
+            "name": str(model.get_name()),
+            "editable": editable,
+            "multiple": isinstance(model, chirp_common.MTOBankModel),
+            "mappings": mappings_json,
+        })
+    return models_json
+
+
+def _mapping_models_by_index(radio):
+    return {
+        str(index): model
+        for index, model in enumerate(radio.get_mapping_models())
+    }
+
+
+def _mapping_entries_by_index(model):
+    return {
+        _mapping_index_key(mapping.get_index()): mapping
+        for mapping in model.get_mappings()
+    }
+
+
+def apply_mapping_payload(radio, requested_models, active_locations):
+    """Apply bank/zone names and memberships to an already loaded image.
+
+    The client sends the complete state for each model. Unchanged models are
+    left alone so writing channels cannot accidentally reorder unrelated
+    banks. Removing memberships happens before additions, which also supports
+    one-bank-per-channel models when a channel moves between banks.
+    """
+    from chirp import chirp_common
+
+    active_locations = {int(location) for location in active_locations}
+    models = _mapping_models_by_index(radio)
+    for requested_model in requested_models:
+        model_index = str(requested_model.get("index"))
+        model = models.get(model_index)
+        if model is None:
+            raise RuntimeError(
+                "The selected bank model is no longer available."
+            )
+
+        current_entries = _mapping_entries_by_index(model)
+        requested_entries = requested_model.get("mappings", [])
+        requested_by_index = {
+            _mapping_index_key(entry.get("index")): entry
+            for entry in requested_entries
+        }
+        current_state = mapping_payload(radio)[int(requested_model["index"])]
+        current_by_index = {
+            entry["index"]: entry for entry in current_state["mappings"]
+        }
+        changed = set(current_by_index) != set(requested_by_index)
+        if not changed:
+            for key, current_entry in current_by_index.items():
+                requested_entry = requested_by_index[key]
+                if (
+                    str(requested_entry.get("name", current_entry["name"]))
+                    != current_entry["name"]
+                    or [
+                        int(location)
+                        for location in requested_entry.get(
+                            "channelLocations", []
+                        )
+                    ]
+                    != current_entry["channelLocations"]
+                ):
+                    changed = True
+                    break
+        if not changed:
+            continue
+        if not current_state["editable"]:
+            raise RuntimeError(
+                "%s are fixed by this radio and cannot be changed."
+                % current_state["name"]
+            )
+
+        desired = {}
+        for key, entry in requested_by_index.items():
+            mapping = current_entries.get(key)
+            if mapping is None:
+                raise RuntimeError(
+                    "Bank %s is no longer available; reopen the radio image."
+                    % key
+                )
+            requested_locations = [
+                int(location)
+                for location in entry.get("channelLocations", [])
+            ]
+            if len(requested_locations) != len(set(requested_locations)):
+                raise RuntimeError(
+                    "Bank %s contains a duplicate channel." % entry.get("name")
+                )
+            locations = requested_locations
+            for location in locations:
+                if location not in active_locations:
+                    raise RuntimeError(
+                        "Channel %i is empty and cannot be placed in a bank."
+                        % location
+                    )
+                try:
+                    memory = radio.get_memory(location)
+                except Exception as exc:
+                    raise RuntimeError(
+                        "Could not load channel %i for bank %s."
+                        % (location, entry.get("name"))
+                    ) from exc
+                if memory.empty:
+                    raise RuntimeError(
+                        "Channel %i is empty and cannot be placed in a bank."
+                        % location
+                    )
+            desired[key] = {
+                "mapping": mapping,
+                "locations": locations,
+                "name": str(entry.get("name", mapping.get_name())),
+            }
+
+        if not current_state["multiple"]:
+            seen_locations = set()
+            for entry in desired.values():
+                overlap = seen_locations.intersection(entry["locations"])
+                if overlap:
+                    location = sorted(overlap)[0]
+                    raise RuntimeError(
+                        "Channel %i can be in only one %s."
+                        % (location, current_state["name"].lower())
+                    )
+                seen_locations.update(entry["locations"])
+
+        for key, entry in desired.items():
+            mapping = entry["mapping"]
+            current_locations = {
+                int(memory.number)
+                for memory in model.get_mapping_memories(mapping)
+            }
+            removed_locations = current_locations - set(entry["locations"])
+            for location in sorted(removed_locations):
+                model.remove_memory_from_mapping(
+                    radio.get_memory(location), mapping
+                )
+
+        for key, entry in desired.items():
+            mapping = entry["mapping"]
+            current_locations = {
+                int(memory.number)
+                for memory in model.get_mapping_memories(mapping)
+            }
+            for location in entry["locations"]:
+                if location not in current_locations:
+                    model.add_memory_to_mapping(
+                        radio.get_memory(location), mapping
+                    )
+
+        for key, entry in desired.items():
+            mapping = entry["mapping"]
+            if (
+                entry["name"] != str(mapping.get_name())
+                and callable(getattr(mapping, "set_name", None))
+            ):
+                mapping.set_name(entry["name"])
+
+    return mapping_payload(radio)
 
 
 def repeaterbook_resource_name(service, country, state):
@@ -1540,6 +1859,7 @@ def main():
             command.add_argument("--image", required=True)
             command.add_argument("--channels", required=True)
             command.add_argument("--cleared", default="")
+            command.add_argument("--mappings")
     read_settings = sub.add_parser("read-settings")
     read_settings.add_argument("--model", required=True)
     settings_source = read_settings.add_mutually_exclusive_group(required=True)
@@ -1616,6 +1936,7 @@ def main():
                 "imagePath": image_path,
                 "zones": zones,
                 "zone": selected_zone,
+                "mappings": mapping_payload(channel_radio),
                 "features": features_json(channel_radio),
             }))
             return
@@ -1703,6 +2024,7 @@ def main():
                     "imagePath": image,
                     "zones": zones,
                     "zone": selected_zone,
+                    "mappings": mapping_payload(channel_radio),
                     "features": features_json(channel_radio),
                 }))
             elif args.command == "upload":
@@ -1813,6 +2135,24 @@ def main():
                         erase_memory_with_extras(channel_radio, location)
                     except Exception:
                         continue
+                mappings = None
+                if args.mappings:
+                    with open(args.mappings, encoding="utf-8") as handle:
+                        requested_mappings = json.load(handle)
+                    start, end = channel_radio.get_features().memory_bounds
+                    active_locations = set()
+                    for location in range(start, end + 1):
+                        try:
+                            if not channel_radio.get_memory(location).empty:
+                                active_locations.add(location)
+                        except Exception:
+                            continue
+                    emit_progress("Preparing banks and zones...", 0.09)
+                    mappings = apply_mapping_payload(
+                        channel_radio,
+                        requested_mappings,
+                        active_locations,
+                    )
                 emit_progress("Writing the image to the radio...", 0.10)
                 radio.sync_out()
                 emit_progress("Saving the updated image...", 0.99)
@@ -1822,6 +2162,11 @@ def main():
                     "ok": True,
                     "skipped": skipped,
                     "adjusted": adjusted,
+                    "mappings": (
+                        mappings
+                        if mappings is not None
+                        else mapping_payload(channel_radio)
+                    ),
                 }))
             else:
                 emit_progress("Preparing radio settings...", 0.02)
@@ -1851,6 +2196,7 @@ def main():
                 exc,
                 getattr(args, "command", None),
                 getattr(args, "model", None),
+                getattr(args, "port", None),
             ),
             file=sys.stderr,
         )

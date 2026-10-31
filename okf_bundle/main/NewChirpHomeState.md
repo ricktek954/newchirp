@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:39Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -26,6 +26,9 @@ class _NewChirpHomeState
 
 - `_channelTableRows`
 - `_markChannelLibraryDirty`
+- `_remapRadioMappingChannels`
+- `_mappingMembershipsAt`
+- `_restoreClipboardMappingsAt`
 - `_rememberChannelImageBaseline`
 - `invalid`
 - `initState`
@@ -40,6 +43,7 @@ class _NewChirpHomeState
 - `_loadRadioSelection`
 - `_loadImageCapabilities`
 - `_switchRadioZone`
+- `_editRadioMappings`
 - `_saveRadioSelection`
 - `_setColumnOrder`
 - `_setColumnWidth`
@@ -136,7 +140,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 364–5171 in `main.dart`
+Lines 372–5397 in `main.dart`
 
 ## Relationships
 

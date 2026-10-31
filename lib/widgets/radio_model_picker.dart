@@ -135,6 +135,16 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     widget.onSelected(model);
   }
 
+  void _showAllModels() {
+    _focusNode.requestFocus();
+    // RawAutocomplete only refreshes its options after the field text changes.
+    // Clear the current label so the browse button always exposes the catalog.
+    _setControllerText(' ');
+    _setControllerText('');
+    _query.value = '';
+    setState(() {});
+  }
+
   _RadioModelMatches _matchesForQuery(String query) {
     final foldedQuery = query.trim().toLowerCase();
     if (_cachedQuery == foldedQuery && _cachedMatches != null) {
@@ -208,14 +218,19 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
                   decoration: InputDecoration(
                     labelText:
                         'Radio model (${widget.models.length} available)',
-                    hintText: 'Start typing a manufacturer or model',
-                    helperText: _searchHelperFor(query),
+                    hintText:
+                        'Start typing a manufacturer or model, or use the arrow',
+                    helperText:
+                        _searchHelperFor(query) ??
+                        (widget.selectedModel == null
+                            ? 'No radio model selected.'
+                            : null),
                     prefixIcon: const Icon(Icons.settings_input_antenna),
-                    suffixIcon: Icon(
-                      Icons.manage_search,
-                      color: widget.enabled
-                          ? colorScheme.onSurfaceVariant
-                          : colorScheme.onSurface.withValues(alpha: 0.38),
+                    suffixIcon: IconButton(
+                      key: const ValueKey('radio-model-show-options'),
+                      tooltip: 'Browse radio models',
+                      onPressed: widget.enabled ? _showAllModels : null,
+                      icon: const Icon(Icons.arrow_drop_down),
                     ),
                   ),
                 );

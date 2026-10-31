@@ -23,6 +23,7 @@ VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 TD_H3_IMAGE = SOURCE / "tests/images/TIDRADIO_TD-H3.img"
 A36PLUS_IMAGE = SOURCE / "tests/images/Talkpod_A36plus.img"
 GMRS_V2_IMAGE = SOURCE / "tests/images/BTECH_GMRS-V2.img"
+DM32UV_IMAGE = SOURCE / "tests/images/Baofeng_DM-32UV.img"
 
 spec = importlib.util.spec_from_file_location(
     "newchirp_chirp_bridge", ROOT / "scripts/chirp_bridge.py"
@@ -160,6 +161,93 @@ class UploadHandshakeTest(unittest.TestCase):
             (1, 250),
         )
 
+    def test_dm32uv_mapping_payload_exposes_zone_memberships(self):
+        radio = self.directory.get_radio_by_image(str(DM32UV_IMAGE))
+
+        models = bridge.mapping_payload(radio)
+
+        self.assertEqual(len(models), 1)
+        self.assertEqual(models[0]["name"], "Zones")
+        self.assertTrue(models[0]["editable"])
+        self.assertTrue(models[0]["multiple"])
+        self.assertEqual(
+            [entry["name"] for entry in models[0]["mappings"]],
+            ["Analog", "Digital", "New zone"],
+        )
+        self.assertEqual(
+            models[0]["mappings"][0]["channelLocations"],
+            list(range(1, 10)) + [13, 14],
+        )
+
+    def test_dm32uv_mapping_changes_create_rename_and_keep_multi_zone(self):
+        radio = self.directory.get_radio_by_image(str(DM32UV_IMAGE))
+        models = bridge.mapping_payload(radio)
+        analytics = models[0]["mappings"][0]
+        digital = models[0]["mappings"][1]
+        new_zone = models[0]["mappings"][2]
+        analytics["channelLocations"].append(10)
+        new_zone["name"] = "Local"
+        new_zone["channelLocations"] = [10]
+
+        updated = bridge.apply_mapping_payload(
+            radio,
+            [models[0]],
+            active_locations={
+                *analytics["channelLocations"],
+                *digital["channelLocations"],
+                *new_zone["channelLocations"],
+            },
+        )
+
+        self.assertEqual(
+            updated[0]["mappings"][0]["channelLocations"][-1],
+            10,
+        )
+        self.assertEqual(updated[0]["mappings"][2]["name"], "Local")
+        self.assertEqual(
+            updated[0]["mappings"][2]["channelLocations"],
+            [10],
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            saved = Path(directory) / "dm32uv-zones.img"
+            radio.save_mmap(str(saved))
+            reopened = self.directory.get_radio_by_image(str(saved))
+            reopened_models = bridge.mapping_payload(reopened)
+
+        self.assertEqual(
+            reopened_models[0]["mappings"][0]["channelLocations"][-1],
+            10,
+        )
+        self.assertIn(
+            10,
+            reopened_models[0]["mappings"][1]["channelLocations"],
+        )
+        self.assertEqual(
+            reopened_models[0]["mappings"][2]["name"],
+            "Local",
+        )
+
+    def test_mapping_change_rejects_an_empty_channel(self):
+        radio = self.directory.get_radio_by_image(str(DM32UV_IMAGE))
+        models = bridge.mapping_payload(radio)
+        models[0]["mappings"][2]["name"] = "Local"
+        models[0]["mappings"][2]["channelLocations"] = [999]
+        active_locations = {
+            location
+            for mapping in models[0]["mappings"]
+            for location in mapping["channelLocations"]
+        }
+
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "Channel 999 is empty",
+        ):
+            bridge.apply_mapping_payload(
+                radio,
+                [models[0]],
+                active_locations,
+            )
+
     def test_ft60_read_ready_message_follows_serial_open(self):
         calls = []
         serial = FakeTDH3Serial()
@@ -224,11 +312,15 @@ class UploadHandshakeTest(unittest.TestCase):
             self.errors.RadioNoResponse(),
             command="download",
             model="AOR_AR8200",
+            port="COM4",
         )
 
         self.assertIn("CC8200-compatible", message)
         self.assertIn("RMT-ID to 00", message)
         self.assertIn("REMOTE BPS", message)
+        self.assertIn("echoed back", message)
+        self.assertIn("using COM4", message)
+        self.assertNotIn("using COM6", message)
 
     def test_rt1_timeout_distinguishes_rt21(self):
         message = bridge.bridge_error_message(
@@ -615,6 +707,144 @@ class UploadHandshakeTest(unittest.TestCase):
             bridge.normalize_repeaterbook_query("East Baton Rouge Parish"),
             "east baton rouge",
         )
+
+    def test_legacy_wouxun_uses_extended_serial_timeout(self):
+        self.assertEqual(
+            bridge.serial_read_timeout(SimpleNamespace(MODEL="KG-UVD1P")),
+            1.0,
+        )
+        self.assertEqual(
+            bridge.serial_read_timeout(SimpleNamespace(MODEL="FT-60")),
+            0.25,
+        )
+
+    def test_legacy_wouxun_timeout_is_applied_to_serial_port(self):
+        radio_class = SimpleNamespace(
+            MODEL="KG-UVD1P",
+            BAUD_RATE=9600,
+            HARDWARE_FLOW=False,
+            WANTS_RTS=True,
+            WANTS_DTR=True,
+        )
+        with mock.patch("serial.Serial") as serial_constructor:
+            bridge.open_serial(radio_class, "COM6")
+
+        serial_constructor.assert_called_once_with(
+            baudrate=9600,
+            rtscts=False,
+            xonxoff=False,
+            timeout=1.0,
+        )
+
+    def test_wouxun_block_failure_suggests_power_cycle(self):
+        message = bridge.bridge_error_message(
+            Exception(
+                "Failed to communicate with radio: "
+                "Failed to read full block (67!=68)"
+            ),
+            command="download",
+            model="Wouxun_KG-UVD1P",
+        )
+
+        self.assertIn("KG-UV2D", message)
+        self.assertIn("power the radio off and on", message)
+        self.assertIn("Wouxun CPS", message)
+
+    def test_ic2730_settings_timeout_suggests_leaving_clone_mode(self):
+        message = bridge.bridge_error_message(
+            Exception(
+                "Data stream stopped before end-of-clone received"
+            ),
+            command="read-settings",
+            model="Icom_IC-2730A",
+        )
+
+        self.assertIn("turn the radio off and back on", message)
+        self.assertIn("Load from stored image", message)
+
+    def test_empty_live_radio_snapshot_can_be_filled_for_upload(self):
+        from chirp import chirp_common
+
+        written = []
+        erased = []
+        stored = {}
+
+        def blank_memory(number):
+            memory = chirp_common.Memory()
+            memory.number = number
+            memory.empty = True
+            return memory
+
+        def set_live_memory(memory):
+            written.append(memory.number)
+            stored[memory.number] = memory.dupe()
+
+        def erase_live_memory(number):
+            erased.append(number)
+            stored[number] = blank_memory(number)
+
+        features = SimpleNamespace(memory_bounds=(1, 2))
+        live_radio = SimpleNamespace(
+            VENDOR="Icom",
+            MODEL="IC-7100",
+            VARIANT="",
+            BAUD_RATE=19200,
+            HARDWARE_FLOW=False,
+            pipe=SimpleNamespace(),
+            status_fn=None,
+            get_features=lambda: features,
+            get_memory=lambda number: stored.get(number, blank_memory(number)),
+            set_memory=set_live_memory,
+            erase_memory=erase_live_memory,
+        )
+        adapter = bridge.headless_live_adapter(live_radio)
+        adapter.status_fn = None
+
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            suffix=".img",
+            encoding="utf-8",
+        ) as handle:
+            handle.write(",".join(chirp_common.Memory.CSV_FORMAT) + "\n")
+            handle.flush()
+            adapter.load_mmap(handle.name)
+
+        memory = chirp_common.Memory()
+        memory.number = 1
+        memory.freq = 146520000
+        adapter.set_memory(memory)
+        adapter.sync_out()
+
+        self.assertEqual(written, [1])
+        self.assertEqual(erased, [2])
+
+    def test_live_write_verification_rejects_silent_changes(self):
+        from chirp import chirp_common
+
+        expected = chirp_common.Memory()
+        expected.number = 1
+        expected.freq = 146520000
+        expected.duplex = ""
+        expected.offset = 0
+        expected.mode = "FM"
+        expected.name = "CALL"
+
+        stored = {}
+        live_radio = SimpleNamespace(
+            get_memory=lambda number: stored.get(
+                number,
+                SimpleNamespace(empty=True),
+            )
+        )
+
+        with self.assertRaisesRegex(
+            Exception,
+            "did not retain the changes: channel 1",
+        ):
+            bridge.verify_live_write(live_radio, [expected], [])
+
+        stored[1] = expected.dupe()
+        bridge.verify_live_write(live_radio, [expected], [])
 
     def test_repeaterbook_country_resources_use_supported_region_rules(self):
         self.assertEqual(

@@ -88,6 +88,44 @@ void main() {
     );
   });
 
+  testWidgets('radio model picker browses the catalog without guessing', (
+    tester,
+  ) async {
+    String? selectedModel = 'AOR_AR8200';
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) => RadioModelPicker(
+              models: const ['AOR_AR8200', 'Baofeng_UV-9R_Pro', 'Yaesu_FT-60'],
+              selectedModel: selectedModel,
+              onSelected: (model) {
+                setState(() => selectedModel = model);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('radio-model-show-options')));
+    await tester.pumpAndSettle();
+
+    expect(selectedModel, 'AOR_AR8200');
+    expect(
+      find.byKey(const ValueKey('radio-model-option-Yaesu_FT-60')),
+      findsOneWidget,
+    );
+
+    await tester.tap(
+      find.byKey(const ValueKey('radio-model-option-Yaesu_FT-60')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(selectedModel, 'Yaesu_FT-60');
+    expect(find.text('Yaesu FT-60'), findsOneWidget);
+  });
+
   testWidgets('radio model picker reports when a search has no matches', (
     tester,
   ) async {

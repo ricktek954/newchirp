@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:39Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: main/confirmOverwriteChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_confirmOverwriteChannel_confirmOverwriteChannel
 ```
 
 ## Source
-Lines 2214–2214 in `main.dart`
+Lines 2363–2363 in `main.dart`
 
 ## Relationships
 

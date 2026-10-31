@@ -92,6 +92,17 @@ void main() {
         zone: 0,
         channels: channels,
         cleared: const [],
+        mappingSignature: '{"name":"renamed"}',
+        baseline: baseline,
+      ),
+      ChannelImageMatch.differs,
+    );
+    expect(
+      channelImageMatch(
+        imagePath: '/tmp/radio.img',
+        zone: 0,
+        channels: channels,
+        cleared: const [],
         baseline: ChannelImageBaseline(
           imagePath: baseline.imagePath,
           zone: baseline.zone,
@@ -286,7 +297,10 @@ void main() {
       ),
     );
 
-    expect(find.text('Channels match the stored radio image.'), findsOneWidget);
+    expect(
+      find.text('Channels, banks, and zones match the stored radio image.'),
+      findsOneWidget,
+    );
     expect(
       tester
           .widget<TextButton>(find.byKey(const Key('channel-library-discard')))
@@ -317,7 +331,7 @@ void main() {
         ),
       ),
     );
-    expect(find.text('Unsaved channel changes'), findsOneWidget);
+    expect(find.text('Unsaved radio changes'), findsOneWidget);
     await tester.tap(find.text('Discard changes'));
     await tester.tap(find.text('Write settings to radio'));
     expect(discarded, isTrue);

@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/home/rlopez/newchirp.net/scripts",
+  "source_root": "/Volumes/RICKEXT/desktop/newchirp/scripts",
   "files": {
     "build_macos_dmg.py": {
       "path": "build_macos_dmg.py",
-      "mtime_ns": 1792753458974638894,
+      "mtime_ns": 1792753027569896057,
       "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
       "concept_ids": [
         "build_macos_dmg/build_background",
@@ -14,60 +14,19 @@
         "build_macos_dmg"
       ]
     },
-    "generate_gmrs_frs_pdf.py": {
-      "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1791109641589702091,
-      "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
-      "concept_ids": [
-        "generate_gmrs_frs_pdf/PdfWriter",
-        "generate_gmrs_frs_pdf/as_pdf",
-        "generate_gmrs_frs_pdf/esc",
-        "generate_gmrs_frs_pdf/init",
-        "generate_gmrs_frs_pdf/line",
-        "generate_gmrs_frs_pdf/main",
-        "generate_gmrs_frs_pdf/rect",
-        "generate_gmrs_frs_pdf/rgb",
-        "generate_gmrs_frs_pdf/row_color",
-        "generate_gmrs_frs_pdf/set_fill",
-        "generate_gmrs_frs_pdf/set_stroke",
-        "generate_gmrs_frs_pdf/table_cell",
-        "generate_gmrs_frs_pdf/text",
-        "generate_gmrs_frs_pdf/text_in_rect",
-        "generate_gmrs_frs_pdf"
-      ]
-    },
-    "newchirp_mass_storage.py": {
-      "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1792921978123223469,
-      "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
-      "concept_ids": [
-        "newchirp_mass_storage/CS750Profile",
-        "newchirp_mass_storage/LinuxScsiPassthrough",
-        "newchirp_mass_storage/MacScsiPassthrough",
-        "newchirp_mass_storage/MassStorageError",
-        "newchirp_mass_storage/RapMassStorageRadio",
-        "newchirp_mass_storage/ScsiPassthrough",
-        "newchirp_mass_storage/WindowsScsiPassthrough",
-        "newchirp_mass_storage/close",
-        "newchirp_mass_storage/command",
-        "newchirp_mass_storage/helper_path",
-        "newchirp_mass_storage/init",
-        "newchirp_mass_storage/list_devices",
-        "newchirp_mass_storage/parse_rap_packet",
-        "newchirp_mass_storage/rap_packet",
-        "newchirp_mass_storage/read_codeplug",
-        "newchirp_mass_storage/read_exact",
-        "newchirp_mass_storage/receive",
-        "newchirp_mass_storage/send",
-        "newchirp_mass_storage/transfer",
-        "newchirp_mass_storage"
-      ]
-    },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793404032494305798,
-      "hash": "8144d6dd8b1b05abe60af09b8cdefc857aff1c9f79c60e154fb175c082af8b4c",
+      "mtime_ns": 1793404724705680496,
+      "hash": "3b6f3c9741e6741eae4105765ac7713cfb94acfe6d1a7150bb8091f5b99c9ca1",
       "concept_ids": [
+        "chirp_bridge/apply_mapping_payload",
+        "chirp_bridge/live_memory_matches",
+        "chirp_bridge/mapping_entries_by_index",
+        "chirp_bridge/mapping_index_key",
+        "chirp_bridge/mapping_models_by_index",
+        "chirp_bridge/mapping_payload",
+        "chirp_bridge/serial_read_timeout",
+        "chirp_bridge/verify_live_write",
         "chirp_bridge",
         "chirp_bridge/init",
         "chirp_bridge/command_summary",
@@ -127,6 +86,55 @@
         "chirp_bridge/RadioCommunicationTrace",
         "chirp_bridge/TracedSerial"
       ]
+    },
+    "generate_gmrs_frs_pdf.py": {
+      "path": "generate_gmrs_frs_pdf.py",
+      "mtime_ns": 1787526889873622751,
+      "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
+      "concept_ids": [
+        "generate_gmrs_frs_pdf/PdfWriter",
+        "generate_gmrs_frs_pdf/as_pdf",
+        "generate_gmrs_frs_pdf/esc",
+        "generate_gmrs_frs_pdf/init",
+        "generate_gmrs_frs_pdf/line",
+        "generate_gmrs_frs_pdf/main",
+        "generate_gmrs_frs_pdf/rect",
+        "generate_gmrs_frs_pdf/rgb",
+        "generate_gmrs_frs_pdf/row_color",
+        "generate_gmrs_frs_pdf/set_fill",
+        "generate_gmrs_frs_pdf/set_stroke",
+        "generate_gmrs_frs_pdf/table_cell",
+        "generate_gmrs_frs_pdf/text",
+        "generate_gmrs_frs_pdf/text_in_rect",
+        "generate_gmrs_frs_pdf"
+      ]
+    },
+    "newchirp_mass_storage.py": {
+      "path": "newchirp_mass_storage.py",
+      "mtime_ns": 1792893456081463146,
+      "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
+      "concept_ids": [
+        "newchirp_mass_storage/CS750Profile",
+        "newchirp_mass_storage/LinuxScsiPassthrough",
+        "newchirp_mass_storage/MacScsiPassthrough",
+        "newchirp_mass_storage/MassStorageError",
+        "newchirp_mass_storage/RapMassStorageRadio",
+        "newchirp_mass_storage/ScsiPassthrough",
+        "newchirp_mass_storage/WindowsScsiPassthrough",
+        "newchirp_mass_storage/close",
+        "newchirp_mass_storage/command",
+        "newchirp_mass_storage/helper_path",
+        "newchirp_mass_storage/init",
+        "newchirp_mass_storage/list_devices",
+        "newchirp_mass_storage/parse_rap_packet",
+        "newchirp_mass_storage/rap_packet",
+        "newchirp_mass_storage/read_codeplug",
+        "newchirp_mass_storage/read_exact",
+        "newchirp_mass_storage/receive",
+        "newchirp_mass_storage/send",
+        "newchirp_mass_storage/transfer",
+        "newchirp_mass_storage"
+      ]
     }
   },
   "concepts": {
@@ -135,7 +143,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "c5ecca1949dd6c93fd54688993982fb2b694f15ad030dc0677528eb3c89f197b",
+      "edge_hash": "9a67aa33dc5a4343f5cc0c7390ab5bac9c486b53ab7b4c85546fa88bab58f949",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -231,7 +239,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "f30f60bdc352103a4ded1ea6bdaae9cb50e805685bba8ee63ed923ede55356aa",
+      "edge_hash": "8db952db2e41451ac1962b2f30921974f84382f78bb25d8386a2525b4cb0715e",
       "enriched": false
     },
     "chirp_bridge/radio_for": {
@@ -263,7 +271,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "08a68986ca2fa7a9ef8fbbdacdb79169eaf3b3ccfa011d636e8a04561936f79f",
+      "edge_hash": "6edb79f97b86a1e0fd63af51b24e48f8ff1fb342e10e411b49f0e23fe923b446",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -471,7 +479,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "64a2c8057e6c641558e1c1376d51f01a51746da2ee4636c2152d1cf0614821a2",
+      "edge_hash": "fa8d46163971ee8a1362acb90539c6600706e2a4de96ef00619536591b3fb899",
       "enriched": false
     },
     "chirp_bridge/repeaterbook_resource_name": {
@@ -913,7 +921,71 @@
       "render_hash": "stale",
       "edge_hash": "8aa8fdb1b459587776dee4b9c57cb1577d7beadf7da79a62c68c8ac6fe2df34d",
       "enriched": false
+    },
+    "chirp_bridge/apply_mapping_payload": {
+      "concept_id": "chirp_bridge/apply_mapping_payload",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "828505cfe02c3443227319daf6a19f5dd26e96cd5e1f40990757d0093ab35231",
+      "enriched": false
+    },
+    "chirp_bridge/live_memory_matches": {
+      "concept_id": "chirp_bridge/live_memory_matches",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "1c91d7e85d497d02372e8429ecc32507a8f4b5c61fb92e8c248e26155252f1b0",
+      "enriched": false
+    },
+    "chirp_bridge/mapping_entries_by_index": {
+      "concept_id": "chirp_bridge/mapping_entries_by_index",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "701a3ad81164411364ce24960144a9b877c0b5c47a2cc5e68edf623d70ca527e",
+      "enriched": false
+    },
+    "chirp_bridge/mapping_index_key": {
+      "concept_id": "chirp_bridge/mapping_index_key",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "b02ae7c61b59ece337e3f40eee11fea0147e358e6d9fc8202d04ed60a35f1ecf",
+      "enriched": false
+    },
+    "chirp_bridge/mapping_models_by_index": {
+      "concept_id": "chirp_bridge/mapping_models_by_index",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "9fb5915c33b1e75c6b36a667e90a98c7a093d997b54d5a706255dbc347cec40b",
+      "enriched": false
+    },
+    "chirp_bridge/mapping_payload": {
+      "concept_id": "chirp_bridge/mapping_payload",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "8e695be97fae97df4ec3902a0040075c1a2771b01040481d6cc48b3777bc57de",
+      "enriched": false
+    },
+    "chirp_bridge/serial_read_timeout": {
+      "concept_id": "chirp_bridge/serial_read_timeout",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "7340773650de4b42426385f88340c595df239a54811e64d8f137d4673892d4a4",
+      "enriched": false
+    },
+    "chirp_bridge/verify_live_write": {
+      "concept_id": "chirp_bridge/verify_live_write",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "b8553e8622e17c20740a40beaef90f6313dece73e95b45a5ddc6ff340c83c5ad",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-30T23:47:55Z"
+  "generated_at": "2026-10-30T23:59:00Z"
 }

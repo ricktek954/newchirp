@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:47:12Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -51,14 +51,22 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [nearest_programmable_frequency](/chirp_bridge/nearest_programmable_frequency.md) |
 | related | [channel_validation_message](/chirp_bridge/channel_validation_message.md) |
 | related | [normalize_upload_memory](/chirp_bridge/normalize_upload_memory.md) |
+| related | [serial_read_timeout](/chirp_bridge/serial_read_timeout.md) |
 | related | [open_serial](/chirp_bridge/open_serial.md) |
 | related | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) |
+| related | [live_memory_matches](/chirp_bridge/live_memory_matches.md) |
+| related | [verify_live_write](/chirp_bridge/verify_live_write.md) |
 | related | [live_channel_context](/chirp_bridge/live_channel_context.md) |
 | related | [radio_for](/chirp_bridge/radio_for.md) |
 | related | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | related | [radio_from_image](/chirp_bridge/radio_from_image.md) |
 | related | [channel_context](/chirp_bridge/channel_context.md) |
 | related | [channel_radio_for](/chirp_bridge/channel_radio_for.md) |
+| related | [_mapping_index_key](/chirp_bridge/mapping_index_key.md) |
+| related | [mapping_payload](/chirp_bridge/mapping_payload.md) |
+| related | [_mapping_models_by_index](/chirp_bridge/mapping_models_by_index.md) |
+| related | [_mapping_entries_by_index](/chirp_bridge/mapping_entries_by_index.md) |
+| related | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) |
 | related | [repeaterbook_resource_name](/chirp_bridge/repeaterbook_resource_name.md) |
 | related | [repeaterbook_cache_path](/chirp_bridge/repeaterbook_cache_path.md) |
 | related | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |

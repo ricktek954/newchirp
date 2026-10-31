@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:36Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: models/radio_channel/toJson
 language: dart
 ---
@@ -24,7 +24,7 @@ MaptoJsontoJson
 ```
 
 ## Source
-Lines 816–816 in `models/radio_channel.dart`
+Lines 833–833 in `models/radio_channel.dart`
 
 ## Relationships
 

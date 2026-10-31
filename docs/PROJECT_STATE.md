@@ -121,6 +121,9 @@ Linux 1.0.26 SHA-256:
   handshaking again.
 - TK-880 channel operations use CHIRP subdevices/zones.
 - Multi-zone selector with real zone names and channel counts.
+- Added a generic CHIRP banks/zones editor with rename, channel membership,
+  and spare-zone creation. DM-32UV offline image tests cover multi-zone
+  membership; physical zone write validation is still pending.
 - Zone switching reloads from the saved parent image and preserves other zones
   during upload.
 - Radio prompt HTML is stripped and driver "click OK" text is rewritten to the

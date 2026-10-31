@@ -16,7 +16,11 @@
 - [_command_summary](command_summary.md)
 - [_finish_pending](finish_pending.md)
 - [_load_module](load_module.md)
+- [_mapping_entries_by_index](mapping_entries_by_index.md)
+- [_mapping_index_key](mapping_index_key.md)
+- [_mapping_models_by_index](mapping_models_by_index.md)
 - [apply_json](apply_json.md)
+- [apply_mapping_payload](apply_mapping_payload.md) — Apply bank/zone names and memberships to an already loaded image.
 - [apply_setting_changes](apply_setting_changes.md)
 - [begin](begin.md)
 - [bridge_error_message](bridge_error_message.md) — Add safe, command-specific recovery guidance to bridge failures.
@@ -36,8 +40,10 @@
 - [has_global_settings](has_global_settings.md)
 - [headless_live_adapter](headless_live_adapter.md) — Give a live radio the file-backed interfaces NewChirp requires.
 - [live_channel_context](live_channel_context.md) — Choose a live-radio subdevice without probing every memory slot.
+- [live_memory_matches](live_memory_matches.md) — Compare fields that every live radio must retain after a write.
 - [load_chirp](load_chirp.md)
 - [main](main.md)
+- [mapping_payload](mapping_payload.md) — Describe CHIRP's bank/zone models for an image or channel owner.
 - [memory_json](memory_json.md)
 - [memory_with_extras](memory_with_extras.md) — Load a channel plus CHIRP's metadata-backed fields such as comments.
 - [nearest_programmable_frequency](nearest_programmable_frequency.md) — Return the closest frequency representable by one of the steps.
@@ -55,10 +61,12 @@
 - [repeaterbook_resource_name](repeaterbook_resource_name.md)
 - [repeaterbook_tone](repeaterbook_tone.md)
 - [search_repeaterbook](search_repeaterbook.md)
+- [serial_read_timeout](serial_read_timeout.md)
 - [set_memory_with_extras](set_memory_with_extras.md) — Write a channel and persist fields CHIRP stores outside radio memory.
 - [setting_doc](setting_doc.md)
 - [setting_value_json](setting_value_json.md)
 - [settings_payload](settings_payload.md)
 - [settings_tree_json](settings_tree_json.md)
 - [status_progress](status_progress.md) — Translate a CHIRP Status message into a structured progress event.
+- [verify_live_write](verify_live_write.md) — Read back live memories so a rejected write cannot report success.
 - [write](write.md)

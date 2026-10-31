@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 import '../models/radio_channel.dart';
+import '../models/radio_mapping.dart';
 import '../models/repeater_search.dart';
 import 'module_sandbox.dart';
 
@@ -494,6 +495,7 @@ class RadioBridge {
       String imagePath,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
+      List<RadioMappingModel> mappings,
       int? zone,
     })
   >
@@ -522,11 +524,19 @@ class RadioBridge {
                 RadioZone.fromJson((entry as Map).cast<String, dynamic>()),
           )
           .toList(),
+      mappings: radioMappingsFromJson(data['mappings'] as List? ?? const []),
       zone: (data['zone'] as num?)?.toInt(),
     );
   }
 
-  Future<({RadioCapabilities capabilities, List<RadioZone> zones, int? zone})>
+  Future<
+    ({
+      RadioCapabilities capabilities,
+      List<RadioZone> zones,
+      List<RadioMappingModel> mappings,
+      int? zone,
+    })
+  >
   imageInfo(String imagePath) async {
     final data = await _run([
       'read-image',
@@ -544,6 +554,7 @@ class RadioBridge {
                 RadioZone.fromJson((entry as Map).cast<String, dynamic>()),
           )
           .toList(),
+      mappings: radioMappingsFromJson(data['mappings'] as List? ?? const []),
       zone: (data['zone'] as num?)?.toInt(),
     );
   }
@@ -557,6 +568,7 @@ class RadioBridge {
       String imagePath,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
+      List<RadioMappingModel> mappings,
       int? zone,
     })
   >
@@ -588,16 +600,21 @@ class RadioBridge {
                 RadioZone.fromJson((entry as Map).cast<String, dynamic>()),
           )
           .toList(),
+      mappings: radioMappingsFromJson(data['mappings'] as List? ?? const []),
       zone: (data['zone'] as num?)?.toInt(),
     );
   }
 
-  Future<List<Map<String, dynamic>>> upload({
+  Future<
+    ({List<Map<String, dynamic>> adjustments, List<RadioMappingModel> mappings})
+  >
+  upload({
     required String model,
     required String port,
     required String imagePath,
     required List<RadioChannel> channels,
     required List<int> cleared,
+    List<RadioMappingModel>? mappings,
     int? zone,
     void Function(RadioProgress)? onProgress,
   }) async {
@@ -605,30 +622,51 @@ class RadioBridge {
       '${Directory.systemTemp.path}/newchirp-upload-$pid-'
       '${DateTime.now().microsecondsSinceEpoch}.json',
     );
-    await temp.writeAsString(
-      jsonEncode(channels.map((e) => e.toJson()).toList()),
-    );
-    final data = await _run([
-      'upload',
-      '--model',
-      model,
-      '--port',
-      port,
-      if (zone != null) ...['--zone', '$zone'],
-      '--image',
-      imagePath,
-      '--channels',
-      temp.path,
-      '--cleared',
-      cleared.join(','),
-    ], onProgress: onProgress);
-    final skipped = (data['skipped'] as List? ?? const [])
-        .map((entry) => (entry as Map).cast<String, dynamic>())
-        .toList();
-    final adjusted = (data['adjusted'] as List? ?? const [])
-        .map((entry) => (entry as Map).cast<String, dynamic>())
-        .toList();
-    return [...skipped, ...adjusted];
+    File? mappingFile;
+    try {
+      await temp.writeAsString(
+        jsonEncode(channels.map((e) => e.toJson()).toList()),
+      );
+      if (mappings != null) {
+        mappingFile = File(
+          '${Directory.systemTemp.path}/newchirp-mappings-$pid-'
+          '${DateTime.now().microsecondsSinceEpoch}.json',
+        );
+        await mappingFile.writeAsString(
+          jsonEncode(radioMappingsToJson(mappings)),
+        );
+      }
+      final data = await _run([
+        'upload',
+        '--model',
+        model,
+        '--port',
+        port,
+        if (zone != null) ...['--zone', '$zone'],
+        '--image',
+        imagePath,
+        '--channels',
+        temp.path,
+        '--cleared',
+        cleared.join(','),
+        if (mappingFile != null) ...['--mappings', mappingFile.path],
+      ], onProgress: onProgress);
+      final skipped = (data['skipped'] as List? ?? const [])
+          .map((entry) => (entry as Map).cast<String, dynamic>())
+          .toList();
+      final adjusted = (data['adjusted'] as List? ?? const [])
+          .map((entry) => (entry as Map).cast<String, dynamic>())
+          .toList();
+      return (
+        adjustments: [...skipped, ...adjusted],
+        mappings: radioMappingsFromJson(data['mappings'] as List? ?? const []),
+      );
+    } finally {
+      if (await temp.exists()) await temp.delete();
+      if (mappingFile != null && await mappingFile.exists()) {
+        await mappingFile.delete();
+      }
+    }
   }
 
   Future<RadioSettings> readSettings({
@@ -700,8 +738,8 @@ class RadioBridge {
     double? latitude,
     double? longitude,
     double? distance,
-    bool fmOnly = true,
-    bool openOnly = true,
+    bool fmOnly = false,
+    bool openOnly = false,
     void Function(RadioProgress)? onProgress,
   }) async {
     final data = await _run([

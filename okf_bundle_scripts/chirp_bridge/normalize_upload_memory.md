@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:47:12Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: chirp_bridge/normalize_upload_memory
 language: python
 ---
@@ -42,7 +42,7 @@ receive-only GMRS and MURS channels impossible to upload.
 | `memory` | `—` | `—` |
 
 ## Source
-Lines 949–988 in `chirp_bridge.py`
+Lines 986–1025 in `chirp_bridge.py`
 
 ## Relationships
 

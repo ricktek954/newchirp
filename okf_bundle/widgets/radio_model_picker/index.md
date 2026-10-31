@@ -15,6 +15,7 @@
 - [_RadioModelCandidate](RadioModelCandidate.md)
 - [_searchHelperFor](searchHelperFor.md)
 - [_setControllerText](setControllerText.md)
+- [_showAllModels](showAllModels.md)
 - [build](build.md)
 - [createState](createState.md)
 - [didUpdateWidget](didUpdateWidget.md)

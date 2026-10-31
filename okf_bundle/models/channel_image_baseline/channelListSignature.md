@@ -10,7 +10,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T12:56:37Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: models/channel_image_baseline/channelListSignature
 language: dart
 ---
@@ -27,7 +27,7 @@ StringchannelListSignature(
 ```
 
 ## Source
-Lines 32–35 in `models/channel_image_baseline.dart`
+Lines 34–37 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

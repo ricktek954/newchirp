@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:47:12Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: chirp_bridge/open_serial
 language: python
 ---
@@ -31,11 +31,12 @@ def open_serial(radio_class, port)
 | `port` | `—` | `—` |
 
 ## Source
-Lines 991–1021 in `chirp_bridge.py`
+Lines 1037–1068 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
+| calls | [serial_read_timeout](/chirp_bridge/serial_read_timeout.md) |
 | called_by | [radio_for](/chirp_bridge/radio_for.md) |

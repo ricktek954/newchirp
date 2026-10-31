@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:39Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: main/downloadAndInstallUpdate
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_downloadAndInstallUpdate_downloadAndInstallUpdate
 ```
 
 ## Source
-Lines 3048–3048 in `main.dart`
+Lines 3221–3221 in `main.dart`
 
 ## Relationships
 

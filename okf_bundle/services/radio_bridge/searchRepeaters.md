@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:44:03Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: services/radio_bridge/searchRepeaters
 language: dart
 ---
@@ -24,7 +24,7 @@ FuturesearchRepeaterssearchRepeaters
 ```
 
 ## Source
-Lines 695–706 in `services/radio_bridge.dart`
+Lines 733–744 in `services/radio_bridge.dart`
 
 ## Relationships
 

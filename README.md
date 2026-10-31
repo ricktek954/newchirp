@@ -26,7 +26,8 @@ implementation history, architecture, known risks, and prioritized next work.
 - CHIRP radio-model catalog and guarded read/write workflow
 - Session-scoped loading of experimental CHIRP `.py` and `.mod` driver modules
 - Reusable per-model radio images after the first read
-- Multi-zone channel selection for radios that expose CHIRP subdevices
+- Editable CHIRP banks and zones, including named zones and channel membership
+- Multi-section channel selection for radios that expose CHIRP subdevices
 - Radio-aware channel slot allocation within each model's memory range
 - Real transfer progress from CHIRP read/write status with percentage and elapsed time
 - Radio-wide settings editor for drivers that expose CHIRP global settings

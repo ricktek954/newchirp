@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:44:03Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: services/radio_bridge/RadioProgress
 language: dart
 ---
@@ -24,7 +24,7 @@ class RadioProgress
 ```
 
 ## Source
-Lines 162–167 in `services/radio_bridge.dart`
+Lines 163–168 in `services/radio_bridge.dart`
 
 ## Relationships
 

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:fix/email-triage-20261030"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:31:39Z"
+timestamp: "2026-10-30T23:58:44Z"
 concept_id: main/TextField
 language: dart
 ---
@@ -27,7 +27,7 @@ class _TextField
 - `createState`
 
 ## Source
-Lines 8826–8845 in `main.dart`
+Lines 9120–9139 in `main.dart`
 
 ## Relationships
 

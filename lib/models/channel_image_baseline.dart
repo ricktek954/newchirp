@@ -12,12 +12,14 @@ class ChannelImageBaseline {
     required this.imagePath,
     required this.zone,
     required this.signature,
+    this.mappingSignature = '',
     required this.loadedFromRadio,
   });
 
   final String imagePath;
   final int? zone;
   final String signature;
+  final String mappingSignature;
   final bool loadedFromRadio;
 }
 
@@ -47,6 +49,7 @@ ChannelImageMatch channelImageMatch({
   required int? zone,
   required List<RadioChannel> channels,
   required Iterable<int> cleared,
+  String mappingSignature = '',
   required ChannelImageBaseline? baseline,
 }) {
   if (imagePath == null) return ChannelImageMatch.noImage;
@@ -59,7 +62,10 @@ ChannelImageMatch channelImageMatch({
     return ChannelImageMatch.notLoaded;
   }
   final current = channelListSignature(channels, cleared);
-  if (current != baseline.signature) return ChannelImageMatch.differs;
+  if (current != baseline.signature ||
+      mappingSignature != baseline.mappingSignature) {
+    return ChannelImageMatch.differs;
+  }
   return baseline.loadedFromRadio
       ? ChannelImageMatch.matchesRadio
       : ChannelImageMatch.matchesImage;
@@ -71,9 +77,10 @@ String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.notLoaded =>
     'Channel list has not been loaded from the stored radio image.',
   ChannelImageMatch.matchesRadio =>
-    'Channels match the values last read from the radio.',
-  ChannelImageMatch.matchesImage => 'Channels match the stored radio image.',
-  ChannelImageMatch.differs => 'Unsaved channel changes',
+    'Channels, banks, and zones match the values last read from the radio.',
+  ChannelImageMatch.matchesImage =>
+    'Channels, banks, and zones match the stored radio image.',
+  ChannelImageMatch.differs => 'Unsaved radio changes',
 };
 
 /// Channel counts and the radio-image match for one library refresh.
@@ -103,6 +110,7 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
   required int? zone,
   required List<RadioChannel> channels,
   required Iterable<int> cleared,
+  String mappingSignature = '',
   required ChannelImageBaseline? baseline,
   required int? memoryStart,
   required int? memoryEnd,
@@ -139,6 +147,7 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
       zone: zone,
       channels: channels,
       cleared: cleared,
+      mappingSignature: mappingSignature,
       baseline: baseline,
     ),
     needsAttention: needsAttention,
@@ -161,6 +170,7 @@ class ChannelLibraryStatsCache {
   int _clearedCount = -1;
   String? _imagePath;
   int? _zone;
+  String _mappingSignature = '';
   ChannelImageBaseline? _baseline;
   int? _memoryStart;
   int? _memoryEnd;
@@ -178,6 +188,7 @@ class ChannelLibraryStatsCache {
     required int? zone,
     required List<RadioChannel> channels,
     required Iterable<int> cleared,
+    String mappingSignature = '',
     required ChannelImageBaseline? baseline,
     required int? memoryStart,
     required int? memoryEnd,
@@ -203,6 +214,7 @@ class ChannelLibraryStatsCache {
         cleared.length == _clearedCount &&
         imagePath == _imagePath &&
         zone == _zone &&
+        mappingSignature == _mappingSignature &&
         identical(baseline, _baseline) &&
         memoryStart == _memoryStart &&
         memoryEnd == _memoryEnd &&
@@ -217,6 +229,7 @@ class ChannelLibraryStatsCache {
       zone: zone,
       channels: channels,
       cleared: cleared,
+      mappingSignature: mappingSignature,
       baseline: baseline,
       memoryStart: memoryStart,
       memoryEnd: memoryEnd,
@@ -233,6 +246,7 @@ class ChannelLibraryStatsCache {
     _clearedCount = cleared.length;
     _imagePath = imagePath;
     _zone = zone;
+    _mappingSignature = mappingSignature;
     _baseline = baseline;
     _memoryStart = memoryStart;
     _memoryEnd = memoryEnd;
