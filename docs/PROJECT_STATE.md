@@ -8,9 +8,11 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.29` installer is live. It restores and validates the saved
-  radio and port on startup, and keeps the IC-E90/IC-T90A clone override,
-  update-button link, and VC++ redistributable fixes from `1.0.27`/`1.0.28`.
+- The Windows `1.0.30` installer is live. It adds repeater frequency and
+  callsign sorting, explains missing or busy COM ports instead of showing raw
+  pyserial text, preserves the radio image when channel-map decoding fails,
+  reports an RT-950 model mismatch without retrying, and suppresses benign
+  CHIRP driver replacement warnings. It keeps the `1.0.27`-`1.0.29` fixes.
 - The Linux `1.0.29` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
@@ -42,7 +44,7 @@ release requirements.
 - Branch: `main`
 - macOS `1.0.29` artifact source commit: `de14ab6e`
 - Open pull requests: none
-- Checked-out source version: `1.0.29+29`
+- Checked-out source version: `1.0.30+30`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -57,7 +59,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.29 |
-| Windows | 1.0.29 |
+| Windows | 1.0.30 |
 | Linux | 1.0.29 |
 | Legacy shared manifest version | 1.0.29 |
 
@@ -75,11 +77,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.29.exe`
-- Version/build: `1.0.29` / `29`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.30.exe`
+- Version/build: `1.0.30` / `30`
 - SHA-256:
-  `83512d374e29cba7cf672047a5561110592a14db5817244b0f65efef78f31ba4`
-- Size: `60,995,747` bytes
+  `ef8a958f37f0d6902a02bf53c576bb90cb26645fab2cc0b161cb657f6e670d5c`
+- Size: `60,999,375` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
