@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:26:54Z"
+timestamp: "2026-10-31T10:32:13Z"
 concept_id: widgets/radio_model_picker/SectionHeader
 language: dart
 ---
@@ -28,7 +28,7 @@ class _SectionHeader
 - `build`
 
 ## Source
-Lines 551–571 in `widgets/radio_model_picker.dart`
+Lines 599–619 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

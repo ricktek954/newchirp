@@ -15,5 +15,6 @@
 - [gm32_channel](gm32_channel.md)
 - [radio_channel](radio_channel.md)
 - [radio_mapping](radio_mapping.md)
+- [repeater_counties](repeater_counties.md)
 - [repeater_regions](repeater_regions.md)
 - [repeater_search](repeater_search.md)

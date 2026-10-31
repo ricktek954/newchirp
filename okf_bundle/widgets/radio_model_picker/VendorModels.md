@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:26:54Z"
+timestamp: "2026-10-31T10:32:13Z"
 concept_id: widgets/radio_model_picker/VendorModels
 language: dart
 ---
@@ -24,7 +24,7 @@ class _VendorModels
 ```
 
 ## Source
-Lines 18–23 in `widgets/radio_model_picker.dart`
+Lines 21–26 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

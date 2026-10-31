@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/widgets/radio_model_picker.dart';
@@ -191,14 +192,16 @@ void main() {
   });
 
   testWidgets('full catalog remains scrollable', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+
     final models = List<String>.generate(
-      565,
+      574,
       (index) => 'Vendor${index}_RT-${index.toString().padLeft(3, '0')}',
     );
     final groups = {
-      for (var group = 0; group < 24; group++)
+      for (var group = 0; group < 89; group++)
         'Vendor$group': [
-          for (var index = group; index < models.length; index += 24)
+          for (var index = group; index < models.length; index += 89)
             models[index],
         ],
     };
@@ -217,12 +220,68 @@ void main() {
 
     await tester.tap(find.byKey(const ValueKey('radio-model-picker-field')));
     await tester.pumpAndSettle();
-    await tester.drag(
-      find.byKey(const ValueKey('radio-model-results-list')),
-      const Offset(0, -400),
-    );
+    final results = find.byKey(const ValueKey('radio-model-results-list'));
+    for (var index = 0; index < 8; index++) {
+      await tester.drag(results, const Offset(0, -600));
+      await tester.pump();
+    }
     await tester.pumpAndSettle();
 
-    expect(tester.takeException(), isNull);
+    final exception = tester.takeException();
+    debugDefaultTargetPlatformOverride = null;
+    expect(exception, isNull);
+  });
+
+  testWidgets('large filtered catalog scrolls on macOS', (tester) async {
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+
+    final icomModels = List<String>.generate(
+      106,
+      (index) => 'Icom_R${index.toString().padLeft(3, '0')}',
+    );
+    final models = <String>[
+      for (var index = 0; index < 468; index++)
+        'Vendor${index % 88}_Other-${index.toString().padLeft(3, '0')}',
+      ...icomModels,
+    ];
+    final groups = <String, List<String>>{
+      for (var group = 0; group < 88; group++) 'Vendor$group': <String>[],
+      'Icom': icomModels,
+    };
+    for (final model in models.take(468)) {
+      final group = model.substring(0, model.indexOf('_'));
+      groups[group]!.add(model);
+    }
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: RadioModelPicker(
+            models: models,
+            vendorModels: groups,
+            selectedModel: null,
+            onSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('radio-model-picker-field')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('radio-model-search')),
+      'icom',
+    );
+    await tester.pumpAndSettle();
+    final results = find.byKey(const ValueKey('radio-model-results-list'));
+    for (var index = 0; index < 5; index++) {
+      await tester.drag(results, const Offset(0, -500));
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+
+    final exception = tester.takeException();
+    debugDefaultTargetPlatformOverride = null;
+    expect(exception, isNull);
   });
 }

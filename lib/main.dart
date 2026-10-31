@@ -1140,7 +1140,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _openLibraryFile() async {
     const type = XTypeGroup(
-      label: 'CHIRP and MOTOTRBO files',
+      label: 'CHIRP images, CSV, or MOTOTRBO XML',
       extensions: ['csv', 'img', 'icf', 'itm', 'd72', 'xml'],
     );
     final file = await openFile(acceptedTypeGroups: const [type]);
@@ -1148,7 +1148,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final lowerPath = file.path.toLowerCase();
     _diagnosticLog.record(
       'file',
-      'Open file selected',
+      'Open channel file selected',
       context: {'name': file.name},
     );
     final isXml = lowerPath.endsWith('.xml');
@@ -3092,7 +3092,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         title: 'Load configuration',
                         description:
                             'Open a CHIRP CSV or native image file and continue editing.',
-                        buttonLabel: 'Open file',
+                        buttonLabel: 'Open channel file',
                         onPressed: _openLibraryFile,
                         help:
                             'Open a CHIRP-compatible CSV or native radio image. Native images '
@@ -6133,7 +6133,7 @@ class _TopBar extends StatelessWidget {
                 label: const Text('Print'),
               ),
             const SizedBox(width: 8),
-            _buildHelpMenu(context),
+            _buildHelpMenu(context, iconOnly: false),
           ],
         ),
       );
@@ -6143,143 +6143,206 @@ class _TopBar extends StatelessWidget {
       height: 72,
       color: Colors.white,
       padding: const EdgeInsets.symmetric(horizontal: 22),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final iconOnly = constraints.maxWidth < 760;
+          final compactLabels = constraints.maxWidth < 1120;
+          return Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Flexible(
-                      child: Text(
-                        libraryName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                    if (dirty)
-                      const Padding(
-                        padding: EdgeInsets.only(left: 7),
-                        child: Text(
-                          '• Edited',
-                          style: TextStyle(
-                            color: Color(0xFFC46A15),
-                            fontSize: 12,
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            libraryName,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
+                        if (dirty)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 7),
+                            child: Text(
+                              '• Edited',
+                              style: TextStyle(
+                                color: Color(0xFFC46A15),
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    Text(
+                      busy
+                          ? status
+                          : chirpModuleName == null
+                          ? 'CHIRP-compatible channel library'
+                          : 'Experimental CHIRP module: $chirpModuleName',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: busy
+                            ? const Color(0xFF1F7455)
+                            : chirpModuleName != null
+                            ? const Color(0xFF9B5B18)
+                            : Colors.black45,
+                        fontSize: 12,
                       ),
+                    ),
                   ],
                 ),
-                Text(
-                  busy
-                      ? status
+              ),
+              MenuAnchor(
+                builder: (context, controller, child) {
+                  void toggle() => controller.isOpen
+                      ? controller.close()
+                      : controller.open();
+                  if (iconOnly) {
+                    return IconButton(
+                      tooltip: 'New',
+                      onPressed: busy ? null : toggle,
+                      icon: const Icon(Icons.note_add_outlined),
+                    );
+                  }
+                  return TextButton.icon(
+                    onPressed: busy ? null : toggle,
+                    icon: const Icon(Icons.note_add_outlined),
+                    label: const Text('New'),
+                  );
+                },
+                menuChildren: [
+                  MenuItemButton(
+                    onPressed: onNew,
+                    leadingIcon: const Icon(Icons.note_add_outlined),
+                    child: const Text('Blank configuration'),
+                  ),
+                  MenuItemButton(
+                    onPressed: onGmrsStarter,
+                    leadingIcon: const Icon(Icons.view_list_outlined),
+                    child: const Text('GMRS starter template'),
+                  ),
+                  MenuItemButton(
+                    onPressed: onRestoreStock,
+                    leadingIcon: const Icon(Icons.restore),
+                    child: const Text('Restore stock channels'),
+                  ),
+                ],
+              ),
+              if (iconOnly)
+                IconButton(
+                  tooltip: 'Open channel file',
+                  onPressed: busy ? null : onOpen,
+                  icon: const Icon(Icons.folder_open_outlined),
+                )
+              else
+                TextButton.icon(
+                  onPressed: busy ? null : onOpen,
+                  icon: const Icon(Icons.folder_open_outlined),
+                  label: const Text('Open channel file'),
+                ),
+              if (iconOnly)
+                IconButton(
+                  tooltip: chirpModuleName == null
+                      ? 'Load CHIRP driver module…'
+                      : 'Unload CHIRP module',
+                  onPressed: busy
+                      ? null
                       : chirpModuleName == null
-                      ? 'CHIRP-compatible channel library'
-                      : 'Experimental CHIRP module: $chirpModuleName',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: busy
-                        ? const Color(0xFF1F7455)
-                        : chirpModuleName != null
-                        ? const Color(0xFF9B5B18)
-                        : Colors.black45,
-                    fontSize: 12,
+                      ? onLoadChirpModule
+                      : onUnloadChirpModule,
+                  icon: Icon(
+                    chirpModuleName == null
+                        ? Icons.extension_outlined
+                        : Icons.extension_off_outlined,
+                  ),
+                )
+              else
+                TextButton.icon(
+                  onPressed: busy
+                      ? null
+                      : chirpModuleName == null
+                      ? onLoadChirpModule
+                      : onUnloadChirpModule,
+                  icon: Icon(
+                    chirpModuleName == null
+                        ? Icons.extension_outlined
+                        : Icons.extension_off_outlined,
+                  ),
+                  label: Text(
+                    chirpModuleName != null
+                        ? 'Unload CHIRP module'
+                        : compactLabels
+                        ? 'Load driver…'
+                        : 'Load CHIRP driver module…',
                   ),
                 ),
-              ],
-            ),
-          ),
-          MenuAnchor(
-            builder: (context, controller, child) => TextButton.icon(
-              onPressed: busy
-                  ? null
-                  : () => controller.isOpen
-                        ? controller.close()
-                        : controller.open(),
-              icon: const Icon(Icons.note_add_outlined),
-              label: const Text('New'),
-            ),
-            menuChildren: [
-              MenuItemButton(
-                onPressed: onNew,
-                leadingIcon: const Icon(Icons.note_add_outlined),
-                child: const Text('Blank configuration'),
+              MenuAnchor(
+                builder: (context, controller, child) {
+                  void toggle() => controller.isOpen
+                      ? controller.close()
+                      : controller.open();
+                  if (iconOnly) {
+                    return IconButton.filled(
+                      tooltip: 'Save',
+                      onPressed: busy || !canSave ? null : toggle,
+                      icon: const Icon(Icons.save_outlined),
+                    );
+                  }
+                  return FilledButton.icon(
+                    onPressed: busy || !canSave ? null : toggle,
+                    icon: const Icon(Icons.save_outlined),
+                    label: const Text('Save'),
+                  );
+                },
+                menuChildren: [
+                  MenuItemButton(onPressed: onSave, child: const Text('Save')),
+                  MenuItemButton(
+                    onPressed: onSaveAs,
+                    child: const Text('Save as…'),
+                  ),
+                ],
               ),
-              MenuItemButton(
-                onPressed: onGmrsStarter,
-                leadingIcon: const Icon(Icons.view_list_outlined),
-                child: const Text('GMRS starter template'),
-              ),
-              MenuItemButton(
-                onPressed: onRestoreStock,
-                leadingIcon: const Icon(Icons.restore),
-                child: const Text('Restore stock channels'),
-              ),
+              const SizedBox(width: 8),
+              _buildHelpMenu(context, iconOnly: iconOnly),
             ],
-          ),
-          TextButton.icon(
-            onPressed: busy ? null : onOpen,
-            icon: const Icon(Icons.folder_open_outlined),
-            label: const Text('Open file'),
-          ),
-          MenuAnchor(
-            builder: (context, controller, child) => FilledButton.icon(
-              onPressed: busy || !canSave
-                  ? null
-                  : () => controller.isOpen
-                        ? controller.close()
-                        : controller.open(),
-              icon: const Icon(Icons.save_outlined),
-              label: const Text('Save'),
-            ),
-            menuChildren: [
-              MenuItemButton(onPressed: onSave, child: const Text('Save')),
-              MenuItemButton(
-                onPressed: onSaveAs,
-                child: const Text('Save as…'),
-              ),
-            ],
-          ),
-          const SizedBox(width: 8),
-          _buildHelpMenu(context),
-        ],
+          );
+        },
       ),
     );
   }
 
-  Widget _buildHelpMenu(BuildContext context) {
+  Widget _buildHelpMenu(BuildContext context, {required bool iconOnly}) {
     return MenuAnchor(
-      builder: (context, controller, child) => TextButton.icon(
-        onPressed: () =>
-            controller.isOpen ? controller.close() : controller.open(),
-        icon: const Icon(Icons.help_outline),
-        label: const Text('Help'),
-      ),
+      builder: (context, controller, child) {
+        void toggle() =>
+            controller.isOpen ? controller.close() : controller.open();
+        if (iconOnly) {
+          return IconButton(
+            tooltip: 'Help',
+            onPressed: toggle,
+            icon: const Icon(Icons.help_outline),
+          );
+        }
+        return TextButton.icon(
+          onPressed: toggle,
+          icon: const Icon(Icons.help_outline),
+          label: const Text('Help'),
+        );
+      },
       menuChildren: [
         MenuItemButton(
           onPressed: () => _showAbbreviationGlossary(context),
           leadingIcon: const Icon(Icons.menu_book_outlined),
           child: const Text('Abbreviations & terms'),
         ),
-        const Divider(height: 1),
-        MenuItemButton(
-          onPressed: busy ? null : onLoadChirpModule,
-          leadingIcon: const Icon(Icons.extension_outlined),
-          child: const Text('Load CHIRP driver module…'),
-        ),
-        if (chirpModuleName != null)
-          MenuItemButton(
-            onPressed: busy ? null : onUnloadChirpModule,
-            leadingIcon: const Icon(Icons.extension_off_outlined),
-            child: const Text('Unload CHIRP module'),
-          ),
         const Divider(height: 1),
         MenuItemButton(
           onPressed: checkingForUpdates ? null : onCheckForUpdates,
@@ -6863,14 +6926,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   }
 
   List<String> get _availableCounties {
-    final counties = {
+    final loadedCounties = {
       for (final result in _results?.results ?? const <RepeaterSearchResult>[])
         if (result.county.trim().isNotEmpty) result.county.trim(),
-    }.toList();
-    counties.sort(
-      (left, right) => left.toLowerCase().compareTo(right.toLowerCase()),
-    );
-    return counties;
+    };
+    return repeaterCountiesForRegion(_country, _state, loadedCounties);
   }
 
   Future<void> _chooseCounties() async {
@@ -6891,13 +6951,14 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
               )
               .toList();
           return AlertDialog(
-            title: const Text('Filter counties'),
+            title: Text('Filter $_state counties'),
             content: SizedBox(
               width: 460,
               height: 420,
               child: Column(
                 children: [
                   TextField(
+                    key: const ValueKey('county-filter-field'),
                     controller: _countyFilterController,
                     autofocus: true,
                     decoration: const InputDecoration(
@@ -6908,13 +6969,23 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                       () => countyQuery = value.trim().toLowerCase(),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => setDialogState(selected.clear),
-                      child: const Text('Clear all'),
-                    ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        '${visibleCounties.length} of ${counties.length} '
+                        'counties',
+                        style: const TextStyle(
+                          color: Colors.black54,
+                          fontSize: 12,
+                        ),
+                      ),
+                      const Spacer(),
+                      TextButton(
+                        onPressed: () => setDialogState(selected.clear),
+                        child: const Text('Clear all'),
+                      ),
+                    ],
                   ),
                   Expanded(
                     child: visibleCounties.isEmpty

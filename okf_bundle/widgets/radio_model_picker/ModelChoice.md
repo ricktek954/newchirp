@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:26:54Z"
+timestamp: "2026-10-31T10:32:13Z"
 concept_id: widgets/radio_model_picker/ModelChoice
 language: dart
 ---
@@ -28,7 +28,7 @@ class _ModelChoice
 - `build`
 
 ## Source
-Lines 573–620 in `widgets/radio_model_picker.dart`
+Lines 621–668 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

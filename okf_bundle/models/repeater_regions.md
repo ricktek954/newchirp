@@ -10,7 +10,7 @@ tags:
   - "domain:repeater_regions.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:13:55Z"
+timestamp: "2026-10-31T09:33:48Z"
 concept_id: models/repeater_regions
 language: dart
 ---
@@ -22,4 +22,6 @@ language: dart
 | Type | Target |
 |------|--------|
 | related | [repeaterRegionsForCountry](/models/repeater_regions/repeaterRegionsForCountry.md) |
+| related | [normalizeRepeaterCounty](/models/repeater_regions/normalizeRepeaterCounty.md) |
+| related | [repeaterCountiesForRegion](/models/repeater_regions/repeaterCountiesForRegion.md) |
 | related | [repeaterCountrySupportsGmrs](/models/repeater_regions/repeaterCountrySupportsGmrs.md) |
