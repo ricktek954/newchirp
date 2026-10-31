@@ -35,6 +35,7 @@ Last updated: 2026-10-31
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
@@ -404,6 +405,37 @@ Last updated: 2026-10-31
 - Next milestone: luc retests after confirming CI-V address `A2h`, USB baud
   rate 115200, `Unlink from [REMOTE]`, and `CI-V Transceive off`; then record
   a successful multi-band read and separate read/write validation
+
+### Icom IC-E90 / IC-T90A clone completion
+
+- Maintainer: NewChirp override of the upstream CHIRP `icx90.py`
+- Maintained file: `drivers/newchirp_icx90.py`
+- Protocol notes: `docs/ICX90_PROTOCOL.md`
+- Models: Icom IC-E90 and IC-T90A
+- Transport: legacy Icom ICF clone serial at 9600 8N1
+- Image: model bytes `25 07 00 01`, fixed size `0x2D40`
+- Implemented: the upstream channel, bank, settings, special-memory, read, and
+  write behavior. The override changes download completion only.
+- Read policy: a download is successful when decoded frames cover the entire
+  `0x2D40` image contiguously. This handles IC-E90 revisions that omit or
+  malform the generic final end frame after sending the complete image. A
+  normal end frame is still accepted.
+- Write policy: unchanged from upstream CHIRP.
+- Evidence: official CS-T90A CPS archive SHA-256
+  `725c37e44a781b972af49fca6b48f9190b0cd2f757e42af05eb79a7992a90038`;
+  executable SHA-256
+  `aae6ea1353a3b0f85379bf30eb66a69fc7814a5a370a555acee2579d64ff7adf`;
+  a field report received 39 bytes of model data followed by 28,261 bytes of
+  clone traffic before the generic end-frame wait failed.
+- Driver SHA-256:
+  `2d78ec1f745d424b09b6cdd7d8d832f5af4ea27cd5015a2415118007331256ac`
+- Hardware validation: none for this override. Offline tests cover complete
+  image coverage without an end frame, normal end-frame completion, and
+  truncated rejection. The public 500-channel image also loaded successfully
+  during manual validation.
+- Next milestone: Klas retests the committed fix with the same OPC-478UD port,
+  confirms that the read completes after the full image arrives, and verifies
+  the displayed channels before any upload.
 
 ### Icom ID-50 and ID-52
 
