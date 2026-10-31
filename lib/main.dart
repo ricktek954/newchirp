@@ -3218,8 +3218,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           if (installerUrl == null)
             FilledButton.icon(
               onPressed: () {
-                unawaited(openExternalUrl(downloadPageUrl));
                 Navigator.pop(dialogContext);
+                unawaited(_openDownloadPage(downloadPageUrl));
               },
               icon: const Icon(Icons.open_in_new),
               label: const Text('Open download page'),
@@ -3397,8 +3397,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             ),
             FilledButton.icon(
               onPressed: () {
-                unawaited(openExternalUrl(downloadPageUrl));
                 Navigator.pop(context);
+                unawaited(_openDownloadPage(downloadPageUrl));
               },
               icon: const Icon(Icons.open_in_new),
               label: const Text('Open download page'),
@@ -3414,6 +3414,36 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _exitForUpdate() async {
     exit(0);
+  }
+
+  /// Opens [url] in the browser and keeps the link reachable if that fails.
+  Future<void> _openDownloadPage(String url) async {
+    if (await openExternalUrl(url)) return;
+    if (!mounted) return;
+    await showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Couldn\u2019t open your browser'),
+        content: Text(
+          'NewChirp could not start the browser on this computer. Open this '
+          'address yourself to get the update:\n\n$url',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Close'),
+          ),
+          FilledButton.icon(
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: url));
+              if (dialogContext.mounted) Navigator.pop(dialogContext);
+            },
+            icon: const Icon(Icons.copy),
+            label: const Text('Copy link'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<void> _showUpToDate(UpdateCheckResult result) => showDialog<void>(
