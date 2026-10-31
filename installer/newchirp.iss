@@ -71,6 +71,20 @@ begin
     (ExpandConstant('{param:LAUNCHAPP|0}') = '1');
 end;
 
+{ True when the machine already has a 14.x VC++ runtime. Windows updates the
+  runtime in place and removes the old split "Minimum"/"Additional Runtime"
+  package keys, so re-running the redistributable makes Windows Installer
+  search for vcRuntimeAdditional_x64.msi and prompt for it. }
+function VcRuntimeInstalled: Boolean;
+var
+  Installed: String;
+begin
+  Result :=
+    RegQueryStringValue(HKLM64,
+      'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64',
+      'Installed', Installed) and (CompareText(Installed, '1') = 0);
+end;
+
 procedure CurStepChanged(CurStep: TSetupStep);
 var
   ResultCode: Integer;
@@ -79,14 +93,20 @@ begin
   begin
     if FileExists(ExpandConstant('{tmp}\vc_redist.x64.exe')) then
     begin
-      WizardForm.StatusLabel.Caption :='Installing Microsoft Visual C++ x64 runtime...';
-      if Exec(ExpandConstant('{tmp}\vc_redist.x64.exe'),
-          '/install /quiet /norestart', '', SW_HIDE,
-          ewWaitUntilTerminated, ResultCode) then
-        Log(Format('Microsoft VC++ redistributable returned code %d.', [ResultCode]))
+      if VcRuntimeInstalled then
+        Log('Microsoft Visual C++ 14.x runtime is already installed; ' +
+            'skipping the redistributable.')
       else
-        Log('Could not launch the Microsoft VC++ redistributable.');
-      WizardForm.StatusLabel.Caption := '';
+      begin
+        WizardForm.StatusLabel.Caption :='Installing Microsoft Visual C++ x64 runtime...';
+        if Exec(ExpandConstant('{tmp}\vc_redist.x64.exe'),
+            '/install /quiet /norestart', '', SW_HIDE,
+            ewWaitUntilTerminated, ResultCode) then
+          Log(Format('Microsoft VC++ redistributable returned code %d.', [ResultCode]))
+        else
+          Log('Could not launch the Microsoft VC++ redistributable.');
+        WizardForm.StatusLabel.Caption := '';
+      end;
     end;
   end;
 end;
