@@ -39,7 +39,7 @@ import 'widgets/radio_mapping_dialog.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
-const String _newChirpVersion = '1.0.26';
+const String _newChirpVersion = '1.0.27';
 
 String _formatBytes(int bytes) {
   if (bytes < 1024) return '$bytes B';

@@ -8,9 +8,10 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.26` installer is built, uploaded, and live. It fixes the
-  Windows update-button link and skips the VC++ redistributable when the
-  unified 14.x runtime is already installed.
+- The Windows `1.0.27` installer is live. It fixes the update-button link and
+  skips the VC++ redistributable when the unified 14.x runtime is installed.
+  The `1.0.26` gate never fired because `RegQueryStringValue` cannot read the
+  `Installed` DWORD; `1.0.27` reads it with `RegQueryDWordValue`.
 - The Linux `1.0.26` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
@@ -56,8 +57,8 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.26 |
-| Windows | 1.0.26 |
-| Linux | 1.0.26 |
+| Windows | 1.0.27 |
+| Linux | 1.0.27 |
 | Legacy shared manifest version | 1.0.26 |
 
 macOS artifact:
@@ -74,11 +75,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.26.exe`
-- Version/build: `1.0.26` / `26`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.27.exe`
+- Version/build: `1.0.27` / `27`
 - SHA-256:
-  `22f31a69003a788ba555afdf99806be1bc3dc1114ab44ead3a390a14e6b9b7c7`
-- Size: `60,992,539` bytes
+  `a57258b5f835408ee7f72d2a3fd304885ed273377cab98f036ee49814f1ced8a`
+- Size: `60,990,343` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
