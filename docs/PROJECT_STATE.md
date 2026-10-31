@@ -13,14 +13,13 @@ release requirements.
   download, plus the update-button and VC++ redistributable fixes from
   `1.0.27` (the `1.0.26` gate never fired because `RegQueryStringValue` cannot
   read the `Installed` DWORD).
-- The Linux `1.0.26` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.27` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.26` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes the experimental Icom IC-41S driver, complete county
-  filters, the reordered file actions, and the macOS radio-picker scroll fix.
+- The macOS `1.0.27` release is built, signed, notarized, stapled, uploaded,
+  and live. It adds the completion-safe IC-E90 clone read fix.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -41,9 +40,9 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.26` artifact source commit: `b6ae41aa`
+- macOS `1.0.27` artifact source commit: `0cc67717`
 - Open pull requests: none
-- Checked-out source version: `1.0.26+26`
+- Checked-out source version: `1.0.28+28`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -57,20 +56,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.26 |
+| macOS | 1.0.27 |
 | Windows | 1.0.28 |
 | Linux | 1.0.27 |
 | Legacy shared manifest version | 1.0.27 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.26.dmg`
-- Version/build: `1.0.26` / `26`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.27.dmg`
+- Version/build: `1.0.27` / `27`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `55be39f4bfa8627c5fce5c5e712c596f89851d57bb55f67da475f990386c360c`
-- Size: `82,114,526` bytes
-- Notarization submission: `4f94c492-adf0-4316-851d-ad76ed6e5d1f`
+  `8244b4dcacaca3b1120f746e42c47ed236bd17afc25a1b6b3553666596606a0a`
+- Size: `82,112,343` bytes
+- Notarization submission: `b7f60d4d-69be-4b68-9d1b-c4600b322aeb`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -86,27 +85,31 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.26.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.27.pkg.tar.zst`
 
-Linux 1.0.26 SHA-256:
+Linux 1.0.27 SHA-256:
 
 - DEB:
-  `bb72f9ed3b40440831b9d6a755efb9ded2b4aadb4e875feda63b23d2f8f36371`
+  `fbbc1d38baf207738cdc6ead37f6fd379aadb24ebd373f42b1899b3fa22b025c`
 - RPM:
-  `e7be56f4ff8406acc5a9ee512885ff8d383b3453d369beeb1c7fb3dc6d4172aa`
+  `f0dc14360aa548cdb3bfe749a0f4d7b764f15a266410586b48d478ff00acdd94`
 - AppImage:
-  `bca743006f96f6c2eb8b62c4a3bc8b37e7bb79d893633a75c117ea2784d13470`
+  `2505084dd6c8142d75b440b6a18f81e7a1a4613933277cea96fa653e203a04cd`
 - Pacman:
-  `d92cc64422a295c928985498f985da3f0ec9a8249a437a11c837d94b888ef017`
+  `f059d6d5eae5314caa679003b16ccbb5d118ff011b509be36818479ad5ec903a`
 
 ## Recently completed
 
+- Published macOS `1.0.27` as a universal signed, notarized, stapled DMG.
+  Verified the embedded version, Python runtimes, CHIRP pin, IC-E90 and
+  IC-41S driver bundles, strict code signatures, Gatekeeper assessment, server
+  checksum, and live platform manifest.
 - Published macOS `1.0.26` as a universal signed, notarized, stapled DMG.
   Verified the embedded version, Python runtimes, CHIRP pin, IC-41S driver
   bundle, strict code signatures, Gatekeeper assessment, server checksum, and
@@ -194,24 +197,26 @@ Linux 1.0.26 SHA-256:
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
 
-## macOS 1.0.26 verification status
+## macOS 1.0.27 verification status
 
-Full verification before the macOS `1.0.26` release:
+Full verification before the macOS `1.0.27` release:
 
 - `flutter analyze`: clean
-- `flutter test`: all 168 tests passed
-- Python test discovery: 163 tests passed, 2 fixture-dependent tests skipped
+- `flutter test`: all 173 tests passed
+- Python test discovery: 167 tests passed, 2 fixture-dependent tests skipped
 - Bridge upload/settings suite: all 43 tests passed
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
-- App version/build in the mounted DMG: `1.0.26` / `26`
+- App version/build in the mounted DMG: `1.0.27` / `27`
 - Main executable architectures: `arm64` and `x86_64`
 - Bundled Python: `3.13.15` for both architectures
 - Bundled CHIRP commit:
   `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled IC-E90 completion override SHA-256:
+  `2d78ec1f745d424b09b6cdd7d8d832f5af4ea27cd5015a2415118007331256ac`
 - Bundled experimental IC-41S driver SHA-256:
   `5f884d58a8bd3dea5d5d8dc4da2137877f5eff9b2d6b97c110851ad4d4dd247c`
 - Server SHA-256 matched the final stapled DMG
-- `/api/releases/latest` reports macOS `1.0.26`
+- `/api/releases/latest` reports macOS `1.0.27`
 
 ## macOS 1.0.24 verification status
 
@@ -289,7 +294,7 @@ Full verification before the Linux `1.0.17` release:
 - Forum like counts and website-side ranking are a separate website project,
   not part of this Flutter repository.
 - The direct updater is first shipped in 1.0.23 and has automated coverage.
-  Exercise the full in-app update path from 1.0.25 to 1.0.26.
+  Exercise the full in-app update path from 1.0.26 to 1.0.27.
 - The roadmap in `docs/SOFTWARE_ROADMAP.md` is older than this handoff and
   contains stale release-status items. Update it when doing broader roadmap
   maintenance.
