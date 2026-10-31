@@ -257,7 +257,9 @@ bool isAllowedDownloadUrl(String url) {
   final trimmed = url.trim();
   if (trimmed.isEmpty || trimmed.contains(RegExp(r'[\s\\]'))) return false;
   final uri = Uri.tryParse(trimmed);
-  if (uri == null || !uri.isAbsolute) return false;
+  // `Uri.isAbsolute` is false for any URI with a fragment, and the published
+  // download page is `https://newchirp.net/#download`.
+  if (uri == null || !uri.hasScheme) return false;
   if (uri.scheme != 'https') return false;
   if (uri.userInfo.isNotEmpty) return false;
   if (uri.host != 'newchirp.net') return false;
@@ -310,26 +312,45 @@ String? trustedUpdateArtifactUrl(String? raw, {String? platform}) {
 
 /// Opens a newchirp.net download page in the default browser.
 ///
-/// Returns false when [url] is not an allowed download page, or when no
-/// usable launcher is available. The launched address is rebuilt as https on
+/// Returns false when [url] is not an allowed download page, or when the
+/// launcher refused to start. The launched address is rebuilt as https on
 /// newchirp.net, so a tricky string cannot change the site.
-Future<bool> openExternalUrl(String url) async {
+///
+/// [launcher] replaces the platform launcher in tests.
+Future<bool> openExternalUrl(
+  String url, {
+  Future<bool> Function(String url)? launcher,
+}) async {
   if (!isAllowedDownloadUrl(url)) return false;
   final allowed = trustedDownloadUrl(url);
   if (!isAllowedDownloadUrl(allowed)) return false;
+  final launch = launcher ?? _launchExternalUrl;
   try {
-    if (Platform.isMacOS) {
-      await Process.run('/usr/bin/open', [allowed]);
-    } else if (Platform.isWindows) {
-      await Process.run(r'C:\Windows\System32\rundll32.exe', [
-        'url.dll,FileProtocolHandler',
-        allowed,
-      ]);
-    } else {
-      await Process.run('xdg-open', [allowed]);
-    }
-    return true;
+    return await launch(allowed);
   } on ProcessException {
     return false;
+  } on ArgumentError {
+    return false;
   }
+}
+
+/// Starts the platform browser for an already validated address.
+///
+/// Windows hands the address to Explorer, the shell entry point a user reaches
+/// by clicking a link. Earlier builds shelled out to
+/// `rundll32 url.dll,FileProtocolHandler`, which endpoint protection software
+/// blocks by policy and which reports no error at all when it does nothing.
+/// Explorer exits with a non-zero code even when it opens the page, so only a
+/// failure to start the process counts as a failed launch.
+Future<bool> _launchExternalUrl(String url) async {
+  if (Platform.isWindows) {
+    await Process.start(r'C:\Windows\explorer.exe', [
+      url,
+    ], mode: ProcessStartMode.detached);
+    return true;
+  }
+  final result = Platform.isMacOS
+      ? await Process.run('/usr/bin/open', [url])
+      : await Process.run('xdg-open', [url]);
+  return result.exitCode == 0;
 }

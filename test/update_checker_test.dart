@@ -230,10 +230,80 @@ void main() {
       expect(trustedDownloadUrl(null), officialDownloadPageUrl);
     });
 
+    test('accepts the published download page with its fragment', () {
+      expect(isAllowedDownloadUrl(officialDownloadPageUrl), isTrue);
+      expect(isAllowedDownloadUrl('https://newchirp.net/#download'), isTrue);
+      expect(
+        trustedDownloadUrl('https://newchirp.net/#download'),
+        'https://newchirp.net/#download',
+      );
+    });
+
     test('does not launch a page outside newchirp.net', () async {
       expect(await openExternalUrl('https://evil.example/setup.exe'), isFalse);
       expect(await openExternalUrl('calc.exe'), isFalse);
       expect(await openExternalUrl('http://newchirp.net/#download'), isFalse);
+    });
+
+    test('hands the trusted download page to the launcher', () async {
+      final launched = <String>[];
+      expect(
+        await openExternalUrl(
+          'https://newchirp.net/#download',
+          launcher: (url) async {
+            launched.add(url);
+            return true;
+          },
+        ),
+        isTrue,
+      );
+      expect(launched, ['https://newchirp.net/#download']);
+    });
+
+    test(
+      'keeps the fragment when the manifest links to a page section',
+      () async {
+        final launched = <String>[];
+        await openExternalUrl(
+          'https://newchirp.net:443/#download',
+          launcher: (url) async {
+            launched.add(url);
+            return true;
+          },
+        );
+        expect(launched, ['https://newchirp.net/#download']);
+      },
+    );
+
+    test('reports a refused or blocked launch', () async {
+      expect(
+        await openExternalUrl(
+          'https://newchirp.net/#download',
+          launcher: (_) async => false,
+        ),
+        isFalse,
+      );
+      expect(
+        await openExternalUrl(
+          'https://newchirp.net/#download',
+          launcher: (_) async =>
+              throw const ProcessException('explorer.exe', []),
+        ),
+        isFalse,
+      );
+    });
+
+    test('never calls the launcher for an untrusted address', () async {
+      var calls = 0;
+      final opened = await openExternalUrl(
+        'https://evil.example/setup.exe',
+        launcher: (_) async {
+          calls++;
+          return true;
+        },
+      );
+      expect(opened, isFalse);
+      expect(calls, 0);
     });
   });
 
@@ -292,7 +362,7 @@ void main() {
           'https://newchirp.net/downloads/NewChirp-1.0.23.dmg#fragment',
           platform: 'macos',
         ),
-        isNull,
+        'https://newchirp.net/downloads/NewChirp-1.0.23.dmg',
       );
     });
   });
