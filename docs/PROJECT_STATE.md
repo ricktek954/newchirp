@@ -8,11 +8,9 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.28` installer is live. It bundles the completion-safe
-  `drivers/newchirp_icx90.py` override for the Icom IC-E90 and IC-T90A clone
-  download, plus the update-button and VC++ redistributable fixes from
-  `1.0.27` (the `1.0.26` gate never fired because `RegQueryStringValue` cannot
-  read the `Installed` DWORD).
+- The Windows `1.0.29` installer is live. It restores and validates the saved
+  radio and port on startup, and keeps the IC-E90/IC-T90A clone override,
+  update-button link, and VC++ redistributable fixes from `1.0.27`/`1.0.28`.
 - The Linux `1.0.27` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
@@ -57,7 +55,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.27 |
-| Windows | 1.0.28 |
+| Windows | 1.0.29 |
 | Linux | 1.0.27 |
 | Legacy shared manifest version | 1.0.27 |
 
@@ -75,11 +73,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.28.exe`
-- Version/build: `1.0.28` / `28`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.29.exe`
+- Version/build: `1.0.29` / `29`
 - SHA-256:
-  `7ec0f7babbd7f3887a605b813095902a0b6361c6ccfa0052b04c0598bcfb3725`
-- Size: `60,994,185` bytes
+  `83512d374e29cba7cf672047a5561110592a14db5817244b0f65efef78f31ba4`
+- Size: `60,995,747` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
