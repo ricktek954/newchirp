@@ -16,10 +16,10 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.28` release is built, signed, notarized, stapled, uploaded,
-  and live. It restores the saved radio and connection on startup, loads and
-  validates that model against the catalog, and keeps Read/Write disabled
-  until the saved selection is usable.
+- The macOS `1.0.29` release is built, signed, notarized, stapled, uploaded,
+  and live. It carries forward saved-radio restoration, repeater sorting, the
+  ID-50 post-download image recovery diagnostics, and clearer missing-COM-port
+  guidance.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -40,7 +40,7 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- macOS `1.0.28` artifact source commit: `405dc18f`
+- macOS `1.0.29` artifact source commit: `de14ab6e`
 - Open pull requests: none
 - Checked-out source version: `1.0.29+29`
 - macOS builds are pinned to CocoaPods with
@@ -56,20 +56,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.28 |
+| macOS | 1.0.29 |
 | Windows | 1.0.29 |
 | Linux | 1.0.29 |
-| Legacy shared manifest version | 1.0.28 |
+| Legacy shared manifest version | 1.0.29 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.28.dmg`
-- Version/build: `1.0.28` / `28`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.29.dmg`
+- Version/build: `1.0.29` / `29`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `d9a89caf2bbcac5b993d37ceebf9d976dff3eba7427eabd0af164d0dd7320e3a`
-- Size: `82,114,918` bytes
-- Notarization submission: `36380271-5ee2-4299-89fe-e6ce5c5d976f`
+  `2eb718fd3ffc02ac212fc261ee50eda6af86b741724971401b3dd998aa321a3d`
+- Size: `82,117,269` bytes
+- Notarization submission: `ba8ac2b9-6e32-4d43-a8a4-2808d45b9d99`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -216,6 +216,28 @@ Linux 1.0.29 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.29 verification status
+
+Full verification before the macOS `1.0.29` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 176 tests passed
+- Python test discovery: 170 tests passed, 2 fixture-dependent tests skipped
+- Bridge upload/settings suite: all 46 tests passed
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.29` / `29`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled IC-E90 completion override SHA-256:
+  `2d78ec1f745d424b09b6cdd7d8d832f5af4ea27cd5015a2415118007331256ac`
+- Bundled experimental IC-41S driver SHA-256:
+  `5f884d58a8bd3dea5d5d8dc4da2137877f5eff9b2d6b97c110851ad4d4dd247c`
+- Notarization submission: `ba8ac2b9-6e32-4d43-a8a4-2808d45b9d99`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.29`
 
 ## macOS 1.0.28 verification status
 
