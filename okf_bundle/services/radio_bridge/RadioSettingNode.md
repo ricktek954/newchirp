@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-10-31T00:09:10Z"
 concept_id: services/radio_bridge/RadioSettingNode
 language: dart
 ---
@@ -39,7 +39,7 @@ RadioSettingNode({
 ```
 
 ## Source
-Lines 183–198 in `services/radio_bridge.dart`
+Lines 187–202 in `services/radio_bridge.dart`
 
 ## Relationships
 

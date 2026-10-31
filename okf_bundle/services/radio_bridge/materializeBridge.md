@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-10-31T00:09:10Z"
 concept_id: services/radio_bridge/materializeBridge
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_materializeBridge_materializeBridge
 ```
 
 ## Source
-Lines 953–953 in `services/radio_bridge.dart`
+Lines 960–960 in `services/radio_bridge.dart`
 
 ## Relationships
 

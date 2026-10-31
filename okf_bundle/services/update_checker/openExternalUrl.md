@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T13:42:17Z"
+timestamp: "2026-10-31T00:09:10Z"
 concept_id: services/update_checker/openExternalUrl
 language: dart
 ---
@@ -35,7 +35,7 @@ usable launcher is available. The launched address is rebuilt as https on
 newchirp.net, so a tricky string cannot change the site.
 
 ## Source
-Lines 315–315 in `services/update_checker.dart`
+Lines 316–316 in `services/update_checker.dart`
 
 ## Relationships
 
