@@ -71,18 +71,36 @@ begin
     (ExpandConstant('{param:LAUNCHAPP|0}') = '1');
 end;
 
+const
+  VcRuntimeKey = 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64';
+
 { True when the machine already has a 14.x VC++ runtime. Windows updates the
-  runtime in place and removes the old split "Minimum"/"Additional Runtime"
-  package keys, so re-running the redistributable makes Windows Installer
-  search for vcRuntimeAdditional_x64.msi and prompt for it. }
+  runtime in place and no longer keeps the old split "Minimum"/"Additional
+  Runtime" MSI packages, so running the redistributable again makes Windows
+  Installer search for vcRuntimeAdditional_x64.msi and prompt for it. The
+  `Installed` value is a DWORD on current runtimes, so it must not be read as
+  a string. }
 function VcRuntimeInstalled: Boolean;
 var
-  Installed: String;
+  InstalledDword: Cardinal;
+  InstalledText, VersionText: String;
 begin
-  Result :=
-    RegQueryStringValue(HKLM64,
-      'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64',
-      'Installed', Installed) and (CompareText(Installed, '1') = 0);
+  if RegQueryDWordValue(HKLM64, VcRuntimeKey, 'Installed', InstalledDword) then
+    Result := InstalledDword = 1
+  else if RegQueryStringValue(HKLM64, VcRuntimeKey, 'Installed', InstalledText) then
+    Result := CompareText(InstalledText, '1') = 0
+  else if RegQueryStringValue(HKLM64, VcRuntimeKey, 'Version', VersionText) then
+    Result := CompareText(Copy(VersionText, 1, 3), 'v14') = 0
+  else if RegQueryDWordValue(HKLM32, VcRuntimeKey, 'Installed', InstalledDword) then
+    Result := InstalledDword = 1
+  else begin
+    RegQueryStringValue(HKLM32, VcRuntimeKey, 'Version', VersionText);
+    Result := CompareText(Copy(VersionText, 1, 3), 'v14') = 0;
+  end;
+  if Result then
+    Log('Microsoft Visual C++ 14.x runtime is present.')
+  else
+    Log('Microsoft Visual C++ 14.x runtime was not detected.');
 end;
 
 procedure CurStepChanged(CurStep: TSetupStep);
