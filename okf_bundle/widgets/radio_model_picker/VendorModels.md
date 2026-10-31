@@ -1,30 +1,30 @@
 ---
 okf_version: "0.2"
-type: Function
-title: _handleSelected
+type: Class
+title: _VendorModels
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
-  - "type:Function"
+  - "type:Class"
   - "module:widgets"
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
-concept_id: widgets/radio_model_picker/handleSelected
+timestamp: "2026-10-31T09:26:54Z"
+concept_id: widgets/radio_model_picker/VendorModels
 language: dart
 ---
 
-# _handleSelected
+# _VendorModels
 
 ## Signature
 
 ```dart
-void_handleSelected(String model)
+class _VendorModels
 ```
 
 ## Source
-Lines 131–131 in `widgets/radio_model_picker.dart`
+Lines 18–23 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

@@ -1,29 +1,66 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-const int _maxVisibleRadioModels = 100;
-const double _optionHeight = 48;
+const String _allVendors = 'All manufacturers';
+const String _recentVendors = 'Recent';
+const int _maxRecentModels = 8;
 
 String displayRadioModelName(String model) => model.replaceAll('_', ' ');
 
-class _RadioModelCandidate {
-  _RadioModelCandidate(this.model)
-    : foldedLabel = model.replaceAll('_', ' ').toLowerCase(),
-      compactLabel = model
-          .replaceAll('_', ' ')
-          .toLowerCase()
-          .replaceAll(RegExp(r'[\s_-]+'), '');
+String _vendorSlug(String vendor) => vendor.replaceAll(' ', '_');
 
-  final String model;
-  final String foldedLabel;
-  final String compactLabel;
+String _modelNameWithinVendor(String model, String vendor) {
+  final prefix = '${_vendorSlug(vendor)}_';
+  return model.startsWith(prefix)
+      ? displayRadioModelName(model.substring(prefix.length))
+      : displayRadioModelName(model);
 }
 
-class _RadioModelMatches {
-  const _RadioModelMatches(this.count, this.visible);
+class _VendorModels {
+  const _VendorModels(this.vendor, this.models);
 
-  final int count;
-  final List<String> visible;
+  final String vendor;
+  final List<String> models;
+}
+
+List<_VendorModels> _groupModels(
+  List<String> models,
+  Map<String, List<String>> vendorModels,
+) {
+  final available = models.toSet();
+  if (vendorModels.isNotEmpty) {
+    final groups = <_VendorModels>[];
+    final grouped = <String>{};
+    for (final entry in vendorModels.entries) {
+      final groupedModels =
+          entry.value.where(available.contains).toSet().toList()..sort();
+      if (groupedModels.isEmpty) continue;
+      groups.add(_VendorModels(entry.key, groupedModels));
+      grouped.addAll(groupedModels);
+    }
+    final remaining = available.difference(grouped).toList()..sort();
+    if (remaining.isNotEmpty) {
+      groups.add(_VendorModels('Other', remaining));
+    }
+    groups.sort(
+      (a, b) => a.vendor.toLowerCase().compareTo(b.vendor.toLowerCase()),
+    );
+    return groups;
+  }
+
+  final inferred = <String, List<String>>{};
+  for (final model in models) {
+    final separator = model.indexOf('_');
+    final vendor = separator < 0 ? 'Other' : model.substring(0, separator);
+    inferred.putIfAbsent(vendor, () => []).add(model);
+  }
+  final groups = [
+    for (final entry in inferred.entries)
+      _VendorModels(
+        entry.key.replaceAll('_', ' '),
+        entry.value.toList()..sort(),
+      ),
+  ]..sort((a, b) => a.vendor.toLowerCase().compareTo(b.vendor.toLowerCase()));
+  return groups;
 }
 
 class RadioModelPicker extends StatefulWidget {
@@ -32,10 +69,12 @@ class RadioModelPicker extends StatefulWidget {
     required this.models,
     required this.selectedModel,
     required this.onSelected,
+    this.vendorModels = const {},
     this.enabled = true,
   });
 
   final List<String> models;
+  final Map<String, List<String>> vendorModels;
   final String? selectedModel;
   final ValueChanged<String> onSelected;
   final bool enabled;
@@ -45,270 +84,537 @@ class RadioModelPicker extends StatefulWidget {
 }
 
 class _RadioModelPickerState extends State<RadioModelPicker> {
-  late final TextEditingController _controller;
-  late final FocusNode _focusNode;
-  late final ValueNotifier<String> _query;
-  late final ScrollController _optionsScrollController;
-  List<_RadioModelCandidate> _candidates = const [];
-  String? _cachedQuery;
-  _RadioModelMatches? _cachedMatches;
+  final List<String> _recentModels = [];
 
   @override
   void initState() {
     super.initState();
-    _query = ValueNotifier(_selectedLabel);
-    _candidates = _buildCandidates();
-    _controller = TextEditingController(text: _query.value);
-    _optionsScrollController = ScrollController();
-    _focusNode = FocusNode(debugLabel: 'Radio model type-ahead')
-      ..addListener(_handleFocusChange);
+    _remember(widget.selectedModel);
   }
 
   @override
   void didUpdateWidget(RadioModelPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (!listEquals(oldWidget.models, widget.models)) {
-      _candidates = _buildCandidates();
-      _cachedQuery = null;
-      _cachedMatches = null;
-    }
     if (oldWidget.selectedModel != widget.selectedModel) {
-      final nextQuery = _selectedLabel;
-      if (!_focusNode.hasFocus || _query.value != nextQuery) {
-        _query.value = nextQuery;
-        _setControllerText(nextQuery);
-      }
+      _remember(widget.selectedModel);
     }
   }
 
-  @override
-  void dispose() {
-    _focusNode
-      ..removeListener(_handleFocusChange)
-      ..dispose();
-    _query.dispose();
-    _optionsScrollController.dispose();
-    _controller.dispose();
-    super.dispose();
+  void _remember(String? model) {
+    if (model == null || model.isEmpty) return;
+    _recentModels
+      ..remove(model)
+      ..insert(0, model);
+    if (_recentModels.length > _maxRecentModels) {
+      _recentModels.removeRange(_maxRecentModels, _recentModels.length);
+    }
   }
 
-  String get _selectedLabel {
-    final selectedModel = widget.selectedModel;
-    return selectedModel == null ? '' : displayRadioModelName(selectedModel);
-  }
-
-  List<_RadioModelCandidate> _buildCandidates() =>
-      widget.models.map(_RadioModelCandidate.new).toList(growable: false);
-
-  void _setControllerText(String value) {
-    _controller.value = TextEditingValue(
-      text: value,
-      selection: TextSelection.collapsed(offset: value.length),
+  Future<void> _openPicker() async {
+    final selected = await showDialog<String>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => _RadioModelDialog(
+        models: widget.models,
+        vendorModels: widget.vendorModels,
+        selectedModel: widget.selectedModel,
+        recentModels: List.unmodifiable(_recentModels),
+      ),
     );
-  }
-
-  void _handleFocusChange() {
-    if (!mounted) return;
-    if (_focusNode.hasFocus) {
-      setState(() {});
-      return;
-    }
-
-    // A dismissed partial search must not look like a selected radio.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted ||
-          _focusNode.hasFocus ||
-          _controller.text == _selectedLabel) {
-        if (mounted) setState(() {});
-        return;
-      }
-      _query.value = _selectedLabel;
-      _setControllerText(_selectedLabel);
-      setState(() {});
-    });
-  }
-
-  void _handleSelected(String model) {
-    final label = displayRadioModelName(model);
-    _query.value = label;
-    _setControllerText(label);
-    widget.onSelected(model);
-  }
-
-  void _showAllModels() {
-    _focusNode.requestFocus();
-    // RawAutocomplete only refreshes its options after the field text changes.
-    // Clear the current label so the browse button always exposes the catalog.
-    _setControllerText(' ');
-    _setControllerText('');
-    _query.value = '';
-    setState(() {});
-  }
-
-  _RadioModelMatches _matchesForQuery(String query) {
-    final foldedQuery = query.trim().toLowerCase();
-    if (_cachedQuery == foldedQuery && _cachedMatches != null) {
-      return _cachedMatches!;
-    }
-
-    final terms = foldedQuery
-        .split(RegExp(r'\s+'))
-        .where((term) => term.isNotEmpty)
-        .toList(growable: false);
-    final compactQuery = foldedQuery.replaceAll(RegExp(r'[\s_-]+'), '');
-    var count = 0;
-    final visible = <String>[];
-
-    for (final candidate in _candidates) {
-      final matches =
-          foldedQuery.isEmpty ||
-          candidate.foldedLabel.contains(foldedQuery) ||
-          terms.every(candidate.foldedLabel.contains) ||
-          (compactQuery.isNotEmpty &&
-              candidate.compactLabel.contains(compactQuery));
-      if (!matches) continue;
-      count++;
-      if (visible.length < _maxVisibleRadioModels) {
-        visible.add(candidate.model);
-      }
-    }
-
-    final result = _RadioModelMatches(count, List.unmodifiable(visible));
-    _cachedQuery = foldedQuery;
-    _cachedMatches = result;
-    return result;
-  }
-
-  String? _searchHelperFor(String query) {
-    if (!_focusNode.hasFocus || query.trim().isEmpty) return null;
-    final count = _matchesForQuery(query).count;
-    if (count == 0) return 'No radio models match this search.';
-    if (count > _maxVisibleRadioModels) {
-      return 'Showing the first $_maxVisibleRadioModels of $count matches. '
-          'Keep typing to narrow the list.';
-    }
-    return count == 1 ? '1 matching radio' : '$count matching radios';
+    if (selected == null || !mounted) return;
+    setState(() => _remember(selected));
+    widget.onSelected(selected);
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    return RawAutocomplete<String>(
-      textEditingController: _controller,
-      focusNode: _focusNode,
-      displayStringForOption: displayRadioModelName,
-      optionsBuilder: (value) => _matchesForQuery(value.text).visible,
-      onSelected: _handleSelected,
-      fieldViewBuilder:
-          (context, textEditingController, focusNode, onFieldSubmitted) {
-            return ValueListenableBuilder<String>(
-              valueListenable: _query,
-              builder: (context, query, _) {
-                return TextField(
-                  key: const ValueKey('radio-model-typeahead-field'),
-                  controller: textEditingController,
-                  focusNode: focusNode,
-                  enabled: widget.enabled,
-                  selectAllOnFocus: true,
-                  autocorrect: false,
-                  enableSuggestions: false,
-                  textInputAction: TextInputAction.search,
-                  onChanged: (value) => _query.value = value,
-                  onSubmitted: (_) => onFieldSubmitted(),
-                  decoration: InputDecoration(
-                    labelText:
-                        'Radio model (${widget.models.length} available)',
-                    hintText:
-                        'Start typing a manufacturer or model, or use the arrow',
-                    helperText:
-                        _searchHelperFor(query) ??
-                        (widget.selectedModel == null
-                            ? 'No radio model selected.'
-                            : null),
-                    prefixIcon: const Icon(Icons.settings_input_antenna),
-                    suffixIcon: IconButton(
-                      key: const ValueKey('radio-model-show-options'),
-                      tooltip: 'Browse radio models',
-                      onPressed: widget.enabled ? _showAllModels : null,
-                      icon: const Icon(Icons.arrow_drop_down),
+    final theme = Theme.of(context);
+    final selectedModel = widget.selectedModel;
+    final selectedVendor = selectedModel == null
+        ? null
+        : _groupModels(
+            widget.models,
+            widget.vendorModels,
+          ).where((group) => group.models.contains(selectedModel)).firstOrNull;
+    return Semantics(
+      button: true,
+      label: selectedModel == null
+          ? 'Choose radio model'
+          : 'Selected radio ${displayRadioModelName(selectedModel)}',
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          key: const ValueKey('radio-model-picker-field'),
+          borderRadius: BorderRadius.circular(8),
+          onTap: widget.enabled ? _openPicker : null,
+          child: InputDecorator(
+            isEmpty: selectedModel == null,
+            decoration: InputDecoration(
+              labelText: 'Radio model (${widget.models.length} available)',
+              prefixIcon: const Icon(Icons.settings_input_antenna),
+              suffixIcon: const Icon(Icons.arrow_drop_down),
+              enabled: widget.enabled,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  selectedModel == null
+                      ? 'Browse supported radios'
+                      : displayRadioModelName(selectedModel),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleMedium,
+                ),
+                if (selectedVendor != null)
+                  Text(
+                    selectedVendor.vendor,
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
-                );
-              },
-            );
-          },
-      optionsViewBuilder: (context, onSelected, options) {
-        final visibleOptions = options.toList(growable: false);
-        final highlightedIndex = AutocompleteHighlightedOption.of(context);
-        final menuHeight = (visibleOptions.length * _optionHeight + 8)
-            .clamp(0.0, 360.0)
-            .toDouble();
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            key: const ValueKey('radio-model-typeahead-options'),
-            elevation: 10,
-            color: colorScheme.surface,
-            clipBehavior: Clip.antiAlias,
-            borderRadius: BorderRadius.circular(10),
-            child: SizedBox(
-              height: menuHeight,
-              child: Scrollbar(
-                controller: _optionsScrollController,
-                child: ListView.builder(
-                  key: const ValueKey('radio-model-typeahead-list'),
-                  controller: _optionsScrollController,
-                  padding: const EdgeInsets.symmetric(vertical: 4),
-                  itemExtent: _optionHeight,
-                  itemCount: visibleOptions.length,
-                  itemBuilder: (context, index) {
-                    final model = visibleOptions[index];
-                    final selected = model == widget.selectedModel;
-                    return Material(
-                      color: index == highlightedIndex
-                          ? colorScheme.primary.withValues(alpha: 0.12)
-                          : Colors.transparent,
-                      child: InkWell(
-                        key: ValueKey('radio-model-option-$model'),
-                        onTap: () => onSelected(model),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 13,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  displayRadioModelName(model),
-                                  style: TextStyle(
-                                    color: selected
-                                        ? colorScheme.primary
-                                        : colorScheme.onSurface,
-                                    fontWeight: selected
-                                        ? FontWeight.w600
-                                        : FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                              if (selected)
-                                Icon(
-                                  Icons.check,
-                                  size: 18,
-                                  color: colorScheme.primary,
-                                ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+              ],
             ),
           ),
-        );
-      },
+        ),
+      ),
+    );
+  }
+}
+
+class _RadioModelDialog extends StatefulWidget {
+  const _RadioModelDialog({
+    required this.models,
+    required this.vendorModels,
+    required this.selectedModel,
+    required this.recentModels,
+  });
+
+  final List<String> models;
+  final Map<String, List<String>> vendorModels;
+  final String? selectedModel;
+  final List<String> recentModels;
+
+  @override
+  State<_RadioModelDialog> createState() => _RadioModelDialogState();
+}
+
+class _RadioModelDialogState extends State<_RadioModelDialog> {
+  late final TextEditingController _searchController;
+  late final FocusNode _searchFocus;
+  late final List<_VendorModels> _groups;
+  String? _vendor;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+    _searchFocus = FocusNode(debugLabel: 'Radio model catalog search');
+    _groups = _groupModels(widget.models, widget.vendorModels);
+    _vendor = _groups
+        .where((group) => group.models.contains(widget.selectedModel))
+        .map((group) => group.vendor)
+        .firstOrNull;
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _searchFocus.dispose();
+    super.dispose();
+  }
+
+  List<_VendorModels> _matchingGroups() {
+    final query = _searchController.text.trim().toLowerCase();
+    final compactQuery = query.replaceAll(RegExp(r'[\s_-]+'), '');
+    final terms = query
+        .split(RegExp(r'\s+'))
+        .where((term) => term.isNotEmpty)
+        .toList(growable: false);
+
+    Iterable<_VendorModels> source;
+    if (query.isNotEmpty) {
+      source = _groups;
+    } else if (_vendor == _recentVendors) {
+      final recentSet = widget.recentModels.toSet();
+      source = [
+        _VendorModels(
+          _recentVendors,
+          widget.recentModels.where(recentSet.contains).toList(),
+        ),
+      ];
+    } else if (_vendor != null && _vendor != _allVendors) {
+      source = _groups.where((group) => group.vendor == _vendor);
+    } else {
+      source = _groups;
+    }
+
+    final matches = <_VendorModels>[];
+    for (final group in source) {
+      final models = group.models
+          .where((model) {
+            if (query.isEmpty) return true;
+            final haystack = '${displayRadioModelName(model)} ${group.vendor}'
+                .toLowerCase();
+            final compact = haystack.replaceAll(RegExp(r'[\s_-]+'), '');
+            return haystack.contains(query) ||
+                terms.every(haystack.contains) ||
+                (compactQuery.isNotEmpty && compact.contains(compactQuery));
+          })
+          .toList(growable: false);
+      if (models.isNotEmpty) {
+        matches.add(_VendorModels(group.vendor, models));
+      }
+    }
+    return matches;
+  }
+
+  void _selectVendor(String? vendor) {
+    setState(() {
+      _vendor = vendor;
+      _searchController.clear();
+    });
+    _searchFocus.requestFocus();
+  }
+
+  void _submitSearch() {
+    final matches = _matchingGroups();
+    if (matches.isEmpty || matches.first.models.isEmpty) return;
+    Navigator.pop(context, matches.first.models.first);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final groups = _matchingGroups();
+    final resultCount = groups.fold<int>(
+      0,
+      (total, group) => total + group.models.length,
+    );
+    return Dialog(
+      key: const ValueKey('radio-model-picker-dialog'),
+      insetPadding: const EdgeInsets.all(24),
+      clipBehavior: Clip.antiAlias,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 920, maxHeight: 680),
+        child: SizedBox(
+          width: 900,
+          height: 640,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 20, 16, 14),
+                child: Row(
+                  children: [
+                    const Icon(Icons.settings_input_antenna, size: 28),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Choose your radio',
+                            style: theme.textTheme.headlineSmall?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            'Browse by manufacturer or search the complete '
+                            'catalog.',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    IconButton(
+                      tooltip: 'Close',
+                      onPressed: () => Navigator.pop(context),
+                      icon: const Icon(Icons.close),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 16),
+                child: TextField(
+                  key: const ValueKey('radio-model-search'),
+                  controller: _searchController,
+                  focusNode: _searchFocus,
+                  autofocus: true,
+                  onChanged: (_) => setState(() {}),
+                  onSubmitted: (_) => _submitSearch(),
+                  decoration: InputDecoration(
+                    hintText:
+                        'Search by manufacturer or model, e.g. Icom ID-52',
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: _searchController.text.isEmpty
+                        ? null
+                        : IconButton(
+                            tooltip: 'Clear search',
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() {});
+                            },
+                            icon: const Icon(Icons.clear),
+                          ),
+                  ),
+                ),
+              ),
+              const Divider(height: 1),
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SizedBox(
+                      width: 224,
+                      child: Material(
+                        color: theme.colorScheme.surfaceContainerLow,
+                        child: ListView(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          children: [
+                            if (widget.recentModels.isNotEmpty)
+                              _VendorChoice(
+                                key: const ValueKey(
+                                  'radio-model-vendor-recent',
+                                ),
+                                label: _recentVendors,
+                                count: widget.recentModels.length,
+                                selected: _vendor == _recentVendors,
+                                onTap: () => _selectVendor(_recentVendors),
+                              ),
+                            _VendorChoice(
+                              key: const ValueKey('radio-model-vendor-all'),
+                              label: _allVendors,
+                              count: widget.models.length,
+                              selected:
+                                  _vendor == null || _vendor == _allVendors,
+                              onTap: () => _selectVendor(null),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.fromLTRB(18, 14, 18, 6),
+                              child: Divider(),
+                            ),
+                            for (final group in _groups)
+                              _VendorChoice(
+                                key: ValueKey(
+                                  'radio-model-vendor-${group.vendor}',
+                                ),
+                                label: group.vendor,
+                                count: group.models.length,
+                                selected: _vendor == group.vendor,
+                                onTap: () => _selectVendor(group.vendor),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const VerticalDivider(width: 1),
+                    Expanded(
+                      child: groups.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No radio models match this search.',
+                                style: theme.textTheme.bodyLarge,
+                              ),
+                            )
+                          : _ModelResultsList(
+                              groups: groups,
+                              selectedModel: widget.selectedModel,
+                              onSelected: (model) =>
+                                  Navigator.pop(context, model),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(height: 1),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 12, 16, 12),
+                child: Row(
+                  children: [
+                    Text(
+                      '$resultCount ${resultCount == 1 ? 'radio' : 'radios'}',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _VendorChoice extends StatelessWidget {
+  const _VendorChoice({
+    super.key,
+    required this.label,
+    required this.count,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String label;
+  final int count;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+      child: ListTile(
+        dense: true,
+        selected: selected,
+        selectedTileColor: theme.colorScheme.primary.withValues(alpha: 0.12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        onTap: onTap,
+        title: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+        trailing: Text(
+          '$count',
+          style: theme.textTheme.labelMedium?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ModelResultsList extends StatelessWidget {
+  const _ModelResultsList({
+    required this.groups,
+    required this.selectedModel,
+    required this.onSelected,
+  });
+
+  final List<_VendorModels> groups;
+  final String? selectedModel;
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final rows = <Object>[];
+    for (final group in groups) {
+      if (group.vendor != _recentVendors) {
+        rows.add(_VendorHeading(group.vendor));
+      }
+      rows.addAll(group.models);
+    }
+    return Scrollbar(
+      child: ListView.builder(
+        key: const ValueKey('radio-model-results-list'),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        itemCount: rows.length,
+        itemBuilder: (context, index) {
+          final row = rows[index];
+          if (row is _VendorHeading) {
+            return _SectionHeader(label: row.label);
+          }
+          final model = row as String;
+          final group = groups.firstWhere(
+            (candidate) => candidate.models.contains(model),
+          );
+          return _ModelChoice(
+            key: ValueKey('radio-model-option-$model'),
+            model: model,
+            vendor: group.vendor,
+            selected: model == selectedModel,
+            onTap: () => onSelected(model),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _VendorHeading {
+  const _VendorHeading(this.label);
+
+  final String label;
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(22, 16, 22, 6),
+      child: Text(
+        label.toUpperCase(),
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: theme.colorScheme.primary,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 1.1,
+        ),
+      ),
+    );
+  }
+}
+
+class _ModelChoice extends StatelessWidget {
+  const _ModelChoice({
+    super.key,
+    required this.model,
+    required this.vendor,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final String model;
+  final String vendor;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final modelName = vendor == _recentVendors
+        ? displayRadioModelName(model)
+        : _modelNameWithinVendor(model, vendor);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
+      child: ListTile(
+        selected: selected,
+        selectedTileColor: theme.colorScheme.primary.withValues(alpha: 0.1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(9)),
+        onTap: onTap,
+        leading: Icon(
+          selected ? Icons.check_circle : Icons.radio_outlined,
+          color: selected
+              ? theme.colorScheme.primary
+              : theme.colorScheme.onSurfaceVariant,
+        ),
+        title: Text(modelName),
+        subtitle: Text(vendor),
+        trailing: selected
+            ? Text(
+                'Selected',
+                style: theme.textTheme.labelMedium?.copyWith(
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
+              )
+            : null,
+      ),
     );
   }
 }

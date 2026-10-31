@@ -401,6 +401,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   String _status = 'Ready';
   List<SerialPortInfo> _ports = [];
   List<String> _models = [];
+  Map<String, List<String>> _modelGroups = {};
   String? _port;
   String? _model;
   String? _radioImage;
@@ -886,9 +887,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (radioSelectionLoad != null) await radioSelectionLoad;
     String? storedImage;
     await _task('Loading radio catalog…', () async {
-      final models = await _bridge.models();
+      final catalog = await _bridge.modelCatalog();
+      final models = catalog.models;
       setState(() {
         _models = models;
+        _modelGroups = {
+          for (final group in catalog.groups) group.name: group.models,
+        };
         if (_model != null && !models.contains(_model)) _model = null;
         _capabilities = null;
         _radioZones = [];
@@ -1043,14 +1048,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               children: [
                 SelectableText(
                   presentation.summary,
-                  style: Theme.of(context).textTheme.titleMedium
-                      ?.copyWith(fontWeight: FontWeight.w600, height: 1.35),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    height: 1.35,
+                  ),
                 ),
                 if (presentation.technical != null) ...[
                   const SizedBox(height: 12),
                   Theme(
-                    data: Theme.of(context)
-                        .copyWith(dividerColor: Colors.transparent),
+                    data: Theme.of(
+                      context,
+                    ).copyWith(dividerColor: Colors.transparent),
                     child: ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       childrenPadding: const EdgeInsets.only(top: 4, bottom: 8),
@@ -1251,6 +1259,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       setState(() {
         _chirpModuleName = file.name;
         _models = models;
+        _modelGroups = {};
         _model = null;
         _capabilities = null;
         _radioZones = [];
@@ -1272,11 +1281,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   Future<void> _unloadChirpModule() async {
     _bridge.unloadModule();
     await _task('Refreshing radio catalog…', () async {
-      final models = await _bridge.models();
+      final catalog = await _bridge.modelCatalog();
+      final models = catalog.models;
       if (!mounted) return;
       setState(() {
         _chirpModuleName = null;
         _models = models;
+        _modelGroups = {
+          for (final group in catalog.groups) group.name: group.models,
+        };
         _model = null;
         _capabilities = null;
         _radioZones = [];
@@ -2998,9 +3011,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               _ => 'Radio settings',
                             },
                             minimalSubtitle: switch (_page) {
-                              2 => 'Application information and open-source licenses',
+                              2 =>
+                                'Application information and open-source licenses',
                               3 => 'Part 95 FRS/GMRS channel plan',
-                              _ => 'Radio-wide options exposed by the selected driver',
+                              _ =>
+                                'Radio-wide options exposed by the selected driver',
                             },
                             showPrint: _page == 3,
                             onPrint: _printFrequencyReference,
@@ -3049,14 +3064,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             children: [
               Text(
                 'What would you like to do?',
-                style: Theme.of(context).textTheme.headlineMedium
-                    ?.copyWith(fontWeight: FontWeight.w700),
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Open an existing CHIRP file or read channels directly from your radio.',
-                style: Theme.of(context).textTheme.bodyLarge
-                    ?.copyWith(color: Colors.black54),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
               ),
               const SizedBox(height: 24),
               LayoutBuilder(
@@ -3073,7 +3090,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         width: cardWidth,
                         icon: Icons.folder_open_outlined,
                         title: 'Load configuration',
-                        description: 'Open a CHIRP CSV or native image file and continue editing.',
+                        description:
+                            'Open a CHIRP CSV or native image file and continue editing.',
                         buttonLabel: 'Open file',
                         onPressed: _openLibraryFile,
                         help:
@@ -3084,7 +3102,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         width: cardWidth,
                         icon: Icons.settings_input_antenna,
                         title: 'Read channels from a radio',
-                        description: 'Connect a programming cable and import the radio’s current channels.',
+                        description:
+                            'Connect a programming cable and import the radio’s current channels.',
                         buttonLabel: 'Connect radio',
                         onPressed: _openRadioConnection,
                         help:
@@ -3096,7 +3115,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         width: cardWidth,
                         icon: Icons.travel_explore,
                         title: 'Find nearby repeaters',
-                        description: 'Search RepeaterBook and add amateur or GMRS channels.',
+                        description:
+                            'Search RepeaterBook and add amateur or GMRS channels.',
                         buttonLabel: 'Find repeaters',
                         onPressed: _findRepeaters,
                         help:
@@ -3543,7 +3563,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 context: context,
                                 applicationName: 'NewChirp',
                                 applicationVersion: _newChirpVersion,
-                                applicationLegalese: 'CHIRP is licensed under GPL-3.0-or-later. NewChirp is not affiliated with or endorsed by the CHIRP project.',
+                                applicationLegalese:
+                                    'CHIRP is licensed under GPL-3.0-or-later. NewChirp is not affiliated with or endorsed by the CHIRP project.',
                               ),
                               icon: const Icon(Icons.description_outlined),
                               label: const Text('View complete licenses'),
@@ -3933,7 +3954,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 onSelected: _setShowEmptySlots,
                                 avatar: const Icon(Icons.space_bar, size: 17),
                                 label: const Text('Slots'),
-                                tooltip: 'Show every memory slot, including empty ones',
+                                tooltip:
+                                    'Show every memory slot, including empty ones',
                               ),
                             ] else ...[
                               OutlinedButton.icon(
@@ -3954,7 +3976,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 onSelected: _setShowEmptySlots,
                                 avatar: const Icon(Icons.space_bar, size: 17),
                                 label: const Text('Show empty slots'),
-                                tooltip: 'Show every memory slot, including empty ones',
+                                tooltip:
+                                    'Show every memory slot, including empty ones',
                               ),
                             ],
                             const SizedBox(width: 2),
@@ -4543,14 +4566,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             children: [
               Text(
                 'GMRS & FRS Frequency Reference',
-                style: Theme.of(context).textTheme.headlineSmall
-                    ?.copyWith(color: green, fontWeight: FontWeight.w700),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: green,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 5),
               Text(
                 'United States Part 95 channel plan - color-coded by frequency band and power class.',
-                style: Theme.of(context).textTheme.bodyMedium
-                    ?.copyWith(color: muted),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: muted),
               ),
               const SizedBox(height: 14),
               Wrap(
@@ -4614,8 +4640,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               const SizedBox(height: 20),
               Text(
                 'Repeater Pairs (GMRS Only)',
-                style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(color: green, fontWeight: FontWeight.w700),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: green,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 8),
               Card(
@@ -4758,15 +4786,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               children: [
                 Text(
                   'Radio settings',
-                  style: Theme.of(context).textTheme.headlineSmall
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 6),
                 Text(
                   'Adjust radio-wide options such as squelch, backlight, VOX, '
                   'and other controls exposed by the selected CHIRP driver.',
-                  style: Theme.of(context).textTheme.bodyLarge
-                      ?.copyWith(color: Colors.black54),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
                 ),
                 const SizedBox(height: 20),
                 Card(
@@ -5114,14 +5144,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             children: [
               Text(
                 'Radio connection',
-                style: Theme.of(context).textTheme.headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.w700),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 6),
               Text(
                 'Read channels from the radio first, edit them in the library, then write the verified image back.',
-                style: Theme.of(context).textTheme.bodyLarge
-                    ?.copyWith(color: Colors.black54),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
               ),
               const SizedBox(height: 20),
               if (_chirpModuleName != null) ...[
@@ -5273,6 +5305,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       else
                         RadioModelPicker(
                           models: _models,
+                          vendorModels: _modelGroups,
                           selectedModel: _models.contains(_model)
                               ? _model
                               : null,
@@ -5364,24 +5397,6 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               ),
                             ],
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              const Card(
-                child: Padding(
-                  padding: EdgeInsets.all(18),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Icon(Icons.info_outline, color: Color(0xFF1F7455)),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'NewChirp uses the provided CHIRP driver tree as its hardware compatibility layer. Its serial package is bundled, so CHIRP GUI dependencies such as wxPython are not needed.',
                         ),
                       ),
                     ],
@@ -6447,7 +6462,8 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
                       autocorrect: false,
                       decoration: const InputDecoration(
                         labelText: 'Your email',
-                        helperText: 'Used only if the developer needs more information.',
+                        helperText:
+                            'Used only if the developer needs more information.',
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -7449,7 +7465,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     decoration: InputDecoration(
                                       isDense: true,
                                       labelText: 'Filter loaded results',
-                                      hintText: 'City, county, callsign, mode, service, or frequency',
+                                      hintText:
+                                          'City, county, callsign, mode, service, or frequency',
                                       prefixIcon: const Icon(
                                         Icons.filter_alt_outlined,
                                       ),
@@ -8136,7 +8153,8 @@ class _ChannelTableState extends State<_ChannelTable> {
           channel.duplex.isNotEmpty && channel.duplex != 'off',
           channel.offset.toStringAsFixed(6),
         ),
-        help: 'Frequency offset, or the independent transmit frequency for split.',
+        help:
+            'Frequency offset, or the independent transmit frequency for split.',
       ),
       _ChannelColumn(
         'CROSS MODE',
@@ -8148,7 +8166,8 @@ class _ChannelTableState extends State<_ChannelTable> {
         'MODE',
         68,
         (channel) => channel.mode,
-        help: 'Voice modulation: FM, narrowband FM, or AM depending on the radio.',
+        help:
+            'Voice modulation: FM, narrowband FM, or AM depending on the radio.',
       ),
       if (showStep)
         _ChannelColumn(

@@ -1,0 +1,33 @@
+---
+okf_version: "0.2"
+type: Class
+title: RadioModelGroup
+resource: services/radio_bridge.dart
+tags:
+  - "lang:dart"
+  - "type:Class"
+  - "module:services"
+  - "domain:radio_bridge.dart"
+  - "git:branch:main"
+  - "git:repo:newchirp"
+timestamp: "2026-10-31T09:24:29Z"
+concept_id: services/radio_bridge/RadioModelGroup
+language: dart
+---
+
+# RadioModelGroup
+
+## Signature
+
+```dart
+class RadioModelGroup
+```
+
+## Source
+Lines 55–60 in `services/radio_bridge.dart`
+
+## Relationships
+
+| Type | Target |
+|------|--------|
+| related | [radio_bridge](/services/radio_bridge.md) |

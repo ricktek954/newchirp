@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T00:09:10Z"
+timestamp: "2026-10-31T09:24:29Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -22,6 +22,8 @@ language: dart
 | Type | Target |
 |------|--------|
 | related | [RadioBridgeException](/services/radio_bridge/RadioBridgeException.md) |
+| related | [RadioModelGroup](/services/radio_bridge/RadioModelGroup.md) |
+| related | [RadioModelCatalog](/services/radio_bridge/RadioModelCatalog.md) |
 | related | [RadioInstructions](/services/radio_bridge/RadioInstructions.md) |
 | related | [RadioCapabilities](/services/radio_bridge/RadioCapabilities.md) |
 | related | [RadioZone](/services/radio_bridge/RadioZone.md) |
@@ -47,6 +49,7 @@ language: dart
 | related | [parseWindowsSerialPortDetails](/services/radio_bridge/parseWindowsSerialPortDetails.md) |
 | related | [_parseComPorts](/services/radio_bridge/parseComPorts.md) |
 | related | [models](/services/radio_bridge/models.md) |
+| related | [modelCatalog](/services/radio_bridge/modelCatalog.md) |
 | related | [loadModule](/services/radio_bridge/loadModule.md) |
 | related | [unloadModule](/services/radio_bridge/unloadModule.md) |
 | related | [instructions](/services/radio_bridge/instructions.md) |

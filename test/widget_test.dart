@@ -748,6 +748,25 @@ void main() {
     expect(find.text('Data from RepeaterBook.com'), findsNothing);
   });
 
+  testWidgets('Radio connection omits implementation-detail information card', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Radio connection').first);
+    await tester.pumpAndSettle();
+
+    expect(
+      find.textContaining('uses the provided CHIRP driver tree'),
+      findsNothing,
+    );
+  });
+
   testWidgets('channel library shows a locked radio image bar', (tester) async {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1;

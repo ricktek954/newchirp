@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _setControllerText
+title: _matchingGroups
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
-concept_id: widgets/radio_model_picker/setControllerText
+timestamp: "2026-10-31T09:26:54Z"
+concept_id: widgets/radio_model_picker/matchingGroups
 language: dart
 ---
 
-# _setControllerText
+# _matchingGroups
 
 ## Signature
 
 ```dart
-void_setControllerText(String value)
+List_matchingGroups_matchingGroups
 ```
 
 ## Source
-Lines 103–103 in `widgets/radio_model_picker.dart`
+Lines 228–228 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

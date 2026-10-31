@@ -3,6 +3,13 @@
 This repository keeps generated OKF knowledge bundles so coding agents can
 answer structural questions without re-reading large source files.
 
+## Product standard
+
+The goal is for NewChirp to be the best radio-programming software in the
+world. Optimize for accuracy, safety, broad radio support, understandable
+failure recovery, and an excellent user experience. Do not treat "works on my
+machine" or parity with an OEM programmer as the final standard.
+
 ## Session handoff
 
 When the user asks where work left off, asks to resume, or starts a fresh

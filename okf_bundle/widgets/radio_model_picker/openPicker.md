@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _searchHelperFor
+title: _openPicker
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
-concept_id: widgets/radio_model_picker/searchHelperFor
+timestamp: "2026-10-31T09:26:54Z"
+concept_id: widgets/radio_model_picker/openPicker
 language: dart
 ---
 
-# _searchHelperFor
+# _openPicker
 
 ## Signature
 
 ```dart
-String_searchHelperFor_searchHelperFor
+Future_openPicker_openPicker
 ```
 
 ## Source
-Lines 182–182 in `widgets/radio_model_picker.dart`
+Lines 113–113 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

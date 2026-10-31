@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-10-30
+Last updated: 2026-10-31
 
 ## Status definitions
 
@@ -35,6 +35,8 @@ Last updated: 2026-10-30
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
+| Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
 ## Radio details
@@ -401,6 +403,40 @@ Last updated: 2026-10-30
 - Next milestone: luc retests after confirming CI-V address `A2h`, USB baud
   rate 115200, `Unlink from [REMOTE]`, and `CI-V Transceive off`; then record
   a successful multi-band read and separate read/write validation
+
+### Icom ID-50 and ID-52
+
+- Maintained driver: `drivers/newchirp_icom_id50_id52.py`
+- Models: Icom ID-50 and ID-52
+- Device help: Icom USB programming cable. Close CS-50 or CS-52 before
+  starting a NewChirp transfer.
+- Transport: Icom clone serial using the `IcomCloneFormat3` family protocol.
+  Frames use `FE FE` framing and `FD` termination; commands `E0` through `E6`
+  cover identification, model data, clone in/out, data, end, and completion.
+  The driver uses raw escaped payloads and the high-bit transform recovered
+  from the CPS.
+- Serial settings: 9600 baud, 8 data bits, no parity, one stop bit
+- Implemented: live model identification, full-image read, full-image write,
+  download-end truncation, model/revision checking, and the provisional
+  ID-4100-family channel, bank, basic settings, and D-STAR map
+- Read/write policy: reads and writes are both enabled because this driver is
+  explicitly experimental. The connected model ID is stored in NewChirp image
+  metadata and must match before a saved image may be uploaded.
+- Evidence: static REA/Ghidra analysis of Icom CS-50 1.03 (`CS50.exe` SHA-256
+  `b9ce2ccc067560f8db8922f74889d5a4ecb88832ae1cba6760d6006a0f890470`) and
+  CS-52 1.23 (`CS52.exe` SHA-256
+  `50bd026943aeed5375e625a7eee65ec4d3c057a03097bfea3b668354a3daa933`);
+  both contain `IcomCloneFormat3`, the Icom clone frame handlers, serial port
+  setup, and the corresponding ID-50/ID-52 model strings.
+- Driver SHA-256:
+  `ea4514858db4f851e139fa4d3cde1437645ba941cca852b46d7329ecb0ddcf13`
+- Hardware validation: none. Offline tests cover registration, model
+  discovery, read framing, end truncation, upload framing, and clone
+  acknowledgement.
+- Next milestone: perform an unedited physical download for each model, save
+  the image and model ID, compare the channel/D-STAR regions against this
+  provisional map, then perform and read back a one-channel edit.
+- Website catalog: must be listed as experimental for both radios.
 
 ### Midland MXT295
 

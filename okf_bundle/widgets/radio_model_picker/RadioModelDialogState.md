@@ -1,30 +1,39 @@
 ---
 okf_version: "0.2"
-type: Function
-title: _showAllModels
+type: Class
+title: _RadioModelDialogState
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
-  - "type:Function"
+  - "type:Class"
   - "module:widgets"
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
-concept_id: widgets/radio_model_picker/showAllModels
+timestamp: "2026-10-31T09:26:54Z"
+concept_id: widgets/radio_model_picker/RadioModelDialogState
 language: dart
 ---
 
-# _showAllModels
+# _RadioModelDialogState
 
 ## Signature
 
 ```dart
-void_showAllModels()
+class _RadioModelDialogState
 ```
 
+## Methods
+
+- `initState`
+- `dispose`
+- `_matchingGroups`
+- `_selectVendor`
+- `_submitSearch`
+- `build`
+
 ## Source
-Lines 138–138 in `widgets/radio_model_picker.dart`
+Lines 203–459 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

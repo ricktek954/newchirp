@@ -2,20 +2,27 @@
 
 ## Classs
 
-- [_RadioModelMatches](RadioModelMatches.md)
+- [_ModelChoice](ModelChoice.md)
+- [_ModelResultsList](ModelResultsList.md)
+- [_RadioModelDialog](RadioModelDialog.md)
+- [_RadioModelDialogState](RadioModelDialogState.md)
 - [_RadioModelPickerState](RadioModelPickerState.md)
+- [_SectionHeader](SectionHeader.md)
+- [_VendorChoice](VendorChoice.md)
+- [_VendorHeading](VendorHeading.md)
+- [_VendorModels](VendorModels.md)
 - [RadioModelPicker](RadioModelPicker.md)
 
 ## Functions
 
-- [_buildCandidates](buildCandidates.md)
-- [_handleFocusChange](handleFocusChange.md)
-- [_handleSelected](handleSelected.md)
-- [_matchesForQuery](matchesForQuery.md)
-- [_RadioModelCandidate](RadioModelCandidate.md)
-- [_searchHelperFor](searchHelperFor.md)
-- [_setControllerText](setControllerText.md)
-- [_showAllModels](showAllModels.md)
+- [_groupModels](groupModels.md)
+- [_matchingGroups](matchingGroups.md)
+- [_modelNameWithinVendor](modelNameWithinVendor.md)
+- [_openPicker](openPicker.md)
+- [_remember](remember.md)
+- [_selectVendor](selectVendor.md)
+- [_submitSearch](submitSearch.md)
+- [_vendorSlug](vendorSlug.md)
 - [build](build.md)
 - [createState](createState.md)
 - [didUpdateWidget](didUpdateWidget.md)

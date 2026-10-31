@@ -5,8 +5,8 @@
   "files": {
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793404724661437217,
-      "hash": "d018818571804e12e5023ceb1cabcb21f6238ae19e958db4cc2220362e028ebc",
+      "mtime_ns": 1793438688442877216,
+      "hash": "bb46cc85ff8d641aecec83069f994ec7179064345c4965ccf78158da99c886cc",
       "concept_ids": [
         "main/AddChannelPlacement",
         "main/ChannelApplyDialog",
@@ -467,6 +467,62 @@
         "services/mototrbo_cps2_xml"
       ]
     },
+    "services/radio_bridge.dart": {
+      "path": "services/radio_bridge.dart",
+      "mtime_ns": 1793438669865506463,
+      "hash": "a187c2107ccf4cd4deeb04373ad84eed72ac36240d0d58718a22bbda39ff5661",
+      "concept_ids": [
+        "services/radio_bridge/RadioBridge",
+        "services/radio_bridge/RadioBridgeException",
+        "services/radio_bridge/RadioCapabilities",
+        "services/radio_bridge/RadioInstructions",
+        "services/radio_bridge/RadioModelCatalog",
+        "services/radio_bridge/RadioModelGroup",
+        "services/radio_bridge/RadioProgress",
+        "services/radio_bridge/RadioSettingNode",
+        "services/radio_bridge/RadioSettings",
+        "services/radio_bridge/RadioZone",
+        "services/radio_bridge/SerialPortInfo",
+        "services/radio_bridge/bundledAssetCandidates",
+        "services/radio_bridge/bundledResourcesDirectory",
+        "services/radio_bridge/cancelActive",
+        "services/radio_bridge/deduplicatePorts",
+        "services/radio_bridge/download",
+        "services/radio_bridge/findChirpSource",
+        "services/radio_bridge/findNewChirpDrivers",
+        "services/radio_bridge/findScsiHelper",
+        "services/radio_bridge/imageCapabilities",
+        "services/radio_bridge/imageInfo",
+        "services/radio_bridge/instructions",
+        "services/radio_bridge/isBenignBridgeStderrLine",
+        "services/radio_bridge/loadAssetBytes",
+        "services/radio_bridge/loadModule",
+        "services/radio_bridge/massStoragePortDetails",
+        "services/radio_bridge/materializeBridge",
+        "services/radio_bridge/materializePythonDependencies",
+        "services/radio_bridge/modelCatalog",
+        "services/radio_bridge/models",
+        "services/radio_bridge/parseComPorts",
+        "services/radio_bridge/parseWindowsSerialPortDetails",
+        "services/radio_bridge/readImage",
+        "services/radio_bridge/readSettings",
+        "services/radio_bridge/resolvePython",
+        "services/radio_bridge/run",
+        "services/radio_bridge/runWithRuntime",
+        "services/radio_bridge/searchRepeaters",
+        "services/radio_bridge/serialPortDetails",
+        "services/radio_bridge/serialPorts",
+        "services/radio_bridge/strings",
+        "services/radio_bridge/toChangeJson",
+        "services/radio_bridge/toString",
+        "services/radio_bridge/unloadModule",
+        "services/radio_bridge/upload",
+        "services/radio_bridge/windowsSerialPortDetails",
+        "services/radio_bridge/windowsSerialPortNames",
+        "services/radio_bridge/writeSettings",
+        "services/radio_bridge"
+      ]
+    },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
       "mtime_ns": 1793187642181438904,
@@ -507,6 +563,30 @@
         "services/repeater_search_preferences_store/save",
         "services/repeater_search_preferences_store/toJson",
         "services/repeater_search_preferences_store"
+      ]
+    },
+    "services/update_checker.dart": {
+      "path": "services/update_checker.dart",
+      "mtime_ns": 1793405350273339165,
+      "hash": "b0966705e6d64f7c73cc74c7da6c85a9979f8e654495587d90546919785d7036",
+      "concept_ids": [
+        "services/update_checker/PlatformRelease",
+        "services/update_checker/ReleaseManifest",
+        "services/update_checker/UpdateCheckException",
+        "services/update_checker/UpdateCheckResult",
+        "services/update_checker/UpdateChecker",
+        "services/update_checker/check",
+        "services/update_checker/compareVersions",
+        "services/update_checker/currentUpdatePlatform",
+        "services/update_checker/isAllowedDownloadUrl",
+        "services/update_checker/openExternalUrl",
+        "services/update_checker/parseManifest",
+        "services/update_checker/toString",
+        "services/update_checker/trustedDownloadUrl",
+        "services/update_checker/trustedUpdateArtifactUrl",
+        "services/update_checker/updateArtifactExtension",
+        "services/update_checker/versionParts",
+        "services/update_checker"
       ]
     },
     "services/update_installer.dart": {
@@ -601,104 +681,34 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1793404724662115456,
-      "hash": "6917152f3c7fc804b03bb5915e9fab2b4f2a0e0043cb1e09a7e0c1721f5fedd8",
+      "mtime_ns": 1793438814455978151,
+      "hash": "08119fc73cf5ede23d2e13be4e95b2766c52762e9c8bfb3d44a5625ba533aa19",
       "concept_ids": [
-        "widgets/radio_model_picker/RadioModelCandidate",
-        "widgets/radio_model_picker/RadioModelMatches",
+        "widgets/radio_model_picker",
+        "widgets/radio_model_picker/VendorModels",
         "widgets/radio_model_picker/RadioModelPicker",
         "widgets/radio_model_picker/RadioModelPickerState",
-        "widgets/radio_model_picker/build",
-        "widgets/radio_model_picker/buildCandidates",
-        "widgets/radio_model_picker/createState",
-        "widgets/radio_model_picker/didUpdateWidget",
+        "widgets/radio_model_picker/RadioModelDialog",
+        "widgets/radio_model_picker/RadioModelDialogState",
+        "widgets/radio_model_picker/VendorChoice",
+        "widgets/radio_model_picker/ModelResultsList",
+        "widgets/radio_model_picker/VendorHeading",
+        "widgets/radio_model_picker/SectionHeader",
+        "widgets/radio_model_picker/ModelChoice",
         "widgets/radio_model_picker/displayRadioModelName",
-        "widgets/radio_model_picker/dispose",
-        "widgets/radio_model_picker/handleFocusChange",
-        "widgets/radio_model_picker/handleSelected",
+        "widgets/radio_model_picker/vendorSlug",
+        "widgets/radio_model_picker/modelNameWithinVendor",
+        "widgets/radio_model_picker/groupModels",
+        "widgets/radio_model_picker/createState",
         "widgets/radio_model_picker/initState",
-        "widgets/radio_model_picker/matchesForQuery",
-        "widgets/radio_model_picker/searchHelperFor",
-        "widgets/radio_model_picker/setControllerText",
-        "widgets/radio_model_picker/showAllModels",
-        "widgets/radio_model_picker"
-      ]
-    },
-    "services/radio_bridge.dart": {
-      "path": "services/radio_bridge.dart",
-      "mtime_ns": 1793405350273120627,
-      "hash": "8a1c1dadc1acd1de36148d9ace970b093351956a9ddfd87250a3f2db8b0aa095",
-      "concept_ids": [
-        "services/radio_bridge",
-        "services/radio_bridge/RadioBridgeException",
-        "services/radio_bridge/RadioInstructions",
-        "services/radio_bridge/RadioCapabilities",
-        "services/radio_bridge/RadioZone",
-        "services/radio_bridge/RadioProgress",
-        "services/radio_bridge/SerialPortInfo",
-        "services/radio_bridge/RadioSettingNode",
-        "services/radio_bridge/RadioSettings",
-        "services/radio_bridge/RadioBridge",
-        "services/radio_bridge/isBenignBridgeStderrLine",
-        "services/radio_bridge/strings",
-        "services/radio_bridge/toString",
-        "services/radio_bridge/toChangeJson",
-        "services/radio_bridge/cancelActive",
-        "services/radio_bridge/serialPortDetails",
-        "services/radio_bridge/massStoragePortDetails",
-        "services/radio_bridge/deduplicatePorts",
-        "services/radio_bridge/serialPorts",
-        "services/radio_bridge/windowsSerialPortNames",
-        "services/radio_bridge/windowsSerialPortDetails",
-        "services/radio_bridge/parseWindowsSerialPortDetails",
-        "services/radio_bridge/parseComPorts",
-        "services/radio_bridge/models",
-        "services/radio_bridge/loadModule",
-        "services/radio_bridge/unloadModule",
-        "services/radio_bridge/instructions",
-        "services/radio_bridge/readImage",
-        "services/radio_bridge/imageInfo",
-        "services/radio_bridge/imageCapabilities",
-        "services/radio_bridge/download",
-        "services/radio_bridge/upload",
-        "services/radio_bridge/readSettings",
-        "services/radio_bridge/writeSettings",
-        "services/radio_bridge/run",
-        "services/radio_bridge/searchRepeaters",
-        "services/radio_bridge/runWithRuntime",
-        "services/radio_bridge/resolvePython",
-        "services/radio_bridge/bundledResourcesDirectory",
-        "services/radio_bridge/materializeBridge",
-        "services/radio_bridge/materializePythonDependencies",
-        "services/radio_bridge/loadAssetBytes",
-        "services/radio_bridge/bundledAssetCandidates",
-        "services/radio_bridge/findChirpSource",
-        "services/radio_bridge/findNewChirpDrivers",
-        "services/radio_bridge/findScsiHelper"
-      ]
-    },
-    "services/update_checker.dart": {
-      "path": "services/update_checker.dart",
-      "mtime_ns": 1793405350273339165,
-      "hash": "b0966705e6d64f7c73cc74c7da6c85a9979f8e654495587d90546919785d7036",
-      "concept_ids": [
-        "services/update_checker",
-        "services/update_checker/UpdateCheckResult",
-        "services/update_checker/UpdateCheckException",
-        "services/update_checker/UpdateChecker",
-        "services/update_checker/ReleaseManifest",
-        "services/update_checker/PlatformRelease",
-        "services/update_checker/currentUpdatePlatform",
-        "services/update_checker/compareVersions",
-        "services/update_checker/versionParts",
-        "services/update_checker/isAllowedDownloadUrl",
-        "services/update_checker/trustedDownloadUrl",
-        "services/update_checker/updateArtifactExtension",
-        "services/update_checker/trustedUpdateArtifactUrl",
-        "services/update_checker/openExternalUrl",
-        "services/update_checker/toString",
-        "services/update_checker/check",
-        "services/update_checker/parseManifest"
+        "widgets/radio_model_picker/didUpdateWidget",
+        "widgets/radio_model_picker/remember",
+        "widgets/radio_model_picker/openPicker",
+        "widgets/radio_model_picker/build",
+        "widgets/radio_model_picker/dispose",
+        "widgets/radio_model_picker/matchingGroups",
+        "widgets/radio_model_picker/selectVendor",
+        "widgets/radio_model_picker/submitSearch"
       ]
     }
   },
@@ -708,7 +718,7 @@
       "type": "Module",
       "resource": "services/radio_bridge.dart",
       "render_hash": "stale",
-      "edge_hash": "9dc8b8cff163e30cac4a809367591a8f28f4a1b3e4a5b610a29ac7f19eed5a83",
+      "edge_hash": "002c2be2b95d3dc8eb8e23391d435c2ec54967b1f4cd122492777f800d4c1b68",
       "enriched": false
     },
     "services/radio_bridge/RadioBridgeException": {
@@ -2852,7 +2862,7 @@
       "type": "Module",
       "resource": "widgets/radio_model_picker.dart",
       "render_hash": "stale",
-      "edge_hash": "0c5ca05a35dee6602311128182281ff2b2fe73f0efd6311ba1cf540066ba73b8",
+      "edge_hash": "47e1885ca5532a7e2eb215fd54d594965b3b7ca27b94d07cb97eb548cda35b95",
       "enriched": false
     },
     "widgets/radio_model_picker/RadioModelPicker": {
@@ -5022,7 +5032,159 @@
       "render_hash": "stale",
       "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
       "enriched": false
+    },
+    "services/radio_bridge/RadioModelGroup": {
+      "concept_id": "services/radio_bridge/RadioModelGroup",
+      "type": "Class",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "services/radio_bridge/RadioModelCatalog": {
+      "concept_id": "services/radio_bridge/RadioModelCatalog",
+      "type": "Class",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "services/radio_bridge/modelCatalog": {
+      "concept_id": "services/radio_bridge/modelCatalog",
+      "type": "Function",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/VendorModels": {
+      "concept_id": "widgets/radio_model_picker/VendorModels",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/RadioModelDialog": {
+      "concept_id": "widgets/radio_model_picker/RadioModelDialog",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/RadioModelDialogState": {
+      "concept_id": "widgets/radio_model_picker/RadioModelDialogState",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/VendorChoice": {
+      "concept_id": "widgets/radio_model_picker/VendorChoice",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/ModelResultsList": {
+      "concept_id": "widgets/radio_model_picker/ModelResultsList",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/SectionHeader": {
+      "concept_id": "widgets/radio_model_picker/SectionHeader",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/ModelChoice": {
+      "concept_id": "widgets/radio_model_picker/ModelChoice",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/vendorSlug": {
+      "concept_id": "widgets/radio_model_picker/vendorSlug",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/modelNameWithinVendor": {
+      "concept_id": "widgets/radio_model_picker/modelNameWithinVendor",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/groupModels": {
+      "concept_id": "widgets/radio_model_picker/groupModels",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/remember": {
+      "concept_id": "widgets/radio_model_picker/remember",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/openPicker": {
+      "concept_id": "widgets/radio_model_picker/openPicker",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/matchingGroups": {
+      "concept_id": "widgets/radio_model_picker/matchingGroups",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/selectVendor": {
+      "concept_id": "widgets/radio_model_picker/selectVendor",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/submitSearch": {
+      "concept_id": "widgets/radio_model_picker/submitSearch",
+      "type": "Function",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
+    },
+    "widgets/radio_model_picker/VendorHeading": {
+      "concept_id": "widgets/radio_model_picker/VendorHeading",
+      "type": "Class",
+      "resource": "widgets/radio_model_picker.dart",
+      "render_hash": "stale",
+      "edge_hash": "ec97a9d9f81c9f86dc84a37dec2fec5bb6dd8514fd30befc9f0cff7e1944865c",
+      "enriched": false
     }
   },
-  "generated_at": "2026-10-31T00:09:11Z"
+  "generated_at": "2026-10-31T09:26:55Z"
 }
