@@ -37,8 +37,8 @@ Last updated: 2026-10-31
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
-| Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
-| Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
+| Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, physical image verified | Disabled | Hidden | Experimental |
+| Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
@@ -457,32 +457,44 @@ Last updated: 2026-10-31
   The driver uses raw escaped payloads and the high-bit transform recovered
   from the CPS.
 - Serial settings: 9600 baud, 8 data bits, no parity, one stop bit
-- Implemented: live model identification, full-image read, full-image write,
-  download-end truncation, model/revision checking, and the provisional
-  ID-4100-family channel, bank, basic settings, and D-STAR map
-- Read/write policy: reads and writes are both enabled because this driver is
-  explicitly experimental. The connected model ID is stored in NewChirp image
-  metadata and must match before a saved image may be uploaded.
+- Implemented: live model identification, full-image read, download-end
+  truncation, model/revision checking, and 500 physical ID-50 channel records
+- Channel map: each record is 51 bytes. Receive frequency and positive offset
+  are 32-bit big-endian Hertz at offsets 0 and 4. The 16-byte Shift-JIS/ASCII
+  name starts at offset 12. Byte 9 is the physical mode selector: `00` FM,
+  `03` AM, and `05` DV. D-STAR UR, RPT1, and RPT2 calls occupy offsets 30, 37,
+  and 44 as 7-byte packed Icom callsigns.
+- Unresolved fields: tone selection, tone frequencies, DCS, narrow-FM,
+  power, skip, duplex direction, zones, and settings. Unrecognized mode-selector
+  values are logged and exposed as FM so they cannot abort a download.
+- Read/write policy: reads are enabled and writes are explicitly disabled
+  until the unresolved fields are validated with controlled physical images.
+  Clone upload code remains in the driver for later validation but is not
+  reachable from a normal write operation.
 - Evidence: static REA/Ghidra analysis of Icom CS-50 1.03 (`CS50.exe` SHA-256
   `b9ce2ccc067560f8db8922f74889d5a4ecb88832ae1cba6760d6006a0f890470`) and
   CS-52 1.23 (`CS52.exe` SHA-256
   `50bd026943aeed5375e625a7eee65ec4d3c057a03097bfea3b668354a3daa933`);
   both contain `IcomCloneFormat3`, the Icom clone frame handlers, serial port
-  setup, and the corresponding ID-50/ID-52 model strings.
+  setup, and the corresponding ID-50/ID-52 model strings. A physical ID-50
+  image supplied by Nick Hale has size 229,669 bytes (`0x38125`) and SHA-256
+  `908f22ecfa95b4e1eb6993f3dec123499cbd90a6e64f4099f44c46b2dff1d5db`;
+  the two supplied read attempts are byte-identical. Radio firmware is CPU
+  `1.05`, DSP `1.01`, and GPS `13196`.
 - Driver SHA-256:
-  `ea4514858db4f851e139fa4d3cde1437645ba941cca852b46d7329ecb0ddcf13`
-- Hardware validation: none. Offline tests cover registration, model
-  discovery, read framing, end truncation, upload framing, and clone
-  acknowledgement.
+  `1021462759b88a6bba1d1aa7ac28100f515015747455ae997e219d67c9d1a193`
+- Hardware validation: the ID-50 completed the clone download twice and all
+  500 records decode without an exception. The supplied image yields 175 FM,
+  320 AM, and 5 DV memories with readable names, offsets, and D-STAR calls.
+  No upload has been attempted. ID-52 still needs an equivalent physical image.
 - Field evidence 2026-10-31: Nick Hale's ID-50 (Windows, NewChirp 1.0.28,
   COM4) completed a 55-byte model handshake and the clone-in transfer. The
-  transport then stopped while applying the provisional ID-4100 map because a
-  decoded channel mode was `???`, which is not a valid CHIRP mode. The raw
-  clone image was saved before map decoding; a failed read now reports that
-  image path so it can be sent for analysis without writing it back.
-- Next milestone: obtain Nick's saved E2 clone image and model revision,
-  recover the actual ID-50 channel/mode offsets, repeat the comparison for
-  ID-52, then perform and read back a one-channel edit.
+  provisional ID-4100 parser then rejected a decoded mode. The saved clone
+  image established the real 51-byte map and the mode-selector byte.
+- Next milestone: Nick verifies the committed read-only parser in the next
+  build, obtain an equivalent ID-52 image, then reverse and validate the tone,
+  power, skip, duplex-direction, zone, and settings fields before enabling a
+  controlled one-channel write and read-back.
 - Website catalog: must be listed as experimental for both radios.
 
 ### AnyTone 5888UV

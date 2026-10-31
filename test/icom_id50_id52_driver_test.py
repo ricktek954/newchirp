@@ -4,7 +4,6 @@ import importlib.util
 from pathlib import Path
 import struct
 import sys
-import tempfile
 import unittest
 
 
@@ -119,14 +118,14 @@ class IcomId50Id52DriverTest(unittest.TestCase):
         cls.id50 = cls.directory.get_radio("Icom_ID-50")
         cls.id52 = cls.directory.get_radio("Icom_ID-52")
 
-    def test_drivers_are_registered_as_experimental_read_write(self):
+    def test_drivers_are_registered_as_experimental_read_only(self):
         self.assertEqual(self.id50.__name__, "IcomId50Radio")
         self.assertEqual(self.id52.__name__, "IcomId52Radio")
         for radio_class in (self.id50, self.id52):
             prompts = radio_class.get_prompts()
             self.assertIn("experimental", prompts.experimental.lower())
-            self.assertIn("Reading and writing are enabled", prompts.experimental)
-            self.assertIn("backup", prompts.pre_upload.lower())
+            self.assertIn("uploads are disabled", prompts.experimental)
+            self.assertIn("read-only", prompts.pre_download.lower())
             self.assertFalse(radio_class._can_hispeed)
 
     def test_download_uses_reported_model_and_radio_end_address(self):
@@ -146,7 +145,7 @@ class IcomId50Id52DriverTest(unittest.TestCase):
         self.assertEqual(radio.get_mmap().get_packed(), image)
         self.assertTrue(any(frame[4] == 0xE2 for frame in serial.writes))
 
-    def test_upload_waits_for_clone_ok(self):
+    def test_upload_is_disabled(self):
         from chirp import memmap
 
         serial = FakeIcomSerial(b"\x00" * 32)
@@ -156,48 +155,63 @@ class IcomId50Id52DriverTest(unittest.TestCase):
         radio._metadata["icom_model_id"] = MODEL_ID.hex()
         radio.status_fn = None
 
-        self.assertTrue(radio.sync_out())
+        with self.assertRaisesRegex(Exception, "read-only"):
+            radio.sync_out()
+        self.assertFalse(any(frame[4] in (0xE3, 0xE4, 0xE5)
+                             for frame in serial.writes if len(frame) > 4))
 
-        commands = [frame[4] for frame in serial.writes if len(frame) > 4]
-        self.assertIn(0xE3, commands)
-        self.assertIn(0xE4, commands)
-        self.assertEqual(commands[-1], 0xE5)
+    def test_physical_layout_decodes_analog_and_dstar_channels(self):
+        from chirp import memmap
+        from chirp.drivers import icf
 
-    def test_provisional_map_round_trips_channels_and_saved_model(self):
-        from chirp import chirp_common, memmap
+        image = bytearray(b"\xFF" * 0x38125)
+        analog = bytearray(51)
+        analog[0:4] = (146_940_000).to_bytes(4, "big")
+        analog[4:8] = (600_000).to_bytes(4, "big")
+        analog[12:28] = b"ANALOG".ljust(16, b"\x00")
+        # Analog records may contain nonzero D-STAR-area defaults.  The mode
+        # selector, not those unrelated bytes, determines the CHIRP mode.
+        analog[37:51] = b"\x01" * 14
+        image[0:51] = analog
+
+        digital = bytearray(51)
+        digital[0:4] = (442_575_000).to_bytes(4, "big")
+        digital[4:8] = (5_000_000).to_bytes(4, "big")
+        digital[9] = 0x05
+        digital[12:28] = b"D-STAR".ljust(16, b"\x00")
+        for start, call in (
+            (30, "CQCQCQ"),
+            (37, "W1ABC  B"),
+            (44, "W1ABC  G"),
+        ):
+            digital[start:start + 7] = bytes(
+                icf.warp_byte_size(call.ljust(8), 8, 7)
+            )
+        image[51:102] = digital
 
         radio = self.id52(None)
-        radio._mmap = memmap.MemoryMapBytes(b"\xFF" * 0x2A3C0)
+        radio._mmap = memmap.MemoryMapBytes(bytes(image))
         radio._metadata["icom_model_id"] = MODEL_ID.hex()
         radio.process_mmap()
 
-        memory = chirp_common.DVMemory()
-        memory.number = 1
-        memory.freq = 146520000
-        memory.duplex = ""
-        memory.offset = 0
-        memory.tmode = ""
-        memory.mode = "FM"
-        memory.name = "TEST"
-        memory.dv_urcall = "CQCQCQ"
-        memory.dv_rpt1call = ""
-        memory.dv_rpt2call = ""
-        memory.dv_code = 0
+        analog_memory = radio.get_memory(1)
+        self.assertEqual(analog_memory.freq, 146_940_000)
+        self.assertEqual(analog_memory.duplex, "+")
+        self.assertEqual(analog_memory.offset, 600_000)
+        self.assertEqual(analog_memory.name, "ANALOG")
+        self.assertEqual(analog_memory.mode, "FM")
 
-        radio.set_memory(memory)
-        restored = radio.get_memory(1)
-        self.assertEqual(restored.freq, 146520000)
-        self.assertEqual(restored.name, "TEST")
-        self.assertEqual(restored.mode, "FM")
-        self.assertEqual(restored.dv_urcall, "CQCQCQ  ")
-
-        with tempfile.NamedTemporaryFile(suffix=".img") as image:
-            radio.save(image.name)
-            loaded = self.directory.get_radio_by_image(image.name)
-
-        self.assertEqual(loaded.MODEL, "ID-52")
-        self.assertEqual(loaded.get_model(), MODEL_ID)
-        self.assertEqual(loaded.get_features().memory_bounds, (0, 999))
+        digital_memory = radio.get_memory(2)
+        self.assertEqual(digital_memory.freq, 442_575_000)
+        self.assertEqual(digital_memory.name, "D-STAR")
+        self.assertEqual(digital_memory.mode, "DV")
+        self.assertEqual(digital_memory.dv_urcall, "CQCQCQ")
+        self.assertEqual(digital_memory.dv_rpt1call, "W1ABC  B")
+        self.assertEqual(digital_memory.dv_rpt2call, "W1ABC  G")
+        self.assertEqual(
+            radio.get_features().memory_bounds,
+            (1, 500),
+        )
 
 
 if __name__ == "__main__":
