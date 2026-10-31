@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 111 concepts across 5 domains and 5 modules'
+description: 'Top-level OKF summary: 112 concepts across 5 domains and 5 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-31T16:18:54Z'
+timestamp: '2026-10-31T16:30:05Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 111 concepts | 5 domains | 5 modules
+> OKF v0.2 bundle | 112 concepts | 5 domains | 5 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 96 |
+| Function | 97 |
 | Class | 10 |
 | Module | 5 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 111 |
+| python | 112 |
 
 ## Domain Map
 
@@ -32,9 +32,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [build_macos_dmg](build_macos_dmg/index.md) (4 concepts) — Build a styled NewChirp macOS DMG with a drag-to-Applications window.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 66 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 67 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (66 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (67 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [generate_gmrs_frs_pdf.py](generate_gmrs_frs_pdf.py/index.md) — 15 concepts
 
@@ -59,6 +59,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [memory_with_extras](/chirp_bridge/memory_with_extras.md) | Function | `chirp_bridge.py` | Load a channel plus CHIRP's metadata-backed fields such as c… |
 | [extra_field_doc](/chirp_bridge/extra_field_doc.md) | Function | `chirp_bridge.py` | Return CHIRP's documentation or a concise fallback for commo… |
 | [emit_progress](/chirp_bridge/emit_progress.md) | Function | `chirp_bridge.py` | Send structured transfer progress without touching the JSON … |
+| [download_decode_error_message](/chirp_bridge/download_decode_error_message.md) | Function | `chirp_bridge.py` | Explain a post-download map failure without losing the saved… |
 | [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
 | [_allow_driver_specific_modes](/chirp_bridge/allow_driver_specific_modes.md) | Function | `chirp_bridge.py` | Permit declared radio modes rejected by CHIRP's shared memor… |
 | [verify_live_write](/chirp_bridge/verify_live_write.md) | Function | `chirp_bridge.py` | Read back live memories so a rejected write cannot report su… |
@@ -73,7 +74,6 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [emit_read_ready](/chirp_bridge/emit_read_ready.md) | Function | `chirp_bridge.py` | Tell the user when a manual PTT-triggered clone read can beg… |
 | [channel_validation_message](/chirp_bridge/channel_validation_message.md) | Function | `chirp_bridge.py` | Add a frequency suggestion to CHIRP's unsupported-step error… |
 | [normalize_upload_memory](/chirp_bridge/normalize_upload_memory.md) | Function | `chirp_bridge.py` | Apply safe coercions advertised by CHIRP validation warnings… |
-| [channel_context](/chirp_bridge/channel_context.md) | Function | `chirp_bridge.py` | Return the selected channel owner plus available radio zones… |
 
 ## Usage with OpenCode
 

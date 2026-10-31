@@ -1339,6 +1339,19 @@ def radio_for(
         raise
 
 
+def download_decode_error_message(model, image, exc):
+    """Explain a post-download map failure without losing the saved image."""
+    detail = str(exc).strip() or exc.__class__.__name__
+    return (
+        "The radio image downloaded successfully and was saved to:\n"
+        "%s\n\n"
+        "NewChirp could not decode the %s channel map: %s\n\n"
+        "Do not write this image back to the radio. Send the saved .img "
+        "file with a bug report so the memory map can be corrected."
+        % (image, model, detail)
+    )
+
+
 def emit_read_ready(radio):
     """Tell the user when a manual PTT-triggered clone read can begin."""
     prompts = radio.get_prompts()
@@ -2068,23 +2081,32 @@ def main():
                 fd, image = tempfile.mkstemp(prefix="newchirp-", suffix=".img")
                 os.close(fd)
                 radio.save_mmap(image)
-                channel_radio, zones, selected_zone = channel_context(
-                    radio, args.zone
-                )
-                start, end = channel_radio.get_features().memory_bounds
-                locations = list(range(start, end + 1))
-                channels = []
-                for index, location in enumerate(locations):
-                    mem = memory_with_extras(channel_radio, location)
-                    if not mem.empty:
-                        channels.append(memory_json(mem))
-                    if locations and (
-                        index % 20 == 0 or index == len(locations) - 1
-                    ):
-                        emit_progress(
-                            "Building the channel list...",
-                            0.94 + 0.05 * (index + 1) / len(locations),
+                try:
+                    channel_radio, zones, selected_zone = channel_context(
+                        radio, args.zone
+                    )
+                    start, end = channel_radio.get_features().memory_bounds
+                    locations = list(range(start, end + 1))
+                    channels = []
+                    for index, location in enumerate(locations):
+                        mem = memory_with_extras(channel_radio, location)
+                        if not mem.empty:
+                            channels.append(memory_json(mem))
+                        if locations and (
+                            index % 20 == 0 or index == len(locations) - 1
+                        ):
+                            emit_progress(
+                                "Building the channel list...",
+                                0.94 + 0.05 * (index + 1) / len(locations),
+                            )
+                except Exception as exc:
+                    raise RuntimeError(
+                        download_decode_error_message(
+                            args.model,
+                            image,
+                            exc,
                         )
+                    ) from exc
                 emit_progress("Read complete.", 1.0)
                 print(json.dumps({
                     "channels": channels,

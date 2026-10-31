@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T16:18:53Z"
+timestamp: "2026-10-31T16:29:22Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 1871–2270 in `chirp_bridge.py`
+Lines 1884–2292 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -48,6 +48,7 @@ Lines 1871–2270 in `chirp_bridge.py`
 | calls | [has_global_settings](/chirp_bridge/has_global_settings.md) |
 | calls | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) |
 | calls | [memory_json](/chirp_bridge/memory_json.md) |
+| calls | [download_decode_error_message](/chirp_bridge/download_decode_error_message.md) |
 | calls | [apply_json](/chirp_bridge/apply_json.md) |
 | calls | [normalize_upload_memory](/chirp_bridge/normalize_upload_memory.md) |
 | calls | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) |

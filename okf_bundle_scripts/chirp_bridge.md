@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T16:18:53Z"
+timestamp: "2026-10-31T16:29:22Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -58,6 +58,7 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [verify_live_write](/chirp_bridge/verify_live_write.md) |
 | related | [live_channel_context](/chirp_bridge/live_channel_context.md) |
 | related | [radio_for](/chirp_bridge/radio_for.md) |
+| related | [download_decode_error_message](/chirp_bridge/download_decode_error_message.md) |
 | related | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | related | [radio_from_image](/chirp_bridge/radio_from_image.md) |
 | related | [channel_context](/chirp_bridge/channel_context.md) |
