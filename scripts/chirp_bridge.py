@@ -505,9 +505,14 @@ def load_chirp(
     # drivers. Reregistration must therefore be enabled before the initial
     # directory scan, or an override such as TIDRADIO_TD-H3 collides with the
     # upstream class while it is being imported.
-    directory.enable_reregistrations()
-    directory.import_drivers()
-    _allow_driver_specific_modes()
+    old_log_level = directory.LOG.level
+    directory.LOG.setLevel(logging.ERROR)
+    try:
+        directory.enable_reregistrations()
+        directory.import_drivers()
+        _allow_driver_specific_modes()
+    finally:
+        directory.LOG.setLevel(old_log_level)
     # chirp.drivers resets DeprecationWarning handling while it imports, so
     # apply NewChirp's filter again before loading overrides or image data.
     warnings.filterwarnings(

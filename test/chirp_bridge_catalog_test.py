@@ -46,6 +46,10 @@ class ColocatedDriverCatalogTest(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertNotIn(
+                "Replacing existing driver id",
+                result.stderr,
+            )
             models = json.loads(result.stdout)["models"]
             self.assertIn("TIDRADIO_TD-H3", models)
             self.assertIn("Icom_ID-50", models)

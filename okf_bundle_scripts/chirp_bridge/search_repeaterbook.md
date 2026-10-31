@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:24:24Z"
+timestamp: "2026-10-31T16:18:53Z"
 concept_id: chirp_bridge/search_repeaterbook
 language: python
 ---
@@ -47,7 +47,7 @@ def search_repeaterbook(country, state, service = 'amateur', query = '', latitud
 | `limit` | `—` | `200` |
 
 ## Source
-Lines 1707–1817 in `chirp_bridge.py`
+Lines 1712–1822 in `chirp_bridge.py`
 
 ## Relationships
 

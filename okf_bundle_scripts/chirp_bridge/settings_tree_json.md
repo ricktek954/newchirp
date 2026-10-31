@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:24:24Z"
+timestamp: "2026-10-31T16:18:53Z"
 concept_id: chirp_bridge/settings_tree_json
 language: python
 ---
@@ -31,7 +31,7 @@ def settings_tree_json(elements, prefix = ())
 | `prefix` | `—` | `()` |
 
 ## Source
-Lines 845–887 in `chirp_bridge.py`
+Lines 850–892 in `chirp_bridge.py`
 
 ## Relationships
 
