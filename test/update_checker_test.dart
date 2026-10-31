@@ -238,7 +238,7 @@ void main() {
   });
 
   group('trustedUpdateArtifactUrl', () {
-    test('accepts only the native package extension for the platform', () {
+    test('accepts packages for platforms with automatic updates', () {
       expect(
         trustedUpdateArtifactUrl(
           'https://newchirp.net/downloads/NewChirp-1.0.23.dmg',
@@ -248,17 +248,20 @@ void main() {
       );
       expect(
         trustedUpdateArtifactUrl(
-          'https://newchirp.net/downloads/NewChirp-Installer-1.0.23.exe',
-          platform: 'windows',
-        ),
-        'https://newchirp.net/downloads/NewChirp-Installer-1.0.23.exe',
-      );
-      expect(
-        trustedUpdateArtifactUrl(
           'https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.deb',
           platform: 'linux',
         ),
         'https://newchirp.net/downloads/NewChirp-linux-x64-1.0.23.deb',
+      );
+    });
+
+    test('keeps Windows updates manual until installers are signed', () {
+      expect(
+        trustedUpdateArtifactUrl(
+          'https://newchirp.net/downloads/NewChirp-Installer-1.0.23.exe',
+          platform: 'windows',
+        ),
+        isNull,
       );
       expect(
         trustedUpdateArtifactUrl(
