@@ -52,6 +52,9 @@ app.*.map.json
 okf_bundle/.okf_lookup_cache.json
 okf_bundle_scripts/.okf_lookup_cache.json
 
+# Local operator-only agent prompts.
+/prompts/
+
 # Android Studio will place build artifacts here
 /android/app/debug
 /android/app/profile
