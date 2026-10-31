@@ -40,7 +40,7 @@ Fetch RepeaterBook's CHIRP-compatible compressed database.
 | `state` | `—` | `—` |
 
 ## Source
-Lines 1593–1632 in `chirp_bridge.py`
+Lines 1625–1664 in `chirp_bridge.py`
 
 ## Relationships
 

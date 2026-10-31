@@ -29,7 +29,7 @@ def _mapping_entries_by_index(model)
 | `model` | `—` | `—` |
 
 ## Source
-Lines 1422–1426 in `chirp_bridge.py`
+Lines 1454–1458 in `chirp_bridge.py`
 
 ## Relationships
 

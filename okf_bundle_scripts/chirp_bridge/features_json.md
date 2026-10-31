@@ -29,7 +29,7 @@ def features_json(radio)
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 738–763 in `chirp_bridge.py`
+Lines 770–795 in `chirp_bridge.py`
 
 ## Relationships
 

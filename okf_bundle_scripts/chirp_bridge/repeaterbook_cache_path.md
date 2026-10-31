@@ -29,7 +29,7 @@ def repeaterbook_cache_path(resource)
 | `resource` | `—` | `—` |
 
 ## Source
-Lines 1587–1590 in `chirp_bridge.py`
+Lines 1619–1622 in `chirp_bridge.py`
 
 ## Relationships
 

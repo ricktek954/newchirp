@@ -38,7 +38,7 @@ Return the selected channel owner plus available radio zones.
 | `zone` | `—` | `None` |
 
 ## Source
-Lines 1329–1362 in `chirp_bridge.py`
+Lines 1361–1394 in `chirp_bridge.py`
 
 ## Relationships
 

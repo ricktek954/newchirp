@@ -36,7 +36,7 @@ Treat location words like "Broward County" as a county name.
 | `query` | `—` | `—` |
 
 ## Source
-Lines 1701–1709 in `chirp_bridge.py`
+Lines 1733–1741 in `chirp_bridge.py`
 
 ## Relationships
 

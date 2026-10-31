@@ -31,7 +31,7 @@ def _load_module(module_path, directory)
 | `directory` | `—` | `—` |
 
 ## Source
-Lines 444–472 in `chirp_bridge.py`
+Lines 476–504 in `chirp_bridge.py`
 
 ## Relationships
 

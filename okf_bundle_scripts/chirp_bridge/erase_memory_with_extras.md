@@ -38,7 +38,7 @@ Erase a channel and remove its metadata-backed fields.
 | `number` | `—` | `—` |
 
 ## Source
-Lines 619–624 in `chirp_bridge.py`
+Lines 651–656 in `chirp_bridge.py`
 
 ## Relationships
 

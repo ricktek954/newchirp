@@ -42,7 +42,7 @@ Add safe, command-specific recovery guidance to bridge failures.
 | `port` | `—` | `None` |
 
 ## Source
-Lines 247–421 in `chirp_bridge.py`
+Lines 247–453 in `chirp_bridge.py`
 
 ## Relationships
 

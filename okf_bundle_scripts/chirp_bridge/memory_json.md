@@ -29,7 +29,7 @@ def memory_json(mem)
 | `mem` | `—` | `—` |
 
 ## Source
-Lines 562–582 in `chirp_bridge.py`
+Lines 594–614 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -29,7 +29,7 @@ def settings_payload(radio)
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1829–1836 in `chirp_bridge.py`
+Lines 1861–1868 in `chirp_bridge.py`
 
 ## Relationships
 
