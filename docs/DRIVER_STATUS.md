@@ -91,8 +91,15 @@ Last updated: 2026-10-31
 - Read/write state: read implemented; every write entry point is disabled
 - Hardware validation: a connected FTDI port opened but did not answer the
   RT-950 handshake, so no physical read has completed
-- Next milestone: confirm the RT-950 is powered and in programming mode, then
-  capture a complete successful read and export a test image
+- Diagnostics: a 2026-10-31 macOS report received the expected one-byte ACK,
+  16-byte `F` reply, and 12-byte `M` reply on the first handshake attempt,
+  then the driver retried and replaced the deterministic model mismatch with
+  a later no-response error. The driver now retries only genuine
+  `RadioNoResponse` failures, so a model mismatch reports the actual received
+  model code immediately.
+- Next milestone: confirm the reported RT-950 model code, classify any
+  variant that does not answer `BT-9000`, then capture a complete successful
+  read and export a test image
 
 ### Connect Systems CS750
 

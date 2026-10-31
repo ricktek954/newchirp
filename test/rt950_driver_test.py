@@ -177,9 +177,13 @@ class RT950DriverTest(unittest.TestCase):
         radio = self.radio_class(serial)
         from chirp import errors
 
-        with self.assertRaises(errors.RadioError):
+        with self.assertRaisesRegex(
+            errors.RadioError,
+            "radio reported b'BT-9001'",
+        ):
             radio.sync_in()
 
+        self.assertEqual(serial.writes.count(b"PROGRAMBT9000U"), 1)
         self.assertNotIn(b"E", serial.writes)
         self.assertFalse(
             [write for write in serial.writes if write[:1] == b"R"]

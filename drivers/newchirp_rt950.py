@@ -235,7 +235,7 @@ class RT950Radio(chirp_common.CloneModeRadio,
             try:
                 self._handshake_once()
                 return
-            except errors.RadioError as exc:
+            except errors.RadioNoResponse as exc:
                 last_error = exc
         raise last_error
 
