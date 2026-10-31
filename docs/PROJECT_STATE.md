@@ -8,6 +8,9 @@ release requirements.
 
 ## Resume here
 
+- The Windows `1.0.26` installer is built, uploaded, and live. It fixes the
+  Windows update-button link and skips the VC++ redistributable when the
+  unified 14.x runtime is already installed.
 - The Linux `1.0.26` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
@@ -53,9 +56,9 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.26 |
-| Windows | 1.0.24 |
+| Windows | 1.0.26 |
 | Linux | 1.0.26 |
-| Legacy shared manifest version | 1.0.24 |
+| Legacy shared manifest version | 1.0.26 |
 
 macOS artifact:
 
@@ -67,6 +70,15 @@ macOS artifact:
 - Size: `82,114,526` bytes
 - Notarization submission: `4f94c492-adf0-4316-851d-ad76ed6e5d1f`
 - Gatekeeper result: accepted as Notarized Developer ID
+- Server checksum matched the local artifact
+
+Windows artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.26.exe`
+- Version/build: `1.0.26` / `26`
+- SHA-256:
+  `22f31a69003a788ba555afdf99806be1bc3dc1114ab44ead3a390a14e6b9b7c7`
+- Size: `60,992,539` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
