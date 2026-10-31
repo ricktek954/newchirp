@@ -10,7 +10,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-10-31T19:55:47Z"
 concept_id: models/radio_channel/nearestFrequencyForSteps
 language: dart
 ---
@@ -24,7 +24,7 @@ int_nearestFrequencyForSteps_nearestFrequencyForSteps
 ```
 
 ## Source
-Lines 797–797 in `models/radio_channel.dart`
+Lines 801–801 in `models/radio_channel.dart`
 
 ## Relationships
 

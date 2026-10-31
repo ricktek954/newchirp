@@ -362,5 +362,12 @@ void main() {
       ),
       isEmpty,
     );
+
+    repeater.crossMode = '';
+    final missingCrossMode = repeater.validate(
+      validToneModes: const ['', 'Tone', 'TSQL', 'DTCS', 'Cross'],
+    );
+    expect(missingCrossMode, hasLength(1));
+    expect(missingCrossMode.single, 'Cross tone requires a cross mode.');
   });
 }

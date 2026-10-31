@@ -734,7 +734,11 @@ class RadioChannel {
         '${validToneModes.map((value) => value.isEmpty ? 'none' : value).join(', ')}.',
       );
     }
+    if (tone == 'Cross' && crossMode.trim().isEmpty) {
+      issues.add('Cross tone requires a cross mode.');
+    }
     if (tone == 'Cross' &&
+        crossMode.trim().isNotEmpty &&
         validCrossModes.isNotEmpty &&
         !validCrossModes.contains(crossMode)) {
       issues.add(
