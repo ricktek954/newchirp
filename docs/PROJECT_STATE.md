@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-10-30
+Last updated: 2026-10-31
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -13,9 +13,9 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.25` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes the TH-D75, DM-32UV, UV-K5, FT3D, AR8200, RT1/RT21,
-  settings, and incompatible-channel upload fixes.
+- The macOS `1.0.26` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes the experimental Icom IC-41S driver, complete county
+  filters, the reordered file actions, and the macOS radio-picker scroll fix.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -36,7 +36,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Release source commit: current `main` after the Linux `1.0.26` release commit
+- macOS `1.0.26` artifact source commit: `b6ae41aa`
 - Open pull requests: none
 - Checked-out source version: `1.0.26+26`
 - macOS builds are pinned to CocoaPods with
@@ -52,20 +52,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.25 |
-| Windows | 1.0.23 |
+| macOS | 1.0.26 |
+| Windows | 1.0.24 |
 | Linux | 1.0.26 |
-| Legacy shared manifest version | 1.0.23 |
+| Legacy shared manifest version | 1.0.24 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.25.dmg`
-- Version/build: `1.0.25` / `25`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.26.dmg`
+- Version/build: `1.0.26` / `26`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `d99ac7bd0c5f88ad1bfdac5f7575f9c548be61772798d54d1b0f29bc4034d125`
-- Size: `81,954,836` bytes
-- Notarization submission: `5ebc873a-9c06-48a0-923d-2c6ef63af347`
+  `55be39f4bfa8627c5fce5c5e712c596f89851d57bb55f67da475f990386c360c`
+- Size: `82,114,526` bytes
+- Notarization submission: `4f94c492-adf0-4316-851d-ad76ed6e5d1f`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -93,6 +93,10 @@ Linux 1.0.26 SHA-256:
 
 ## Recently completed
 
+- Published macOS `1.0.26` as a universal signed, notarized, stapled DMG.
+  Verified the embedded version, Python runtimes, CHIRP pin, IC-41S driver
+  bundle, strict code signatures, Gatekeeper assessment, server checksum, and
+  live platform manifest.
 - Published macOS `1.0.25` as a universal signed, notarized, stapled DMG.
   Verified the embedded version, Python runtimes, CHIRP pin, new handshake
   overrides, strict code signatures, Gatekeeper assessment, server checksum,
@@ -176,22 +180,24 @@ Linux 1.0.26 SHA-256:
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
 
-## macOS 1.0.25 verification status
+## macOS 1.0.26 verification status
 
-Full verification before the macOS `1.0.25` release:
+Full verification before the macOS `1.0.26` release:
 
 - `flutter analyze`: clean
-- `flutter test`: all 147 tests passed
-- Python test discovery: 127 tests passed, 2 fixture-dependent tests skipped
-- Bridge upload/settings suite: all 32 tests passed
+- `flutter test`: all 168 tests passed
+- Python test discovery: 163 tests passed, 2 fixture-dependent tests skipped
+- Bridge upload/settings suite: all 43 tests passed
 - Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
-- App version/build in the mounted DMG: `1.0.25` / `25`
+- App version/build in the mounted DMG: `1.0.26` / `26`
 - Main executable architectures: `arm64` and `x86_64`
 - Bundled Python: `3.13.15` for both architectures
 - Bundled CHIRP commit:
   `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled experimental IC-41S driver SHA-256:
+  `5f884d58a8bd3dea5d5d8dc4da2137877f5eff9b2d6b97c110851ad4d4dd247c`
 - Server SHA-256 matched the final stapled DMG
-- `/api/releases/latest` reports macOS `1.0.25`
+- `/api/releases/latest` reports macOS `1.0.26`
 
 ## macOS 1.0.24 verification status
 
@@ -269,7 +275,7 @@ Full verification before the Linux `1.0.17` release:
 - Forum like counts and website-side ranking are a separate website project,
   not part of this Flutter repository.
 - The direct updater is first shipped in 1.0.23 and has automated coverage.
-  Exercise the full in-app update path from 1.0.24 to 1.0.25.
+  Exercise the full in-app update path from 1.0.25 to 1.0.26.
 - The roadmap in `docs/SOFTWARE_ROADMAP.md` is older than this handoff and
   contains stale release-status items. Update it when doing broader roadmap
   maintenance.
