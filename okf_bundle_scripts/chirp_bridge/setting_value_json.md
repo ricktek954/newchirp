@@ -29,7 +29,7 @@ def setting_value_json(setting)
 | `setting` | `—` | `—` |
 
 ## Source
-Lines 776–847 in `chirp_bridge.py`
+Lines 808–879 in `chirp_bridge.py`
 
 ## Relationships
 

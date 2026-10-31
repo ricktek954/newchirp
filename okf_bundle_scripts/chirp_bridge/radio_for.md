@@ -41,7 +41,7 @@ def radio_for(directory, model, port, progress_range = (0.0, 1.0), image = None,
 | `channel_zone` | `—` | `None` |
 
 ## Source
-Lines 1249–1307 in `chirp_bridge.py`
+Lines 1281–1339 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -38,7 +38,7 @@ Write a channel and persist fields CHIRP stores outside radio memory.
 | `memory` | `—` | `—` |
 
 ## Source
-Lines 611–616 in `chirp_bridge.py`
+Lines 643–648 in `chirp_bridge.py`
 
 ## Relationships
 

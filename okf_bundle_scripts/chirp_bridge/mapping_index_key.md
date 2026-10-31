@@ -29,7 +29,7 @@ def _mapping_index_key(index)
 | `index` | `—` | `—` |
 
 ## Source
-Lines 1370–1371 in `chirp_bridge.py`
+Lines 1402–1403 in `chirp_bridge.py`
 
 ## Relationships
 

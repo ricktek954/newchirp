@@ -425,6 +425,35 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertIn("Close Baofeng CPS", message)
         self.assertIn("old saved port", message)
 
+    def test_serial_missing_port_explains_reconnect_steps(self):
+        with mock.patch.object(bridge.sys, "platform", "win32"):
+            message = bridge.bridge_error_message(
+                RuntimeError(
+                    "could not open port 'COM4': "
+                    "FileNotFoundError(2, 'Das System kann die angegebene "
+                    "Datei nicht finden.', None, 2)"
+                ),
+                command="download",
+                model="Radtel_RT-950",
+            )
+
+        self.assertIn("Windows could not open COM4", message)
+        self.assertIn("not available", message)
+        self.assertIn("Device Manager", message)
+        self.assertNotIn("FileNotFoundError", message)
+        self.assertNotIn("Das System", message)
+
+    def test_serial_missing_port_uses_selected_port(self):
+        with mock.patch.object(bridge.sys, "platform", "win32"):
+            message = bridge.bridge_error_message(
+                RuntimeError("could not open port: device gone"),
+                command="download",
+                model="Radtel_RT-950",
+                port="COM7",
+            )
+
+        self.assertIn("Windows could not open COM7", message)
+
     def test_linux_serial_access_denied_names_linux(self):
         with mock.patch.object(bridge.sys, "platform", "linux"):
             message = bridge.bridge_error_message(

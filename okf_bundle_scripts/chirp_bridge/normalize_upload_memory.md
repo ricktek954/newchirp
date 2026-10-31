@@ -42,7 +42,7 @@ receive-only GMRS and MURS channels impossible to upload.
 | `memory` | `—` | `—` |
 
 ## Source
-Lines 1003–1042 in `chirp_bridge.py`
+Lines 1035–1074 in `chirp_bridge.py`
 
 ## Relationships
 

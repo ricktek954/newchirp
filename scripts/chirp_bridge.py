@@ -286,6 +286,38 @@ def bridge_error_message(exc, command=None, model=None, port=None):
                 "COM100 if it did not newly appear when the cable was connected."
                 % port
             )
+    elif (
+        "filenotfounderror" in lowered_message
+        or "could not open port" in lowered_message
+    ):
+        port_match = re.search(r"port '([^']+)'", message)
+        port = port_match.group(1) if port_match else (
+            port or "the selected serial port"
+        )
+        if sys.platform.startswith("linux"):
+            message = (
+                "Linux could not open %s because no serial device exists at "
+                "that path. Reconnect the programming cable, then refresh the "
+                "interface list; USB adapters can reappear under a different "
+                "ttyUSB name after being unplugged." % port
+            )
+        elif sys.platform == "darwin":
+            message = (
+                "macOS could not open %s because no serial device exists at "
+                "that path. Reconnect the programming cable, then refresh the "
+                "interface list; the adapter can reappear under a different "
+                "/dev/cu.usbmodem name after being unplugged." % port
+            )
+        else:
+            message = (
+                "Windows could not open %s because that port is not "
+                "available. The cable may be unplugged or using a different "
+                "COM port, a USB-serial driver may not be loaded, or the "
+                "saved entry may be stale. Unplug and reconnect the cable, "
+                "check Device Manager to confirm the COM port appears "
+                "without a warning icon, then refresh the interface list "
+                "and select that port." % port
+            )
     if (
         command in ("download", "read-settings")
         and model == "Yaesu_FT-60"

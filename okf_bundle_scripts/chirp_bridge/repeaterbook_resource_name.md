@@ -33,7 +33,7 @@ def repeaterbook_resource_name(service, country, state)
 | `state` | `—` | `—` |
 
 ## Source
-Lines 1572–1584 in `chirp_bridge.py`
+Lines 1604–1616 in `chirp_bridge.py`
 
 ## Relationships
 

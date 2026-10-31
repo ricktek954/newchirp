@@ -29,7 +29,7 @@ def serial_read_timeout(radio_class)
 | `radio_class` | `—` | `—` |
 
 ## Source
-Lines 1045–1051 in `chirp_bridge.py`
+Lines 1077–1083 in `chirp_bridge.py`
 
 ## Relationships
 
