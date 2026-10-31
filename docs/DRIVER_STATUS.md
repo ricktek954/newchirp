@@ -29,6 +29,7 @@ Last updated: 2026-10-31
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | CHIRP TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
@@ -483,6 +484,23 @@ Last updated: 2026-10-31
   recover the actual ID-50 channel/mode offsets, repeat the comparison for
   ID-52, then perform and read back a one-channel edit.
 - Website catalog: must be listed as experimental for both radios.
+
+### AnyTone 5888UV
+
+- Maintainer: NewChirp compatibility override of CHIRP's
+  `AnyTone5888UVRadio`
+- Maintained file: `drivers/newchirp_anytone.py`
+- Issue: the upstream driver decodes `sqlMode` as a three-bit value but
+  indexes a five-item list. Raw values 5 through 7 therefore abort the channel
+  read with `IndexError`.
+- Fix: unknown SQL values are exposed as `Off`, preserving the downloaded
+  channel while leaving the unknown radio setting unchanged. The upstream
+  `RadioSettingValueList` compatibility warning is also suppressed.
+- Hardware validation: none. The 2026-10-31 macOS report from
+  `2muchsql@gmail.com` completed the clone download and exposed the invalid
+  value during channel decoding.
+- Next milestone: the reporter confirms the channel list opens and verifies
+  settings before any write.
 
 ### Icom IC-41S
 
