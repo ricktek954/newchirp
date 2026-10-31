@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:41:41Z"
+timestamp: "2026-10-31T15:01:55Z"
 concept_id: main/saveColumnLayout
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_saveColumnLayout_saveColumnLayout
 ```
 
 ## Source
-Lines 627–627 in `main.dart`
+Lines 641–641 in `main.dart`
 
 ## Relationships
 

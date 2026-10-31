@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:41:41Z"
+timestamp: "2026-10-31T15:01:55Z"
 concept_id: main/findRepeaters
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_findRepeaters_findRepeaters
 ```
 
 ## Source
-Lines 1682–1682 in `main.dart`
+Lines 1707–1707 in `main.dart`
 
 ## Relationships
 
