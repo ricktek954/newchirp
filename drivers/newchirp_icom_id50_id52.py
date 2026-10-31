@@ -12,11 +12,11 @@ programmers use the standard Icom ``IcomCloneFormat3`` protocol implemented
 by CHIRP's ``icf`` module: FE/FD framing with E0 through E6 commands, raw
 escaped clone data, and the high-bit transform used by recent Icom radios.
 
-The memory layout starts from the closely related ID-4100 map.  It remains
-provisional for these two radios until physical readback validates every
-field.  Reading and writing are intentionally enabled for this experimental
-driver so field data can be collected, but the radio model and map revision
-are checked on every live transfer.
+The 500-channel layout was recovered from a physical ID-50 image supplied by
+a field tester.  Reads expose frequencies, offsets, channel names, the analog
+mode flag, and D-STAR callsigns.  Tones and some channel option bits are still
+unvalidated, so writes are disabled and the radio model is checked on every
+live transfer.
 """
 
 import logging
@@ -34,6 +34,8 @@ LOG = logging.getLogger(__name__)
 MAX_MEMORY_SIZE = 0x80000
 END_FRAME = b"Icom Inc."
 CLONE_TIMEOUT = 15
+CHANNEL_COUNT = 500
+CHANNEL_RECORD_SIZE = 51
 
 
 def _model_hex(model):
@@ -182,15 +184,12 @@ class _DynamicIcomCloneMixin:
         self.process_mmap()
 
     def sync_out(self):
-        if self._mmap is None:
-            raise errors.RadioError("Read the radio or load an image first")
-        self._identify_radio()
-        self._memsize = len(self._mmap)
-        self.pipe.baudrate = self.BAUD_RATE
-        return self._clone_to_radio()
+        raise errors.RadioError(
+            "The ID-50/ID-52 channel and D-STAR map is read-only while the "
+            "remaining tone and mode flags are validated."
+        )
 
     def process_mmap(self):
-        super().process_mmap()
         model = self._metadata.get("icom_model_id")
         if model:
             try:
@@ -205,7 +204,7 @@ class _IcomId50Id52Base(
     id5100.ID4100Radio,
     chirp_common.ExperimentalRadio,
 ):
-    """Shared read/write implementation for the two experimental drivers."""
+    """Shared read-only implementation for the two experimental drivers."""
 
     VENDOR = "Icom"
     BAUD_RATE = 9600
@@ -223,11 +222,10 @@ class _IcomId50Id52Base(
         prompts = chirp_common.RadioPrompts()
         prompts.experimental = (
             "%s support is experimental. The Icom clone transport is known, "
-            "but the channel, zone, and D-STAR field map has not yet been "
-            "validated on physical hardware. Reading and writing are enabled "
-            "at your own risk. Download and save an unedited backup image "
-            "before making changes, and do not write if the downloaded "
-            "channels do not look correct.\n" % cls.MODEL
+            "and supplied physical images have established the 500-channel "
+            "frequency, name, offset, and D-STAR callsign layout. Tones and "
+            "some mode flags remain unvalidated, so uploads are disabled. "
+            "Download the radio and keep a saved backup image.\n" % cls.MODEL
         )
         prompts.info = (
             "Connect the radio with its Icom USB programming cable, turn it "
@@ -239,16 +237,98 @@ class _IcomId50Id52Base(
             "1. Turn the radio on and connect the Icom USB cable.\n"
             "2. Close Icom CS-50/CS-52 and any other program using the port.\n"
             "3. Start the download and leave the radio powered on.\n\n"
-            "Save the unedited download as a backup. Verify the model ID, "
-            "channels, names, tones, zones, and D-STAR callsigns before "
-            "using upload."
-        )
-        prompts.pre_upload = (
-            "Experimental write. Keep a known-good backup image and do not "
-            "disconnect the cable or turn off the radio. After writing, read "
-            "the radio back and verify every field before relying on it."
+            "Save the unedited download as a backup. This driver is "
+            "read-only until the remaining tone and mode fields are verified."
         )
         return prompts
+
+    def get_features(self):
+        rf = chirp_common.RadioFeatures()
+        rf.has_name = True
+        rf.has_settings = False
+        rf.has_bank = False
+        rf.has_ctone = False
+        rf.has_rx_dtcs = False
+        rf.has_tuning_step = False
+        rf.has_cross = False
+        rf.can_odd_split = False
+        rf.memory_bounds = (1, CHANNEL_COUNT)
+        rf.valid_bands = [
+            (108000000, 174000000),
+            (375000000, 550000000),
+        ]
+        rf.valid_modes = ["FM", "AM", "DV"]
+        rf.valid_duplexes = ["", "+"]
+        rf.valid_tmodes = [""]
+        rf.valid_name_length = 16
+        return rf
+
+    def _channel_record(self, number):
+        if not 1 <= number <= CHANNEL_COUNT:
+            raise errors.InvalidMemoryLocation(
+                "Channel number must be between 1 and %i" % CHANNEL_COUNT
+            )
+        start = (number - 1) * CHANNEL_RECORD_SIZE
+        return self._mmap.get(start, CHANNEL_RECORD_SIZE)
+
+    def get_raw_memory(self, number):
+        return repr(self._channel_record(number))
+
+    @staticmethod
+    def _decode_name(raw):
+        try:
+            name = raw.decode("shift_jis")
+        except UnicodeDecodeError:
+            name = raw.decode("ascii", errors="replace")
+        return name.replace("\x00", "").rstrip()
+
+    @staticmethod
+    def _decode_call(raw):
+        return "".join(
+            chr(value) for value in icf.warp_byte_size(raw, 7, 8)
+        ).rstrip()
+
+    def get_memory(self, number):
+        record = self._channel_record(number)
+        memory = chirp_common.DVMemory()
+        memory.number = number
+
+        frequency = int.from_bytes(record[0:4], "big")
+        if frequency in (0, 0xFFFFFFFF):
+            memory.empty = True
+            return memory
+
+        memory.freq = frequency
+        offset = int.from_bytes(record[4:8], "big")
+        if offset:
+            memory.duplex = "+"
+            memory.offset = offset
+
+        memory.name = self._decode_name(record[12:28])
+        mode_flag = record[9]
+        if mode_flag == 0x03:
+            memory.mode = "AM"
+        elif mode_flag == 0x05:
+            memory.mode = "DV"
+            memory.dv_urcall = self._decode_call(record[30:37])
+            memory.dv_rpt1call = self._decode_call(record[37:44])
+            memory.dv_rpt2call = self._decode_call(record[44:51])
+        else:
+            if mode_flag != 0x00:
+                LOG.warning(
+                    "Unknown Icom %s channel %i mode flag 0x%02X; using FM",
+                    self.MODEL,
+                    number,
+                    mode_flag,
+                )
+            memory.mode = "FM"
+        return memory
+
+    def set_memory(self, memory):
+        raise errors.RadioError(
+            "The ID-50/ID-52 map is read-only until all tone and mode flags "
+            "are independently validated."
+        )
 
     @classmethod
     def match_model(cls, filedata, filename):

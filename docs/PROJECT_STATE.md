@@ -115,6 +115,11 @@ Linux 1.0.29 sizes:
 
 ## Recently completed
 
+- Replaced the provisional Icom ID-50/ID-52 parser with the physical ID-50
+  map recovered from Nick Hale's supplied clone image. The 500-channel
+  read-only parser decodes FM, AM, DV, names, offsets, and D-STAR calls
+  without the former invalid-mode failure. Writes remain disabled until the
+  remaining channel flags are validated.
 - Published Linux `1.0.29` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
   package metadata, server checksums, public HTTP 200 checks, and live
