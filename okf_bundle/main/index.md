@@ -195,4 +195,5 @@
 - [rowColor](rowColor.md)
 - [save](save.md)
 - [start](start.md)
+- [toggle](toggle.md)
 - [walk](walk.md)

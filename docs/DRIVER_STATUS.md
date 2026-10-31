@@ -37,6 +37,7 @@ Last updated: 2026-10-31
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Provisional ID-4100-family map | Experimental |
+| Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
 ## Radio details
@@ -437,6 +438,40 @@ Last updated: 2026-10-31
   the image and model ID, compare the channel/D-STAR regions against this
   provisional map, then perform and read back a one-channel edit.
 - Website catalog: must be listed as experimental for both radios.
+
+### Icom IC-41S
+
+- Maintained driver: `drivers/newchirp_ic41s.py`
+- Protocol notes: `docs/IC41S_PROTOCOL.md`
+- Model: Icom IC-41S only. The CS-41S Rev. 1.3 package contains no IC-41W
+  model evidence.
+- Device help: Icom OPC-478/U/UC programming cable; close CS-41S before a
+  transfer.
+- Transport: legacy Icom clone serial with hexadecimal `E4` payloads,
+  checksums, 9600 8N1 normal speed, and the `Icom Inc.` end frame.
+- Image: model header `29280000`, map revision 1, 16-byte records, decoded
+  size `0x7D80`.
+- Implemented: full-image read and write, RX frequency, exact split TX
+  frequency, eight-character names, empty channels, and channel-count-aware
+  memory bounds.
+- Preserved without editing: tone words, channel flag bits other than active
+  and duplex, zone table, settings, scan lists, SelCall, and key assignments.
+- Evidence: official CS-41S Rev. 1.3 CPS ZIP SHA-256
+  `9d93ade74ca671a1a037bb39fc5f040cbe1e24ab1447d19747e0230aef23502f`;
+  executable SHA-256
+  `1b47aae5605044dfb45b937ee4326f0ec108306bf106575ac17ea7e29528d0d5`;
+  populated sample ICF SHA-256
+  `eb3dd05b5e4add4bcfeeddb6de8e86f1e2c6cdb2785469b71750891d608ddb9a`.
+- Driver SHA-256:
+  `5f884d58a8bd3dea5d5d8dc4da2137877f5eff9b2d6b97c110851ad4d4dd247c`
+- Read/write state: both enabled for this experimental driver.
+- Hardware validation: none. Offline tests cover CPS image parsing, channel
+  editing, split operation, empty channels, model matching, and preservation
+  of unknown tone bytes.
+- Next milestone: capture an unedited physical read, compare it byte-for-byte
+  with CS-41S, edit one simplex and one split channel, write them, and verify
+  the result with both CS-41S and NewChirp.
+- Website catalog: listed as experimental in New Experimental Radio Support.
 
 ### Midland MXT295
 

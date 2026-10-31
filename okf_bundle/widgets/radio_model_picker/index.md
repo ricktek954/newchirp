@@ -3,7 +3,9 @@
 ## Classs
 
 - [_ModelChoice](ModelChoice.md)
+- [_ModelEntry](ModelEntry.md)
 - [_ModelResultsList](ModelResultsList.md)
+- [_ModelResultsListState](ModelResultsListState.md)
 - [_RadioModelDialog](RadioModelDialog.md)
 - [_RadioModelDialogState](RadioModelDialogState.md)
 - [_RadioModelPickerState](RadioModelPickerState.md)
@@ -15,6 +17,7 @@
 
 ## Functions
 
+- [_cacheGroups](cacheGroups.md)
 - [_groupModels](groupModels.md)
 - [_matchingGroups](matchingGroups.md)
 - [_modelNameWithinVendor](modelNameWithinVendor.md)

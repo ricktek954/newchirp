@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:24:48Z"
+timestamp: "2026-10-31T09:39:28Z"
 concept_id: main
 language: dart
 ---
@@ -74,6 +74,9 @@ language: dart
 | related | [_headerCell](/main/headerCell.md) |
 | related | [legendItem](/main/legendItem.md) |
 | related | [_showAbbreviationGlossary](/main/showAbbreviationGlossary.md) |
+| related | [toggle](/main/toggle.md) |
+| related | [toggle](/main/toggle.md) |
+| related | [toggle](/main/toggle.md) |
 | related | [fitAllPoints](/main/fitAllPoints.md) |
 | related | [resizeBy](/main/resizeBy.md) |
 | related | [inactive](/main/inactive.md) |
@@ -222,7 +225,10 @@ language: dart
 | related | [dispose](/main/dispose.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
+| related | [toggle](/main/toggle.md) |
+| related | [toggle](/main/toggle.md) |
 | related | [_buildHelpMenu](/main/buildHelpMenu.md) |
+| related | [toggle](/main/toggle.md) |
 | related | [createState](/main/createState.md) |
 | related | [dispose](/main/dispose.md) |
 | related | [_submit](/main/submit.md) |

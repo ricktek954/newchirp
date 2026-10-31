@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 const String _allVendors = 'All manufacturers';
 const String _recentVendors = 'Recent';
 const int _maxRecentModels = 8;
+final RegExp _querySeparators = RegExp(r'[\s_-]+');
+final RegExp _queryTerms = RegExp(r'\s+');
 
 String displayRadioModelName(String model) => model.replaceAll('_', ' ');
 
@@ -205,6 +208,9 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
   late final FocusNode _searchFocus;
   late final List<_VendorModels> _groups;
   String? _vendor;
+  String? _cachedQuery;
+  String? _cachedVendor;
+  List<_VendorModels>? _cachedGroups;
 
   @override
   void initState() {
@@ -227,9 +233,15 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
 
   List<_VendorModels> _matchingGroups() {
     final query = _searchController.text.trim().toLowerCase();
-    final compactQuery = query.replaceAll(RegExp(r'[\s_-]+'), '');
+    if (_cachedGroups != null &&
+        _cachedQuery == query &&
+        _cachedVendor == _vendor) {
+      return _cachedGroups!;
+    }
+
+    final compactQuery = query.replaceAll(_querySeparators, '');
     final terms = query
-        .split(RegExp(r'\s+'))
+        .split(_queryTerms)
         .where((term) => term.isNotEmpty)
         .toList(growable: false);
 
@@ -250,14 +262,17 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
       source = _groups;
     }
 
+    if (query.isEmpty) {
+      return _cacheGroups(query, source.toList(growable: false));
+    }
+
     final matches = <_VendorModels>[];
     for (final group in source) {
       final models = group.models
           .where((model) {
-            if (query.isEmpty) return true;
             final haystack = '${displayRadioModelName(model)} ${group.vendor}'
                 .toLowerCase();
-            final compact = haystack.replaceAll(RegExp(r'[\s_-]+'), '');
+            final compact = haystack.replaceAll(_querySeparators, '');
             return haystack.contains(query) ||
                 terms.every(haystack.contains) ||
                 (compactQuery.isNotEmpty && compact.contains(compactQuery));
@@ -267,7 +282,14 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
         matches.add(_VendorModels(group.vendor, models));
       }
     }
-    return matches;
+    return _cacheGroups(query, matches);
+  }
+
+  List<_VendorModels> _cacheGroups(String query, List<_VendorModels> groups) {
+    _cachedQuery = query;
+    _cachedVendor = _vendor;
+    _cachedGroups = groups;
+    return groups;
   }
 
   void _selectVendor(String? vendor) {
@@ -495,7 +517,7 @@ class _VendorChoice extends StatelessWidget {
   }
 }
 
-class _ModelResultsList extends StatelessWidget {
+class _ModelResultsList extends StatefulWidget {
   const _ModelResultsList({
     required this.groups,
     required this.selectedModel,
@@ -507,34 +529,53 @@ class _ModelResultsList extends StatelessWidget {
   final ValueChanged<String> onSelected;
 
   @override
+  State<_ModelResultsList> createState() => _ModelResultsListState();
+}
+
+class _ModelResultsListState extends State<_ModelResultsList> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final rows = <Object>[];
-    for (final group in groups) {
+    for (final group in widget.groups) {
       if (group.vendor != _recentVendors) {
         rows.add(_VendorHeading(group.vendor));
       }
-      rows.addAll(group.models);
+      rows.addAll(
+        group.models.map(
+          (model) => _ModelEntry(model: model, vendor: group.vendor),
+        ),
+      );
     }
     return Scrollbar(
+      controller: _scrollController,
       child: ListView.builder(
         key: const ValueKey('radio-model-results-list'),
+        controller: _scrollController,
+        primary: false,
         padding: const EdgeInsets.symmetric(vertical: 8),
         itemCount: rows.length,
+        scrollCacheExtent: const ScrollCacheExtent.pixels(480),
+        addAutomaticKeepAlives: false,
         itemBuilder: (context, index) {
           final row = rows[index];
           if (row is _VendorHeading) {
             return _SectionHeader(label: row.label);
           }
-          final model = row as String;
-          final group = groups.firstWhere(
-            (candidate) => candidate.models.contains(model),
-          );
+          final entry = row as _ModelEntry;
           return _ModelChoice(
-            key: ValueKey('radio-model-option-$model'),
-            model: model,
-            vendor: group.vendor,
-            selected: model == selectedModel,
-            onTap: () => onSelected(model),
+            key: ValueKey('radio-model-option-${entry.model}'),
+            model: entry.model,
+            vendor: entry.vendor,
+            selected: entry.model == widget.selectedModel,
+            onTap: () => widget.onSelected(entry.model),
           );
         },
       ),
@@ -546,6 +587,13 @@ class _VendorHeading {
   const _VendorHeading(this.label);
 
   final String label;
+}
+
+class _ModelEntry {
+  const _ModelEntry({required this.model, required this.vendor});
+
+  final String model;
+  final String vendor;
 }
 
 class _SectionHeader extends StatelessWidget {

@@ -109,7 +109,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.runAsync(() async {
-      await tester.tap(find.text('Open file').first);
+      await tester.tap(find.text('Open channel file').first);
       await Future<void>.delayed(const Duration(milliseconds: 100));
     });
     await tester.pumpAndSettle();

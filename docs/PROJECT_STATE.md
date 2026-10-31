@@ -140,7 +140,7 @@ Linux 1.0.26 SHA-256:
   and direct drag or menu movement between radio memory slots.
 - Bundled Linux and Windows Python runtime hashes are pinned in build scripts.
 - CHIRP `.py` and `.mod` driver modules can be loaded from
-  **Help > Load CHIRP driver module…** for the current session.
+  **Load CHIRP driver module…** in the top action bar for the current session.
 - Loaded modules can add or override radio drivers; the radio catalog refreshes
   after loading and unloading.
 - User-loaded CHIRP modules run behind a macOS Seatbelt or Linux bubblewrap

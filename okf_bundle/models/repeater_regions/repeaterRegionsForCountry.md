@@ -10,7 +10,7 @@ tags:
   - "domain:repeater_regions.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-29T13:13:55Z"
+timestamp: "2026-10-31T09:33:48Z"
 concept_id: models/repeater_regions/repeaterRegionsForCountry
 language: dart
 ---
@@ -24,7 +24,7 @@ ListrepeaterRegionsForCountryrepeaterRegionsForCountry
 ```
 
 ## Source
-Lines 223–223 in `models/repeater_regions.dart`
+Lines 225–225 in `models/repeater_regions.dart`
 
 ## Relationships
 

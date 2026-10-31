@@ -1,46 +1,47 @@
 ---
-description: 'Top-level OKF summary: 526 concepts across 4 domains and 26 modules'
+description: 'Top-level OKF summary: 530 concepts across 4 domains and 27 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-31T09:26:55Z'
+timestamp: '2026-10-31T09:39:29Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 526 concepts | 4 domains | 26 modules
+> OKF v0.2 bundle | 530 concepts | 4 domains | 27 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 406 |
+| Function | 409 |
 | Class | 88 |
-| Module | 26 |
+| Module | 27 |
 | Enum | 6 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 526 |
+| dart | 530 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 193 concepts
+### [main.dart](main.dart/index.md) — 194 concepts
 
-- [main](main/index.md) (193 concepts)
+- [main](main/index.md) (194 concepts)
 
-### [models](models/index.md) — 82 concepts
+### [models](models/index.md) — 85 concepts
 
 - [models/radio_channel](models/radio_channel/index.md) (37 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (11 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (9 concepts)
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
-- [models/repeater_regions](models/repeater_regions/index.md) (3 concepts)
+- [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
+- [models/repeater_counties](models/repeater_counties/index.md) (1 concepts)
 
 ### [services](services/index.md) — 196 concepts
 

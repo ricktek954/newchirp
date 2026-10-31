@@ -316,7 +316,12 @@ void main() {
 
     await tester.tap(find.text('All counties'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Erie'));
+    await tester.enterText(
+      find.byKey(const ValueKey('county-filter-field')),
+      'Erie',
+    );
+    await tester.pump();
+    await tester.tap(find.text('Erie').last);
     await tester.pump();
     await tester.tap(find.text('Apply'));
     await tester.pumpAndSettle();
@@ -328,7 +333,12 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Clear all'));
     await tester.pump();
-    await tester.tap(find.text('Broward'));
+    await tester.enterText(
+      find.byKey(const ValueKey('county-filter-field')),
+      'Broward',
+    );
+    await tester.pump();
+    await tester.tap(find.text('Broward').last);
     await tester.pump();
     await tester.tap(find.text('Apply'));
     await tester.pumpAndSettle();
@@ -641,9 +651,14 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.text('Open channel file'), findsWidgets);
+    expect(find.text('Load CHIRP driver module…'), findsOneWidget);
+    final openLeft = tester.getTopLeft(find.text('Open channel file').first);
+    final loadLeft = tester.getTopLeft(find.text('Load CHIRP driver module…'));
+    expect(loadLeft.dx, greaterThan(openLeft.dx));
+
     await tester.tap(find.text('Help'));
     await tester.pumpAndSettle();
-    expect(find.text('Load CHIRP driver module…'), findsOneWidget);
     await tester.tap(find.text('Check for updates'));
     await tester.pumpAndSettle();
 
@@ -696,7 +711,7 @@ void main() {
     expect(find.text('NewChirp'), findsWidgets);
     expect(find.text('What would you like to do?'), findsOneWidget);
     expect(find.text('Start new'), findsNothing);
-    expect(find.text('Open file'), findsWidgets);
+    expect(find.text('Open channel file'), findsWidgets);
     expect(find.text('Use GMRS template'), findsNothing);
     expect(find.text('Connect radio'), findsOneWidget);
     expect(find.text('GMRS 1'), findsNothing);
@@ -1719,7 +1734,7 @@ void main() {
     expect(find.text('View complete licenses'), findsOneWidget);
     expect(find.textContaining('not affiliated with'), findsOneWidget);
     expect(find.text('New'), findsNothing);
-    expect(find.text('Open file'), findsNothing);
+    expect(find.text('Open channel file'), findsNothing);
     expect(
       find.textContaining('Rick Lopez · Lead Programmer'),
       findsNWidgets(2),
@@ -1747,7 +1762,7 @@ void main() {
     expect(find.text('Repeater Pairs (GMRS Only)'), findsOneWidget);
     expect(find.text('467.5500'), findsOneWidget);
     expect(find.text('New'), findsNothing);
-    expect(find.text('Open file'), findsNothing);
+    expect(find.text('Open channel file'), findsNothing);
     expect(find.text('Print'), findsOneWidget);
   });
 

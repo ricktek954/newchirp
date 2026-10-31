@@ -39,4 +39,4 @@ Lines 207–210 in `chirp_bridge.py`
 |------|--------|
 | related | [TracedSerial](/chirp_bridge/TracedSerial.md) |
 | calls | [received](/chirp_bridge/received.md) |
-| called_by | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
+| called_by | [_read_source](/generate_repeater_counties/read_source.md) |

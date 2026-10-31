@@ -116,7 +116,7 @@ GUI requirements.
 Always read a radio before writing it. NewChirp intentionally keeps writing
 locked until a matching radio image has been downloaded in the current session.
 
-Use **Open file** to load a CHIRP-compatible CSV, a MOTOTRBO CPS 2.0 Zone XML
+Use **Open channel file** to load a CHIRP-compatible CSV, a MOTOTRBO CPS 2.0 Zone XML
 export, or a native CHIRP image such as `.img`, `.icf`, `.itm`, or `.d72`.
 CPS 2.0 XML is read-only and imports conventional channels, including basic
 analog and DMR fields. Native CHIRP images use model detection, retain the
@@ -125,9 +125,10 @@ selected.
 
 ### Experimental CHIRP modules
 
-**Help > Load CHIRP driver module…** loads a trusted CHIRP `.py` or `.mod`
-module for the current NewChirp session and refreshes the radio catalog. Modules
-can replace built-in drivers or add experimental driver classes.
+**Load CHIRP driver module…** in the top action bar, immediately after
+**Open channel file**, loads a trusted CHIRP `.py` or `.mod` module for the
+current NewChirp session and refreshes the radio catalog. Modules can replace
+built-in drivers or add experimental driver classes.
 
 CHIRP modules are executable Python code. NewChirp runs a loaded module in a
 sandbox that blocks the home folder, other drives, and the network. The module
@@ -230,6 +231,19 @@ Reading and writing are enabled for users who accept the experimental risk.
 Download and save an unedited image first, verify that every displayed field is
 correct, and keep a known-good backup before uploading. Status and evidence are
 recorded in `docs/DRIVER_STATUS.md`.
+
+### Experimental Icom IC-41S support
+
+NewChirp includes an experimental read/write driver for the Icom IC-41S UHF CB
+transceiver. It uses the legacy Icom clone transport and 22-byte channel image
+recovered from Icom CS-41S Cloning Software Rev. 1.3. RX frequency, exact split
+TX frequency, eight-character labels, and CPS channel counts are editable while
+unresolved tone, zone, scan, and settings bytes are preserved.
+
+The supplied CS-41S package documents and identifies only the IC-41S. An IC-41W
+driver is not included without model-specific evidence. Download and save an
+unedited backup before an experimental upload. Protocol notes are recorded in
+`docs/IC41S_PROTOCOL.md`.
 
 ## Code knowledge graph
 

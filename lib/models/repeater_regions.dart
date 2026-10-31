@@ -1,3 +1,5 @@
+import 'repeater_counties.dart';
+
 const repeaterCountries = <String>[
   'Albania',
   'Andorra',
@@ -227,6 +229,54 @@ List<String> repeaterRegionsForCountry(String country) {
     'Mexico' => repeaterMexicoRegions,
     _ => const ['All'],
   };
+}
+
+String normalizeRepeaterCounty(String county) {
+  var normalized = county.trim();
+  for (final suffix in const [
+    ' city and borough',
+    ' census area',
+    ' municipality',
+    ' municipio',
+    ' county',
+    ' parish',
+    ' borough',
+  ]) {
+    if (normalized.toLowerCase().endsWith(suffix)) {
+      normalized = normalized
+          .substring(0, normalized.length - suffix.length)
+          .trim();
+      break;
+    }
+  }
+  if (normalized.endsWith(' city')) {
+    normalized = normalized.substring(0, normalized.length - 5).trim();
+  }
+  return normalized;
+}
+
+List<String> repeaterCountiesForRegion(
+  String country,
+  String region,
+  Iterable<String> loadedCounties,
+) {
+  final counties = <String, String>{};
+  if (country == 'United States') {
+    for (final county
+        in repeaterUsCountiesByState[region] ?? const <String>[]) {
+      counties[county.toLowerCase()] = county;
+    }
+  }
+  for (final county in loadedCounties) {
+    final normalized = normalizeRepeaterCounty(county);
+    if (normalized.isEmpty) continue;
+    counties.putIfAbsent(normalized.toLowerCase(), () => normalized);
+  }
+  final result = counties.values.toList();
+  result.sort(
+    (left, right) => left.toLowerCase().compareTo(right.toLowerCase()),
+  );
+  return result;
 }
 
 bool repeaterCountrySupportsGmrs(String country) => country == 'United States';

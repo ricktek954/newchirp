@@ -45,7 +45,7 @@ is stored in this repository.
 1. In CPS2, open the R7 codeplug.
 2. Select a Zone containing conventional analog and digital channels.
 3. Copy the Zone XML and save it as a `.xml` file.
-4. In NewChirp, choose **Open file** and select the XML file.
+4. In NewChirp, choose **Open channel file** and select the XML file.
 5. Compare channel names, frequencies, tones, power, color codes, timeslots,
    contact references, RX group lists, and scan membership with CPS2.
 
