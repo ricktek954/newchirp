@@ -7361,7 +7361,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 child:
                                     DropdownButtonFormField<RepeaterSortOrder>(
                                       key: ValueKey(
-                                        'repeater-sort-$_sortOrder',
+                                        'repeater-sort-${_sortOrder.name}',
                                       ),
                                       isExpanded: true,
                                       initialValue: _sortOrder,
@@ -7372,6 +7372,14 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         DropdownMenuItem(
                                           value: RepeaterSortOrder.source,
                                           child: Text('Source order'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: RepeaterSortOrder.frequency,
+                                          child: Text('Frequency'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: RepeaterSortOrder.callsignName,
+                                          child: Text('Callsign / name'),
                                         ),
                                         DropdownMenuItem(
                                           value: RepeaterSortOrder.city,

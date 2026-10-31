@@ -10,7 +10,7 @@ tags:
   - "domain:repeater_search.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T06:07:13Z"
+timestamp: "2026-10-31T15:12:55Z"
 concept_id: models/repeater_search/RepeaterSortOrder
 language: dart
 ---
@@ -27,6 +27,10 @@ enum RepeaterSortOrder
 
 - `source`
 - `source`
+- `frequency`
+- `frequency`
+- `callsignName`
+- `callsignName`
 - `city`
 - `city`
 - `county`

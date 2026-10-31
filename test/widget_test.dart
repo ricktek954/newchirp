@@ -332,6 +332,16 @@ void main() {
     expect(preferencesStore.preferences.fmOnly, isFalse);
     expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
     expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('repeater-sort-source')));
+    await tester.pumpAndSettle();
+    expect(find.text('Frequency'), findsOneWidget);
+    expect(find.text('Callsign / name'), findsOneWidget);
+    await tester.tap(find.text('Callsign / name'));
+    await tester.pumpAndSettle();
+    expect(
+      tester.getTopLeft(find.text('W4BUG — Point of Americas')).dy,
+      lessThan(tester.getTopLeft(find.text('WB2ECR — Buffalo')).dy),
+    );
     await tester.ensureVisible(find.text('Map'));
     await tester.tap(find.text('Map'));
     await tester.pump();
