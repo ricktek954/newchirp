@@ -10,7 +10,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T00:09:10Z"
+timestamp: "2026-10-31T14:31:44Z"
 concept_id: services/update_checker/ReleaseManifest
 language: dart
 ---

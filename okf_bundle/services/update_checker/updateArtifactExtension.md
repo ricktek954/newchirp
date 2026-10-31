@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T00:09:10Z"
+timestamp: "2026-10-31T14:31:44Z"
 concept_id: services/update_checker/updateArtifactExtension
 language: dart
 ---
@@ -31,7 +31,7 @@ StringupdateArtifactExtensionupdateArtifactExtension
 File extension used by an installable desktop update for [platform].
 
 ## Source
-Lines 283–283 in `services/update_checker.dart`
+Lines 285–285 in `services/update_checker.dart`
 
 ## Relationships
 

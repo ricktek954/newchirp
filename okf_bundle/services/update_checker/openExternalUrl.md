@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T00:09:10Z"
+timestamp: "2026-10-31T14:31:44Z"
 concept_id: services/update_checker/openExternalUrl
 language: dart
 ---
@@ -30,12 +30,14 @@ FutureopenExternalUrlopenExternalUrl
 
 Opens a newchirp.net download page in the default browser.
 
-Returns false when [url] is not an allowed download page, or when no
-usable launcher is available. The launched address is rebuilt as https on
+Returns false when [url] is not an allowed download page, or when the
+launcher refused to start. The launched address is rebuilt as https on
 newchirp.net, so a tricky string cannot change the site.
 
+[launcher] replaces the platform launcher in tests.
+
 ## Source
-Lines 316–316 in `services/update_checker.dart`
+Lines 320–323 in `services/update_checker.dart`
 
 ## Relationships
 

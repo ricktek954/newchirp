@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 533 concepts across 4 domains and 27 modules'
+description: 'Top-level OKF summary: 535 concepts across 4 domains and 27 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-10-31T10:32:14Z'
+timestamp: '2026-10-31T14:31:45Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 533 concepts | 4 domains | 27 modules
+> OKF v0.2 bundle | 535 concepts | 4 domains | 27 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 410 |
+| Function | 412 |
 | Class | 90 |
 | Module | 27 |
 | Enum | 6 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 533 |
+| dart | 535 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 194 concepts
+### [main.dart](main.dart/index.md) — 195 concepts
 
-- [main](main/index.md) (194 concepts)
+- [main](main/index.md) (195 concepts)
 
 ### [models](models/index.md) — 85 concepts
 
@@ -43,12 +43,12 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - [models/repeater_counties](models/repeater_counties/index.md) (1 concepts)
 
-### [services](services/index.md) — 196 concepts
+### [services](services/index.md) — 197 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (49 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (35 concepts)
+- [services/update_checker](services/update_checker/index.md) (18 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
-- [services/update_checker](services/update_checker/index.md) (17 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
 - [services/update_installer](services/update_installer/index.md) (11 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (10 concepts)
@@ -73,8 +73,8 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
 | [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
-| [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
+| [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
@@ -84,11 +84,11 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 | [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
+| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
 | [restorePlainMidlandRepeater](/models/radio_channel/restorePlainMidlandRepeater.md) | Function | `models/radio_channel.dart` | Puts the standard GMRS repeater back in this row and clears … |
 | [isHidden](/services/file_save_warning_store/isHidden.md) | Function | `services/file_save_warning_store.dart` | True only when the person checked "Do not show me this messa… |
 | [DownloadedUpdate](/services/update_installer/DownloadedUpdate.md) | Class | `services/update_installer.dart` | A downloaded installer ready for the platform-specific updat… |
 | [midlandReceiveGmrsChannel](/models/radio_channel/midlandReceiveGmrsChannel.md) | Function | `models/radio_channel.dart` | GMRS channel shown for this row. Fixed rows use the slot. Ot… |
-| [moduleSandboxRefusal](/services/module_sandbox/moduleSandboxRefusal.md) | Function | `services/module_sandbox.dart` | A message when this operating system cannot sandbox a module… |
 
 ## Usage with OpenCode
 
