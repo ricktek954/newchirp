@@ -11,7 +11,7 @@ release requirements.
 - The Windows `1.0.29` installer is live. It restores and validates the saved
   radio and port on startup, and keeps the IC-E90/IC-T90A clone override,
   update-button link, and VC++ redistributable fixes from `1.0.27`/`1.0.28`.
-- The Linux `1.0.28` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.29` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
@@ -42,7 +42,7 @@ release requirements.
 - Branch: `main`
 - macOS `1.0.28` artifact source commit: `405dc18f`
 - Open pull requests: none
-- Checked-out source version: `1.0.28+28`
+- Checked-out source version: `1.0.29+29`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -58,7 +58,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.28 |
 | Windows | 1.0.29 |
-| Linux | 1.0.28 |
+| Linux | 1.0.29 |
 | Legacy shared manifest version | 1.0.28 |
 
 macOS artifact:
@@ -85,34 +85,38 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.28.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.pkg.tar.zst`
 
-Linux 1.0.28 SHA-256:
+Linux 1.0.29 SHA-256:
 
 - DEB:
-  `2a5427bd84483d375671ebfcc330e8287bc9642c97a9a5800d9415f88275bc59`
+  `c7c609b31a1de77315296143f5cb27eff13253426810213a32bad2efccce1f93`
 - RPM:
-  `9daf34f5cd76af67b7be8ee424a148e392fe70b35d4025d6afc05a5ae4efefb8`
+  `99a31305079f1096357f5bb16012c9be8ccb1b6bda01bc830b648d748aaa1865`
 - AppImage:
-  `e99ae1c9e26999b7df5fd0691fed17a3cf341149811c5757253bb65ed65b7dbe`
+  `d188c57fbdc442ce1c1008ef5a43e0832b7b18e695d5f8044236b8685b10fe2b`
 - Pacman:
-  `bbbcb7e026c829adc5a8825e64e814a0f703be40ba61095d7073130b72bba529`
+  `736456f07f806d74393cf5b9f226bb8e3bc22112a068673b6f722adae0fca45e`
 
-Linux 1.0.28 sizes:
+Linux 1.0.29 sizes:
 
-- DEB: `48,272,396` bytes
-- RPM: `38,770,704` bytes
+- DEB: `48,272,364` bytes
+- RPM: `38,771,970` bytes
 - AppImage: `144,254,144` bytes
-- Pacman: `46,776,496` bytes
+- Pacman: `46,785,136` bytes
 
 ## Recently completed
 
+- Published Linux `1.0.29` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
+  package metadata, server checksums, public HTTP 200 checks, and live
+  platform manifest.
 - Published Linux `1.0.28` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
   package metadata, server checksums, public HTTP 200 checks, and live
