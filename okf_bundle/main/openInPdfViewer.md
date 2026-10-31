@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:39:28Z"
+timestamp: "2026-10-31T14:31:44Z"
 concept_id: main/openInPdfViewer
 language: dart
 ---
@@ -23,7 +23,7 @@ FutureopenInPdfVieweropenInPdfViewer
 ```
 
 ## Source
-Lines 4120–4120 in `main.dart`
+Lines 4150–4150 in `main.dart`
 
 ## Relationships
 

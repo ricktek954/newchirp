@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:39:28Z"
+timestamp: "2026-10-31T14:31:44Z"
 concept_id: main/selectCountry
 language: dart
 ---
@@ -23,7 +23,7 @@ void_selectCountry(String country)
 ```
 
 ## Source
-Lines 6789–6789 in `main.dart`
+Lines 6819–6819 in `main.dart`
 
 ## Relationships
 

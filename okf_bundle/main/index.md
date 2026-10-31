@@ -115,6 +115,7 @@
 - [_newLibrary](newLibrary.md)
 - [_nextChannelLocation](nextChannelLocation.md)
 - [_noteRepeaterRowKept](noteRepeaterRowKept.md)
+- [_openDownloadPage](openDownloadPage.md) — Opens [url] in the browser and keeps the link reachable if that fails.
 - [_openLibraryFile](openLibraryFile.md)
 - [_openRadioConnection](openRadioConnection.md)
 - [_openRadioSettings](openRadioSettings.md)
