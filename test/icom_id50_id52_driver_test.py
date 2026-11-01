@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "build_support/chirp-20261023"
 PYTHON_VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 MODEL_ID = b"\x3a\x90\x00\x09"
+CHANNEL_RECORD_SIZE = 51
 
 
 def _load_bridge():
@@ -168,7 +169,13 @@ class IcomId50Id52DriverTest(unittest.TestCase):
         analog = bytearray(51)
         analog[0:4] = (146_940_000).to_bytes(4, "big")
         analog[4:8] = (600_000).to_bytes(4, "big")
+        analog[10] = 0x25
+        analog[11] = 0x2F
         analog[12:28] = b"ANALOG".ljust(16, b"\x00")
+        analog[28] = 0x01
+        analog[30] = 0x1B
+        analog[31] = 0x08
+        analog[34] = 0xE4
         # Analog records may contain nonzero D-STAR-area defaults.  The mode
         # selector, not those unrelated bytes, determines the CHIRP mode.
         analog[37:51] = b"\x01" * 14
@@ -200,6 +207,12 @@ class IcomId50Id52DriverTest(unittest.TestCase):
         self.assertEqual(analog_memory.offset, 600_000)
         self.assertEqual(analog_memory.name, "ANALOG")
         self.assertEqual(analog_memory.mode, "FM")
+        self.assertEqual(analog_memory.skip, "P")
+        self.assertEqual(analog_memory.tuning_step, 12.5)
+        self.assertEqual(analog_memory.power, "High")
+        self.assertEqual(analog_memory.tmode, "Tone")
+        self.assertEqual(analog_memory.rtone, 162.2)
+        self.assertEqual(analog_memory.ctone, 88.5)
 
         digital_memory = radio.get_memory(2)
         self.assertEqual(digital_memory.freq, 442_575_000)
@@ -212,6 +225,52 @@ class IcomId50Id52DriverTest(unittest.TestCase):
             radio.get_features().memory_bounds,
             (1, 500),
         )
+
+    def test_duplex_tone_and_skip_are_separate_packed_fields(self):
+        from chirp import memmap
+
+        image = bytearray(b"\xFF" * (CHANNEL_RECORD_SIZE * 3))
+
+        minus = bytearray(CHANNEL_RECORD_SIZE)
+        minus[0:4] = (145_470_000).to_bytes(4, "big")
+        minus[4:8] = (600_000).to_bytes(4, "big")
+        minus[10] = 0x10
+        minus[11] = 0x10
+        minus[28] = 0x0B
+        minus[30] = 17
+        minus[31] = 17
+        image[0:CHANNEL_RECORD_SIZE] = minus
+
+        simplex_with_stale_offset = bytearray(CHANNEL_RECORD_SIZE)
+        simplex_with_stale_offset[0:4] = (145_110_000).to_bytes(4, "big")
+        simplex_with_stale_offset[4:8] = (600_000).to_bytes(4, "big")
+        simplex_with_stale_offset[10] = 0x00
+        simplex_with_stale_offset[11] = 0x0F
+        image[CHANNEL_RECORD_SIZE:CHANNEL_RECORD_SIZE * 2] = (
+            simplex_with_stale_offset
+        )
+
+        radio = self.id50(None)
+        radio._mmap = memmap.MemoryMapBytes(bytes(image))
+        radio._metadata["icom_model_id"] = MODEL_ID.hex()
+        radio.process_mmap()
+
+        first = radio.get_memory(1)
+        self.assertEqual(first.duplex, "-")
+        self.assertEqual(first.skip, "S")
+        self.assertEqual(first.tmode, "TSQL")
+        self.assertEqual(first.rtone, 118.8)
+        self.assertEqual(first.ctone, 118.8)
+        self.assertEqual(first.power, "Low")
+        self.assertEqual(first.tuning_step, 5.0)
+
+        second = radio.get_memory(2)
+        self.assertEqual(second.duplex, "")
+        self.assertEqual(second.offset, 0)
+        self.assertEqual(second.skip, "")
+        self.assertEqual(second.tmode, "")
+        self.assertEqual(second.power, "High")
+        self.assertEqual(second.tuning_step, 5.0)
 
 
 if __name__ == "__main__":

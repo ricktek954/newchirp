@@ -714,14 +714,20 @@ Last updated: 2026-11-01
 - Serial settings: 9600 baud, 8 data bits, no parity, one stop bit
 - Implemented: live model identification, full-image read, download-end
   truncation, model/revision checking, and 500 physical ID-50 channel records
+  with names, frequency, mode, duplex direction, offset, CTCSS, tuning step,
+  output level, scan skip, and D-STAR callsigns
 - Channel map: each record is 51 bytes. Receive frequency and positive offset
   are 32-bit big-endian Hertz at offsets 0 and 4. The 16-byte Shift-JIS/ASCII
   name starts at offset 12. Byte 9 is the physical mode selector: `00` FM,
-  `03` AM, and `05` DV. D-STAR UR, RPT1, and RPT2 calls occupy offsets 30, 37,
-  and 44 as 7-byte packed Icom callsigns.
-- Unresolved fields: tone selection, tone frequencies, DCS, narrow-FM,
-  power, skip, duplex direction, zones, and settings. Unrecognized mode-selector
-  values are logged and exposed as FM so they cannot abort a download.
+  `03` AM, and `05` DV. Byte 10 packs scan skip in the high nibble and tuning
+  step in the low nibble. Byte 11 packs duplex in the high nibble (`00` off,
+  `01` minus, `02` plus) and output level in the low nibble. Byte 28 selects
+  the tone mode (`00` off, `01` tone, `0B` TSQL); offsets 30 and 31 are the
+  transmit and receive CTCSS indexes. D-STAR UR, RPT1, and RPT2 calls occupy
+  offsets 30, 37, and 44 as 7-byte packed Icom callsigns in DV records.
+- Unresolved fields: DTCS, reverse/cross-tone modes, remaining packed flags,
+  zones, and settings. Unrecognized mode-selector values are logged and
+  exposed as FM so they cannot abort a download.
 - Read/write policy: reads are enabled and writes are explicitly disabled
   until the unresolved fields are validated with controlled physical images.
   Clone upload code remains in the driver for later validation but is not
@@ -736,20 +742,28 @@ Last updated: 2026-11-01
   `908f22ecfa95b4e1eb6993f3dec123499cbd90a6e64f4099f44c46b2dff1d5db`;
   the two supplied read attempts are byte-identical. Radio firmware is CPU
   `1.05`, DSP `1.01`, and GPS `13196`.
+- Field image 2026-11-01: Nick Hale's NewChirp 1.0.32 Windows read produced
+  229,669-byte image `newchirp-7b9wb35_.img`, SHA-256
+  `42b0f30169073cf679f283b0b3e776e8f29eb21e0b808d3882e128bc80ab67e1`.
+  Comparing it with the previous verified image and the CS-50 built-in
+  channel templates established the tone, duplex, tuning-step, output-level,
+  and scan-skip packing.
 - Driver SHA-256:
-  `1021462759b88a6bba1d1aa7ac28100f515015747455ae997e219d67c9d1a193`
+  `b8e842fdb98823c2bae8d6bab7e04f2d8ea162c1abd975fad94f24922fd25382`
 - Hardware validation: the ID-50 completed the clone download twice and all
-  500 records decode without an exception. The supplied image yields 175 FM,
-  320 AM, and 5 DV memories with readable names, offsets, and D-STAR calls.
-  No upload has been attempted. ID-52 still needs an equivalent physical image.
+  500 records decode without an exception. The latest supplied image yields
+  175 FM, 320 AM, and 5 DV memories; 42 are DUP+, 9 are DUP-, 15 use TONE,
+  8 use TSQL, and all report scan skip off. AM receive-only channels leave the
+  transmit-power field blank. No upload has been attempted. ID-52 still needs
+  an equivalent physical image.
 - Field evidence 2026-10-31: Nick Hale's ID-50 (Windows, NewChirp 1.0.28,
   COM4) completed a 55-byte model handshake and the clone-in transfer. The
   provisional ID-4100 parser then rejected a decoded mode. The saved clone
   image established the real 51-byte map and the mode-selector byte.
-- Next milestone: Nick verifies the committed read-only parser in the next
-  build, obtain an equivalent ID-52 image, then reverse and validate the tone,
-  power, skip, duplex-direction, zone, and settings fields before enabling a
-  controlled one-channel write and read-back.
+- Next milestone: Nick verifies Tone, power, skip, Duplex, and tuning-step
+  values in the next normal build; obtain an equivalent ID-52 image; then
+  validate DTCS, reverse/cross tones, zones, settings, write encoding, and a
+  controlled one-channel write/read-back before enabling uploads.
 - Website catalog: must be listed as experimental for both radios.
 
 ### AnyTone 5888UV

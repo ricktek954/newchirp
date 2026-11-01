@@ -13,10 +13,11 @@ by CHIRP's ``icf`` module: FE/FD framing with E0 through E6 commands, raw
 escaped clone data, and the high-bit transform used by recent Icom radios.
 
 The 500-channel layout was recovered from a physical ID-50 image supplied by
-a field tester.  Reads expose frequencies, offsets, channel names, the analog
-mode flag, and D-STAR callsigns.  Tones and some channel option bits are still
-unvalidated, so writes are disabled and the radio model is checked on every
-live transfer.
+a field tester and checked against the CS-50 executable's built-in channel
+templates. Reads expose frequencies, offsets, channel names, modes, duplex,
+CTCSS, scan skip, tuning step, output level, and D-STAR callsigns. DTCS,
+reverse-tone modes, and the remaining packed flags are not yet validated, so
+writes are disabled and the radio model is checked on every live transfer.
 """
 
 import logging
@@ -36,6 +37,54 @@ END_FRAME = b"Icom Inc."
 CLONE_TIMEOUT = 15
 CHANNEL_COUNT = 500
 CHANNEL_RECORD_SIZE = 51
+
+DUPLEX_CODES = {
+    0: "",
+    1: "-",
+    2: "+",
+}
+
+SKIP_CODES = {
+    0: "",
+    1: "S",
+    2: "P",
+}
+
+# The receiver stores the tuning step in the low nibble. The 6.25 and airband
+# selectors also set companion bits in byte 8, which take precedence over this
+# table because "Auto" has no direct CHIRP equivalent.
+TUNING_STEP_CODES = {
+    0: 5.0,
+    1: 6.25,
+    2: 8.33,
+    3: 9.0,
+    4: 10.0,
+    5: 12.5,
+    6: 15.0,
+    7: 10.0,
+    8: 25.0,
+    9: 30.0,
+    10: 50.0,
+    11: 100.0,
+    12: 125.0,
+    13: 200.0,
+    14: 5.0,
+}
+
+# CS-50 stores the per-channel output level as a four-bit RF-gain value.
+# Existing physical images use 0 and 15; the intermediate bands map to the
+# radio's low/medium/high output settings for CHIRP's common power column.
+POWER_LEVELS = [
+    chirp_common.PowerLevel("Low", watts=0.5),
+    chirp_common.PowerLevel("Medium", watts=2.5),
+    chirp_common.PowerLevel("High", watts=5.0),
+]
+
+# The CS-50 decoder field is a packed bit mask rather than the displayed
+# option index. These are the two values present in the physical ID-50 image.
+DECODE_OFF = 0x00
+DECODE_TONE = 0x01
+DECODE_TSQL = 0x0B
 
 
 def _model_hex(model):
@@ -223,9 +272,11 @@ class _IcomId50Id52Base(
         prompts.experimental = (
             "%s support is experimental. The Icom clone transport is known, "
             "and supplied physical images have established the 500-channel "
-            "frequency, name, offset, and D-STAR callsign layout. Tones and "
-            "some mode flags remain unvalidated, so uploads are disabled. "
-            "Download the radio and keep a saved backup image.\n" % cls.MODEL
+            "frequency, name, mode, duplex, CTCSS, tuning-step, output-level, "
+            "scan-skip, and D-STAR callsign layout. DTCS, reverse/cross-tone "
+            "modes, and some packed flags remain unvalidated, so uploads are "
+            "disabled. Download the radio and keep a saved backup image.\n"
+            % cls.MODEL
         )
         prompts.info = (
             "Connect the radio with its Icom USB programming cable, turn it "
@@ -238,7 +289,8 @@ class _IcomId50Id52Base(
             "2. Close Icom CS-50/CS-52 and any other program using the port.\n"
             "3. Start the download and leave the radio powered on.\n\n"
             "Save the unedited download as a backup. This driver is "
-            "read-only until the remaining tone and mode fields are verified."
+            "read-only until DTCS, reverse/cross-tone modes, and the remaining "
+            "write fields are independently verified."
         )
         return prompts
 
@@ -247,9 +299,9 @@ class _IcomId50Id52Base(
         rf.has_name = True
         rf.has_settings = False
         rf.has_bank = False
-        rf.has_ctone = False
+        rf.has_ctone = True
         rf.has_rx_dtcs = False
-        rf.has_tuning_step = False
+        rf.has_tuning_step = True
         rf.has_cross = False
         rf.can_odd_split = False
         rf.memory_bounds = (1, CHANNEL_COUNT)
@@ -258,8 +310,11 @@ class _IcomId50Id52Base(
             (375000000, 550000000),
         ]
         rf.valid_modes = ["FM", "AM", "DV"]
-        rf.valid_duplexes = ["", "+"]
-        rf.valid_tmodes = [""]
+        rf.valid_duplexes = ["", "-", "+"]
+        rf.valid_tmodes = ["", "Tone", "TSQL"]
+        rf.valid_skips = ["", "S", "P"]
+        rf.valid_power_levels = POWER_LEVELS
+        rf.valid_tuning_steps = sorted(set(TUNING_STEP_CODES.values()))
         rf.valid_name_length = 16
         return rf
 
@@ -300,9 +355,53 @@ class _IcomId50Id52Base(
 
         memory.freq = frequency
         offset = int.from_bytes(record[4:8], "big")
-        if offset:
-            memory.duplex = "+"
+        duplex_code = record[11] >> 4
+        memory.duplex = DUPLEX_CODES.get(duplex_code, "")
+        if memory.duplex:
             memory.offset = offset
+        elif offset:
+            memory.offset = 0
+            LOG.debug(
+                "Icom %s channel %i has offset %i with duplex disabled; "
+                "keeping the inactive offset out of CHIRP",
+                self.MODEL,
+                number,
+                offset,
+            )
+
+        skip_code = record[10] >> 4
+        memory.skip = SKIP_CODES.get(skip_code, "")
+        if skip_code not in SKIP_CODES:
+            LOG.warning(
+                "Unknown Icom %s channel %i scan-skip code 0x%X",
+                self.MODEL,
+                number,
+                skip_code,
+            )
+
+        power_code = record[11] & 0x0F
+        if power_code <= 4:
+            memory.power = "Low"
+        elif power_code <= 9:
+            memory.power = "Medium"
+        else:
+            memory.power = "High"
+
+        step_code = record[10] & 0x0F
+        tuning_step = TUNING_STEP_CODES.get(step_code)
+        if record[8] in (0x10, 0x11):
+            tuning_step = 6.25
+        elif record[8] == 0x20:
+            tuning_step = 8.33
+        if tuning_step is None:
+            LOG.warning(
+                "Unknown Icom %s channel %i tuning-step code 0x%X",
+                self.MODEL,
+                number,
+                step_code,
+            )
+        else:
+            memory.tuning_step = tuning_step
 
         memory.name = self._decode_name(record[12:28])
         mode_flag = record[9]
@@ -322,12 +421,51 @@ class _IcomId50Id52Base(
                     mode_flag,
                 )
             memory.mode = "FM"
+
+        decode = record[28]
+        if decode != DECODE_OFF:
+            tone_index = record[30] & 0x3F
+            ctone_index = record[31] & 0x3F
+            if tone_index < len(chirp_common.TONES):
+                memory.rtone = chirp_common.TONES[tone_index]
+            if ctone_index < len(chirp_common.TONES):
+                memory.ctone = chirp_common.TONES[ctone_index]
+
+            if (
+                tone_index < len(chirp_common.TONES)
+                and ctone_index < len(chirp_common.TONES)
+            ):
+                if decode == DECODE_TONE:
+                    memory.tmode = "Tone"
+                elif decode == DECODE_TSQL:
+                    memory.tmode = "TSQL"
+            elif decode in (DECODE_TONE, DECODE_TSQL):
+                LOG.warning(
+                    "Icom %s channel %i has an invalid CTCSS index %i/%i",
+                    self.MODEL,
+                    number,
+                    tone_index,
+                    ctone_index,
+                )
+
+            if decode not in (DECODE_TONE, DECODE_TSQL):
+                LOG.warning(
+                    "Unknown Icom %s channel %i decode code 0x%02X; "
+                    "not exposing an unsupported tone mode",
+                    self.MODEL,
+                    number,
+                    decode,
+                )
+                memory.tmode = ""
+
+        if memory.mode == "AM":
+            memory.power = None
         return memory
 
     def set_memory(self, memory):
         raise errors.RadioError(
-            "The ID-50/ID-52 map is read-only until all tone and mode flags "
-            "are independently validated."
+            "The ID-50/ID-52 map is read-only until DTCS, reverse/cross tones, "
+            "and the remaining write fields are independently validated."
         )
 
     @classmethod

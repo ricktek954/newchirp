@@ -164,11 +164,12 @@ Linux 1.0.32 sizes:
   addressed 64 KiB image, retains the full image even when layout inference
   fails, discovers provisional PMR446 channel records, and blocks writes until
   the physical codeplug layout is validated.
-- Replaced the provisional Icom ID-50/ID-52 parser with the physical ID-50
-  map recovered from Nick Hale's supplied clone image. The 500-channel
-  read-only parser decodes FM, AM, DV, names, offsets, and D-STAR calls
-  without the former invalid-mode failure. Writes remain disabled until the
-  remaining channel flags are validated.
+- Expanded the physical Icom ID-50/ID-52 parser after Nick Hale's 1.0.32
+  retest. The 500-channel read-only parser now decodes FM, AM, DV, names,
+  offsets, duplex direction, CTCSS, tuning step, output level, scan skip, and
+  D-STAR calls without the former invalid-mode failure. Writes remain
+  disabled until DTCS, reverse/cross tones, and the remaining channel flags
+  are validated.
 - Published Linux `1.0.29` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
   package metadata, server checksums, public HTTP 200 checks, and live
