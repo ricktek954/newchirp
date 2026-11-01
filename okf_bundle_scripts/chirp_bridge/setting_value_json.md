@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:29:47Z"
+timestamp: "2026-11-01T13:37:43Z"
 concept_id: chirp_bridge/setting_value_json
 language: python
 ---
@@ -29,7 +29,7 @@ def setting_value_json(setting)
 | `setting` | `—` | `—` |
 
 ## Source
-Lines 808–879 in `chirp_bridge.py`
+Lines 825–896 in `chirp_bridge.py`
 
 ## Relationships
 

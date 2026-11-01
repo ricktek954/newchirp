@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:29:47Z"
+timestamp: "2026-11-01T13:37:43Z"
 concept_id: chirp_bridge/load_chirp
 language: python
 ---
@@ -35,7 +35,7 @@ def load_chirp(source, vendor, newchirp_driver_dir = None, module_path = None)
 | `module_path` | `—` | `None` |
 
 ## Source
-Lines 517–591 in `chirp_bridge.py`
+Lines 534–608 in `chirp_bridge.py`
 
 ## Relationships
 

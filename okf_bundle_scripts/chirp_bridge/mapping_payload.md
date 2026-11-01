@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:29:47Z"
+timestamp: "2026-11-01T13:37:43Z"
 concept_id: chirp_bridge/mapping_payload
 language: python
 ---
@@ -36,7 +36,7 @@ Describe CHIRP's bank/zone models for an image or channel owner.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1423–1461 in `chirp_bridge.py`
+Lines 1440–1478 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:29:47Z"
+timestamp: "2026-11-01T13:37:43Z"
 concept_id: chirp_bridge/download_decode_error_message
 language: python
 ---
@@ -40,7 +40,7 @@ Explain a post-download map failure without losing the saved image.
 | `exc` | `—` | `—` |
 
 ## Source
-Lines 1346–1356 in `chirp_bridge.py`
+Lines 1363–1373 in `chirp_bridge.py`
 
 ## Relationships
 

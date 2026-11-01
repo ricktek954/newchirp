@@ -49,6 +49,8 @@ Last updated: 2026-11-01
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
 | Kenwood TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710G clone serial | Stock driver | Stock driver | Stock driver | Regional identity compatibility |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
+| Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
 
 ## Radio details
 
@@ -172,6 +174,59 @@ Last updated: 2026-11-01
 - Next milestone: confirm the reported RT-950 model code, classify any
   variant that does not answer `BT-9000`, then capture a complete successful
   read and export a test image
+
+### Retevis MA1 and MA1 model A9305B
+
+- The original MA1 continues to use the pinned upstream CHIRP `th9800.py`
+  implementation at 38400 baud. Its image is 65,296 bytes with 1,000
+  channels, 6-character channel names, and per-channel settings. The driver
+  provides read and write support but remains classified as experimental.
+- The newer A9305B is a separate radio path. Retevis labels the distinction
+  explicitly: the A9305B CPS is only for radios carrying a label showing
+  `MA1 A9305B`.
+- Maintained A9305B driver:
+  `drivers/newchirp_retevis_ma1_a9305b.py`
+- Driver SHA-256:
+  `730a984d6484dbd85a10c2d9937c750bc1fcb4a2348a7055b58b6cb7341d1fe7`
+- Official CPS evidence:
+  `MA1-A9305B Programming Software-V1.0.zip`, downloaded from Retevis'
+  official software page. Archive SHA-256:
+  `8febcc09f1c546bd9f632fcc7beea91e94ad05fba637fb99ddef85c98281ea18`
+- Extracted CPS application: `TM-70WPlus.exe`, SHA-256:
+  `d2acb13359329a64d923282e3bcfcc0576436d7cb5aa2db71e02327e8458dafb`
+- Analysis used the requested REA project and its static .NET/CIL inspector.
+  The CPS setup resource identifies `RadioName=MA1-A9305B V1.0` and
+  `Baudradio=57600`; the application assembly contains the 9600-baud
+  handshake, baud command, programming-code path, read/write/end commands,
+  two's-complement block checksums, and the 1,000-channel table.
+- Old MA1 CPS evidence: `MA1-Programming-Software.zip` V3.6. Archive SHA-256:
+  `6a78cc7a29c8a3e7ccb11830d80c9dea6f203c7ac1a96a4140c90c74852b015b`.
+  Its extracted WPF application assembly SHA-256:
+  `4f817a2738ff7a332cdfd3f6a698b5cd01d5073f88a276ac2de1b6d7ad9125f1`.
+- A9305B transport: 9600 8N1 handshake with DTR/RTS asserted, 57600-baud
+  negotiation, then addressed `FE/FD` blocks. Reads use up to 240-byte blocks;
+  writes use the CPS' 32-byte rows and additive two's-complement checksum.
+- A9305B memory map: channels 1-200 use 21-byte records at `0x0000`, active
+  and skip bitmaps at `0x1180`/`0x11A0`, and 6+10-character names at
+  `0x000F` and `0x2300`. Channels 201-1000 use records at `0x4000`, bitmaps
+  at `0xB600`/`0xB680`, and 6+10-character names at `0x4015` and `0x8200`.
+- A9305B implemented fields: receive/transmit frequency, duplex and
+  odd-split, FM/NFM/AM/NAM, three power levels, 16-character names,
+  CTCSS/DCS with polarity and cross modes, tuning step, scan skip,
+  transmit inhibit, talk-around, and reverse. Unknown channel bits,
+  signalling fields, factory/calibration data, and unproven settings bytes
+  are preserved.
+- A9305B writable ranges mirror the CPS and exclude
+  `0x1680-0x19BF`, `0x2B80-0x31FF`, `0x3284-0x3FFF`, and
+  `0xBED0-0xCFFF`.
+- Offline validation: registration of both MA1 variants, channel decoding
+  across both 200/800 sections, 16-character names, tone fields, active/skip
+  bitmaps, model fingerprinting, complete read framing, block checksums, and
+  complete write framing.
+- Hardware validation: none for A9305B.
+- Next milestone: complete an unedited physical read, save the raw backup,
+  compare it with a CPS-exported image, then perform one channel edit,
+  read-back, and restore test.
 
 ### Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950
 

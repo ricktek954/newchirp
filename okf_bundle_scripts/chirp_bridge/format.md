@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:29:47Z"
+timestamp: "2026-11-01T13:37:43Z"
 concept_id: chirp_bridge/format
 language: python
 ---
@@ -29,7 +29,7 @@ def format(self)
 | `self` | `—` | `—` |
 
 ## Source
-Lines 165–181 in `chirp_bridge.py`
+Lines 182–198 in `chirp_bridge.py`
 
 ## Relationships
 

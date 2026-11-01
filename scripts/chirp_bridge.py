@@ -53,6 +53,23 @@ class RadioCommunicationTrace:
             return "<invalid serial data>"
         if not raw:
             return "<empty write>"
+        if len(raw) >= 5 and raw[:4] == b"\xfe\xfe\xee\xef":
+            commands = {
+                0xE0: "handshake",
+                0xE2: "enter read",
+                0xE3: "enter write",
+                0xE4: "write block",
+                0xE5: "end session",
+                0xE6: "baud switch",
+                0xE7: "programming code",
+                0xEB: "read block",
+            }
+            label = commands.get(raw[4], "command %02x" % raw[4])
+            if raw[4] in (0xE4, 0xEB) and len(raw) >= 11:
+                address = int.from_bytes(raw[5:9], "big")
+                length = int.from_bytes(raw[9:11], "big")
+                label += " addr=0x%04x len=%i" % (address, length)
+            return "TYT %s (%i bytes)" % (label, len(raw))
         if len(raw) >= 6 and raw[:2] == b"\xfe\xfe":
             command = raw[4]
             subcommand = raw[5]
