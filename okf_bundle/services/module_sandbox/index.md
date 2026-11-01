@@ -20,6 +20,7 @@
 - [_serialPort](serialPort.md)
 - [add](add.md)
 - [addRoot](addRoot.md)
+- [canLoadChirpModules](canLoadChirpModules.md)
 - [currentSandboxPlatform](currentSandboxPlatform.md)
 - [dispose](dispose.md)
 - [isSafeAllowRoot](isSafeAllowRoot.md) — A directory NewChirp may expose inside the sandbox.

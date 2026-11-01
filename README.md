@@ -135,10 +135,10 @@ sandbox that blocks the home folder, other drives, and the network. The module
 can still use the selected radio and the files for this session. A bad module
 can still damage the radio. Only load a module from a source you trust.
 NewChirp does not automatically download, remember, or reload modules after
-the app closes. On Windows, module loading is refused because NewChirp cannot
-sandbox it there yet. On Linux, bubblewrap (`bwrap`) must be installed or
-loading is refused. This feature loads desktop CHIRP drivers; it does not
-flash or install radio firmware.
+the app closes. On Windows, the module action is unavailable because NewChirp
+cannot sandbox it there yet; use the bundled CHIRP drivers instead. On Linux,
+bubblewrap (`bwrap`) must be installed or loading is refused. This feature
+loads desktop CHIRP drivers; it does not flash or install radio firmware.
 
 ## Verify and build
 

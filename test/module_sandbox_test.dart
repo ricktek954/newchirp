@@ -19,6 +19,10 @@ void main() {
     expect(moduleSandboxRefusal(SandboxPlatform.macos), isNull);
     expect(moduleSandboxRefusal(SandboxPlatform.linux), isNull);
     expect(moduleSandboxBubblewrapMessage, contains('bubblewrap'));
+    expect(canLoadChirpModules(SandboxPlatform.windows), isFalse);
+    expect(canLoadChirpModules(SandboxPlatform.other), isFalse);
+    expect(canLoadChirpModules(SandboxPlatform.macos), isTrue);
+    expect(canLoadChirpModules(SandboxPlatform.linux), isTrue);
   });
 
   test('rejects sandbox paths that could escape the profile', () {

@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 539 concepts across 4 domains and 27 modules'
-git_branch: HEAD
+description: 'Top-level OKF summary: 540 concepts across 4 domains and 27 modules'
+git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-01T12:22:22Z'
+timestamp: '2026-11-01T13:03:44Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 539 concepts | 4 domains | 27 modules
+> OKF v0.2 bundle | 540 concepts | 4 domains | 27 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 416 |
+| Function | 417 |
 | Class | 90 |
 | Module | 27 |
 | Enum | 6 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 539 |
+| dart | 540 |
 
 ## Domain Map
 
@@ -43,10 +43,10 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - [models/repeater_counties](models/repeater_counties/index.md) (1 concepts)
 
-### [services](services/index.md) — 198 concepts
+### [services](services/index.md) — 199 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (50 concepts)
-- [services/module_sandbox](services/module_sandbox/index.md) (35 concepts)
+- [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/update_checker](services/update_checker/index.md) (18 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
