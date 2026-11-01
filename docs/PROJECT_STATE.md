@@ -21,7 +21,7 @@ release requirements.
   three UV-5R Mini no-response reports needing cable and OEM-CPS details, and
   one FT-70D connection report needing confirmation of the programming cable
   and port.
-- The Linux `1.0.29` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.30` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
@@ -48,9 +48,10 @@ release requirements.
 
 ## Repository state
 
-- Local path: `/Volumes/RICKEXT/desktop/newchirp`
+- Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.30` artifact source commit: `262b5e60`
+- Linux `1.0.30` artifact source commit: `262b5e60`
 - Open pull requests: none
 - Checked-out source version: `1.0.31+31`
 - macOS builds are pinned to CocoaPods with
@@ -68,8 +69,8 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.30 |
 | Windows | 1.0.31 |
-| Linux | 1.0.29 |
-| Legacy shared manifest version | 1.0.29 |
+| Linux | 1.0.30 |
+| Legacy shared manifest version | 1.0.30 |
 
 macOS artifact:
 
@@ -95,34 +96,40 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.29.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.pkg.tar.zst`
 
-Linux 1.0.29 SHA-256:
+Linux 1.0.30 SHA-256:
 
 - DEB:
-  `c7c609b31a1de77315296143f5cb27eff13253426810213a32bad2efccce1f93`
+  `a8df9d2854f504893abd82548176d9b3f3ab17f20d891ade6fd70b3c2a95bcbe`
 - RPM:
-  `99a31305079f1096357f5bb16012c9be8ccb1b6bda01bc830b648d748aaa1865`
+  `6406b617345c2f3aa56cbfdc0b16ca23d4dacb2cb0ede49820d6b27662bd7d9f`
 - AppImage:
-  `d188c57fbdc442ce1c1008ef5a43e0832b7b18e695d5f8044236b8685b10fe2b`
+  `a93d9673147334e0db774d09a52a20c32927abf65fb264fc92ac2617f09b5fa0`
 - Pacman:
-  `736456f07f806d74393cf5b9f226bb8e3bc22112a068673b6f722adae0fca45e`
+  `efcfd56b5f1f792b7d6b63bac5099eefcb970772447162d3b1b83b5da6a42bdf`
 
-Linux 1.0.29 sizes:
+Linux 1.0.30 sizes:
 
-- DEB: `48,272,364` bytes
-- RPM: `38,771,970` bytes
-- AppImage: `144,254,144` bytes
-- Pacman: `46,785,136` bytes
+- DEB: `48,359,880` bytes
+- RPM: `38,826,090` bytes
+- AppImage: `144,340,160` bytes
+- Pacman: `46,874,712` bytes
 
 ## Recently completed
 
+- Published Linux `1.0.30` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
+  package metadata, bundled `libusb-1.0.so.0` and USB DFU helper, server
+  checksums, public HTTP 200 checks, and live platform manifest.
+- Fixed Linux runtime bundling so the packaged desktop bundle includes the
+  system `libusb-1.0.so.0` shared library needed by USB DFU radios.
 - Published macOS `1.0.30` as a universal signed, notarized, stapled DMG.
   Verified the app/build version, new experimental drivers, arm64 and x86_64
   Python runtimes, universal libusb loading under both architectures, strict

@@ -132,7 +132,7 @@ LIBUSB_SOURCE="${NEWCHIRP_LIBUSB_SOURCE:-}"
 if [[ -z "$LIBUSB_SOURCE" ]]; then
   LIBUSB_SOURCE="$(
     ldconfig -p 2>/dev/null |
-      awk '/libusb-1\\.0\\.so\\.0 .*x86-64/ {print $NF; exit}'
+      awk '$1 == "libusb-1.0.so.0" && /x86-64/ {path = $NF} END {print path}'
   )"
 fi
 if [[ -n "$LIBUSB_SOURCE" && -f "$LIBUSB_SOURCE" ]]; then
