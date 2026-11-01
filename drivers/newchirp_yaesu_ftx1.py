@@ -161,7 +161,12 @@ class YaesuFTX1Radio(
                 "Unsupported Yaesu CAT identity %r; expected FTX-1 (%s)"
                 % (identity, IDENTIFICATION)
             )
-        self._command("AI0;")
+        try:
+            self._command("AI0;")
+        except errors.RadioNoResponse:
+            # Some FTX-1 firmware accepts AI0 without returning an AI0;
+            # acknowledgement. Identification already completed, so proceed.
+            LOG.warning("FTX-1 accepted ID but did not acknowledge AI0")
 
     def get_features(self):
         rf = chirp_common.RadioFeatures()
