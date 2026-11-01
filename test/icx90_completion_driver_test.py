@@ -6,6 +6,8 @@ import struct
 import sys
 import unittest
 
+from chirp_test_source import chirp_source
+
 
 ROOT = Path(__file__).resolve().parent.parent
 PYTHON_VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
@@ -95,9 +97,8 @@ class FakeIcomSerial:
 class Icx90CompletionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        source = ROOT / "build_support/chirp-20261023"
         cls.directory = _load_bridge().load_chirp(
-            str(source),
+            str(chirp_source()),
             str(PYTHON_VENDOR),
             str(ROOT / "drivers"),
         )

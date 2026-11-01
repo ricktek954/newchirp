@@ -37,6 +37,8 @@ END_FRAME = b"Icom Inc."
 CLONE_TIMEOUT = 15
 CHANNEL_COUNT = 500
 CHANNEL_RECORD_SIZE = 51
+CHANNEL_AVAILABILITY_OFFSET = 0xA632
+CHANNEL_AVAILABLE = 0x00
 
 DUPLEX_CODES = {
     0: "",
@@ -326,6 +328,14 @@ class _IcomId50Id52Base(
         start = (number - 1) * CHANNEL_RECORD_SIZE
         return self._mmap.get(start, CHANNEL_RECORD_SIZE)
 
+    def _channel_is_available(self, number):
+        offset = CHANNEL_AVAILABILITY_OFFSET + number - 1
+        if offset >= len(self._mmap):
+            # Compact synthetic images used by protocol tests do not include
+            # the metadata area, so preserve their channel-record behavior.
+            return True
+        return self._mmap.get(offset, 1) == bytes([CHANNEL_AVAILABLE])
+
     def get_raw_memory(self, number):
         return repr(self._channel_record(number))
 
@@ -347,6 +357,10 @@ class _IcomId50Id52Base(
         record = self._channel_record(number)
         memory = chirp_common.DVMemory()
         memory.number = number
+
+        if not self._channel_is_available(number):
+            memory.empty = True
+            return memory
 
         frequency = int.from_bytes(record[0:4], "big")
         if frequency in (0, 0xFFFFFFFF):

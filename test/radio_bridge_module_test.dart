@@ -4,25 +4,13 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 
-String chirpSourceForTest() {
-  const candidates = [
-    'build_support/chirp-20261023',
-    'build_support/chirp-20261016',
-    '../chirp-20260626',
-  ];
-  for (final candidate in candidates) {
-    if (File('$candidate/chirp/chirp_common.py').existsSync()) {
-      return candidate;
-    }
-  }
-  throw StateError('CHIRP source for tests was not found.');
-}
+import 'chirp_test_source.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('loads .py and .mod modules for the current bridge session', () async {
-    final source = chirpSourceForTest();
+    final source = requireChirpSourceForTests();
     for (final extension in ['py', 'mod']) {
       final suffix = extension == 'py' ? 'Py' : 'Mod';
       final module = File(
@@ -57,7 +45,7 @@ class NewChirpLoadedModule${suffix}Radio(chirp_common.CloneModeRadio):
   });
 
   test('rejects non-CHIRP module extensions', () async {
-    final source = chirpSourceForTest();
+    final source = requireChirpSourceForTests();
     final module = File(
       '${Directory.systemTemp.path}/newchirp-module-$pid.txt',
     );
@@ -82,7 +70,7 @@ class NewChirpLoadedModule${suffix}Radio(chirp_common.CloneModeRadio):
   });
 
   test('a loaded module can override a built-in CHIRP driver', () async {
-    final source = chirpSourceForTest();
+    final source = requireChirpSourceForTests();
     final module = File(
       '${Directory.systemTemp.path}/newchirp-override-module-$pid.py',
     );
@@ -114,7 +102,7 @@ class NewChirpOverrideRadio(chirp_common.CloneModeRadio):
   });
 
   test('rolls back a module that fails to load', () async {
-    final source = chirpSourceForTest();
+    final source = requireChirpSourceForTests();
     final module = File(
       '${Directory.systemTemp.path}/newchirp-broken-module-$pid.py',
     );
@@ -139,7 +127,7 @@ class NewChirpOverrideRadio(chirp_common.CloneModeRadio):
   });
 
   test('a loaded module cannot read the home folder', () async {
-    final source = chirpSourceForTest();
+    final source = requireChirpSourceForTests();
     final secret = File('pubspec.yaml').absolute.path;
     final module = File(
       '${Directory.systemTemp.path}/newchirp-sandbox-probe-$pid.py',

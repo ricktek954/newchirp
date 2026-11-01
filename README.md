@@ -113,6 +113,12 @@ the archive when its checksum does not match. NewChirp bundles the headless
 serial dependency used by the CHIRP drivers; do not install CHIRP's wxPython
 GUI requirements.
 
+CHIRP's upstream source is generated under
+`build_support/chirp-<pinned-commit>`. That directory is disposable build input,
+not NewChirp source; running `scripts/update_chirp.sh` replaces it. Tests resolve
+the same pinned snapshot automatically. NewChirp-specific driver behavior
+belongs in `drivers/`, and build scripts copy those overrides into the app bundle.
+
 Always read a radio before writing it. NewChirp intentionally keeps writing
 locked until a matching radio image has been downloaded in the current session.
 

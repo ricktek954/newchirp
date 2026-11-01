@@ -7,11 +7,15 @@ import sys
 import unittest
 
 
+from chirp_test_source import chirp_source
+
+
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "build_support/chirp-20261023"
+SOURCE = chirp_source()
 PYTHON_VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 MODEL_ID = b"\x3a\x90\x00\x09"
 CHANNEL_RECORD_SIZE = 51
+CHANNEL_AVAILABILITY_OFFSET = 0xA632
 
 
 def _load_bridge():
@@ -195,6 +199,9 @@ class IcomId50Id52DriverTest(unittest.TestCase):
                 icf.warp_byte_size(call.ljust(8), 8, 7)
             )
         image[51:102] = digital
+        image[
+            CHANNEL_AVAILABILITY_OFFSET:CHANNEL_AVAILABILITY_OFFSET + 2
+        ] = b"\x00\x00"
 
         radio = self.id52(None)
         radio._mmap = memmap.MemoryMapBytes(bytes(image))
@@ -225,6 +232,34 @@ class IcomId50Id52DriverTest(unittest.TestCase):
             radio.get_features().memory_bounds,
             (1, 500),
         )
+
+    def test_unavailable_channel_hides_retained_factory_record(self):
+        from chirp import memmap
+
+        image = bytearray(
+            b"\xFF" * (CHANNEL_AVAILABILITY_OFFSET + 500)
+        )
+        active = bytearray(CHANNEL_RECORD_SIZE)
+        active[0:4] = (146_940_000).to_bytes(4, "big")
+        active[12:28] = b"ACTIVE".ljust(16, b"\x00")
+        image[0:CHANNEL_RECORD_SIZE] = active
+
+        inactive = bytearray(CHANNEL_RECORD_SIZE)
+        inactive[0:4] = (125_800_000).to_bytes(4, "big")
+        inactive[9] = 0x03
+        inactive[12:28] = "東京国際APP".encode("shift_jis").ljust(16, b"\x00")
+        image[
+            CHANNEL_RECORD_SIZE:CHANNEL_RECORD_SIZE * 2
+        ] = inactive
+        image[CHANNEL_AVAILABILITY_OFFSET] = 0x00
+
+        radio = self.id50(None)
+        radio._mmap = memmap.MemoryMapBytes(bytes(image))
+        radio._metadata["icom_model_id"] = MODEL_ID.hex()
+        radio.process_mmap()
+
+        self.assertFalse(radio.get_memory(1).empty)
+        self.assertTrue(radio.get_memory(2).empty)
 
     def test_duplex_tone_and_skip_are_separate_packed_fields(self):
         from chirp import memmap

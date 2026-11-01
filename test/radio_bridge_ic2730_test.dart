@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 
+import 'chirp_test_source.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('loads IC-2730A settings when CHIRP omits float maximum', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final image = File('${Directory.systemTemp.path}/newchirp-ic2730-$pid.img');
     await image.writeAsBytes(List<int>.filled(21312, 0), flush: true);
     addTearDown(() async {

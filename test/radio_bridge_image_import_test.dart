@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 
+import 'chirp_test_source.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('detects a native CHIRP image and returns its model', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final image = File(
       '${Directory.systemTemp.path}/newchirp-image-import-$pid.img',
     );
@@ -38,9 +38,7 @@ void main() {
   });
 
   test('FT-857 images with reserved AM step values remain readable', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final sample = File('$source/tests/images/Yaesu_FT-857_897.img');
     expect(await sample.exists(), isTrue);
 
@@ -73,9 +71,7 @@ void main() {
   test(
     'TK-880 images read channels through their populated subdevice',
     () async {
-      final source = Directory('build_support/chirp-20261023').existsSync()
-          ? 'build_support/chirp-20261023'
-          : '../chirp-20260626';
+      final source = requireChirpSourceForTests();
       final image = File('$source/tests/images/Kenwood_TK-880.img');
       expect(await image.exists(), isTrue);
 
@@ -103,9 +99,7 @@ void main() {
   );
 
   test('DM-32UV images expose editable CHIRP zones', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final image = File('$source/tests/images/Baofeng_DM-32UV.img');
     expect(await image.exists(), isTrue);
 
@@ -135,9 +129,7 @@ void main() {
   });
 
   test('radio-specific fields include mouse-over documentation', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final image = File('$source/tests/images/Baofeng_UV-5R_Mini.img');
 
     final imported = await RadioBridge(
@@ -148,8 +140,8 @@ void main() {
         field.name: field.documentation,
     };
 
-    expect(fields['bcl'], contains('Busy Channel Lockout'));
-    expect(fields['pttid'], contains('PTT ID'));
-    expect(fields['scode'], contains('S-CODE'));
+    expect(fields['bcl'], contains('Prevents transmitting'));
+    expect(fields['pttid'], contains('DTMF PTT-ID'));
+    expect(fields['scode'], contains('DTMF PTT-ID codes'));
   });
 }

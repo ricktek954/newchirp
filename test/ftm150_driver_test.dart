@@ -1,15 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/radio_bridge.dart';
+
+import 'chirp_test_source.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('catalog exposes the experimental Yaesu FTM-150 driver', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final bridge = RadioBridge(sourcePath: source, newDriversPath: 'drivers');
 
     expect(await bridge.models(), contains('Yaesu_FTM-150R'));
@@ -20,9 +18,7 @@ void main() {
   });
 
   test('FT-857 exposes its clone-mode read and write instructions', () async {
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final bridge = RadioBridge(sourcePath: source);
 
     final instructions = await bridge.instructions('Yaesu_FT-857_897');
