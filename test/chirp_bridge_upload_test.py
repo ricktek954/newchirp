@@ -225,6 +225,44 @@ class UploadHandshakeTest(unittest.TestCase):
             "Local",
         )
 
+    def test_ft5d_banks_allow_a_channel_in_multiple_banks(self):
+        image = SOURCE / "tests/images/Yaesu_FT5D_R.img"
+        directory = bridge.load_chirp(
+            str(SOURCE),
+            str(VENDOR),
+            str(ROOT / "drivers"),
+        )
+        radio = directory.get_radio_by_image(str(image))
+        models = bridge.mapping_payload(radio)
+
+        self.assertEqual(len(models), 1)
+        self.assertTrue(models[0]["multiple"])
+
+        first = models[0]["mappings"][0]["channelLocations"]
+        second = models[0]["mappings"][1]["channelLocations"]
+        start, end = radio.get_features().memory_bounds
+        location = next(
+            number
+            for number in range(start, end + 1)
+            if not radio.get_memory(number).empty
+        )
+        first.append(location)
+        second.append(location)
+        active_locations = {
+            channel
+            for mapping in models[0]["mappings"]
+            for channel in mapping["channelLocations"]
+        }
+
+        updated = bridge.apply_mapping_payload(
+            radio,
+            [models[0]],
+            active_locations,
+        )
+
+        self.assertIn(location, updated[0]["mappings"][0]["channelLocations"])
+        self.assertIn(location, updated[0]["mappings"][1]["channelLocations"])
+
     def test_mapping_change_rejects_an_empty_channel(self):
         radio = self.directory.get_radio_by_image(str(DM32UV_IMAGE))
         models = bridge.mapping_payload(radio)

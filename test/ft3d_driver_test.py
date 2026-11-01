@@ -37,6 +37,18 @@ class FT3DConnectionGuidanceTest(unittest.TestCase):
         self.assertIn("press Send", message)
         self.assertIn("CLONE", message)
 
+    def test_ft5d_uses_its_actual_f_menu_clone_button(self):
+        bridge = _load_bridge()
+
+        message = bridge.bridge_error_message(
+            RuntimeError("No response from radio"),
+            command="download",
+            model="Yaesu_FT5D_R",
+        )
+
+        self.assertIn("hold [F MENU]", message)
+        self.assertNotIn("hold DISP", message)
+
     def test_read_ready_announces_the_radio_send_button(self):
         bridge = _load_bridge()
         progress = []

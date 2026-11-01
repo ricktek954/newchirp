@@ -192,6 +192,19 @@ class RT950DriverTest(unittest.TestCase):
             [write for write in serial.writes if write[:1] == b"R"]
         )
 
+    def test_protocol_accepts_the_rt950_model_alias(self):
+        memory = bytearray(b"\xff" * 0xC100)
+        memory[0:32] = _record(146_520_000, 146_520_000, name=b"ALIAS")
+        serial = FakeRT950Serial(memory)
+        serial.model = b"RT-950"
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+
+        radio.sync_in()
+
+        self.assertEqual(radio.get_memory(1).name, "ALIAS")
+        self.assertEqual(serial.writes.count(b"PROGRAMBT9000U"), 1)
+
     def test_channel_layout_and_tone_decoding(self):
         ctc_tone = (1000).to_bytes(2, "little")
         memory = bytearray(b"\xff" * 0xC100)

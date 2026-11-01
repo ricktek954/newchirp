@@ -21,7 +21,7 @@ Last updated: 2026-11-01
 | --- | --- | --- | --- | --- | --- | --- |
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
-| Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
@@ -136,19 +136,26 @@ Last updated: 2026-11-01
 - Scope: the shared upstream CHIRP Yaesu clone reader used by the FT-1D,
   FT-2D, FT-3D, and FT-5D families
 - Transport: 38400 8N1 clone serial with the radio in CLONE mode
-- Implemented: completion-first receive handling and a five-second idle limit
-- Read/write policy: read timeout ordering only. Channel image layout, write
-  behavior, and radio-specific fields are unchanged.
+- Implemented: completion-first receive handling, a five-second idle limit,
+  and multi-bank mapping classification for the radios whose CHIRP bank model
+  stores independent membership lists
+- Read/write policy: channel image layout and radio-specific fields are
+  unchanged. The compatibility layer corrects bank-model metadata so a
+  channel may remain in multiple radio banks instead of being rejected.
 - Evidence: upstream CHIRP `yaesu_clone.py` and the 2026-10-29 NewChirp 1.0.23
   report from ka4hot@outlook.com. The FT5D completed its Send operation after
   a 3.2-second final chunk, but the upstream reader checked its two-second
   timeout before recognizing that the requested byte count was complete.
+- Field evidence 2026-11-01: a macOS FT-5D write was rejected because channels
+  34 and 38 were present in multiple banks. The upstream `FT1BankModel` and
+  `FT2BankModel` contain independent per-bank channel lists but were declared
+  as single-bank models. The compatibility override now marks those models as
+  multi-bank and corrects FT-5D clone instructions to use `[F MENU]`.
 - Driver SHA-256:
-  `0f144ce74ee905c6091a1c396fb249927b9998aa83e4febf3e401056f88a438d`
+  `48b2a466a0e6207352d699909b0ae70eb5d9cc6e6921d8c58acbcfd5ef32def0`
 - Hardware validation: none for this timing override.
-- Next milestone: FT5D owner retests a complete read with the cable on the
-  same COM port throughout; if it still times out, capture the progress
-  percentage and final read image size.
+- Next milestone: FT5D owner retests the multi-bank write in the next normal
+  build and confirms the bank memberships survive a radio read-back.
 
 ### Radtel RT-950
 
@@ -171,9 +178,15 @@ Last updated: 2026-11-01
   a later no-response error. The driver now retries only genuine
   `RadioNoResponse` failures, so a model mismatch reports the actual received
   model code immediately.
+- Field evidence 2026-11-01: a macOS RT-950 read received `RT-950` from the
+  model command after the `BT-9000` handshake was acknowledged. Both identity
+  strings are now accepted as the same read-only RT-950 protocol; writes
+  remain disabled until a complete physical read is validated.
+- Driver SHA-256:
+  `5bf37f120a186d217b382fce415c8f427a9cb11305e1c3d0bdac05ba6438e02f`
 - Next milestone: confirm the reported RT-950 model code, classify any
-  variant that does not answer `BT-9000`, then capture a complete successful
-  read and export a test image
+  variant that does not answer the `BT-9000` handshake, then capture a
+  complete successful read and export a test image
 
 ### Retevis MA1 and MA1 model A9305B
 

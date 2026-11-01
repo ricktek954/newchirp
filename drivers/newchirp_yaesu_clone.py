@@ -10,7 +10,7 @@
 import time
 
 from chirp import chirp_common, errors
-from chirp.drivers import yaesu_clone
+from chirp.drivers import ft1d, ft2d, ft4, yaesu_clone
 
 
 IDLE_TIMEOUT = 5.0
@@ -61,4 +61,50 @@ if not getattr(
     False,
 ):
     yaesu_clone._chunk_read = _chunk_read
+
+
+class _MTOYaesuSC35BankModel(
+    ft4.YaesuSC35GenericBankModel,
+    chirp_common.MTOBankModel,
+):
+    """Describe the FT-1/2/3/5 bitmask banks as multi-bank mappings."""
+
+
+_OriginalFT1BankModel = ft1d.FT1BankModel
+_OriginalFT2BankModel = ft2d.FT2BankModel
+
+
+class _MTOFT1BankModel(
+    _OriginalFT1BankModel,
+    chirp_common.MTOBankModel,
+):
+    """Describe the FT-1/2/3/5 ordered bank lists as multi-bank mappings."""
+
+    def __init__(self, radio, name="Banks"):
+        chirp_common.BankModel.__init__(self, radio, name)
+        self._bank_mappings = []
+        for index, _bank in enumerate(self._radio._memobj.bank_info):
+            bank = ft1d.FT1Bank(self, "%i" % index, "BANK-%i" % index)
+            bank.index = index
+            self._bank_mappings.append(bank)
+
+
+class _MTOFT2BankModel(
+    _OriginalFT2BankModel,
+    chirp_common.MTOBankModel,
+):
+    """Describe the FT-2/5 ordered bank lists as multi-bank mappings."""
+
+    def __init__(self, radio, name="Banks"):
+        chirp_common.BankModel.__init__(self, radio, name)
+        self._bank_mappings = []
+        for index, _bank in enumerate(self._radio._memobj.bank_info):
+            bank = ft2d.FT2Bank(self, "%i" % index, "BANK-%i" % index)
+            bank.index = index
+            self._bank_mappings.append(bank)
+
+
+ft4.YaesuSC35GenericBankModel = _MTOYaesuSC35BankModel
+ft1d.FT1BankModel = _MTOFT1BankModel
+ft2d.FT2BankModel = _MTOFT2BankModel
 
