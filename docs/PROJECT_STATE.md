@@ -28,10 +28,10 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.31` release is built, signed, notarized, stapled, uploaded,
-  and live. It adds experimental Retevis MA1 model A9305B and Icom IC-746PRO
-  support and retains the `1.0.30` FTX-1, MD-UV380, and D578UVIII drivers.
-  The universal DMG contains both Python architectures and universal libusb.
+- The macOS `1.0.33` release is built, signed, notarized, stapled, uploaded,
+  and live. It includes the verified Icom ID-50 channel-field decoder while
+  keeping ID-50 writes disabled. The universal DMG contains both Python
+  architectures and universal libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -52,7 +52,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.31` artifact source commit: `604dbbf2`
+- macOS `1.0.33` artifact source commit: `b9bce854`
 - Linux `1.0.32` artifact source commit: `07bcfd29`
 - Open pull requests: none
 - Checked-out source version: `1.0.33+33`
@@ -69,20 +69,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.31 |
+| macOS | 1.0.33 |
 | Windows | 1.0.33 |
 | Linux | 1.0.32 |
 | Legacy shared manifest version | 1.0.31 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.31.dmg`
-- Version/build: `1.0.31` / `31`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.33.dmg`
+- Version/build: `1.0.33` / `33`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `22befb62d91ad07a57f718f032be0c811856e54fe1d90d2916719da0d3b7c71e`
-- Size: `82,335,380` bytes
-- Notarization submission: `54b5031a-850d-4e8e-a8c1-1cea2e6852a8`
+  `ba824a3ef3b6f5b806f4d779515ad2a5093f4708e449e03b441675e200c3f233`
+- Size: `82,335,665` bytes
+- Notarization submission: `8d8471ef-eac5-4043-a0fa-4ffdd0aa7b4c`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -126,6 +126,11 @@ Linux 1.0.32 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.33` as a universal signed, notarized, stapled DMG.
+  Verified the app/build version, Icom ID-50 channel-field decoder, arm64 and
+  x86_64 Python runtimes, universal libusb loading under both architectures,
+  strict code signatures, Gatekeeper acceptance, notarization ticket, server
+  checksum, public download, and live platform manifest.
 - Published Linux `1.0.32` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. Fixed the Debian 12/MX Linux startup failure
   reported as `undefined symbol: g_once_init_enter_pointer` by compiling
@@ -271,6 +276,24 @@ Linux 1.0.32 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.33 verification status
+
+Full verification before the macOS `1.0.33` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 176 tests passed
+- Python test discovery: 223 tests passed, 2 fixture-dependent tests skipped
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.33` / `33`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Notarization submission: `8d8471ef-eac5-4043-a0fa-4ffdd0aa7b4c`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.33`
 
 ## macOS 1.0.31 verification status
 
