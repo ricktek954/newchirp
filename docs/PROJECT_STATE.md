@@ -8,12 +8,10 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.32` installer is live. It adds experimental nicFW950
-  support for the RT-950 Pro and BJ-9000, experimental Kenwood TK-3401D
-  read support, TD-H8 fourth-generation serial, TM-D710GP regional identity,
-  Icom IC-746PRO and Retevis MA1 A9305B profiles, and hides the CHIRP module
-  action on Windows where modules cannot be sandboxed. It keeps the
-  `1.0.27`-`1.0.31` fixes.
+- The Windows `1.0.33` installer is live. It decodes the verified Icom ID-50
+  channel fields (names, frequency, mode, duplex/offset, CTCSS, tuning step,
+  output level, scan skip, and D-STAR callsigns) while keeping ID-50 writes
+  disabled. It keeps the `1.0.27`-`1.0.32` fixes.
 - The 2026-10-31 current-release retest sweep replied to all 31 unresolved
   bug reports that predated the live Windows `1.0.30` or Linux/macOS `1.0.29`
   releases. Each original was marked read and each `Sent` copy was verified
@@ -57,7 +55,7 @@ release requirements.
 - macOS `1.0.31` artifact source commit: `604dbbf2`
 - Linux `1.0.32` artifact source commit: `07bcfd29`
 - Open pull requests: none
-- Checked-out source version: `1.0.32+32`
+- Checked-out source version: `1.0.33+33`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -72,7 +70,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.31 |
-| Windows | 1.0.32 |
+| Windows | 1.0.33 |
 | Linux | 1.0.32 |
 | Legacy shared manifest version | 1.0.31 |
 
@@ -90,11 +88,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.32.exe`
-- Version/build: `1.0.32` / `32`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.33.exe`
+- Version/build: `1.0.33` / `33`
 - SHA-256:
-  `91b4b6166d97257424eaa2fb3ade9fae745ad5b38f3b1dffcfaac51ad0a0eda0`
-- Size: `61,083,446` bytes
+  `922e7dea923dd2dae911f094763b3845e948d08afbc4a108efdf9be20d91dbe8`
+- Size: `61,083,733` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
