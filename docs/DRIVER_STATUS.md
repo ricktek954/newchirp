@@ -43,6 +43,7 @@ Last updated: 2026-11-01
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Icom IC-746PRO | `drivers/newchirp_icom_ic746pro.py` | Icom CI-V serial, 9600 8N1 | Stock IC-746 family logic | Stock IC-746 family logic | Stock IC-746 family logic | Experimental model profile |
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, physical image verified | Disabled | Hidden | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
@@ -568,6 +569,26 @@ Last updated: 2026-11-01
 - Hardware validation: read/write validation on this identity is pending
 - Next milestone: perform a complete read and controlled write with the
   control-head connection required by the Kenwood programmer
+
+### Icom IC-746PRO
+
+- Maintained driver: `drivers/newchirp_icom_ic746pro.py`
+- Transport: Icom CI-V serial, 9600 baud, 8N1
+- Model distinction: the original IC-746 uses CI-V address `0x56`; the
+  IC-746PRO uses `0x66`. Sending IC-746 commands to address `0x56` leaves an
+  IC-746PRO silent even when the cable and port are working.
+- Implemented: exact IC-746PRO model identity and CI-V address, using the
+  established IC-746 family live-memory implementation for channel fields and
+  write policy.
+- Evidence: Hamlib's public `ic746.c` definitions list address `0x56` for the
+  IC-746 and `0x66` for the IC-746PRO; the NewChirp report from
+  kn5eee@proton.me showed CI-V address `0x56` selected for a radio reported as
+  an IC-746PRO.
+- Offline validation: exact model registration, CI-V destination address,
+  frame construction, and separation from the original IC-746 profile.
+- Hardware validation: none.
+- Next milestone: read the IC-746PRO with CI-V address `66h` and
+  CI-V Transceive off, then perform one controlled memory edit and read-back.
 
 ### Icom IC-9700
 
