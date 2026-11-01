@@ -21,7 +21,7 @@ release requirements.
   three UV-5R Mini no-response reports needing cable and OEM-CPS details, and
   one FT-70D connection report needing confirmation of the programming cable
   and port.
-- The Linux `1.0.30` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.31` DEB, RPM, AppImage, and Pacman artifacts are live.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
@@ -51,7 +51,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.30` artifact source commit: `262b5e60`
-- Linux `1.0.30` artifact source commit: `262b5e60`
+- Linux `1.0.31` artifact source commit: `604dbbf2`
 - Open pull requests: none
 - Checked-out source version: `1.0.31+31`
 - macOS builds are pinned to CocoaPods with
@@ -69,7 +69,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.30 |
 | Windows | 1.0.31 |
-| Linux | 1.0.30 |
+| Linux | 1.0.31 |
 | Legacy shared manifest version | 1.0.30 |
 
 macOS artifact:
@@ -96,34 +96,39 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.30.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.pkg.tar.zst`
 
-Linux 1.0.30 SHA-256:
+Linux 1.0.31 SHA-256:
 
 - DEB:
-  `a8df9d2854f504893abd82548176d9b3f3ab17f20d891ade6fd70b3c2a95bcbe`
+  `8b70c1ed7dfebe4334157143625c412dfe8f69a01c5ebed1bf564e04d43055ab`
 - RPM:
-  `6406b617345c2f3aa56cbfdc0b16ca23d4dacb2cb0ede49820d6b27662bd7d9f`
+  `ff257bd94cd9a384ca79191567da5a3459681a3713c055f51bf1f6e1e27a63ec`
 - AppImage:
-  `a93d9673147334e0db774d09a52a20c32927abf65fb264fc92ac2617f09b5fa0`
+  `9e52d4d4341bfa771270cd00ca0e8bc5fe284642d0e362a9b700075ee2610a24`
 - Pacman:
-  `efcfd56b5f1f792b7d6b63bac5099eefcb970772447162d3b1b83b5da6a42bdf`
+  `6f21c0b1b2789fbd1e872ea89322e183286b6eddaf6e39f4509a04dd923febd8`
 
-Linux 1.0.30 sizes:
+Linux 1.0.31 sizes:
 
-- DEB: `48,359,880` bytes
-- RPM: `38,826,090` bytes
-- AppImage: `144,340,160` bytes
-- Pacman: `46,874,712` bytes
+- DEB: `48,368,450` bytes
+- RPM: `38,847,008` bytes
+- AppImage: `144,360,640` bytes
+- Pacman: `46,871,853` bytes
 
 ## Recently completed
 
+- Published Linux `1.0.31` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `604dbbf2`. Verified the
+  embedded `version.json`, package metadata, bundled `libusb-1.0.so.0` and
+  USB DFU helper, server checksums, public HTTP 200 checks, and live platform
+  manifest.
 - Published Linux `1.0.30` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
   package metadata, bundled `libusb-1.0.so.0` and USB DFU helper, server
