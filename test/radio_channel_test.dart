@@ -5,6 +5,23 @@ RadioChannel channelAt(int location) =>
     RadioChannel(location: location, name: 'CH $location', frequency: 146.52);
 
 void main() {
+  test('name validation respects the actual radio limit', () {
+    final repeater = RadioChannel(
+      location: 215,
+      name: 'Barrio El Remanso',
+      frequency: 145.135,
+    );
+    expect(repeater.validate(maxNameLength: 30), isEmpty);
+    expect(
+      repeater.validate(maxNameLength: 16).single,
+      contains('16 characters'),
+    );
+    repeater.name = List.filled(31, 'X').join();
+    expect(
+      repeater.validate(maxNameLength: 30).single,
+      contains('30 characters'),
+    );
+  });
   test('Midland MXT295 shows Midland channel numbers', () {
     expect(channelNumberLabel('Baofeng_UV-5R', 16), '16');
     expect(showsMidlandChannelNumbers('Baofeng_UV-5R'), isFalse);
