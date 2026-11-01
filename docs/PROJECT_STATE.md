@@ -123,6 +123,11 @@ Linux 1.0.29 sizes:
 
 ## Recently completed
 
+- Added experimental read-only Kenwood TK-3401D support from KPG-171D
+  reverse-engineering evidence. The driver identifies the radio, reads the
+  addressed 64 KiB image, retains the full image even when layout inference
+  fails, discovers provisional PMR446 channel records, and blocks writes until
+  the physical codeplug layout is validated.
 - Replaced the provisional Icom ID-50/ID-52 parser with the physical ID-50
   map recovered from Nick Hale's supplied clone image. The 500-channel
   read-only parser decodes FM, AM, DV, names, offsets, and D-STAR calls
