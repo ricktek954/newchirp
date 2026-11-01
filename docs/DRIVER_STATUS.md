@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-10-31
+Last updated: 2026-11-01
 
 ## Status definitions
 
@@ -25,6 +25,7 @@ Last updated: 2026-10-31
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
@@ -389,6 +390,35 @@ Last updated: 2026-10-31
 - Next milestone: affected owner retests with MCP-D75 closed and the same
   COM port selected throughout. If it still fails, submit the new ID reply
   text so the adapter echo behavior can be distinguished from radio settings.
+
+### Kenwood TK-3401D
+
+- Maintained driver: `drivers/newchirp_kenwood_tk3401d.py`
+- Protocol notes: `docs/KPG171D_PROTOCOL.md`
+- Model: Kenwood TK-3401D dPMR446/analogue PMR446
+- Device help: Kenwood-compatible USB programming cable. Close KPG-171D
+  before starting a transfer.
+- Transport: KPG-171D command protocol, starting at 9600 8N2 and continuing
+  at 19200 baud
+- Implemented: model identification, a zero-key session, 64 KiB addressed
+  read, 128-byte block acknowledgements, complete raw-image retention, and a
+  provisional PMR446 record scan for the 32 channel slots
+- Read policy: read-only. The complete image is retained even if the channel
+  decoder cannot identify it.
+- Write policy: disabled. The physical direction flags, tones, power, keys,
+  zones, and dPMR-specific fields have not yet been confirmed.
+- Evidence: KPG-171D `1.10.1.0` executable SHA-256
+  `3bd15b126fa0776e7f4206ed81931bba1ca4f5884cc81d1f719c1ec9331fb6fd`;
+  REA 6.5.0 and Ghidra 12.1.4 analysis of the handshake, identity checksum,
+  addressed reads, writes, and programming-mode exit
+- Driver SHA-256:
+  `48325e592ab71d1d2d6f029484f547082ee0e0598a5e7c0a6401132310d16fd8`
+- Hardware validation: none. Offline tests cover identification, the 128-byte
+  address sequence, PMR446 record discovery, and blocked upload.
+- Next milestone: perform a physical TK-3401D read, compare the discovered
+  records and names with KPG-171D, then map the remaining fields before
+  considering any upload capability.
+- Website catalog: must be listed as experimental.
 
 ### Icom IC-9700
 
