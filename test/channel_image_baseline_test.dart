@@ -396,4 +396,65 @@ void main() {
       isFalse,
     );
   });
+  test(
+    'library validation uses the selected radio name limit and refreshes the cache',
+    () {
+      final channels = [_channel(215, 'Barrio El Remanso')];
+      final cache = ChannelLibraryStatsCache();
+      ChannelLibrarySnapshot read(int nameLength) => cache.read(
+        imagePath: null,
+        zone: null,
+        channels: channels,
+        cleared: const <int>[],
+        baseline: null,
+        memoryStart: 1,
+        memoryEnd: 999,
+        radioModel: 'Bajeton_BJ-9000_nicFW950',
+        maximumNameLength: nameLength,
+      );
+      final generic = read(16);
+      expect(generic.needsAttention, 1);
+      final nicfw = read(30);
+      expect(nicfw.needsAttention, 0);
+      expect(identical(generic, nicfw), isFalse);
+      expect(identical(nicfw, read(30)), isTrue);
+    },
+  );
+
+  testWidgets(
+    'channel image bar explains validation issues and exposes review',
+    (tester) async {
+      var reviewed = false;
+      var wrote = false;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ChannelLibraryImageBar(
+              match: ChannelImageMatch.differs,
+              canDiscard: true,
+              canWrite: true,
+              showConnect: false,
+              issueCount: 2,
+              onReviewIssues: () => reviewed = true,
+              onDiscard: () {},
+              onWrite: () => wrote = true,
+              onConnect: () {},
+            ),
+          ),
+        ),
+      );
+      expect(find.textContaining('2 channels need attention'), findsOneWidget);
+      expect(
+        find.textContaining('incompatible channels cannot be programmed'),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const Key('channel-library-review-issues')));
+      expect(reviewed, isTrue);
+      await tester.tap(find.byKey(const Key('channel-library-write')));
+      expect(
+        wrote,
+        isTrue,
+      ); // The upload workflow must show its compatibility confirmation.
+    },
+  );
 }
