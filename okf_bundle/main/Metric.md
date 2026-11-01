@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:37:02Z"
+timestamp: "2026-11-01T12:22:20Z"
 concept_id: main/Metric
 language: dart
 ---
