@@ -9,11 +9,12 @@
 
 Adapted from the user-supplied nicfw_950_v4.py protocol/layout reference.
 This is a memory programmer for radios already running nicFW950, not a
-firmware flasher. Physical-radio validation is still pending.
+firmware flasher. Read/write validation covers one nicFW950 6.00.16c unit.
 """
 
 import logging
 import struct
+import time
 
 from chirp import bitwise, chirp_common, directory, errors, memmap
 from chirp.settings import (
@@ -432,7 +433,7 @@ def _read_exact(pipe, count):
     while len(data) < count:
         part = pipe.read(count - len(data))
         if not part:
-            raise errors.RadioError(
+            raise errors.RadioNoResponse(
                 "Serial timeout (%d of %d bytes)" % (len(data), count)
             )
         data.extend(part)
@@ -452,9 +453,20 @@ def _exchange_ack(pipe, packet, command):
 def _negotiate(pipe):
     pipe.baudrate = DEFAULT_BAUD
     pipe.timeout = 1.5
-    pipe.reset_input_buffer()
     packet = b"\xaa\x70" + struct.pack("<I", FAST_BAUD) + b"\x55"
-    _exchange_ack(pipe, packet, 0x70)
+    for attempt in range(2):
+        pipe.reset_input_buffer()
+        try:
+            _exchange_ack(pipe, packet, 0x70)
+            break
+        except errors.RadioNoResponse:
+            if attempt:
+                raise
+            # A preceding download leaves the radio at high speed until its
+            # idle timeout. Allow a quiet interval before retrying at 38400.
+            # Only the initial, read-only baud handshake may be retried.
+            LOG.info("Waiting for nicFW950 serial idle reset before retry")
+            time.sleep(3.0)
     pipe.baudrate = FAST_BAUD
     if _read_exact(pipe, 2) != b"\xaa\x70":
         raise errors.RadioError("No high-speed baud ACK")
@@ -544,8 +556,9 @@ class NicFW950Radio(
     def get_prompts(cls):
         prompts = chirp_common.RadioPrompts()
         prompts.experimental = (
-            "Experimental nicFW950 driver; physical-radio validation is "
-            "pending. Use only with nicFW950 firmware, not stock firmware."
+            "Experimental nicFW950 driver. Read/write tested on one unit "
+            "running nicFW950 6.00.16c; other versions need validation. "
+            "Use only with nicFW950 firmware, not stock firmware."
         )
         prompts.info = (
             "For RT-950, RT-950 Pro and Bajeton BJ-9000 radios already "
@@ -564,7 +577,7 @@ class NicFW950Radio(
             "Upload changed nicFW950 channel/settings blocks from this "
             "radio's downloaded image. Keep stable power throughout. "
             "The radio reboots after the flash commit is acknowledged. "
-            "This driver has not been hardware-verified."
+            "Hardware validation covers nicFW950 6.00.16c on one unit."
         )
         return prompts
 

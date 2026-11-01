@@ -13,8 +13,9 @@ Catalog entries:
 
 The protocol/layout reference is the user-provided `nicfw_950_v4.py` with
 SHA-256 `bb20f6252dba38bfa604f2ba0c0e465f0d98c67b73d1cfdc5071576dfdcc1f45`.
-The reference and this port both await physical-radio validation. Firmware
-version coverage is unknown; record the version from the first tested radio.
+The standalone reference was not executed. The NewChirp port was validated
+on one RT-950/BJ-9000-family unit with **nicFW950 6.00.16c** on 2026-10-31.
+Other firmware versions and individual aliases still need validation.
 
 ## Serial protocol
 
@@ -34,6 +35,9 @@ The checksum is the sum of the four address bytes and 128 data bytes, modulo
 Fragmented replies are accumulated; an empty serial read is a timeout.
 Restore the host baud rate to 38400 after success or failure. The reference
 states the radio returns to 38400 after its idle timeout.
+An immediate new operation can precede that reset. If the initial baud ACK
+times out, wait three quiet seconds and retry once at 38400. Bad ACKs,
+high-speed ACK failures, flash writes and flash commits are not retried.
 
 ## Image and editable fields
 
@@ -107,7 +111,7 @@ uploads. Tests also exercise CHIRP image save/reload and the actual NewChirp
 bridge JSON channel/settings upload paths. Synthetic tests cannot establish
 that a particular firmware version or physical radio is compatible.
 
-Before submitting a PR, perform and record this hardware sequence:
+For further hardware validation, perform and record this sequence:
 
 1. Record the radio model and exact nicFW950 version. Close CHIRP/RMS and
    other serial programs. Use the USB programming cable and normal power-on.
@@ -122,3 +126,37 @@ Before submitting a PR, perform and record this hardware sequence:
    after each. Record any radio-managed differences instead of silently
    accepting them. Restore the edited fields and verify again.
 6. Add the evidence and firmware coverage to `docs/DRIVER_STATUS.md`.
+
+## Recorded hardware validation: 6.00.16c
+
+One user-confirmed RT-950/BJ-9000-family unit was tested with the NewChirp
+1.0.30 Windows runtime and this maintained driver on 2026-10-31:
+
+- Complete download: 502 checked blocks, 64,256 raw bytes, 209 occupied channels.
+- No-op decode/re-encode of all occupied channels and global settings:
+  zero changed bytes.
+- Channel 1 name changed and independently read after reboot: full image
+  matched the expected image. The original 30-byte name, including padding,
+  was restored.
+- Squelch changed from 5 to 6 and group A renamed separately: each full
+  post-reboot image matched its expected image. Both original values were
+  restored and re-read.
+- The user selected slot B, channel mode and channel 1 during the test.
+  Three operating-state bytes changed outside the name write and were
+  retained. Final image equaled the subsequent stable baseline byte-for-byte;
+  all channels, reserved/VFO records, calibration and power-band data matched
+  the original download.
+- Immediate renegotiation after a download exercised the recovery path:
+  two baud requests, one three-second quiet interval, 4.783 seconds total.
+- The firmware left FM Receive Method unset (`0xFFFF`); default display did
+  not rewrite it during unrelated settings edits.
+
+Raw-image SHA-256 evidence (images remain private, outside the repository):
+
+| Image | SHA-256 |
+| --- | --- |
+| Original download | `a928d10955de1096f5d99f2cfc07687695c0a2a23adb5f16b6a570003fb02ee6` |
+| Channel-name readback | `609abc2b656aa1575c82cb84f7e1b90a4178f21f6efa26d8e4cc5f0edc574d83` |
+| Squelch readback | `073386da54a810fbf7d7b13bb6a66c1256982f91796e962ab691c4ddb49d4464` |
+| Group-name readback | `2107d65cbafa96b7bdb97bc2692d6ac586f0425fd360518b1c7607d7483d6e55` |
+| Final restored image, with user's operating-state changes | `7514da597c1793c18731cbb3d4fc5958883c1ff3b508864c55b6841e82425339` |
