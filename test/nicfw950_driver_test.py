@@ -115,6 +115,7 @@ class FakeNicFW950Serial:
         self.timeout = 1.5
         self.corrupt_read = None
         self.reject_command = None
+        self.negotiate_timeouts = 0
         self.closed = False
 
     def reset_input_buffer(self):
@@ -136,6 +137,9 @@ class FakeNicFW950Serial:
         if command == 0x70:
             assert packet == b"\xaa\x70\x00\x08\x07\x00\x55"
             assert self.baudrate == 38400
+            if self.negotiate_timeouts:
+                self.negotiate_timeouts -= 1
+                return len(packet)
             self.responses.extend(b"\xaa\x70\xaa\x70")
         elif command == 0x30:
             assert len(packet) == 7 and packet[-1] == 0x55
@@ -377,9 +381,35 @@ class NicFW950DriverTest(unittest.TestCase):
                 radio = self.radio_class(serial)
                 if corruption == "timeout":
                     serial.read = lambda _count: b""
-                with self.assertRaises(errors.RadioError):
+                with (
+                    mock.patch.object(self.driver.time, "sleep"),
+                    self.assertRaises(errors.RadioError),
+                ):
                     radio.sync_in()
                 self.assertEqual(serial.baudrate, 38400)
+
+    def test_baud_handshake_retries_once_after_a_quiet_idle_interval(self):
+        serial = FakeNicFW950Serial(_image())
+        serial.negotiate_timeouts = 1
+        with mock.patch.object(self.driver.time, "sleep") as sleep:
+            self.driver._negotiate(serial)
+        sleep.assert_called_once_with(3.0)
+        self.assertEqual(len(serial.writes), 2)
+        self.assertTrue(all(packet[1] == 0x70 for packet in serial.writes))
+        self.assertEqual(serial.baudrate, 460800)
+
+    def test_baud_handshake_rejects_bad_ack_without_retrying(self):
+        from chirp import errors
+
+        serial = FakeNicFW950Serial(_image())
+        serial.reject_command = 0x70
+        with (
+            mock.patch.object(self.driver.time, "sleep") as sleep,
+            self.assertRaisesRegex(errors.RadioError, "Unexpected ACK"),
+        ):
+            self.driver._negotiate(serial)
+        sleep.assert_not_called()
+        self.assertEqual(len(serial.writes), 1)
 
     def test_saved_image_upload_in_fresh_process_writes_only_changed_blocks(
         self,

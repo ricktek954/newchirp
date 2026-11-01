@@ -125,14 +125,6 @@ selected.
 
 ### Experimental CHIRP modules
 
-nicFW950 is also included as a maintained experimental driver. For a Radtel
-RT-950 / RT-950 Pro or Bajeton BJ-9000 already running nicsure nicFW950,
-select the model whose name ends in **nicFW950**. The stock RT-950 entry
-uses a different protocol. This driver supports the reference 999-channel
-layout, channel extras, global settings and group names; physical-radio
-validation is pending. See [nicFW950 notes](docs/NICFW950_PROTOCOL.md) for
-the supported layout, offline checks and hardware test procedure.
-
 **Load CHIRP driver module…** in the top action bar, immediately after
 **Open channel file**, loads a trusted CHIRP `.py` or `.mod` module for the
 current NewChirp session and refreshes the radio catalog. Modules can replace
@@ -217,6 +209,19 @@ NewChirp also includes a read-only driver for the Radtel RT-950. Select
 the 960 channel memories. Uploads are disabled because the CPS write path has
 not yet been independently validated. Protocol details and reverse-engineering
 evidence are recorded in `docs/RT950_PROTOCOL.md`.
+
+### Experimental nicFW950 support
+
+For a Radtel RT-950 / RT-950 Pro or Bajeton BJ-9000 already running nicsure
+nicFW950, select the model whose name ends in **nicFW950**. The stock RT-950
+entry uses a different protocol. This maintained driver supports the reference
+999-channel layout, channel extras, global settings and group names.
+
+Reads, channel writes, a global setting and a group-name edit were verified
+on one physical unit running **nicFW950 6.00.16c**, including post-reboot
+readback and restoration. Other firmware versions and individual aliases
+still need validation. See [nicFW950 notes](docs/NICFW950_PROTOCOL.md) for
+the layout, evidence and test procedure.
 
 ### Experimental CS750 codeplug support
 
