@@ -3656,8 +3656,22 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final invalidChannels = _activeChannels
         .where((channel) => _channelIssues(channel).isNotEmpty)
         .toList();
-    var channelsToWrite = _activeChannels;
-    final compatibleCount = _activeChannels.length - invalidChannels.length;
+    final invalidLocations = invalidChannels
+        .map((channel) => channel.location)
+        .toSet();
+    final channelsToWrite = _activeChannels
+        .where((channel) => !invalidLocations.contains(channel.location))
+        .toList();
+    final skippedByValidation = [
+      for (final channel in invalidChannels)
+        <String, dynamic>{
+          'location': channel.location,
+          'name': channel.name,
+          'reason': _channelIssues(channel).join(' '),
+          'skipped': true,
+        },
+    ];
+    final compatibleCount = channelsToWrite.length;
     final issues = _activeChannels
         .expand(
           (channel) => _channelIssues(channel).map(
@@ -3701,10 +3715,6 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         return;
       }
       if (!mounted) return;
-      channelsToWrite = compatibleChannelsForUpload(
-        _activeChannels,
-        _channelIssues,
-      );
     }
     final activeLocations = channelsToWrite
         .map((channel) => channel.location)
@@ -3755,15 +3765,6 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
     if (!await _confirmRadioInstructions(instructions, writing: true)) return;
-    final incompatibleChanges = <Map<String, dynamic>>[
-      for (final channel in invalidChannels)
-        {
-          'location': channel.location,
-          'name': channel.name,
-          'reason': _channelIssues(channel).join('; '),
-          'skipped': true,
-        },
-    ];
     var changes = <Map<String, dynamic>>[];
     final clearedForUpload = clearedLocationsForUpload(
       channels: _activeChannels,
@@ -3776,8 +3777,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         model: _model!,
         port: _port!,
         imagePath: _radioImage!,
+        // The bridge can normalize names before validating them. Never send
+        // rows the user agreed to skip, even if normalization could fix them.
         channels: channelsToWrite,
-        cleared: clearedForUpload.toList(),
+        cleared: clearedForUpload
+            .where((location) => !invalidLocations.contains(location))
+            .toList(),
         mappings: mappingsChanged
             ? _radioMappings
                   .map((model) => model.retainingChannels(activeLocations))
@@ -3786,7 +3791,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         zone: _selectedZone,
         onProgress: _reportTransferProgress,
       );
-      changes = [...incompatibleChanges, ...result.adjustments];
+      changes = [...skippedByValidation, ...result.adjustments];
       final skippedChannels = changes.any((entry) => entry['skipped'] == true);
       final writtenImage = skippedChannels
           ? await _bridge.readImage(_radioImage!, zone: _selectedZone)

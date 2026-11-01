@@ -52,7 +52,7 @@ class _AnalogBridge extends RadioBridge {
 
 class _CsvSelector extends FileSelectorPlatform {
   _CsvSelector(this.path);
-  final String path;
+  String path;
 
   @override
   Future<XFile?> openFile({
@@ -62,7 +62,233 @@ class _CsvSelector extends FileSelectorPlatform {
   }) async => XFile(path);
 }
 
+class _WritingBridge extends _AnalogBridge {
+  final imageChannels = [
+    for (var location = 1; location <= 3; location++)
+      RadioChannel(
+        location: location,
+        name: 'Original $location',
+        frequency: 145.5,
+      ),
+  ];
+  List<RadioChannel>? uploaded;
+  List<int>? clearedLocations;
+  int imageReads = 0;
+
+  @override
+  Future<List<SerialPortInfo>> serialPortDetails() async => const [
+    SerialPortInfo(port: 'TEST-NO-HARDWARE'),
+  ];
+
+  @override
+  Future<RadioInstructions> instructions(String model) async =>
+      const RadioInstructions(
+        info: null,
+        experimental: null,
+        preDownload: null,
+        preUpload: null,
+      );
+
+  @override
+  Future<
+    ({
+      List<RadioChannel> channels,
+      String model,
+      String imagePath,
+      RadioCapabilities capabilities,
+      List<RadioZone> zones,
+      List<RadioMappingModel> mappings,
+      int? zone,
+    })
+  >
+  readImage(String imagePath, {int? zone}) async {
+    imageReads++;
+    return (
+      channels: imageChannels.map((channel) => channel.copy()).toList(),
+      model: _model,
+      imagePath: imagePath,
+      capabilities: (await imageInfo(imagePath)).capabilities,
+      zones: const <RadioZone>[],
+      mappings: const <RadioMappingModel>[],
+      zone: null,
+    );
+  }
+
+  @override
+  Future<
+    ({List<Map<String, dynamic>> adjustments, List<RadioMappingModel> mappings})
+  >
+  upload({
+    required String model,
+    required String port,
+    required String imagePath,
+    required List<RadioChannel> channels,
+    required List<int> cleared,
+    List<RadioMappingModel>? mappings,
+    int? zone,
+    void Function(RadioProgress)? onProgress,
+  }) async {
+    expect(port, 'TEST-NO-HARDWARE');
+    uploaded = channels.map((channel) => channel.copy()).toList();
+    clearedLocations = [...cleared];
+    for (final channel in channels) {
+      imageChannels.removeWhere(
+        (stored) => stored.location == channel.location,
+      );
+      imageChannels.add(channel.copy());
+    }
+    imageChannels.removeWhere((channel) => cleared.contains(channel.location));
+    return (
+      adjustments: <Map<String, dynamic>>[],
+      mappings: <RadioMappingModel>[],
+    );
+  }
+}
+
 void main() {
+  testWidgets(
+    'skip and write never sends flagged rows to the bridge and keeps them unsaved',
+    (tester) async {
+      tester.view.physicalSize = const Size(1440, 1000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final temp = Directory.systemTemp.createTempSync('newchirp-skip-write-');
+      addTearDown(() async {
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.runAsync(() => temp.delete(recursive: true));
+      });
+      final image = File('${temp.path}/source.img')
+        ..writeAsStringSync('fake image');
+      final tooLong = 'X' * 31;
+      final incoming = [
+        RadioChannel(location: 1, name: 'Compatible edit', frequency: 146.52),
+        RadioChannel(location: 2, name: tooLong, frequency: 146.6),
+        RadioChannel(
+          location: 3,
+          name: 'Digital',
+          frequency: 433.45,
+          mode: 'DMR',
+        ),
+        RadioChannel(location: 4, name: tooLong, frequency: 146.7),
+      ];
+      final csv = File('${temp.path}/channels.csv')
+        ..writeAsStringSync(ChirpCsv.encode(incoming));
+      final selector = _CsvSelector(image.path);
+      final previousSelector = FileSelectorPlatform.instance;
+      FileSelectorPlatform.instance = selector;
+      addTearDown(() => FileSelectorPlatform.instance = previousSelector);
+      final bridge = _WritingBridge();
+      await tester.pumpWidget(
+        NewChirpApp(
+          radioBridge: bridge,
+          radioImageStore: RadioImageStore(
+            rootDirectory: Directory('${temp.path}/images'),
+          ),
+          radioSelectionStore: _RememberedSelection(),
+          columnLayoutStore: ColumnLayoutStore(
+            path: '${temp.path}/layout.json',
+          ),
+          checkForUpdatesOnStartup: false,
+        ),
+      );
+      await tester.runAsync(
+        () => Future<void>.delayed(const Duration(milliseconds: 100)),
+      );
+      await tester.pumpAndSettle();
+      Future<void> openFile() async {
+        await tester.runAsync(() async {
+          await tester.tap(find.text('Open channel file').first);
+          await Future<void>.delayed(const Duration(milliseconds: 100));
+        });
+        await tester.pumpAndSettle();
+      }
+
+      await openFile();
+      expect(find.text('Original 2'), findsOneWidget);
+      selector.path = csv.path;
+      await openFile();
+      await tester.runAsync(() async {
+        await tester.tap(find.text('Apply'));
+        await Future<void>.delayed(Duration.zero);
+      });
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('3 channels need attention'),
+        findsOneWidget,
+        reason: tester
+            .widgetList<Text>(find.byType(Text))
+            .map((text) => text.data)
+            .join('\n'),
+      );
+      await tester.tap(find.byKey(const Key('channel-library-write')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('upload-skip-incompatible')));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('This will program 1 channels'),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Write to radio'));
+      await tester.pumpAndSettle();
+
+      // Assert the actual bridge boundary, before it can truncate/filter names.
+      expect(bridge.uploaded!.map((channel) => channel.location), [1]);
+      expect(bridge.clearedLocations, isEmpty);
+      expect(
+        bridge.imageChannels
+            .firstWhere((channel) => channel.location == 1)
+            .name,
+        'Compatible edit',
+      );
+      expect(
+        bridge.imageChannels
+            .firstWhere((channel) => channel.location == 2)
+            .name,
+        'Original 2',
+      );
+      expect(
+        bridge.imageChannels
+            .firstWhere((channel) => channel.location == 3)
+            .name,
+        'Original 3',
+      );
+      expect(
+        bridge.imageChannels.any((channel) => channel.location == 4),
+        isFalse,
+      );
+      expect(bridge.imageReads, 2); // Import, then the image actually written.
+      expect(
+        find.textContaining('Channel 2 $tooLong could not be written'),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Close'));
+      await tester.pumpAndSettle();
+      expect(find.text('Unsaved radio changes'), findsOneWidget);
+      expect(find.text(tooLong), findsNWidgets(2));
+      expect(
+        tester
+            .widget<FilledButton>(
+              find.byKey(const Key('channel-library-write')),
+            )
+            .onPressed,
+        isNotNull,
+      );
+      expect(find.byKey(const ValueKey('channel-issues-2')), findsOneWidget);
+      expect(find.byKey(const ValueKey('channel-issues-3')), findsOneWidget);
+      expect(find.byKey(const ValueKey('channel-issues-4')), findsOneWidget);
+      await tester.tap(find.text('New'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Blank configuration'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Any unsaved changes will be lost'),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Keep current list'));
+      await tester.pumpAndSettle();
+    },
+  );
   testWidgets(
     'opening CSV retains radio rules, flags both DMR rows and explains each issue',
     (tester) async {
