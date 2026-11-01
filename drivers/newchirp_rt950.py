@@ -37,6 +37,7 @@ BLOCK_SIZE = 0x80
 ACK = b"\x06"
 HANDSHAKE = b"PROGRAMBT9000U"
 MODEL_CODE = b"BT-9000"
+MODEL_ALIASES = (MODEL_CODE, b"RT-950")
 
 # The CPS deliberately skips the unused regions between these ranges.
 READ_RANGES = (
@@ -223,10 +224,10 @@ class RT950Radio(chirp_common.CloneModeRadio,
 
         self.pipe.write(b"M")
         model = self._read_exact(12).replace(b"\x00", b"").strip()
-        if model != MODEL_CODE:
+        if model not in MODEL_ALIASES:
             raise errors.RadioError(
-                "RT-950 driver expected model %s, radio reported %r"
-                % (MODEL_CODE.decode("ascii"), model)
+                "RT-950 driver expected BT-9000 or RT-950, radio reported %r"
+                % model
             )
 
     def _handshake(self):
