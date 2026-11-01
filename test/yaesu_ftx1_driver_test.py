@@ -26,11 +26,12 @@ def _load_bridge():
 
 
 class FakeFTX1Serial:
-    def __init__(self):
+    def __init__(self, ack_ai=True):
         self.timeout = 0.35
         self.baudrate = 9600
         self._rx = bytearray()
         self.active = 1
+        self.ack_ai = ack_ai
         self.memories = {
             1: {
                 "freq": 146_940_000,
@@ -76,7 +77,8 @@ class FakeFTX1Serial:
         if command == "ID;":
             self._ack("ID0840")
         elif command == "AI0;":
-            self._ack("AI0")
+            if self.ack_ai:
+                self._ack("AI0")
         elif command == "MC;":
             self._ack("MC0%05i" % self.active)
         elif re.fullmatch(r"MC0\d{5};", command):
@@ -196,6 +198,12 @@ class YaesuFTX1Test(unittest.TestCase):
         self.assertEqual(stored["name"], "PMR 06")
         self.assertEqual(stored["sql"], "1")
         self.assertEqual(stored["tone_index"], 18)
+
+    def test_accepts_silent_ai0_after_valid_identification(self):
+        radio = self.radio_class(FakeFTX1Serial(ack_ai=False))
+        memory = radio.get_memory(37)
+        self.assertEqual(memory.freq, 446_006_250)
+        self.assertEqual(memory.name, "PMR 01")
 
 
 if __name__ == "__main__":

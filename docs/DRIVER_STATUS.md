@@ -37,6 +37,7 @@ Last updated: 2026-11-01
 | TYT MD-UV380 | `drivers/newchirp_tyt_mduv380.py` | ST DfuSe USB 0483:DF11 + libusb | 3000 channels + zones | Yes, offline-tested | Hidden | Experimental |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | CHIRP TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| TIDRADIO TD-H8 fourth-generation HAM | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | Identity accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
@@ -45,6 +46,7 @@ Last updated: 2026-11-01
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, physical image verified | Disabled | Hidden | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
+| Kenwood TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710G clone serial | Stock driver | Stock driver | Stock driver | Regional identity compatibility |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
 ## Radio details
@@ -344,6 +346,19 @@ Last updated: 2026-11-01
 - Next milestone: the reporter confirms that brightness displays as level 5
   and the PF1 short-press Monitor setting writes successfully.
 
+### TIDRADIO TD-H8 fourth-generation HAM serial
+
+- Maintained file: `drivers/newchirp_tdh8_serial.py`
+- Transport: pinned CHIRP TD-H8 serial protocol at 38400 8N1
+- Identity: `TDH84GEH`, observed in the 2026-11-01 NewChirp 1.0.30 report
+  from 99kelly@comcast.net
+- Implemented: identity resolution against the later `0x1FEF` TD-H8 address
+  space and read-only image download/offline editing
+- Read/write policy: writes remain disabled until a physical read, controlled
+  write, and read-back validate this fourth-generation address space
+- Next milestone: reporter retests the read and supplies the saved image if
+  channel decoding differs
+
 ### Radioddity DB35-G
 
 - Maintainer: NewChirp driver reverse engineered from the official Radioddity
@@ -541,6 +556,18 @@ Last updated: 2026-11-01
   records and names with KPG-171D, then map the remaining fields before
   considering any upload capability.
 - Website catalog: must be listed as experimental.
+
+### Kenwood TM-D710GP regional identity
+
+- Maintained file: `drivers/newchirp_tmd710.py`
+- Transport and layout: unchanged pinned CHIRP TM-D710G clone protocol
+- Implemented: accepts the regional `D710GP` clone identity returned when the
+  programming cable is connected through the TM-D710 control head
+- Evidence: 2026-11-01 NewChirp 1.0.30 report from ke5etc@yahoo.com; the
+  complete command handshake reached `ID TM-D710GP` instead of `TM-D710G`
+- Hardware validation: read/write validation on this identity is pending
+- Next milestone: perform a complete read and controlled write with the
+  control-head connection required by the Kenwood programmer
 
 ### Icom IC-9700
 
