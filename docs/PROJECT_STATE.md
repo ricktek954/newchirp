@@ -8,10 +8,11 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.33` installer is live. It decodes the verified Icom ID-50
-  channel fields (names, frequency, mode, duplex/offset, CTCSS, tuning step,
-  output level, scan skip, and D-STAR callsigns) while keeping ID-50 writes
-  disabled. It keeps the `1.0.27`-`1.0.32` fixes.
+- The Windows `1.0.34` installer is live. It keeps channel-page writes
+  available when the stored radio image already matches (with the existing
+  transfer safety guards), adds one-click clear controls to channel and
+  repeater searches, and fixes Icom ID-50 empty memory handling. It keeps
+  the `1.0.27`-`1.0.33` fixes.
 - The 2026-10-31 current-release retest sweep replied to all 31 unresolved
   bug reports that predated the live Windows `1.0.30` or Linux/macOS `1.0.29`
   releases. Each original was marked read and each `Sent` copy was verified
@@ -55,7 +56,7 @@ release requirements.
 - macOS `1.0.33` artifact source commit: `b9bce854`
 - Linux `1.0.32` artifact source commit: `07bcfd29`
 - Open pull requests: none
-- Checked-out source version: `1.0.33+33`
+- Checked-out source version: `1.0.34+34`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -70,7 +71,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.33 |
-| Windows | 1.0.33 |
+| Windows | 1.0.34 |
 | Linux | 1.0.32 |
 | Legacy shared manifest version | 1.0.31 |
 
@@ -88,11 +89,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.33.exe`
-- Version/build: `1.0.33` / `33`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.34.exe`
+- Version/build: `1.0.34` / `34`
 - SHA-256:
-  `922e7dea923dd2dae911f094763b3845e948d08afbc4a108efdf9be20d91dbe8`
-- Size: `61,083,733` bytes
+  `314eed8225fccf56dae1d777bb348b7df55ee910968fd3a40780a1becae7610b`
+- Size: `61,083,669` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
