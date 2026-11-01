@@ -276,6 +276,8 @@ class NewChirpApp extends StatelessWidget {
     this.updateInstaller,
     this.exitForUpdate,
     this.diagnosticLog,
+    this.radioBridge,
+    this.radioImageStore,
     this.checkForUpdatesOnStartup = true,
   });
 
@@ -289,6 +291,8 @@ class NewChirpApp extends StatelessWidget {
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
   final DiagnosticLog? diagnosticLog;
+  final RadioBridge? radioBridge;
+  final RadioImageStore? radioImageStore;
   final bool checkForUpdatesOnStartup;
 
   @override
@@ -342,6 +346,8 @@ class NewChirpApp extends StatelessWidget {
         updateInstaller: updateInstaller,
         exitForUpdate: exitForUpdate,
         diagnosticLog: diagnosticLog,
+        radioBridge: radioBridge,
+        radioImageStore: radioImageStore,
         checkForUpdatesOnStartup: checkForUpdatesOnStartup,
       ),
     );
@@ -361,6 +367,8 @@ class NewChirpHome extends StatefulWidget {
     this.updateInstaller,
     this.exitForUpdate,
     this.diagnosticLog,
+    this.radioBridge,
+    this.radioImageStore,
     this.checkForUpdatesOnStartup = true,
   });
 
@@ -374,6 +382,8 @@ class NewChirpHome extends StatefulWidget {
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
   final DiagnosticLog? diagnosticLog;
+  final RadioBridge? radioBridge;
+  final RadioImageStore? radioImageStore;
   final bool checkForUpdatesOnStartup;
 
   @override
@@ -383,7 +393,7 @@ class NewChirpHome extends StatefulWidget {
 typedef _ChannelMappingMembership = ({int modelIndex, String mappingIndex});
 
 class _NewChirpHomeState extends State<NewChirpHome> {
-  final _bridge = RadioBridge();
+  late final _bridge = widget.radioBridge ?? RadioBridge();
   late final _columnLayoutStore =
       widget.columnLayoutStore ?? ColumnLayoutStore();
   late final _radioSelectionStore =
@@ -401,7 +411,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   late final _updateInstaller =
       widget.updateInstaller ?? const UpdateInstaller();
   late final _diagnosticLog = widget.diagnosticLog ?? DiagnosticLog();
-  final _imageStore = RadioImageStore();
+  late final _imageStore = widget.radioImageStore ?? RadioImageStore();
   Future<void>? _radioSelectionLoad;
   final _searchController = TextEditingController();
   final _channelTableKey = GlobalKey<_ChannelTableState>();
@@ -1394,9 +1404,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _modelGroups = {
           for (final group in catalog.groups) group.name: group.models,
         };
-        if (_model != null && !models.contains(_model)) _model = null;
-        _radioFirmware = null;
-        _capabilities = null;
+        if (_model != null && !models.contains(_model)) {
+          _model = null;
+          _radioFirmware = null;
+          _capabilities = null;
+        }
         _radioZones = [];
         _radioMappings = [];
         _selectedZone = null;
@@ -2006,6 +2018,51 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _showChannelEditorAtLocation(channel.location);
   }
 
+  Future<void> _reviewAllChannelIssues() async {
+    final problems = [
+      for (final channel in _activeChannels)
+        (channel: channel, issues: _channelIssues(channel)),
+    ].where((problem) => problem.issues.isNotEmpty).toList();
+    if (problems.isEmpty) return;
+    final location = await showDialog<int>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Channels that need attention'),
+        content: SizedBox(
+          width: 620,
+          height: 360,
+          child: ListView.separated(
+            itemCount: problems.length,
+            separatorBuilder: (_, _) => const Divider(),
+            itemBuilder: (context, index) {
+              final problem = problems[index];
+              return ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: Text(
+                  'Channel ${problem.channel.location} — ${problem.channel.name}',
+                ),
+                subtitle: Text(problem.issues.join('\n')),
+                trailing: TextButton(
+                  onPressed: () =>
+                      Navigator.pop(context, problem.channel.location),
+                  child: const Text('Edit channel'),
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close'),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || location == null) return;
+    await _showChannelEditorAtLocation(location);
+  }
+
   void _sortChannelsByLocation() {
     _channels.sort((left, right) => left.location.compareTo(right.location));
   }
@@ -2261,12 +2318,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _findRepeaters() async {
+    final image = _radioImage;
+    if (_capabilities == null && image != null) {
+      await _loadImageCapabilities(image);
+      if (!mounted) return;
+    }
     final channels = await showDialog<List<RadioChannel>>(
       context: context,
       builder: (context) => RepeaterBookDialog(
         bridge: _bridge,
         preferencesStore: _repeaterSearchPreferencesStore,
         myGmrsService: _myGmrsService,
+        radioModel: _model,
+        capabilities: _capabilities,
       ),
     );
     if (channels == null || channels.isEmpty || !mounted) return;
@@ -2475,7 +2539,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _libraryOpen = true;
       _page = 0;
       _dirty = false;
-      _capabilities = null;
+      // A new library still targets the selected radio.
       _radioZones = [];
       _radioMappings = [];
       _selectedZone = null;
@@ -3630,7 +3694,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           ],
         ),
       );
-      if (skipIncompatible != true) return;
+      if (skipIncompatible != true) {
+        if (skipIncompatible == false && mounted) {
+          await _reviewAllChannelIssues();
+        }
+        return;
+      }
       if (!mounted) return;
       channelsToWrite = compatibleChannelsForUpload(
         _activeChannels,
@@ -3718,6 +3787,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         onProgress: _reportTransferProgress,
       );
       changes = [...incompatibleChanges, ...result.adjustments];
+      final skippedChannels = changes.any((entry) => entry['skipped'] == true);
+      final writtenImage = skippedChannels
+          ? await _bridge.readImage(_radioImage!, zone: _selectedZone)
+          : null;
       final nameChanges = changes.where((entry) {
         final from = entry['nameFrom'];
         final to = entry['nameTo'];
@@ -3735,8 +3808,21 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           if (index >= 0) _channels[index].name = name;
         }
         _radioMappings = result.mappings;
-        _dirty = false;
-        _rememberChannelImageBaseline(fromRadio: false);
+        _dirty = skippedChannels;
+        if (writtenImage == null) {
+          _rememberChannelImageBaseline(fromRadio: false);
+        } else {
+          // Skipped rows remain in the library. Compare with the image that
+          // was actually written so they never appear saved to the radio.
+          _channelImageBaseline = ChannelImageBaseline(
+            imagePath: _radioImage!,
+            zone: _selectedZone,
+            signature: channelListSignature(writtenImage.channels, const []),
+            mappingSignature: radioMappingsSignature(_radioMappings),
+            loadedFromRadio: false,
+          );
+          _markChannelLibraryDirty();
+        }
       });
       _diagnosticLog.record(
         'radio',
@@ -5391,6 +5477,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             selectedLocations: _selectedChannelLocations,
                             radioModel: _model,
                             capabilities: _capabilities,
+                            issuesForChannel: _channelIssues,
                             columnOrder: _columnOrder,
                             columnWidths: _columnWidths,
                             onColumnOrderChanged: _setColumnOrder,
@@ -5493,10 +5580,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               match: imageMatch,
               busy: _busy,
               invalidCount: invalid,
+              allowIncompatibleReview: true,
               hasPort: _port != null,
               hasRadioModel: _radioModelSelectedForTransfer,
               hasRadioImage: _radioImage != null,
             ),
+            issueCount: invalid,
+            compatibilityChecked: _capabilities != null,
+            onReviewIssues: !_busy
+                ? () => unawaited(_reviewAllChannelIssues())
+                : null,
             showConnect: _port == null,
             onDiscard: () => unawaited(_discardChannelLibraryChanges()),
             onWrite: () => unawaited(_uploadRadio()),
@@ -8372,11 +8465,15 @@ class RepeaterBookDialog extends StatefulWidget {
     required this.bridge,
     required this.preferencesStore,
     this.myGmrsService,
+    this.radioModel,
+    this.capabilities,
   });
 
   final RadioBridge bridge;
   final RepeaterSearchPreferencesStore preferencesStore;
   final MyGmrsService? myGmrsService;
+  final String? radioModel;
+  final RadioCapabilities? capabilities;
 
   @override
   State<RepeaterBookDialog> createState() => _RepeaterBookDialogState();
@@ -8790,11 +8887,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   }
 
   List<RadioChannel> get _selectedChannels {
-    final results = _selected.toList()
-      ..sort(
-        (left, right) =>
-            left.channel.location.compareTo(right.channel.location),
-      );
+    final results =
+        _selected.where((result) => _resultIssues(result).isEmpty).toList()
+          ..sort(
+            (left, right) =>
+                left.channel.location.compareTo(right.channel.location),
+          );
     return [
       for (var index = 0; index < results.length; index++)
         results[index].channel.copy()..location = index + 1,
@@ -8931,7 +9029,33 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         '${result.location.isEmpty ? '' : ' • ${result.location}'}';
   }
 
+  List<String> _resultIssues(RepeaterSearchResult result) {
+    final capabilities = widget.capabilities;
+    if (capabilities == null) return const [];
+    return result.channel.validate(
+      radioModel: widget.radioModel,
+      validTuningSteps: capabilities.steps,
+      validBands: capabilities.validBands,
+      validModes: capabilities.modes,
+      validToneModes: capabilities.toneModes,
+      validCrossModes: capabilities.crossModes,
+      hasTuningStep: capabilities.hasTuningStep,
+      maximumNameLength: capabilities.nameLength,
+    );
+  }
+
   void _setResultSelected(RepeaterSearchResult result, bool selected) {
+    final issues = _resultIssues(result);
+    if (selected && issues.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Cannot add ${result.channel.name}: ${issues.join(' ')}',
+          ),
+        ),
+      );
+      return;
+    }
     setState(() {
       if (selected) {
         _selected.add(result);
@@ -8960,15 +9084,19 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
             child: Tooltip(
               message:
                   '${result.callsign} • ${result.channel.frequency.toStringAsFixed(4)} MHz\n'
-                  '${result.location}',
+                  '${result.location}'
+                  '${_resultIssues(result).isEmpty ? '' : '\nNot compatible: ${_resultIssues(result).join(' ')}'}',
               child: GestureDetector(
+                key: ValueKey('repeater-map-result-${result.callsign}'),
                 behavior: HitTestBehavior.opaque,
                 onTap: () =>
                     _setResultSelected(result, !_selected.contains(result)),
                 child: Icon(
                   Icons.location_on,
                   size: 22,
-                  color: _selected.contains(result)
+                  color: _resultIssues(result).isNotEmpty
+                      ? Colors.grey
+                      : _selected.contains(result)
                       ? const Color(0xFF9B3C20)
                       : const Color(0xFF1F7455),
                   shadows: const [Shadow(blurRadius: 4, color: Colors.black45)],
@@ -9030,7 +9158,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                       CircleMarker(
                         point: LatLng(result.latitude!, result.longitude!),
                         radius: 4,
-                        color: _selected.contains(result)
+                        color: _resultIssues(result).isNotEmpty
+                            ? Colors.grey
+                            : _selected.contains(result)
                             ? const Color(0xFFB23A28)
                             : const Color(0xFF19724F),
                         borderStrokeWidth: 1,
@@ -9088,6 +9218,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _resultFilterController.text,
       counties: _selectedCounties,
     );
+    final incompatibleCount = visibleResults
+        .where((result) => _resultIssues(result).isNotEmpty)
+        .length;
     final size = MediaQuery.sizeOf(context);
     final maxWidth = size.width - 24;
     final maxHeight = size.height - 24;
@@ -9143,6 +9276,20 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             'before transmitting.',
                             style: TextStyle(color: Colors.black54),
                           ),
+                          if (widget.capabilities != null) ...[
+                            const SizedBox(height: 6),
+                            Text(
+                              'Selected radio: ${widget.radioModel?.replaceAll('_', ' ') ?? 'current radio'}. '
+                              'Supported modes: ${widget.capabilities!.modes.join(', ')}. '
+                              'Incompatible results are disabled and show the reason.',
+                              key: const Key('repeater-radio-compatibility'),
+                            ),
+                          ] else if (widget.radioModel != null) ...[
+                            const SizedBox(height: 6),
+                            const Text(
+                              'Radio compatibility has not been checked yet. Load a radio image to check these results.',
+                            ),
+                          ],
                           const SizedBox(height: 14),
                           if (_enableMyGmrsDirectory) ...[
                             Row(
@@ -9625,7 +9772,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 const SizedBox(width: 8),
                                 TextButton(
                                   onPressed: () => setState(
-                                    () => _selected.addAll(visibleResults),
+                                    () => _selected.addAll(
+                                      visibleResults.where(
+                                        (result) =>
+                                            _resultIssues(result).isEmpty,
+                                      ),
+                                    ),
                                   ),
                                   child: const Text('Select all'),
                                 ),
@@ -9667,22 +9819,23 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         const Divider(height: 1),
                                     itemBuilder: (context, index) {
                                       final result = visibleResults[index];
+                                      final issues = _resultIssues(result);
                                       return CheckboxListTile(
+                                        key: ValueKey(
+                                          'repeater-result-${result.callsign}-${result.channel.frequency}',
+                                        ),
                                         dense: true,
                                         contentPadding:
                                             const EdgeInsets.symmetric(
                                               horizontal: 4,
                                             ),
                                         value: _selected.contains(result),
-                                        onChanged: (selected) {
-                                          setState(() {
-                                            if (selected == true) {
-                                              _selected.add(result);
-                                            } else {
-                                              _selected.remove(result);
-                                            }
-                                          });
-                                        },
+                                        onChanged: issues.isEmpty
+                                            ? (selected) => _setResultSelected(
+                                                result,
+                                                selected == true,
+                                              )
+                                            : null,
                                         title: Text(
                                           result.callsign.isEmpty
                                               ? result.channel.name
@@ -9690,10 +9843,25 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
                                         ),
-                                        subtitle: Text(
-                                          _channelDetail(result),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
+                                        subtitle: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              _channelDetail(result),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            if (issues.isNotEmpty)
+                                              Text(
+                                                'Not compatible: ${issues.join(' ')}',
+                                                style: TextStyle(
+                                                  color: Theme.of(
+                                                    context,
+                                                  ).colorScheme.error,
+                                                ),
+                                              ),
+                                          ],
                                         ),
                                       );
                                     },
@@ -9707,6 +9875,17 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      if (incompatibleCount > 0)
+                        Expanded(
+                          child: Text(
+                            '$incompatibleCount ${incompatibleCount == 1 ? 'result is' : 'results are'} incompatible with '
+                            '${widget.radioModel?.replaceAll('_', ' ') ?? 'the selected radio'} and cannot be selected.',
+                            key: const Key('repeater-incompatible-summary'),
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ),
+                        ),
                       TextButton(
                         onPressed: _loading
                             ? null
@@ -10023,6 +10202,7 @@ class _ChannelTable extends StatefulWidget {
     required this.selectedLocations,
     required this.radioModel,
     required this.capabilities,
+    required this.issuesForChannel,
     required this.columnOrder,
     required this.columnWidths,
     required this.onColumnOrderChanged,
@@ -10051,6 +10231,7 @@ class _ChannelTable extends StatefulWidget {
   final Set<int> selectedLocations;
   final String? radioModel;
   final RadioCapabilities? capabilities;
+  final List<String> Function(RadioChannel) issuesForChannel;
   final List<String> columnOrder;
   final Map<String, double> columnWidths;
   final ValueChanged<List<String>> onColumnOrderChanged;
@@ -10582,6 +10763,8 @@ class _ChannelTableState extends State<_ChannelTable> {
     required bool startsBank,
   }) {
     final isCleared = entry.value.cleared;
+    final issues = widget.issuesForChannel(entry.value);
+    final needsAttention = issues.isNotEmpty;
     final canDrag = widget.reorderEnabled && !isCleared;
     final dragLabel = entry.value.name.isEmpty
         ? 'Channel ${channelNumberLabel(widget.radioModel, entry.value.location)}'
@@ -10611,13 +10794,20 @@ class _ChannelTableState extends State<_ChannelTable> {
             child: Tooltip(
               message: isCleared
                   ? 'Empty memory slot. Double-click to create a channel.'
+                  : needsAttention
+                  ? '${issues.join('\n')}\nDouble-click to edit channel.'
                   : 'Double-click to edit channel',
               child: InkWell(
                 onDoubleTap: () => widget.onOpen(entry.key),
                 child: Container(
+                  key: ValueKey('channel-row-${entry.key}'),
                   height: 45,
                   color: isDropTarget
                       ? const Color(0xFFD7EAE1)
+                      : needsAttention
+                      ? widget.selectedLocations.contains(entry.key)
+                            ? const Color(0xFFFFE3BD)
+                            : const Color(0xFFFFF4E5)
                       : widget.selectedLocations.contains(entry.key)
                       ? const Color(0xFFE8F3ED)
                       : isCleared
@@ -10698,34 +10888,60 @@ class _ChannelTableState extends State<_ChannelTable> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             child: Align(
                               alignment: Alignment.centerLeft,
-                              child: Text(
-                                isCleared
-                                    ? column.label == '#'
-                                          ? column.value(entry.value)
-                                          : column.label == 'NAME'
-                                          ? 'Empty slot'
-                                          : '—'
-                                    : column.value(entry.value),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: column.label == 'NAME'
-                                      ? isCleared
-                                            ? FontWeight.w400
-                                            : FontWeight.w600
-                                      : FontWeight.w400,
-                                  fontStyle: isCleared && column.label == 'NAME'
-                                      ? FontStyle.italic
-                                      : null,
-                                  color: isCleared
-                                      ? Colors.black38
-                                      : column.label == '#'
-                                      ? Colors.black54
-                                      : null,
-                                  fontFeatures: column.label == 'RX FREQUENCY'
-                                      ? const [FontFeature.tabularFigures()]
-                                      : null,
-                                ),
+                              child: Row(
+                                children: [
+                                  if (column.label == 'NAME' && needsAttention)
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 6),
+                                      child: Tooltip(
+                                        message:
+                                            'Channel ${entry.key}: ${issues.join('\n')}',
+                                        child: Icon(
+                                          Icons.warning_amber_rounded,
+                                          key: ValueKey(
+                                            'channel-issues-${entry.key}',
+                                          ),
+                                          size: 18,
+                                          color: const Color(0xFF9B5B18),
+                                        ),
+                                      ),
+                                    ),
+                                  Expanded(
+                                    child: Text(
+                                      isCleared
+                                          ? column.label == '#'
+                                                ? column.value(entry.value)
+                                                : column.label == 'NAME'
+                                                ? 'Empty slot'
+                                                : '—'
+                                          : column.value(entry.value),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontWeight: column.label == 'NAME'
+                                            ? isCleared
+                                                  ? FontWeight.w400
+                                                  : FontWeight.w600
+                                            : FontWeight.w400,
+                                        fontStyle:
+                                            isCleared && column.label == 'NAME'
+                                            ? FontStyle.italic
+                                            : null,
+                                        color: isCleared
+                                            ? Colors.black38
+                                            : column.label == '#'
+                                            ? Colors.black54
+                                            : null,
+                                        fontFeatures:
+                                            column.label == 'RX FREQUENCY'
+                                            ? const [
+                                                FontFeature.tabularFigures(),
+                                              ]
+                                            : null,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
