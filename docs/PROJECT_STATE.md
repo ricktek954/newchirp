@@ -170,9 +170,10 @@ Linux 1.0.32 sizes:
 - Expanded the physical Icom ID-50/ID-52 parser after Nick Hale's 1.0.32
   retest. The 500-channel read-only parser now decodes FM, AM, DV, names,
   offsets, duplex direction, CTCSS, tuning step, output level, scan skip, and
-  D-STAR calls without the former invalid-mode failure. Writes remain
-  disabled until DTCS, reverse/cross tones, and the remaining channel flags
-  are validated.
+  D-STAR calls without the former invalid-mode failure. It also uses the
+  radio's channel-availability table so retained factory records in unused
+  slots are reported as empty. Writes remain disabled until DTCS,
+  reverse/cross tones, and the remaining channel flags are validated.
 - Published Linux `1.0.29` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. Verified the embedded `version.json`,
   package metadata, server checksums, public HTTP 200 checks, and live

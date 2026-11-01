@@ -1,17 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/radio_bridge.dart';
+
+import 'chirp_test_source.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('catalog exposes the experimental Midland MXT295 driver', () async {
-    final source = Directory('build_support/chirp-20261016').existsSync()
-        ? 'build_support/chirp-20261016'
-        : Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final bridge = RadioBridge(sourcePath: source, newDriversPath: 'drivers');
 
     expect(await bridge.models(), contains('Midland_MXT295'));

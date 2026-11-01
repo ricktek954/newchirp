@@ -7,9 +7,11 @@ import sys
 import unittest
 from unittest import mock
 
+from chirp_test_source import chirp_source
+
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "build_support/chirp-21e42e4518c167548af90ed7f9edf75e516c491a"
+SOURCE = chirp_source()
 VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 
 

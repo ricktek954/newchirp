@@ -11,15 +11,10 @@ from contextlib import redirect_stdout
 from pathlib import Path
 from unittest import mock
 
+from chirp_test_source import chirp_source
+
 ROOT = Path(__file__).resolve().parent.parent
-PIN = dict(
-    line.split()
-    for line in (ROOT / "scripts/chirp-source.pin").read_text().splitlines()
-    if line and not line.startswith("#")
-)
-SOURCE = ROOT / "build_support" / ("chirp-" + PIN["commit"])
-if not SOURCE.is_dir():
-    SOURCE = ROOT / "build_support/chirp-20261023"
+SOURCE = chirp_source()
 VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 MODEL = "Radtel_RT-950_Pro_nicFW950"
 

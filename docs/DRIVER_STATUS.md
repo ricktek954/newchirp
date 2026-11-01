@@ -714,8 +714,8 @@ Last updated: 2026-11-01
 - Serial settings: 9600 baud, 8 data bits, no parity, one stop bit
 - Implemented: live model identification, full-image read, download-end
   truncation, model/revision checking, and 500 physical ID-50 channel records
-  with names, frequency, mode, duplex direction, offset, CTCSS, tuning step,
-  output level, scan skip, and D-STAR callsigns
+  with channel availability, names, frequency, mode, duplex direction, offset,
+  CTCSS, tuning step, output level, scan skip, and D-STAR callsigns
 - Channel map: each record is 51 bytes. Receive frequency and positive offset
   are 32-bit big-endian Hertz at offsets 0 and 4. The 16-byte Shift-JIS/ASCII
   name starts at offset 12. Byte 9 is the physical mode selector: `00` FM,
@@ -725,6 +725,9 @@ Last updated: 2026-11-01
   the tone mode (`00` off, `01` tone, `0B` TSQL); offsets 30 and 31 are the
   transmit and receive CTCSS indexes. D-STAR UR, RPT1, and RPT2 calls occupy
   offsets 30, 37, and 44 as 7-byte packed Icom callsigns in DV records.
+  A separate 500-byte channel-availability table starts at image offset
+  `0xA632`; `00` exposes the memory to CHIRP and `FF` marks a retained but
+  unavailable factory record as empty.
 - Unresolved fields: DTCS, reverse/cross-tone modes, remaining packed flags,
   zones, and settings. Unrecognized mode-selector values are logged and
   exposed as FM so they cannot abort a download.
@@ -747,21 +750,26 @@ Last updated: 2026-11-01
   `42b0f30169073cf679f283b0b3e776e8f29eb21e0b808d3882e128bc80ab67e1`.
   Comparing it with the previous verified image and the CS-50 built-in
   channel templates established the tone, duplex, tuning-step, output-level,
-  and scan-skip packing.
+  and scan-skip packing. The same image's `0xA632` table has 29 zero entries
+  followed by 471 `FF` entries, matching Nick's 29 saved memories. The radio
+  retains factory AM records after the last available memory, so frequency
+  validity alone cannot determine whether a channel is present.
 - Driver SHA-256:
-  `b8e842fdb98823c2bae8d6bab7e04f2d8ea162c1abd975fad94f24922fd25382`
+  `d05cf80346574e2cdabbf2d38df11036417a0eb8236da699a77835200de8b20c`
 - Hardware validation: the ID-50 completed the clone download twice and all
-  500 records decode without an exception. The latest supplied image yields
-  175 FM, 320 AM, and 5 DV memories; 42 are DUP+, 9 are DUP-, 15 use TONE,
-  8 use TSQL, and all report scan skip off. AM receive-only channels leave the
-  transmit-power field blank. No upload has been attempted. ID-52 still needs
-  an equivalent physical image.
+  500 records decode without an exception. The latest supplied image exposes
+  the 29 available memories as 24 FM and 5 DV; 12 are DUP+, 9 are DUP-, 15 use
+  TONE, 8 use TSQL, and all report scan skip off. Twenty use low output and
+  nine use high output. The retained factory AM records in unavailable slots
+  are now hidden. No upload has been attempted. ID-52 still needs an
+  equivalent physical image.
 - Field evidence 2026-10-31: Nick Hale's ID-50 (Windows, NewChirp 1.0.28,
   COM4) completed a 55-byte model handshake and the clone-in transfer. The
   provisional ID-4100 parser then rejected a decoded mode. The saved clone
   image established the real 51-byte map and the mode-selector byte.
-- Next milestone: Nick verifies Tone, power, skip, Duplex, and tuning-step
-  values in the next normal build; obtain an equivalent ID-52 image; then
+- Next milestone: Nick verifies that only the 29 available memories appear and
+  checks Tone, power, skip, Duplex, and tuning-step values in the next normal
+  build; obtain an equivalent ID-52 image; then
   validate DTCS, reverse/cross tones, zones, settings, write encoding, and a
   controlled one-channel write/read-back before enabling uploads.
 - Website catalog: must be listed as experimental for both radios.

@@ -12,13 +12,11 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest import mock
 
+from chirp_test_source import chirp_source
+
 
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = (
-    ROOT / "build_support/chirp-20261023"
-    if (ROOT / "build_support/chirp-20261023").is_dir()
-    else ROOT.parent / "chirp-20260626"
-)
+SOURCE = chirp_source()
 VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 TD_H3_IMAGE = SOURCE / "tests/images/TIDRADIO_TD-H3.img"
 A36PLUS_IMAGE = SOURCE / "tests/images/Talkpod_A36plus.img"
@@ -483,9 +481,9 @@ class UploadHandshakeTest(unittest.TestCase):
             for field in bridge.extra_fields_json(channel)
         }
 
-        self.assertIn("Busy Channel Lockout", fields["bcl"])
-        self.assertIn("PTT ID", fields["pttid"])
-        self.assertIn("S-CODE", fields["scode"])
+        self.assertIn("Prevents transmitting", fields["bcl"])
+        self.assertIn("DTMF PTT-ID", fields["pttid"])
+        self.assertIn("DTMF PTT-ID codes", fields["scode"])
 
     def test_driver_specific_live_modes_are_accepted_by_memory_map(self):
         from chirp import chirp_common

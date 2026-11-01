@@ -7,8 +7,11 @@ import tempfile
 import unittest
 
 
+from chirp_test_source import chirp_source
+
+
 ROOT = Path(__file__).resolve().parent.parent
-SOURCE = ROOT / "build_support/chirp-20261023"
+SOURCE = chirp_source()
 PYTHON_VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 TDH3_IMAGE = SOURCE / "tests/images/TIDRADIO_TD-H3.img"
 BRIGHTNESS_OFFSET = 0x0CA5

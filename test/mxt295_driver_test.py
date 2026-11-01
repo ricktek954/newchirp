@@ -8,21 +8,12 @@ import sys
 import unittest
 from pathlib import Path
 
+from chirp_test_source import chirp_source
+
 
 ROOT = Path(__file__).resolve().parent.parent
 VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 CAPTURES = Path("/Users/randybrown/Downloads/mxt295")
-
-
-def chirp_source():
-    for path in (
-        ROOT / "build_support/chirp-20261016",
-        ROOT / "build_support/chirp-20261023",
-        ROOT.parent / "chirp-20260626",
-    ):
-        if (path / "chirp/chirp_common.py").is_file():
-            return path
-    raise RuntimeError("CHIRP source was not found")
 
 
 SOURCE = chirp_source()

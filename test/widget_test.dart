@@ -12,6 +12,8 @@ import 'package:newchirp/services/file_save_warning_store.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 import 'package:newchirp/services/repeater_search_preferences_store.dart';
 import 'package:newchirp/services/update_checker.dart';
+
+import 'chirp_test_source.dart';
 import 'package:newchirp/services/update_installer.dart';
 
 var _layoutTest = 0;
@@ -1813,9 +1815,7 @@ void main() {
   ) async {
     await tester.pumpWidget(testApp());
     await tester.pumpAndSettle();
-    final source = Directory('build_support/chirp-20261023').existsSync()
-        ? 'build_support/chirp-20261023'
-        : '../chirp-20260626';
+    final source = requireChirpSourceForTests();
     final models = await tester.runAsync(
       () => RadioBridge(sourcePath: source).models(),
     );

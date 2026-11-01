@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/module_sandbox.dart';
 
+import 'chirp_test_source.dart';
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -197,8 +199,11 @@ void main() {
     'macOS launch plan uses sandbox-exec and a private environment',
     () async {
       if (!Platform.isMacOS) return;
-      final source = Directory('build_support/chirp-20261016');
-      expect(source.existsSync(), isTrue, reason: 'pinned local CHIRP tree');
+      final source = chirpSourceForTests();
+      if (source == null) {
+        markTestSkipped('Pinned CHIRP source is not downloaded');
+        return;
+      }
       final sandbox = ModuleSandbox();
       addTearDown(sandbox.dispose);
       final module = File('${Directory.systemTemp.path}/newchirp-plan-$pid.py');
@@ -209,7 +214,7 @@ void main() {
 
       final launch = await sandbox.prepare(
         python: 'python3',
-        chirpSource: source.absolute.path,
+        chirpSource: Directory(source).absolute.path,
         driverDir: null,
         wheel: module.absolute.path,
         bridge: module.absolute.path,
