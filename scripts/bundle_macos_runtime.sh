@@ -134,6 +134,7 @@ fi
 LIBUSB_SOURCE="${NEWCHIRP_LIBUSB_SOURCE:-}"
 if [[ -z "$LIBUSB_SOURCE" ]]; then
   for candidate in \
+    "$CACHE_DIR/libusb-1.0.30-universal/lib/libusb-1.0.dylib" \
     /opt/homebrew/lib/libusb-1.0.0.dylib \
     /usr/local/lib/libusb-1.0.0.dylib; do
     if [[ -f "$candidate" ]]; then
