@@ -128,6 +128,17 @@ if [[ -f "$CHIRP_ROOT/COPYING" ]]; then
   cp "$CHIRP_ROOT/COPYING" "$BUNDLE_DIR/chirp-COPYING.txt"
 fi
 
+LIBUSB_SOURCE="${NEWCHIRP_LIBUSB_SOURCE:-}"
+if [[ -z "$LIBUSB_SOURCE" ]]; then
+  LIBUSB_SOURCE="$(
+    ldconfig -p 2>/dev/null |
+      awk '/libusb-1\\.0\\.so\\.0 .*x86-64/ {print $NF; exit}'
+  )"
+fi
+if [[ -n "$LIBUSB_SOURCE" && -f "$LIBUSB_SOURCE" ]]; then
+  cp "$LIBUSB_SOURCE" "$BUNDLE_DIR/libusb-1.0.so.0"
+fi
+
 if [[ -f "$BUILD_SUPPORT_DIR/chirp-version.txt" ]]; then
   cp "$BUILD_SUPPORT_DIR/chirp-version.txt" "$BUNDLE_DIR/chirp-version.txt"
 else

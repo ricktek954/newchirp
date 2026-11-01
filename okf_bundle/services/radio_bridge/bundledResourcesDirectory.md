@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:24:29Z"
+timestamp: "2026-11-01T11:34:06Z"
 concept_id: services/radio_bridge/bundledResourcesDirectory
 language: dart
 ---
@@ -24,7 +24,7 @@ Directory_bundledResourcesDirectory_bundledResourcesDirectory
 ```
 
 ## Source
-Lines 986–986 in `services/radio_bridge.dart`
+Lines 988–988 in `services/radio_bridge.dart`
 
 ## Relationships
 

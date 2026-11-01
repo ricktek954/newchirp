@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:24:29Z"
+timestamp: "2026-11-01T11:34:06Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -72,4 +72,5 @@ language: dart
 | related | [_findChirpSource](/services/radio_bridge/findChirpSource.md) |
 | related | [_findNewChirpDrivers](/services/radio_bridge/findNewChirpDrivers.md) |
 | related | [_findScsiHelper](/services/radio_bridge/findScsiHelper.md) |
+| related | [_findLibusbRuntime](/services/radio_bridge/findLibusbRuntime.md) |
 | related | [RadioBridge](/services/radio_bridge/RadioBridge.md) |

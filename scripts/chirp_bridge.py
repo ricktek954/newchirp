@@ -1305,10 +1305,14 @@ def radio_for(
         from newchirp_mass_storage import ScsiPassthrough
 
         handle = ScsiPassthrough(port)
+    elif transport_kind == "usb_dfu":
+        from newchirp_usb_dfu import DfuTransport
+
+        handle = DfuTransport(port)
     else:
         handle = TracedSerial(open_serial(radio_class, port), RADIO_TRACE)
     try:
-        if detect_serial and transport_kind != "scsi_rap":
+        if detect_serial and transport_kind is None:
             try:
                 radio_class = radio_class.detect_from_serial(handle)
             except NotImplementedError:
@@ -1962,12 +1966,19 @@ def main():
             }))
             return
         if args.command == "list-interfaces":
+            interfaces = []
             try:
                 from newchirp_mass_storage import list_devices
 
-                interfaces = list_devices()
+                interfaces.extend(list_devices())
             except Exception:
-                interfaces = []
+                pass
+            try:
+                from newchirp_usb_dfu import list_devices as list_dfu_devices
+
+                interfaces.extend(list_dfu_devices())
+            except Exception:
+                pass
             print(json.dumps({"interfaces": interfaces}))
             return
         if args.command == "model-info":

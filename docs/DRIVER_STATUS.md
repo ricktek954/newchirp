@@ -20,6 +20,7 @@ Last updated: 2026-11-01
 | Radio | Driver | Transport | Read | Write | Settings | Status |
 | --- | --- | --- | --- | --- | --- | --- |
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
+| Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
@@ -31,6 +32,8 @@ Last updated: 2026-11-01
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| AnyTone AT-D578UVIII Plus | `drivers/newchirp_anytone_d578uviii.py` | D578UV CPS serial, 115200 8N1 | 4000 channels + zones | Yes, offline-tested | Hidden | Experimental |
+| TYT MD-UV380 | `drivers/newchirp_tyt_mduv380.py` | ST DfuSe USB 0483:DF11 + libusb | 3000 channels + zones | Yes, offline-tested | Hidden | Experimental |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | CHIRP TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
@@ -44,6 +47,69 @@ Last updated: 2026-11-01
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 
 ## Radio details
+
+### AnyTone AT-D578UVIII Plus
+
+- Maintained driver: `drivers/newchirp_anytone_d578uviii.py`
+- Protocol notes: `docs/ANYTONE_D578UVIII_PROTOCOL.md`
+- Transport: AnyTone D578UV serial protocol at 115200 8N1
+- Implemented: 4000 conventional channel records, RX/TX frequencies,
+  FM/NFM/DMR mode, power, names, CTCSS/DCS, color code, time slot, contact
+  index, RX-group index, receive-only, talkaround, and 250 ordered zones
+- Preserved but not edited: contacts, RX-group members, scan lists, optional
+  signalling, APRS, encryption, call lists, and radio-wide settings
+- Official CPS evidence: `AT-D578UV_PLUS_PC_SOFTWARE.zip`, CPS 1.21 executable
+  SHA-256
+  `47737a24a496efdfe4924419ad81ab91317abcf30618801b7a4b631801b6146b`
+- Implementation references: REA 6.5.0/Ghidra 12.1.4 analysis of the official
+  CPS, QDMR commit `fb9c96af53f646c0706fa360209b2e0e6cd79a08`, and public
+  D578UVIII Plus codeplug commit
+  `65ec2c0700fdaae027536aeaa90f92bf116386ee`
+- Driver SHA-256:
+  `9f2a05c5c2f33a7cf53678dcab1a385d41fea514fc4c483e1b407c40c9119c30`
+- Hardware validation: none
+- Next milestone: physical channel/zone edit, upload, read-back, and comparison
+  with the radio display and official CPS
+
+### Yaesu FTX-1
+
+- Maintained driver: `drivers/newchirp_yaesu_ftx1.py`
+- Protocol notes: `docs/YAESU_FTX1_PROTOCOL.md`
+- Transport: documented Yaesu CAT serial, auto-baud from 4800 through 115200
+- Implemented: 999 live memories, frequency, 12-character name, FM/NFM/AM/
+  USB/LSB/CW mode, standard repeater shift, CTCSS and DCS
+- Not represented: nonstandard repeater splits and optional signalling
+- Evidence: Yaesu FTX-1 CAT reference and public `cat-ftx1` commit
+  `e77b599dbb27eff5b4bd49c01a689989cfcc9495`
+- Driver SHA-256:
+  `cbc60dc846bdaa78c55b1967f7f7ca0cf755c565e31d0c84f23a8a4738b7d6e9`
+- Hardware validation: none
+- Next milestone: physical empty-memory behavior, one controlled memory write,
+  read-back, tone comparison, and repeater-shift verification
+
+### TYT MD-UV380
+
+- Maintained driver: `drivers/newchirp_tyt_mduv380.py`
+- USB transport: `scripts/newchirp_usb_dfu.py`
+- Protocol notes: `docs/TYT_MDUV380_PROTOCOL.md`
+- Transport: ST DfuSe USB `0483:DF11`, 1024-byte blocks, with libusb
+- Implemented: two complete codeplug segments, 3000 conventional channels,
+  frequencies, FM/NFM/DMR mode, power, UTF-16LE names, CTCSS/DCS, color code,
+  time slot, contact/group indexes, receive-only, talkaround, and 250 zones
+- Preserved but not edited: contacts, RX-group members, scan lists, optional
+  signalling, APRS, encryption, buttons, and radio-wide settings
+- Evidence: official MD-UV380 CPS 2.42 executable SHA-256
+  `62aa2101f75368ba61082fe3ceb999aa20573897f7b86a1ab616e47b390612bc`,
+  REA 6.5.0/Ghidra 12.1.4, editcp commit
+  `64fc5857ef0f33c1363a6e5d138964c9c21f663c`, and QDMR commit
+  `fb9c96af53f646c0706fa360209b2e0e6cd79a08`
+- Driver SHA-256:
+  `37626dfbf0a556cd9f02bc7712c5581e805e7e39d1debe6fda4e9b1d87121f81`
+- USB transport SHA-256:
+  `3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c`
+- Hardware validation: none
+- Next milestone: physical identify/read/edit/write/read-back test and
+  libusb-runtime validation in native platform release builds
 
 ### Yaesu FTM-150R/E/ASP
 

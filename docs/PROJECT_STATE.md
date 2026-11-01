@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-10-31
+Last updated: 2026-11-01
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -123,6 +123,13 @@ Linux 1.0.29 sizes:
 
 ## Recently completed
 
+- Added experimental offline-tested read/write drivers for Yaesu FTX-1,
+  TYT MD-UV380, and AnyTone AT-D578UVIII Plus. FTX-1 uses documented live CAT
+  memory commands; AnyTone uses its CPS 1.21 serial codeplug protocol; and
+  MD-UV380 uses a new libusb DfuSe transport. Complete images and zone records
+  are preserved, while contacts, scan lists, optional signalling, and
+  radio-wide settings remain untouched. All three require physical-radio
+  validation before release-status claims.
 - Added experimental read-only Kenwood TK-3401D support from KPG-171D
   reverse-engineering evidence. The driver identifies the radio, reads the
   addressed 64 KiB image, retains the full image even when layout inference
