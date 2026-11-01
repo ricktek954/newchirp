@@ -5,14 +5,15 @@
   "files": {
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1793404724661717754,
-      "hash": "4686b22a44c241decbb57f263a71b6dd0a1424eb525375387da5aa4da9eacffa",
+      "mtime_ns": 1793569318185419310,
+      "hash": "2601598292269d2a7553a28afb0aca562505cae29f434063e530e095a503f8b5",
       "concept_ids": [
         "models/channel_image_baseline/ChannelImageBaseline",
         "models/channel_image_baseline/ChannelImageMatch",
         "models/channel_image_baseline/ChannelLibrarySnapshot",
         "models/channel_image_baseline/ChannelLibraryStatsCache",
         "models/channel_image_baseline/channelImageStatusText",
+        "models/channel_image_baseline/channelLibraryWriteReady",
         "models/channel_image_baseline/channelListSignature",
         "models/channel_image_baseline/markDirty",
         "models/channel_image_baseline/read",
@@ -436,8 +437,8 @@
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1793017335032510969,
-      "hash": "4f46618ae2168ef10a8d93a47b5936a1e209a7cef65952f2c160b30aa844cc85",
+      "mtime_ns": 1793569318276516403,
+      "hash": "57cd150df865177f067ed9a3d2454c0d48731c63ccb2311322c24a63f0aaf9b4",
       "concept_ids": [
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
         "widgets/channel_library_image_bar/build",
@@ -529,8 +530,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793554274974843413,
-      "hash": "022c1392af49fcf700377a92c3604c54b6f64782a00c450458c8f7ac27bfd219",
+      "mtime_ns": 1793569332061890568,
+      "hash": "3c956342cdb4e9444dfcd1e3792db85e451f95102f8f81ed5f66a7b3ce02c8b1",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -3219,7 +3220,7 @@
       "type": "Module",
       "resource": "models/channel_image_baseline.dart",
       "render_hash": "stale",
-      "edge_hash": "08aafe9ff36918e57293434d42b1e59675d5fc95aa50c91cb6ed00ebb17fb757",
+      "edge_hash": "c663474cb95128f33a136aef939fb2575c77654bcb0b782c15f6ea1f6954f9cf",
       "enriched": false
     },
     "models/channel_image_baseline/ChannelImageBaseline": {
@@ -5325,7 +5326,15 @@
       "render_hash": "stale",
       "edge_hash": "4718950da3f2a62a3d37911f1748671264be8cf6dc21bf19d53e37af3c7c5d9f",
       "enriched": false
+    },
+    "models/channel_image_baseline/channelLibraryWriteReady": {
+      "concept_id": "models/channel_image_baseline/channelLibraryWriteReady",
+      "type": "Function",
+      "resource": "models/channel_image_baseline.dart",
+      "render_hash": "stale",
+      "edge_hash": "7e5196f48d46402f056a557ad53e7ebed49ef606e32e7e414cf925d3703d172b",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-01T17:31:16Z"
+  "generated_at": "2026-11-01T21:42:13Z"
 }

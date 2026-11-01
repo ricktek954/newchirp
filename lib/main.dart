@@ -3989,6 +3989,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           children: [
                             Expanded(
                               child: TextField(
+                                key: const ValueKey('channel-search-field'),
                                 controller: _searchController,
                                 onChanged: (value) =>
                                     setState(() => _query = value),
@@ -3997,6 +3998,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   hintText: compact
                                       ? 'Search'
                                       : 'Search name, frequency, or note',
+                                  suffixIcon: _searchController.text.isEmpty
+                                      ? null
+                                      : IconButton(
+                                          key: const ValueKey(
+                                            'channel-search-clear',
+                                          ),
+                                          tooltip: 'Clear channel search',
+                                          onPressed: () {
+                                            _searchController.clear();
+                                            setState(() => _query = '');
+                                          },
+                                          icon: const Icon(Icons.clear),
+                                        ),
                                 ),
                               ),
                             ),
@@ -4153,10 +4167,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           ChannelLibraryImageBar(
             match: imageMatch,
             canDiscard: imageMatch == ChannelImageMatch.differs && !_busy,
-            canWrite:
-                imageMatch == ChannelImageMatch.differs &&
-                !_busy &&
-                invalid == 0,
+            canWrite: channelLibraryWriteReady(
+              match: imageMatch,
+              busy: _busy,
+              invalidCount: invalid,
+              hasPort: _port != null,
+              hasRadioModel: _radioModelSelectedForTransfer,
+              hasRadioImage: _radioImage != null,
+            ),
             showConnect: _port == null,
             onDiscard: () => unawaited(_discardChannelLibraryChanges()),
             onWrite: () => unawaited(_uploadRadio()),
@@ -7489,13 +7507,26 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                           ),
                           const SizedBox(height: 12),
                           TextField(
+                            key: const ValueKey('repeater-search-filter'),
                             controller: _filterController,
                             enabled: !_loading,
+                            onChanged: (_) => setState(() {}),
                             onSubmitted: (_) => _search(),
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               labelText:
                                   'City, county, callsign, landmark, or notes',
-                              prefixIcon: Icon(Icons.search),
+                              prefixIcon: const Icon(Icons.search),
+                              suffixIcon: _filterController.text.isEmpty
+                                  ? null
+                                  : IconButton(
+                                      key: const ValueKey(
+                                        'repeater-search-clear',
+                                      ),
+                                      tooltip: 'Clear repeater search',
+                                      onPressed: () =>
+                                          setState(_filterController.clear),
+                                      icon: const Icon(Icons.clear),
+                                    ),
                             ),
                           ),
                           const SizedBox(height: 12),
