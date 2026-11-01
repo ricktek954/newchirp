@@ -13,14 +13,15 @@ release requirements.
   transfer safety guards), adds one-click clear controls to channel and
   repeater searches, and fixes Icom ID-50 empty memory handling. It keeps
   the `1.0.27`-`1.0.33` fixes.
-- The 2026-10-31 current-release retest sweep replied to all 31 unresolved
-  bug reports that predated the live Windows `1.0.30` or Linux/macOS `1.0.29`
-  releases. Each original was marked read and each `Sent` copy was verified
-  with `\Seen`. The unread report queue is now five current-build reports:
-  one DM-32UV firmware `.046` image-decoding failure needing the saved image,
-  three UV-5R Mini no-response reports needing cable and OEM-CPS details, and
-  one FT-70D connection report needing confirmation of the programming cable
-  and port.
+- The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
+  UID 313. The fixes are committed as `9ab7e522`; both replies were verified
+  in `Sent`, and both source messages were marked `\Seen`.
+- The unread report queue contains seven Windows reports from 2026-11-01:
+  UIDs 305 and 306 are clone-read no-response cases; 308 is an RT-950 Pro
+  nicFW950 timeout; 311 is an unavailable COM port; 314 is an unexpected
+  UV-5RM Plus response; 316 needs the saved QYT KT8900D image; and 319 is an
+  incomplete Retevis MA1 read. These remain unread for native Windows/hardware
+  follow-up.
 - The Linux `1.0.32` DEB, RPM, AppImage, and Pacman artifacts are live.
   This hotfix caps the Linux runner and plugin builds at the GLib 2.74 API
   level so Debian 12/MX Linux systems do not fail at startup with missing
