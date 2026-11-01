@@ -251,6 +251,62 @@ void main() {
     );
   });
 
+  test('extra fields are read by name', () {
+    final row = channelAt(1);
+    row.extras.add(
+      ChannelExtraField(
+        name: 'busy',
+        label: 'Busy lock',
+        kind: 'bool',
+        value: true,
+      ),
+    );
+    row.extras.add(
+      ChannelExtraField(
+        name: 'busy',
+        label: 'Later duplicate',
+        kind: 'bool',
+        value: false,
+      ),
+    );
+    row.extras.add(
+      ChannelExtraField(
+        name: 'note',
+        label: 'Note',
+        kind: 'string',
+        value: 'Hill',
+      ),
+    );
+
+    expect(row.extraFieldText('busy'), 'On');
+    expect(row.extraFieldText('note'), 'Hill');
+    expect(row.extraFieldText('missing'), '—');
+
+    row.extras.first.value = false;
+    expect(row.extraFieldText('busy'), 'Off');
+
+    row.extras.add(
+      ChannelExtraField(
+        name: 'blank',
+        label: 'Blank',
+        kind: 'string',
+        value: '',
+      ),
+    );
+    expect(row.extraFieldText('blank'), isEmpty);
+    expect(row.extraFieldText('note'), 'Hill');
+
+    row.extras.add(
+      ChannelExtraField(
+        name: 'empty',
+        label: 'Empty',
+        kind: 'string',
+        value: null,
+      ),
+    );
+    expect(row.extraFieldText('empty'), '—');
+  });
+
   test('channel validation uses the selected radio memory bounds', () {
     expect(
       channelAt(200).validate(minimumLocation: 1, maximumLocation: 199),

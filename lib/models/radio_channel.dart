@@ -494,6 +494,41 @@ class RadioChannel {
   String comment;
   List<ChannelExtraField> extras;
 
+  Map<String, ChannelExtraField>? _extrasByName;
+  List<ChannelExtraField>? _indexedExtras;
+  int _extrasByNameLength = -1;
+
+  /// The first extra field with [name], or null when this channel has none.
+  ///
+  /// The lookup is remembered until the extras list is replaced or its length
+  /// changes. A later edit of that field's value is still visible, because the
+  /// remembered entry points at the field itself. The first field with a
+  /// repeated name wins.
+  ChannelExtraField? extraByName(String name) {
+    final source = extras;
+    if (_extrasByName == null ||
+        _extrasByNameLength != source.length ||
+        !identical(_indexedExtras, source)) {
+      final indexed = <String, ChannelExtraField>{};
+      for (final field in source) {
+        indexed.putIfAbsent(field.name, () => field);
+      }
+      _extrasByName = indexed;
+      _extrasByNameLength = source.length;
+      _indexedExtras = source;
+    }
+    return _extrasByName![name];
+  }
+
+  /// Grid text for the extra field named [name].
+  String extraFieldText(String name) {
+    final field = extraByName(name);
+    if (field == null) return '—';
+    final value = field.value;
+    if (value is bool) return value ? 'On' : 'Off';
+    return value?.toString() ?? '—';
+  }
+
   double? get transmitFrequency {
     if (duplex == 'off') return null;
     if (duplex == 'split') return offset;
