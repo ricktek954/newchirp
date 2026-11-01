@@ -793,10 +793,18 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Open channel file'), findsWidgets);
-    expect(find.text('Load CHIRP driver module…'), findsOneWidget);
-    final openLeft = tester.getTopLeft(find.text('Open channel file').first);
-    final loadLeft = tester.getTopLeft(find.text('Load CHIRP driver module…'));
-    expect(loadLeft.dx, greaterThan(openLeft.dx));
+    // Windows hides the module action until a sandbox backend is available.
+    expect(
+      find.text('Load CHIRP driver module…'),
+      Platform.isWindows ? findsNothing : findsOneWidget,
+    );
+    if (!Platform.isWindows) {
+      final openLeft = tester.getTopLeft(find.text('Open channel file').first);
+      final loadLeft = tester.getTopLeft(
+        find.text('Load CHIRP driver module…'),
+      );
+      expect(loadLeft.dx, greaterThan(openLeft.dx));
+    }
 
     await tester.tap(find.text('Help'));
     await tester.pumpAndSettle();

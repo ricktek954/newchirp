@@ -2799,7 +2799,22 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final invalidChannels = _activeChannels
         .where((channel) => _channelIssues(channel).isNotEmpty)
         .toList();
-    final compatibleCount = _activeChannels.length - invalidChannels.length;
+    final invalidLocations = invalidChannels
+        .map((channel) => channel.location)
+        .toSet();
+    final channelsToWrite = _activeChannels
+        .where((channel) => !invalidLocations.contains(channel.location))
+        .toList();
+    final skippedByValidation = [
+      for (final channel in invalidChannels)
+        <String, dynamic>{
+          'location': channel.location,
+          'name': channel.name,
+          'reason': _channelIssues(channel).join(' '),
+          'skipped': true,
+        },
+    ];
+    final compatibleCount = channelsToWrite.length;
     final issues = _activeChannels
         .expand(
           (channel) => _channelIssues(channel).map(
@@ -2846,7 +2861,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
     final uppercasesNames =
         _capabilities?.uppercaseNames == true &&
-        _activeChannels.any(
+        channelsToWrite.any(
           (channel) => channel.name != channel.name.toUpperCase(),
         );
     final confirmed = await showDialog<bool>(
@@ -2891,8 +2906,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         model: _model!,
         port: _port!,
         imagePath: _radioImage!,
-        channels: _activeChannels,
-        cleared: _clearedLocations.toList(),
+        // The bridge can normalize names before validating them. Never send
+        // rows the user agreed to skip, even if normalization could fix them.
+        channels: channelsToWrite,
+        cleared: _clearedLocations
+            .where((location) => !invalidLocations.contains(location))
+            .toList(),
         mappings: mappingsChanged
             ? _radioMappings
                   .map((model) => model.retainingChannels(activeLocations))
@@ -2901,7 +2920,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         zone: _selectedZone,
         onProgress: _reportTransferProgress,
       );
-      changes = result.adjustments;
+      changes = [...skippedByValidation, ...result.adjustments];
       final skippedChannels = changes.any((entry) => entry['skipped'] == true);
       final writtenImage = skippedChannels
           ? await _bridge.readImage(_radioImage!, zone: _selectedZone)
