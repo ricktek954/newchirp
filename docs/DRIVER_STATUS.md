@@ -22,6 +22,7 @@ Last updated: 2026-10-31
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
+| Radtel RT-950 / RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes, offline-tested | Changed blocks, experimental | Global settings and group names | Experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -101,6 +102,38 @@ Last updated: 2026-10-31
 - Next milestone: confirm the reported RT-950 model code, classify any
   variant that does not answer `BT-9000`, then capture a complete successful
   read and export a test image
+
+### Radtel RT-950 / RT-950 Pro, Bajeton BJ-9000 with nicFW950
+
+- Maintained driver: `drivers/newchirp_nicfw950.py`
+- Protocol and test procedure: `docs/NICFW950_PROTOCOL.md`
+- Separate catalog entries: `Radtel_RT-950_nicFW950`,
+  `Radtel_RT-950_Pro_nicFW950`, `Bajeton_BJ-9000_nicFW950`
+- Evidence: user-supplied `nicfw_950_v4.py`, SHA-256
+  `bb20f6252dba38bfa604f2ba0c0e465f0d98c67b73d1cfdc5071576dfdcc1f45`
+- Driver SHA-256:
+  `2925dfc70188a62ecf7e1c1e9ab07d808a89c05e950d42e169785619e8e4b246`
+- Transport: 38400 baud negotiation to 460800 baud, 8N1, 128-byte blocks,
+  address echoes and additive checksums; no stock CPS handshake or flow control
+- Implemented: 999 channels, 30-character ASCII names, RX/TX frequencies,
+  duplex/TX inhibit, seven power labels, FM/NFM/AM and native DSB/automatic
+  extras, CTCSS/DCS with octal DCS storage, four A-Z groups in Comment,
+  channel extras, global settings and 26 editable group names
+- Read/write policy: read `0x50200..0x5FCFF`; only changed 128-byte blocks
+  are written. Compare all affected blocks with the radio before the first
+  write. Preserve reserved/VFO records, calibration, power-band data and gaps.
+  Require commit ACK before requesting reboot. No wxPython UI dependency.
+- Image baseline: rebuilt from saved CHIRP images in each bridge process so
+  channel uploads and settings-only uploads share the same guarded behavior
+- Offline validation: 18 driver tests, including real bridge JSON channel and
+  settings upload paths, plus 7 stock RT-950/catalog regression tests passed.
+  Two failures in the general upload suite were reproduced on unmodified
+  upstream code (Windows temporary-file sharing and a BCL documentation assertion).
+- Hardware validation: none. The user has not tested the supplied CHIRP
+  reference either; no firmware-version compatibility claim is made yet.
+- Next milestone: download from the user's radio, record its exact nicFW950
+  version, retain the original image, edit one channel name, upload, reboot
+  and download again to verify the change and preserved bytes before a PR.
 
 ### Connect Systems CS750
 
