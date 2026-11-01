@@ -8,9 +8,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T12:22:20Z"
+timestamp: "2026-11-01T13:03:43Z"
 concept_id: main/openDownloadPage
 language: dart
 ---
@@ -30,7 +30,7 @@ Future_openDownloadPage_openDownloadPage
 Opens [url] in the browser and keeps the link reachable if that fails.
 
 ## Source
-Lines 3452–3452 in `main.dart`
+Lines 3455–3455 in `main.dart`
 
 ## Relationships
 

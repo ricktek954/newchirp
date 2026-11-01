@@ -213,8 +213,8 @@
     },
     "services/module_sandbox.dart": {
       "path": "services/module_sandbox.dart",
-      "mtime_ns": 1793017335032207764,
-      "hash": "abf07dfa5b65de0c46cb0332ee1c6a18ab3c22b062c361abe643301a4a8ea9d9",
+      "mtime_ns": 1793538219364377942,
+      "hash": "aae98b91ca6084a15f5e04a7d8dbd23948600f84f063c8befd4794f8820afd22",
       "concept_ids": [
         "services/module_sandbox/ModuleSandbox",
         "services/module_sandbox/ModuleSandboxException",
@@ -225,6 +225,7 @@
         "services/module_sandbox/add",
         "services/module_sandbox/addRoot",
         "services/module_sandbox/bubblewrapParents",
+        "services/module_sandbox/canLoadChirpModules",
         "services/module_sandbox/copyModule",
         "services/module_sandbox/currentSandboxPlatform",
         "services/module_sandbox/dispose",
@@ -528,8 +529,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793535740767810505,
-      "hash": "c479cb5c8bdac6cbea40766ab2ac8e09c6cbfe21ab920c75b8f6e14de992f04d",
+      "mtime_ns": 1793538223035467350,
+      "hash": "6a684aa7b73b33bd23550dc3ffd81349c601ff90c522463674f576f3af25b679",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -3266,7 +3267,7 @@
       "type": "Module",
       "resource": "services/module_sandbox.dart",
       "render_hash": "stale",
-      "edge_hash": "49d5267aa8187d963bf3375b288693608d6756f4479146f795797454046778df",
+      "edge_hash": "df6e61383155caaf90259aec6482bd5e1d63784033330a52f938f87e2b37e37e",
       "enriched": false
     },
     "services/module_sandbox/SandboxPlatform": {
@@ -5316,7 +5317,15 @@
       "render_hash": "stale",
       "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
       "enriched": false
+    },
+    "services/module_sandbox/canLoadChirpModules": {
+      "concept_id": "services/module_sandbox/canLoadChirpModules",
+      "type": "Function",
+      "resource": "services/module_sandbox.dart",
+      "render_hash": "stale",
+      "edge_hash": "4718950da3f2a62a3d37911f1748671264be8cf6dc21bf19d53e37af3c7c5d9f",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-01T12:22:22Z"
+  "generated_at": "2026-11-01T13:03:44Z"
 }

@@ -105,6 +105,10 @@ String? moduleSandboxRefusal(SandboxPlatform platform) {
   }
 }
 
+bool canLoadChirpModules(SandboxPlatform platform) {
+  return moduleSandboxRefusal(platform) == null;
+}
+
 Future<String?> moduleSandboxBlocker() async {
   final platform = currentSandboxPlatform();
   final refusal = moduleSandboxRefusal(platform);

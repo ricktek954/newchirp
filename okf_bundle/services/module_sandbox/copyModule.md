@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:module_sandbox.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:15:08Z"
+timestamp: "2026-11-01T13:03:39Z"
 concept_id: services/module_sandbox/copyModule
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_copyModule_copyModule
 ```
 
 ## Source
-Lines 586–586 in `services/module_sandbox.dart`
+Lines 590–590 in `services/module_sandbox.dart`
 
 ## Relationships
 

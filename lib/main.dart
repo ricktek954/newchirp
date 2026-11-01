@@ -3025,6 +3025,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             busy: _busy,
                             status: _status,
                             chirpModuleName: _chirpModuleName,
+                            moduleLoadingAvailable: canLoadChirpModules(
+                              currentSandboxPlatform(),
+                            ),
                             checkingForUpdates: _checkingForUpdates,
                             onCheckForUpdates: () => _checkForUpdates(),
                             onLoadChirpModule: _loadChirpModule,
@@ -6124,6 +6127,7 @@ class _TopBar extends StatelessWidget {
     required this.busy,
     required this.status,
     required this.chirpModuleName,
+    required this.moduleLoadingAvailable,
     required this.checkingForUpdates,
     required this.onCheckForUpdates,
     required this.onLoadChirpModule,
@@ -6146,6 +6150,7 @@ class _TopBar extends StatelessWidget {
   final bool busy;
   final String status;
   final String? chirpModuleName;
+  final bool moduleLoadingAvailable;
   final bool checkingForUpdates;
   final VoidCallback onCheckForUpdates;
   final VoidCallback onLoadChirpModule;
@@ -6316,42 +6321,43 @@ class _TopBar extends StatelessWidget {
                   icon: const Icon(Icons.folder_open_outlined),
                   label: const Text('Open channel file'),
                 ),
-              if (iconOnly)
-                IconButton(
-                  tooltip: chirpModuleName == null
-                      ? 'Load CHIRP driver module…'
-                      : 'Unload CHIRP module',
-                  onPressed: busy
-                      ? null
-                      : chirpModuleName == null
-                      ? onLoadChirpModule
-                      : onUnloadChirpModule,
-                  icon: Icon(
-                    chirpModuleName == null
-                        ? Icons.extension_outlined
-                        : Icons.extension_off_outlined,
+              if (moduleLoadingAvailable || chirpModuleName != null)
+                if (iconOnly)
+                  IconButton(
+                    tooltip: chirpModuleName == null
+                        ? 'Load CHIRP driver module…'
+                        : 'Unload CHIRP module',
+                    onPressed: busy
+                        ? null
+                        : chirpModuleName == null
+                        ? onLoadChirpModule
+                        : onUnloadChirpModule,
+                    icon: Icon(
+                      chirpModuleName == null
+                          ? Icons.extension_outlined
+                          : Icons.extension_off_outlined,
+                    ),
+                  )
+                else
+                  TextButton.icon(
+                    onPressed: busy
+                        ? null
+                        : chirpModuleName == null
+                        ? onLoadChirpModule
+                        : onUnloadChirpModule,
+                    icon: Icon(
+                      chirpModuleName == null
+                          ? Icons.extension_outlined
+                          : Icons.extension_off_outlined,
+                    ),
+                    label: Text(
+                      chirpModuleName != null
+                          ? 'Unload CHIRP module'
+                          : compactLabels
+                          ? 'Load driver…'
+                          : 'Load CHIRP driver module…',
+                    ),
                   ),
-                )
-              else
-                TextButton.icon(
-                  onPressed: busy
-                      ? null
-                      : chirpModuleName == null
-                      ? onLoadChirpModule
-                      : onUnloadChirpModule,
-                  icon: Icon(
-                    chirpModuleName == null
-                        ? Icons.extension_outlined
-                        : Icons.extension_off_outlined,
-                  ),
-                  label: Text(
-                    chirpModuleName != null
-                        ? 'Unload CHIRP module'
-                        : compactLabels
-                        ? 'Load driver…'
-                        : 'Load CHIRP driver module…',
-                  ),
-                ),
               MenuAnchor(
                 builder: (context, controller, child) {
                   void toggle() => controller.isOpen
