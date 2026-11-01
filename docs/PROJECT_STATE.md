@@ -26,10 +26,10 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.29` release is built, signed, notarized, stapled, uploaded,
-  and live. It carries forward saved-radio restoration, repeater sorting, the
-  ID-50 post-download image recovery diagnostics, and clearer missing-COM-port
-  guidance.
+- The macOS `1.0.30` release is built, signed, notarized, stapled, uploaded,
+  and live. It adds experimental Yaesu FTX-1, TYT MD-UV380, and AnyTone
+  AT-D578UVIII Plus drivers. The universal DMG contains a universal libusb
+  runtime for the MD-UV380 DfuSe transport.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -50,7 +50,7 @@ release requirements.
 
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- macOS `1.0.29` artifact source commit: `de14ab6e`
+- macOS `1.0.30` artifact source commit: `262b5e60`
 - Open pull requests: none
 - Checked-out source version: `1.0.31+31`
 - macOS builds are pinned to CocoaPods with
@@ -66,20 +66,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.29 |
+| macOS | 1.0.30 |
 | Windows | 1.0.31 |
 | Linux | 1.0.29 |
 | Legacy shared manifest version | 1.0.29 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.29.dmg`
-- Version/build: `1.0.29` / `29`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.30.dmg`
+- Version/build: `1.0.30` / `30`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `2eb718fd3ffc02ac212fc261ee50eda6af86b741724971401b3dd998aa321a3d`
-- Size: `82,117,269` bytes
-- Notarization submission: `ba8ac2b9-6e32-4d43-a8a4-2808d45b9d99`
+  `aadcbed804fb2ddfd1e58eec170db3a622718d843a20c7d2f2e88bb837a01a54`
+- Size: `82,461,199` bytes
+- Notarization submission: `ff724cda-5fa6-4267-af71-8e0fcd0ac353`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -123,6 +123,11 @@ Linux 1.0.29 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.30` as a universal signed, notarized, stapled DMG.
+  Verified the app/build version, new experimental drivers, arm64 and x86_64
+  Python runtimes, universal libusb loading under both architectures, strict
+  code signatures, Gatekeeper acceptance, notarization ticket, server
+  checksum, public download, and live platform manifest.
 - Added experimental offline-tested read/write drivers for Yaesu FTX-1,
   TYT MD-UV380, and AnyTone AT-D578UVIII Plus. FTX-1 uses documented live CAT
   memory commands; AnyTone uses its CPS 1.21 serial codeplug protocol; and
@@ -243,6 +248,27 @@ Linux 1.0.29 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.30 verification status
+
+Full verification before the macOS `1.0.30` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 176 tests passed
+- Python test discovery: 186 tests passed, 2 fixture-dependent tests skipped
+- Bridge upload/settings suite: all 46 tests passed
+- Web Programmer suite: all 84 tests passed
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.30` / `30`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb `1.0.30` bundled and loaded successfully under both
+  architectures
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Notarization submission: `ff724cda-5fa6-4267-af71-8e0fcd0ac353`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.30`
 
 ## macOS 1.0.29 verification status
 
