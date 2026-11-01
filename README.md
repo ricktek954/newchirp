@@ -216,6 +216,8 @@ For a Radtel RT-950 Pro or Bajeton BJ-9000 already running nicsure
 nicFW950, select the model whose name ends in **nicFW950**. The stock RT-950
 entry uses a different protocol. This maintained driver supports the reference
 999-channel layout, channel extras, global settings and group names.
+Use the Groups channel extra for A–Z memberships. Free-form imported comments
+are kept in saved images and CSV exports; they are not stored in the radio.
 The standard RT-950 (non-Pro) is not included in nicFW950 support.
 
 Reads, channel writes, a global setting and a group-name edit were verified

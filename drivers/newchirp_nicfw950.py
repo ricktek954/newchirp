@@ -541,6 +541,14 @@ def _choice(name, choices, value):
     )
 
 
+def _group_letters(value):
+    """Recognize legacy group comments without mistaking imported notes for groups."""
+    value = (value or "").strip().upper()
+    if len(value) <= 4 and all("A" <= letter <= "Z" for letter in value):
+        return value
+    return None
+
+
 @directory.register
 class NicFW950Radio(
     chirp_common.CloneModeRadio, chirp_common.ExperimentalRadio
@@ -564,8 +572,9 @@ class NicFW950Radio(
             "For RT-950 Pro and Bajeton BJ-9000 radios already "
             "running nicsure nicFW950 with the 999-channel layout. "
             "USB serial uses 38400 baud, 8N1, then negotiates 460800 baud. "
-            "Groups are entered as up to four A-Z letters in Comment; "
-            "group names are available in radio settings."
+            "Use Groups for up to four A-Z group letters. Comment also "
+            "accepts legacy group letters; longer notes are kept in saved "
+            "images and CSV files. Group names are available in radio settings."
         )
         prompts.pre_download = (
             "Turn on the radio normally with nicFW950 installed and connect "
@@ -656,9 +665,15 @@ class NicFW950Radio(
             )
         if len(memory.name.encode("ascii")) > 30:
             raise errors.RadioError("Channel name exceeds 30 characters")
-        comment = (memory.comment or "").strip().upper()
-        if len(comment) > 4 or any(c < "A" or c > "Z" for c in comment):
-            raise errors.RadioError("Groups must be 0-4 letters from A to Z")
+        comment = _group_letters(memory.comment)
+        for setting in memory.extra or []:
+            if (
+                setting.get_name() == "groups"
+                and _group_letters(str(setting.value)) is None
+            ):
+                raise errors.RadioError(
+                    "Groups must be 0-4 letters from A to Z"
+                )
         for tone in chirp_common.split_tone_encode(memory):
             _tone_encode(*tone)
         return tx, comment
@@ -939,6 +954,20 @@ class NicFW950Radio(
     def get_raw_memory(self, number):
         return repr(self._memobj.channels[number - 1])
 
+    def set_memory_extra(self, memory):
+        # nicFW has group bytes, not free-form comment storage. Preserve
+        # imported notes in the image metadata, outside the flash payload.
+        notes = self._metadata.setdefault("nicfw_notes", {})
+        key = str(memory.number)
+        if not memory.empty and _group_letters(memory.comment) is None:
+            notes[key] = memory.comment
+        else:
+            notes.pop(key, None)
+
+    def erase_memory_extra(self, number):
+        super().erase_memory_extra(number)
+        self._metadata.get("nicfw_notes", {}).pop(str(number), None)
+
     def get_memory(self, number):
         if not 1 <= number <= CHANNELS:
             raise errors.InvalidMemoryLocation("Channel outside 1-999")
@@ -979,12 +1008,25 @@ class NicFW950Radio(
         chirp_common.split_tone_decode(mem, tx_tone, rx_tone)
         # Each byte contains 0 (unused) or 1..26 (groups A..Z).
         group_values = [(int(raw.groups) >> (8 * i)) & 0xFF for i in range(4)]
-        mem.comment = "".join(
+        groups = "".join(
             chr(ord("A") + value - 1)
             for value in group_values
             if 1 <= value <= 26
         )
+        mem.comment = self._metadata.get("nicfw_notes", {}).get(
+            str(number), groups
+        )
         extra = RadioSettingGroup("extra", "nicFW Settings")
+        group_setting = RadioSetting(
+            "groups",
+            "Groups (A-Z)",
+            RadioSettingValueString(0, 4, groups, autopad=False),
+        )
+        group_setting.set_doc(
+            "Up to four A-Z group letters stored in the radio. "
+            "Longer Comment notes are kept in the saved image/CSV only."
+        )
+        extra.append(group_setting)
         extra.append(_choice("modulation", MODULATIONS, min(modulation, 3)))
         extra.append(_choice("bandwidth", BANDWIDTHS, min(bandwidth, 2)))
         extra.append(
@@ -1045,6 +1087,7 @@ class NicFW950Radio(
         if mem.empty:
             # Invalidate only; leave other bytes unchanged.
             raw.magic = 0
+            self.erase_memory_extra(mem.number)
             return
         self._validate_channel(mem)
         saved = raw.get_raw()
@@ -1053,6 +1096,7 @@ class NicFW950Radio(
         except Exception:
             raw.set_raw(saved)
             raise
+        self.set_memory_extra(mem)
 
     def _set_channel(self, mem, raw):
         was_valid = int(raw.magic) == MAGIC
@@ -1140,8 +1184,20 @@ class NicFW950Radio(
         for key in ("busyLock", "reversed", "permanent"):
             if key in settings:
                 setattr(raw, key, int(bool(settings[key])))
-        # The Comment column is the canonical nicFW group list for CSV compatibility.
-        if previous is None or comment != previous.comment:
+        # Explicit group edits take precedence; legacy A-Z comments remain
+        # compatible with nicFW CSV files. Free-form notes do not alter groups.
+        if "groups" in settings:
+            comment = _group_letters(str(settings["groups"]))
+        elif (
+            previous is not None
+            and _group_letters(previous.comment) is None
+            and not (mem.comment or "").strip()
+        ):
+            # Removing a saved note must not remove the radio's group list.
+            comment = None
+        if comment is not None and (
+            previous is None or comment != previous.comment
+        ):
             raw.groups = sum(
                 (ord(letter) - ord("A") + 1) << (8 * i)
                 for i, letter in enumerate(comment)
