@@ -278,7 +278,7 @@ void main() {
     expect(identical(unknownModes, analogOnly), isFalse);
   });
 
-  testWidgets('channel image bar enables actions only when channels differ', (
+  testWidgets('channel image bar reflects the supplied action state', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -333,8 +333,43 @@ void main() {
     );
     expect(find.text('Unsaved radio changes'), findsOneWidget);
     await tester.tap(find.text('Discard changes'));
-    await tester.tap(find.text('Write settings to radio'));
+    await tester.tap(find.text('Write channels to radio'));
     expect(discarded, isTrue);
     expect(wrote, isTrue);
+  });
+
+  test('channel writes are ready for matching and changed radio images', () {
+    bool ready(
+      ChannelImageMatch match, {
+      bool busy = false,
+      int invalidCount = 0,
+      bool hasPort = true,
+      bool hasRadioModel = true,
+      bool hasRadioImage = true,
+    }) => channelLibraryWriteReady(
+      match: match,
+      busy: busy,
+      invalidCount: invalidCount,
+      hasPort: hasPort,
+      hasRadioModel: hasRadioModel,
+      hasRadioImage: hasRadioImage,
+    );
+
+    expect(ready(ChannelImageMatch.matchesRadio), isTrue);
+    expect(ready(ChannelImageMatch.matchesImage), isTrue);
+    expect(ready(ChannelImageMatch.differs), isTrue);
+    expect(ready(ChannelImageMatch.noImage), isFalse);
+    expect(ready(ChannelImageMatch.notLoaded), isFalse);
+    expect(ready(ChannelImageMatch.matchesRadio, busy: true), isFalse);
+    expect(ready(ChannelImageMatch.matchesRadio, invalidCount: 1), isFalse);
+    expect(ready(ChannelImageMatch.matchesRadio, hasPort: false), isFalse);
+    expect(
+      ready(ChannelImageMatch.matchesRadio, hasRadioModel: false),
+      isFalse,
+    );
+    expect(
+      ready(ChannelImageMatch.matchesRadio, hasRadioImage: false),
+      isFalse,
+    );
   });
 }

@@ -11,6 +11,7 @@
 - [channelImageMatch](channelImageMatch.md)
 - [channelImageStatusText](channelImageStatusText.md)
 - [channelLibrarySnapshot](channelLibrarySnapshot.md)
+- [channelLibraryWriteReady](channelLibraryWriteReady.md)
 - [channelListSignature](channelListSignature.md)
 - [markDirty](markDirty.md)
 - [read](read.md)

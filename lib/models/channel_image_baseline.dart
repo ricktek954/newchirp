@@ -83,6 +83,28 @@ String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.differs => 'Unsaved radio changes',
 };
 
+bool channelLibraryWriteReady({
+  required ChannelImageMatch match,
+  required bool busy,
+  required int invalidCount,
+  required bool hasPort,
+  required bool hasRadioModel,
+  required bool hasRadioImage,
+}) {
+  final imageReady = switch (match) {
+    ChannelImageMatch.matchesRadio ||
+    ChannelImageMatch.matchesImage ||
+    ChannelImageMatch.differs => true,
+    ChannelImageMatch.noImage || ChannelImageMatch.notLoaded => false,
+  };
+  return !busy &&
+      invalidCount == 0 &&
+      hasPort &&
+      hasRadioModel &&
+      hasRadioImage &&
+      imageReady;
+}
+
 /// Channel counts and the radio-image match for one library refresh.
 class ChannelLibrarySnapshot {
   const ChannelLibrarySnapshot({

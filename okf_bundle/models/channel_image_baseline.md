@@ -10,7 +10,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-11-01T21:41:58Z"
 concept_id: models/channel_image_baseline
 language: dart
 ---
@@ -28,6 +28,7 @@ language: dart
 | related | [channelListSignature](/models/channel_image_baseline/channelListSignature.md) |
 | related | [channelImageMatch](/models/channel_image_baseline/channelImageMatch.md) |
 | related | [channelImageStatusText](/models/channel_image_baseline/channelImageStatusText.md) |
+| related | [channelLibraryWriteReady](/models/channel_image_baseline/channelLibraryWriteReady.md) |
 | related | [channelLibrarySnapshot](/models/channel_image_baseline/channelLibrarySnapshot.md) |
 | related | [markDirty](/models/channel_image_baseline/markDirty.md) |
 | related | [read](/models/channel_image_baseline/read.md) |

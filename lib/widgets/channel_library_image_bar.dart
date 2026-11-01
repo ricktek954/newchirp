@@ -59,7 +59,7 @@ class ChannelLibraryImageBar extends StatelessWidget {
                 key: const Key('channel-library-write'),
                 onPressed: canWrite ? onWrite : null,
                 icon: const Icon(Icons.save_outlined),
-                label: const Text('Write settings to radio'),
+                label: const Text('Write channels to radio'),
               ),
           ],
         ),

@@ -323,6 +323,14 @@ void main() {
     );
     await tester.tap(find.text('Open repeater search'));
     await tester.pumpAndSettle();
+    final searchFilter = find.byKey(const ValueKey('repeater-search-filter'));
+    await tester.enterText(searchFilter, 'Buffalo');
+    await tester.pump();
+    expect(find.byKey(const ValueKey('repeater-search-clear')), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('repeater-search-clear')));
+    await tester.pump();
+    expect(tester.widget<TextField>(searchFilter).controller?.text, isEmpty);
+
     await tester.tap(find.text('Search'));
     await tester.pumpAndSettle();
 
@@ -849,7 +857,30 @@ void main() {
       isNull,
     );
     expect(find.text('Connect radio to write'), findsOneWidget);
-    expect(find.text('Write settings to radio'), findsNothing);
+    expect(find.text('Write channels to radio'), findsNothing);
+  });
+
+  testWidgets('channel search has a one-click clear control', (tester) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    final search = find.byKey(const ValueKey('channel-search-field'));
+    await tester.enterText(search, 'GMRS 1');
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('channel-search-clear')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('channel-search-clear')));
+    await tester.pumpAndSettle();
+
+    expect(tester.widget<TextField>(search).controller?.text, isEmpty);
+    expect(find.text('GMRS 1'), findsOneWidget);
+    expect(find.byKey(const ValueKey('channel-search-clear')), findsNothing);
   });
 
   testWidgets('opens the GMRS starter only when selected', (tester) async {

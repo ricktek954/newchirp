@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T17:31:14Z"
+timestamp: "2026-11-01T21:42:12Z"
 concept_id: main/toggle
 language: dart
 ---
@@ -23,7 +23,7 @@ voidtoggle()
 ```
 
 ## Source
-Lines 6399–6399 in `main.dart`
+Lines 6417–6417 in `main.dart`
 
 ## Relationships
 
