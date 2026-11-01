@@ -124,6 +124,9 @@ Future<void> main() async {
       const ['pySerial'],
       await rootBundle.loadString('assets/licenses/PYSERIAL-BSD-3-CLAUSE.txt'),
     );
+    yield LicenseEntryWithLineBreaks(const [
+      'libusb',
+    ], await rootBundle.loadString('assets/licenses/LIBUSB-LGPL-2.1.txt'));
   });
   if (Platform.isLinux) {
     runApp(NewChirpApp(diagnosticLog: diagnosticLog));
@@ -3614,7 +3617,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             ),
                             const SizedBox(height: 8),
                             const Text(
-                              'The complete CHIRP GPL text, the pySerial BSD notice, and licenses for Flutter dependencies are included with this application.',
+                              'The complete CHIRP GPL text and pySerial, libusb, and Flutter dependency licenses are included with this application.',
                             ),
                             const SizedBox(height: 16),
                             OutlinedButton.icon(

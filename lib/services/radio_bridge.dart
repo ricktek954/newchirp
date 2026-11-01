@@ -816,6 +816,7 @@ class RadioBridge {
     final newDrivers = _findNewChirpDrivers();
     final python = await _resolvePython();
     final scsiHelper = _findScsiHelper();
+    final libusbRuntime = _findLibusbRuntime();
     final arguments = <String>[
       script,
       '--source',
@@ -851,6 +852,7 @@ class RadioBridge {
           arguments,
           environment: {
             'NEWCHIRP_SCSI_HELPER': ?scsiHelper,
+            'NEWCHIRP_LIBUSB': ?libusbRuntime,
             'PYTHONIOENCODING': 'utf-8',
           },
           includeParentEnvironment: true,
@@ -1003,6 +1005,9 @@ class RadioBridge {
       'scripts/newchirp_mass_storage.py',
     );
     await massStorage.writeAsBytes(massStorageData, flush: true);
+    final usbDfu = File('${runtime.path}/newchirp_usb_dfu.py');
+    final usbDfuData = await _loadAssetBytes('scripts/newchirp_usb_dfu.py');
+    await usbDfu.writeAsBytes(usbDfuData, flush: true);
     return file.path;
   }
 
@@ -1091,6 +1096,23 @@ class RadioBridge {
       if (resources != null) '${resources.path}/newchirp_scsi',
       'tools/newchirp_scsi_mac',
       'build/newchirp_scsi_mac',
+    ];
+    for (final candidate in candidates) {
+      if (File(candidate).existsSync()) return File(candidate).absolute.path;
+    }
+    return null;
+  }
+
+  String? _findLibusbRuntime() {
+    final configured = Platform.environment['NEWCHIRP_LIBUSB'];
+    final resources = _bundledResourcesDirectory();
+    final candidates = <String>[
+      if (configured != null && configured.isNotEmpty) configured,
+      if (resources != null) '${resources.path}/libusb-1.0.dylib',
+      if (resources != null) '${resources.path}/libusb-1.0.so.0',
+      if (resources != null) '${resources.path}/libusb-1.0.dll',
+      if (Platform.isMacOS) '/opt/homebrew/lib/libusb-1.0.dylib',
+      if (Platform.isMacOS) '/usr/local/lib/libusb-1.0.dylib',
     ];
     for (final candidate in candidates) {
       if (File(candidate).existsSync()) return File(candidate).absolute.path;

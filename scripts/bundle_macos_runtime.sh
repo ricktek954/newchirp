@@ -131,6 +131,21 @@ if [[ -f "$PROJECT_DIR/tools/newchirp_scsi_mac.c" ]]; then
     -o "$RESOURCES_DIR/newchirp_scsi"
 fi
 
+LIBUSB_SOURCE="${NEWCHIRP_LIBUSB_SOURCE:-}"
+if [[ -z "$LIBUSB_SOURCE" ]]; then
+  for candidate in \
+    /opt/homebrew/lib/libusb-1.0.0.dylib \
+    /usr/local/lib/libusb-1.0.0.dylib; do
+    if [[ -f "$candidate" ]]; then
+      LIBUSB_SOURCE="$candidate"
+      break
+    fi
+  done
+fi
+if [[ -n "$LIBUSB_SOURCE" && -f "$LIBUSB_SOURCE" ]]; then
+  cp "$LIBUSB_SOURCE" "$RESOURCES_DIR/libusb-1.0.dylib"
+fi
+
 if [[ -f "$CHIRP_ROOT/COPYING" ]]; then
   cp "$CHIRP_ROOT/COPYING" "$RESOURCES_DIR/chirp-COPYING.txt"
 fi

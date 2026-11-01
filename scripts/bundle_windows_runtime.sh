@@ -144,6 +144,14 @@ if [[ -f "$CHIRP_ROOT/COPYING" ]]; then
   cp "$CHIRP_ROOT/COPYING" "$BUNDLE_DIR/chirp-COPYING.txt"
 fi
 
+LIBUSB_SOURCE="${NEWCHIRP_LIBUSB_SOURCE:-}"
+if [[ -z "$LIBUSB_SOURCE" && -f "$BUILD_SUPPORT_DIR/libusb-1.0.dll" ]]; then
+  LIBUSB_SOURCE="$BUILD_SUPPORT_DIR/libusb-1.0.dll"
+fi
+if [[ -n "$LIBUSB_SOURCE" && -f "$LIBUSB_SOURCE" ]]; then
+  cp "$LIBUSB_SOURCE" "$BUNDLE_DIR/libusb-1.0.dll"
+fi
+
 if [[ -f "$BUILD_SUPPORT_DIR/chirp-version.txt" ]]; then
   cp "$BUILD_SUPPORT_DIR/chirp-version.txt" "$BUNDLE_DIR/chirp-version.txt"
 else

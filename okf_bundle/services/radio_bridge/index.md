@@ -17,6 +17,7 @@
 - [_bundledResourcesDirectory](bundledResourcesDirectory.md)
 - [_deduplicatePorts](deduplicatePorts.md)
 - [_findChirpSource](findChirpSource.md)
+- [_findLibusbRuntime](findLibusbRuntime.md)
 - [_findNewChirpDrivers](findNewChirpDrivers.md)
 - [_findScsiHelper](findScsiHelper.md)
 - [_loadAssetBytes](loadAssetBytes.md)
