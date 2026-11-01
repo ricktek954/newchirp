@@ -22,7 +22,10 @@ release requirements.
   three UV-5R Mini no-response reports needing cable and OEM-CPS details, and
   one FT-70D connection report needing confirmation of the programming cable
   and port.
-- The Linux `1.0.31` DEB, RPM, AppImage, and Pacman artifacts are live.
+- The Linux `1.0.32` DEB, RPM, AppImage, and Pacman artifacts are live.
+  This hotfix caps the Linux runner and plugin builds at the GLib 2.74 API
+  level so Debian 12/MX Linux systems do not fail at startup with missing
+  `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
@@ -52,7 +55,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.31` artifact source commit: `604dbbf2`
-- Linux `1.0.31` artifact source commit: `604dbbf2`
+- Linux `1.0.32` artifact source commit: `07bcfd29`
 - Open pull requests: none
 - Checked-out source version: `1.0.32+32`
 - macOS builds are pinned to CocoaPods with
@@ -70,7 +73,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.31 |
 | Windows | 1.0.32 |
-| Linux | 1.0.31 |
+| Linux | 1.0.32 |
 | Legacy shared manifest version | 1.0.31 |
 
 macOS artifact:
@@ -97,34 +100,42 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.31.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.pkg.tar.zst`
 
-Linux 1.0.31 SHA-256:
+Linux 1.0.32 SHA-256:
 
 - DEB:
-  `8b70c1ed7dfebe4334157143625c412dfe8f69a01c5ebed1bf564e04d43055ab`
+  `2bee891f5efaaf1059be1535b7a16b72970b1479dc2ad6257c6cd284a9ace318`
 - RPM:
-  `ff257bd94cd9a384ca79191567da5a3459681a3713c055f51bf1f6e1e27a63ec`
+  `daa8a5eaa2d65b7995367b84b6b81cde9809bd45e6413f50a1473e8912a004a4`
 - AppImage:
-  `9e52d4d4341bfa771270cd00ca0e8bc5fe284642d0e362a9b700075ee2610a24`
+  `48e9e311382331ed085c7dac67278009e7358866c9cadd06afb7240241f3ac03`
 - Pacman:
-  `6f21c0b1b2789fbd1e872ea89322e183286b6eddaf6e39f4509a04dd923febd8`
+  `3f0122b53a1d4c88fe41efe458c67537c06e439ec08978c42aa9202ea5948ef1`
 
-Linux 1.0.31 sizes:
+Linux 1.0.32 sizes:
 
-- DEB: `48,368,450` bytes
-- RPM: `38,847,008` bytes
+- DEB: `48,370,212` bytes
+- RPM: `38,852,708` bytes
 - AppImage: `144,360,640` bytes
-- Pacman: `46,871,853` bytes
+- Pacman: `46,867,775` bytes
 
 ## Recently completed
 
+- Published Linux `1.0.32` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts. Fixed the Debian 12/MX Linux startup failure
+  reported as `undefined symbol: g_once_init_enter_pointer` by compiling
+  the Linux runner and plugin targets with `GLIB_VERSION_MAX_ALLOWED` and
+  `GLIB_VERSION_MIN_REQUIRED` capped at GLib 2.74. Verified the embedded
+  `version.json`, package metadata, bundled `libusb-1.0.so.0` and USB DFU
+  helper, absence of GLib 2.80 once-init pointer symbols, server checksums,
+  public HTTP 200 checks, and live platform manifest.
 - Published Linux `1.0.31` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts from source commit `604dbbf2`. Verified the
   embedded `version.json`, package metadata, bundled `libusb-1.0.so.0` and
