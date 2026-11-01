@@ -114,23 +114,26 @@ Last updated: 2026-10-31
 - Evidence: user-supplied `nicfw_950_v4.py`, SHA-256
   `bb20f6252dba38bfa604f2ba0c0e465f0d98c67b73d1cfdc5071576dfdcc1f45`
 - Driver SHA-256:
-  `a68f0d024a6061f98225d0e0de518efcde73d9ca772c2d83b02488088c3cb8a3`
+  `9fb5b5260c80c9cc3e5324daec441990816d70d08dd0a9c4035077b8bda5d751`
 - Transport: 38400 baud negotiation to 460800 baud, 8N1, 128-byte blocks,
   address echoes and additive checksums; no stock CPS handshake or flow control.
   Retry only an initial baud ACK timeout, once after a three-second quiet
   interval, to recover the radio's idle baud reset after a previous download.
 - Implemented: 999 channels, 30-character ASCII names, RX/TX frequencies,
   duplex/TX inhibit, seven power labels, FM/NFM/AM and native DSB/automatic
-  extras, CTCSS/DCS with octal DCS storage, four A-Z groups in Comment,
-  channel extras, global settings and 26 editable group names
+  extras, CTCSS/DCS with octal DCS storage, four A-Z groups in a channel extra
+  (legacy Comment group letters remain supported), free-form notes in saved
+  image metadata, global settings and 26 editable group names
 - Read/write policy: read `0x50200..0x5FCFF`; only changed 128-byte blocks
   are written. Compare all affected blocks with the radio before the first
   write. Preserve reserved/VFO records, calibration, power-band data and gaps.
   Require commit ACK before requesting reboot. No wxPython UI dependency.
 - Image baseline: rebuilt from saved CHIRP images in each bridge process so
   channel uploads and settings-only uploads share the same guarded behavior
-- Offline validation: 20 driver tests, including real bridge JSON channel and
-  settings upload paths, plus 7 stock RT-950/catalog regression tests passed.
+- Offline validation: 23 driver tests, including real bridge JSON channel and
+  settings upload paths, imported-note persistence and independent group edits,
+  plus 7 stock RT-950/catalog regression tests passed. The note/group separation
+  was verified offline; it did not add another physical-radio write.
   Two failures in the general upload suite were reproduced on unmodified
   upstream code (Windows temporary-file sharing and a BCL documentation assertion).
 - Hardware validation, 2026-10-31: one user-provided unit already running

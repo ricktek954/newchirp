@@ -71,8 +71,13 @@ DCS uses `0x8000` plus the binary value of the octal designation; `0x4000`
 selects reversed polarity. For example D114 is `0x804C`, or `0xC04C` reversed.
 CTCSS is stored in tenths of Hz; zero means no tone.
 
-The Comment column contains up to four A-Z group letters, one per stored byte
-(1–26). Each group-name slot is 13 bytes: marker `0xAA` and twelve
+The Groups (A-Z) channel extra holds up to four group letters, one per stored
+byte (1–26). Legacy CSV files can still put those letters in Comment. Free-form
+comments, including RepeaterBook notes, are retained in `.img` metadata and CSV
+exports without changing the radio's groups; the radio has no free-form note
+storage. Removing a saved note also preserves the group bytes. Explicit edits
+to Groups take precedence over the legacy Comment value.
+Each group-name slot is 13 bytes: marker `0xAA` and twelve
 space-padded ASCII characters. Slot zero, unnamed slots and unused bytes are
 preserved unless an exposed name is explicitly edited.
 

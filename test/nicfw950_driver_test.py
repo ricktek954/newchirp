@@ -292,8 +292,6 @@ class NicFW950DriverTest(unittest.TestCase):
 
         for field, value in (
             ("freq", 146_520_001),
-            ("comment", "ABCDE"),
-            ("comment", "A1"),
             ("name", "x" * 31),
             ("name", "ñ"),
         ):
@@ -306,6 +304,66 @@ class NicFW950DriverTest(unittest.TestCase):
                     radio.set_memory(memory)
                 self.assertEqual(radio.get_mmap().get_packed(), before)
                 self.assertTrue(radio.validate_memory(memory))
+
+    def test_repeater_notes_survive_image_reload_without_changing_groups(self):
+        radio = self.radio()
+        original = radio.get_mmap().get_packed()
+        memory = radio.get_memory(1)
+        memory.comment = "RepeaterBook Amateur: LOCAL - Buenos Aires - OPEN"
+        self.bridge.set_memory_with_extras(radio, memory)
+        self.assertEqual(radio.get_mmap().get_packed(), original)
+        self.assertEqual(
+            str(_setting(radio.get_memory(1).extra, "groups").value), "ABCZ"
+        )
+        with tempfile.TemporaryDirectory() as temp:
+            path = str(Path(temp) / "notes.img")
+            radio.save_mmap(path)
+            reopened = self.directory.get_radio_by_image(path)
+            self.assertEqual(
+                self.bridge.memory_with_extras(reopened, 1).comment,
+                memory.comment,
+            )
+            self.assertEqual(reopened.get_mmap().get_packed(), original)
+            cleared = reopened.get_memory(1)
+            cleared.comment = ""
+            self.bridge.set_memory_with_extras(reopened, cleared)
+            self.assertEqual(reopened.get_mmap().get_packed(), original)
+            self.assertNotIn("1", reopened.metadata.get("nicfw_notes", {}))
+
+    def test_explicit_groups_edit_is_independent_of_free_form_notes(self):
+        radio = self.radio()
+        memory = radio.get_memory(1)
+        memory.comment = "RepeaterBook Amateur: imported note"
+        _setting(memory.extra, "groups").value = "EF"
+        radio.set_memory(memory)
+        stored = radio.get_memory(1)
+        self.assertEqual(stored.comment, memory.comment)
+        self.assertEqual(str(_setting(stored.extra, "groups").value), "EF")
+        self.assertEqual(int(radio._memobj.channels[0].groups), 0x0605)
+        _setting(stored.extra, "groups").value = "A1"
+        before = radio.get_mmap().get_packed()
+        from chirp import errors
+
+        with self.assertRaisesRegex(errors.RadioError, "Groups"):
+            radio.set_memory(stored)
+        self.assertEqual(radio.get_mmap().get_packed(), before)
+
+    def test_new_repeater_note_defaults_to_no_group_and_delete_removes_note(
+        self,
+    ):
+        from chirp import chirp_common
+
+        radio = self.radio()
+        memory = chirp_common.Memory(215)
+        memory.freq = 145_135_000
+        memory.name = "Barrio El Remanso"
+        memory.comment = "RepeaterBook Amateur: LU1EAC - OPEN"
+        radio.set_memory(memory)
+        self.assertEqual(int(radio._memobj.channels[214].groups), 0)
+        self.assertEqual(radio.get_memory(215).comment, memory.comment)
+        memory.empty = True
+        radio.set_memory(memory)
+        self.assertNotIn("215", radio.metadata.get("nicfw_notes", {}))
 
     def test_settings_defaults_do_not_overwrite_unrelated_bytes(self):
         radio = self.radio()
