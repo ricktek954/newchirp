@@ -21,7 +21,7 @@ SOURCE = ROOT / "build_support" / ("chirp-" + PIN["commit"])
 if not SOURCE.is_dir():
     SOURCE = ROOT / "build_support/chirp-20261023"
 VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
-MODEL = "Radtel_RT-950_nicFW950"
+MODEL = "Radtel_RT-950_Pro_nicFW950"
 
 
 def _load_bridge():
@@ -200,7 +200,6 @@ class NicFW950DriverTest(unittest.TestCase):
     def test_catalog_keeps_stock_and_nicfw_models_separate(self):
         for name in (
             MODEL,
-            "Radtel_RT-950_Pro_nicFW950",
             "Bajeton_BJ-9000_nicFW950",
         ):
             self.assertEqual(
@@ -210,6 +209,7 @@ class NicFW950DriverTest(unittest.TestCase):
         self.assertNotEqual(
             self.directory.get_radio("Radtel_RT-950"), self.radio_class
         )
+        self.assertNotIn("Radtel_RT-950_nicFW950", self.directory.DRV_TO_RADIO)
         features = self.radio().get_features()
         self.assertEqual(features.memory_bounds, (1, 999))
         self.assertEqual(features.valid_name_length, 30)

@@ -22,7 +22,7 @@ Last updated: 2026-10-31
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
-| Radtel RT-950 / RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
+| Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -103,16 +103,18 @@ Last updated: 2026-10-31
   variant that does not answer `BT-9000`, then capture a complete successful
   read and export a test image
 
-### Radtel RT-950 / RT-950 Pro, Bajeton BJ-9000 with nicFW950
+### Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950
 
 - Maintained driver: `drivers/newchirp_nicfw950.py`
 - Protocol and test procedure: `docs/NICFW950_PROTOCOL.md`
-- Separate catalog entries: `Radtel_RT-950_nicFW950`,
-  `Radtel_RT-950_Pro_nicFW950`, `Bajeton_BJ-9000_nicFW950`
+- Separate catalog entries: `Radtel_RT-950_Pro_nicFW950`,
+  `Bajeton_BJ-9000_nicFW950`
+- Model scope: standard RT-950 (non-Pro) excluded. Nicsure's release hub
+  lists the RT-950 Pro; no non-Pro nicFW950 compatibility evidence is recorded.
 - Evidence: user-supplied `nicfw_950_v4.py`, SHA-256
   `bb20f6252dba38bfa604f2ba0c0e465f0d98c67b73d1cfdc5071576dfdcc1f45`
 - Driver SHA-256:
-  `7e896708cc85108c353f45fede817e6df997a7e1224cff60c6510a6a6a3ffaa4`
+  `a68f0d024a6061f98225d0e0de518efcde73d9ca772c2d83b02488088c3cb8a3`
 - Transport: 38400 baud negotiation to 460800 baud, 8N1, 128-byte blocks,
   address echoes and additive checksums; no stock CPS handshake or flow control.
   Retry only an initial baud ACK timeout, once after a three-second quiet
@@ -131,8 +133,8 @@ Last updated: 2026-10-31
   settings upload paths, plus 7 stock RT-950/catalog regression tests passed.
   Two failures in the general upload suite were reproduced on unmodified
   upstream code (Windows temporary-file sharing and a BCL documentation assertion).
-- Hardware validation, 2026-10-31: one user-confirmed RT-950/BJ-9000-family
-  unit, nicFW950 **6.00.16c**, CH340 USB serial. Read 64,256 bytes and 209
+- Hardware validation, 2026-10-31: one user-provided unit already running
+  nicFW950 **6.00.16c**, CH340 USB serial. Read 64,256 bytes and 209
   occupied channels. No-op channel/settings round-trip changed zero bytes.
   Channel-name, squelch and group-A-name writes each matched the complete
   expected raw image after reboot. All test edits were restored and verified;

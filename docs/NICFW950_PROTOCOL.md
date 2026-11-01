@@ -1,21 +1,29 @@
 # nicFW950 memory programming
 
 The experimental `drivers/newchirp_nicfw950.py` driver programs memory on
-radios already running nicsure nicFW950 with the supplied 999-channel flash
-layout. It does not install firmware. The stock RT-950 driver remains a
+RT-950 Pro / BJ-9000 radios already running nicsure nicFW950 with the
+supplied 999-channel flash layout. It does not install firmware.
+The stock RT-950 driver remains a
 separate, read-only driver with a different protocol and image format.
 
 Catalog entries:
 
-- `Radtel_RT-950_nicFW950`
 - `Radtel_RT-950_Pro_nicFW950`
 - `Bajeton_BJ-9000_nicFW950`
 
 The protocol/layout reference is the user-provided `nicfw_950_v4.py` with
 SHA-256 `bb20f6252dba38bfa604f2ba0c0e465f0d98c67b73d1cfdc5071576dfdcc1f45`.
 The standalone reference was not executed. The NewChirp port was validated
-on one RT-950/BJ-9000-family unit with **nicFW950 6.00.16c** on 2026-10-31.
+on one user-provided unit with **nicFW950 6.00.16c** on 2026-10-31.
 Other firmware versions and individual aliases still need validation.
+
+The standard RT-950 (non-Pro) is excluded. Nicsure's
+[release hub](https://www.patreon.com/nicsure/posts/central-hub-150725357)
+lists the RT-950 Pro. His
+[Pro backup/restore firmware post](https://www.patreon.com/nicsure/posts/radtel-rt-950-160721095)
+also explicitly leaves compatibility of that tool with non-Pro hardware
+unknown. Neither the supplied CHIRP reference nor the physical test provides
+evidence for a separate non-Pro nicFW950 catalog entry.
 
 ## Serial protocol
 
@@ -129,7 +137,7 @@ For further hardware validation, perform and record this sequence:
 
 ## Recorded hardware validation: 6.00.16c
 
-One user-confirmed RT-950/BJ-9000-family unit was tested with the NewChirp
+One user-provided unit already running nicFW950 was tested with the NewChirp
 1.0.30 Windows runtime and this maintained driver on 2026-10-31:
 
 - Complete download: 502 checked blocks, 64,256 raw bytes, 209 occupied channels.

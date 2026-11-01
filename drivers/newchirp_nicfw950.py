@@ -5,7 +5,7 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-"""Experimental nicFW950 support for RT-950/RT-950 Pro and BJ-9000.
+"""Experimental nicFW950 support for RT-950 Pro and BJ-9000.
 
 Adapted from the user-supplied nicfw_950_v4.py protocol/layout reference.
 This is a memory programmer for radios already running nicFW950, not a
@@ -546,7 +546,7 @@ class NicFW950Radio(
     chirp_common.CloneModeRadio, chirp_common.ExperimentalRadio
 ):
     VENDOR = "Radtel"
-    MODEL = "RT-950"
+    MODEL = "RT-950 Pro"
     VARIANT = "nicFW950"
     BAUD_RATE = DEFAULT_BAUD
     NEEDS_COMPAT_SERIAL = False
@@ -561,7 +561,7 @@ class NicFW950Radio(
             "Use only with nicFW950 firmware, not stock firmware."
         )
         prompts.info = (
-            "For RT-950, RT-950 Pro and Bajeton BJ-9000 radios already "
+            "For RT-950 Pro and Bajeton BJ-9000 radios already "
             "running nicsure nicFW950 with the 999-channel layout. "
             "USB serial uses 38400 baud, 8N1, then negotiates 460800 baud. "
             "Groups are entered as up to four A-Z letters in Comment; "
@@ -1155,11 +1155,6 @@ class NicFW950Radio(
             )
         raw.pttID = ptt
         raw.magic = MAGIC
-
-
-@directory.register
-class NicFW950ProRadio(NicFW950Radio):
-    MODEL = "RT-950 Pro"
 
 
 @directory.register
