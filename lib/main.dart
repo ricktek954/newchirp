@@ -39,7 +39,7 @@ import 'widgets/radio_mapping_dialog.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
-const String _newChirpVersion = '1.0.35';
+const String _newChirpVersion = '1.0.36';
 
 bool radioModelSelectionReady(List<String> models, String? model) {
   return model != null && models.contains(model);
