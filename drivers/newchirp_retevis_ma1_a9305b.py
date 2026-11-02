@@ -54,6 +54,7 @@ READ_COMMAND = b"\xfe\xfe\xee\xef\xeb"
 READ_RESPONSE = b"\xfe\xfe\xef\xee\xe4"
 WRITE_COMMAND = b"\xfe\xfe\xee\xef\xe4"
 ACK = b"\xfe\xfe\xef\xee\xe6\x00\xfd"
+READ_RESPONSE_TIMEOUT = 5.0
 
 # These ranges match the official CPS. They intentionally omit the
 # factory/calibration and runtime ranges between them.
@@ -307,15 +308,51 @@ def _exit_program_mode(radio):
 
 def _read_block(radio, address, length):
     radio.pipe.write(_read_frame(address, length))
-    response = _read_exact(
+    # The CPS receives read responses as uppercase hexadecimal text: the
+    # 11-byte frame header (response, address, and returned length), payload,
+    # checksum, and FD terminator are all represented by two ASCII characters
+    # per binary byte.
+    header_text = _read_exact(
         radio.pipe,
-        length + 13,
+        22,
         "reading 0x%04X" % address,
+        timeout=READ_RESPONSE_TIMEOUT,
     )
+    try:
+        header = bytes.fromhex(header_text.decode("ascii"))
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise errors.RadioError(
+            "Malformed A9305B response header for 0x%04X: %s"
+            % (address, header_text.hex())
+        ) from exc
+    if header[:5] != READ_RESPONSE:
+        raise errors.RadioError(
+            "Malformed A9305B response for 0x%04X: %s"
+            % (address, header_text.decode("ascii", errors="replace"))
+        )
+    response_length = struct.unpack(">H", header[9:11])[0]
+    if response_length > length or response_length > READ_BLOCK_SIZE:
+        raise errors.RadioError(
+            "A9305B returned %i bytes for a %i-byte request at 0x%04X"
+            % (response_length, length, address)
+        )
+
+    tail_text = _read_exact(
+        radio.pipe,
+        response_length * 2 + 4,
+        "reading 0x%04X" % address,
+        timeout=READ_RESPONSE_TIMEOUT,
+    )
+    try:
+        response = bytes.fromhex((header_text + tail_text).decode("ascii"))
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise errors.RadioError(
+            "Malformed A9305B response for 0x%04X" % address
+        ) from exc
     if (
         not response.startswith(READ_RESPONSE)
         or response[5:9] != struct.pack(">I", address)
-        or response[9:11] != struct.pack(">H", length)
+        or response[9:11] != struct.pack(">H", response_length)
         or not response.endswith(b"\xFD")
     ):
         raise errors.RadioError(
@@ -345,11 +382,10 @@ def _download(radio):
             address = start
             while address < end:
                 length = min(READ_BLOCK_SIZE, end - address)
-                image[address:address + length] = _read_block(
-                    radio, address, length
-                )
-                address += length
-                completed += length
+                payload = _read_block(radio, address, length)
+                image[address:address + len(payload)] = payload
+                address += len(payload)
+                completed += len(payload)
                 if radio.status_fn:
                     status.cur = completed
                     radio.status_fn(status)

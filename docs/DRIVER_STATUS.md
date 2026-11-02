@@ -200,7 +200,7 @@ Last updated: 2026-11-01
 - Maintained A9305B driver:
   `drivers/newchirp_retevis_ma1_a9305b.py`
 - Driver SHA-256:
-  `730a984d6484dbd85a10c2d9937c750bc1fcb4a2348a7055b58b6cb7341d1fe7`
+  `12d30f7fe849f841e239f66963af6395e679a7d5ac9c61e8e390db4121f0de94`
 - Official CPS evidence:
   `MA1-A9305B Programming Software-V1.0.zip`, downloaded from Retevis'
   official software page. Archive SHA-256:
@@ -218,7 +218,10 @@ Last updated: 2026-11-01
   `4f817a2738ff7a332cdfd3f6a698b5cd01d5073f88a276ac2de1b6d7ad9125f1`.
 - A9305B transport: 9600 8N1 handshake with DTR/RTS asserted, 57600-baud
   negotiation, then addressed `FE/FD` blocks. Reads use up to 240-byte blocks;
-  writes use the CPS' 32-byte rows and additive two's-complement checksum.
+  read-data responses are uppercase ASCII hexadecimal and may return fewer
+  bytes than requested. The driver follows the response's encoded length and
+  advances by the actual payload returned. Writes use the CPS' 32-byte rows
+  and additive two's-complement checksum.
 - A9305B memory map: channels 1-200 use 21-byte records at `0x0000`, active
   and skip bitmaps at `0x1180`/`0x11A0`, and 6+10-character names at
   `0x000F` and `0x2300`. Channels 201-1000 use records at `0x4000`, bitmaps
@@ -234,9 +237,15 @@ Last updated: 2026-11-01
   `0xBED0-0xCFFF`.
 - Offline validation: registration of both MA1 variants, channel decoding
   across both 200/800 sections, 16-character names, tone fields, active/skip
-  bitmaps, model fingerprinting, complete read framing, block checksums, and
-  complete write framing.
-- Hardware validation: none for A9305B.
+  bitmaps, model fingerprinting, complete binary and ASCII-hex read framing,
+  short response packets, block checksums, and complete write framing.
+- Hardware validation: the OEM software successfully read and wrote the radio
+  from two Windows 11 PCs with two different USB cables. Zoran's 2026-11-01
+  NewChirp 1.0.33 read reached every protocol stage, but reported a 214-byte
+  response where the driver expected 253 binary bytes. CPS analysis shows 214
+  is the complete ASCII-hex encoding of a shorter 94-byte payload frame.
+  NewChirp now parses that framing and remains pending a successful full read.
+- Radio version: `M V136`
 - Next milestone: complete an unedited physical read, save the raw backup,
   compare it with a CPS-exported image, then perform one channel edit,
   read-back, and restore test.

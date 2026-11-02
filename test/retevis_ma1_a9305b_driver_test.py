@@ -110,8 +110,9 @@ def _checksum(data):
 
 
 class FakeA9305BSerial:
-    def __init__(self, image):
+    def __init__(self, image, read_payload_limit=94):
         self.image = bytearray(image)
+        self.read_payload_limit = read_payload_limit
         self.baudrate = 9600
         self.timeout = 0.2
         self._responses = bytearray()
@@ -142,17 +143,19 @@ class FakeA9305BSerial:
         elif command == 0xEB:
             address, length = struct.unpack(">IH", data[5:11])
             self.read_addresses.append(address)
-            payload = bytes(self.image[address:address + length])
+            returned_length = min(length, self.read_payload_limit)
+            payload = bytes(self.image[address:address + returned_length])
             body = (
-                struct.pack(">IH", address, length)
+                struct.pack(">IH", address, returned_length)
                 + payload
             )
-            self._enqueue(
+            response = (
                 READ_RESPONSE
                 + body
                 + bytes((_checksum(body),))
                 + b"\xFD"
             )
+            self._enqueue(response.hex().upper().encode("ascii"))
         elif command == 0xE4:
             address, length = struct.unpack(">IH", data[5:11])
             self.write_addresses.append(address)
@@ -310,6 +313,16 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
             b"D         ",
         )
         self.assertEqual(serial.baudrate, 9600)
+
+    def test_serial_read_accepts_the_radios_shorter_ascii_hex_frame(self):
+        serial = FakeA9305BSerial(_image(), read_payload_limit=94)
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+
+        radio.sync_in()
+
+        self.assertEqual(radio.get_memory(1).name, "CHAN01234567890")
+        self.assertEqual(serial.read_addresses[:3], [0x0000, 0x005E, 0x00BC])
 
     def test_image_model_matching_requires_marker(self):
         valid = _image()
