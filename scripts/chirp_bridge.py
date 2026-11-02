@@ -162,7 +162,7 @@ class RadioCommunicationTrace:
                 "PASSSTA",
                 "SYSINFO",
                 "PROGRAM",
-            ):
+            ) or pending["command"].startswith("PROGRAM"):
                 preview = response[:32].hex(" ")
                 if len(response) > 32:
                     preview += " …"

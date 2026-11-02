@@ -436,6 +436,16 @@ class UploadHandshakeTest(unittest.TestCase):
         rendered = trace.format()
         self.assertIn("VR | incomplete response (1 bytes)", rendered)
 
+    def test_trace_shows_short_program_handshake_reply_bytes(self):
+        trace = bridge.RadioCommunicationTrace()
+        trace.begin(b"PROGRAMBFNORMALU")
+        trace.received(b"\x05")
+
+        rendered = trace.format()
+
+        self.assertIn("PROGRAMBFNOR", rendered)
+        self.assertIn("reply=05 (1 bytes)", rendered)
+
     def test_bridge_error_does_not_require_a_model_argument(self):
         message = bridge.bridge_error_message(
             RuntimeError("catalog failed"),
