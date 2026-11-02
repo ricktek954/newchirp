@@ -8,11 +8,13 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.34` installer is live. It keeps channel-page writes
-  available when the stored radio image already matches (with the existing
-  transfer safety guards), adds one-click clear controls to channel and
-  repeater searches, and fixes Icom ID-50 empty memory handling. It keeps
-  the `1.0.27`-`1.0.33` fixes.
+- The Windows `1.0.35` installer is live. It accepts the verified RT-950
+  model alias, classifies Yaesu FT-1/2/3/5 bank models as multi-bank with
+  corrected FT-5D clone guidance, follows A9305B CPS response lengths,
+  skips IC-E90 memories marked invisible, and replaces the malformed
+  IC-7200 CI-V memory-frame grammar. The TH-9800/VX-6 image-decode
+  tolerance is offline-tested only; physical retests are pending. It keeps
+  the `1.0.27`-`1.0.34` fixes.
 - The macOS `1.0.35` release is live. It includes the TH-9800 and VX-6
   tolerant image decoders, removes file-only models from the connected-radio
   catalog, and gives CHIRP modules with a `wx` dependency a clear headless
@@ -90,7 +92,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.35 |
-| Windows | 1.0.34 |
+| Windows | 1.0.35 |
 | Linux | 1.0.32 |
 | Legacy shared manifest version | 1.0.31 |
 
@@ -108,11 +110,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.34.exe`
-- Version/build: `1.0.34` / `34`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.35.exe`
+- Version/build: `1.0.35` / `35`
 - SHA-256:
-  `314eed8225fccf56dae1d777bb348b7df55ee910968fd3a40780a1becae7610b`
-- Size: `61,083,669` bytes
+  `b4930fe5afcd1fac315fcd144d4e0672f10bf7b3091d3f88623790ff42f6bce6`
+- Size: `61,089,788` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
