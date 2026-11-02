@@ -42,6 +42,7 @@
 - [headless_live_adapter](headless_live_adapter.md) — Give a live radio the file-backed interfaces NewChirp requires.
 - [live_channel_context](live_channel_context.md) — Choose a live-radio subdevice without probing every memory slot.
 - [live_memory_matches](live_memory_matches.md) — Compare fields that every live radio must retain after a write.
+- [live_models_by_vendor](live_models_by_vendor.md) — Return selectable serial/transport radios, excluding file-only models.
 - [load_chirp](load_chirp.md)
 - [main](main.md)
 - [mapping_payload](mapping_payload.md) — Describe CHIRP's bank/zone models for an image or channel owner.
