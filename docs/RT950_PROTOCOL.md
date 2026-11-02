@@ -18,10 +18,10 @@ repository.
 
 - 115200 baud, 8 data bits, no parity, one stop bit
 - RTS and DTR asserted
-- CPS flow-control setting: request-to-send plus XON/XOFF
+- CPS serial handshake: `None` (no RTS/CTS or XON/XOFF flow control)
 
-The current driver uses the same settings. The headless serial bridge supports
-an optional driver-level `XON_XOFF` setting.
+The current driver uses the same settings. The earlier note incorrectly
+described the separately asserted RTS/DTR lines as hardware flow control.
 
 ## Programming handshake
 
@@ -29,9 +29,18 @@ an optional driver-level `XON_XOFF` setting.
 2. Read one byte and require `0x06`.
 3. Send ASCII `F` and read/discard 16 bytes.
 4. Send ASCII `M` and read 12 bytes. The trimmed model code is `BT-9000`.
+5. Send the 25-byte randomized `SEND` authentication packet.
+6. Read one byte and require `0x06`.
 
 After a successful handshake, a read session sends 128-byte block commands and
 ends with ASCII `E`.
+
+The `SEND` packet contains:
+
+- Bytes 0-3: ASCII `SEND`.
+- Byte 4: a random encryption-symbol selector.
+- Bytes 5-24: random indexes into a twenty-entry four-character symbol table.
+- The selected symbol is four ASCII bytes and is retained for the session.
 
 ## Read framing
 
@@ -48,6 +57,14 @@ Request:
 Response: 132 bytes total. The CPS validates the two address bytes at offsets
 one and two, then copies the 128-byte payload beginning at offset four. It does
 not require a specific response command byte.
+
+The 128-byte payload is encrypted with the four-byte symbol selected by the
+`SEND` packet. Bytes equal to `0x00`, `0xFF`, the symbol byte, or its complement
+are left unchanged; the remaining bytes are XORed with the rotating symbol.
+
+The current Web Programmer reader allows 3.5 seconds for each 132-byte block
+response. A macOS 1.0.36 report timed out after 2.0 seconds with zero bytes,
+so the desktop driver uses the same 3.5-second response window.
 
 The driver reads blocks from these ranges:
 

@@ -214,7 +214,8 @@ Last updated: 2026-11-02
 - Evidence: official RT-950 CPS v1.3.0, native .NET metadata and CIL
 - CPS artifact SHA-256:
   `605054c46ec17520b0f79b78585c3be431a6dcb95164dc638985455e813d7a1e`
-- Transport: CHIRP serial path at 115200 8N1 with RTS/DTR and XON/XOFF
+- Transport: CHIRP serial path at 115200 8N1 with RTS/DTR asserted and no
+  hardware or XON/XOFF flow control
 - Implemented: 960 channel records, frequencies, duplex, CTCSS/DCS, mode,
   power, scan-skip, GB2312 names, and documented channel extras
 - Read strategy: 248 verified 128-byte blocks over CPS memory ranges through
@@ -232,8 +233,16 @@ Last updated: 2026-11-02
   model command after the `BT-9000` handshake was acknowledged. Both identity
   strings are now accepted as the same read-only RT-950 protocol; writes
   remain disabled until a complete physical read is validated.
+- Field evidence 2026-11-02: a macOS 1.0.36 read completed the handshake and
+  model alias, then received no bytes for the first 128-byte read block before
+  the old two-second timeout. Re-analysis of the exact official CPS v1.3.0
+  artifact recovered two missing facts: flow control is disabled, and a
+  randomized 25-byte `SEND` authentication packet must be acknowledged before
+  reads. The driver now performs that exchange, decrypts returned payloads with
+  the selected session symbol, and allows the Web Programmer's 3.5-second
+  block response window.
 - Driver SHA-256:
-  `5bf37f120a186d217b382fce415c8f427a9cb11305e1c3d0bdac05ba6438e02f`
+  `8207d45296cb382188714486ef624656c627569e9e03331da3552c6cf07279fc`
 - Next milestone: confirm the reported RT-950 model code, classify any
   variant that does not answer the `BT-9000` handshake, then capture a
   complete successful read and export a test image
