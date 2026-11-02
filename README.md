@@ -267,6 +267,13 @@ driver is not included without model-specific evidence. Download and save an
 unedited backup before an experimental upload. Protocol notes are recorded in
 `docs/IC41S_PROTOCOL.md`.
 
+## Reverse-engineered radio drivers
+
+When deriving a driver from an OEM programming application, use
+`docs/REA_PLAYBOOK.md`. It requires a byte-level protocol contract, traces both
+the send and receive paths, separates memory-map evidence from transport
+evidence, and defines the replay and physical-radio validation gates.
+
 ## Code knowledge graph
 
 This project keeps OKF knowledge bundles for coding agents:
