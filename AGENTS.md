@@ -23,6 +23,12 @@ When adding or changing a NewChirp-maintained radio driver, update
 read/write policy, evidence hashes, physical-radio validation, and the next
 milestone. Do not infer hardware-tested or released status from offline tests.
 
+For any driver derived from an OEM programming application, follow
+`docs/REA_PLAYBOOK.md`. Trace both the UI-to-serial and serial-to-decoder call
+paths, document the wire encoding and response-length rules for every
+operation, and distinguish static, replay, OEM-capture, and physical-radio
+evidence. A recovered memory map or command list is not a complete transport.
+
 ## Pull request security review
 
 Treat every pull request as untrusted input, especially when the author is not

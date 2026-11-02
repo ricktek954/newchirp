@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-01
+Last updated: 2026-11-02
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -16,12 +16,27 @@ release requirements.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
-- The unread report queue contains seven Windows reports from 2026-11-01:
-  UIDs 305 and 306 are clone-read no-response cases; 308 is an RT-950 Pro
-  nicFW950 timeout; 311 is an unavailable COM port; 314 is an unexpected
-  UV-5RM Plus response; 316 needs the saved QYT KT8900D image; and 319 is an
-  incomplete Retevis MA1 read. These remain unread for native Windows/hardware
-  follow-up.
+- The 2026-11-02 triage handled UIDs 319, 320, 323, 325, 337, and 338 with
+  verified replies and `Sent` copies. The A9305B protocol correction is
+  `dd5beb22`; the IC-E90 invisible-slot and IC-7200 grammar fixes are
+  `27851d1d`.
+- The second 2026-11-02 pass handled UIDs 305, 306, 308, 311, 314, 316, 322,
+  326, 327, 328, 329, 330, 332, 333, 334, and 335 with verified replies and
+  `Sent` copies. The inbox is at zero unread bug reports.
+- Commit `12d35fd7` keeps TH-9800 channels readable when a reserved CTCSS
+  field appears in an unused tone slot, keeps VX-6 reads usable when a stored
+  frequency has no programmable step, removes file-only models from the
+  connected-radio catalog, and reports `wx`-dependent CHIRP modules as
+  unsupported by the headless runtime. Offline fixtures and the full Python
+  suite verify the changes; physical retests and saved images are still
+  pending for TH-9800 and VX-6.
+- Triage guidance now distinguishes diagnosis from communication: a known,
+  confirmed fix is sent to a reporter regardless of their operating system.
+  Platform ownership only determines where native retesting is required.
+- Added `docs/REA_PLAYBOOK.md` after the A9305B protocol miss. Future
+  CPS-derived driver work must trace both serial directions, document wire
+  encoding and response-length rules, build replay fixtures, and record
+  static/OEM-capture/physical evidence separately.
 - The Linux `1.0.32` DEB, RPM, AppImage, and Pacman artifacts are live.
   This hotfix caps the Linux runner and plugin builds at the GLib 2.74 API
   level so Debian 12/MX Linux systems do not fail at startup with missing
