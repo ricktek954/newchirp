@@ -45,6 +45,7 @@ Last updated: 2026-11-05
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
+| Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, hardware-tested | Yes, one channel-name write tested | Hidden | Experimental |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image; invisible-slot guard | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -1090,6 +1091,28 @@ Last updated: 2026-11-05
   read. If the block is still short, capture whether Wouxun CPS can read it and
   provide the first response header bytes so the protocol variant can be
   separated from a cable timing issue.
+
+### Wouxun KG-905G Plus
+
+- Maintained driver: `drivers/newchirp_kg905g.py`
+- Protocol notes: `docs/KG905G_PROTOCOL.md`
+- Transport: Wouxun clone serial, 19200 8N1, DTR asserted, RTS asserted
+- Cable: K-plug. The capture used a Silicon Labs CP210x adapter.
+- Model ident: `KG-905G+`. Factory identity at `0x0040` is read and never written.
+- Evidence captures, kept in Downloads and not committed:
+  - `/Users/randybrown/Downloads/KG_905G_Plus/905GplusREAD.pcap`
+    `8f2196178c139f5a5571f69217ac74d63b101b994f8dda38eaba8b4a1cf4125c`
+  - `/Users/randybrown/Downloads/KG_905G_Plus/905GWRITE.pcap`
+    `4283a39bea678eafff77191237e797491cfc55f64bb9ad902418e08c5197cfa3`
+  - `/Users/randybrown/Downloads/KG_905G_Plus/KG905G_PLUS.kg`
+    `c35c7be56ad378d35c779540046d6593c6acd689d8309eb356ed5522ddfe21b0`
+- Implemented: memories 1 through 31, names, tones, power, wide or narrow, and scan add. Settings stay in the image and are not edited.
+- Read policy: follow the captured read list, including the repeated requests the Wouxun program sends.
+- Write policy: write those same blocks except `0x0040`, `0x0080`, `0x00C0`, and `0x0700`. Simplex must be a GMRS channel. A repeater must be a GMRS output with a +5 MHz offset. The seven 467 MHz interstitial channels are stored narrow and Low. Memories 32 through 400 are not mapped, so they are not offered and their bytes are left as read.
+- Hardware validation: on 2026-11-02 Randy downloaded this KG-905G Plus and the channels looked correct. He then changed one channel name, wrote it, and confirmed the new name on the radio. The driver stays experimental. Memories 32 through 400, settings, and a full read-back of every other channel were not part of that test.
+- Read warning: the driver is experimental. Keep a backup from the Wouxun program before an upload.
+- Next milestone: download again after a write and confirm memories 1 through 31 besides the edited name are unchanged. Do not map memories 32 through 400 until a capture programs a channel in that range.
+- Website catalog: not listed
 
 ### Motorola MOTOTRBO R7
 
