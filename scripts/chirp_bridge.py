@@ -527,6 +527,14 @@ def _load_module(module_path, directory):
         spec.loader.exec_module(module)
     except Exception as exc:
         sys.modules.pop(module_name, None)
+        if isinstance(exc, ModuleNotFoundError) and exc.name == "wx":
+            raise RuntimeError(
+                "Could not load CHIRP module %s: this module depends on the "
+                "wx GUI toolkit, which is not available in NewChirp's "
+                "headless driver runtime. Ask the module author for a "
+                "driver-only version, or use the built-in radio driver."
+                % os.path.basename(module_path)
+            ) from exc
         raise RuntimeError(
             "Could not load CHIRP module %s: %s"
             % (os.path.basename(module_path), exc)
@@ -620,6 +628,23 @@ def load_chirp(
         finally:
             directory.LOG.setLevel(old_log_level)
     return directory
+
+
+def live_models_by_vendor(directory):
+    """Return selectable serial/transport radios, excluding file-only models."""
+    from chirp import chirp_common
+
+    models_by_vendor = {}
+    for identifier, radio_class in directory.DRV_TO_RADIO.items():
+        if (
+            issubclass(radio_class, chirp_common.FileBackedRadio)
+            and not issubclass(radio_class, chirp_common.CloneModeRadio)
+        ):
+            continue
+        models_by_vendor.setdefault(
+            str(radio_class.VENDOR), []
+        ).append(identifier)
+    return models_by_vendor
 
 
 def memory_json(mem):
@@ -1976,11 +2001,7 @@ def main():
             args.module,
         )
         if args.command == "list-models":
-            models_by_vendor = {}
-            for identifier, radio_class in directory.DRV_TO_RADIO.items():
-                models_by_vendor.setdefault(
-                    str(radio_class.VENDOR), []
-                ).append(identifier)
+            models_by_vendor = live_models_by_vendor(directory)
             vendors = [
                 {
                     "name": vendor,
@@ -1992,7 +2013,11 @@ def main():
                 )
             ]
             print(json.dumps({
-                "models": sorted(directory.DRV_TO_RADIO.keys()),
+                "models": sorted(
+                    identifier
+                    for identifiers in models_by_vendor.values()
+                    for identifier in identifiers
+                ),
                 "vendors": vendors,
             }))
             return
