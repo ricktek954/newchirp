@@ -9,12 +9,14 @@ release requirements.
 ## Resume here
 
 - The Windows `1.0.36` installer is live. It retries the UV-5RM Plus CPS
-  handshake when the radio misses the first identification reply, and keeps
-  the `1.0.27`-`1.0.35` fixes.
-- The macOS `1.0.35` release is live. It includes the TH-9800 and VX-6
-  tolerant image decoders, removes file-only models from the connected-radio
-  catalog, and gives CHIRP modules with a `wx` dependency a clear headless
-  runtime error.
+  handshake when the radio misses the first identification reply. It also
+  keeps the RT-950, FT-5D, A9305B, IC-E90, IC-7200, TH-9800, and VX-6 fixes
+  from `1.0.27` through `1.0.35`.
+- The macOS `1.0.36` release is live. It includes the UV-5RM Plus OEM-style
+  handshake retry and one-byte diagnostic trace. It also includes the TH-9800
+  and VX-6 tolerant image decoders, removes file-only models from the
+  connected-radio catalog, and gives CHIRP modules with a `wx` dependency a
+  clear headless runtime error.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
@@ -48,7 +50,7 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.35` release is built, signed, notarized, stapled, uploaded,
+- The macOS `1.0.36` release is built, signed, notarized, stapled, uploaded,
   and live. The universal DMG contains both Python architectures and universal
   libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
@@ -71,7 +73,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.35` artifact source commit: `b39df094`
+- macOS `1.0.36` artifact source commit: `32fbc464`
 - Linux `1.0.35` artifact source commit: `b39df094`
 - Open pull requests: none
 - Checked-out source version: `1.0.36+36`
@@ -88,20 +90,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.35 |
+| macOS | 1.0.36 |
 | Windows | 1.0.36 |
 | Linux | 1.0.35 |
 | Legacy shared manifest version | 1.0.35 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.35.dmg`
-- Version/build: `1.0.35` / `35`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.36.dmg`
+- Version/build: `1.0.36` / `36`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `809ae10d397f2f3e7be65271e2f6114580764f1b9a091249943df18ed1a082a1`
-- Size: `82,346,151` bytes
-- Notarization submission: `f5d6e76f-b1dc-49b4-8353-793f8e134f01`
+  `50b4022bf638877788fb9f2a7dc081fddd40b197d9fd6a10327bedfe9c8791d7`
+- Size: `82,344,490` bytes
+- Notarization submission: `6ba8d659-3351-4e90-8825-57835834986d`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -145,6 +147,11 @@ Linux 1.0.35 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.36` as a universal signed, notarized, stapled DMG.
+  Verified the UV-5RM Plus handshake retry and diagnostic trace, app/build
+  version, arm64 and x86_64 Python runtimes, universal libusb, strict code
+  signatures, Gatekeeper acceptance, notarization ticket, server checksum,
+  public download, and live platform manifest.
 - Published macOS `1.0.35` as a universal signed, notarized, stapled DMG.
   Verified the app/build version, TH-9800 and VX-6 compatibility drivers,
   headless-module error handling, live-radio catalog filtering, arm64 and
@@ -308,6 +315,24 @@ Linux 1.0.35 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.36 verification status
+
+Full verification before the macOS `1.0.36` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 178 tests passed
+- Python test discovery: 237 tests passed, 2 fixture-dependent tests skipped
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.36` / `36`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Notarization submission: `6ba8d659-3351-4e90-8825-57835834986d`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.36`
 
 ## macOS 1.0.35 verification status
 
