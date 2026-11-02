@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-01
+Last updated: 2026-11-02
 
 ## Status definitions
 
@@ -32,6 +32,7 @@ Last updated: 2026-11-01
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone AT-D578UVIII Plus | `drivers/newchirp_anytone_d578uviii.py` | D578UV CPS serial, 115200 8N1 | 4000 channels + zones | Yes, offline-tested | Hidden | Experimental |
 | TYT MD-UV380 | `drivers/newchirp_tyt_mduv380.py` | ST DfuSe USB 0483:DF11 + libusb | 3000 channels + zones | Yes, offline-tested | Hidden | Experimental |
@@ -56,6 +57,26 @@ Last updated: 2026-11-01
 | Yaesu VX-6 | Pinned CHIRP `vx6.py` with `drivers/newchirp_vx6_compat.py` | Yaesu clone serial, 19200 8N1 | Unprogrammable stored slots are treated as empty | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 
 ## Radio details
+
+### Baofeng UV-5RM Plus
+
+- Maintained compatibility: `drivers/newchirp_uv5rm_plus.py`
+- Protocol notes: `docs/BAOFENG_UV5RM_PLUS_PROTOCOL.md`
+- Official CPS:
+  `BAOFENG_UV-5RM_Plus_CPS_20240327.zip`, SHA-256
+  `63fcd01605238017040647c4fe3a8d2cccf544d76440027511c1953255d2b13f`
+- Extracted CPS executable SHA-256:
+  `5fb0880f45602a56a55dfba6e9a20a7972ac9f75e4286fd8f406372e0343ae1d`
+- Transport: 115200 8N1 with RTS and DTR asserted
+- Implemented: the OEM retries `PROGRAMBFNORMALU` every second, up to five
+  times, when a stray byte is returned instead of `0x06`
+- Read/write policy: keep the pinned CHIRP channel, settings, and upload logic
+- Evidence: REA 6.5.0/Ghidra 12.1.4 static analysis of `Communication` and
+  `FormProgress`, plus the 2026-11-02 NewChirp Linux report that returned one
+  unexpected byte at the first handshake
+- Hardware validation: none for the retry override
+- Next milestone: reporter retests the next normal Linux build; if it still
+  fails, capture the exact byte and an OEM serial trace
 
 ### TYT TH-9800
 
