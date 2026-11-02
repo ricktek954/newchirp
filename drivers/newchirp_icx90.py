@@ -28,6 +28,25 @@ CLONE_TIMEOUT = 15
 
 directory.enable_reregistrations()
 
+_UPSTREAM_GET_MEMORY = icx90.ICx90Radio.get_memory
+
+
+def _get_memory_with_invisible_guard(self, number):
+    if (
+        isinstance(number, int)
+        and 0 <= number < len(self.memobj.banks)
+        and self.memobj.banks[number].invisible_channel
+    ):
+        memory = chirp_common.Memory()
+        memory.number = number
+        memory.empty = True
+        return memory
+    return _UPSTREAM_GET_MEMORY(self, number)
+
+
+_get_memory_with_invisible_guard.newchirp_invisible_guard = True
+icx90.ICx90Radio.get_memory = _get_memory_with_invisible_guard
+
 
 @directory.register
 class ICx90Radio(icx90.ICx90Radio):
