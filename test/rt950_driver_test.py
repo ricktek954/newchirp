@@ -63,6 +63,7 @@ class FakeRT950Serial:
         self.ack_handshake = True
         self.model = b"BT-9000"
         self.max_read_size = 7
+        self.encryption_symbol = b"\x20" * 4
 
     def reset_input_buffer(self):
         self.responses.clear()
@@ -76,11 +77,32 @@ class FakeRT950Serial:
             self.responses.append(b"\x00" * 16)
         elif data == b"M":
             self.responses.append(self.model.ljust(12, b"\x00"))
+        elif data[:4] == b"SEND":
+            compat = sys.modules[
+                "newchirp.drivers.newchirp_rt950"
+            ]
+            index = (
+                (data[4] - 32) * 2 + 1
+                if data[4] & 0x20
+                else (data[4] - 16) * 2
+            ) + 1
+            self.encryption_symbol = compat.SEND_SYMBOLS[
+                data[4 + index]
+            ].encode("ascii")
+            self.responses.append(b"\x06")
         elif data[:1] == b"R":
             address = (data[1] << 8) | data[2]
             length = data[3]
+            payload = bytearray(self.memory[address:address + length])
+            for index, value in enumerate(payload):
+                key = self.encryption_symbol[index % 4]
+                if (
+                    key != 0x20
+                    and value not in (0, 0xFF, key, key ^ 0xFF)
+                ):
+                    payload[index] ^= key
             self.responses.append(
-                b"W" + data[1:] + self.memory[address:address + length]
+                b"W" + data[1:] + payload
             )
 
     def read(self, size):
@@ -122,8 +144,9 @@ class RT950DriverTest(unittest.TestCase):
             self.radio_class,
         )
         self.assertEqual(self.radio_class.BAUD_RATE, 115200)
-        self.assertTrue(self.radio_class.HARDWARE_FLOW)
-        self.assertTrue(self.radio_class.XON_XOFF)
+        self.assertEqual(self.radio_class.READ_TIMEOUT, 3.5)
+        self.assertFalse(self.radio_class.HARDWARE_FLOW)
+        self.assertFalse(self.radio_class.XON_XOFF)
 
         radio = self._radio_from_memory(b"\xff" * 0xC100)
         from chirp import errors
@@ -146,8 +169,8 @@ class RT950DriverTest(unittest.TestCase):
                 handle,
             )
 
-        self.assertTrue(serial_class.call_args.kwargs["rtscts"])
-        self.assertTrue(serial_class.call_args.kwargs["xonxoff"])
+        self.assertFalse(serial_class.call_args.kwargs["rtscts"])
+        self.assertFalse(serial_class.call_args.kwargs["xonxoff"])
         self.assertEqual(serial_class.call_args.kwargs["baudrate"], 115200)
         self.assertTrue(handle.rts)
         self.assertTrue(handle.dtr)
@@ -170,6 +193,12 @@ class RT950DriverTest(unittest.TestCase):
         self.assertEqual(reads[240], b"R\x80\x00\x80")
         self.assertEqual(reads[-1], b"R\xc0\x80\x80")
         self.assertEqual(serial.writes[-1], b"E")
+        send_writes = [
+            write for write in serial.writes
+            if write.startswith(b"SEND")
+        ]
+        self.assertEqual(len(send_writes), 1)
+        self.assertEqual(len(send_writes[0]), 25)
         self.assertEqual(radio._mmap.get(0, 4), _frequency_bytes(146_520_000))
         self.assertEqual(radio._mmap.get(0x7800, 4), b"\xff" * 4)
         self.assertEqual(radio._mmap.get(0xC0FC, 4), b"LAST")

@@ -14,6 +14,7 @@ path, and all settings blocks have been independently validated.
 """
 
 import logging
+import random
 import time
 
 from chirp import chirp_common, directory, errors, memmap
@@ -33,11 +34,17 @@ MEM_SIZE = 0xC100
 CHANNEL_COUNT = 960
 CHANNEL_RECORD_SIZE = 0x20
 BLOCK_SIZE = 0x80
+READ_TIMEOUT = 3.5
 
 ACK = b"\x06"
 HANDSHAKE = b"PROGRAMBT9000U"
 MODEL_CODE = b"BT-9000"
 MODEL_ALIASES = (MODEL_CODE, b"RT-950")
+SEND_SYMBOLS = (
+    "BHT ", "CO 7", "A ES", " EIY", "M PQ", "XN Y", "RVB ", " HQP",
+    "W RC", "MS N", " SAT", "K DH", "ZO R", "C SL", "6RB ", " JCG",
+    "PN V", "J PK", "EK L", "I LZ",
+)
 
 # The CPS deliberately skips the unused regions between these ranges.
 READ_RANGES = (
@@ -91,6 +98,38 @@ def _read_blocks():
             yield address
 
 
+def _send_packet_and_symbol(rng=None):
+    """Build the OEM's randomized 25-byte SEND authentication packet."""
+    rng = rng or random.Random(int(time.time() * 1000))
+    packet = bytearray(25)
+    packet[0:4] = b"SEND"
+    packet[4] = rng.randrange(1, 3) << 4
+    rng.randrange(0, 4)
+    packet[4] |= rng.randrange(0, 5)
+    if packet[4] & 0x20:
+        index = (packet[4] - 32) * 2 + 1
+    else:
+        index = (packet[4] - 16) * 2
+    index += 1
+    for offset in range(5, 25):
+        packet[offset] = rng.randrange(0, 20)
+    symbol = SEND_SYMBOLS[packet[4 + index]].encode("ascii")
+    return bytes(packet), symbol
+
+
+def _decode_payload(payload, symbol):
+    """Undo the CPS rotating symbol substitution on a read payload."""
+    decoded = bytearray(payload)
+    for index, value in enumerate(decoded):
+        key = symbol[index % 4]
+        if (
+            key != 0x20
+            and value not in (0x00, 0xFF, key, key ^ 0xFF)
+        ):
+            decoded[index] ^= key
+    return bytes(decoded)
+
+
 def _decode_frequency(raw):
     """Decode the CPS two-digits-per-byte decimal frequency format."""
     transformed = []
@@ -140,8 +179,9 @@ class RT950Radio(chirp_common.CloneModeRadio,
     VENDOR = "Radtel"
     MODEL = "RT-950"
     BAUD_RATE = 115200
-    HARDWARE_FLOW = True
-    XON_XOFF = True
+    READ_TIMEOUT = READ_TIMEOUT
+    HARDWARE_FLOW = False
+    XON_XOFF = False
     WANTS_DTR = True
     WANTS_RTS = True
 
@@ -159,8 +199,8 @@ class RT950Radio(chirp_common.CloneModeRadio,
         prompts.info = (
             "Connect the radio with its USB programming cable, turn the "
             "radio on, and start the download. The interface uses 115200 "
-            "baud, 8 data bits, no parity, one stop bit, and hardware flow "
-            "control with XON/XOFF."
+            "baud, 8 data bits, no parity, one stop bit, RTS and DTR "
+            "asserted, and no hardware or XON/XOFF flow control."
         )
         prompts.pre_download = (
             "1. Turn the radio on and connect its USB programming cable.\n"
@@ -191,7 +231,7 @@ class RT950Radio(chirp_common.CloneModeRadio,
         rf.valid_name_length = 12
         return rf
 
-    def _read_exact(self, size, timeout=2.0):
+    def _read_exact(self, size, timeout=READ_TIMEOUT):
         data = bytearray()
         deadline = time.monotonic() + timeout
         while len(data) < size:
@@ -230,6 +270,16 @@ class RT950Radio(chirp_common.CloneModeRadio,
                 % model
             )
 
+        # The OEM requires this randomized authentication exchange before it
+        # accepts memory reads. Its selected four-byte symbol also encrypts
+        # every payload returned during the session.
+        send_packet, self._encryption_symbol = _send_packet_and_symbol()
+        self.pipe.write(send_packet)
+        if self._read_exact(1) != ACK:
+            raise errors.RadioNoResponse(
+                "The RT-950 did not acknowledge data encryption"
+            )
+
     def _handshake(self):
         last_error = None
         for _attempt in range(3):
@@ -251,7 +301,7 @@ class RT950Radio(chirp_common.CloneModeRadio,
                 "RT-950 returned the wrong block address for 0x%04x: %r"
                 % (address, reply[1:3])
             )
-        return reply[4:]
+        return _decode_payload(reply[4:], self._encryption_symbol)
 
     def sync_in(self):
         session_started = False
