@@ -43,9 +43,10 @@ release requirements.
   CPS-derived driver work must trace both serial directions, document wire
   encoding and response-length rules, build replay fixtures, and record
   static/OEM-capture/physical evidence separately.
-- The Linux `1.0.32` DEB, RPM, AppImage, and Pacman artifacts are live.
-  This hotfix caps the Linux runner and plugin builds at the GLib 2.74 API
-  level so Debian 12/MX Linux systems do not fail at startup with missing
+- The Linux `1.0.35` DEB, RPM, AppImage, and Pacman artifacts are live.
+  This release was built from `b39df094` and includes the `1.0.33` through
+  `1.0.35` fixes while keeping the GLib 2.74 API cap so Debian 12/MX Linux
+  systems do not fail at startup with missing
   `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
@@ -75,7 +76,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.35` artifact source commit: `b39df094`
-- Linux `1.0.32` artifact source commit: `07bcfd29`
+- Linux `1.0.35` artifact source commit: `b39df094`
 - Open pull requests: none
 - Checked-out source version: `1.0.35+35`
 - macOS builds are pinned to CocoaPods with
@@ -93,8 +94,8 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.35 |
 | Windows | 1.0.35 |
-| Linux | 1.0.32 |
-| Legacy shared manifest version | 1.0.31 |
+| Linux | 1.0.35 |
+| Legacy shared manifest version | 1.0.35 |
 
 macOS artifact:
 
@@ -120,31 +121,31 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.35.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.35.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.35.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.32.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.35.pkg.tar.zst`
 
-Linux 1.0.32 SHA-256:
+Linux 1.0.35 SHA-256:
 
 - DEB:
-  `2bee891f5efaaf1059be1535b7a16b72970b1479dc2ad6257c6cd284a9ace318`
+  `3a2a271d11ac50a33376c74de135e5f16c5e67d14c308a7f3850274c85fbee02`
 - RPM:
-  `daa8a5eaa2d65b7995367b84b6b81cde9809bd45e6413f50a1473e8912a004a4`
+  `f292777daebf6f6eab02f4ad201355929f53b31949990dac0c8ad922b4cc9577`
 - AppImage:
-  `48e9e311382331ed085c7dac67278009e7358866c9cadd06afb7240241f3ac03`
+  `5fb41b23103b62d93f1bcd763815a1fdb94461d93e56f34b7d986758bb3c6d86`
 - Pacman:
-  `3f0122b53a1d4c88fe41efe458c67537c06e439ec08978c42aa9202ea5948ef1`
+  `a398c854c2c6dc326884219da7eb4e9e4982ad944e76a4fcbac0039ac3b7db39`
 
-Linux 1.0.32 sizes:
+Linux 1.0.35 sizes:
 
-- DEB: `48,370,212` bytes
-- RPM: `38,852,708` bytes
-- AppImage: `144,360,640` bytes
-- Pacman: `46,867,775` bytes
+- DEB: `48,381,148` bytes
+- RPM: `38,863,454` bytes
+- AppImage: `144,364,736` bytes
+- Pacman: `46,876,224` bytes
 
 ## Recently completed
 
@@ -159,6 +160,12 @@ Linux 1.0.32 sizes:
   x86_64 Python runtimes, universal libusb loading under both architectures,
   strict code signatures, Gatekeeper acceptance, notarization ticket, server
   checksum, public download, and live platform manifest.
+- Published Linux `1.0.35` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `b39df094`. Verified
+  `flutter analyze`, the full Flutter test suite, embedded `version.json`,
+  package metadata, bundled Python/CHIRP runtime and `libusb-1.0.so.0`,
+  absence of GLib 2.80 once-init pointer symbols, server checksums, public
+  HTTP 200 checks, and live platform manifest.
 - Published Linux `1.0.32` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts. Fixed the Debian 12/MX Linux startup failure
   reported as `undefined symbol: g_once_init_enter_pointer` by compiling
