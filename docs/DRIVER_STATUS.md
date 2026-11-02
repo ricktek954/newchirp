@@ -42,7 +42,8 @@ Last updated: 2026-11-01
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
-| Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image; invisible-slot guard | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Icom IC-746PRO | `drivers/newchirp_icom_ic746pro.py` | Icom CI-V serial, 9600 8N1 | Stock IC-746 family logic | Stock IC-746 family logic | Stock IC-746 family logic | Experimental model profile |
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, physical image verified | Disabled | Hidden | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
@@ -700,7 +701,8 @@ Last updated: 2026-11-01
 - Transport: legacy Icom ICF clone serial at 9600 8N1
 - Image: model bytes `25 07 00 01`, fixed size `0x2D40`
 - Implemented: the upstream channel, bank, settings, special-memory, read, and
-  write behavior. The override changes download completion only.
+  write behavior. The override changes download completion and treats memories
+  marked `invisible_channel` as empty before decoding stale channel fields.
 - Read policy: a download is successful when decoded frames cover the entire
   `0x2D40` image contiguously. This handles IC-E90 revisions that omit or
   malform the generic final end frame after sending the complete image. A
@@ -712,8 +714,15 @@ Last updated: 2026-11-01
   `aae6ea1353a3b0f85379bf30eb66a69fc7814a5a370a555acee2579d64ff7adf`;
   a field report received 39 bytes of model data followed by 28,261 bytes of
   clone traffic before the generic end-frame wait failed.
+- Field image 2026-11-02: Klas supplied a 11,769-byte CHIRP image,
+  SHA-256
+  `356041292a5b3edb9204c023359798981c19e406ccd02b5f87993ff3d770cc26`.
+  NewChirp failed on stale data in memories 83 and 89; both carry
+  `invisible_channel=1`, but upstream attempted to decode tone mode `4`.
+  With the visibility guard, the image loads 82 visible channels and no
+  parser exception.
 - Driver SHA-256:
-  `2d78ec1f745d424b09b6cdd7d8d832f5af4ea27cd5015a2415118007331256ac`
+  `c7bebdcea4e70092fcd112e17997f1ea4f260b6c97831c6bc4c89309055d5233`
 - Hardware validation: none for this override. Offline tests cover complete
   image coverage without an end frame, normal end-frame completion, and
   truncated rejection. The public 500-channel image also loaded successfully
@@ -721,6 +730,27 @@ Last updated: 2026-11-01
 - Next milestone: Klas retests the committed fix with the same OPC-478UD port,
   confirms that the read completes after the full image arrives, and verifies
   the displayed channels before any upload.
+
+### Icom IC-7200 memory grammar compatibility
+
+- Maintainer: NewChirp override of the upstream CHIRP `Icom7200Radio`
+- Maintained file: `drivers/newchirp_icom_ic7200.py`
+- Transport: Icom CI-V serial at 19200 8N1
+- Implemented: the upstream live-memory channel, mode, filter, and read/write
+  behavior with a corrected shared `MemFrame` field grammar
+- Issue: pinned upstream `MEM_FORMAT` omits the comma after `unknown:3`, causing
+  every CI-V memory response to fail with
+  `syntax error in input:3: split:1` before channel decode
+- Correction: the override supplies the same 11-byte frame layout with valid
+  bit-field continuation punctuation and installs it only for the IC-7200
+- Evidence: 2026-11-02 NewChirp 1.0.34 report from nevesperes@gmail.com on
+  Windows COM3. The radio returned repeated 19-byte CI-V `1A 00` status
+  responses before the parser error.
+- Driver SHA-256:
+  `375110fc403edb71a475d7573a63ea456c4ea79179495071b5acbd47058cd4c7`
+- Hardware validation: none for this override
+- Next milestone: reporter retests a complete IC-7200 read, then verifies one
+  controlled channel edit and read-back
 
 ### Icom ID-50 and ID-52
 

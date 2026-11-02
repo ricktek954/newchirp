@@ -153,6 +153,22 @@ class Icx90CompletionTest(unittest.TestCase):
         with self.assertRaises(errors.RadioError):
             radio.sync_in()
 
+    def test_invisible_memory_is_empty_even_with_stale_channel_data(self):
+        from chirp import memmap
+
+        radio = self.radio_class(memmap.MemoryMapBytes(bytes(IMAGE_SIZE)))
+        radio.process_mmap()
+        radio.get_features()
+        radio.memobj.memory[83].freq = 86_008
+        radio.memobj.memory[83].tone_mode = 4
+        radio.memobj.banks[83].invisible_channel = 1
+
+        self.assertTrue(radio.get_memory(83).empty)
+
+        radio.memobj.memory[1].freq = 29_000
+        radio.memobj.banks[1].invisible_channel = 0
+        self.assertFalse(radio.get_memory(1).empty)
+
 
 if __name__ == "__main__":
     unittest.main()
