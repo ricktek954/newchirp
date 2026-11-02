@@ -42,9 +42,9 @@ release requirements.
   CPS-derived driver work must trace both serial directions, document wire
   encoding and response-length rules, build replay fixtures, and record
   static/OEM-capture/physical evidence separately.
-- The Linux `1.0.36` DEB, RPM, AppImage, and Pacman artifacts are live.
-  This release was built from `32fbc464` and includes the UV-5RM Plus CPS
-  handshake retry while keeping the GLib 2.74 API cap so Debian 12/MX Linux
+- The Linux `1.0.37` DEB, RPM, AppImage, and Pacman artifacts are live.
+  This release was built from `5a5e79a9` and includes the RT-950 transport
+  correction while keeping the GLib 2.74 API cap so Debian 12/MX Linux
   systems do not fail at startup with missing
   `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
@@ -75,7 +75,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.37` artifact source commit: `96d80548`
-- Linux `1.0.36` artifact source commit: `32fbc464`
+- Linux `1.0.37` artifact source commit: `5a5e79a9`
 - Open pull requests: none
 - Checked-out source version: `1.0.37+37`
 - macOS builds are pinned to CocoaPods with
@@ -93,8 +93,8 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.37 |
 | Windows | 1.0.37 |
-| Linux | 1.0.36 |
-| Legacy shared manifest version | 1.0.36 |
+| Linux | 1.0.37 |
+| Legacy shared manifest version | 1.0.37 |
 
 macOS artifact:
 
@@ -106,7 +106,7 @@ macOS artifact:
 - Size: `82,345,483` bytes
 - Notarization submission: `9bd8af3a-c8f0-4193-ac9a-7cfa2827bcdf`
 - Gatekeeper result: accepted as Notarized Developer ID
-- Server checksum matched the local artifact
+- Server checksum recorded from the live artifact
 
 Windows artifact:
 
@@ -120,31 +120,31 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.36.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.36.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.36.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.36.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.pkg.tar.zst`
 
-Linux 1.0.36 SHA-256:
+Linux 1.0.37 SHA-256:
 
 - DEB:
-  `ab4fb3b713ca4f6b276bbd25a48522edc3950bc20900f0e6f95215e21e548c17`
+  `f7af9810c574e82b165e226fcb13c5953d9f0eb2abb75a66f223d6de0f3dd241`
 - RPM:
-  `22522a103a0484ca34b20acbc1fc453c49a2a3f91772206d29dee07c714edbd3`
+  `f03800e49945b157d90c7a049c7fab9570d6bc5b868b2f17b791dba12289f4de`
 - AppImage:
-  `071bbea5c8db52afd0bfc32b76eb440c1db8c45c529e827ec32c2fb73cb3bd48`
+  `06b5d331a4c884772c3e96382dba845b1a5b74b38daa757309f4338c3ba61991`
 - Pacman:
-  `51f4482cffad354e5839fd5460a85fe36f5a54fbf61761a1479c55d03c35aaca`
+  `fcfe94d0ebf62d353ec85e71482fa50ee33ff9644c2d1085be79ef6e94a6afca`
 
-Linux 1.0.36 sizes:
+Linux 1.0.37 sizes:
 
-- DEB: `48,379,426` bytes
-- RPM: `38,846,204` bytes
+- DEB: `48,379,978` bytes
+- RPM: `38,842,053` bytes
 - AppImage: `144,364,736` bytes
-- Pacman: `46,883,097` bytes
+- Pacman: `46,886,531` bytes
 
 ## Recently completed
 
@@ -153,6 +153,13 @@ Linux 1.0.36 sizes:
   and block-timeout correction; app/build version; arm64 and x86_64 Python
   runtimes; universal libusb; strict signatures; Gatekeeper acceptance;
   notarization ticket; server checksum; public download; and live manifest.
+- Published Linux `1.0.37` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `5a5e79a9`. Verified
+  `flutter analyze`, the full Flutter test suite, RT-950 driver tests,
+  bridge upload tests, embedded `version.json`, package metadata, bundled
+  Python/CHIRP runtime and `libusb-1.0.so.0`, absence of GLib 2.80
+  once-init pointer symbols, server checksums, public HTTP 200 checks, and
+  live platform manifest.
 - Published macOS `1.0.36` as a universal signed, notarized, stapled DMG.
   Verified the UV-5RM Plus handshake retry and diagnostic trace, app/build
   version, arm64 and x86_64 Python runtimes, universal libusb, strict code
