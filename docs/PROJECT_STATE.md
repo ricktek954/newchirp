@@ -8,10 +8,11 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.36` installer is live. It retries the UV-5RM Plus CPS
-  handshake when the radio misses the first identification reply. It also
-  keeps the RT-950, FT-5D, A9305B, IC-E90, IC-7200, TH-9800, and VX-6 fixes
-  from `1.0.27` through `1.0.35`.
+- The Windows `1.0.37` installer is live. It applies the CPS-verified RT-950
+  transport correction: hardware and XON/XOFF flow control are disabled,
+  the randomized 25-byte `SEND` authentication exchange is performed with
+  session-symbol payload decryption, and the Web Programmer's 3.5-second
+  block response window is allowed. It keeps the `1.0.27`-`1.0.36` fixes.
 - The macOS `1.0.37` release is live. It contains the CPS-verified RT-950
   transport correction: no hardware/XON-XOFF flow control, randomized SEND
   authentication, session-symbol payload decryption, and the OEM-compatible
@@ -91,7 +92,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.37 |
-| Windows | 1.0.36 |
+| Windows | 1.0.37 |
 | Linux | 1.0.36 |
 | Legacy shared manifest version | 1.0.36 |
 
@@ -109,11 +110,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.36.exe`
-- Version/build: `1.0.36` / `36`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.37.exe`
+- Version/build: `1.0.37` / `37`
 - SHA-256:
-  `32ec404f0fd23caa8e4aed18f6cd06a3be3d69f5c08bb9d343ad1eeef4b400fd`
-- Size: `61,091,704` bytes
+  `a8acc8b92ec3fffe664381cb6fd12f1eb9af78e0f642f3846c4c34ede23653a5`
+- Size: `61,092,497` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
