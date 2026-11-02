@@ -52,8 +52,36 @@ Last updated: 2026-11-01
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
+| TYT TH-9800 | Pinned CHIRP `th9800.py` with `drivers/newchirp_th9800_compat.py` | TYT clone serial, 38400 8N1 | Reserved tone values no longer abort the read | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Yaesu VX-6 | Pinned CHIRP `vx6.py` with `drivers/newchirp_vx6_compat.py` | Yaesu clone serial, 19200 8N1 | Unprogrammable stored slots are treated as empty | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 
 ## Radio details
+
+### TYT TH-9800
+
+- Maintained compatibility: `drivers/newchirp_th9800_compat.py`
+- Transport: upstream CHIRP TYT clone serial at 38400 8N1
+- Decode policy: preserve active channels when a stored CTCSS field is
+  outside CHIRP's supported tone range; use the 88.5 Hz default in the decoded
+  memory while retaining the original image bytes
+- Evidence: upstream CHIRP fixture `TYT_TH-9800.img` plus the 2026-11-01
+  report showing `1666.5` rejected as an invalid `ctone`
+- Hardware validation: pending
+- Next milestone: retest with the reporter's saved image and compare one
+  edited channel against the radio display before an upload/re-read cycle
+
+### Yaesu VX-6
+
+- Maintained compatibility: `drivers/newchirp_vx6_compat.py`
+- Transport: upstream CHIRP Yaesu clone serial at 19200 8N1
+- Decode policy: treat only a flagged memory whose stored frequency cannot be
+  corrected to a supported tuning step as empty, retaining the original image
+  bytes so untouched slots are not erased during an upload
+- Evidence: upstream CHIRP fixture `Yaesu_VX-6.img` plus the 2026-11-02 report
+  showing `666.666000 MHz` aborting the full read
+- Hardware validation: pending
+- Next milestone: retest with the reporter's saved image and confirm the
+  channel count against the radio
 
 ### AnyTone AT-D578UVIII Plus
 
