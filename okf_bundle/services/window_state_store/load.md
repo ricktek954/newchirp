@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:window_state_store.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-11-02T10:26:10Z"
 concept_id: services/window_state_store/load
 language: dart
 ---
