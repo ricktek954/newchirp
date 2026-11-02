@@ -13,6 +13,10 @@ release requirements.
   transfer safety guards), adds one-click clear controls to channel and
   repeater searches, and fixes Icom ID-50 empty memory handling. It keeps
   the `1.0.27`-`1.0.33` fixes.
+- The macOS `1.0.35` release is live. It includes the TH-9800 and VX-6
+  tolerant image decoders, removes file-only models from the connected-radio
+  catalog, and gives CHIRP modules with a `wx` dependency a clear headless
+  runtime error.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
@@ -45,10 +49,9 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.34` release is built, signed, notarized, stapled, uploaded,
-  and live. It includes the ID-50 unavailable-memory fix, direct channel-page
-  writes, and one-click search clearing. The universal DMG contains both
-  Python architectures and universal libusb.
+- The macOS `1.0.35` release is built, signed, notarized, stapled, uploaded,
+  and live. The universal DMG contains both Python architectures and universal
+  libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
   provisional channel map still requires validation on physical hardware.
 - The experimental GM-32 has physical read/write evidence from 2026-10-25.
@@ -69,10 +72,10 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.34` artifact source commit: `a03baa4e`
+- macOS `1.0.35` artifact source commit: `b39df094`
 - Linux `1.0.32` artifact source commit: `07bcfd29`
 - Open pull requests: none
-- Checked-out source version: `1.0.34+34`
+- Checked-out source version: `1.0.35+35`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -86,20 +89,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.34 |
+| macOS | 1.0.35 |
 | Windows | 1.0.34 |
 | Linux | 1.0.32 |
 | Legacy shared manifest version | 1.0.31 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.34.dmg`
-- Version/build: `1.0.34` / `34`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.35.dmg`
+- Version/build: `1.0.35` / `35`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `d41cbb48b73f41db92aa7a9ad57011409cac2973bc438308aebcb1ed181344dd`
-- Size: `82,338,260` bytes
-- Notarization submission: `65193466-7a9e-4ecf-b4d6-9ea05cefebd2`
+  `809ae10d397f2f3e7be65271e2f6114580764f1b9a091249943df18ed1a082a1`
+- Size: `82,346,151` bytes
+- Notarization submission: `f5d6e76f-b1dc-49b4-8353-793f8e134f01`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum matched the local artifact
 
@@ -143,6 +146,12 @@ Linux 1.0.32 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.35` as a universal signed, notarized, stapled DMG.
+  Verified the app/build version, TH-9800 and VX-6 compatibility drivers,
+  headless-module error handling, live-radio catalog filtering, arm64 and
+  x86_64 Python runtimes, universal libusb, strict code signatures,
+  Gatekeeper acceptance, notarization ticket, server checksum, public
+  download, and live platform manifest.
 - Published macOS `1.0.33` as a universal signed, notarized, stapled DMG.
   Verified the app/build version, Icom ID-50 channel-field decoder, arm64 and
   x86_64 Python runtimes, universal libusb loading under both architectures,
@@ -294,6 +303,24 @@ Linux 1.0.32 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.35 verification status
+
+Full verification before the macOS `1.0.35` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 178 tests passed
+- Python test discovery: 234 tests passed, 2 fixture-dependent tests skipped
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.35` / `35`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Notarization submission: `f5d6e76f-b1dc-49b4-8353-793f8e134f01`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.35`
 
 ## macOS 1.0.34 verification status
 
