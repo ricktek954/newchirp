@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-02
+Last updated: 2026-11-03
 
 ## Status definitions
 
@@ -37,6 +37,7 @@ Last updated: 2026-11-02
 | AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone AT-D578UVIII Plus | `drivers/newchirp_anytone_d578uviii.py` | D578UV CPS serial, 115200 8N1 | 4000 channels + zones | Yes, offline-tested | Hidden | Experimental |
 | TYT MD-UV380 | `drivers/newchirp_tyt_mduv380.py` | ST DfuSe USB 0483:DF11 + libusb | 3000 channels + zones | Yes, offline-tested | Hidden | Experimental |
+| Baofeng UV-9G | Pinned CHIRP `baofeng_wp970i.py` with `drivers/newchirp_uv9g.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Stock CHIRP driver | Invalid service calibration values are read-only and preserved | Experimental compatibility override |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | CHIRP TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | TIDRADIO TD-H8 fourth-generation HAM | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | Identity accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
@@ -51,6 +52,7 @@ Last updated: 2026-11-02
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
 | Kenwood TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710G clone serial | Stock driver | Stock driver | Stock driver | Regional identity compatibility |
+| Kenwood TK-270G | Pinned CHIRP `tk760g.py` with `drivers/newchirp_kenwood_tk270g.py` | CHIRP Kenwood clone serial, 9600 8N1 | Stock driver; invalid bank metadata normalized | Stock driver | Stock driver | Experimental compatibility override |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
@@ -71,13 +73,37 @@ Last updated: 2026-11-02
 - Transport: 115200 8N1 with RTS and DTR asserted
 - Implemented: the OEM retries `PROGRAMBFNORMALU` every second, up to five
   times, when a stray byte is returned instead of `0x06`
+- Unprogrammed PTT-ID bytes (`0xFF`) are exposed as `Off` instead of aborting
+  channel decode; a subsequent upload replaces the invalid byte with the
+  valid Off value
 - Read/write policy: keep the pinned CHIRP channel, settings, and upload logic
 - Evidence: REA 6.5.0/Ghidra 12.1.4 static analysis of `Communication` and
   `FormProgress`, plus the 2026-11-02 NewChirp Linux report that returned one
   unexpected byte at the first handshake
+- Additional evidence: the 2026-11-03 macOS report UID 388 opened an edited
+  image and failed during upload because channel memory 0 stored `pttid=0xFF`
 - Hardware validation: none for the retry override
-- Next milestone: reporter retests the next normal Linux build; if it still
-  fails, capture the exact byte and an OEM serial trace
+- Next milestone: reporters retest the next normal build; the macOS reporter
+  should confirm the edited channel library uploads and reads back correctly
+
+### Baofeng UV-9G service settings
+
+- Maintained compatibility: `drivers/newchirp_uv9g.py`
+- Transport: pinned CHIRP WP970I clone serial at 9600 8N1
+- Read policy: unchanged. Service squelch calibration values above the upstream
+  display maximum of 123 are shown read-only instead of aborting settings load.
+- Write policy: unchanged for all normal settings. The invalid calibration
+  values remain in the image and are skipped during a settings upload.
+- Evidence: the 2026-11-03 Windows report UID 393 completed a 66-channel read,
+  then failed while loading `squelch.vhf.sql4` through `sql9` with stored values
+  124 through 129. The upstream `RadioSettingValueInteger(0, 123, value)`
+  rejected the stored bytes.
+- Offline validation: the upstream `Baofeng_UV-9G.img` fixture covers settings
+  load, read-only invalid calibration entries, and preservation through
+  `set_settings`.
+- Hardware validation: none for this override
+- Next milestone: the reporter retests settings upload in the next normal build
+  and confirms the radio's ordinary settings remain intact
 
 ### TYT TH-9800
 
@@ -723,6 +749,23 @@ Last updated: 2026-11-02
   records and names with KPG-171D, then map the remaining fields before
   considering any upload capability.
 - Website catalog: must be listed as experimental.
+
+### Kenwood TK-270G bank metadata
+
+- Maintained compatibility: `drivers/newchirp_kenwood_tk270g.py`
+- Transport: pinned CHIRP Kenwood Series 60G clone serial at 9600 8N1
+- Issue: an active channel with an unprogrammed bank index above 127 aborts
+  channel decode when upstream constructs its 0-127 bank-index setting
+- Correction: normalize an invalid index to the channel's zero-based position
+  and move it to bank 1, matching the driver's existing defaults for `0xFF`
+- Evidence: the 2026-11-03 Windows report UID 391 read 24 channels, then
+  failed its write with `bnumb value 128 not in range 0-127`
+- Offline validation: the upstream `Kenwood_TK-272G.img` fixture is
+  re-identified as a TK-270G for the shared Series 60G layout and covers the
+  invalid-index normalization
+- Hardware validation: none for this override
+- Next milestone: the reporter retests upload in the next normal build, then
+  reads the radio back and verifies the edited channels and bank assignments
 
 ### Kenwood TM-D710GP regional identity
 

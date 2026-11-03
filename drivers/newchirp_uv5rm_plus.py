@@ -23,6 +23,7 @@ HANDSHAKE_RETRIES = 5
 RETRY_DELAY = 1.0
 UNEXPECTED_RESPONSE = "Unexpected response from radio"
 _ORIGINAL_DO_IDENT = baofeng_uv17Pro._do_ident
+_ORIGINAL_GET_MEMORY = baofeng_uv17Pro.BaofengUV5RMPlus.get_memory
 
 
 def _do_ident(radio):
@@ -49,3 +50,25 @@ if not getattr(
     False,
 ):
     baofeng_uv17Pro._do_ident = _do_ident
+
+
+def _get_memory(self, number):
+    """Expose an unprogrammed PTT-ID byte as a valid Off setting."""
+    _mem = self._get_raw_memory(number)
+    pttid = int(_mem.pttid)
+    if pttid < len(self.PTTID_LIST):
+        return _ORIGINAL_GET_MEMORY(self, number)
+
+    # 0xFF is an unprogrammed channel byte, not a selectable PTT-ID mode.
+    # Normalize it while decoding so upload can replace it with a valid value.
+    _mem.pttid = 0
+    return _ORIGINAL_GET_MEMORY(self, number)
+
+
+_get_memory.newchirp_uv5rm_plus_invalid_pttid = True
+if not getattr(
+    baofeng_uv17Pro.BaofengUV5RMPlus.get_memory,
+    "newchirp_uv5rm_plus_invalid_pttid",
+    False,
+):
+    baofeng_uv17Pro.BaofengUV5RMPlus.get_memory = _get_memory
