@@ -8,6 +8,19 @@ release requirements.
 
 ## Resume here
 
+- The second 2026-11-03 triage found 14 unread bug reports and handled UIDs
+  383, 386, 387, 388, 391, 393, and 395. Every reply was verified in `Sent`,
+  and every original source UID was verified `\Seen`. UIDs 384, 385, 389, 390,
+  392, 394, and 396 remain unread: five require Windows/COM-port or handshake
+  diagnosis, and two are reporter acknowledgements.
+- Scoped fixes are committed and pushed as `4d2c385c`: unprogrammed UV-5RM
+  Plus PTT-ID bytes load as Off, out-of-range UV-9G service squelch calibration
+  values are read-only and preserved during settings upload, and invalid
+  TK-270G bank metadata is normalized before channel decode.
+- Verification for `4d2c385c`: `flutter analyze` is clean, all 178 Flutter
+  tests pass, and all 245 discovered Python tests pass with 2 fixture-dependent
+  skips. The installed formatter still reports 13 pre-existing Dart files it
+  would rewrite; no Dart source was changed for this triage.
 - The 2026-11-03 triage handled all 23 unread bug-report messages (UIDs
   347, 348, 349, 351, 352, 354, 356, 357, 359, 360, 361, 362, 363, 364,
   366, 367, 372, 374, 375, 376, 377, 379, and 380). Every reply was verified
