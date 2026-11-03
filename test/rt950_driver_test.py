@@ -39,7 +39,10 @@ def _frequency_bytes(frequency):
         (tens // 100) % 100,
         tens % 100,
     )
-    return bytes(((part // 10) << 4) | (part % 10) for part in parts)
+    return bytes(
+        ((part // 10) << 4) | (part % 10)
+        for part in reversed(parts)
+    )
 
 
 def _record(rx, tx, *, rx_tone=b"\x00\x00", tx_tone=b"\x00\x00",
@@ -287,6 +290,17 @@ class RT950DriverTest(unittest.TestCase):
         self.assertEqual(third.power, "Low")
         self.assertEqual(third.name, "AIR")
         self.assertTrue(radio.get_memory(960).empty)
+
+    def test_frequency_uses_the_cps_little_endian_byte_order(self):
+        memory = bytearray(b"\xff" * 0xC100)
+        memory[0:8] = bytes.fromhex("0075254600757546")
+
+        radio = self._radio_from_memory(memory)
+        channel = radio.get_memory(1)
+
+        self.assertEqual(channel.freq, 462_575_000)
+        self.assertEqual(channel.duplex, "+")
+        self.assertEqual(channel.offset, 5_000_000)
 
     def test_channel_fields_have_explanations(self):
         memory = bytearray(b"\xff" * 0xC100)

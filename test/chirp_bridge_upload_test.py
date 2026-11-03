@@ -138,6 +138,18 @@ class UploadHandshakeTest(unittest.TestCase):
             radio.sync_out()
         self.assertEqual(serial.ident_count, 2)
 
+    def test_td_h3_variant_selection_resolves_the_generic_identity(self):
+        serial = FakeTDH3Serial()
+        selected = self.directory.get_radio("TIDRADIO_TD-H3-HAM")
+
+        detected = selected.detect_from_serial(serial)
+
+        self.assertIs(
+            detected,
+            self.directory.get_radio("TIDRADIO_TD-H3"),
+        )
+        self.assertEqual(serial.ident_count, 1)
+
     def test_tk880_image_uses_populated_channel_subdevice(self):
         image = SOURCE / "tests/images/Kenwood_TK-880.img"
         radio = bridge.radio_from_image(

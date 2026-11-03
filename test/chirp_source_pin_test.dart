@@ -26,5 +26,8 @@ void main() {
       expect(text.contains('refs/heads/master'), isFalse, reason: path);
       expect(text.contains('chirp-master'), isFalse, reason: path);
     }
+
+    final updater = File('scripts/update_chirp.sh').readAsStringSync();
+    expect(updater, contains('CODE: Reasons | None = None'));
   });
 }
