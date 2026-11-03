@@ -51,7 +51,8 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         bridge = _load_bridge()
-        bridge.load_chirp(
+        cls.bridge = bridge
+        cls.directory = bridge.load_chirp(
             str(SOURCE),
             str(PYTHON_VENDOR),
             str(ROOT / "drivers"),
@@ -90,6 +91,24 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
             self.radio_module._do_ident(radio)
 
         self.assertEqual(serial.writes, [b"PROGRAMBFNORMALU"])
+
+    def test_unprogrammed_pttid_is_exposed_as_off(self):
+        radio = self.bridge.radio_from_image(
+            self.directory,
+            "Baofeng_UV-5RM_Plus",
+            str(SOURCE / "tests/images/Baofeng_UV-5RM_Plus.img"),
+        )
+        radio._memobj.memory[0].pttid = 0xFF
+
+        memory = radio.get_memory(1)
+        pttid = next(
+            setting
+            for setting in memory.extra
+            if setting.get_name() == "pttid"
+        )
+
+        self.assertEqual(str(pttid.value), "Off")
+        self.assertEqual(int(radio._memobj.memory[0].pttid), 0)
 
 
 if __name__ == "__main__":
