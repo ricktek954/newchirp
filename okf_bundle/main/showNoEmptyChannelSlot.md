@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-03T20:21:43Z"
 concept_id: main/showNoEmptyChannelSlot
 language: dart
 ---
@@ -23,7 +23,7 @@ void_showNoEmptyChannelSlot()
 ```
 
 ## Source
-Lines 1730–1730 in `main.dart`
+Lines 1798–1798 in `main.dart`
 
 ## Relationships
 

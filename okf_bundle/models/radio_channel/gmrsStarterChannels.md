@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T19:55:47Z"
+timestamp: "2026-11-03T20:21:22Z"
 concept_id: models/radio_channel/gmrsStarterChannels
 language: dart
 ---
@@ -24,7 +24,7 @@ ListgmrsStarterChannelsgmrsStarterChannels
 ```
 
 ## Source
-Lines 861–861 in `models/radio_channel.dart`
+Lines 866–866 in `models/radio_channel.dart`
 
 ## Relationships
 

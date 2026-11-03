@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-03T20:21:43Z"
 concept_id: main/cutChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ void_cutChannel(int index)
 ```
 
 ## Source
-Lines 2345–2345 in `main.dart`
+Lines 2413–2413 in `main.dart`
 
 ## Relationships
 

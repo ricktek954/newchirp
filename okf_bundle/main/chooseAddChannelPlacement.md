@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-03T20:21:43Z"
 concept_id: main/chooseAddChannelPlacement
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_chooseAddChannelPlacement_chooseAddChannelPlacement
 ```
 
 ## Source
-Lines 2145–2145 in `main.dart`
+Lines 2213–2213 in `main.dart`
 
 ## Relationships
 

@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T21:41:58Z"
+timestamp: "2026-11-03T20:22:07Z"
 concept_id: models/channel_image_baseline/read
 language: dart
 ---
@@ -33,12 +33,15 @@ ChannelLibrarySnapshotread({
     List<double> validTuningSteps = const [],
     List<({double startMhz, double endMhz})> validBands = const [],
     List<String> validModes = const [],
+    List<String> validToneModes = const [],
+    List<String> validCrossModes = const [],
     bool hasTuningStep = true,
+    int maxNameLength = 16,
   })
 ```
 
 ## Source
-Lines 208–222 in `models/channel_image_baseline.dart`
+Lines 220–237 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

@@ -11,7 +11,7 @@
 - [channelImageMatch](channelImageMatch.md)
 - [channelImageStatusText](channelImageStatusText.md)
 - [channelLibrarySnapshot](channelLibrarySnapshot.md)
-- [channelLibraryWriteReady](channelLibraryWriteReady.md)
+- [channelLibraryWriteReady](channelLibraryWriteReady.md) — Allow incompatible rows only when the caller provides a review/skip step.
 - [channelListSignature](channelListSignature.md)
 - [markDirty](markDirty.md)
 - [read](read.md)
