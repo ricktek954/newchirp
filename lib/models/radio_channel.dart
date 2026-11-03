@@ -688,6 +688,7 @@ class RadioChannel {
     List<String> validToneModes = const [],
     List<String> validCrossModes = const [],
     bool hasTuningStep = true,
+    int maxNameLength = 16,
   }) {
     final issues = <String>[];
     if (cleared) return issues;
@@ -746,7 +747,11 @@ class RadioChannel {
         'cross tones: ${validCrossModes.join(', ')}.',
       );
     }
-    if (name.length > 16) issues.add('Name may be too long for many radios.');
+    if (name.length > maxNameLength) {
+      issues.add(
+        'Name must be $maxNameLength characters or fewer for this radio.',
+      );
+    }
     if (hasTuningStep && validTuningSteps.isNotEmpty && frequency > 0) {
       final frequencyHz = (frequency * 1000000).round();
       final stepSupported = validTuningSteps.any(

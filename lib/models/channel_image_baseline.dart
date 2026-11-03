@@ -83,10 +83,13 @@ String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.differs => 'Unsaved radio changes',
 };
 
+/// Allow incompatible rows only when the caller provides a review/skip step.
+/// Connection and image requirements still apply to that workflow.
 bool channelLibraryWriteReady({
   required ChannelImageMatch match,
   required bool busy,
   required int invalidCount,
+  bool allowIncompatibleReview = false,
   required bool hasPort,
   required bool hasRadioModel,
   required bool hasRadioImage,
@@ -98,7 +101,7 @@ bool channelLibraryWriteReady({
     ChannelImageMatch.noImage || ChannelImageMatch.notLoaded => false,
   };
   return !busy &&
-      invalidCount == 0 &&
+      (invalidCount == 0 || allowIncompatibleReview) &&
       hasPort &&
       hasRadioModel &&
       hasRadioImage &&
@@ -140,7 +143,10 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
   List<double> validTuningSteps = const [],
   List<({double startMhz, double endMhz})> validBands = const [],
   List<String> validModes = const [],
+  List<String> validToneModes = const [],
+  List<String> validCrossModes = const [],
   bool hasTuningStep = true,
+  int maxNameLength = 16,
 }) {
   var activeCount = 0;
   var scanEnabledCount = 0;
@@ -157,7 +163,10 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
           validTuningSteps: validTuningSteps,
           validBands: validBands,
           validModes: validModes,
+          validToneModes: validToneModes,
+          validCrossModes: validCrossModes,
           hasTuningStep: hasTuningStep,
+          maxNameLength: maxNameLength,
         )
         .isNotEmpty) {
       needsAttention++;
@@ -200,6 +209,9 @@ class ChannelLibraryStatsCache {
   int _tuningStepsHash = 0;
   int _validBandsHash = 0;
   int _validModesHash = 0;
+  int _validToneModesHash = 0;
+  int _validCrossModesHash = 0;
+  int _maxNameLength = 16;
 
   void markDirty() {
     _dirty = true;
@@ -218,7 +230,10 @@ class ChannelLibraryStatsCache {
     List<double> validTuningSteps = const [],
     List<({double startMhz, double endMhz})> validBands = const [],
     List<String> validModes = const [],
+    List<String> validToneModes = const [],
+    List<String> validCrossModes = const [],
     bool hasTuningStep = true,
+    int maxNameLength = 16,
   }) {
     final tuningStepsHash = Object.hash(
       Object.hashAll(validTuningSteps),
@@ -228,6 +243,8 @@ class ChannelLibraryStatsCache {
       validBands.map((band) => Object.hash(band.startMhz, band.endMhz)),
     );
     final validModesHash = Object.hashAll(validModes);
+    final validToneModesHash = Object.hashAll(validToneModes);
+    final validCrossModesHash = Object.hashAll(validCrossModes);
     final sameInputs =
         !_dirty &&
         identical(channels, _channels) &&
@@ -243,7 +260,10 @@ class ChannelLibraryStatsCache {
         radioModel == _radioModel &&
         tuningStepsHash == _tuningStepsHash &&
         validBandsHash == _validBandsHash &&
-        validModesHash == _validModesHash;
+        validModesHash == _validModesHash &&
+        validToneModesHash == _validToneModesHash &&
+        validCrossModesHash == _validCrossModesHash &&
+        maxNameLength == _maxNameLength;
     if (sameInputs) return _snapshot;
 
     final snapshot = channelLibrarySnapshot(
@@ -259,7 +279,10 @@ class ChannelLibraryStatsCache {
       validTuningSteps: validTuningSteps,
       validBands: validBands,
       validModes: validModes,
+      validToneModes: validToneModes,
+      validCrossModes: validCrossModes,
       hasTuningStep: hasTuningStep,
+      maxNameLength: maxNameLength,
     );
     _dirty = false;
     _channels = channels;
@@ -276,6 +299,9 @@ class ChannelLibraryStatsCache {
     _tuningStepsHash = tuningStepsHash;
     _validBandsHash = validBandsHash;
     _validModesHash = validModesHash;
+    _validToneModesHash = validToneModesHash;
+    _validCrossModesHash = validCrossModesHash;
+    _maxNameLength = maxNameLength;
     _snapshot = snapshot;
     return snapshot;
   }

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-03T20:21:43Z"
 concept_id: main/chooseCounties
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_chooseCounties_chooseCounties
 ```
 
 ## Source
-Lines 7028–7028 in `main.dart`
+Lines 7149–7149 in `main.dart`
 
 ## Relationships
 

@@ -135,6 +135,8 @@
 - [_restoreClipboardMappingsAt](restoreClipboardMappingsAt.md)
 - [_restoreLibrary](restoreLibrary.md)
 - [_restoreStockChannels](restoreStockChannels.md)
+- [_resultIssues](resultIssues.md)
+- [_reviewChannelIssues](reviewChannelIssues.md)
 - [_saveColumnLayout](saveColumnLayout.md)
 - [_saveCsv](saveCsv.md)
 - [_saveCsvNow](saveCsvNow.md)

@@ -9,9 +9,9 @@ tags:
   - "type:Class"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T21:41:58Z"
+timestamp: "2026-11-03T20:22:07Z"
 concept_id: models/channel_image_baseline/ChannelLibraryStatsCache
 language: dart
 ---
@@ -40,7 +40,7 @@ limits, channel list, or cleared-slot count changes.
 - `read`
 
 ## Source
-Lines 186–282 in `models/channel_image_baseline.dart`
+Lines 195–308 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

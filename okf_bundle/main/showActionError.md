@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-03T20:21:43Z"
 concept_id: main/showActionError
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_showActionError_showActionError
 ```
 
 ## Source
-Lines 1053–1053 in `main.dart`
+Lines 1068–1068 in `main.dart`
 
 ## Relationships
 

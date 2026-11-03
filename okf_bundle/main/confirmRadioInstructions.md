@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-03T20:21:43Z"
 concept_id: main/confirmRadioInstructions
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_confirmRadioInstructions_confirmRadioInstructions
 ```
 
 ## Source
-Lines 2615–2618 in `main.dart`
+Lines 2683–2686 in `main.dart`
 
 ## Relationships
 

@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:widgets"
   - "domain:channel_library_image_bar.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T21:41:58Z"
+timestamp: "2026-11-03T20:21:42Z"
 concept_id: widgets/channel_library_image_bar/build
 language: dart
 ---
@@ -24,7 +24,7 @@ Widgetbuild(BuildContext context)
 ```
 
 ## Source
-Lines 27–27 in `widgets/channel_library_image_bar.dart`
+Lines 33–33 in `widgets/channel_library_image_bar.dart`
 
 ## Relationships
 
