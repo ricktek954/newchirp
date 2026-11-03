@@ -40,7 +40,7 @@ Add a frequency suggestion to CHIRP's unsupported-step error.
 | `steps_khz` | `—` | `—` |
 
 ## Source
-Lines 1078–1088 in `chirp_bridge.py`
+Lines 1102–1112 in `chirp_bridge.py`
 
 ## Relationships
 

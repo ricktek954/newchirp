@@ -483,6 +483,57 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertIn("Close Baofeng CPS", message)
         self.assertIn("old saved port", message)
 
+    def test_serial_configure_failure_names_device_recovery(self):
+        with mock.patch.object(bridge.sys, "platform", "win32"):
+            message = bridge.bridge_error_message(
+                RuntimeError(
+                    "Cannot configure port, something went wrong. Original "
+                    "message: PermissionError(13, 'A device attached to the "
+                    "system is not functioning.', None, 31)"
+                ),
+                command="download",
+                model="Radtel_RT-950_Pro_nicFW950",
+                port="COM3",
+            )
+
+        self.assertIn("Windows could not configure COM3", message)
+        self.assertIn("device failure", message)
+        self.assertIn("Windows error 31", message)
+        self.assertIn("CH340", message)
+        self.assertNotIn("PermissionError", message)
+
+    def test_serial_configure_failure_names_cable_steps_off_windows(self):
+        with mock.patch.object(bridge.sys, "platform", "linux"):
+            message = bridge.bridge_error_message(
+                RuntimeError(
+                    "Cannot configure port, something went wrong. Original "
+                    "message: PermissionError(13, 'A device attached to the "
+                    "system is not functioning.', None, 31)"
+                ),
+                command="download",
+                model="Radtel_RT-950_Pro_nicFW950",
+                port="COM3",
+            )
+
+        self.assertIn("Could not configure COM3", message)
+        self.assertIn("different USB port", message)
+        self.assertNotIn("Windows", message)
+
+    def test_localized_permission_error_explains_port_ownership(self):
+        with mock.patch.object(bridge.sys, "platform", "win32"):
+            message = bridge.bridge_error_message(
+                RuntimeError(
+                    "could not open port 'COM4': PermissionError(13, "
+                    "'Zugriff verweigert', None, 5)"
+                ),
+                command="download",
+                model="Baofeng_DM-32UV",
+            )
+
+        self.assertIn("Windows could not open COM4", message)
+        self.assertIn("another program or driver", message)
+        self.assertNotIn("Zugriff", message)
+
     def test_serial_missing_port_explains_reconnect_steps(self):
         with mock.patch.object(bridge.sys, "platform", "win32"):
             message = bridge.bridge_error_message(

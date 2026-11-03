@@ -29,7 +29,7 @@ def extra_fields_json(mem)
 | `mem` | `—` | `—` |
 
 ## Source
-Lines 715–767 in `chirp_bridge.py`
+Lines 739–791 in `chirp_bridge.py`
 
 ## Relationships
 

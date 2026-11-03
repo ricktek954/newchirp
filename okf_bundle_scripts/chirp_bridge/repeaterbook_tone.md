@@ -29,7 +29,7 @@ def repeaterbook_tone(value)
 | `value` | `—` | `—` |
 
 ## Source
-Lines 1740–1748 in `chirp_bridge.py`
+Lines 1764–1772 in `chirp_bridge.py`
 
 ## Relationships
 

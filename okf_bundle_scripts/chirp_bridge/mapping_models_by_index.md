@@ -29,7 +29,7 @@ def _mapping_models_by_index(radio)
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1520–1524 in `chirp_bridge.py`
+Lines 1544–1548 in `chirp_bridge.py`
 
 ## Relationships
 

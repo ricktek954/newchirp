@@ -30,7 +30,7 @@ def _allow_driver_specific_modes()
 Permit declared radio modes rejected by CHIRP's shared memory map.
 
 ## Source
-Lines 546–553 in `chirp_bridge.py`
+Lines 570–577 in `chirp_bridge.py`
 
 ## Relationships
 

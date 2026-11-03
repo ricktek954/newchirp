@@ -29,7 +29,7 @@ def setting_doc(element)
 | `element` | `—` | `—` |
 
 ## Source
-Lines 854–861 in `chirp_bridge.py`
+Lines 878–885 in `chirp_bridge.py`
 
 ## Relationships
 

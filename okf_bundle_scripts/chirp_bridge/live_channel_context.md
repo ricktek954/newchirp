@@ -38,7 +38,7 @@ Choose a live-radio subdevice without probing every memory slot.
 | `zone` | `—` | `None` |
 
 ## Source
-Lines 1311–1334 in `chirp_bridge.py`
+Lines 1335–1358 in `chirp_bridge.py`
 
 ## Relationships
 

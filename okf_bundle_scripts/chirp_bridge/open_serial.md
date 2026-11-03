@@ -31,7 +31,7 @@ def open_serial(radio_class, port)
 | `port` | `—` | `—` |
 
 ## Source
-Lines 1142–1173 in `chirp_bridge.py`
+Lines 1166–1197 in `chirp_bridge.py`
 
 ## Relationships
 

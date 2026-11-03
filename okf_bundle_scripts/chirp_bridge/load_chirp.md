@@ -35,7 +35,7 @@ def load_chirp(source, vendor, newchirp_driver_dir = None, module_path = None)
 | `module_path` | `—` | `None` |
 
 ## Source
-Lines 556–630 in `chirp_bridge.py`
+Lines 580–654 in `chirp_bridge.py`
 
 ## Relationships
 

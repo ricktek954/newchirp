@@ -40,7 +40,7 @@ Build a driver instance backed only by a saved radio image.
 | `image` | `—` | `—` |
 
 ## Source
-Lines 1427–1431 in `chirp_bridge.py`
+Lines 1451–1455 in `chirp_bridge.py`
 
 ## Relationships
 

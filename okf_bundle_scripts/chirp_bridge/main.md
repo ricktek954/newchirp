@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 1944–2359 in `chirp_bridge.py`
+Lines 1968–2383 in `chirp_bridge.py`
 
 ## Relationships
 

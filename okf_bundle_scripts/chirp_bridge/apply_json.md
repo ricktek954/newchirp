@@ -33,7 +33,7 @@ def apply_json(radio, mem, item)
 | `item` | `—` | `—` |
 
 ## Source
-Lines 1022–1057 in `chirp_bridge.py`
+Lines 1046–1081 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -40,7 +40,7 @@ Translate a CHIRP Status message into a structured progress event.
 | `end` | `—` | `1.0` |
 
 ## Source
-Lines 487–504 in `chirp_bridge.py`
+Lines 511–528 in `chirp_bridge.py`
 
 ## Relationships
 

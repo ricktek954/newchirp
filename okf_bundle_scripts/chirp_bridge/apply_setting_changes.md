@@ -31,7 +31,7 @@ def apply_setting_changes(settings, changes)
 | `changes` | `—` | `—` |
 
 ## Source
-Lines 983–1019 in `chirp_bridge.py`
+Lines 1007–1043 in `chirp_bridge.py`
 
 ## Relationships
 

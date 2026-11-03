@@ -38,7 +38,7 @@ Load a channel plus CHIRP's metadata-backed fields such as comments.
 | `number` | `—` | `—` |
 
 ## Source
-Lines 690–696 in `chirp_bridge.py`
+Lines 714–720 in `chirp_bridge.py`
 
 ## Relationships
 

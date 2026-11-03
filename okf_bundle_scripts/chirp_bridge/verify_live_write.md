@@ -40,7 +40,7 @@ Read back live memories so a rejected write cannot report success.
 | `cleared` | `—` | `—` |
 
 ## Source
-Lines 1291–1308 in `chirp_bridge.py`
+Lines 1315–1332 in `chirp_bridge.py`
 
 ## Relationships
 
