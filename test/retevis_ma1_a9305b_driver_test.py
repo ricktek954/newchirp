@@ -17,6 +17,7 @@ PYTHON_VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 MEM_SIZE = 0xD000
 ACK = b"\xFE\xFE\xEF\xEE\xE6\x00\xFD"
 HANDSHAKE_ACK = b"\xFE\xFE\xEF\xEE\xE1\x26\x72\x00\x00"
+READ_COMMAND = b"\xFE\xFE\xEE\xEF\xEB"
 READ_RESPONSE = b"\xFE\xFE\xEF\xEE\xE4"
 WRITE_COMMAND = b"\xFE\xFE\xEE\xEF\xE4"
 READ_RANGES = (
@@ -141,26 +142,38 @@ class FakeA9305BSerial:
         elif command in (0xE2, 0xE3, 0xE5):
             self._enqueue(ACK)
         elif command == 0xEB:
-            address, length = struct.unpack(">IH", data[5:11])
+            address = int(data[5:9], 16)
+            length = int(data[9:11], 16)
             self.read_addresses.append(address)
             returned_length = min(length, self.read_payload_limit)
             payload = bytes(self.image[address:address + returned_length])
-            body = (
-                struct.pack(">IH", address, returned_length)
-                + payload
-            )
             response = (
                 READ_RESPONSE
-                + body
-                + bytes((_checksum(body),))
+                + ("%04X%02X" % (address, returned_length)).encode("ascii")
+                + payload.hex().upper().encode("ascii")
+                + (
+                    "%02X"
+                    % _checksum(
+                        struct.pack(">I", address)
+                        + bytes((returned_length,))
+                        + payload
+                    )
+                ).encode("ascii")
                 + b"\xFD"
             )
-            self._enqueue(response.hex().upper().encode("ascii"))
+            self._enqueue(response)
         elif command == 0xE4:
-            address, length = struct.unpack(">IH", data[5:11])
+            address = int(data[5:9], 16)
+            length = int(data[9:11], 16)
             self.write_addresses.append(address)
-            payload = data[11:11 + length]
-            if sum(data[5:12 + length]) & 0xFF:
+            payload = bytes.fromhex(data[11:11 + length * 2].decode("ascii"))
+            response_checksum = int(data[11 + length * 2:13 + length * 2], 16)
+            expected_checksum = _checksum(
+                struct.pack(">I", address)
+                + bytes((length,))
+                + payload
+            )
+            if response_checksum != expected_checksum:
                 raise AssertionError("invalid host checksum")
             self.image[address:address + length] = payload
             self._enqueue(ACK)
@@ -314,7 +327,7 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
         )
         self.assertEqual(serial.baudrate, 9600)
 
-    def test_serial_read_accepts_the_radios_shorter_ascii_hex_frame(self):
+    def test_serial_read_accepts_the_radios_shorter_mixed_frame(self):
         serial = FakeA9305BSerial(_image(), read_payload_limit=94)
         radio = self.radio_class(serial)
         radio.status_fn = lambda _status: None
@@ -323,6 +336,18 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
 
         self.assertEqual(radio.get_memory(1).name, "CHAN01234567890")
         self.assertEqual(serial.read_addresses[:3], [0x0000, 0x005E, 0x00BC])
+
+    def test_serial_commands_use_cps_mixed_binary_and_ascii_hex_framing(self):
+        serial = FakeA9305BSerial(_image(), read_payload_limit=100)
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+
+        radio.sync_in()
+
+        self.assertEqual(
+            serial.writes[3],
+            READ_COMMAND + b"0000F0\xFD",
+        )
 
     def test_image_model_matching_requires_marker(self):
         valid = _image()

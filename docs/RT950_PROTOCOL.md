@@ -85,7 +85,7 @@ There are 960 fixed 32-byte records at `0x0000`.
 
 | Offset | Meaning |
 | --- | --- |
-| `0x00-0x03` | RX frequency, packed decimal in 10 Hz units |
+| `0x00-0x03` | RX frequency, little-endian packed decimal in 10 Hz units |
 | `0x04-0x07` | TX frequency, same encoding |
 | `0x08-0x09` | RX tone |
 | `0x0A-0x0B` | TX tone |
@@ -96,8 +96,12 @@ There are 960 fixed 32-byte records at `0x0000`.
 | `0x10-0x13` | FHSS code |
 | `0x14-0x1F` | 12-byte channel name encoded with GB2312 |
 
-Frequency bytes hold a two-digit decimal value in BCD form. For example,
-146.52000 MHz is represented by `14 65 20 00`.
+Frequency bytes hold a two-digit decimal value in BCD form, least-significant
+group first. For example, 146.52000 MHz is represented by `00 20 65 14`, and
+462.57500 MHz is represented by `00 75 25 46`.
+
+A 2026-11-02 field image displayed a `462.575000` MHz channel as `7.525460`
+MHz because the driver decoded these bytes in the opposite order.
 
 Tone words use little-endian bytes:
 

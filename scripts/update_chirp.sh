@@ -63,6 +63,33 @@ open(path, "w", encoding="utf-8").write(text)
 PY
 }
 
+apply_python_compatibility_patches() {
+  local target="$1"
+  "${NEWCHIRP_PYTHON:-python3}" - "$target" <<'PY'
+import sys
+
+path = sys.argv[1] + "/chirp/errors.py"
+try:
+    text = open(path, encoding="utf-8").read()
+except FileNotFoundError:
+    print('warning: CHIRP errors module not found at %s' % path, file=sys.stderr)
+    sys.exit(0)
+
+old = "    CODE: None | Reasons = None\n"
+new = "    CODE: Reasons | None = None\n"
+if old in text:
+    text = text.replace(old, new, 1)
+    open(path, "w", encoding="utf-8").write(text)
+elif new not in text:
+    print(
+        'warning: CHIRP error annotation patch target missing in %s; '
+        'older Python versions may fail while loading radio models'
+        % path,
+        file=sys.stderr,
+    )
+PY
+}
+
 PIN_FILE="$SCRIPT_DIR/chirp-source.pin"
 if [[ ! -f "$PIN_FILE" ]]; then
   echo "CHIRP pin file is missing: $PIN_FILE" >&2
@@ -151,6 +178,7 @@ rm -rf "$TARGET_DIR"
 mv "$TMP_DIR" "$TARGET_DIR"
 
 apply_newchirp_patches "$TARGET_DIR"
+apply_python_compatibility_patches "$TARGET_DIR"
 
 if [[ ! -d "$TARGET_DIR/chirp" ]]; then
   echo "Pinned CHIRP source is missing the chirp package." >&2

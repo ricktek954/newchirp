@@ -33,6 +33,7 @@ Last updated: 2026-11-02
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng GM-21 | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_baofeng_gm21.py` | UV-17-family serial; GM-5RH and UV-17Pro GPS handshakes | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone AT-D578UVIII Plus | `drivers/newchirp_anytone_d578uviii.py` | D578UV CPS serial, 115200 8N1 | 4000 channels + zones | Yes, offline-tested | Hidden | Experimental |
 | TYT MD-UV380 | `drivers/newchirp_tyt_mduv380.py` | ST DfuSe USB 0483:DF11 + libusb | 3000 channels + zones | Yes, offline-tested | Hidden | Experimental |
@@ -241,8 +242,11 @@ Last updated: 2026-11-02
   reads. The driver now performs that exchange, decrypts returned payloads with
   the selected session symbol, and allows the Web Programmer's 3.5-second
   block response window.
+- Frequency encoding: receive and transmit frequencies are four little-endian
+  base-100 fields. A 2026-11-02 field report showed `462.575000` MHz rendered
+  as `7.525460` MHz because the bytes were decoded in the wrong order.
 - Driver SHA-256:
-  `8207d45296cb382188714486ef624656c627569e9e03331da3552c6cf07279fc`
+  `9c8380c52d4344619b0000bfb452480eb7b960ec8ccb9d3c6d1c4854b7721a89`
 - Next milestone: confirm the reported RT-950 model code, classify any
   variant that does not answer the `BT-9000` handshake, then capture a
   complete successful read and export a test image
@@ -259,7 +263,7 @@ Last updated: 2026-11-02
 - Maintained A9305B driver:
   `drivers/newchirp_retevis_ma1_a9305b.py`
 - Driver SHA-256:
-  `12d30f7fe849f841e239f66963af6395e679a7d5ac9c61e8e390db4121f0de94`
+  `4f5920e7b89ee461b63c204f9e4fa8364e53ce9a74c8f1a26f4dea8cccbd197d`
 - Official CPS evidence:
   `MA1-A9305B Programming Software-V1.0.zip`, downloaded from Retevis'
   official software page. Archive SHA-256:
@@ -277,10 +281,12 @@ Last updated: 2026-11-02
   `4f817a2738ff7a332cdfd3f6a698b5cd01d5073f88a276ac2de1b6d7ad9125f1`.
 - A9305B transport: 9600 8N1 handshake with DTR/RTS asserted, 57600-baud
   negotiation, then addressed `FE/FD` blocks. Reads use up to 240-byte blocks;
-  read-data responses are uppercase ASCII hexadecimal and may return fewer
-  bytes than requested. The driver follows the response's encoded length and
-  advances by the actual payload returned. Writes use the CPS' 32-byte rows
-  and additive two's-complement checksum.
+  frames mix binary delimiters with ASCII-hex fields. The five-byte command or
+  response marker and final `FD` are binary; the address, length, payload, and
+  additive two's-complement checksum are uppercase ASCII hexadecimal. Responses
+  may return fewer bytes than requested, so the driver follows the encoded
+  length and advances by the actual payload returned. Writes use the CPS'
+  32-byte rows.
 - A9305B memory map: channels 1-200 use 21-byte records at `0x0000`, active
   and skip bitmaps at `0x1180`/`0x11A0`, and 6+10-character names at
   `0x000F` and `0x2300`. Channels 201-1000 use records at `0x4000`, bitmaps
@@ -301,9 +307,12 @@ Last updated: 2026-11-02
 - Hardware validation: the OEM software successfully read and wrote the radio
   from two Windows 11 PCs with two different USB cables. Zoran's 2026-11-01
   NewChirp 1.0.33 read reached every protocol stage, but reported a 214-byte
-  response where the driver expected 253 binary bytes. CPS analysis shows 214
-  is the complete ASCII-hex encoding of a shorter 94-byte payload frame.
-  NewChirp now parses that framing and remains pending a successful full read.
+  response where the driver expected a binary frame. Zoran's 2026-11-02
+  NewChirp 1.0.37 test exposed that the first implementation also treated the
+  binary response marker as ASCII text. Direct CIL tracing of
+  `SendReadDatAddComPro` and `DisplayText` shows the mixed framing above.
+  NewChirp now constructs read/write commands and parses responses in that
+  exact format and remains pending a successful physical read.
 - Radio version: `M V136`
 - Next milestone: complete an unedited physical read, save the raw backup,
   compare it with a CPS-exported image, then perform one channel edit,
@@ -466,6 +475,8 @@ Last updated: 2026-11-02
 - Maintainer: NewChirp override of the upstream CHIRP `TDH3`, `TDH3_HAM`, and
   `TDH3_GMRS` settings path
 - Maintained file: `drivers/newchirp_tdh3.py`
+- Driver SHA-256:
+  `60d6c1fbe241c0222ca0ad938e7100b8b647287bc98a9467e63ba26dc5eb1358`
 - Transport: upstream CHIRP TD-H3 clone serial at 38400 8N1
 - Implemented: all channel, settings, and write behavior from the pinned
   upstream TD-H3 drivers. The override normalizes a stored brightness value of
@@ -474,6 +485,9 @@ Last updated: 2026-11-02
 - Read/write policy: channel layout and write sequencing are unchanged.
   Brightness normalization only changes an invalid value and prevents
   unrelated shortcut-key changes from failing during settings serialization.
+- Identity routing: selecting the HAM or GMRS catalog entry now delegates to
+  the TD-H3 family detector. The reported `P31183` identity therefore resolves
+  to the generic TD-H3 profile even when a variant entry was selected.
 - Evidence: pinned CHIRP `tdh8.py` SHA-256
   `6cc013c387f4728df4db826cd758fad805fd855e43bc44e70e2004aac845cc6c`;
   2026-10-30 NewChirp 1.0.25 report from caitlinfireblood@gmail.com. The radio
@@ -482,6 +496,22 @@ Last updated: 2026-11-02
 - Hardware validation: none for the invalid-value normalization.
 - Next milestone: the reporter confirms that brightness displays as level 5
   and the PF1 short-press Monitor setting writes successfully.
+
+### Baofeng GM-21 firmware variants
+
+- Maintained compatibility: `drivers/newchirp_baofeng_gm21.py`
+- Driver SHA-256:
+  `70d24948654ed3b6bc9ee48ec63540591679a3dcf6edb6452335ccadec75cca9`
+- Transport: pinned CHIRP UV-17-family clone serial at 115200 8N1 with
+  DTR/RTS asserted.
+- Handshake policy: try the field-confirmed `PROGRAMBFGMRS05U` GM-5RH
+  handshake first, then the existing `PROGRAMCOLORPROU` UV-17Pro GPS handshake.
+- Field evidence: a GM-21 with firmware 0.02 and hardware 01 rebooted or did
+  not answer the original UV-17Pro GPS handshake. The same cable read and wrote
+  the radio without errors when the GM-5RH profile was selected.
+- Channel layout remains the pinned CHIRP GM-21 layout and settings path.
+- Next milestone: confirm the compatibility override reads and writes that
+  radio through the GM-21 catalog entry.
 
 ### TIDRADIO TD-H8 fourth-generation HAM serial
 

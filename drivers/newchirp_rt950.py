@@ -131,9 +131,9 @@ def _decode_payload(payload, symbol):
 
 
 def _decode_frequency(raw):
-    """Decode the CPS two-digits-per-byte decimal frequency format."""
+    """Decode the CPS little-endian two-digits-per-byte frequency format."""
     transformed = []
-    for value in raw:
+    for value in reversed(raw):
         high, low = value >> 4, value & 0x0F
         if high > 9 or low > 9:
             raise errors.InvalidDataError(
