@@ -38,7 +38,7 @@ Return the closest frequency representable by one of the steps.
 | `steps_khz` | `—` | `—` |
 
 ## Source
-Lines 1060–1075 in `chirp_bridge.py`
+Lines 1084–1099 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -36,7 +36,7 @@ Tell the user when a manual PTT-triggered clone read can begin.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1415–1424 in `chirp_bridge.py`
+Lines 1439–1448 in `chirp_bridge.py`
 
 ## Relationships
 

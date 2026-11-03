@@ -36,7 +36,7 @@ Return the object that owns metadata for a radio or channel subdevice.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 673–687 in `chirp_bridge.py`
+Lines 697–711 in `chirp_bridge.py`
 
 ## Relationships
 

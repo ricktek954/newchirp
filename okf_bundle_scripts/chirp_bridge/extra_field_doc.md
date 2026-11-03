@@ -36,7 +36,7 @@ Return CHIRP's documentation or a concise fallback for common terms.
 | `setting` | `—` | `—` |
 
 ## Source
-Lines 814–823 in `chirp_bridge.py`
+Lines 838–847 in `chirp_bridge.py`
 
 ## Relationships
 

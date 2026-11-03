@@ -29,7 +29,7 @@ def has_global_settings(radio)
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1930–1931 in `chirp_bridge.py`
+Lines 1954–1955 in `chirp_bridge.py`
 
 ## Relationships
 

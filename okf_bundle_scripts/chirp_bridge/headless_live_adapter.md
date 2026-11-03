@@ -36,7 +36,7 @@ Give a live radio the file-backed interfaces NewChirp requires.
 | `live_radio` | `—` | `—` |
 
 ## Source
-Lines 1176–1253 in `chirp_bridge.py`
+Lines 1200–1277 in `chirp_bridge.py`
 
 ## Relationships
 

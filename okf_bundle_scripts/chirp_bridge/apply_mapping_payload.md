@@ -45,7 +45,7 @@ one-bank-per-channel models when a channel moves between banks.
 | `active_locations` | `—` | `—` |
 
 ## Source
-Lines 1534–1674 in `chirp_bridge.py`
+Lines 1558–1698 in `chirp_bridge.py`
 
 ## Relationships
 

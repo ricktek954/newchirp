@@ -40,7 +40,7 @@ Explain a post-download map failure without losing the saved image.
 | `exc` | `—` | `—` |
 
 ## Source
-Lines 1402–1412 in `chirp_bridge.py`
+Lines 1426–1436 in `chirp_bridge.py`
 
 ## Relationships
 

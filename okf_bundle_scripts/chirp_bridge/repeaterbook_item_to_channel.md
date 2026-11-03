@@ -31,7 +31,7 @@ def repeaterbook_item_to_channel(item, number)
 | `number` | `—` | `—` |
 
 ## Source
-Lines 1751–1803 in `chirp_bridge.py`
+Lines 1775–1827 in `chirp_bridge.py`
 
 ## Relationships
 

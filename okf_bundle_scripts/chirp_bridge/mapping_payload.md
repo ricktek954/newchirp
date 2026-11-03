@@ -36,7 +36,7 @@ Describe CHIRP's bank/zone models for an image or channel owner.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1479–1517 in `chirp_bridge.py`
+Lines 1503–1541 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -36,7 +36,7 @@ Return selectable serial/transport radios, excluding file-only models.
 | `directory` | `—` | `—` |
 
 ## Source
-Lines 633–647 in `chirp_bridge.py`
+Lines 657–671 in `chirp_bridge.py`
 
 ## Relationships
 

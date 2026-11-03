@@ -38,7 +38,7 @@ Compare fields that every live radio must retain after a write.
 | `actual` | `—` | `—` |
 
 ## Source
-Lines 1256–1288 in `chirp_bridge.py`
+Lines 1280–1312 in `chirp_bridge.py`
 
 ## Relationships
 

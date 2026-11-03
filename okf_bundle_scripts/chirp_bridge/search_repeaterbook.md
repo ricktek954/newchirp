@@ -47,7 +47,7 @@ def search_repeaterbook(country, state, service = 'amateur', query = '', latitud
 | `limit` | `—` | `200` |
 
 ## Source
-Lines 1817–1927 in `chirp_bridge.py`
+Lines 1841–1951 in `chirp_bridge.py`
 
 ## Relationships
 

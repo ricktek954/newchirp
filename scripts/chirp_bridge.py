@@ -266,7 +266,31 @@ def bridge_error_message(exc, command=None, model=None, port=None):
     message = str(exc).strip() or exc.__class__.__name__
     lowered_message = message.lower()
     if (
-        "permissionerror(13)" in lowered_message
+        "cannot configure port" in lowered_message
+        or "a device attached to the system is not functioning"
+        in lowered_message
+    ):
+        port_match = re.search(r"port '([^']+)'", message)
+        port = port_match.group(1) if port_match else (
+            port or "the selected serial port"
+        )
+        if sys.platform.startswith("linux") or sys.platform == "darwin":
+            message = (
+                "Could not configure %s. Unplug and replug the programming "
+                "cable, reseat the radio plug, and try a different USB port "
+                "before retrying." % port
+            )
+        else:
+            message = (
+                "Windows could not configure %s because the USB-serial driver "
+                "reported a device failure (Windows error 31). Unplug and "
+                "replug the cable, use a USB port on the computer itself "
+                "rather than a hub, and reseat the radio programming plug. "
+                "If the error continues, reinstall the adapter's CH340, "
+                "CP210x, or FTDI driver or try a different cable." % port
+            )
+    elif (
+        "permissionerror(13" in lowered_message
         or "access is denied" in lowered_message
         or "permission denied" in lowered_message
     ):

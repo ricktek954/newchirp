@@ -31,7 +31,7 @@ def settings_tree_json(elements, prefix = ())
 | `prefix` | `—` | `()` |
 
 ## Source
-Lines 938–980 in `chirp_bridge.py`
+Lines 962–1004 in `chirp_bridge.py`
 
 ## Relationships
 

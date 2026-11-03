@@ -38,7 +38,7 @@ Return the radio object that owns channel memories.
 | `zone` | `—` | `None` |
 
 ## Source
-Lines 1470–1472 in `chirp_bridge.py`
+Lines 1494–1496 in `chirp_bridge.py`
 
 ## Relationships
 
