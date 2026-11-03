@@ -8,6 +8,21 @@ release requirements.
 
 ## Resume here
 
+- The third 2026-11-03 triage found 11 unread bug reports. Replies were
+  verified in `Sent`, and source UIDs 384, 390, 392, 394, 396, 397, 398, and
+  400 were verified `\Seen`. UIDs 385 and 399 are reporter acknowledgements;
+  401 and 402 are the Yaesu VX-5 hardware/protocol thread. All four remain
+  unread pending hardware validation or no action.
+- The Windows serial-diagnostic fix is committed and pushed as `ccb389d1`.
+  Error 31 / "cannot configure port" failures now identify the USB-serial
+  device and recovery steps, and localized `PermissionError(13, ...)` text no
+  longer bypasses the port-ownership explanation.
+- Verification for `ccb389d1`: the focused bridge suite ran 53 tests with one
+  pre-existing Windows `NamedTemporaryFile` `PermissionError`; Flutter ran 173
+  passing tests with four intentional Windows module-sandbox failures and one
+  pre-existing Help-menu expectation failure; `flutter analyze` reported only
+  three pre-existing `avoid_print` infos. The live Windows release remains
+  `1.0.37`; this fix is not released yet.
 - The second 2026-11-03 triage found 14 unread bug reports and handled UIDs
   383, 386, 387, 388, 391, 393, and 395. Every reply was verified in `Sent`,
   and every original source UID was verified `\Seen`. UIDs 384, 385, 389, 390,
