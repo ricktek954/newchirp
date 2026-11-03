@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-02
+Last updated: 2026-11-03
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,14 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-03 triage handled all 23 unread bug-report messages (UIDs
+  347, 348, 349, 351, 352, 354, 356, 357, 359, 360, 361, 362, 363, 364,
+  366, 367, 372, 374, 375, 376, 377, 379, and 380). Every reply was verified
+  in `Sent`, every source message was marked `\Seen`, and the inbox returned
+  to zero unread bug reports. Scoped fixes are committed as `d6df462a`:
+  correct A9305B mixed-frame handling, little-endian RT-950 frequency decoding,
+  TD-H3 family auto-detection, the field-confirmed GM-21 alternate handshake,
+  and a Linux Python compatibility patch for CHIRP's error annotation.
 - The Windows `1.0.37` installer is live. It applies the CPS-verified RT-950
   transport correction: hardware and XON/XOFF flow control are disabled,
   the randomized 25-byte `SEND` authentication exchange is performed with
