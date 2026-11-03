@@ -396,6 +396,34 @@ void main() {
       isFalse,
     );
   });
+
+  test('incompatible review keeps all connection and image guards', () {
+    bool ready({
+      ChannelImageMatch match = ChannelImageMatch.differs,
+      bool busy = false,
+      bool hasPort = true,
+      bool hasRadioModel = true,
+      bool hasRadioImage = true,
+    }) => channelLibraryWriteReady(
+      match: match,
+      busy: busy,
+      invalidCount: 1,
+      allowIncompatibleReview: true,
+      hasPort: hasPort,
+      hasRadioModel: hasRadioModel,
+      hasRadioImage: hasRadioImage,
+    );
+    expect(ready(), isTrue);
+    expect(ready(match: ChannelImageMatch.matchesRadio), isTrue);
+    expect(ready(match: ChannelImageMatch.matchesImage), isTrue);
+    expect(ready(match: ChannelImageMatch.noImage), isFalse);
+    expect(ready(match: ChannelImageMatch.notLoaded), isFalse);
+    expect(ready(busy: true), isFalse);
+    expect(ready(hasPort: false), isFalse);
+    expect(ready(hasRadioModel: false), isFalse);
+    expect(ready(hasRadioImage: false), isFalse);
+  });
+
   test(
     'library validation uses the selected radio name limit and refreshes the cache',
     () {

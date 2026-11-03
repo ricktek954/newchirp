@@ -83,6 +83,8 @@ String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.differs => 'Unsaved radio changes',
 };
 
+/// Allow incompatible rows only when the caller provides a review/skip step.
+/// Connection and image requirements still apply to that workflow.
 bool channelLibraryWriteReady({
   required ChannelImageMatch match,
   required bool busy,
