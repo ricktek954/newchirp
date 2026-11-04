@@ -17,7 +17,8 @@ release requirements.
   hosting a loopback callback. It calls `/api/mygmrs/oauth/start`, opens
   myGMRS in the system browser, polls with a short-lived bearer handoff token,
   and receives the tokens once after the website exchanges the code. The
-  website relay is committed and pushed as `cc326fc`; it is not deployed yet.
+  desktop relay client is `5725a727`; the website relay is `cc326fc`. Neither
+  change is deployed as part of this work.
 - myGMRS live sign-in is still blocked until myGMRS registers
   `https://newchirp.net/api/mygmrs/oauth/callback` for client
   `mg_wiOzRfSIVvZYjwvgBUyH_u6U`. The custom URI suggested in Rich's email was
