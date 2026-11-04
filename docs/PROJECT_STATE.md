@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-03
+Last updated: 2026-11-04
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,24 @@ release requirements.
 
 ## Resume here
 
+- Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
+  in commit `8476c0c3`. The repeater dialog can switch between RepeaterBook and
+  myGMRS, signs in through the system browser, imports GMRS frequencies and
+  mapped tones, and honors the API's license and Premium data restrictions.
+  Integration details are in `docs/MYGMRS_API.md`.
+- myGMRS live sign-in is blocked on callback registration. The supplied client
+  currently accepts only
+  `net.newchirp.newchirp_mobile:/mygmrs/callback`; it does not accept NewChirp's
+  desktop loopback default `http://127.0.0.1:8765/callback`. Ask myGMRS to
+  register that exact URI before live OAuth testing.
+- myGMRS access and refresh tokens are held in memory for the NewChirp process
+  lifetime. They are intentionally not persisted until secure storage is
+  implemented for macOS, Windows, and Linux. No client secret is shipped.
+- Verification for `8476c0c3`: `flutter analyze` is clean, all 183 Flutter
+  tests pass, and all 248 discovered Python tests pass with 2 fixture-dependent
+  skips. A read-only anonymous request to `GET /repeaters?state=NY` confirmed
+  the documented response shape and confirms that anonymous frequencies are
+  omitted.
 - The third 2026-11-03 triage found 11 unread bug reports. Replies were
   verified in `Sent`, and source UIDs 384, 390, 392, 394, 396, 397, 398, and
   400 were verified `\Seen`. UIDs 385 and 399 are reporter acknowledgements;
