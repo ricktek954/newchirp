@@ -26,39 +26,40 @@ overridden at build time:
 ```sh
 flutter build macos --release \
   --dart-define=MYGMRS_CLIENT_ID=mg_wiOzRfSIVvZYjwvgBUyH_u6U \
-  --dart-define=MYGMRS_REDIRECT_URI=http://127.0.0.1:8765/callback
+  --dart-define=MYGMRS_BROKER_BASE=https://newchirp.net
 ```
 
-## Desktop callback
+## Website-mediated desktop callback
 
-myGMRS recommends loopback callbacks for desktop and CLI clients. NewChirp
-defaults to:
+NewChirp may run behind a firewall, so the app does not host an inbound OAuth
+listener. The newchirp.net website provides the public callback:
 
 ```text
-http://127.0.0.1:8765/callback
+https://newchirp.net/api/mygmrs/oauth/callback
 ```
 
-The app listens only on IPv4 loopback while the system browser performs
-myGMRS sign-in. The listener validates the OAuth `state`, accepts the
-one-time code, and closes. myGMRS matches the complete redirect string,
-including scheme, host, port, and path; it does not support wildcard ports.
+The app:
 
-No redirect URI has been confirmed as registered for this client. Rich's email
-offered `net.newchirp.newchirp_mobile:/mygmrs/callback` as an example, while
-warning that its underscore may make it unusable. A request to the
-authorization endpoint displaying the sign-in page is not proof that the
-callback is registered, since validation may not complete until after sign-in.
+1. Calls `POST https://newchirp.net/api/mygmrs/oauth/start`.
+2. Opens the returned myGMRS authorization URL in the system browser.
+3. Polls `POST https://newchirp.net/api/mygmrs/oauth/poll` with a random,
+   short-lived bearer handoff token.
+4. Receives the OAuth tokens once after the website exchanges the code.
 
-Live sign-in therefore remains blocked until myGMRS explicitly registers a
-chosen redirect URI for this client. The loopback URI above is ready in the
-application but is also currently unregistered. If myGMRS permits only one of
-its own callback forms rather than a NewChirp-owned URI, the integration cannot
-complete the Authorization Code flow as a public third-party client.
+The website creates the PKCE verifier and `state`, validates and consumes
+`state`, exchanges the authorization code, and keeps pending tokens in process
+memory. Authorization codes and tokens are never placed in browser URLs.
+
+myGMRS must register the website callback above for public client
+`mg_wiOzRfSIVvZYjwvgBUyH_u6U` before live sign-in can work. The custom URI
+suggested in Rich's email was only an example and is not treated as registered.
 
 ## Token handling
 
 - Access tokens and rotating refresh tokens remain in memory for the life of
   the running NewChirp process.
+- Tokens move through `newchirp.net` only in an HTTPS JSON response guarded by
+  the separate bearer handoff token. The website does not persist them.
 - Tokens and authorization codes are never written to diagnostics or logs.
 - Tokens are not currently persisted across application restarts. This avoids
   storing refresh tokens in plaintext while cross-platform secure storage is
@@ -100,11 +101,12 @@ Premium tones do not block importing the licensed frequency.
 
 ## Next verification
 
-1. Register `http://127.0.0.1:8765/callback` for the existing client.
+1. Register `https://newchirp.net/api/mygmrs/oauth/callback` for the existing
+   client.
 2. Sign in with an active, non-Premium GMRS account and verify that frequency,
    name, location, and map data import while PL tones remain absent.
 3. Repeat with a Premium account and verify PL In, PL Out, and rules.
-4. Confirm the loopback listener closes after success, denial, timeout, and an
-   invalid `state`.
+4. Confirm the website handoff expires after success, denial, timeout, and an
+   invalid `state`, and that a completed handoff can be retrieved only once.
 5. Decide whether refresh tokens should move to Keychain, DPAPI, and libsecret
    after a secure-storage implementation is available for all desktop targets.

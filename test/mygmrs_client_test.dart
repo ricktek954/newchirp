@@ -1,34 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/services/mygmrs_client.dart';
 
 void main() {
-  test('builds an OAuth authorization URL with PKCE and repeater scope', () {
-    final client = MyGmrsClient(
-      clientId: 'test-client',
-      redirectUri: Uri.parse('http://127.0.0.1:8765/callback'),
-      apiBase: Uri.parse('https://api.example.test'),
-    );
-
-    final uri = client.buildAuthorizeUri(
-      state: 'expected-state',
-      codeChallenge: 'challenge-value',
-    );
-
-    expect(uri.path, '/oauth/authorize');
-    expect(uri.queryParameters['client_id'], 'test-client');
-    expect(
-      uri.queryParameters['redirect_uri'],
-      'http://127.0.0.1:8765/callback',
-    );
-    expect(uri.queryParameters['scope'], 'repeaters:read');
-    expect(uri.queryParameters['state'], 'expected-state');
-    expect(uri.queryParameters['code_challenge'], 'challenge-value');
-    expect(uri.queryParameters['code_challenge_method'], 'S256');
-  });
-
   test('converts myGMRS repeater data into a GMRS channel', () {
     final client = MyGmrsClient(clientId: 'test-client');
 
@@ -94,71 +69,59 @@ void main() {
     );
   });
 
-  test(
-    'completes authorization-code PKCE flow with a loopback callback',
-    () async {
-      final tokenServer = await HttpServer.bind(
-        InternetAddress.loopbackIPv4,
-        0,
-      );
-      addTearDown(() => tokenServer.close(force: true));
-      tokenServer.listen((request) async {
-        expect(request.uri.path, '/oauth/token');
-        final body = utf8.decode(
-          await request.fold<List<int>>([], (bytes, chunk) {
-            bytes.addAll(chunk);
-            return bytes;
-          }),
-        );
-        expect(body, contains('grant_type=authorization_code'));
-        expect(body, contains('code=test-code'));
-        expect(body, contains('client_id=test-client'));
-        expect(body, contains('code_verifier='));
+  test('completes sign-in through the newchirp.net handoff relay', () async {
+    final broker = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    addTearDown(() => broker.close(force: true));
+    var polls = 0;
+    broker.listen((request) async {
+      if (request.uri.path == '/api/mygmrs/oauth/start') {
+        expect(request.method, 'POST');
         request.response
           ..statusCode = HttpStatus.ok
           ..headers.contentType = ContentType.json
           ..write(
-            '{"access_token":"access","token_type":"Bearer",'
-            '"expires_in":3600,"refresh_token":"refresh",'
-            '"scope":"repeaters:read"}',
+            '{"handoffToken":"handoff-secret",'
+            '"authorizeUrl":"https://mygmrs.test/oauth/authorize"}',
           );
-        await request.response.close();
-      });
+      } else if (request.uri.path == '/api/mygmrs/oauth/poll') {
+        expect(
+          request.headers.value(HttpHeaders.authorizationHeader),
+          'Bearer handoff-secret',
+        );
+        polls++;
+        if (polls == 1) {
+          request.response
+            ..statusCode = HttpStatus.accepted
+            ..headers.contentType = ContentType.json
+            ..write('{"status":"pending"}');
+        } else {
+          request.response
+            ..statusCode = HttpStatus.ok
+            ..headers.contentType = ContentType.json
+            ..write(
+              '{"status":"ready","access_token":"access",'
+              '"token_type":"Bearer","expires_in":3600,'
+              '"refresh_token":"refresh",'
+              '"scope":"repeaters:read"}',
+            );
+        }
+      } else {
+        request.response.statusCode = HttpStatus.notFound;
+      }
+      await request.response.close();
+    });
 
-      final callbackProbe = await ServerSocket.bind(
-        InternetAddress.loopbackIPv4,
-        0,
-      );
-      final callbackPort = callbackProbe.port;
-      await callbackProbe.close();
+    Uri? opened;
+    final client = MyGmrsClient(
+      brokerBase: Uri.parse('http://127.0.0.1:${broker.port}'),
+      openBrowser: (authorizeUri) async => opened = authorizeUri,
+      signInTimeout: const Duration(seconds: 5),
+    );
 
-      final client = MyGmrsClient(
-        clientId: 'test-client',
-        redirectUri: Uri.parse('http://127.0.0.1:$callbackPort/callback'),
-        apiBase: Uri.parse('http://127.0.0.1:${tokenServer.port}'),
-        openBrowser: (authorizeUri) async {
-          final state = authorizeUri.queryParameters['state']!;
-          final redirect = Uri.parse(
-            authorizeUri.queryParameters['redirect_uri']!,
-          );
-          final callback = redirect.replace(
-            queryParameters: {'code': 'test-code', 'state': state},
-          );
-          final http = HttpClient();
-          try {
-            final request = await http.getUrl(callback);
-            final response = await request.close();
-            await response.drain<void>();
-            expect(response.statusCode, HttpStatus.ok);
-          } finally {
-            http.close(force: true);
-          }
-        },
-      );
+    await client.signIn();
 
-      await client.signIn();
-
-      expect(client.signedIn, isTrue);
-    },
-  );
+    expect(opened, Uri.parse('https://mygmrs.test/oauth/authorize'));
+    expect(polls, 2);
+    expect(client.signedIn, isTrue);
+  });
 }

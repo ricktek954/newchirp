@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:24:20Z"
+timestamp: "2026-11-04T11:37:02Z"
 concept_id: services/mygmrs_client/stateCode
 language: dart
 ---
@@ -24,7 +24,7 @@ String_stateCode(String state)
 ```
 
 ## Source
-Lines 459–459 in `services/mygmrs_client.dart`
+Lines 391–391 in `services/mygmrs_client.dart`
 
 ## Relationships
 

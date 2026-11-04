@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _secureRandomBytes
+title: _postJson
 resource: services/mygmrs_client.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:24:20Z"
-concept_id: services/mygmrs_client/secureRandomBytes
+timestamp: "2026-11-04T11:37:02Z"
+concept_id: services/mygmrs_client/postJson
 language: dart
 ---
 
-# _secureRandomBytes
+# _postJson
 
 ## Signature
 
 ```dart
-List_secureRandomBytes_secureRandomBytes
+Future_postJson_postJson
 ```
 
 ## Source
-Lines 449–449 in `services/mygmrs_client.dart`
+Lines 294–297 in `services/mygmrs_client.dart`
 
 ## Relationships
 
