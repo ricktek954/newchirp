@@ -41,6 +41,7 @@ import 'widgets/radio_mapping_dialog.dart';
 const _menuChannel = MethodChannel('newchirp/menu');
 
 const String _newChirpVersion = '1.0.37';
+const bool _enableMyGmrsDirectory = false;
 
 bool radioModelSelectionReady(List<String> models, String? model) {
   return model != null && models.contains(model);
@@ -3160,14 +3161,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         icon: Icons.travel_explore,
                         title: 'Find nearby repeaters',
                         description:
-                            'Search RepeaterBook or myGMRS and add repeater channels.',
+                            'Search RepeaterBook and add repeater channels.',
                         buttonLabel: 'Find repeaters',
                         onPressed: _findRepeaters,
                         help:
-                            'Search RepeaterBook for amateur and GMRS repeaters, or '
-                            'sign in to myGMRS for GMRS directory results, preview '
-                            'matching repeaters, and add selected channels to the '
-                            'current library.',
+                            'Search RepeaterBook for amateur and GMRS repeaters, '
+                            'preview matching repeaters, and add selected channels '
+                            'to the current library.',
                       ),
                     ],
                   );
@@ -7427,73 +7427,78 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             style: TextStyle(color: Colors.black54),
                           ),
                           const SizedBox(height: 14),
-                          Row(
-                            children: [
-                              Expanded(
-                                child:
-                                    DropdownButtonFormField<_RepeaterProvider>(
-                                      key: ValueKey(
-                                        'repeater-provider-${_provider.name}',
-                                      ),
-                                      isExpanded: true,
-                                      initialValue: _provider,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Directory',
-                                      ),
-                                      items: const [
-                                        DropdownMenuItem(
-                                          value: _RepeaterProvider.repeaterBook,
-                                          child: Text('RepeaterBook'),
+                          if (_enableMyGmrsDirectory) ...[
+                            Row(
+                              children: [
+                                Expanded(
+                                  child:
+                                      DropdownButtonFormField<
+                                        _RepeaterProvider
+                                      >(
+                                        key: ValueKey(
+                                          'repeater-provider-${_provider.name}',
                                         ),
-                                        DropdownMenuItem(
-                                          value: _RepeaterProvider.myGmrs,
-                                          child: Text('myGMRS.com'),
+                                        isExpanded: true,
+                                        initialValue: _provider,
+                                        decoration: const InputDecoration(
+                                          labelText: 'Directory',
                                         ),
-                                      ],
-                                      onChanged: _loading
-                                          ? null
-                                          : (value) {
-                                              if (value != null) {
-                                                _selectProvider(value);
-                                              }
-                                            },
-                                    ),
-                              ),
-                              if (_provider == _RepeaterProvider.myGmrs) ...[
-                                const SizedBox(width: 12),
-                                OutlinedButton.icon(
-                                  key: const ValueKey('mygmrs-sign-in'),
-                                  onPressed: _loading || _myGmrs.signedIn
-                                      ? null
-                                      : _signInMyGmrs,
-                                  icon: Icon(
-                                    _myGmrs.signedIn
-                                        ? Icons.verified_user_outlined
-                                        : Icons.login,
-                                  ),
-                                  label: Text(
-                                    _myGmrs.signedIn
-                                        ? 'Signed in'
-                                        : 'Sign in to myGMRS',
-                                  ),
+                                        items: const [
+                                          DropdownMenuItem(
+                                            value:
+                                                _RepeaterProvider.repeaterBook,
+                                            child: Text('RepeaterBook'),
+                                          ),
+                                          DropdownMenuItem(
+                                            value: _RepeaterProvider.myGmrs,
+                                            child: Text('myGMRS.com'),
+                                          ),
+                                        ],
+                                        onChanged: _loading
+                                            ? null
+                                            : (value) {
+                                                if (value != null) {
+                                                  _selectProvider(value);
+                                                }
+                                              },
+                                      ),
                                 ),
+                                if (_provider == _RepeaterProvider.myGmrs) ...[
+                                  const SizedBox(width: 12),
+                                  OutlinedButton.icon(
+                                    key: const ValueKey('mygmrs-sign-in'),
+                                    onPressed: _loading || _myGmrs.signedIn
+                                        ? null
+                                        : _signInMyGmrs,
+                                    icon: Icon(
+                                      _myGmrs.signedIn
+                                          ? Icons.verified_user_outlined
+                                          : Icons.login,
+                                    ),
+                                    label: Text(
+                                      _myGmrs.signedIn
+                                          ? 'Signed in'
+                                          : 'Sign in to myGMRS',
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
-                          ),
-                          if (_provider == _RepeaterProvider.myGmrs) ...[
-                            const SizedBox(height: 6),
-                            const Text(
-                              'myGMRS requires an active GMRS license for '
-                              'repeater frequencies. PL tones and rules require '
-                              'a Premium membership. This sign-in lasts until '
-                              'NewChirp closes.',
-                              style: TextStyle(
-                                color: Colors.black54,
-                                fontSize: 12,
-                              ),
                             ),
+                            if (_provider == _RepeaterProvider.myGmrs) ...[
+                              const SizedBox(height: 6),
+                              const Text(
+                                'myGMRS requires an active GMRS license for '
+                                'repeater frequencies. PL tones and rules require '
+                                'a Premium membership. This sign-in lasts until '
+                                'NewChirp closes.',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                            const SizedBox(height: 12),
                           ],
-                          const SizedBox(height: 12),
                           Row(
                             children: [
                               Expanded(

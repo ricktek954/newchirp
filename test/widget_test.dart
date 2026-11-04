@@ -9,7 +9,6 @@ import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/models/repeater_search.dart';
 import 'package:newchirp/services/column_layout_store.dart';
 import 'package:newchirp/services/file_save_warning_store.dart';
-import 'package:newchirp/services/mygmrs_client.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 import 'package:newchirp/services/repeater_search_preferences_store.dart';
 import 'package:newchirp/services/update_checker.dart';
@@ -187,63 +186,6 @@ class _FakeRepeaterSearchPreferencesStore
   @override
   Future<void> save(RepeaterSearchPreferences next) async {
     preferences = next;
-  }
-}
-
-class _FakeMyGmrsService implements MyGmrsService {
-  @override
-  bool signedIn = false;
-
-  int signInCount = 0;
-  String? lastState;
-  bool? lastOpenOnly;
-
-  @override
-  Future<void> signIn() async {
-    signInCount++;
-    signedIn = true;
-  }
-
-  @override
-  Future<RepeaterSearchResults> searchRepeaters({
-    required String state,
-    String query = '',
-    double? latitude,
-    double? longitude,
-    double? distanceKm,
-    bool openOnly = false,
-    int limit = 100,
-  }) async {
-    await signIn();
-    lastState = state;
-    lastOpenOnly = openOnly;
-    return RepeaterSearchResults(
-      source: 'myGMRS',
-      sourceUrl: 'https://mygmrs.com',
-      totalMatches: 1,
-      results: [
-        RepeaterSearchResult(
-          channel: RadioChannel(
-            location: 1,
-            name: 'Example GMRS',
-            frequency: 462.575,
-            duplex: '+',
-            offset: 5,
-            tone: 'TSQL',
-            txTone: 141.3,
-            rxTone: 141.3,
-          ),
-          callsign: '',
-          city: 'Example Town',
-          county: '',
-          state: state,
-          use: 'OPEN',
-          service: 'GMRS',
-          latitude: 40,
-          longitude: -74,
-        ),
-      ],
-    );
   }
 }
 
@@ -618,14 +560,13 @@ void main() {
     expect(bridge.lastFmOnly, isFalse);
   });
 
-  testWidgets('myGMRS search signs in and previews GMRS channels', (
+  testWidgets('myGMRS directory stays hidden while credentials are pending', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1200, 720);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);
-    final myGmrs = _FakeMyGmrsService();
 
     await tester.pumpWidget(
       MaterialApp(
@@ -637,39 +578,23 @@ void main() {
                 builder: (context) => RepeaterBookDialog(
                   bridge: _FakeRepeaterBridge(),
                   preferencesStore: _FakeRepeaterSearchPreferencesStore(),
-                  myGmrsService: myGmrs,
                 ),
               ),
-              child: const Text('Open myGMRS search'),
+              child: const Text('Open repeater search'),
             ),
           ),
         ),
       ),
     );
-    await tester.tap(find.text('Open myGMRS search'));
+    await tester.tap(find.text('Open repeater search'));
     await tester.pumpAndSettle();
 
-    await tester.tap(
+    expect(find.text('myGMRS.com'), findsNothing);
+    expect(find.byKey(const ValueKey('mygmrs-sign-in')), findsNothing);
+    expect(
       find.byKey(const ValueKey('repeater-provider-repeaterBook')),
+      findsNothing,
     );
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('myGMRS.com').last);
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(const ValueKey('mygmrs-sign-in')), findsOneWidget);
-    await tester.tap(find.byKey(const ValueKey('mygmrs-sign-in')));
-    await tester.pumpAndSettle();
-    expect(myGmrs.signInCount, 1);
-    expect(find.text('Signed in'), findsOneWidget);
-
-    await tester.ensureVisible(find.text('Search'));
-    await tester.tap(find.text('Search'));
-    await tester.pumpAndSettle();
-
-    expect(myGmrs.lastState, 'New York');
-    expect(myGmrs.lastOpenOnly, isFalse);
-    expect(find.text('Example GMRS'), findsOneWidget);
-    expect(find.textContaining('Data from myGMRS'), findsOneWidget);
   });
 
   testWidgets('startup update check offers a newer release', (tester) async {

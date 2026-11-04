@@ -8,6 +8,11 @@ release requirements.
 
 ## Resume here
 
+- The myGMRS directory option is disabled in the desktop UI until the
+  confidential server-side client is issued and callback registration is
+  confirmed. RepeaterBook is again the only visible repeater directory. The
+  dormant myGMRS client, website relay, and handoff documentation remain in the
+  source for the follow-up implementation.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
   in commit `8476c0c3`. The repeater dialog can switch between RepeaterBook and
   myGMRS, signs in through the system browser, imports GMRS frequencies and
