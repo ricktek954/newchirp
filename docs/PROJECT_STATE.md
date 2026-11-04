@@ -24,6 +24,13 @@ release requirements.
   `https://newchirp.net/api/mygmrs/oauth/callback` for client
   `mg_wiOzRfSIVvZYjwvgBUyH_u6U`. The custom URI suggested in Rich's email was
   only an example and was not confirmed as registered.
+- The public-client relay is now a prototype, not the target architecture.
+  myGMRS documentation requires a confidential server-side web client when
+  codes are exchanged on newchirp.net. The operator requested that new client
+  on 2026-11-04. Awaiting its client ID, one-time secret, callback
+  registration, and then server-side token/session proxy work. The complete
+  status and next steps are in the website repository at
+  `docs/MYGMRS_OAUTH_RELAY.md`.
 - myGMRS access and refresh tokens are held in memory for the NewChirp process
   lifetime. They are intentionally not persisted until secure storage is
   implemented for macOS, Windows, and Linux. No client secret is shipped.
