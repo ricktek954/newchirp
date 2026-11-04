@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-04T11:24:35Z"
 concept_id: main/setColumnWidth
 language: dart
 ---
@@ -23,7 +23,7 @@ void_setColumnWidth(String id, double width)
 ```
 
 ## Source
-Lines 868–868 in `main.dart`
+Lines 876–876 in `main.dart`
 
 ## Relationships
 

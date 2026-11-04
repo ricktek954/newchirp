@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-04T11:24:35Z"
 concept_id: main/ExtraFieldEditor
 language: dart
 ---
@@ -27,7 +27,7 @@ class ExtraFieldEditor
 - `build`
 
 ## Source
-Lines 9382–9448 in `main.dart`
+Lines 9528–9594 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-04T11:24:35Z"
 concept_id: main/loadPreferences
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_loadPreferences_loadPreferences
 ```
 
 ## Source
-Lines 6872–6872 in `main.dart`
+Lines 6889–6889 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T12:37:20Z"
+timestamp: "2026-11-04T11:24:35Z"
 concept_id: main/downloadAndInstallUpdate
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_downloadAndInstallUpdate_downloadAndInstallUpdate
 ```
 
 ## Source
-Lines 3276–3276 in `main.dart`
+Lines 3286–3286 in `main.dart`
 
 ## Relationships
 

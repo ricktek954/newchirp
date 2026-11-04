@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-/// Optional filters remembered between RepeaterBook searches.
+/// Optional filters remembered between repeater-directory searches.
 class RepeaterSearchPreferences {
   const RepeaterSearchPreferences({this.openOnly = false, this.fmOnly = false});
 
