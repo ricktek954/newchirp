@@ -18,7 +18,8 @@ release requirements.
   myGMRS in the system browser, polls with a short-lived bearer handoff token,
   and receives the tokens once after the website exchanges the code. The
   desktop relay client is `5725a727`; the website relay is `cc326fc`. Neither
-  change is deployed as part of this work.
+  change is a release build. The website relay was later merged with newer
+  live-only behavior and deployed as `de7d991`.
 - myGMRS live sign-in is still blocked until myGMRS registers
   `https://newchirp.net/api/mygmrs/oauth/callback` for client
   `mg_wiOzRfSIVvZYjwvgBUyH_u6U`. The custom URI suggested in Rich's email was
