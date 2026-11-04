@@ -6,6 +6,10 @@ The myGMRS developer portal documents a JSON API at
 `https://api.mygmrs.com`. NewChirp uses OAuth 2.0 Authorization Code with
 PKCE S256 and requests only the `repeaters:read` scope.
 
+The myGMRS directory is currently hidden in the desktop UI. The source remains
+dormant until myGMRS issues the requested confidential server-side client and
+registers its callback.
+
 Official references:
 
 - Developer portal: `https://developers.mygmrs.com/`

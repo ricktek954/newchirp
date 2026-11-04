@@ -22,8 +22,6 @@ implementation history, architecture, known risks, and prioritized next work.
 - RepeaterBook search with state, location, radius, mode, and open-repeater
   filters; preview on a synchronized interactive map and selectively insert
   amateur or GMRS repeater channels
-- myGMRS OAuth sign-in and GMRS repeater search, including licensed frequency
-  imports and Premium PL-tone/rules data
 - USB serial-port discovery
 - CHIRP radio-model catalog and guarded read/write workflow
 - Session-scoped loading of experimental CHIRP `.py` and `.mod` driver modules

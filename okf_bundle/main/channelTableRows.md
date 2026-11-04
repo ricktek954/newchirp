@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:24:35Z"
+timestamp: "2026-11-04T12:40:58Z"
 concept_id: main/channelTableRows
 language: dart
 ---
@@ -23,7 +23,7 @@ List_channelTableRows_channelTableRows
 ```
 
 ## Source
-Lines 473–473 in `main.dart`
+Lines 474–474 in `main.dart`
 
 ## Relationships
 
