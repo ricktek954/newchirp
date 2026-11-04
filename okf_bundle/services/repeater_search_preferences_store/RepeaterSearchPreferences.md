@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: Class
 title: RepeaterSearchPreferences
-description: Optional filters remembered between RepeaterBook searches.
+description: Optional filters remembered between repeater-directory searches.
 resource: services/repeater_search_preferences_store.dart
 tags:
   - "lang:dart"
@@ -11,14 +11,14 @@ tags:
   - "domain:repeater_search_preferences_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-11-04T11:24:39Z"
 concept_id: services/repeater_search_preferences_store/RepeaterSearchPreferences
 language: dart
 ---
 
 # RepeaterSearchPreferences
 
-Optional filters remembered between RepeaterBook searches.
+Optional filters remembered between repeater-directory searches.
 
 ## Signature
 
@@ -28,7 +28,7 @@ class RepeaterSearchPreferences
 
 ## Docstring
 
-Optional filters remembered between RepeaterBook searches.
+Optional filters remembered between repeater-directory searches.
 
 ## Methods
 

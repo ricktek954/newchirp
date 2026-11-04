@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T11:06:53Z"
+timestamp: "2026-11-04T11:21:17Z"
 concept_id: chirp_bridge/external_memory_owner
 language: python
 ---

@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 541 concepts across 4 domains and 27 modules'
+description: 'Top-level OKF summary: 568 concepts across 4 domains and 28 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-02T12:37:22Z'
+timestamp: '2026-11-04T11:24:40Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 541 concepts | 4 domains | 27 modules
+> OKF v0.2 bundle | 568 concepts | 4 domains | 28 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 418 |
-| Class | 90 |
-| Module | 27 |
-| Enum | 6 |
+| Function | 440 |
+| Class | 93 |
+| Module | 28 |
+| Enum | 7 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 541 |
+| dart | 568 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 198 concepts
+### [main.dart](main.dart/index.md) — 201 concepts
 
-- [main](main/index.md) (198 concepts)
+- [main](main/index.md) (201 concepts)
 
 ### [models](models/index.md) — 86 concepts
 
@@ -43,17 +43,17 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - [models/repeater_counties](models/repeater_counties/index.md) (1 concepts)
 
-### [services](services/index.md) — 199 concepts
+### [services](services/index.md) — 223 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (50 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
+- [services/mygmrs_client](services/mygmrs_client/index.md) (24 concepts)
 - [services/update_checker](services/update_checker/index.md) (18 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
 - [services/update_installer](services/update_installer/index.md) (11 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (10 concepts)
-- [services/radio_image_store](services/radio_image_store/index.md) (8 concepts)
-- *…and 6 more modules*
+- *…and 7 more modules*
 
 ### [widgets](widgets/index.md) — 58 concepts
 
@@ -82,9 +82,9 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
+| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 | [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
-| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
 | [restorePlainMidlandRepeater](/models/radio_channel/restorePlainMidlandRepeater.md) | Function | `models/radio_channel.dart` | Puts the standard GMRS repeater back in this row and clears … |
 | [isHidden](/services/file_save_warning_store/isHidden.md) | Function | `services/file_save_warning_store.dart` | True only when the person checked "Do not show me this messa… |
 | [DownloadedUpdate](/services/update_installer/DownloadedUpdate.md) | Class | `services/update_installer.dart` | A downloaded installer ready for the platform-specific updat… |

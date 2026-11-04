@@ -27,6 +27,7 @@ import 'services/repeater_search_preferences_store.dart';
 import 'services/radio_selection_store.dart';
 import 'services/module_sandbox.dart';
 import 'services/mototrbo_cps2_xml.dart';
+import 'services/mygmrs_client.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/update_installer.dart';
@@ -283,6 +284,7 @@ class NewChirpApp extends StatelessWidget {
     this.radioSelectionStore,
     this.fileSaveWarningStore,
     this.repeaterSearchPreferencesStore,
+    this.myGmrsService,
     this.updateChecker,
     this.updateInstaller,
     this.exitForUpdate,
@@ -294,6 +296,7 @@ class NewChirpApp extends StatelessWidget {
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
   final RepeaterSearchPreferencesStore? repeaterSearchPreferencesStore;
+  final MyGmrsService? myGmrsService;
   final UpdateChecker? updateChecker;
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
@@ -345,6 +348,7 @@ class NewChirpApp extends StatelessWidget {
         radioSelectionStore: radioSelectionStore,
         fileSaveWarningStore: fileSaveWarningStore,
         repeaterSearchPreferencesStore: repeaterSearchPreferencesStore,
+        myGmrsService: myGmrsService,
         updateChecker: updateChecker,
         updateInstaller: updateInstaller,
         exitForUpdate: exitForUpdate,
@@ -362,6 +366,7 @@ class NewChirpHome extends StatefulWidget {
     this.radioSelectionStore,
     this.fileSaveWarningStore,
     this.repeaterSearchPreferencesStore,
+    this.myGmrsService,
     this.updateChecker,
     this.updateInstaller,
     this.exitForUpdate,
@@ -373,6 +378,7 @@ class NewChirpHome extends StatefulWidget {
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
   final RepeaterSearchPreferencesStore? repeaterSearchPreferencesStore;
+  final MyGmrsService? myGmrsService;
   final UpdateChecker? updateChecker;
   final UpdateInstaller? updateInstaller;
   final Future<void> Function()? exitForUpdate;
@@ -393,6 +399,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       widget.fileSaveWarningStore ?? FileSaveWarningStore();
   late final _repeaterSearchPreferencesStore =
       widget.repeaterSearchPreferencesStore ?? RepeaterSearchPreferencesStore();
+  late final MyGmrsService _myGmrsService =
+      widget.myGmrsService ?? MyGmrsClient();
   late final _updateChecker = widget.updateChecker ?? UpdateChecker();
   late final _updateInstaller =
       widget.updateInstaller ?? const UpdateInstaller();
@@ -1713,6 +1721,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       builder: (context) => RepeaterBookDialog(
         bridge: _bridge,
         preferencesStore: _repeaterSearchPreferencesStore,
+        myGmrsService: _myGmrsService,
       ),
     );
     if (channels == null || channels.isEmpty || !mounted) return;
@@ -3151,13 +3160,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         icon: Icons.travel_explore,
                         title: 'Find nearby repeaters',
                         description:
-                            'Search RepeaterBook and add amateur or GMRS channels.',
+                            'Search RepeaterBook or myGMRS and add repeater channels.',
                         buttonLabel: 'Find repeaters',
                         onPressed: _findRepeaters,
                         help:
-                            'Search RepeaterBook by country, region, and optional location, '
-                            'preview matching repeaters, and add selected channels '
-                            'to the current library.',
+                            'Search RepeaterBook for amateur and GMRS repeaters, or '
+                            'sign in to myGMRS for GMRS directory results, preview '
+                            'matching repeaters, and add selected channels to the '
+                            'current library.',
                       ),
                     ],
                   );
@@ -6820,15 +6830,19 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
 
 enum _AddChannelPlacement { end, beforeSelected, afterSelected }
 
+enum _RepeaterProvider { repeaterBook, myGmrs }
+
 class RepeaterBookDialog extends StatefulWidget {
   const RepeaterBookDialog({
     super.key,
     required this.bridge,
     required this.preferencesStore,
+    this.myGmrsService,
   });
 
   final RadioBridge bridge;
   final RepeaterSearchPreferencesStore preferencesStore;
+  final MyGmrsService? myGmrsService;
 
   @override
   State<RepeaterBookDialog> createState() => _RepeaterBookDialogState();
@@ -6844,6 +6858,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   String _country = 'United States';
   String _state = 'New York';
   String _service = 'all';
+  _RepeaterProvider _provider = _RepeaterProvider.repeaterBook;
   bool _fmOnly = false;
   bool _openOnly = false;
   bool _preferencesTouched = false;
@@ -6858,6 +6873,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   RepeaterSortOrder _sortOrder = RepeaterSortOrder.source;
   Size? _dialogSize;
   final MapController _mapController = MapController();
+  late final MyGmrsService _myGmrs;
 
   List<String> get _regions => repeaterRegionsForCountry(_country);
 
@@ -6866,6 +6882,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   @override
   void initState() {
     super.initState();
+    _myGmrs = widget.myGmrsService ?? MyGmrsClient();
     _preferencesLoad = _loadPreferences();
   }
 
@@ -6890,6 +6907,40 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _error = null;
       _status = '';
     });
+  }
+
+  void _selectProvider(_RepeaterProvider provider) {
+    setState(() {
+      _provider = provider;
+      _results = null;
+      _selected.clear();
+      _selectedCounties.clear();
+      _error = null;
+      _status = '';
+      if (provider == _RepeaterProvider.myGmrs) {
+        _country = 'United States';
+        _service = 'gmrs';
+        _fmOnly = false;
+      }
+    });
+  }
+
+  Future<void> _signInMyGmrs() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+      _status = 'Opening myGMRS sign-in…';
+    });
+    try {
+      await _myGmrs.signIn();
+      if (mounted) {
+        setState(() => _status = 'Signed in to myGMRS for this session.');
+      }
+    } catch (error) {
+      if (mounted) setState(() => _error = '$error');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
   }
 
   @override
@@ -6947,23 +6998,34 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _results = null;
       _selected.clear();
       _selectedCounties.clear();
-      _status = 'Searching RepeaterBook…';
+      _status = _provider == _RepeaterProvider.myGmrs
+          ? 'Signing in to myGMRS…'
+          : 'Searching RepeaterBook…';
     });
     try {
-      final results = await widget.bridge.searchRepeaters(
-        country: _country,
-        state: _state,
-        service: _service,
-        filter: _filterController.text.trim(),
-        latitude: latitude,
-        longitude: longitude,
-        distance: distance,
-        fmOnly: _fmOnly,
-        openOnly: _openOnly,
-        onProgress: (progress) {
-          if (mounted) setState(() => _status = progress.label);
-        },
-      );
+      final results = _provider == _RepeaterProvider.myGmrs
+          ? await _myGmrs.searchRepeaters(
+              state: _state,
+              query: _filterController.text.trim(),
+              latitude: latitude,
+              longitude: longitude,
+              distanceKm: distance,
+              openOnly: _openOnly,
+            )
+          : await widget.bridge.searchRepeaters(
+              country: _country,
+              state: _state,
+              service: _service,
+              filter: _filterController.text.trim(),
+              latitude: latitude,
+              longitude: longitude,
+              distance: distance,
+              fmOnly: _fmOnly,
+              openOnly: _openOnly,
+              onProgress: (progress) {
+                if (mounted) setState(() => _status = progress.label);
+              },
+            );
       if (!mounted) return;
       setState(() {
         _results = results;
@@ -6979,8 +7041,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   }
 
   String _emptyResultsMessage(int totalMatches) {
+    final source = _provider == _RepeaterProvider.myGmrs
+        ? 'myGMRS'
+        : 'RepeaterBook';
     if (totalMatches > 0) {
-      return 'RepeaterBook returned $totalMatches matching '
+      return '$source returned $totalMatches matching '
           '${totalMatches == 1 ? 'repeater' : 'repeaters'}, but none could '
           'be imported.';
     }
@@ -6991,9 +7056,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         : ' within ${radius.toStringAsFixed(radius == radius.roundToDouble() ? 0 : 1)} km '
               'of your coordinates in $location';
     if (_country == 'United States' && _service == 'gmrs') {
-      return 'No matching GMRS repeaters were found$range. RepeaterBook may '
-          'not have a GMRS listing for this area yet. Check that Country and '
-          'Region match your coordinates.';
+      final sourceHint = _provider == _RepeaterProvider.myGmrs
+          ? 'myGMRS requires an active GMRS license to expose repeater '
+                'frequencies. Confirm that you are signed in with an eligible '
+                'account.'
+          : 'RepeaterBook may not have a GMRS listing for this area yet.';
+      return 'No matching GMRS repeaters were found$range. $sourceHint '
+          'Check that Country and Region match your coordinates.';
     }
     final activeFilters = [if (_openOnly) 'open use', if (_fmOnly) 'FM analog'];
     final filterHint = activeFilters.isEmpty
@@ -7127,7 +7196,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   }
 
   void _searchAmateurInstead() {
-    setState(() => _service = 'amateur');
+    setState(() {
+      _provider = _RepeaterProvider.repeaterBook;
+      _service = 'amateur';
+    });
     _search();
   }
 
@@ -7349,12 +7421,79 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'Search RepeaterBook and add selected repeater channels to '
+                            'Search a repeater directory and add selected channels to '
                             'your current library. Verify repeater status and access '
                             'before transmitting.',
                             style: TextStyle(color: Colors.black54),
                           ),
                           const SizedBox(height: 14),
+                          Row(
+                            children: [
+                              Expanded(
+                                child:
+                                    DropdownButtonFormField<_RepeaterProvider>(
+                                      key: ValueKey(
+                                        'repeater-provider-${_provider.name}',
+                                      ),
+                                      isExpanded: true,
+                                      initialValue: _provider,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Directory',
+                                      ),
+                                      items: const [
+                                        DropdownMenuItem(
+                                          value: _RepeaterProvider.repeaterBook,
+                                          child: Text('RepeaterBook'),
+                                        ),
+                                        DropdownMenuItem(
+                                          value: _RepeaterProvider.myGmrs,
+                                          child: Text('myGMRS.com'),
+                                        ),
+                                      ],
+                                      onChanged: _loading
+                                          ? null
+                                          : (value) {
+                                              if (value != null) {
+                                                _selectProvider(value);
+                                              }
+                                            },
+                                    ),
+                              ),
+                              if (_provider == _RepeaterProvider.myGmrs) ...[
+                                const SizedBox(width: 12),
+                                OutlinedButton.icon(
+                                  key: const ValueKey('mygmrs-sign-in'),
+                                  onPressed: _loading || _myGmrs.signedIn
+                                      ? null
+                                      : _signInMyGmrs,
+                                  icon: Icon(
+                                    _myGmrs.signedIn
+                                        ? Icons.verified_user_outlined
+                                        : Icons.login,
+                                  ),
+                                  label: Text(
+                                    _myGmrs.signedIn
+                                        ? 'Signed in'
+                                        : 'Sign in to myGMRS',
+                                  ),
+                                ),
+                              ],
+                            ],
+                          ),
+                          if (_provider == _RepeaterProvider.myGmrs) ...[
+                            const SizedBox(height: 6),
+                            const Text(
+                              'myGMRS requires an active GMRS license for '
+                              'repeater frequencies. PL tones and rules require '
+                              'a Premium membership. This sign-in lasts until '
+                              'NewChirp closes.',
+                              style: TextStyle(
+                                color: Colors.black54,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                          const SizedBox(height: 12),
                           Row(
                             children: [
                               Expanded(
@@ -7373,7 +7512,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         ),
                                       )
                                       .toList(),
-                                  onChanged: _loading
+                                  onChanged:
+                                      _loading ||
+                                          _provider == _RepeaterProvider.myGmrs
                                       ? null
                                       : (value) {
                                           if (value != null) {
@@ -7489,7 +7630,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       child: Text('GMRS'),
                                     ),
                                   ],
-                                  onChanged: _loading || !_supportsGmrs
+                                  onChanged:
+                                      _loading ||
+                                          !_supportsGmrs ||
+                                          _provider == _RepeaterProvider.myGmrs
                                       ? null
                                       : (value) {
                                           if (value != null) {
@@ -7602,7 +7746,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     ListTileControlAffinity.leading,
                                 title: const Text('FM-capable only'),
                                 value: _fmOnly,
-                                onChanged: _loading
+                                onChanged:
+                                    _loading ||
+                                        _provider == _RepeaterProvider.myGmrs
                                     ? null
                                     : (value) => setState(() {
                                         _preferencesTouched = true;
@@ -7694,7 +7840,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       ? 'Search to preview repeater channels.'
                                       : '${visibleResults.length} shown'
                                             ' of ${results.results.length} loaded'
-                                            ' • Data from RepeaterBook.com',
+                                            ' • Data from ${results.source}',
                                   style: const TextStyle(
                                     color: Colors.black54,
                                     fontSize: 12,
