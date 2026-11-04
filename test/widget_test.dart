@@ -836,6 +836,36 @@ void main() {
     }
   });
 
+  testWidgets('radio settings distinguish live and saved sources', (
+    tester,
+  ) async {
+    var radioReads = 0;
+    var snapshotLoads = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: RadioSettingsSourceActions(
+            canReadRadio: true,
+            hasSavedSnapshot: true,
+            enabled: true,
+            onReadRadio: () => radioReads++,
+            onUseSavedSnapshot: () => snapshotLoads++,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.text('Read current settings from radio'), findsOneWidget);
+    expect(find.text('Use saved radio snapshot'), findsOneWidget);
+    expect(find.text('Reload stored image'), findsNothing);
+
+    await tester.tap(find.text('Read current settings from radio'));
+    await tester.tap(find.text('Use saved radio snapshot'));
+    expect(radioReads, 1);
+    expect(snapshotLoads, 1);
+  });
+
   testWidgets('Find repeaters opens from the left navigation', (tester) async {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1;
