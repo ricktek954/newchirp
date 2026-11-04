@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T12:40:58Z"
+timestamp: "2026-11-04T16:23:18Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -85,6 +85,7 @@ class _NewChirpHomeState
 - `_selectPage`
 - `_openRadioSettings`
 - `_loadRadioSettings`
+- `_useSavedRadioSnapshot`
 - `_readRadioSettings`
 - `_markRadioSettingsChanged`
 - `_radioSettingChanges`
@@ -142,7 +143,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 393–5511 in `main.dart`
+Lines 393–5477 in `main.dart`
 
 ## Relationships
 

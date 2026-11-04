@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T12:40:58Z"
+timestamp: "2026-11-04T16:23:18Z"
 concept_id: main/rowColor
 language: dart
 ---
@@ -23,7 +23,7 @@ ColorrowColor(int channel)
 ```
 
 ## Source
-Lines 4593–4593 in `main.dart`
+Lines 4622–4622 in `main.dart`
 
 ## Relationships
 

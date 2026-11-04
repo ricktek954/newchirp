@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T12:40:58Z"
+timestamp: "2026-11-04T16:23:18Z"
 concept_id: main/ChannelEditor
 language: dart
 ---
@@ -28,7 +28,7 @@ class _ChannelEditor
 - `choices`
 
 ## Source
-Lines 8944–9472 in `main.dart`
+Lines 8950–9478 in `main.dart`
 
 ## Relationships
 

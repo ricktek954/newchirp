@@ -559,8 +559,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793796058204130890,
-      "hash": "a6848f2fb02ba44c77941e890ccb15bd59ce0dfbd056b152ba2624d80f8c1e51",
+      "mtime_ns": 1793809398961114026,
+      "hash": "bc4323e3f0eb710bbf16e66be3233151c569fa6bf70a68781768d373e7934a33",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -573,6 +573,7 @@
         "main/NavItem",
         "main/TransferOverlay",
         "main/TransferOverlayState",
+        "main/RadioSettingsSourceActions",
         "main/RadioSettingField",
         "main/RadioSettingFieldState",
         "main/GlossaryDialog",
@@ -695,6 +696,7 @@
         "main/selectPage",
         "main/openRadioSettings",
         "main/loadRadioSettings",
+        "main/useSavedRadioSnapshot",
         "main/readRadioSettings",
         "main/markRadioSettingsChanged",
         "main/radioSettingChanges",
@@ -1412,7 +1414,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "d80461c6218ea217ad25dbbaf355b7a53cde9d3292eebaa415c574739cb2c2fb",
+      "edge_hash": "c3222f07a2febb14729529ee9bc6cc78beef800d8324cb6445d96e862b6d8e36",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -5590,7 +5592,23 @@
       "render_hash": "stale",
       "edge_hash": "b4b739be2b81a2debb19ab874a000dcc578dc6c09aff8e741e378e1c2667a9b9",
       "enriched": false
+    },
+    "main/useSavedRadioSnapshot": {
+      "concept_id": "main/useSavedRadioSnapshot",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/RadioSettingsSourceActions": {
+      "concept_id": "main/RadioSettingsSourceActions",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-04T12:40:59Z"
+  "generated_at": "2026-11-04T16:23:20Z"
 }

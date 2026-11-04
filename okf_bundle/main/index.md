@@ -38,6 +38,7 @@
 - [ExtraFieldEditor](ExtraFieldEditor.md)
 - [NewChirpApp](NewChirpApp.md)
 - [NewChirpHome](NewChirpHome.md)
+- [RadioSettingsSourceActions](RadioSettingsSourceActions.md)
 - [RepeaterBookDialog](RepeaterBookDialog.md)
 
 ## Functions
@@ -172,6 +173,7 @@
 - [_unloadChirpModule](unloadChirpModule.md)
 - [_uploadRadio](uploadRadio.md)
 - [_useGmrsStarter](useGmrsStarter.md)
+- [_useSavedRadioSnapshot](useSavedRadioSnapshot.md)
 - [_WindowStateManager](WindowStateManager.md)
 - [_writeRadioSettings](writeRadioSettings.md)
 - [adaptRadioPromptButton](adaptRadioPromptButton.md)

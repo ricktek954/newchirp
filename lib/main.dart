@@ -1979,6 +1979,35 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  Future<void> _useSavedRadioSnapshot() async {
+    if (_settingsLoading || _busy) return;
+    if (_settingsDirty) {
+      final discard = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          title: const Text('Discard unsaved settings changes?'),
+          content: const Text(
+            'Using the saved radio snapshot will replace the unsaved settings '
+            'changes shown on this page.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Use saved snapshot'),
+            ),
+          ],
+        ),
+      );
+      if (discard != true || !mounted) return;
+    }
+    await _loadRadioSettings(force: true);
+  }
+
   Future<void> _readRadioSettings() async {
     final model = _model;
     final port = _port;
@@ -4914,7 +4943,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                           '${_settingsLoadedFromRadio
                                               ? '  |  read from radio'
                                               : hasImage
-                                              ? '  |  stored image available'
+                                              ? '  |  saved snapshot available'
                                               : ''}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -4924,28 +4953,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        Wrap(
-                          alignment: WrapAlignment.end,
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            if (canReadRadio && !settingsUnsupported)
-                              FilledButton.tonalIcon(
-                                onPressed: _settingsLoading || _busy
-                                    ? null
-                                    : _readRadioSettings,
-                                icon: const Icon(Icons.cable),
-                                label: const Text('Read settings from radio'),
-                              ),
-                            if (hasImage && !settingsUnsupported)
-                              OutlinedButton.icon(
-                                onPressed: _settingsLoading || _busy
-                                    ? null
-                                    : () => _loadRadioSettings(force: true),
-                                icon: const Icon(Icons.refresh),
-                                label: const Text('Reload stored image'),
-                              ),
-                          ],
+                        RadioSettingsSourceActions(
+                          canReadRadio: canReadRadio && !settingsUnsupported,
+                          hasSavedSnapshot: hasImage && !settingsUnsupported,
+                          enabled: !_settingsLoading && !_busy,
+                          onReadRadio: _readRadioSettings,
+                          onUseSavedSnapshot: _useSavedRadioSnapshot,
                         ),
                       ],
                     ),
@@ -4983,27 +4996,6 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     icon: Icons.error_outline,
                     title: 'Could not load radio settings',
                     body: _settingsError!,
-                    action: Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        if (canReadRadio)
-                          FilledButton.icon(
-                            onPressed: _settingsLoading || _busy
-                                ? null
-                                : _readRadioSettings,
-                            icon: const Icon(Icons.cable),
-                            label: const Text('Read settings from radio'),
-                          ),
-                        TextButton.icon(
-                          onPressed: _settingsLoading || _busy
-                              ? null
-                              : () => _loadRadioSettings(force: true),
-                          icon: const Icon(Icons.refresh),
-                          label: const Text('Reload stored image'),
-                        ),
-                      ],
-                    ),
                   )
                 else if (!hasImage)
                   _settingsMessage(
@@ -5011,19 +5003,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     title: 'Read radio settings',
                     body: canReadRadio
                         ? 'Read the current settings directly from the connected '
-                              'radio. This refreshes the stored image and settings '
-                              'only; the current channel list is not changed.'
+                              'radio. This refreshes the saved snapshot and '
+                              'settings only; the current channel list is not '
+                              'changed.'
                         : 'Select the programming cable and exact model on Radio '
                               'connection, then read the radio to load its '
                               'settings.',
                     action: canReadRadio
-                        ? FilledButton.icon(
-                            onPressed: _settingsLoading || _busy
-                                ? null
-                                : _readRadioSettings,
-                            icon: const Icon(Icons.cable),
-                            label: const Text('Read settings from radio'),
-                          )
+                        ? null
                         : FilledButton.icon(
                             onPressed: _openRadioConnection,
                             icon: const Icon(Icons.settings_input_antenna),
@@ -5035,30 +5022,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     icon: Icons.tune,
                     title: 'Settings have not loaded yet',
                     body: canReadRadio
-                        ? 'Choose Read settings from radio for the current values, or '
-                              'reload the stored image for cached values.'
-                        : 'Load the settings from the stored radio image.',
-                    action: Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        if (canReadRadio)
-                          FilledButton.icon(
-                            onPressed: _settingsLoading || _busy
-                                ? null
-                                : _readRadioSettings,
-                            icon: const Icon(Icons.cable),
-                            label: const Text('Read settings from radio'),
-                          ),
-                        TextButton.icon(
-                          onPressed: _settingsLoading || _busy
-                              ? null
-                              : () => _loadRadioSettings(force: true),
-                          icon: const Icon(Icons.refresh),
-                          label: const Text('Reload stored image'),
-                        ),
-                      ],
-                    ),
+                        ? 'Read the current values from the connected radio, or '
+                              'use the saved radio snapshot for cached values.'
+                        : 'Use the saved radio snapshot to load cached values.',
                   )
                 else if (!hasSettings)
                   _settingsMessage(
@@ -5100,7 +5066,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   ? 'Unsaved settings changes'
                                   : _settingsLoadedFromRadio
                                   ? 'Settings match the values last read from the radio.'
-                                  : 'Settings match the stored radio image.',
+                                  : 'Settings match the saved radio snapshot.',
                               style: TextStyle(
                                 color: _settingsDirty
                                     ? const Color(0xFFC46A15)
@@ -5829,6 +5795,46 @@ class _TransferOverlayState extends State<_TransferOverlay> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class RadioSettingsSourceActions extends StatelessWidget {
+  const RadioSettingsSourceActions({
+    super.key,
+    required this.canReadRadio,
+    required this.hasSavedSnapshot,
+    required this.enabled,
+    required this.onReadRadio,
+    required this.onUseSavedSnapshot,
+  });
+
+  final bool canReadRadio;
+  final bool hasSavedSnapshot;
+  final bool enabled;
+  final VoidCallback onReadRadio;
+  final VoidCallback onUseSavedSnapshot;
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.end,
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        if (canReadRadio)
+          FilledButton.tonalIcon(
+            onPressed: enabled ? onReadRadio : null,
+            icon: const Icon(Icons.cable),
+            label: const Text('Read current settings from radio'),
+          ),
+        if (hasSavedSnapshot)
+          OutlinedButton.icon(
+            onPressed: enabled ? onUseSavedSnapshot : null,
+            icon: const Icon(Icons.history),
+            label: const Text('Use saved radio snapshot'),
+          ),
+      ],
     );
   }
 }
