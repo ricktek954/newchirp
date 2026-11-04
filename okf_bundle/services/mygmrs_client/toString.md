@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:24:20Z"
+timestamp: "2026-11-04T11:37:02Z"
 concept_id: services/mygmrs_client/toString
 language: dart
 ---
@@ -24,7 +24,7 @@ StringtoString()
 ```
 
 ## Source
-Lines 46–46 in `services/mygmrs_client.dart`
+Lines 43–43 in `services/mygmrs_client.dart`
 
 ## Relationships
 

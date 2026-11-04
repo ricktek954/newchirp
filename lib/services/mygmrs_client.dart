@@ -1,9 +1,6 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
-import 'package:crypto/crypto.dart';
 
 import '../models/radio_channel.dart';
 import '../models/repeater_search.dart';
@@ -12,13 +9,13 @@ const myGmrsClientId = String.fromEnvironment(
   'MYGMRS_CLIENT_ID',
   defaultValue: 'mg_wiOzRfSIVvZYjwvgBUyH_u6U',
 );
-const myGmrsRedirectUri = String.fromEnvironment(
-  'MYGMRS_REDIRECT_URI',
-  defaultValue: 'http://127.0.0.1:8765/callback',
-);
 const myGmrsApiBase = String.fromEnvironment(
   'MYGMRS_API_BASE',
   defaultValue: 'https://api.mygmrs.com',
+);
+const myGmrsBrokerBase = String.fromEnvironment(
+  'MYGMRS_BROKER_BASE',
+  defaultValue: 'https://newchirp.net',
 );
 
 abstract interface class MyGmrsService {
@@ -49,18 +46,18 @@ class MyGmrsException implements Exception {
 class MyGmrsClient implements MyGmrsService {
   MyGmrsClient({
     this.clientId = myGmrsClientId,
-    Uri? redirectUri,
     Uri? apiBase,
+    Uri? brokerBase,
     Future<void> Function(Uri uri)? openBrowser,
     Duration signInTimeout = const Duration(minutes: 5),
-  }) : redirectUri = redirectUri ?? Uri.parse(myGmrsRedirectUri),
-       apiBase = apiBase ?? Uri.parse(myGmrsApiBase),
+  }) : apiBase = apiBase ?? Uri.parse(myGmrsApiBase),
+       brokerBase = brokerBase ?? Uri.parse(myGmrsBrokerBase),
        _openBrowser = openBrowser ?? _openSystemBrowser,
        _signInTimeout = signInTimeout;
 
   final String clientId;
-  final Uri redirectUri;
   final Uri apiBase;
+  final Uri brokerBase;
   final Future<void> Function(Uri uri) _openBrowser;
   final Duration _signInTimeout;
 
@@ -75,124 +72,43 @@ class MyGmrsClient implements MyGmrsService {
 
   @override
   Future<void> signIn() async {
-    if (clientId.trim().isEmpty) {
+    final start = await _postJson('/api/mygmrs/oauth/start', const {});
+    final handoffToken = '${start['handoffToken'] ?? ''}';
+    final authorizeUrl = Uri.tryParse('${start['authorizeUrl'] ?? ''}');
+    if (handoffToken.isEmpty ||
+        authorizeUrl == null ||
+        !authorizeUrl.isScheme('https')) {
       throw const MyGmrsException(
-        'myGMRS sign-in is not configured. Set MYGMRS_CLIENT_ID when building.',
+        'newchirp.net returned an invalid myGMRS sign-in response.',
       );
     }
-    if (redirectUri.host != '127.0.0.1' || !redirectUri.hasPort) {
-      throw const MyGmrsException(
-        'The desktop myGMRS callback must use a fixed 127.0.0.1 port.',
+    await _openBrowser(authorizeUrl);
+    final deadline = DateTime.now().add(_signInTimeout);
+    while (DateTime.now().isBefore(deadline)) {
+      await Future<void>.delayed(const Duration(milliseconds: 1200));
+      final poll = await _jsonRequest(
+        'POST',
+        brokerBase.replace(path: '/api/mygmrs/oauth/poll'),
+        contentType: ContentType.json,
+        body: '{}',
+        authorization: 'Bearer $handoffToken',
+        includeAccessToken: false,
       );
-    }
-
-    final verifier = base64Url
-        .encode(_secureRandomBytes(32))
-        .replaceAll('=', '');
-    final challenge = base64Url
-        .encode(sha256.convert(ascii.encode(verifier)).bytes)
-        .replaceAll('=', '');
-    final state = base64Url.encode(_secureRandomBytes(32)).replaceAll('=', '');
-    final authorizeUri = buildAuthorizeUri(
-      state: state,
-      codeChallenge: challenge,
-    );
-
-    late final HttpServer server;
-    try {
-      server = await HttpServer.bind(
-        InternetAddress.loopbackIPv4,
-        redirectUri.port,
-        shared: false,
-      );
-    } on SocketException catch (error) {
-      throw MyGmrsException(
-        'Could not listen for the myGMRS callback on '
-        '${redirectUri.host}:${redirectUri.port}. Close the application using '
-        'that port and try again. $error',
-      );
-    }
-
-    final callback = Completer<Uri>();
-    final subscription = server.listen((request) async {
-      if (request.uri.path != redirectUri.path) {
-        request.response.statusCode = HttpStatus.notFound;
-        await request.response.close();
+      if (poll.statusCode == HttpStatus.accepted) continue;
+      if (poll.statusCode == HttpStatus.ok) {
+        _storeTokens(poll.body);
         return;
       }
-      if (!callback.isCompleted) callback.complete(request.uri);
-      request.response
-        ..statusCode = HttpStatus.ok
-        ..headers.contentType = ContentType.html
-        ..write(
-          '<!doctype html><meta charset="utf-8">'
-          '<title>NewChirp</title>'
-          '<p>myGMRS sign-in is complete. You can close this window '
-          'and return to NewChirp.</p>',
-        );
-      await request.response.close();
-    });
-
-    try {
-      await _openBrowser(authorizeUri);
-      final callbackUri = await callback.future.timeout(
-        _signInTimeout,
-        onTimeout: () => throw const MyGmrsException(
-          'myGMRS sign-in timed out. Return to NewChirp and try again.',
-        ),
+      final message = '${poll.body['error'] ?? poll.rawBody}'.trim();
+      throw MyGmrsException(
+        message.isEmpty
+            ? 'myGMRS sign-in failed with HTTP ${poll.statusCode}.'
+            : message,
       );
-      final callbackError = callbackUri.queryParameters['error'];
-      if (callbackError != null) {
-        throw MyGmrsException(
-          'myGMRS denied sign-in: $callbackError'
-          '${callbackUri.queryParameters['error_description'] == null ? '' : ' - ${callbackUri.queryParameters['error_description']}'}',
-        );
-      }
-      if (callbackUri.queryParameters['state'] != state) {
-        throw const MyGmrsException(
-          'myGMRS returned an invalid authorization state. Sign in again.',
-        );
-      }
-      final code = callbackUri.queryParameters['code'];
-      if (code == null || code.isEmpty) {
-        throw const MyGmrsException(
-          'myGMRS did not return an authorization code.',
-        );
-      }
-      await _exchangeAuthorizationCode(code, verifier);
-    } finally {
-      await subscription.cancel();
-      await server.close(force: true);
     }
-  }
-
-  Uri buildAuthorizeUri({
-    required String state,
-    required String codeChallenge,
-  }) {
-    return apiBase.replace(
-      path: '/oauth/authorize',
-      queryParameters: {
-        'response_type': 'code',
-        'client_id': clientId,
-        'redirect_uri': redirectUri.toString(),
-        'scope': 'repeaters:read',
-        'state': state,
-        'code_challenge': codeChallenge,
-        'code_challenge_method': 'S256',
-      },
+    throw const MyGmrsException(
+      'myGMRS sign-in timed out. Return to NewChirp and try again.',
     );
-  }
-
-  Future<void> _exchangeAuthorizationCode(String code, String verifier) async {
-    final response = await _postForm('/oauth/token', {
-      'grant_type': 'authorization_code',
-      'code': code,
-      'redirect_uri': redirectUri.toString(),
-      'client_id': clientId,
-      'code_verifier': verifier,
-    });
-    _storeTokens(response);
   }
 
   Future<void> _refreshAccessToken() async {
@@ -375,11 +291,30 @@ class MyGmrsClient implements MyGmrsService {
     return response.body;
   }
 
+  Future<Map<String, dynamic>> _postJson(
+    String path,
+    Map<String, dynamic> payload,
+  ) async {
+    final response = await _jsonRequest(
+      'POST',
+      brokerBase.replace(path: path),
+      contentType: ContentType.json,
+      body: jsonEncode(payload),
+      includeAccessToken: false,
+    );
+    if (response.statusCode != HttpStatus.ok) {
+      throw MyGmrsException(_apiError(response));
+    }
+    return response.body;
+  }
+
   Future<_JsonResponse> _jsonRequest(
     String method,
     Uri uri, {
     ContentType? contentType,
     String? body,
+    String? authorization,
+    bool includeAccessToken = true,
   }) async {
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 20);
@@ -390,7 +325,9 @@ class MyGmrsClient implements MyGmrsService {
         ..set(HttpHeaders.userAgentHeader, 'NewChirp');
       if (contentType != null) request.headers.contentType = contentType;
       final accessToken = _accessToken;
-      if (accessToken != null) {
+      if (authorization != null) {
+        request.headers.set(HttpHeaders.authorizationHeader, authorization);
+      } else if (includeAccessToken && accessToken != null) {
         request.headers.set(
           HttpHeaders.authorizationHeader,
           'Bearer $accessToken',
@@ -444,11 +381,6 @@ class _JsonResponse {
   final int statusCode;
   final Map<String, dynamic> body;
   final String rawBody;
-}
-
-List<int> _secureRandomBytes(int length) {
-  final random = Random.secure();
-  return List<int>.generate(length, (_) => random.nextInt(256));
 }
 
 double? _ctcssTone(Object? raw) {

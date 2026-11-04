@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:24:20Z"
+timestamp: "2026-11-04T11:37:02Z"
 concept_id: services/mygmrs_client/refreshAccessToken
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_refreshAccessToken_refreshAccessToken
 ```
 
 ## Source
-Lines 198–198 in `services/mygmrs_client.dart`
+Lines 114–114 in `services/mygmrs_client.dart`
 
 ## Relationships
 
