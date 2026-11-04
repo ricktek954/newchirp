@@ -43,12 +43,17 @@ myGMRS sign-in. The listener validates the OAuth `state`, accepts the
 one-time code, and closes. myGMRS matches the complete redirect string,
 including scheme, host, port, and path; it does not support wildcard ports.
 
-The supplied client currently has the custom callback
-`net.newchirp.newchirp_mobile:/mygmrs/callback` registered, but not the
-loopback callback. Live sign-in therefore remains blocked until the loopback
-URI above is registered for this client. The custom URI is not the default
-because its scheme contains an underscore and would also require native
-URL-handler registration on macOS, Windows, and Linux.
+No redirect URI has been confirmed as registered for this client. Rich's email
+offered `net.newchirp.newchirp_mobile:/mygmrs/callback` as an example, while
+warning that its underscore may make it unusable. A request to the
+authorization endpoint displaying the sign-in page is not proof that the
+callback is registered, since validation may not complete until after sign-in.
+
+Live sign-in therefore remains blocked until myGMRS explicitly registers a
+chosen redirect URI for this client. The loopback URI above is ready in the
+application but is also currently unregistered. If myGMRS permits only one of
+its own callback forms rather than a NewChirp-owned URI, the integration cannot
+complete the Authorization Code flow as a public third-party client.
 
 ## Token handling
 

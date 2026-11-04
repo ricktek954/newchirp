@@ -13,11 +13,14 @@ release requirements.
   myGMRS, signs in through the system browser, imports GMRS frequencies and
   mapped tones, and honors the API's license and Premium data restrictions.
   Integration details are in `docs/MYGMRS_API.md`.
-- myGMRS live sign-in is blocked on callback registration. The supplied client
-  currently accepts only
-  `net.newchirp.newchirp_mobile:/mygmrs/callback`; it does not accept NewChirp's
-  desktop loopback default `http://127.0.0.1:8765/callback`. Ask myGMRS to
-  register that exact URI before live OAuth testing.
+- myGMRS live sign-in is blocked because no redirect URI has been confirmed
+  as registered. Rich suggested
+  `net.newchirp.newchirp_mobile:/mygmrs/callback` as an example but did not say
+  it had been registered, and he warned that its underscore may make it
+  unusable. The desktop loopback default
+  `http://127.0.0.1:8765/callback` is also not confirmed. Do not infer OAuth
+  callback registration from the authorization endpoint showing a sign-in
+  page; that request can succeed before the redirect is validated.
 - myGMRS access and refresh tokens are held in memory for the NewChirp process
   lifetime. They are intentionally not persisted until secure storage is
   implemented for macOS, Windows, and Linux. No client secret is shipped.
