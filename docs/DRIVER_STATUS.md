@@ -562,14 +562,20 @@ Last updated: 2026-11-05
 
 - Maintained compatibility: `drivers/newchirp_baofeng_gm21.py`
 - Driver SHA-256:
-  `70d24948654ed3b6bc9ee48ec63540591679a3dcf6edb6452335ccadec75cca9`
+  `17d6bfa54e271ff8b60ef40e4c10c79bbce0ca20dc4016a4922e2da7a7bf4def`
 - Transport: pinned CHIRP UV-17-family clone serial at 115200 8N1 with
   DTR/RTS asserted.
 - Handshake policy: try the field-confirmed `PROGRAMBFGMRS05U` GM-5RH
-  handshake first, then the existing `PROGRAMCOLORPROU` UV-17Pro GPS handshake.
+  handshake with the GM-5RH `F`/`M`/`SEND` magic sequence, then the existing
+  `PROGRAMCOLORPROU` UV-17Pro GPS handshake with its own seven-byte-`M`
+  sequence.
 - Field evidence: a GM-21 with firmware 0.02 and hardware 01 rebooted or did
   not answer the original UV-17Pro GPS handshake. The same cable read and wrote
   the radio without errors when the GM-5RH profile was selected.
+- 1.0.40 field report: the GM-21 entry accepted `PROGRAMBFGMRS05U` but then
+  used the UV-17Pro GPS follow-up magic, causing the first clone read to return
+  eight bytes instead of 68. Selecting GM-5RH still succeeded. The override
+  now keeps each identification string paired with its matching magic sequence.
 - Channel layout remains the pinned CHIRP GM-21 layout and settings path.
 - Next milestone: confirm the compatibility override reads and writes that
   radio through the GM-21 catalog entry.

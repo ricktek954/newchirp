@@ -1,5 +1,6 @@
 """Offline checks for the Baofeng GM-21 firmware compatibility override."""
 
+from collections import deque
 import importlib.util
 import sys
 import unittest
@@ -52,6 +53,68 @@ class BaofengGM21DriverTest(unittest.TestCase):
                 baofeng_uv17Pro.MSTRING_UV17PROGPS,
             ],
         )
+
+    def test_gm5rh_profile_uses_the_gm5rh_magic_sequence(self):
+        from chirp.drivers import baofeng_uv17Pro
+
+        serial = _SequenceSerial([
+            b"\x06",
+            b"F" * 16,
+            b"M" * 15,
+            b"\x06",
+        ])
+        radio = self.radio_class(serial)
+
+        self.assertTrue(baofeng_uv17Pro._do_ident(radio))
+        self.assertEqual(serial.writes[0], baofeng_uv17Pro.MSTRING_GM5RH)
+        self.assertEqual(
+            serial.writes[1:],
+            [magic for magic, _length in baofeng_uv17Pro.GM5RH._magics],
+        )
+        self.assertEqual(serial.writes[2], b"M")
+
+    def test_gps_fallback_uses_the_gps_magic_sequence(self):
+        from chirp.drivers import baofeng_uv17Pro
+
+        serial = _SequenceSerial([
+            b"\x05",
+            b"\x06",
+            b"F" * 16,
+            b"M" * 7,
+            b"\x06",
+        ])
+        radio = self.radio_class(serial)
+
+        self.assertTrue(baofeng_uv17Pro._do_ident(radio))
+        self.assertEqual(
+            serial.writes[:2],
+            [
+                baofeng_uv17Pro.MSTRING_GM5RH,
+                baofeng_uv17Pro.MSTRING_UV17PROGPS,
+            ],
+        )
+        self.assertEqual(
+            serial.writes[2:],
+            [
+                magic
+                for magic, _length in baofeng_uv17Pro.UV17ProGPS._magics
+            ],
+        )
+
+
+class _SequenceSerial:
+    def __init__(self, replies):
+        self.replies = deque(replies)
+        self.timeout = 1.5
+        self.writes = []
+
+    def read(self, size):
+        if size == 256 or not self.replies:
+            return b""
+        return self.replies.popleft()[:size]
+
+    def write(self, data):
+        self.writes.append(bytes(data))
 
 
 if __name__ == "__main__":
