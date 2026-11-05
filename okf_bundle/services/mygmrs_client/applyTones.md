@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T10:17:41Z"
+timestamp: "2026-11-05T10:49:20Z"
 concept_id: services/mygmrs_client/applyTones
 language: dart
 ---
@@ -24,7 +24,7 @@ void_applyTones(RadioChannel channel, double? txTone, double? rxTone)
 ```
 
 ## Source
-Lines 412–412 in `services/mygmrs_client.dart`
+Lines 416–416 in `services/mygmrs_client.dart`
 
 ## Relationships
 

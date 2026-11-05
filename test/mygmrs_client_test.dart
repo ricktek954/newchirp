@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -75,6 +76,7 @@ void main() {
     var polls = 0;
     var searches = 0;
     var signedOut = false;
+    Map<String, dynamic>? searchPayload;
     broker.listen((request) async {
       if (request.uri.path == '/api/mygmrs/oauth/start') {
         expect(request.method, 'POST');
@@ -110,6 +112,9 @@ void main() {
           request.headers.value(HttpHeaders.authorizationHeader),
           'Bearer session-token',
         );
+        searchPayload =
+            jsonDecode(await utf8.decoder.bind(request).join())
+                as Map<String, dynamic>;
         searches++;
         request.response
           ..statusCode = HttpStatus.ok
@@ -148,8 +153,15 @@ void main() {
     expect(polls, 2);
     expect(client.signedIn, isTrue);
 
-    final results = await client.searchRepeaters(state: 'New York');
+    final results = await client.searchRepeaters(
+      state: 'New York',
+      query: '33004',
+      distanceKm: 40,
+    );
     expect(searches, 1);
+    expect(searchPayload?['zip'], '33004');
+    expect(searchPayload?.containsKey('search'), isFalse);
+    expect(searchPayload?['range'], '25');
     expect(results.results.single.channel.frequency, 462.575);
 
     await client.signOut();

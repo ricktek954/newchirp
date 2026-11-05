@@ -51,6 +51,7 @@ class MyGmrsClient implements MyGmrsService {
 
   String? _sessionToken;
   DateTime? _sessionExpiresAt;
+  static final _zipCodePattern = RegExp(r'^\d{5}(?:-\d{4})?$');
 
   @override
   bool get signedIn =>
@@ -146,9 +147,12 @@ class MyGmrsClient implements MyGmrsService {
     int limit = 100,
   }) async {
     await ensureSignedIn();
+    final trimmedQuery = query.trim();
+    final zipQuery = _zipCodePattern.hasMatch(trimmedQuery) ? trimmedQuery : '';
     final payload = <String, dynamic>{
       if (state.isNotEmpty && state != 'All') 'state': _stateCode(state),
-      if (query.trim().isNotEmpty) 'search': query.trim(),
+      if (trimmedQuery.isNotEmpty && zipQuery.isEmpty) 'search': trimmedQuery,
+      if (zipQuery.isNotEmpty) 'zip': zipQuery,
       if (latitude != null) 'latitude': '$latitude',
       if (longitude != null) 'longitude': '$longitude',
       if (distanceKm != null)

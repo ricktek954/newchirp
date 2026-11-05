@@ -20,6 +20,10 @@ release requirements.
   NewChirp session token. Website commit `0c6f048` performs the confidential
   client exchange, keeps myGMRS access/refresh tokens server-side, refreshes
   them, proxies authenticated repeater searches, and revokes them on sign-out.
+- myGMRS text searches use literal listing text and do not resolve county
+  names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
+  search and explains the limitation instead of returning a misleading empty
+  result.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:
