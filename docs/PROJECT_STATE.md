@@ -8,6 +8,12 @@ release requirements.
 
 ## Resume here
 
+- The Windows `1.0.38` installer is live from source commit `10bafaeb`.
+  It includes the myGMRS ZIP-radius search and the Windows serial configure /
+  localized permission diagnostics. The versioned installer is
+  `NewChirp-Installer-1.0.38.exe`, SHA-256
+  `cd589faaebff21eb0d9f42519fbf897c63af6255466b71387739731aa7e4ded6`,
+  size `61,111,602` bytes.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -141,6 +147,7 @@ release requirements.
 - Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
 - macOS `1.0.38` artifact source commit: `10bafaeb`
+- Windows `1.0.38` artifact source commit: `10bafaeb`
 - Linux `1.0.37` artifact source commit: `5a5e79a9`
 - Open pull requests: none
 - Checked-out source version: `1.0.38+38`
@@ -158,7 +165,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.38 |
-| Windows | 1.0.37 |
+| Windows | 1.0.38 |
 | Linux | 1.0.37 |
 | Legacy shared manifest version | 1.0.37 |
 
@@ -176,11 +183,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.37.exe`
-- Version/build: `1.0.37` / `37`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.38.exe`
+- Version/build: `1.0.38` / `38`
 - SHA-256:
-  `a8acc8b92ec3fffe664381cb6fd12f1eb9af78e0f642f3846c4c34ede23653a5`
-- Size: `61,092,497` bytes
+  `cd589faaebff21eb0d9f42519fbf897c63af6255466b71387739731aa7e4ded6`
+- Size: `61,111,602` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
