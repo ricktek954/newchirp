@@ -46,6 +46,10 @@ release requirements.
   applies only changed standard or radio-extra fields to all selected channels.
 - Post-`1.0.39` source adds multi-row copy, cut, and contiguous paste for the
   selected channel block. This is not included in the live artifacts yet.
+- Post-`1.0.39` source also lets Baofeng UV-5G Mini channels 15-22 retain a
+  simplex or +5 MHz repeater assignment. Fixed frequencies and dedicated
+  repeater slots 23-30 remain protected. This is not included in live
+  artifacts yet.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:
