@@ -8,6 +8,14 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-05 email triage handled 24 unread messages. Nineteen replies
+  were sent and verified in `Sent`; five already-handled/no-action messages
+  were marked `\Seen`. Three immediate delivery bounces were marked `\Seen`:
+  two Microsoft-family recipients rejected the server IP as blocklisted, and
+  one Gmail recipient address did not exist. The inbox returned to zero unread.
+- Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
+  generic identity `TDH84GEN` as read-only. Writes remain disabled pending
+  physical write/read-back validation.
 - The Windows `1.0.38` installer is live from source commit `10bafaeb`.
   It includes the myGMRS ZIP-radius search and the Windows serial configure /
   localized permission diagnostics. The versioned installer is
