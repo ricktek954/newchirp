@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-03
+Last updated: 2026-11-05
 
 ## Status definitions
 
@@ -40,7 +40,7 @@ Last updated: 2026-11-03
 | Baofeng UV-9G | Pinned CHIRP `baofeng_wp970i.py` with `drivers/newchirp_uv9g.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Stock CHIRP driver | Invalid service calibration values are read-only and preserved | Experimental compatibility override |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | CHIRP TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
-| TIDRADIO TD-H8 fourth-generation HAM | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | Identity accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
+| TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | HAM and generic G4 identities accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
@@ -539,12 +539,13 @@ Last updated: 2026-11-03
 - Next milestone: confirm the compatibility override reads and writes that
   radio through the GM-21 catalog entry.
 
-### TIDRADIO TD-H8 fourth-generation HAM serial
+### TIDRADIO TD-H8 fourth-generation serial
 
 - Maintained file: `drivers/newchirp_tdh8_serial.py`
 - Transport: pinned CHIRP TD-H8 serial protocol at 38400 8N1
-- Identity: `TDH84GEH`, observed in the 2026-11-01 NewChirp 1.0.30 report
-  from 99kelly@comcast.net
+- Identities: `TDH84GEH`, observed in the 2026-11-01 NewChirp 1.0.30 report
+  from 99kelly@comcast.net; `TDH84GEN`, observed in 2026-11-05 NewChirp
+  1.0.37 reports from hils73@hotmail.com and nymetssuck@gmail.com
 - Implemented: identity resolution against the later `0x1FEF` TD-H8 address
   space and read-only image download/offline editing
 - Read/write policy: writes remain disabled until a physical read, controlled

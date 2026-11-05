@@ -75,3 +75,22 @@ class ExperimentalSerialFollowupTest(unittest.TestCase):
         radio = object.__new__(radio_class)
         with self.assertRaisesRegex(errors.RadioError, "writes are disabled"):
             radio.sync_out()
+
+    def test_tdh8_fourth_generation_generic_is_read_only(self):
+        from chirp import errors
+        from chirp.drivers import tdh8
+
+        with mock.patch.object(
+            tdh8,
+            "_do_ident",
+            return_value=b"TDH84GEN",
+        ):
+            radio_class = tdh8.TDH8.detect_from_serial(object())
+        self.assertEqual(
+            radio_class.__name__,
+            "TIDRadioTDH8FourthGen",
+        )
+        self.assertEqual(radio_class.ident_mode, b"TDH84GEN")
+        radio = object.__new__(radio_class)
+        with self.assertRaisesRegex(errors.RadioError, "writes are disabled"):
+            radio.sync_out()
