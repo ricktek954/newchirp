@@ -44,6 +44,8 @@ release requirements.
   and includes CHIRP-style multi-row editing: Shift-click selects a range,
   Cmd/Ctrl-click toggles individual rows, and the right-click Properties editor
   applies only changed standard or radio-extra fields to all selected channels.
+- Post-`1.0.39` source adds multi-row copy, cut, and contiguous paste for the
+  selected channel block. This is not included in the live artifacts yet.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:

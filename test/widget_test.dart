@@ -15,6 +15,7 @@ import 'package:newchirp/services/repeater_search_preferences_store.dart';
 import 'package:newchirp/services/update_checker.dart';
 
 import 'chirp_test_source.dart';
+
 import 'package:newchirp/services/update_installer.dart';
 
 var _layoutTest = 0;
@@ -1695,6 +1696,89 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('GMRS 1'), findsNWidgets(2));
+  });
+
+  testWidgets('right-click can copy and paste a selected channel block', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pump();
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump();
+    expect(find.text('Edit 3 selected'), findsOneWidget);
+
+    var gesture = await tester.startGesture(
+      tester.getCenter(find.text('GMRS 3').first),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Copy 3 channels'));
+    await tester.pumpAndSettle();
+
+    gesture = await tester.startGesture(
+      tester.getCenter(find.text('GMRS 5').first),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Paste 3 channels'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Overwrite 3 channels?'), findsOneWidget);
+    await tester.tap(find.text('Overwrite channels'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('GMRS 1'), findsNWidgets(2));
+    expect(find.text('GMRS 2'), findsNWidgets(2));
+    expect(find.text('GMRS 3'), findsNWidgets(2));
+    expect(find.text('Edit 3 selected'), findsOneWidget);
+  });
+
+  testWidgets('right-click cut clears and copies a selected channel block', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pump();
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.tap(find.text('GMRS 2').first);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump();
+
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('GMRS 2').first),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Cut 2 channels'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('GMRS 1'), findsNothing);
+    expect(find.text('GMRS 2'), findsNothing);
   });
 
   testWidgets('right-click can clear a channel row', (tester) async {

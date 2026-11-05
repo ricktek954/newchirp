@@ -81,6 +81,7 @@ as a development artifact; the release build is the clean-machine package.
 - [x] Added channel creation and duplication.
 - [x] Added right-click copy, cut, paste, and duplicate actions in the channel
   table.
+- [x] Added multi-row copy, cut, and contiguous paste for selected channels.
 - [x] Added right-click **Clear channel**, which marks that memory slot to be
   cleared on the next radio write.
 - [x] Added undo/redo with Cmd/Ctrl+Z / Cmd/Ctrl+Shift+Z keyboard shortcuts and
@@ -320,7 +321,8 @@ flutter run -d macos
 - Temporary bridge, upload JSON, wheel, and radio image files are not fully
   isolated per operation or cleaned up after use.
 - Errors are shown in dialogs but there is no user-accessible diagnostic log.
-- Bulk paste and import conflict tools are not implemented.
+- Multi-row paste overwrites contiguous target rows; import conflict tools and
+  automatic shifting are not implemented.
 - Search state, selected page, and selected row are not persisted.
 - Column layout has no visible **Reset columns** command.
 - Accessibility, screen-reader, keyboard-only, localization, and high-contrast
@@ -395,7 +397,8 @@ flutter run -d macos
   format; define what CSV can and cannot retain.
 - [x] Add multi-select and bulk property editing that applies only changed
   fields, matching CHIRP's selected-memory Properties workflow.
-- [ ] Add multi-row copy/paste, movement, and import merge.
+- [x] Add multi-row copy/paste.
+- [ ] Add multi-row movement and import merge.
 - [ ] Add undo/redo and stronger unsaved-change protection on app close.
 - [ ] Add keyboard navigation and common desktop shortcuts.
 - [ ] Add **Reset columns** and optionally persist table sort/filter state.
