@@ -28,12 +28,14 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The Windows `1.0.38` installer is live from source commit `10bafaeb`.
-  It includes the myGMRS ZIP-radius search and the Windows serial configure /
-  localized permission diagnostics. The versioned installer is
-  `NewChirp-Installer-1.0.38.exe`, SHA-256
-  `cd589faaebff21eb0d9f42519fbf897c63af6255466b71387739731aa7e4ded6`,
-  size `61,111,602` bytes.
+- The Windows `1.0.39` installer is live from source commit `91ac1711`.
+  It adds multi-row channel copy/paste and properties editing, the A9305B read
+  checksum correction, UV-5G Mini simplex channels 15-22, and TD-H8 Gen 4
+  read-only identity support. It keeps the myGMRS ZIP-radius search and Windows
+  serial diagnostics. The versioned installer is
+  `NewChirp-Installer-1.0.39.exe`, SHA-256
+  `b460f2e2f07ab8bd1b580e6d8c12a44e6c5d43f8c3554f855846247971d5594b`,
+  size `61,115,880` bytes.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -178,7 +180,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.38` artifact source commit: `10bafaeb`
-- Windows `1.0.38` artifact source commit: `10bafaeb`
+- Windows `1.0.39` artifact source commit: `91ac1711`
 - Linux `1.0.39` artifact source commit: `e515bc4b`
 - Open pull requests: none
 - Checked-out source version: `1.0.39+39`
@@ -196,7 +198,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.38 |
-| Windows | 1.0.38 |
+| Windows | 1.0.39 |
 | Linux | 1.0.39 |
 | Legacy shared manifest version | 1.0.38 |
 
@@ -214,11 +216,11 @@ macOS artifact:
 
 Windows artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.38.exe`
-- Version/build: `1.0.38` / `38`
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.39.exe`
+- Version/build: `1.0.39` / `39`
 - SHA-256:
-  `cd589faaebff21eb0d9f42519fbf897c63af6255466b71387739731aa7e4ded6`
-- Size: `61,111,602` bytes
+  `b460f2e2f07ab8bd1b580e6d8c12a44e6c5d43f8c3554f855846247971d5594b`
+- Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
 Linux artifacts:
