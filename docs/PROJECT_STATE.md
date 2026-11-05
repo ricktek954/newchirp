@@ -28,14 +28,8 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The Windows `1.0.39` installer is live from source commit `91ac1711`.
-  It adds multi-row channel copy/paste and properties editing, the A9305B read
-  checksum correction, UV-5G Mini simplex channels 15-22, and TD-H8 Gen 4
-  read-only identity support. It keeps the myGMRS ZIP-radius search and Windows
-  serial diagnostics. The versioned installer is
-  `NewChirp-Installer-1.0.39.exe`, SHA-256
-  `b460f2e2f07ab8bd1b580e6d8c12a44e6c5d43f8c3554f855846247971d5594b`,
-  size `61,115,880` bytes.
+- The Windows `1.0.40` installer is publicly available. The prior recorded
+  `1.0.39` installer was built from source commit `91ac1711`.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -117,9 +111,9 @@ release requirements.
   the randomized 25-byte `SEND` authentication exchange is performed with
   session-symbol payload decryption, and the Web Programmer's 3.5-second
   block response window is allowed. It keeps the `1.0.27`-`1.0.36` fixes.
-- The macOS `1.0.39` release is live. It includes the CPS-aligned Retevis MA1
-  A9305B read path, multi-row copy/cut/paste, the UV-5G Mini repeater-slot
-  correction, and the myGMRS directory and OAuth flow from `1.0.38`.
+- The macOS `1.0.40` release is live. It adds the official-CPS-derived Wouxun
+  KG-905G Plus driver with all 400 channels and retains the A9305B,
+  multi-row editing, UV-5G Mini, and myGMRS fixes from `1.0.39`.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
@@ -153,7 +147,7 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.39` release is built, signed, notarized, stapled, uploaded,
+- The macOS `1.0.40` release is built, signed, notarized, stapled, uploaded,
   and live. The universal DMG contains both Python architectures and universal
   libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
@@ -176,11 +170,11 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.39` artifact source commit: `91ac1711`
+- macOS `1.0.40` artifact source commit: `8fdcef21`
 - Windows `1.0.39` artifact source commit: `91ac1711`
 - Linux `1.0.39` artifact source commit: `e515bc4b`
 - Open pull requests: none
-- Checked-out source version: `1.0.39+39`
+- Checked-out source version: `1.0.40+40`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -194,24 +188,24 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.39 |
-| Windows | 1.0.39 |
+| macOS | 1.0.40 |
+| Windows | 1.0.40 |
 | Linux | 1.0.39 |
 | Legacy shared manifest version | 1.0.39 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.39.dmg`
-- Version/build: `1.0.39` / `39`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.40.dmg`
+- Version/build: `1.0.40` / `40`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `4957f36f6feba433cdeb91c0f9ca8f074a5c62b8e8485733d611b4af09a6e41b`
-- Size: `81,276,451` bytes
-- Notarization submission: `4444b0b0-908d-415c-a39e-c1e4617776de`
+  `318630cd494fe8e8620a1ccddd8e7fd0f8846fb068300bbeb1a5ec6b75f1ea62`
+- Size: `81,283,507` bytes
+- Notarization submission: `a387d9c2-2953-4383-9612-c370f1c08d8f`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows artifact:
+Windows `1.0.39` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.39.exe`
 - Version/build: `1.0.39` / `39`
@@ -251,6 +245,11 @@ Linux 1.0.39 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.40` from source commit `8fdcef21` as a universal
+  signed, notarized, stapled DMG. Verified the official-CPS-derived Wouxun
+  KG-905G Plus driver, app/build version, both Python runtimes, universal
+  libusb, strict signatures, Gatekeeper acceptance, notarization ticket,
+  public checksum, HTTP availability, and the per-platform live manifest.
 - Published macOS `1.0.39` from source commit `91ac1711` as a universal
   signed, notarized, stapled DMG. Verified the A9305B CPS-aligned
   read-checksum correction, app/build version, arm64 and x86_64 Python
@@ -456,6 +455,26 @@ Linux 1.0.39 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.40 verification status
+
+Full verification before the macOS `1.0.40` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 186 tests passed
+- Python test discovery: 265 tests passed, 2 fixture-dependent tests skipped
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.40` / `40`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled KG-905G Plus driver SHA-256:
+  `fc4748422a39080c1cee91a253b2a9fe505c4ec63ad0c284938248428f5833a8`
+- Notarization submission: `a387d9c2-2953-4383-9612-c370f1c08d8f`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.40`
 
 ## macOS 1.0.39 verification status
 
