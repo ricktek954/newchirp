@@ -33,6 +33,7 @@ Last updated: 2026-11-05
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng UV-5G Mini | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5g_mini.py` | UV-17-family serial, 115200 8N1 | Fixed GMRS frequencies; channels 15-22 retain stored duplex | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng GM-21 | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_baofeng_gm21.py` | UV-17-family serial; GM-5RH and UV-17Pro GPS handshakes | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone AT-D578UVIII Plus | `drivers/newchirp_anytone_d578uviii.py` | D578UV CPS serial, 115200 8N1 | 4000 channels + zones | Yes, offline-tested | Hidden | Experimental |
@@ -85,6 +86,31 @@ Last updated: 2026-11-05
 - Hardware validation: none for the retry override
 - Next milestone: reporters retest the next normal build; the macOS reporter
   should confirm the edited channel library uploads and reads back correctly
+
+### Baofeng UV-5G Mini
+
+- Maintained compatibility: `drivers/newchirp_uv5g_mini.py`
+- Transport: pinned CHIRP `baofeng_uv17Pro.py`, UV-17-family serial at
+  115200 8N1
+- Implemented: factory GMRS frequencies remain fixed for channels 1-30.
+  Channels 15-22 retain their stored simplex or +5 MHz repeater assignment
+  instead of being forced to repeater operation. Channels 23-30 remain fixed
+  repeater slots.
+- Read/write policy: the compatibility override changes only CHIRP's decoded
+  field mutability for channels 15-22. It does not change the serial protocol
+  or the stock channel encoder.
+- Evidence: upstream CHIRP fixture `Baofeng_UV-5G_Mini.img`, SHA-256
+  `14c43f7aec329913b2734be669d4667c5d70805163e253062063c6b817656156`,
+  plus the 2026-11-05 report that NewChirp forced channels 15-22 to repeater
+  operation.
+- Offline validation: the fixture round-trips channels 15-22 through simplex
+  and +5 MHz repeater assignments while channels 23-30 remain immutable.
+- Driver SHA-256:
+  `4d7f0051a5d7e7f5960cb76fb6b6c4fd4df14711cdbd033f7fd3fddd4488bc29`
+- Hardware validation: none for this compatibility override
+- Next milestone: the reporter should use the next normal build to confirm a
+  simplex edit on one of channels 15-22 transmits simplex, then confirm a
+  +5 MHz assignment still transmits through a repeater.
 
 ### Baofeng UV-9G service settings
 

@@ -164,6 +164,8 @@ Column layout is stored at:
 - [x] Patched the UV-5G Mini driver so channels 1-30 report their factory GMRS
   frequencies. This tweak is reapplied automatically whenever the CHIRP source
   updates, and is experimental until verified on a radio.
+- [x] Kept UV-5G Mini channels 15-22 simplex or repeater selectable while
+  preserving fixed frequencies and the dedicated repeater slots 23-30.
 
 The bridge protocol uses JSON over a spawned process:
 
