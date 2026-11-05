@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:37:02Z"
+timestamp: "2026-11-05T10:17:41Z"
 concept_id: services/mygmrs_client/jsonRequest
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_jsonRequest_jsonRequest
 ```
 
 ## Source
-Lines 311–318 in `services/mygmrs_client.dart`
+Lines 276–282 in `services/mygmrs_client.dart`
 
 ## Relationships
 

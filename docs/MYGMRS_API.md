@@ -1,14 +1,13 @@
 # myGMRS API integration
 
-Last checked: 2026-11-04
+Last checked: 2026-11-05
 
 The myGMRS developer portal documents a JSON API at
 `https://api.mygmrs.com`. NewChirp uses OAuth 2.0 Authorization Code with
 PKCE S256 and requests only the `repeaters:read` scope.
 
-The myGMRS directory is currently hidden in the desktop UI. The source remains
-dormant until myGMRS issues the requested confidential server-side client and
-registers its callback.
+The myGMRS directory is enabled. myGMRS approved the confidential
+server-side client and registered the NewChirp callback on 2026-11-05.
 
 Official references:
 
@@ -19,9 +18,10 @@ Official references:
 
 ## Client configuration
 
-- Public client ID: `mg_wiOzRfSIVvZYjwvgBUyH_u6U`
-- NewChirp requests no client secret. A public desktop client must not ship one.
-- Default API base: `https://api.mygmrs.com`
+- Confidential web client ID: `mg_smZAkkxFZZ7_4vFQH6puaP0h`
+- The client secret exists only in the `newchirp.net` server environment. It
+  is never included in desktop builds, responses, diagnostics, or logs.
+- NewChirp no longer sends myGMRS API requests or OAuth tokens from the desktop.
 - Requested scope: `repeaters:read`
 
 The client ID is public OAuth configuration, not a password. It can be
@@ -29,7 +29,6 @@ overridden at build time:
 
 ```sh
 flutter build macos --release \
-  --dart-define=MYGMRS_CLIENT_ID=mg_wiOzRfSIVvZYjwvgBUyH_u6U \
   --dart-define=MYGMRS_BROKER_BASE=https://newchirp.net
 ```
 
@@ -48,41 +47,46 @@ The app:
 2. Opens the returned myGMRS authorization URL in the system browser.
 3. Polls `POST https://newchirp.net/api/mygmrs/oauth/poll` with a random,
    short-lived bearer handoff token.
-4. Receives the OAuth tokens once after the website exchanges the code.
+4. Receives an opaque NewChirp session token after the website exchanges the
+   code.
 
 The website creates the PKCE verifier and `state`, validates and consumes
-`state`, exchanges the authorization code, and keeps pending tokens in process
-memory. Authorization codes and tokens are never placed in browser URLs.
+`state`, exchanges the authorization code with the confidential client secret,
+and keeps myGMRS access and refresh tokens in process memory. Authorization
+codes, myGMRS tokens, and the client secret are never placed in browser URLs or
+returned to the desktop.
 
-myGMRS must register the website callback above for public client
-`mg_wiOzRfSIVvZYjwvgBUyH_u6U` before live sign-in can work. The custom URI
-suggested in Rich's email was only an example and is not treated as registered.
+myGMRS registered the website callback above for the confidential client. The
+custom URI suggested in Rich's email was only an example and is not used.
 
 ## Token handling
 
-- Access tokens and rotating refresh tokens remain in memory for the life of
-  the running NewChirp process.
-- Tokens move through `newchirp.net` only in an HTTPS JSON response guarded by
-  the separate bearer handoff token. The website does not persist them.
-- Tokens and authorization codes are never written to diagnostics or logs.
-- Tokens are not currently persisted across application restarts. This avoids
-  storing refresh tokens in plaintext while cross-platform secure storage is
-  not yet implemented.
-- Concurrent refresh requests are not possible in the current UI because one
-  shared myGMRS client performs refreshes serially.
+- myGMRS access and rotating refresh tokens remain server-side in the
+  `newchirp.net` process.
+- The desktop receives only an opaque NewChirp session token. It does not
+  receive myGMRS tokens.
+- The relay refreshes expiring myGMRS access tokens and serializes concurrent
+  refreshes.
+- Sessions expire after 12 hours without use. Server restart invalidates them.
+- Sign-out invalidates the NewChirp session and revokes the myGMRS refresh
+  token.
+- Tokens, authorization codes, and the client secret are never written to
+  diagnostics or logs.
 
 ## Repeater search
 
 NewChirp calls:
 
 ```text
-GET https://api.mygmrs.com/repeaters
+POST https://newchirp.net/api/mygmrs/repeaters/search
 ```
 
-It sends the US state abbreviation, optional text query, optional coordinates
-and radius, `description=true`, `offline=false`, `limit=100`, and `skip=0`.
-The UI radius is entered in kilometers and converted to miles because the API
-uses miles.
+The request is authenticated with the opaque NewChirp session. The website adds
+the server-held myGMRS access token, refreshes it when needed, and proxies
+`GET https://api.mygmrs.com/repeaters`. The desktop sends the US state
+abbreviation, optional text query, optional coordinates and radius, and the
+result limit. The UI radius is entered in kilometers and converted to miles
+because the API uses miles.
 
 The API omits repeater frequencies for anonymous callers and for signed-in
 users without an active GMRS license. PL tones and rules require both the
@@ -103,14 +107,10 @@ If PL In and PL Out match, the channel uses TSQL. If only PL In exists, it
 uses transmit Tone. If they differ, it uses a Tone-to-Tone cross mode. Missing
 Premium tones do not block importing the licensed frequency.
 
-## Next verification
+## Remaining verification
 
-1. Register `https://newchirp.net/api/mygmrs/oauth/callback` for the existing
-   client.
-2. Sign in with an active, non-Premium GMRS account and verify that frequency,
+1. Sign in with an active, non-Premium GMRS account and verify that frequency,
    name, location, and map data import while PL tones remain absent.
-3. Repeat with a Premium account and verify PL In, PL Out, and rules.
-4. Confirm the website handoff expires after success, denial, timeout, and an
-   invalid `state`, and that a completed handoff can be retrieved only once.
-5. Decide whether refresh tokens should move to Keychain, DPAPI, and libsecret
-   after a secure-storage implementation is available for all desktop targets.
+2. Repeat with a Premium account and verify PL In, PL Out, and rules.
+3. Confirm sign-out revokes the upstream token and all server-side session
+   records.

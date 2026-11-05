@@ -161,6 +161,7 @@
 - [_showUpdateAvailable](showUpdateAvailable.md)
 - [_showUpToDate](showUpToDate.md)
 - [_signInMyGmrs](signInMyGmrs.md)
+- [_signOutMyGmrs](signOutMyGmrs.md)
 - [_snapshotLibrary](snapshotLibrary.md)
 - [_sortChannelsByLocation](sortChannelsByLocation.md)
 - [_submit](submit.md)

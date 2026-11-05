@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-04
+Last updated: 2026-11-05
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,37 +8,25 @@ release requirements.
 
 ## Resume here
 
-- The myGMRS directory option is disabled in the desktop UI until the
-  confidential server-side client is issued and callback registration is
-  confirmed. RepeaterBook is again the only visible repeater directory. The
-  dormant myGMRS client, website relay, and handoff documentation remain in the
-  source for the follow-up implementation.
+- myGMRS approved the confidential server-side client and callback on
+  2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
   in commit `8476c0c3`. The repeater dialog can switch between RepeaterBook and
   myGMRS, signs in through the system browser, imports GMRS frequencies and
   mapped tones, and honors the API's license and Premium data restrictions.
   Integration details are in `docs/MYGMRS_API.md`.
-- The desktop client now uses the `newchirp.net` OAuth relay rather than
-  hosting a loopback callback. It calls `/api/mygmrs/oauth/start`, opens
-  myGMRS in the system browser, polls with a short-lived bearer handoff token,
-  and receives the tokens once after the website exchanges the code. The
-  desktop relay client is `5725a727`; the website relay is `cc326fc`. Neither
-  change is a release build. The website relay was later merged with newer
-  live-only behavior and deployed as `de7d991`.
-- myGMRS live sign-in is still blocked until myGMRS registers
-  `https://newchirp.net/api/mygmrs/oauth/callback` for client
-  `mg_wiOzRfSIVvZYjwvgBUyH_u6U`. The custom URI suggested in Rich's email was
-  only an example and was not confirmed as registered.
-- The public-client relay is now a prototype, not the target architecture.
-  myGMRS documentation requires a confidential server-side web client when
-  codes are exchanged on newchirp.net. The operator requested that new client
-  on 2026-11-04. Awaiting its client ID, one-time secret, callback
-  registration, and then server-side token/session proxy work. The complete
-  status and next steps are in the website repository at
-  `docs/MYGMRS_OAUTH_RELAY.md`.
-- myGMRS access and refresh tokens are held in memory for the NewChirp process
-  lifetime. They are intentionally not persisted until secure storage is
-  implemented for macOS, Windows, and Linux. No client secret is shipped.
+- The desktop calls `/api/mygmrs/oauth/start`, opens myGMRS in the system
+  browser, polls with a short-lived handoff token, and receives only an opaque
+  NewChirp session token. Website commit `0c6f048` performs the confidential
+  client exchange, keeps myGMRS access/refresh tokens server-side, refreshes
+  them, proxies authenticated repeater searches, and revokes them on sign-out.
+- The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
+  `0600`. It is not present in either repository or in desktop builds.
+- Verification for the confidential relay and desktop session path:
+  `flutter analyze` is clean, all 183 Flutter tests pass, all 248 Python tests
+  pass with 2 fixture-dependent skips, the website build and forum tests pass,
+  and the website OAuth test covers token refresh, opaque sessions, search
+  proxying, logout revocation, and invalid state.
 - Verification for `8476c0c3`: `flutter analyze` is clean, all 183 Flutter
   tests pass, and all 248 discovered Python tests pass with 2 fixture-dependent
   skips. A read-only anonymous request to `GET /repeaters?state=NY` confirmed

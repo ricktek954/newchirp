@@ -5,7 +5,7 @@ import 'package:newchirp/services/mygmrs_client.dart';
 
 void main() {
   test('converts myGMRS repeater data into a GMRS channel', () {
-    final client = MyGmrsClient(clientId: 'test-client');
+    final client = MyGmrsClient();
 
     final results = client.convertRepeaterResponse({
       'success': true,
@@ -49,7 +49,7 @@ void main() {
   });
 
   test('explains when myGMRS omits frequencies', () {
-    final client = MyGmrsClient(clientId: 'test-client');
+    final client = MyGmrsClient();
 
     expect(
       () => client.convertRepeaterResponse({
@@ -73,6 +73,8 @@ void main() {
     final broker = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     addTearDown(() => broker.close(force: true));
     var polls = 0;
+    var searches = 0;
+    var signedOut = false;
     broker.listen((request) async {
       if (request.uri.path == '/api/mygmrs/oauth/start') {
         expect(request.method, 'POST');
@@ -99,12 +101,34 @@ void main() {
             ..statusCode = HttpStatus.ok
             ..headers.contentType = ContentType.json
             ..write(
-              '{"status":"ready","access_token":"access",'
-              '"token_type":"Bearer","expires_in":3600,'
-              '"refresh_token":"refresh",'
-              '"scope":"repeaters:read"}',
+              '{"status":"ready","sessionToken":"session-token",'
+              '"expiresIn":43200}',
             );
         }
+      } else if (request.uri.path == '/api/mygmrs/repeaters/search') {
+        expect(
+          request.headers.value(HttpHeaders.authorizationHeader),
+          'Bearer session-token',
+        );
+        searches++;
+        request.response
+          ..statusCode = HttpStatus.ok
+          ..headers.contentType = ContentType.json
+          ..write(
+            '{"success":true,"info":{"total":1},"items":['
+            '{"Name":"Relay","State":"NY","Frequency":"462.575",'
+            '"Type":"Open System","Status":"Online"}]}',
+          );
+      } else if (request.uri.path == '/api/mygmrs/oauth/logout') {
+        expect(
+          request.headers.value(HttpHeaders.authorizationHeader),
+          'Bearer session-token',
+        );
+        signedOut = true;
+        request.response
+          ..statusCode = HttpStatus.ok
+          ..headers.contentType = ContentType.json
+          ..write('{"signedOut":true}');
       } else {
         request.response.statusCode = HttpStatus.notFound;
       }
@@ -123,5 +147,13 @@ void main() {
     expect(opened, Uri.parse('https://mygmrs.test/oauth/authorize'));
     expect(polls, 2);
     expect(client.signedIn, isTrue);
+
+    final results = await client.searchRepeaters(state: 'New York');
+    expect(searches, 1);
+    expect(results.results.single.channel.frequency, 462.575);
+
+    await client.signOut();
+    expect(signedOut, isTrue);
+    expect(client.signedIn, isFalse);
   });
 }
