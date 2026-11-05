@@ -8,6 +8,11 @@ release requirements.
 
 ## Resume here
 
+- Scott's 2026-11-05 GM-21 1.0.40 report showed the GM-5RH identification
+  string succeeding but the UV-17Pro GPS follow-up magic being sent next, so
+  the first clone read returned eight bytes instead of 68. The compatibility
+  path now pairs each identification string with its own `F`/`M`/`SEND`
+  sequence. Physical retest through the GM-21 catalog entry is pending.
 - The 2026-11-05 A9305B follow-up showed NewChirp 1.0.38 rejecting a complete
   494-byte read response because its `F3` trailing checksum did not match the
   driver's write-side `A2` calculation. The official CPS read path strips that
