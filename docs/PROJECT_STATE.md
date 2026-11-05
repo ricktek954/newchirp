@@ -53,17 +53,19 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
-- The Linux `1.0.39` DEB, RPM, AppImage, and Pacman artifacts are live from
-  source commit `e515bc4b`. This is the current Linux build of latest `main`
-  and includes CHIRP-style multi-row editing: Shift-click selects a range,
-  Cmd/Ctrl-click toggles individual rows, and the right-click Properties editor
-  applies only changed standard or radio-extra fields to all selected channels.
-- Post-`e515bc4b` source adds multi-row copy, cut, and contiguous paste for the
-  selected channel block. This is not included in the Linux `1.0.39`
-  artifacts yet.
-- Source after the original Linux `1.0.39` build also lets Baofeng UV-5G Mini
-  channels 15-22 retain a simplex or +5 MHz repeater assignment. Fixed
-  frequencies and dedicated repeater slots 23-30 remain protected.
+- The Linux `1.0.40` DEB, RPM, AppImage, and Pacman artifacts are live from
+  source commit `8fdcef21`. This release includes the experimental Wouxun
+  KG-905G Plus driver, multi-row channel copy/cut/paste and bulk properties
+  editing, the A9305B read checksum correction, UV-5G Mini simplex channels
+  15-22, and TD-H8 Gen 4 read-only identity support.
+- Linux `1.0.40` verification: quick safety scan of the new KG-905G driver and
+  tests found no process execution, network, environment, or arbitrary
+  filesystem access; `flutter analyze` is clean; all 186 Flutter tests pass;
+  all 265 Python tests pass with 2 fixture-dependent skips; embedded
+  `version.json`, package metadata, package payloads, extracted AppImage
+  payload, bundled Python/CHIRP runtime, bundled `libusb-1.0.so.0`, absence of
+  GLib 2.80 once-init pointer symbols, server checksums, public HTTP 200
+  checks, and the live platform manifest were verified.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:
@@ -145,7 +147,7 @@ release requirements.
   encoding and response-length rules, build replay fixtures, and record
   static/OEM-capture/physical evidence separately.
 - The Linux `1.0.37` DEB, RPM, AppImage, and Pacman artifacts are superseded
-  by Linux `1.0.39`. The `1.0.37` release was built from `5a5e79a9` and
+  by Linux `1.0.40`. The `1.0.37` release was built from `5a5e79a9` and
   included the RT-950 transport correction while keeping the GLib 2.74 API cap
   so Debian 12/MX Linux systems do not fail at startup with missing
   `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
@@ -178,7 +180,7 @@ release requirements.
 - Branch: `main`
 - macOS `1.0.40` artifact source commit: `8fdcef21`
 - Windows `1.0.40` artifact source commit: `8fdcef21`
-- Linux `1.0.39` artifact source commit: `e515bc4b`
+- Linux `1.0.40` artifact source commit: `8fdcef21`
 - Open pull requests: none
 - Checked-out source version: `1.0.40+40`
 - macOS builds are pinned to CocoaPods with
@@ -196,8 +198,8 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.40 |
 | Windows | 1.0.40 |
-| Linux | 1.0.39 |
-| Legacy shared manifest version | 1.0.39 |
+| Linux | 1.0.40 |
+| Legacy shared manifest version | 1.0.40 |
 
 macOS artifact:
 
@@ -232,31 +234,31 @@ Windows `1.0.39` artifact (historical):
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.pkg.tar.zst`
 
-Linux 1.0.39 SHA-256:
+Linux 1.0.40 SHA-256:
 
 - DEB:
-  `6b7b1989a90d6088200835e5bba89a5ba23616b357efd61b718458f7e210cb27`
+  `c30ed97a95e406b371c94dccaffa97e9fcaa1c865137431da72fe7fa5a2100ac`
 - RPM:
-  `2e7bda638843d292b03d98e25420e9a32685d7777e7ff59d2ecae5938a852b6f`
+  `11225c702eb408e097cb5702264bbad71676ad52203744e6f87886669e39d54b`
 - AppImage:
-  `cf3ac37f3bc630b0164a16725e264580af964b555e5a2417ffad91cd4933897e`
+  `79c272e8fd0cf93a6625b006e30d655aa38db56a2dada65f0192180c72949268`
 - Pacman:
-  `9ec70cda46eeb445932a705e85851a62b443b7774027ca3138f62eb23d293e79`
+  `3f8147564daad683c6d82f8f11d65f894168288bcd8768371e0a47251042c8e8`
 
-Linux 1.0.39 sizes:
+Linux 1.0.40 sizes:
 
-- DEB: `48,407,742` bytes
-- RPM: `38,896,280` bytes
-- AppImage: `144,389,312` bytes
-- Pacman: `46,872,550` bytes
+- DEB: `48,412,260` bytes
+- RPM: `38,883,730` bytes
+- AppImage: `144,401,600` bytes
+- Pacman: `46,895,161` bytes
 
 ## Recently completed
 
@@ -265,6 +267,13 @@ Linux 1.0.39 sizes:
   KG-905G Plus driver, app/build version, both Python runtimes, universal
   libusb, strict signatures, Gatekeeper acceptance, notarization ticket,
   public checksum, HTTP availability, and the per-platform live manifest.
+- Published Linux `1.0.40` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `8fdcef21`. Verified
+  `flutter analyze`, 186 Flutter tests, 265 Python tests with 2
+  fixture-dependent skips, embedded `version.json`, DEB/RPM/Pacman metadata,
+  package payloads, extracted AppImage payload, bundled Python/CHIRP runtime
+  and `libusb-1.0.so.0`, absence of GLib 2.80 once-init pointer symbols,
+  server checksums, public HTTP 200 checks, and live platform manifest.
 - Published macOS `1.0.39` from source commit `91ac1711` as a universal
   signed, notarized, stapled DMG. Verified the A9305B CPS-aligned
   read-checksum correction, app/build version, arm64 and x86_64 Python
