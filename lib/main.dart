@@ -6987,6 +6987,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   Future<void> _search() async {
     await _preferencesLoad;
     if (!mounted) return;
+    final filter = _filterController.text.trim();
+    final zipSearch = RegExp(r'^\d{5}(?:-\d{4})?$').hasMatch(filter);
     final latitude = double.tryParse(_latitudeController.text.trim());
     final longitude = double.tryParse(_longitudeController.text.trim());
     final distance = double.tryParse(_distanceController.text.trim());
@@ -7002,7 +7004,15 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() => _error = 'Longitude must be between -180 and 180.');
       return;
     }
-    if (distance != null && latitude == null) {
+    if (_provider == _RepeaterProvider.myGmrs &&
+        zipSearch &&
+        latitude != null) {
+      setState(
+        () => _error = 'Use either a ZIP code or coordinates, not both.',
+      );
+      return;
+    }
+    if (distance != null && latitude == null && !zipSearch) {
       setState(
         () =>
             _error = 'Latitude and longitude are required for a radius search.',
@@ -7035,7 +7045,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       final results = _provider == _RepeaterProvider.myGmrs
           ? await _myGmrs.searchRepeaters(
               state: _state,
-              query: _filterController.text.trim(),
+              query: filter,
               latitude: latitude,
               longitude: longitude,
               distanceKm: distance,
@@ -7088,7 +7098,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       final sourceHint = _provider == _RepeaterProvider.myGmrs
           ? 'myGMRS requires an active GMRS license to expose repeater '
                 'frequencies. Confirm that you are signed in with an eligible '
-                'account.'
+                'account. myGMRS text search does not understand county names; '
+                'enter a 5-digit ZIP code for a nearby repeater search.'
           : 'RepeaterBook may not have a GMRS listing for this area yet.';
       return 'No matching GMRS repeaters were found$range. $sourceHint '
           'Check that Country and Region match your coordinates.';
@@ -7693,8 +7704,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             onChanged: (_) => setState(() {}),
                             onSubmitted: (_) => _search(),
                             decoration: InputDecoration(
-                              labelText:
-                                  'City, county, callsign, landmark, or notes',
+                              labelText: _provider == _RepeaterProvider.myGmrs
+                                  ? 'Repeater name, city, or ZIP code'
+                                  : 'City, county, callsign, landmark, or notes',
+                              helperText: _provider == _RepeaterProvider.myGmrs
+                                  ? 'A 5-digit ZIP searches nearby repeaters. '
+                                        'County names are not supported by myGMRS.'
+                                  : null,
                               prefixIcon: const Icon(Icons.search),
                               suffixIcon: _filterController.text.isEmpty
                                   ? null

@@ -93,6 +93,11 @@ users without an active GMRS license. PL tones and rules require both the
 `repeaters:read` scope and an active Premium membership. NewChirp reports
 this distinction instead of silently importing incomplete channels.
 
+myGMRS text search matches listing names and locations; it does not resolve
+county names. A 5-digit ZIP code entered in the NewChirp search box is sent to
+myGMRS as a ZIP-radius search, matching the myGMRS website's nearby-repeater
+behavior.
+
 ## Channel mapping
 
 - Frequency: myGMRS repeater output frequency
