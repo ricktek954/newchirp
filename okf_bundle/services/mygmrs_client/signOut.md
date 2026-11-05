@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _refreshAccessToken
+title: signOut
 resource: services/mygmrs_client.dart
 tags:
   - "lang:dart"
@@ -10,21 +10,21 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:37:02Z"
-concept_id: services/mygmrs_client/refreshAccessToken
+timestamp: "2026-11-05T10:17:41Z"
+concept_id: services/mygmrs_client/signOut
 language: dart
 ---
 
-# _refreshAccessToken
+# signOut
 
 ## Signature
 
 ```dart
-Future_refreshAccessToken_refreshAccessToken
+FuturesignOutsignOut
 ```
 
 ## Source
-Lines 114–114 in `services/mygmrs_client.dart`
+Lines 113–113 in `services/mygmrs_client.dart`
 
 ## Relationships
 

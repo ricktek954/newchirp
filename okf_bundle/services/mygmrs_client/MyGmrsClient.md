@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:37:02Z"
+timestamp: "2026-11-05T10:17:41Z"
 concept_id: services/mygmrs_client/MyGmrsClient
 language: dart
 ---
@@ -21,8 +21,6 @@ language: dart
 
 ```dart
 MyGmrsClient({
-    this.clientId = myGmrsClientId,
-    Uri? apiBase,
     Uri? brokerBase,
     Future<void> Function(Uri uri)? openBrowser,
     Duration signInTimeout = const Duration(minutes: 5),
@@ -30,7 +28,7 @@ MyGmrsClient({
 ```
 
 ## Source
-Lines 47–53 in `services/mygmrs_client.dart`
+Lines 40–44 in `services/mygmrs_client.dart`
 
 ## Relationships
 

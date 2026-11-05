@@ -560,7 +560,7 @@ void main() {
     expect(bridge.lastFmOnly, isFalse);
   });
 
-  testWidgets('myGMRS directory stays hidden while credentials are pending', (
+  testWidgets('myGMRS directory is available after credential approval', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1200, 720);
@@ -589,12 +589,21 @@ void main() {
     await tester.tap(find.text('Open repeater search'));
     await tester.pumpAndSettle();
 
-    expect(find.text('myGMRS.com'), findsNothing);
     expect(find.byKey(const ValueKey('mygmrs-sign-in')), findsNothing);
     expect(
       find.byKey(const ValueKey('repeater-provider-repeaterBook')),
-      findsNothing,
+      findsOneWidget,
     );
+
+    await tester.tap(
+      find.byKey(const ValueKey('repeater-provider-repeaterBook')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('myGMRS.com'), findsOneWidget);
+    await tester.tap(find.text('myGMRS.com').last);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('mygmrs-sign-in')), findsOneWidget);
   });
 
   testWidgets('startup update check offers a newer release', (tester) async {

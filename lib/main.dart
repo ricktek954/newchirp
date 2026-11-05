@@ -41,7 +41,7 @@ import 'widgets/radio_mapping_dialog.dart';
 const _menuChannel = MethodChannel('newchirp/menu');
 
 const String _newChirpVersion = '1.0.37';
-const bool _enableMyGmrsDirectory = false;
+const bool _enableMyGmrsDirectory = true;
 
 bool radioModelSelectionReady(List<String> models, String? model) {
   return model != null && models.contains(model);
@@ -6949,6 +6949,29 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
   }
 
+  Future<void> _signOutMyGmrs() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+      _status = 'Signing out of myGMRS…';
+    });
+    try {
+      await _myGmrs.signOut();
+      if (mounted) {
+        setState(() {
+          _status = 'Signed out of myGMRS.';
+          _results = null;
+          _selected.clear();
+          _selectedCounties.clear();
+        });
+      }
+    } catch (error) {
+      if (mounted) setState(() => _error = '$error');
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
   @override
   void dispose() {
     _filterController.dispose();
@@ -7473,17 +7496,19 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   const SizedBox(width: 12),
                                   OutlinedButton.icon(
                                     key: const ValueKey('mygmrs-sign-in'),
-                                    onPressed: _loading || _myGmrs.signedIn
+                                    onPressed: _loading
                                         ? null
+                                        : _myGmrs.signedIn
+                                        ? _signOutMyGmrs
                                         : _signInMyGmrs,
                                     icon: Icon(
                                       _myGmrs.signedIn
-                                          ? Icons.verified_user_outlined
+                                          ? Icons.logout
                                           : Icons.login,
                                     ),
                                     label: Text(
                                       _myGmrs.signedIn
-                                          ? 'Signed in'
+                                          ? 'Sign out'
                                           : 'Sign in to myGMRS',
                                     ),
                                   ),

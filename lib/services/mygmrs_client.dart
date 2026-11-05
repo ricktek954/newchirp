@@ -1,18 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import '../models/radio_channel.dart';
 import '../models/repeater_search.dart';
 
-const myGmrsClientId = String.fromEnvironment(
-  'MYGMRS_CLIENT_ID',
-  defaultValue: 'mg_wiOzRfSIVvZYjwvgBUyH_u6U',
-);
-const myGmrsApiBase = String.fromEnvironment(
-  'MYGMRS_API_BASE',
-  defaultValue: 'https://api.mygmrs.com',
-);
 const myGmrsBrokerBase = String.fromEnvironment(
   'MYGMRS_BROKER_BASE',
   defaultValue: 'https://newchirp.net',
@@ -22,6 +13,8 @@ abstract interface class MyGmrsService {
   bool get signedIn;
 
   Future<void> signIn();
+
+  Future<void> signOut();
 
   Future<RepeaterSearchResults> searchRepeaters({
     required String state,
@@ -45,30 +38,24 @@ class MyGmrsException implements Exception {
 
 class MyGmrsClient implements MyGmrsService {
   MyGmrsClient({
-    this.clientId = myGmrsClientId,
-    Uri? apiBase,
     Uri? brokerBase,
     Future<void> Function(Uri uri)? openBrowser,
     Duration signInTimeout = const Duration(minutes: 5),
-  }) : apiBase = apiBase ?? Uri.parse(myGmrsApiBase),
-       brokerBase = brokerBase ?? Uri.parse(myGmrsBrokerBase),
+  }) : brokerBase = brokerBase ?? Uri.parse(myGmrsBrokerBase),
        _openBrowser = openBrowser ?? _openSystemBrowser,
        _signInTimeout = signInTimeout;
 
-  final String clientId;
-  final Uri apiBase;
   final Uri brokerBase;
   final Future<void> Function(Uri uri) _openBrowser;
   final Duration _signInTimeout;
 
-  String? _accessToken;
-  String? _refreshToken;
-  DateTime? _accessTokenExpiresAt;
+  String? _sessionToken;
+  DateTime? _sessionExpiresAt;
 
   @override
   bool get signedIn =>
-      _accessToken != null &&
-      _accessTokenExpiresAt?.isAfter(DateTime.now()) == true;
+      _sessionToken != null &&
+      _sessionExpiresAt?.isAfter(DateTime.now()) == true;
 
   @override
   Future<void> signIn() async {
@@ -92,11 +79,10 @@ class MyGmrsClient implements MyGmrsService {
         contentType: ContentType.json,
         body: '{}',
         authorization: 'Bearer $handoffToken',
-        includeAccessToken: false,
       );
       if (poll.statusCode == HttpStatus.accepted) continue;
       if (poll.statusCode == HttpStatus.ok) {
-        _storeTokens(poll.body);
+        _storeSession(poll.body);
         return;
       }
       final message = '${poll.body['error'] ?? poll.rawBody}'.trim();
@@ -111,49 +97,41 @@ class MyGmrsClient implements MyGmrsService {
     );
   }
 
-  Future<void> _refreshAccessToken() async {
-    final refreshToken = _refreshToken;
-    if (refreshToken == null || refreshToken.isEmpty) {
+  void _storeSession(Map<String, dynamic> response) {
+    final sessionToken = '${response['sessionToken'] ?? ''}';
+    if (sessionToken.isEmpty) {
       throw const MyGmrsException(
-        'Your myGMRS session expired. Sign in again.',
+        'newchirp.net did not return a myGMRS session.',
       );
     }
-    final response = await _postForm('/oauth/token', {
-      'grant_type': 'refresh_token',
-      'refresh_token': refreshToken,
-      'client_id': clientId,
-    });
-    _storeTokens(response);
+    final expiresIn = (response['expiresIn'] as num?)?.toInt() ?? 43200;
+    _sessionToken = sessionToken;
+    _sessionExpiresAt = DateTime.now().add(Duration(seconds: expiresIn));
   }
 
-  void _storeTokens(Map<String, dynamic> response) {
-    final accessToken = '${response['access_token'] ?? ''}';
-    if (accessToken.isEmpty) {
-      throw const MyGmrsException('myGMRS did not return an access token.');
-    }
-    final expiresIn = (response['expires_in'] as num?)?.toInt() ?? 3600;
-    _accessToken = accessToken;
-    _accessTokenExpiresAt = DateTime.now().add(
-      Duration(seconds: max(0, expiresIn - 60)),
-    );
-    final rotatedRefreshToken = response['refresh_token'];
-    if (rotatedRefreshToken is String && rotatedRefreshToken.isNotEmpty) {
-      _refreshToken = rotatedRefreshToken;
+  @override
+  Future<void> signOut() async {
+    final sessionToken = _sessionToken;
+    _sessionToken = null;
+    _sessionExpiresAt = null;
+    if (sessionToken == null) return;
+    try {
+      await _jsonRequest(
+        'POST',
+        brokerBase.replace(path: '/api/mygmrs/oauth/logout'),
+        contentType: ContentType.json,
+        body: '{}',
+        authorization: 'Bearer $sessionToken',
+      );
+    } on MyGmrsException {
+      // Local sign-out still succeeds if the network is unavailable.
     }
   }
 
   Future<void> ensureSignedIn() async {
     if (signedIn) return;
-    if (_refreshToken != null) {
-      try {
-        await _refreshAccessToken();
-        return;
-      } on MyGmrsException {
-        _accessToken = null;
-        _refreshToken = null;
-        _accessTokenExpiresAt = null;
-      }
-    }
+    _sessionToken = null;
+    _sessionExpiresAt = null;
     await signIn();
   }
 
@@ -168,22 +146,34 @@ class MyGmrsClient implements MyGmrsService {
     int limit = 100,
   }) async {
     await ensureSignedIn();
-    final queryParameters = <String, String>{
+    final payload = <String, dynamic>{
       if (state.isNotEmpty && state != 'All') 'state': _stateCode(state),
       if (query.trim().isNotEmpty) 'search': query.trim(),
       if (latitude != null) 'latitude': '$latitude',
       if (longitude != null) 'longitude': '$longitude',
       if (distanceKm != null)
         'range': '${(distanceKm / 1.609344).ceil().clamp(1, 250)}',
-      'description': 'true',
-      'offline': 'false',
       'limit': '${limit.clamp(1, 100)}',
-      'skip': '0',
     };
-    var response = await _getJson('/repeaters', queryParameters);
+    final sessionToken = _sessionToken;
+    if (sessionToken == null) {
+      throw const MyGmrsException(
+        'Your myGMRS session expired. Sign in again.',
+      );
+    }
+    final response = await _jsonRequest(
+      'POST',
+      brokerBase.replace(path: '/api/mygmrs/repeaters/search'),
+      contentType: ContentType.json,
+      body: jsonEncode(payload),
+      authorization: 'Bearer $sessionToken',
+    );
     if (response.statusCode == HttpStatus.unauthorized) {
-      await _refreshAccessToken();
-      response = await _getJson('/repeaters', queryParameters);
+      _sessionToken = null;
+      _sessionExpiresAt = null;
+      throw MyGmrsException(
+        '${response.body['error'] ?? 'Your myGMRS session expired. Sign in again.'}',
+      );
     }
     if (response.statusCode != HttpStatus.ok) {
       throw MyGmrsException(_apiError(response));
@@ -267,30 +257,6 @@ class MyGmrsClient implements MyGmrsService {
     );
   }
 
-  Future<_JsonResponse> _getJson(
-    String path,
-    Map<String, String> queryParameters,
-  ) {
-    final uri = apiBase.replace(path: path, queryParameters: queryParameters);
-    return _jsonRequest('GET', uri);
-  }
-
-  Future<Map<String, dynamic>> _postForm(
-    String path,
-    Map<String, String> fields,
-  ) async {
-    final response = await _jsonRequest(
-      'POST',
-      apiBase.replace(path: path),
-      contentType: ContentType('application', 'x-www-form-urlencoded'),
-      body: Uri(queryParameters: fields).query,
-    );
-    if (response.statusCode != HttpStatus.ok) {
-      throw MyGmrsException(_apiError(response));
-    }
-    return response.body;
-  }
-
   Future<Map<String, dynamic>> _postJson(
     String path,
     Map<String, dynamic> payload,
@@ -300,7 +266,6 @@ class MyGmrsClient implements MyGmrsService {
       brokerBase.replace(path: path),
       contentType: ContentType.json,
       body: jsonEncode(payload),
-      includeAccessToken: false,
     );
     if (response.statusCode != HttpStatus.ok) {
       throw MyGmrsException(_apiError(response));
@@ -314,7 +279,6 @@ class MyGmrsClient implements MyGmrsService {
     ContentType? contentType,
     String? body,
     String? authorization,
-    bool includeAccessToken = true,
   }) async {
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 20);
@@ -324,14 +288,8 @@ class MyGmrsClient implements MyGmrsService {
         ..set(HttpHeaders.acceptHeader, 'application/json')
         ..set(HttpHeaders.userAgentHeader, 'NewChirp');
       if (contentType != null) request.headers.contentType = contentType;
-      final accessToken = _accessToken;
       if (authorization != null) {
         request.headers.set(HttpHeaders.authorizationHeader, authorization);
-      } else if (includeAccessToken && accessToken != null) {
-        request.headers.set(
-          HttpHeaders.authorizationHeader,
-          'Bearer $accessToken',
-        );
       }
       if (body != null) request.write(body);
       final response = await request.close();
