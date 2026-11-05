@@ -28,8 +28,14 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The Windows `1.0.40` installer is publicly available. The prior recorded
-  `1.0.39` installer was built from source commit `91ac1711`.
+- The Windows `1.0.40` installer is live from source commit `8fdcef21`.
+  It adds the CPS-derived Wouxun KG-905G Plus driver and keeps multi-row channel
+  editing, the A9305B read checksum correction, UV-5G Mini simplex support,
+  TD-H8 Gen 4 read-only identity support, myGMRS ZIP-radius search, and Windows
+  serial diagnostics. The versioned installer is
+  `NewChirp-Installer-1.0.40.exe`, SHA-256
+  `16c99f969b05b742497eaf23f943a12c2384e756bf931987fed881b0544ddf90`,
+  size `61,124,631` bytes.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -171,7 +177,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.40` artifact source commit: `8fdcef21`
-- Windows `1.0.39` artifact source commit: `91ac1711`
+- Windows `1.0.40` artifact source commit: `8fdcef21`
 - Linux `1.0.39` artifact source commit: `e515bc4b`
 - Open pull requests: none
 - Checked-out source version: `1.0.40+40`
@@ -204,6 +210,15 @@ macOS artifact:
 - Notarization submission: `a387d9c2-2953-4383-9612-c370f1c08d8f`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
+
+Windows artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.40.exe`
+- Version/build: `1.0.40` / `40`
+- SHA-256:
+  `16c99f969b05b742497eaf23f943a12c2384e756bf931987fed881b0544ddf90`
+- Size: `61,124,631` bytes
+- Server checksum matched the local artifact
 
 Windows `1.0.39` artifact (historical):
 
