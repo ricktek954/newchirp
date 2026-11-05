@@ -31,6 +31,10 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
+- Post-`1.0.38` source adds CHIRP-style multi-row editing. Shift-click selects
+  a range, Cmd/Ctrl-click toggles individual rows, and the right-click
+  Properties editor applies only changed standard or radio-extra fields to all
+  selected channels. This is not included in the live `1.0.38` artifact yet.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:

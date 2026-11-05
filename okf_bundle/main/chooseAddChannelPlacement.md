@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main/chooseAddChannelPlacement
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_chooseAddChannelPlacement_chooseAddChannelPlacement
 ```
 
 ## Source
-Lines 2184–2184 in `main.dart`
+Lines 2482–2482 in `main.dart`
 
 ## Relationships
 

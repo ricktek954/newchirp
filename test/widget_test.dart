@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/main.dart';
@@ -957,6 +958,112 @@ void main() {
     expect(tester.widget<TextField>(search).controller?.text, isEmpty);
     expect(find.text('GMRS 1'), findsOneWidget);
     expect(find.byKey(const ValueKey('channel-search-clear')), findsNothing);
+  });
+
+  testWidgets('Shift and Ctrl click select channels for bulk editing', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pump();
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.tap(find.text('GMRS 4').first);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump();
+
+    expect(find.text('Edit 4 selected'), findsOneWidget);
+    expect(find.byKey(const ValueKey('bulk-edit-channels')), findsOneWidget);
+
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+    await tester.tap(find.text('GMRS 6').first);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+    await tester.pump();
+
+    expect(find.text('Edit 5 selected'), findsOneWidget);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.tap(find.text('GMRS 7').first);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.pump();
+
+    expect(find.text('Edit 6 selected'), findsOneWidget);
+    final propertiesMenu = await tester.startGesture(
+      tester.getCenter(find.text('GMRS 7').first),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await propertiesMenu.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Edit selected properties'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Edit 6 channels'), findsOneWidget);
+    expect(
+      find.textContaining('Only fields you change here are applied'),
+      findsOneWidget,
+    );
+    final bulkName = find.descendant(
+      of: find.byType(Dialog),
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration?.labelText == 'Name',
+      ),
+    );
+    tester.widget<TextField>(bulkName).onChanged!('BULK');
+    await tester.pump();
+    tester
+        .widget<DropdownButtonFormField<String>>(
+          find.descendant(
+            of: find.byType(Dialog),
+            matching: find.byWidgetPredicate(
+              (widget) =>
+                  widget is DropdownButtonFormField<String> &&
+                  widget.decoration.labelText == 'Scan',
+            ),
+          ),
+        )
+        .onChanged!('S');
+    await tester.pump();
+    await tester.tap(find.text('Update 6'));
+    await tester.pumpAndSettle();
+
+    for (final location in [1, 2, 3, 4, 6, 7]) {
+      expect(
+        find.descendant(
+          of: find.byKey(ValueKey('channel-slot-$location')),
+          matching: find.text('Skip'),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.byKey(ValueKey('channel-slot-$location')),
+          matching: find.text('BULK'),
+        ),
+        findsOneWidget,
+      );
+    }
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-5')),
+        matching: find.text('Include'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-5')),
+        matching: find.text('GMRS 5'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('opens the GMRS starter only when selected', (tester) async {

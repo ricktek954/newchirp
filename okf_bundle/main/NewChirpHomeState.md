@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -25,6 +25,10 @@ class _NewChirpHomeState
 ## Methods
 
 - `_channelTableRows`
+- `_selectChannelAtLocation`
+- `_showBulkChannelEditor`
+- `_bulkChannelDraftChanged`
+- `_applyBulkChannelDraft`
 - `_markChannelLibraryDirty`
 - `_remapRadioMappingChannels`
 - `_mappingMembershipsAt`
@@ -143,7 +147,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 393–5477 in `main.dart`
+Lines 394–5800 in `main.dart`
 
 ## Relationships
 

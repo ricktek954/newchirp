@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main/duplicateChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ void_duplicateChannel()
 ```
 
 ## Source
-Lines 2347–2347 in `main.dart`
+Lines 2645–2645 in `main.dart`
 
 ## Relationships
 

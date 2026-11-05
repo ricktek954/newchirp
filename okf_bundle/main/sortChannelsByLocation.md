@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main/sortChannelsByLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ void_sortChannelsByLocation()
 ```
 
 ## Source
-Lines 1491–1491 in `main.dart`
+Lines 1789–1789 in `main.dart`
 
 ## Relationships
 

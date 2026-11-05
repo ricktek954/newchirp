@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main/radioModelSelectionReady
 language: dart
 ---
@@ -23,7 +23,7 @@ boolradioModelSelectionReady(List<String> models, String? model)
 ```
 
 ## Source
-Lines 46–46 in `main.dart`
+Lines 47–47 in `main.dart`
 
 ## Relationships
 
