@@ -27,8 +27,9 @@ The intended workflow is:
 - The startup screen must explain the available starting options.
 - Keep the standard 22-channel GMRS template available from the **New** menu,
   not on the welcome screen before a radio image has been read.
-- A single click must select a row immediately; a double-click opens the full
-  channel editor.
+- A single click must select a row immediately; Shift-click selects a range;
+  the platform multi-select key toggles rows; a double-click opens the full
+  channel editor; and Properties edits all selected rows.
 - Show the relevant CHIRP channel fields, including radio-specific per-channel
   extras when the driver exposes them.
 - Reading and writing must block the rest of the interface with a visible
@@ -319,8 +320,7 @@ flutter run -d macos
 - Temporary bridge, upload JSON, wheel, and radio image files are not fully
   isolated per operation or cleaned up after use.
 - Errors are shown in dialogs but there is no user-accessible diagnostic log.
-- There are no keyboard shortcuts, undo/redo, multi-row editing, bulk paste, or
-  import conflict tools.
+- Bulk paste and import conflict tools are not implemented.
 - Search state, selected page, and selected row are not persisted.
 - Column layout has no visible **Reset columns** command.
 - Accessibility, screen-reader, keyboard-only, localization, and high-contrast
@@ -393,7 +393,9 @@ flutter run -d macos
 - [x] Add global radio settings where drivers expose them.
 - [ ] Preserve supported radio-specific extras through an image/native project
   format; define what CSV can and cannot retain.
-- [ ] Add multi-select, bulk edit, copy/paste, row movement, and import merge.
+- [x] Add multi-select and bulk property editing that applies only changed
+  fields, matching CHIRP's selected-memory Properties workflow.
+- [ ] Add multi-row copy/paste, movement, and import merge.
 - [ ] Add undo/redo and stronger unsaved-change protection on app close.
 - [ ] Add keyboard navigation and common desktop shortcuts.
 - [ ] Add **Reset columns** and optionally persist table sort/filter state.

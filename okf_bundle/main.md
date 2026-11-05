@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main
 language: dart
 ---
@@ -49,6 +49,7 @@ language: dart
 | related | [_HelpButton](/main/HelpButton.md) |
 | related | [_WelcomeAction](/main/WelcomeAction.md) |
 | related | [_Metric](/main/Metric.md) |
+| related | [_ChannelSelectionMode](/main/ChannelSelectionMode.md) |
 | related | [_ChannelColumn](/main/ChannelColumn.md) |
 | related | [_ChannelTable](/main/ChannelTable.md) |
 | related | [_ChannelTableState](/main/ChannelTableState.md) |
@@ -98,6 +99,10 @@ language: dart
 | related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |
 | related | [_channelTableRows](/main/channelTableRows.md) |
+| related | [_selectChannelAtLocation](/main/selectChannelAtLocation.md) |
+| related | [_showBulkChannelEditor](/main/showBulkChannelEditor.md) |
+| related | [_bulkChannelDraftChanged](/main/bulkChannelDraftChanged.md) |
+| related | [_applyBulkChannelDraft](/main/applyBulkChannelDraft.md) |
 | related | [_markChannelLibraryDirty](/main/markChannelLibraryDirty.md) |
 | related | [_remapRadioMappingChannels](/main/remapRadioMappingChannels.md) |
 | related | [_mappingMembershipsAt](/main/mappingMembershipsAt.md) |

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -413,6 +414,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   final _settingsScrollController = ScrollController();
   List<RadioChannel> _channels = [];
   int _selected = -1;
+  final Set<int> _extraSelectedLocations = {};
+  int? _selectionAnchorLocation;
   int _page = 0;
   String _query = '';
   String _libraryName = 'NewChirp';
@@ -464,6 +467,23 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   RadioChannel? get _current => _selected >= 0 && _selected < _channels.length
       ? _channels[_selected]
       : null;
+
+  Set<int> get _selectedChannelLocations {
+    final selectedLocations = <int>{};
+    final current = _current;
+    if (current != null && !current.cleared) {
+      selectedLocations.add(current.location);
+    }
+    for (final location in _extraSelectedLocations) {
+      for (final channel in _channels) {
+        if (channel.location == location) {
+          if (!channel.cleared) selectedLocations.add(location);
+          break;
+        }
+      }
+    }
+    return selectedLocations;
+  }
 
   bool get _radioModelSelectedForTransfer =>
       radioModelSelectionReady(_models, _model);
@@ -521,6 +541,279 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               ),
         ),
     ];
+  }
+
+  void _selectChannelAtLocation(int location, _ChannelSelectionMode mode) {
+    final index = _channels.indexWhere(
+      (channel) => channel.location == location,
+    );
+    if (index < 0) return;
+
+    if (mode == _ChannelSelectionMode.range) {
+      final rows = _channelTableRows();
+      final clickedRow = rows.indexWhere((entry) => entry.key == location);
+      final anchorRow = rows.indexWhere(
+        (entry) => entry.key == _selectionAnchorLocation,
+      );
+      if (clickedRow < 0) return;
+      final anchorIndex = anchorRow < 0 ? clickedRow : anchorRow;
+      final start = anchorIndex < clickedRow ? anchorIndex : clickedRow;
+      final end = anchorIndex < clickedRow ? clickedRow : anchorIndex;
+      final range = {for (var row = start; row <= end; row++) rows[row].key};
+      setState(() {
+        _selected = index;
+        _extraSelectedLocations
+          ..clear()
+          ..addAll(range.where((selected) => selected != location));
+        _selectionAnchorLocation ??= location;
+      });
+      return;
+    }
+
+    if (mode == _ChannelSelectionMode.toggle) {
+      final selected = _selectedChannelLocations;
+      if (selected.contains(location)) {
+        final remaining = selected.toSet()..remove(location);
+        if (remaining.isEmpty) return;
+        if (_current?.location == location) {
+          final nextPrimary = remaining.first;
+          final nextIndex = _channels.indexWhere(
+            (channel) => channel.location == nextPrimary,
+          );
+          setState(() {
+            _selected = nextIndex;
+            _extraSelectedLocations
+              ..clear()
+              ..addAll(remaining.where((selected) => selected != nextPrimary));
+            if (_selectionAnchorLocation == location) {
+              _selectionAnchorLocation = nextPrimary;
+            }
+          });
+        } else {
+          setState(() => _extraSelectedLocations.remove(location));
+        }
+      } else if (_current == null) {
+        setState(() {
+          _selected = index;
+          _selectionAnchorLocation = location;
+        });
+      } else {
+        setState(() => _extraSelectedLocations.add(location));
+      }
+      return;
+    }
+
+    setState(() {
+      _selected = index;
+      _extraSelectedLocations.clear();
+      _selectionAnchorLocation = location;
+    });
+  }
+
+  Future<void> _showBulkChannelEditor() async {
+    final selectedLocations = _selectedChannelLocations;
+    if (selectedLocations.length < 2) return;
+    final channels =
+        _channels
+            .where(
+              (channel) =>
+                  selectedLocations.contains(channel.location) &&
+                  !channel.cleared,
+            )
+            .toList()
+          ..sort((left, right) => left.location.compareTo(right.location));
+    final source = channels.first.copy();
+    final initial = source.copy();
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (dialogContext) => StatefulBuilder(
+        builder: (context, setDialogState) => Dialog(
+          child: SizedBox(
+            width: 760,
+            height: MediaQuery.sizeOf(context).height * 0.82,
+            child: _ChannelEditor(
+              channel: source,
+              radioModel: _model,
+              capabilities: _capabilities,
+              title: 'Edit ${channels.length} channels',
+              notice:
+                  'Defaults come from channel '
+                  '${channelNumberLabel(_model, channels.first.location)}. '
+                  'Only fields you change here are applied to all selected '
+                  'channels.',
+              saveLabel: 'Update ${channels.length}',
+              showLocation: false,
+              canDelete: false,
+              canSave: () => _bulkChannelDraftChanged(initial, source),
+              onChanged: (update) => setDialogState(update),
+              onClose: () => Navigator.pop(dialogContext),
+              onDelete: () {},
+              onSave: () {
+                final proposed = [
+                  for (final channel in channels)
+                    channel.copy()..location = channel.location,
+                ];
+                for (final channel in proposed) {
+                  _applyBulkChannelDraft(initial, source, channel);
+                  if (isBaofengGm32(_model)) applyGm32Rules(channel);
+                }
+                final issues = <String>[];
+                for (final channel in proposed) {
+                  final channelIssues = [
+                    ...channel.validate(
+                      minimumLocation: _capabilities?.memoryStart,
+                      maximumLocation: _capabilities?.memoryEnd,
+                      validTuningSteps: _capabilities?.steps ?? const [],
+                      validBands: _capabilities?.validBands ?? const [],
+                      validModes: _capabilities?.modes ?? const [],
+                      hasTuningStep: _capabilities?.hasTuningStep ?? true,
+                      radioModel: _model,
+                    ),
+                    if (isBaofengGm32(_model))
+                      ...gm32ChannelIssues(_model, channel),
+                  ];
+                  if (channelIssues.isNotEmpty) {
+                    issues.add(
+                      'Channel '
+                      '${channelNumberLabel(_model, channel.location)}: '
+                      '${channelIssues.join(' ')}',
+                    );
+                  }
+                }
+                if (issues.isNotEmpty) {
+                  unawaited(
+                    showDialog<void>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: const Text('Selected channels need changes'),
+                        content: SingleChildScrollView(
+                          child: Text(issues.join('\n\n')),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text('Back to editor'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                  return;
+                }
+
+                _recordHistory(preserveMultiSelection: true);
+                setState(() {
+                  for (final channel in proposed) {
+                    final index = _channels.indexWhere(
+                      (existing) => existing.location == channel.location,
+                    );
+                    if (index >= 0) _channels[index] = channel;
+                  }
+                  _dirty = true;
+                  _markChannelLibraryDirty();
+                });
+                Navigator.pop(dialogContext);
+                ScaffoldMessenger.of(this.context)
+                  ..hideCurrentSnackBar()
+                  ..showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Updated ${channels.length} selected channels',
+                      ),
+                      behavior: SnackBarBehavior.floating,
+                      duration: const Duration(seconds: 2),
+                    ),
+                  );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  bool _bulkChannelDraftChanged(RadioChannel initial, RadioChannel draft) {
+    if (initial.name != draft.name ||
+        initial.frequency != draft.frequency ||
+        initial.duplex != draft.duplex ||
+        initial.offset != draft.offset ||
+        initial.tone != draft.tone ||
+        initial.txTone != draft.txTone ||
+        initial.rxTone != draft.rxTone ||
+        initial.dtcs != draft.dtcs ||
+        initial.dtcsPolarity != draft.dtcsPolarity ||
+        initial.rxDtcs != draft.rxDtcs ||
+        initial.crossMode != draft.crossMode ||
+        initial.mode != draft.mode ||
+        initial.step != draft.step ||
+        initial.skip != draft.skip ||
+        initial.power != draft.power ||
+        initial.comment != draft.comment) {
+      return true;
+    }
+    for (final field in draft.extras) {
+      ChannelExtraField? original;
+      for (final candidate in initial.extras) {
+        if (candidate.name == field.name) {
+          original = candidate;
+          break;
+        }
+      }
+      if (original == null || !mapEquals(original.toJson(), field.toJson())) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _applyBulkChannelDraft(
+    RadioChannel initial,
+    RadioChannel draft,
+    RadioChannel target,
+  ) {
+    if (draft.name != initial.name) target.name = draft.name;
+    if (draft.frequency != initial.frequency) {
+      target.frequency = draft.frequency;
+    }
+    if (draft.duplex != initial.duplex) target.duplex = draft.duplex;
+    if (draft.offset != initial.offset) target.offset = draft.offset;
+    if (draft.tone != initial.tone) target.tone = draft.tone;
+    if (draft.txTone != initial.txTone) target.txTone = draft.txTone;
+    if (draft.rxTone != initial.rxTone) target.rxTone = draft.rxTone;
+    if (draft.dtcs != initial.dtcs) target.dtcs = draft.dtcs;
+    if (draft.dtcsPolarity != initial.dtcsPolarity) {
+      target.dtcsPolarity = draft.dtcsPolarity;
+    }
+    if (draft.rxDtcs != initial.rxDtcs) target.rxDtcs = draft.rxDtcs;
+    if (draft.crossMode != initial.crossMode) {
+      target.crossMode = draft.crossMode;
+    }
+    if (draft.mode != initial.mode) target.mode = draft.mode;
+    if (draft.step != initial.step) target.step = draft.step;
+    if (draft.skip != initial.skip) target.skip = draft.skip;
+    if (draft.power != initial.power) target.power = draft.power;
+    if (draft.comment != initial.comment) target.comment = draft.comment;
+
+    for (final draftField in draft.extras) {
+      ChannelExtraField? initialField;
+      for (final candidate in initial.extras) {
+        if (candidate.name == draftField.name) {
+          initialField = candidate;
+          break;
+        }
+      }
+      if (initialField != null &&
+          mapEquals(initialField.toJson(), draftField.toJson())) {
+        continue;
+      }
+      for (final targetField in target.extras) {
+        if (targetField.name == draftField.name && targetField.mutable) {
+          targetField.value = draftField.value;
+          break;
+        }
+      }
+    }
   }
 
   ChannelLibrarySnapshot get _channelLibrarySnapshot => _channelStats.read(
@@ -682,6 +975,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     setState(() {
       _channels = state.channels.map((channel) => channel.copy()).toList();
       _selected = state.selected;
+      _extraSelectedLocations.clear();
+      _selectionAnchorLocation = _current?.location;
       _libraryName = state.libraryName;
       _libraryPath = state.libraryPath;
       _libraryOpen = state.libraryOpen;
@@ -697,7 +992,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
-  void _recordHistory() {
+  void _recordHistory({bool preserveMultiSelection = false}) {
+    if (!preserveMultiSelection) {
+      _extraSelectedLocations.clear();
+    }
     _undoStack.add(_snapshotLibrary());
     if (_undoStack.length > 200) _undoStack.removeAt(0);
     _redoStack.clear();
@@ -3832,6 +4130,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Widget _buildLibrary() {
     final visible = _channelTableRows();
+    final selectedChannelCount = _selectedChannelLocations.length;
     final libraryStats = _channelLibrarySnapshot;
     final invalid = libraryStats.needsAttention;
     final imageMatch = libraryStats.match;
@@ -4055,6 +4354,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             ),
                             const SizedBox(width: 8),
                             if (compact) ...[
+                              if (selectedChannelCount > 1)
+                                IconButton(
+                                  key: const ValueKey('bulk-edit-channels'),
+                                  onPressed: _showBulkChannelEditor,
+                                  tooltip:
+                                      'Bulk edit $selectedChannelCount selected '
+                                      'channels',
+                                  icon: const Icon(Icons.edit_note_outlined),
+                                ),
                               IconButton(
                                 onPressed: _duplicateChannel,
                                 tooltip: 'Duplicate channel',
@@ -4076,6 +4384,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                     'Show every memory slot, including empty ones',
                               ),
                             ] else ...[
+                              if (selectedChannelCount > 1) ...[
+                                OutlinedButton.icon(
+                                  key: const ValueKey('bulk-edit-channels'),
+                                  onPressed: _showBulkChannelEditor,
+                                  icon: const Icon(Icons.edit_note_outlined),
+                                  label: Text(
+                                    'Edit $selectedChannelCount selected',
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                              ],
                               OutlinedButton.icon(
                                 onPressed: _duplicateChannel,
                                 icon: const Icon(Icons.copy_outlined),
@@ -4108,6 +4427,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   'Duplicate copies the selected row, and Delete removes it after '
                                   'confirmation. Double-click any row to edit all of its fields. '
                                   'Right-click a row to copy, cut, paste, duplicate, or clear it. '
+                                  'Click selects one row. Shift-click selects a range, and '
+                                  'Cmd/Ctrl-click toggles individual rows. Use Bulk edit to '
+                                  'change channel properties on all selected rows; only fields '
+                                  'you modify are applied. Right-click and choose Properties '
+                                  'for the same editor. '
                                   'Drag the handle at the left edge of a row to move it; intervening '
                                   'channels shift through the same memory slots. '
                                   'Show empty slots keeps the radio memory layout visible; '
@@ -4127,20 +4451,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             key: _channelTableKey,
                             entries: visible,
                             selected: _current?.location ?? -1,
+                            selectedLocations: _selectedChannelLocations,
                             radioModel: _model,
                             capabilities: _capabilities,
                             columnOrder: _columnOrder,
                             columnWidths: _columnWidths,
                             onColumnOrderChanged: _setColumnOrder,
                             onColumnWidthChanged: _setColumnWidth,
-                            onSelect: (location) {
-                              final index = _channels.indexWhere(
-                                (channel) => channel.location == location,
-                              );
-                              if (index >= 0) {
-                                setState(() => _selected = index);
-                              }
-                            },
+                            onSelect: _selectChannelAtLocation,
                             clipboardNotEmpty: _channelClipboard.isNotEmpty,
                             onCopy: (location) {
                               final index = _channels.indexWhere(
@@ -4183,6 +4501,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             },
                             onInsertEmptyBefore: _insertEmptySlotBefore,
                             onRemoveEmpty: _removeEmptySlot,
+                            onBulkEdit: _showBulkChannelEditor,
                             reorderEnabled: _query.isEmpty,
                             reorderDisabledMessage: _query.isNotEmpty
                                 ? 'Clear search to rearrange channels'
@@ -4192,7 +4511,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 (channel) => channel.location == location,
                               );
                               if (index >= 0) {
-                                setState(() => _selected = index);
+                                setState(() {
+                                  _selected = index;
+                                  _extraSelectedLocations.clear();
+                                  _selectionAnchorLocation = location;
+                                });
                               }
                               unawaited(_showChannelEditorAtLocation(location));
                             },
@@ -8265,6 +8588,8 @@ class _Metric extends StatelessWidget {
   );
 }
 
+enum _ChannelSelectionMode { replace, toggle, range }
+
 class _ChannelColumn {
   _ChannelColumn(this.label, this.width, this.value, {String? id, this.help})
     : id = id ?? label;
@@ -8280,6 +8605,7 @@ class _ChannelTable extends StatefulWidget {
     super.key,
     required this.entries,
     required this.selected,
+    required this.selectedLocations,
     required this.radioModel,
     required this.capabilities,
     required this.columnOrder,
@@ -8296,6 +8622,7 @@ class _ChannelTable extends StatefulWidget {
     required this.onMove,
     required this.onInsertEmptyBefore,
     required this.onRemoveEmpty,
+    required this.onBulkEdit,
     required this.reorderEnabled,
     required this.reorderDisabledMessage,
     required this.onOpen,
@@ -8303,13 +8630,14 @@ class _ChannelTable extends StatefulWidget {
 
   final List<MapEntry<int, RadioChannel>> entries;
   final int selected;
+  final Set<int> selectedLocations;
   final String? radioModel;
   final RadioCapabilities? capabilities;
   final List<String> columnOrder;
   final Map<String, double> columnWidths;
   final ValueChanged<List<String>> onColumnOrderChanged;
   final void Function(String id, double width) onColumnWidthChanged;
-  final ValueChanged<int> onSelect;
+  final void Function(int location, _ChannelSelectionMode mode) onSelect;
   final bool clipboardNotEmpty;
   final ValueChanged<int> onCopy;
   final ValueChanged<int> onCut;
@@ -8319,6 +8647,7 @@ class _ChannelTable extends StatefulWidget {
   final void Function(int fromIndex, int toIndex) onMove;
   final ValueChanged<int> onInsertEmptyBefore;
   final ValueChanged<int> onRemoveEmpty;
+  final VoidCallback onBulkEdit;
   final bool reorderEnabled;
   final String reorderDisabledMessage;
   final ValueChanged<int> onOpen;
@@ -8372,6 +8701,12 @@ class _ChannelTableState extends State<_ChannelTable> {
     final isCleared = widget.entries.any(
       (entry) => entry.key == index && entry.value.cleared,
     );
+    if (!widget.selectedLocations.contains(index)) {
+      widget.onSelect(index, _ChannelSelectionMode.replace);
+    }
+    final multiSelected =
+        widget.selectedLocations.length > 1 &&
+        widget.selectedLocations.contains(index);
     showMenu<int>(
       context: context,
       position: RelativeRect.fromLTRB(
@@ -8381,6 +8716,14 @@ class _ChannelTableState extends State<_ChannelTable> {
         position.dy,
       ),
       items: [
+        PopupMenuItem(
+          value: 7,
+          enabled: !isCleared,
+          child: Text(
+            multiSelected ? 'Edit selected properties' : 'Properties',
+          ),
+        ),
+        const PopupMenuDivider(),
         PopupMenuItem(value: 0, enabled: !isCleared, child: const Text('Copy')),
         PopupMenuItem(value: 1, enabled: !isCleared, child: const Text('Cut')),
         PopupMenuItem(
@@ -8411,6 +8754,13 @@ class _ChannelTableState extends State<_ChannelTable> {
       ],
     ).then((value) {
       switch (value) {
+        case 7:
+          if (multiSelected) {
+            widget.onBulkEdit();
+          } else {
+            widget.onOpen(index);
+          }
+          break;
         case 0:
           widget.onCopy(index);
           break;
@@ -8767,7 +9117,16 @@ class _ChannelTableState extends State<_ChannelTable> {
         final isDropTarget = candidates.isNotEmpty;
         return Listener(
           behavior: HitTestBehavior.opaque,
-          onPointerDown: (_) => widget.onSelect(entry.key),
+          onPointerDown: (event) {
+            if (event.buttons & kSecondaryMouseButton != 0) return;
+            final keyboard = HardwareKeyboard.instance;
+            final mode = keyboard.isShiftPressed
+                ? _ChannelSelectionMode.range
+                : keyboard.isControlPressed || keyboard.isMetaPressed
+                ? _ChannelSelectionMode.toggle
+                : _ChannelSelectionMode.replace;
+            widget.onSelect(entry.key, mode);
+          },
           child: GestureDetector(
             onSecondaryTapDown: (details) =>
                 _showRowMenu(context, entry.key, details.globalPosition),
@@ -8781,7 +9140,7 @@ class _ChannelTableState extends State<_ChannelTable> {
                   height: 45,
                   color: isDropTarget
                       ? const Color(0xFFD7EAE1)
-                      : entry.key == widget.selected
+                      : widget.selectedLocations.contains(entry.key)
                       ? const Color(0xFFE8F3ED)
                       : isCleared
                       ? const Color(0xFFFAFAFA)
@@ -8803,7 +9162,10 @@ class _ChannelTableState extends State<_ChannelTable> {
                         child: Draggable<int>(
                           data: entry.key,
                           maxSimultaneousDrags: canDrag ? 1 : 0,
-                          onDragStarted: () => widget.onSelect(entry.key),
+                          onDragStarted: () => widget.onSelect(
+                            entry.key,
+                            _ChannelSelectionMode.replace,
+                          ),
                           feedback: Material(
                             elevation: 6,
                             color: const Color(0xFF1F7455),
@@ -8997,13 +9359,22 @@ class _ChannelEditor extends StatelessWidget {
     required this.onSave,
     required this.onDelete,
     required this.onClose,
+    this.title = 'Channel details',
+    this.notice,
+    this.saveLabel = 'Save channel',
+    this.showLocation = true,
     this.canDelete = true,
+    this.canSave,
     this.enteringFrequency = false,
     this.onEnteringFrequency,
   });
   final RadioChannel channel;
   final String? radioModel;
   final RadioCapabilities? capabilities;
+  final String title;
+  final String? notice;
+  final String saveLabel;
+  final bool showLocation;
   final bool enteringFrequency;
   final ValueChanged<bool>? onEnteringFrequency;
   final void Function(VoidCallback) onChanged;
@@ -9011,6 +9382,7 @@ class _ChannelEditor extends StatelessWidget {
   final VoidCallback onDelete;
   final VoidCallback onClose;
   final bool canDelete;
+  final bool Function()? canSave;
 
   @override
   Widget build(BuildContext context) {
@@ -9112,10 +9484,13 @@ class _ChannelEditor extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(18, 16, 10, 12),
             child: Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
-                    'Channel details',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                    title,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 IconButton(
@@ -9145,31 +9520,45 @@ class _ChannelEditor extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                if (notice != null) ...[
+                  Container(
+                    padding: const EdgeInsets.all(11),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE8F3ED),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(notice!, style: const TextStyle(fontSize: 12)),
+                  ),
+                  const SizedBox(height: 12),
+                ],
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: showsMidlandChannelNumbers(radioModel)
-                          ? _TextField(
-                              label: 'Channel',
-                              value: channelNumberLabel(
-                                radioModel,
-                                channel.location,
+                    if (showLocation) ...[
+                      Expanded(
+                        child: showsMidlandChannelNumbers(radioModel)
+                            ? _TextField(
+                                label: 'Channel',
+                                value: channelNumberLabel(
+                                  radioModel,
+                                  channel.location,
+                                ),
+                                readOnly: true,
+                                onValue: (_) {},
+                              )
+                            : _NumberField(
+                                label: 'Location',
+                                value: channel.location.toDouble(),
+                                decimals: 0,
+                                onValue: (v) => onChanged(
+                                  () => channel.location = v.toInt(),
+                                ),
                               ),
-                              readOnly: true,
-                              onValue: (_) {},
-                            )
-                          : _NumberField(
-                              label: 'Location',
-                              value: channel.location.toDouble(),
-                              decimals: 0,
-                              onValue: (v) =>
-                                  onChanged(() => channel.location = v.toInt()),
-                            ),
-                    ),
-                    const SizedBox(width: 10),
+                      ),
+                      const SizedBox(width: 10),
+                    ],
                     Expanded(
-                      flex: 2,
+                      flex: showLocation ? 2 : 1,
                       child: _TextField(
                         label: 'Name',
                         value: channel.name,
@@ -9505,9 +9894,11 @@ class _ChannelEditor extends StatelessWidget {
                 TextButton(onPressed: onClose, child: const Text('Cancel')),
                 const Spacer(),
                 FilledButton.icon(
-                  onPressed: blocking.isEmpty ? onSave : null,
+                  onPressed: blocking.isEmpty && (canSave?.call() ?? true)
+                      ? onSave
+                      : null,
                   icon: const Icon(Icons.check, size: 18),
-                  label: const Text('Save channel'),
+                  label: Text(saveLabel),
                 ),
               ],
             ),

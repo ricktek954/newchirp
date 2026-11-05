@@ -557,8 +557,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793876440502679280,
-      "hash": "1c85d4ba51ebd0093bac0f33f59068a03c2e36b063aebba43ccf29ad8c563947",
+      "mtime_ns": 1793877277560117965,
+      "hash": "c77f7e27cea54fba2f89adcc4794519e76fe86a2873d3273d686e10737e6cdc0",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -590,6 +590,7 @@
         "main/HelpButton",
         "main/WelcomeAction",
         "main/Metric",
+        "main/ChannelSelectionMode",
         "main/ChannelColumn",
         "main/ChannelTable",
         "main/ChannelTableState",
@@ -635,6 +636,10 @@
         "main/build",
         "main/createState",
         "main/channelTableRows",
+        "main/selectChannelAtLocation",
+        "main/showBulkChannelEditor",
+        "main/bulkChannelDraftChanged",
+        "main/applyBulkChannelDraft",
         "main/markChannelLibraryDirty",
         "main/remapRadioMappingChannels",
         "main/mappingMembershipsAt",
@@ -1413,7 +1418,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "d4397f4937f69e555f06e958e00fd169cc7189b98021f806c298ad3f5e5d2c71",
+      "edge_hash": "63f342665bba683726ed58698d9d75ffd799c2c82c0743e28e55a4c3ead27bf6",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -5631,7 +5636,71 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "main/selectChannelAtLocation": {
+      "concept_id": "main/selectChannelAtLocation",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/showBulkChannelEditor": {
+      "concept_id": "main/showBulkChannelEditor",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/ChannelSelectionMode": {
+      "concept_id": "main/ChannelSelectionMode",
+      "type": "Enum",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/BulkChannelChanges": {
+      "concept_id": "main/BulkChannelChanges",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/BulkChannelEditorDialog": {
+      "concept_id": "main/BulkChannelEditorDialog",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/BulkChannelEditorDialogState": {
+      "concept_id": "main/BulkChannelEditorDialogState",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/bulkChannelDraftChanged": {
+      "concept_id": "main/bulkChannelDraftChanged",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/applyBulkChannelDraft": {
+      "concept_id": "main/applyBulkChannelDraft",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-05T11:00:42Z"
+  "generated_at": "2026-11-05T11:14:38Z"
 }

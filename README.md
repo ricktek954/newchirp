@@ -12,6 +12,8 @@ implementation history, architecture, known risks, and prioritized next work.
 - CHIRP-compatible CSV import and export
 - CSV/GMRS template insertion starting at any channel number
 - Searchable channel library with validation and detailed editing
+- Multi-row selection with Shift and Cmd/Ctrl, plus a CHIRP-style Properties
+  editor that applies only modified fields across the selected channels
 - Drag-and-drop channel rearrangement across the radio's occupied memory slots
 - Optional empty-slot view that keeps memory gaps visible and lets a channel
   be created directly in a specific slot

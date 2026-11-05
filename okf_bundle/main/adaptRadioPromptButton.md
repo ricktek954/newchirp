@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main/adaptRadioPromptButton
 language: dart
 ---
@@ -23,7 +23,7 @@ StringadaptRadioPromptButton(String message, String buttonLabel)
 ```
 
 ## Source
-Lines 66–66 in `main.dart`
+Lines 67–67 in `main.dart`
 
 ## Relationships
 

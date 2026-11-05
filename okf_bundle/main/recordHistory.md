@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:00:40Z"
+timestamp: "2026-11-05T11:14:37Z"
 concept_id: main/recordHistory
 language: dart
 ---
@@ -19,11 +19,11 @@ language: dart
 ## Signature
 
 ```dart
-void_recordHistory()
+void_recordHistory({bool preserveMultiSelection = false})
 ```
 
 ## Source
-Lines 700–700 in `main.dart`
+Lines 995–995 in `main.dart`
 
 ## Relationships
 
