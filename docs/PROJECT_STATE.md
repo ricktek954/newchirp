@@ -78,11 +78,12 @@ release requirements.
   the randomized 25-byte `SEND` authentication exchange is performed with
   session-symbol payload decryption, and the Web Programmer's 3.5-second
   block response window is allowed. It keeps the `1.0.27`-`1.0.36` fixes.
-- The macOS `1.0.37` release is live. It contains the CPS-verified RT-950
-  transport correction: no hardware/XON-XOFF flow control, randomized SEND
-  authentication, session-symbol payload decryption, and the OEM-compatible
-  block timeout. It keeps the UV-5RM Plus handshake retry, TH-9800 and VX-6
-  tolerant decoders, and preceding fixes.
+- The macOS `1.0.38` release is live. It adds the myGMRS.com repeater
+  directory through the confidential newchirp.net OAuth relay, ZIP-radius
+  searches that match myGMRS's nearby-repeater behavior, secure
+  server-held-token channel import, explicit sign-out, and the established
+  RepeaterBook flow. It keeps the CPS-verified RT-950 transport correction,
+  UV-5RM Plus handshake retry, and tolerant TH-9800/VX-6 decoders.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
@@ -116,7 +117,7 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.37` release is built, signed, notarized, stapled, uploaded,
+- The macOS `1.0.38` release is built, signed, notarized, stapled, uploaded,
   and live. The universal DMG contains both Python architectures and universal
   libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
@@ -137,12 +138,12 @@ release requirements.
 
 ## Repository state
 
-- Local path: `/home/rlopez/newchirp.net`
+- Local path: `/Volumes/RICKEXT/desktop/newchirp`
 - Branch: `main`
-- macOS `1.0.37` artifact source commit: `96d80548`
+- macOS `1.0.38` artifact source commit: `10bafaeb`
 - Linux `1.0.37` artifact source commit: `5a5e79a9`
 - Open pull requests: none
-- Checked-out source version: `1.0.37+37`
+- Checked-out source version: `1.0.38+38`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -156,20 +157,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.37 |
+| macOS | 1.0.38 |
 | Windows | 1.0.37 |
 | Linux | 1.0.37 |
 | Legacy shared manifest version | 1.0.37 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.37.dmg`
-- Version/build: `1.0.37` / `37`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.38.dmg`
+- Version/build: `1.0.38` / `38`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `4c6a0b087e8299f23ea36f23f1d2f44a4998646513b59b2a43953a3da3f1681f`
-- Size: `82,345,483` bytes
-- Notarization submission: `9bd8af3a-c8f0-4193-ac9a-7cfa2827bcdf`
+  `aea94fe1f28c2378f5647ffd1a4e91c213627b910d3dca4b7c896951ebfb524c`
+- Size: `82,378,688` bytes
+- Notarization submission: `4349ae6a-3551-46f9-aa5b-33eab8f006f0`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
@@ -213,6 +214,11 @@ Linux 1.0.37 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.38` from source commit `10bafaeb` as a universal
+  signed, notarized, stapled DMG. Verified myGMRS OAuth and ZIP-radius search
+  tests, app/build version, arm64 and x86_64 Python runtimes, universal libusb,
+  strict signatures, Gatekeeper acceptance, notarization ticket, server
+  checksum, public download, and the per-platform live manifest.
 - Published macOS `1.0.37` as a universal signed, notarized, stapled DMG.
   Verified the CPS-backed RT-950 authentication, flow-control, decryption,
   and block-timeout correction; app/build version; arm64 and x86_64 Python
@@ -400,6 +406,26 @@ Linux 1.0.37 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.38 verification status
+
+Full verification before the macOS `1.0.38` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 183 tests passed
+- Python test discovery: 248 tests passed, 2 fixture-dependent tests skipped
+- myGMRS relay and desktop session/ZIP-search regression tests passed
+- Website forum tests and production build passed
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.38` / `38`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Notarization submission: `4349ae6a-3551-46f9-aa5b-33eab8f006f0`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.38`
 
 ## macOS 1.0.37 verification status
 
