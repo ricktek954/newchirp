@@ -31,10 +31,11 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
-- Post-`1.0.38` source adds CHIRP-style multi-row editing. Shift-click selects
-  a range, Cmd/Ctrl-click toggles individual rows, and the right-click
-  Properties editor applies only changed standard or radio-extra fields to all
-  selected channels. This is not included in the live `1.0.38` artifact yet.
+- The Linux `1.0.39` DEB, RPM, AppImage, and Pacman artifacts are live from
+  source commit `e515bc4b`. This is the current Linux build of latest `main`
+  and includes CHIRP-style multi-row editing: Shift-click selects a range,
+  Cmd/Ctrl-click toggles individual rows, and the right-click Properties editor
+  applies only changed standard or radio-extra fields to all selected channels.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:
@@ -60,8 +61,8 @@ release requirements.
   pre-existing Windows `NamedTemporaryFile` `PermissionError`; Flutter ran 173
   passing tests with four intentional Windows module-sandbox failures and one
   pre-existing Help-menu expectation failure; `flutter analyze` reported only
-  three pre-existing `avoid_print` infos. The live Windows release remains
-  `1.0.37`; this fix is not released yet.
+  three pre-existing `avoid_print` infos. This note predates the later
+  Windows `1.0.38` publication.
 - The second 2026-11-03 triage found 14 unread bug reports and handled UIDs
   383, 386, 387, 388, 391, 393, and 395. Every reply was verified in `Sent`,
   and every original source UID was verified `\Seen`. UIDs 384, 385, 389, 390,
@@ -118,10 +119,10 @@ release requirements.
   CPS-derived driver work must trace both serial directions, document wire
   encoding and response-length rules, build replay fixtures, and record
   static/OEM-capture/physical evidence separately.
-- The Linux `1.0.37` DEB, RPM, AppImage, and Pacman artifacts are live.
-  This release was built from `5a5e79a9` and includes the RT-950 transport
-  correction while keeping the GLib 2.74 API cap so Debian 12/MX Linux
-  systems do not fail at startup with missing
+- The Linux `1.0.37` DEB, RPM, AppImage, and Pacman artifacts are superseded
+  by Linux `1.0.39`. The `1.0.37` release was built from `5a5e79a9` and
+  included the RT-950 transport correction while keeping the GLib 2.74 API cap
+  so Debian 12/MX Linux systems do not fail at startup with missing
   `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
 - The live downloads page shows separate Linux rows for DEB, RPM, AppImage,
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
@@ -148,13 +149,13 @@ release requirements.
 
 ## Repository state
 
-- Local path: `/Volumes/RICKEXT/desktop/newchirp`
+- Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.38` artifact source commit: `10bafaeb`
 - Windows `1.0.38` artifact source commit: `10bafaeb`
-- Linux `1.0.37` artifact source commit: `5a5e79a9`
+- Linux `1.0.39` artifact source commit: `e515bc4b`
 - Open pull requests: none
-- Checked-out source version: `1.0.38+38`
+- Checked-out source version: `1.0.39+39`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -170,8 +171,8 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.38 |
 | Windows | 1.0.38 |
-| Linux | 1.0.37 |
-| Legacy shared manifest version | 1.0.37 |
+| Linux | 1.0.39 |
+| Legacy shared manifest version | 1.0.38 |
 
 macOS artifact:
 
@@ -197,34 +198,41 @@ Windows artifact:
 Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.37.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.39.pkg.tar.zst`
 
-Linux 1.0.37 SHA-256:
+Linux 1.0.39 SHA-256:
 
 - DEB:
-  `f7af9810c574e82b165e226fcb13c5953d9f0eb2abb75a66f223d6de0f3dd241`
+  `6b7b1989a90d6088200835e5bba89a5ba23616b357efd61b718458f7e210cb27`
 - RPM:
-  `f03800e49945b157d90c7a049c7fab9570d6bc5b868b2f17b791dba12289f4de`
+  `2e7bda638843d292b03d98e25420e9a32685d7777e7ff59d2ecae5938a852b6f`
 - AppImage:
-  `06b5d331a4c884772c3e96382dba845b1a5b74b38daa757309f4338c3ba61991`
+  `cf3ac37f3bc630b0164a16725e264580af964b555e5a2417ffad91cd4933897e`
 - Pacman:
-  `fcfe94d0ebf62d353ec85e71482fa50ee33ff9644c2d1085be79ef6e94a6afca`
+  `9ec70cda46eeb445932a705e85851a62b443b7774027ca3138f62eb23d293e79`
 
-Linux 1.0.37 sizes:
+Linux 1.0.39 sizes:
 
-- DEB: `48,379,978` bytes
-- RPM: `38,842,053` bytes
-- AppImage: `144,364,736` bytes
-- Pacman: `46,886,531` bytes
+- DEB: `48,407,742` bytes
+- RPM: `38,896,280` bytes
+- AppImage: `144,389,312` bytes
+- Pacman: `46,872,550` bytes
 
 ## Recently completed
 
+- Published Linux `1.0.39` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `e515bc4b`. Verified
+  `flutter analyze`, 184 Flutter tests, 248 Python tests with 2
+  fixture-dependent skips, embedded `version.json`, DEB/RPM/Pacman metadata,
+  package payloads, extracted AppImage payload, bundled Python/CHIRP runtime
+  and `libusb-1.0.so.0`, absence of GLib 2.80 once-init pointer symbols,
+  server checksums, public HTTP 200 checks, and live platform manifest.
 - Published macOS `1.0.38` from source commit `10bafaeb` as a universal
   signed, notarized, stapled DMG. Verified myGMRS OAuth and ZIP-radius search
   tests, app/build version, arm64 and x86_64 Python runtimes, universal libusb,
