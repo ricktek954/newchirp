@@ -58,12 +58,12 @@ release requirements.
   and includes CHIRP-style multi-row editing: Shift-click selects a range,
   Cmd/Ctrl-click toggles individual rows, and the right-click Properties editor
   applies only changed standard or radio-extra fields to all selected channels.
-- Post-`1.0.39` source adds multi-row copy, cut, and contiguous paste for the
-  selected channel block. This is not included in the live artifacts yet.
-- Post-`1.0.39` source also lets Baofeng UV-5G Mini channels 15-22 retain a
-  simplex or +5 MHz repeater assignment. Fixed frequencies and dedicated
-  repeater slots 23-30 remain protected. This is not included in live
+- Post-`e515bc4b` source adds multi-row copy, cut, and contiguous paste for the
+  selected channel block. This is not included in the Linux `1.0.39`
   artifacts yet.
+- Source after the original Linux `1.0.39` build also lets Baofeng UV-5G Mini
+  channels 15-22 retain a simplex or +5 MHz repeater assignment. Fixed
+  frequencies and dedicated repeater slots 23-30 remain protected.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:
@@ -117,12 +117,9 @@ release requirements.
   the randomized 25-byte `SEND` authentication exchange is performed with
   session-symbol payload decryption, and the Web Programmer's 3.5-second
   block response window is allowed. It keeps the `1.0.27`-`1.0.36` fixes.
-- The macOS `1.0.38` release is live. It adds the myGMRS.com repeater
-  directory through the confidential newchirp.net OAuth relay, ZIP-radius
-  searches that match myGMRS's nearby-repeater behavior, secure
-  server-held-token channel import, explicit sign-out, and the established
-  RepeaterBook flow. It keeps the CPS-verified RT-950 transport correction,
-  UV-5RM Plus handshake retry, and tolerant TH-9800/VX-6 decoders.
+- The macOS `1.0.39` release is live. It includes the CPS-aligned Retevis MA1
+  A9305B read path, multi-row copy/cut/paste, the UV-5G Mini repeater-slot
+  correction, and the myGMRS directory and OAuth flow from `1.0.38`.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
@@ -156,7 +153,7 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.38` release is built, signed, notarized, stapled, uploaded,
+- The macOS `1.0.39` release is built, signed, notarized, stapled, uploaded,
   and live. The universal DMG contains both Python architectures and universal
   libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
@@ -179,7 +176,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.38` artifact source commit: `10bafaeb`
+- macOS `1.0.39` artifact source commit: `91ac1711`
 - Windows `1.0.39` artifact source commit: `91ac1711`
 - Linux `1.0.39` artifact source commit: `e515bc4b`
 - Open pull requests: none
@@ -197,20 +194,20 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.38 |
+| macOS | 1.0.39 |
 | Windows | 1.0.39 |
 | Linux | 1.0.39 |
-| Legacy shared manifest version | 1.0.38 |
+| Legacy shared manifest version | 1.0.39 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.38.dmg`
-- Version/build: `1.0.38` / `38`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.39.dmg`
+- Version/build: `1.0.39` / `39`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `aea94fe1f28c2378f5647ffd1a4e91c213627b910d3dca4b7c896951ebfb524c`
-- Size: `82,378,688` bytes
-- Notarization submission: `4349ae6a-3551-46f9-aa5b-33eab8f006f0`
+  `4957f36f6feba433cdeb91c0f9ca8f074a5c62b8e8485733d611b4af09a6e41b`
+- Size: `81,276,451` bytes
+- Notarization submission: `4444b0b0-908d-415c-a39e-c1e4617776de`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
@@ -254,6 +251,12 @@ Linux 1.0.39 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.39` from source commit `91ac1711` as a universal
+  signed, notarized, stapled DMG. Verified the A9305B CPS-aligned
+  read-checksum correction, app/build version, arm64 and x86_64 Python
+  runtimes, universal libusb, strict signatures, Gatekeeper acceptance,
+  notarization ticket, public checksum, HTTP availability, and the
+  per-platform live manifest.
 - Published Linux `1.0.39` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts from source commit `e515bc4b`. Verified
   `flutter analyze`, 184 Flutter tests, 248 Python tests with 2
@@ -453,6 +456,26 @@ Linux 1.0.39 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.39 verification status
+
+Full verification before the macOS `1.0.39` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 186 tests passed
+- Python test discovery: 254 tests passed, 2 fixture-dependent tests skipped
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.39` / `39`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled A9305B driver SHA-256:
+  `efecd7c568f2d162905943e5751eb85a71d875c5b83de07c56cc15c4aff39a85`
+- Notarization submission: `4444b0b0-908d-415c-a39e-c1e4617776de`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.39`
 
 ## macOS 1.0.38 verification status
 
