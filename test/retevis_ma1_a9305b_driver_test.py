@@ -111,9 +111,15 @@ def _checksum(data):
 
 
 class FakeA9305BSerial:
-    def __init__(self, image, read_payload_limit=94):
+    def __init__(
+        self,
+        image,
+        read_payload_limit=94,
+        read_checksum_override=None,
+    ):
         self.image = bytearray(image)
         self.read_payload_limit = read_payload_limit
+        self.read_checksum_override = read_checksum_override
         self.baudrate = 9600
         self.timeout = 0.2
         self._responses = bytearray()
@@ -147,18 +153,18 @@ class FakeA9305BSerial:
             self.read_addresses.append(address)
             returned_length = min(length, self.read_payload_limit)
             payload = bytes(self.image[address:address + returned_length])
+            checksum = self.read_checksum_override
+            if checksum is None:
+                checksum = _checksum(
+                    struct.pack(">I", address)
+                    + bytes((returned_length,))
+                    + payload
+                )
             response = (
                 READ_RESPONSE
                 + ("%04X%02X" % (address, returned_length)).encode("ascii")
                 + payload.hex().upper().encode("ascii")
-                + (
-                    "%02X"
-                    % _checksum(
-                        struct.pack(">I", address)
-                        + bytes((returned_length,))
-                        + payload
-                    )
-                ).encode("ascii")
+                + ("%02X" % checksum).encode("ascii")
                 + b"\xFD"
             )
             self._enqueue(response)
@@ -337,6 +343,20 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
         self.assertEqual(radio.get_memory(1).name, "CHAN01234567890")
         self.assertEqual(serial.read_addresses[:3], [0x0000, 0x005E, 0x00BC])
 
+    def test_serial_read_accepts_the_radios_unchecked_cps_frame(self):
+        serial = FakeA9305BSerial(
+            _image(),
+            read_payload_limit=240,
+            read_checksum_override=0xF3,
+        )
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+
+        radio.sync_in()
+
+        self.assertEqual(radio.get_memory(1).name, "CHAN01234567890")
+        self.assertEqual(serial.read_addresses[0], 0x0000)
+
     def test_serial_commands_use_cps_mixed_binary_and_ascii_hex_framing(self):
         serial = FakeA9305BSerial(_image(), read_payload_limit=100)
         radio = self.radio_class(serial)
@@ -366,6 +386,15 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
             + b"\xFD"
         )
         trace.begin(frame)
+        trace._finish_pending()
+        self.assertIn(
+            "TYT read block addr=0x3200 len=132",
+            trace.format(),
+        )
+
+    def test_binary_trace_decodes_a9305b_ascii_address_fields(self):
+        trace = _load_bridge().RadioCommunicationTrace()
+        trace.begin(READ_COMMAND + b"320084\xFD")
         trace._finish_pending()
         self.assertIn(
             "TYT read block addr=0x3200 len=132",

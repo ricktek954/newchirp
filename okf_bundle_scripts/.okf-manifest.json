@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/scripts",
+  "source_root": "/private/tmp/newchirp-a9305b/scripts",
   "files": {
     "build_macos_dmg.py": {
       "path": "build_macos_dmg.py",
-      "mtime_ns": 1792753027569896057,
+      "mtime_ns": 1793898026391121624,
       "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
       "concept_ids": [
         "build_macos_dmg/build_background",
@@ -16,7 +16,7 @@
     },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1787526889873622751,
+      "mtime_ns": 1793898026391980088,
       "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
       "concept_ids": [
         "generate_gmrs_frs_pdf/PdfWriter",
@@ -38,7 +38,7 @@
     },
     "generate_repeater_counties.py": {
       "path": "generate_repeater_counties.py",
-      "mtime_ns": 1793439376655566408,
+      "mtime_ns": 1793898026392054505,
       "hash": "5b41696728c60fba0706a10867eadf154b89b4d803f0ed4e9038319bc7fe3c24",
       "concept_ids": [
         "generate_repeater_counties/dart_string",
@@ -51,7 +51,7 @@
     },
     "newchirp_mass_storage.py": {
       "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1792893456081463146,
+      "mtime_ns": 1793898026392134214,
       "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
       "concept_ids": [
         "newchirp_mass_storage/CS750Profile",
@@ -78,7 +78,7 @@
     },
     "newchirp_usb_dfu.py": {
       "path": "newchirp_usb_dfu.py",
-      "mtime_ns": 1793532981625641026,
+      "mtime_ns": 1793898026392227256,
       "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
       "concept_ids": [
         "newchirp_usb_dfu/DeviceDescriptor",
@@ -111,8 +111,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793791277455833774,
-      "hash": "12bc48b7aa207c763d6d2fc24063c859da7b5f61513615754563eb254ef28256",
+      "mtime_ns": 1793898037665526363,
+      "hash": "1cb8b389eac016343ef6f1ab547212e7b8e053e4e54610443302b1c79eba1498",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -1307,5 +1307,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-04T11:21:18Z"
+  "generated_at": "2026-11-05T17:01:38Z"
 }

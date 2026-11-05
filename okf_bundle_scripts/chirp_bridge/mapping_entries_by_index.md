@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:21:17Z"
+timestamp: "2026-11-05T17:00:37Z"
 concept_id: chirp_bridge/mapping_entries_by_index
 language: python
 ---
@@ -29,7 +29,7 @@ def _mapping_entries_by_index(model)
 | `model` | `—` | `—` |
 
 ## Source
-Lines 1551–1555 in `chirp_bridge.py`
+Lines 1555–1559 in `chirp_bridge.py`
 
 ## Relationships
 

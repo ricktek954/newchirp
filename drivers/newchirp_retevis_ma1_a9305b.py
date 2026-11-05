@@ -394,16 +394,22 @@ def _read_block(radio, address, length):
             "A9305B response for 0x%04X did not end with FD; terminator was %s"
             % (address, terminator.hex())
         )
+    # The CPS strips the trailing response checksum without comparing it to
+    # the write-side two's-complement checksum. Real radios return values that
+    # differ from that calculation (for example F3 instead of A2 at 0x0000),
+    # while the complete frame length, address, payload, and FD are valid.
     expected_checksum = _checksum(
         struct.pack(">I", address)
         + bytes((response_length,))
         + payload
     )
     if response_checksum != expected_checksum:
-        raise errors.RadioError(
-            "A9305B checksum mismatch for read block 0x%04X: got %02X, "
-            "expected %02X"
-            % (address, response_checksum, expected_checksum)
+        LOG.debug(
+            "A9305B read checksum at 0x%04X is %02X, CPS path ignores it "
+            "(write-side value would be %02X)",
+            address,
+            response_checksum,
+            expected_checksum,
         )
     return payload
 
