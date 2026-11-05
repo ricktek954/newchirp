@@ -17,9 +17,10 @@ release requirements.
   Integration details are in `docs/MYGMRS_API.md`.
 - The desktop calls `/api/mygmrs/oauth/start`, opens myGMRS in the system
   browser, polls with a short-lived handoff token, and receives only an opaque
-  NewChirp session token. Website commit `0c6f048` performs the confidential
+  NewChirp session token. Website commit `4f57d20` performs the confidential
   client exchange, keeps myGMRS access/refresh tokens server-side, refreshes
-  them, proxies authenticated repeater searches, and revokes them on sign-out.
+  them, proxies authenticated and ZIP-radius repeater searches, and revokes
+  them on sign-out.
 - myGMRS text searches use literal listing text and do not resolve county
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
@@ -29,7 +30,7 @@ release requirements.
 - Verification for the confidential relay and desktop session path:
   `flutter analyze` is clean, all 183 Flutter tests pass, all 248 Python tests
   pass with 2 fixture-dependent skips, the website build and forum tests pass,
-  and the website OAuth test covers token refresh, opaque sessions, search
+  and the website OAuth test covers token refresh, opaque sessions, ZIP search
   proxying, logout revocation, and invalid state.
 - Verification for `8476c0c3`: `flutter analyze` is clean, all 183 Flutter
   tests pass, and all 248 discovered Python tests pass with 2 fixture-dependent
