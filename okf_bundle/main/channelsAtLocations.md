@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _pasteChannelAtLocation
+title: _channelsAtLocations
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:14:37Z"
-concept_id: main/pasteChannelAtLocation
+timestamp: "2026-11-05T12:37:01Z"
+concept_id: main/channelsAtLocations
 language: dart
 ---
 
-# _pasteChannelAtLocation
+# _channelsAtLocations
 
 ## Signature
 
 ```dart
-Future_pasteChannelAtLocation_pasteChannelAtLocation
+List_channelsAtLocations_channelsAtLocations
 ```
 
 ## Source
-Lines 2712–2712 in `main.dart`
+Lines 2676–2676 in `main.dart`
 
 ## Relationships
 

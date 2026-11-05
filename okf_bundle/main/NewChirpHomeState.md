@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:14:37Z"
+timestamp: "2026-11-05T12:37:01Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -32,7 +32,7 @@ class _NewChirpHomeState
 - `_markChannelLibraryDirty`
 - `_remapRadioMappingChannels`
 - `_mappingMembershipsAt`
-- `_restoreClipboardMappingsAt`
+- `_restoreMappingMembershipsAt`
 - `_rememberChannelImageBaseline`
 - `invalid`
 - `initState`
@@ -102,9 +102,11 @@ class _NewChirpHomeState
 - `_addChannel`
 - `_duplicateChannel`
 - `_duplicateChannelAt`
-- `_copyChannel`
-- `_cutChannel`
-- `_pasteChannelAtLocation`
+- `_channelsAtLocations`
+- `_copyChannelsAtLocations`
+- `_cutChannelsAtLocations`
+- `_pasteChannelsAtLocation`
+- `_confirmOverwriteChannels`
 - `_confirmOverwriteChannel`
 - `_deleteChannelAt`
 - `_clearChannel`
@@ -147,7 +149,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 394–5800 in `main.dart`
+Lines 396–5913 in `main.dart`
 
 ## Relationships
 

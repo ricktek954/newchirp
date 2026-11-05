@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:14:37Z"
+timestamp: "2026-11-05T12:37:01Z"
 concept_id: main
 language: dart
 ---
@@ -106,7 +106,7 @@ language: dart
 | related | [_markChannelLibraryDirty](/main/markChannelLibraryDirty.md) |
 | related | [_remapRadioMappingChannels](/main/remapRadioMappingChannels.md) |
 | related | [_mappingMembershipsAt](/main/mappingMembershipsAt.md) |
-| related | [_restoreClipboardMappingsAt](/main/restoreClipboardMappingsAt.md) |
+| related | [_restoreMappingMembershipsAt](/main/restoreMappingMembershipsAt.md) |
 | related | [_rememberChannelImageBaseline](/main/rememberChannelImageBaseline.md) |
 | related | [invalid](/main/invalid.md) |
 | related | [initState](/main/initState.md) |
@@ -176,9 +176,11 @@ language: dart
 | related | [_addChannel](/main/addChannel.md) |
 | related | [_duplicateChannel](/main/duplicateChannel.md) |
 | related | [_duplicateChannelAt](/main/duplicateChannelAt.md) |
-| related | [_copyChannel](/main/copyChannel.md) |
-| related | [_cutChannel](/main/cutChannel.md) |
-| related | [_pasteChannelAtLocation](/main/pasteChannelAtLocation.md) |
+| related | [_channelsAtLocations](/main/channelsAtLocations.md) |
+| related | [_copyChannelsAtLocations](/main/copyChannelsAtLocations.md) |
+| related | [_cutChannelsAtLocations](/main/cutChannelsAtLocations.md) |
+| related | [_pasteChannelsAtLocation](/main/pasteChannelsAtLocation.md) |
+| related | [_confirmOverwriteChannels](/main/confirmOverwriteChannels.md) |
 | related | [_confirmOverwriteChannel](/main/confirmOverwriteChannel.md) |
 | related | [_deleteChannelAt](/main/deleteChannelAt.md) |
 | related | [_clearChannel](/main/clearChannel.md) |

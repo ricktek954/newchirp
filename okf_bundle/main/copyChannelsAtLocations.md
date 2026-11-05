@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _copyChannel
+title: _copyChannelsAtLocations
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:14:37Z"
-concept_id: main/copyChannel
+timestamp: "2026-11-05T12:37:01Z"
+concept_id: main/copyChannelsAtLocations
 language: dart
 ---
 
-# _copyChannel
+# _copyChannelsAtLocations
 
 ## Signature
 
 ```dart
-void_copyChannel(int index)
+void_copyChannelsAtLocations(Iterable<int> locations)
 ```
 
 ## Source
-Lines 2673–2673 in `main.dart`
+Lines 2686–2686 in `main.dart`
 
 ## Relationships
 
