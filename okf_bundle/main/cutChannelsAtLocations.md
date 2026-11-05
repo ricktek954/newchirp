@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _restoreClipboardMappingsAt
+title: _cutChannelsAtLocations
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:14:37Z"
-concept_id: main/restoreClipboardMappingsAt
+timestamp: "2026-11-05T12:37:01Z"
+concept_id: main/cutChannelsAtLocations
 language: dart
 ---
 
-# _restoreClipboardMappingsAt
+# _cutChannelsAtLocations
 
 ## Signature
 
 ```dart
-void_restoreClipboardMappingsAt(int location)
+void_cutChannelsAtLocations(Iterable<int> locations)
 ```
 
 ## Source
-Lines 857–857 in `main.dart`
+Lines 2697–2697 in `main.dart`
 
 ## Relationships
 

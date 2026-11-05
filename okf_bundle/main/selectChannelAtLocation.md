@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:14:37Z"
+timestamp: "2026-11-05T12:37:01Z"
 concept_id: main/selectChannelAtLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ void_selectChannelAtLocation(int location, _ChannelSelectionMode mode)
 ```
 
 ## Source
-Lines 546–546 in `main.dart`
+Lines 548–548 in `main.dart`
 
 ## Relationships
 

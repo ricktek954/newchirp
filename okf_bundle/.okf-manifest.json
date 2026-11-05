@@ -557,8 +557,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793877277560117965,
-      "hash": "c77f7e27cea54fba2f89adcc4794519e76fe86a2873d3273d686e10737e6cdc0",
+      "mtime_ns": 1793882221208494190,
+      "hash": "f16b73cb07c2766e15f164474f0e7e80e2b58a9290fb515f3a7ac711b58f8c96",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -643,7 +643,7 @@
         "main/markChannelLibraryDirty",
         "main/remapRadioMappingChannels",
         "main/mappingMembershipsAt",
-        "main/restoreClipboardMappingsAt",
+        "main/restoreMappingMembershipsAt",
         "main/rememberChannelImageBaseline",
         "main/initState",
         "main/loadColumnLayout",
@@ -711,9 +711,11 @@
         "main/addChannel",
         "main/duplicateChannel",
         "main/duplicateChannelAt",
-        "main/copyChannel",
-        "main/cutChannel",
-        "main/pasteChannelAtLocation",
+        "main/channelsAtLocations",
+        "main/copyChannelsAtLocations",
+        "main/cutChannelsAtLocations",
+        "main/pasteChannelsAtLocation",
+        "main/confirmOverwriteChannels",
         "main/confirmOverwriteChannel",
         "main/deleteChannelAt",
         "main/clearChannel",
@@ -1418,7 +1420,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "63f342665bba683726ed58698d9d75ffd799c2c82c0743e28e55a4c3ead27bf6",
+      "edge_hash": "3348fd840c5c9c0da21800cf63b29d30b3cf584911c8a1c78946aabbbee4ccf3",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -5700,7 +5702,55 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "main/restoreMappingMembershipsAt": {
+      "concept_id": "main/restoreMappingMembershipsAt",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/channelsAtLocations": {
+      "concept_id": "main/channelsAtLocations",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/copyChannelsAtLocations": {
+      "concept_id": "main/copyChannelsAtLocations",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/cutChannelsAtLocations": {
+      "concept_id": "main/cutChannelsAtLocations",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/pasteChannelsAtLocation": {
+      "concept_id": "main/pasteChannelsAtLocation",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/confirmOverwriteChannels": {
+      "concept_id": "main/confirmOverwriteChannels",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-05T11:14:38Z"
+  "generated_at": "2026-11-05T12:37:02Z"
 }

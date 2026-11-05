@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _cutChannel
+title: _confirmOverwriteChannels
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T11:14:37Z"
-concept_id: main/cutChannel
+timestamp: "2026-11-05T12:37:01Z"
+concept_id: main/confirmOverwriteChannels
 language: dart
 ---
 
-# _cutChannel
+# _confirmOverwriteChannels
 
 ## Signature
 
 ```dart
-void_cutChannel(int index)
+Future_confirmOverwriteChannels_confirmOverwriteChannels
 ```
 
 ## Source
-Lines 2682–2682 in `main.dart`
+Lines 2818–2818 in `main.dart`
 
 ## Relationships
 
