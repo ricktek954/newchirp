@@ -315,7 +315,7 @@ Last updated: 2026-11-05
 - Maintained A9305B driver:
   `drivers/newchirp_retevis_ma1_a9305b.py`
 - Driver SHA-256:
-  `4f5920e7b89ee461b63c204f9e4fa8364e53ce9a74c8f1a26f4dea8cccbd197d`
+  `efecd7c568f2d162905943e5751eb85a71d875c5b83de07c56cc15c4aff39a85`
 - Official CPS evidence:
   `MA1-A9305B Programming Software-V1.0.zip`, downloaded from Retevis'
   official software page. Archive SHA-256:
@@ -335,10 +335,13 @@ Last updated: 2026-11-05
   negotiation, then addressed `FE/FD` blocks. Reads use up to 240-byte blocks;
   frames mix binary delimiters with ASCII-hex fields. The five-byte command or
   response marker and final `FD` are binary; the address, length, payload, and
-  additive two's-complement checksum are uppercase ASCII hexadecimal. Responses
-  may return fewer bytes than requested, so the driver follows the encoded
-  length and advances by the actual payload returned. Writes use the CPS'
-  32-byte rows.
+  trailing checksum field are uppercase ASCII hexadecimal. The CPS read path
+  strips the response checksum without validating it, so reads are checked by
+  marker, address, encoded length, complete payload, and terminator. The CPS
+  write path uses an additive two's-complement checksum over the binary address,
+  one-byte length, and payload. Responses may return fewer bytes than requested,
+  so the driver follows the encoded length and advances by the actual payload
+  returned. Writes use the CPS' 32-byte rows.
 - A9305B memory map: channels 1-200 use 21-byte records at `0x0000`, active
   and skip bitmaps at `0x1180`/`0x11A0`, and 6+10-character names at
   `0x000F` and `0x2300`. Channels 201-1000 use records at `0x4000`, bitmaps
@@ -355,7 +358,8 @@ Last updated: 2026-11-05
 - Offline validation: registration of both MA1 variants, channel decoding
   across both 200/800 sections, 16-character names, tone fields, active/skip
   bitmaps, model fingerprinting, complete binary and ASCII-hex read framing,
-  short response packets, block checksums, and complete write framing.
+  short response packets, opaque read checksums, write-side block checksums,
+  and complete write framing.
 - Hardware validation: the OEM software successfully read and wrote the radio
   from two Windows 11 PCs with two different USB cables. Zoran's 2026-11-01
   NewChirp 1.0.33 read reached every protocol stage, but reported a 214-byte
@@ -363,8 +367,12 @@ Last updated: 2026-11-05
   NewChirp 1.0.37 test exposed that the first implementation also treated the
   binary response marker as ASCII text. Direct CIL tracing of
   `SendReadDatAddComPro` and `DisplayText` shows the mixed framing above.
-  NewChirp now constructs read/write commands and parses responses in that
-  exact format and remains pending a successful physical read.
+  Zoran's 2026-11-05 NewChirp 1.0.38 test received a complete 494-byte block
+  response at `0x0000`, but the radio returned checksum `F3` while NewChirp's
+  write-side calculation expected `A2`. `DisplayText` strips that field without
+  comparing it, so the driver now mirrors the CPS read policy and logs any
+  difference at debug level. A successful physical read and comparison with
+  the CPS-exported image remain pending.
 - Radio version: `M V136`
 - Next milestone: complete an unedited physical read, save the raw backup,
   compare it with a CPS-exported image, then perform one channel edit,

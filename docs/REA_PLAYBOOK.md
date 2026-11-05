@@ -227,6 +227,15 @@ A field read returned 214 bytes. The old driver interpreted that as a partial
 The lesson is not "the CPS was wrong" or "the radio behaved differently."
 The missing evidence was the receive-side conversion and dynamic length path.
 
+A later 1.0.38 report showed a complete 494-byte response whose returned
+checksum `F3` did not match the `A2` value derived from the CPS write-side
+checksum algorithm. `DisplayText` discards the last two characters after
+converting the response without checking that checksum. Recovering a checksum
+algorithm from one direction is not evidence that the application validates it
+in the other direction. The driver must preserve the CPS' actual read policy:
+validate framing, address, returned length, payload, and terminator while
+treating the returned checksum field as part of the frame that the OEM ignores.
+
 ## Review questions
 
 Before approving a reverse-engineered driver, answer:

@@ -8,6 +8,18 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-05 A9305B follow-up showed NewChirp 1.0.38 rejecting a complete
+  494-byte read response because its `F3` trailing checksum did not match the
+  driver's write-side `A2` calculation. The official CPS read path strips that
+  field without validating it; source now mirrors that policy while retaining
+  marker, address, length, payload, and terminator checks. A physical read and
+  comparison with the CPS export are still required.
+- Verification for the A9305B correction: the focused driver suite ran 11
+  tests, all 254 discovered Python tests passed with 2 fixture-dependent
+  skips, `flutter analyze` is clean, and all 186 Flutter tests pass. The
+  installed formatter still reports two pre-existing files it would rewrite:
+  `lib/models/repeater_counties.dart` and
+  `lib/services/window_state_store.dart`.
 - The 2026-11-05 email triage handled 24 unread messages. Nineteen replies
   were sent and verified in `Sent`; five already-handled/no-action messages
   were marked `\Seen`. Three immediate delivery bounces were marked `\Seen`:

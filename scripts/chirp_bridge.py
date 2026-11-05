@@ -66,8 +66,12 @@ class RadioCommunicationTrace:
             }
             label = commands.get(raw[4], "command %02x" % raw[4])
             if raw[4] in (0xE4, 0xEB) and len(raw) >= 11:
-                address = int.from_bytes(raw[5:9], "big")
-                length = int.from_bytes(raw[9:11], "big")
+                try:
+                    address = int(raw[5:9], 16)
+                    length = int(raw[9:11], 16)
+                except ValueError:
+                    address = int.from_bytes(raw[5:9], "big")
+                    length = int.from_bytes(raw[9:11], "big")
                 label += " addr=0x%04x len=%i" % (address, length)
             return "TYT %s (%i bytes)" % (label, len(raw))
         if len(raw) >= 6 and raw[:2] == b"\xfe\xfe":
