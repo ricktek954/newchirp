@@ -391,6 +391,8 @@ class NewChirpHome extends StatefulWidget {
   State<NewChirpHome> createState() => _NewChirpHomeState();
 }
 
+typedef _ChannelMappingMembership = ({int modelIndex, String mappingIndex});
+
 class _NewChirpHomeState extends State<NewChirpHome> {
   final _bridge = RadioBridge();
   late final _columnLayoutStore =
@@ -457,7 +459,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   bool _hideFileSaveWarning = false;
   bool _savingLibrary = false;
   List<RadioChannel> _channelClipboard = [];
-  List<({int modelIndex, String mappingIndex})> _channelClipboardMappings = [];
+  List<List<_ChannelMappingMembership>> _channelClipboardMappings = [];
   final Set<int> _clearedLocations = {};
   ChannelImageBaseline? _channelImageBaseline;
   final ChannelLibraryStatsCache _channelStats = ChannelLibraryStatsCache();
@@ -843,9 +845,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _radioMappings = remapRadioMappingLocations(_radioMappings, changes);
   }
 
-  List<({int modelIndex, String mappingIndex})> _mappingMembershipsAt(
-    int location,
-  ) {
+  List<_ChannelMappingMembership> _mappingMembershipsAt(int location) {
     return [
       for (var modelIndex = 0; modelIndex < _radioMappings.length; modelIndex++)
         for (final mapping in _radioMappings[modelIndex].mappings)
@@ -854,9 +854,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     ];
   }
 
-  void _restoreClipboardMappingsAt(int location) {
-    if (_channelClipboardMappings.isEmpty) return;
-    final memberships = _channelClipboardMappings.toSet();
+  void _restoreMappingMembershipsAt(
+    int location,
+    List<_ChannelMappingMembership> memberships,
+  ) {
+    if (memberships.isEmpty) return;
+    final membershipSet = memberships.toSet();
     _radioMappings = [
       for (var modelIndex = 0; modelIndex < _radioMappings.length; modelIndex++)
         _radioMappings[modelIndex].copyWith(
@@ -867,7 +870,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   final locations = mapping.channelLocations
                       .where((value) => value != location)
                       .toList();
-                  if (memberships.contains((
+                  if (membershipSet.contains((
                     modelIndex: modelIndex,
                     mappingIndex: mapping.index,
                   ))) {
@@ -2670,72 +2673,176 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
-  void _copyChannel(int index) {
-    if (index < 0 || index >= _channels.length) return;
-    if (_channels[index].cleared) return;
+  List<RadioChannel> _channelsAtLocations(Iterable<int> locations) {
+    final wanted = locations.toSet();
+    return _channels
+        .where(
+          (channel) => wanted.contains(channel.location) && !channel.cleared,
+        )
+        .toList()
+      ..sort((left, right) => left.location.compareTo(right.location));
+  }
+
+  void _copyChannelsAtLocations(Iterable<int> locations) {
+    final channels = _channelsAtLocations(locations);
+    if (channels.isEmpty) return;
     setState(() {
-      _channelClipboard = [_channels[index].copy()];
-      _channelClipboardMappings = [];
+      _channelClipboard = [for (final channel in channels) channel.copy()];
+      _channelClipboardMappings = [
+        for (final _ in channels) <_ChannelMappingMembership>[],
+      ];
     });
   }
 
-  void _cutChannel(int index) {
-    if (index < 0 || index >= _channels.length) return;
-    if (_channels[index].cleared) return;
-    final channel = _channels[index];
-    if (isMidlandRepeaterRow(_model, channel.location)) {
-      _recordHistory();
-      setState(() {
-        _channelClipboard = [channel.copy()];
-        _channelClipboardMappings = [];
-        _keepMidlandRepeater(channel);
-        _selected = index;
-        _dirty = true;
-        _markChannelLibraryDirty();
-      });
-      _noteRepeaterRowKept(channel);
-      return;
-    }
-    _recordHistory();
+  void _cutChannelsAtLocations(Iterable<int> locations) {
+    final channels = _channelsAtLocations(locations);
+    if (channels.isEmpty) return;
+    final protectedChannels = channels
+        .where((channel) => isMidlandRepeaterRow(_model, channel.location))
+        .toList();
+    final clearableChannels = channels
+        .where((channel) => !isMidlandRepeaterRow(_model, channel.location))
+        .toList();
+    _recordHistory(preserveMultiSelection: true);
     setState(() {
-      _channelClipboard = [channel.copy()];
-      _channelClipboardMappings = _mappingMembershipsAt(channel.location);
-      channel.clear();
-      _remapRadioMappingChannels({channel.location: null});
-      _clearedLocations.add(channel.location);
-      _selected = index;
+      _channelClipboard = [for (final channel in channels) channel.copy()];
+      _channelClipboardMappings = [
+        for (final channel in channels) _mappingMembershipsAt(channel.location),
+      ];
+      for (final channel in protectedChannels) {
+        _keepMidlandRepeater(channel);
+      }
+      if (clearableChannels.isNotEmpty) {
+        final clearedLocations = [
+          for (final channel in clearableChannels) channel.location,
+        ];
+        for (final channel in clearableChannels) {
+          channel.clear();
+        }
+        _remapRadioMappingChannels({
+          for (final location in clearedLocations) location: null,
+        });
+        _clearedLocations.addAll(clearedLocations);
+      }
+      _selected = _channels.indexWhere(
+        (channel) => channel.location == channels.first.location,
+      );
+      _selectionAnchorLocation = channels.first.location;
+      _extraSelectedLocations.clear();
       _dirty = true;
       _markChannelLibraryDirty();
     });
+    for (final channel in protectedChannels) {
+      _noteRepeaterRowKept(channel);
+    }
   }
 
-  Future<void> _pasteChannelAtLocation(int location) async {
-    if (_channelClipboard.isEmpty) {
+  Future<void> _pasteChannelsAtLocation(int location) async {
+    if (_channelClipboard.isEmpty) return;
+    final finalLocation = location + _channelClipboard.length - 1;
+    final minimum = _capabilities?.memoryStart;
+    final maximum = _capabilities?.memoryEnd;
+    if ((minimum != null && location < minimum) ||
+        (maximum != null && finalLocation > maximum)) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              _channelClipboard.length == 1
+                  ? 'The copied channel does not fit in this radio’s memory.'
+                  : 'The copied channels do not fit starting at this row.',
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       return;
     }
-    final index = _channels.indexWhere(
-      (channel) => channel.location == location,
-    );
-    final target = index >= 0 ? _channels[index] : null;
-    if (target != null && !target.cleared) {
-      final confirmed = await _confirmOverwriteChannel(target);
+
+    final byLocation = {
+      for (final channel in _channels) channel.location: channel,
+    };
+    final occupiedTargets = [
+      for (var offset = 0; offset < _channelClipboard.length; offset++)
+        if (byLocation[location + offset] case final target?
+            when !target.cleared)
+          target,
+    ];
+    if (occupiedTargets.isNotEmpty) {
+      final confirmed = await _confirmOverwriteChannels(occupiedTargets);
       if (!confirmed || !mounted) return;
     }
-    final pasted = _channelClipboard.first.copy()..location = location;
-    _recordHistory();
+
+    final destinations = [
+      for (var offset = 0; offset < _channelClipboard.length; offset++)
+        location + offset,
+    ];
+    final pastedChannels = [
+      for (var index = 0; index < _channelClipboard.length; index++)
+        _channelClipboard[index].copy()..location = destinations[index],
+    ];
+    _recordHistory(preserveMultiSelection: true);
     setState(() {
-      if (index >= 0) {
-        _channels[index] = pasted;
-      } else {
-        _channels.add(pasted);
-        _sortChannelsByLocation();
+      for (var index = 0; index < pastedChannels.length; index++) {
+        final pasted = pastedChannels[index];
+        final targetIndex = _channels.indexWhere(
+          (channel) => channel.location == pasted.location,
+        );
+        if (targetIndex >= 0) {
+          _channels[targetIndex] = pasted;
+        } else {
+          _channels.add(pasted);
+        }
+        _restoreMappingMembershipsAt(
+          pasted.location,
+          _channelClipboardMappings[index],
+        );
       }
-      _selected = _channels.indexOf(pasted);
+      _clearedLocations.removeAll(destinations);
+      _sortChannelsByLocation();
+      _selected = _channels.indexWhere(
+        (channel) => channel.location == location,
+      );
+      _selectionAnchorLocation = location;
+      _extraSelectedLocations
+        ..clear()
+        ..addAll(destinations.skip(1));
       _dirty = true;
-      _clearedLocations.remove(location);
-      _restoreClipboardMappingsAt(location);
       _markChannelLibraryDirty();
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _channelTableKey.currentState?.revealSelectedChannel();
+    });
+  }
+
+  Future<bool> _confirmOverwriteChannels(List<RadioChannel> channels) async {
+    if (channels.length == 1) return _confirmOverwriteChannel(channels.single);
+    final first = channels.first;
+    final last = channels.last;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.warning_amber_rounded, color: Color(0xFFC46A15)),
+        title: Text('Overwrite ${channels.length} channels?'),
+        content: Text(
+          'The destination range ${channelNumberLabel(_model, first.location)} '
+          'through ${channelNumberLabel(_model, last.location)} contains '
+          '${channels.length} channels with data. Pasting will replace them.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Overwrite channels'),
+          ),
+        ],
+      ),
+    );
+    return confirmed == true;
   }
 
   Future<bool> _confirmOverwriteChannel(RadioChannel channel) async {
@@ -4427,6 +4534,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   'Duplicate copies the selected row, and Delete removes it after '
                                   'confirmation. Double-click any row to edit all of its fields. '
                                   'Right-click a row to copy, cut, paste, duplicate, or clear it. '
+                                  'Copying or cutting a multi-row selection copies the active '
+                                  'channels as a block; paste places the block at the target row. '
                                   'Click selects one row. Shift-click selects a range, and '
                                   'Cmd/Ctrl-click toggles individual rows. Use Bulk edit to '
                                   'change channel properties on all selected rows; only fields '
@@ -4459,20 +4568,24 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             onColumnOrderChanged: _setColumnOrder,
                             onColumnWidthChanged: _setColumnWidth,
                             onSelect: _selectChannelAtLocation,
-                            clipboardNotEmpty: _channelClipboard.isNotEmpty,
+                            clipboardCount: _channelClipboard.length,
                             onCopy: (location) {
-                              final index = _channels.indexWhere(
-                                (channel) => channel.location == location,
+                              final selected = _selectedChannelLocations;
+                              _copyChannelsAtLocations(
+                                selected.contains(location)
+                                    ? selected
+                                    : {location},
                               );
-                              if (index >= 0) _copyChannel(index);
                             },
                             onCut: (location) {
-                              final index = _channels.indexWhere(
-                                (channel) => channel.location == location,
+                              final selected = _selectedChannelLocations;
+                              _cutChannelsAtLocations(
+                                selected.contains(location)
+                                    ? selected
+                                    : {location},
                               );
-                              if (index >= 0) _cutChannel(index);
                             },
-                            onPaste: _pasteChannelAtLocation,
+                            onPaste: _pasteChannelsAtLocation,
                             onDuplicate: (location) {
                               final index = _channels.indexWhere(
                                 (channel) => channel.location == location,
@@ -8613,7 +8726,7 @@ class _ChannelTable extends StatefulWidget {
     required this.onColumnOrderChanged,
     required this.onColumnWidthChanged,
     required this.onSelect,
-    required this.clipboardNotEmpty,
+    required this.clipboardCount,
     required this.onCopy,
     required this.onCut,
     required this.onPaste,
@@ -8638,7 +8751,7 @@ class _ChannelTable extends StatefulWidget {
   final ValueChanged<List<String>> onColumnOrderChanged;
   final void Function(String id, double width) onColumnWidthChanged;
   final void Function(int location, _ChannelSelectionMode mode) onSelect;
-  final bool clipboardNotEmpty;
+  final int clipboardCount;
   final ValueChanged<int> onCopy;
   final ValueChanged<int> onCut;
   final Future<void> Function(int) onPaste;
@@ -8724,12 +8837,32 @@ class _ChannelTableState extends State<_ChannelTable> {
           ),
         ),
         const PopupMenuDivider(),
-        PopupMenuItem(value: 0, enabled: !isCleared, child: const Text('Copy')),
-        PopupMenuItem(value: 1, enabled: !isCleared, child: const Text('Cut')),
+        PopupMenuItem(
+          value: 0,
+          enabled: !isCleared,
+          child: Text(
+            multiSelected
+                ? 'Copy ${widget.selectedLocations.length} channels'
+                : 'Copy',
+          ),
+        ),
+        PopupMenuItem(
+          value: 1,
+          enabled: !isCleared,
+          child: Text(
+            multiSelected
+                ? 'Cut ${widget.selectedLocations.length} channels'
+                : 'Cut',
+          ),
+        ),
         PopupMenuItem(
           value: 2,
-          enabled: widget.clipboardNotEmpty,
-          child: const Text('Paste'),
+          enabled: widget.clipboardCount > 0,
+          child: Text(
+            widget.clipboardCount > 1
+                ? 'Paste ${widget.clipboardCount} channels'
+                : 'Paste',
+          ),
         ),
         PopupMenuItem(
           value: 3,
