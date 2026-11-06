@@ -8,6 +8,17 @@ release requirements.
 
 ## Resume here
 
+- UID 464 reported that `Quansheng_UV-K1` rejected an `F4HWN v6.3.0`
+  handshake on Linux. The current UV-K1 profile supports only stock 7.03.x and
+  the official Quansheng CPS is also stock-only. NewChirp now routes a
+  manually selected UV-K1 to an experimental F4HWN 6.3 profile with the
+  firmware's 1,024-channel `0xB190` memory map, 128-byte transfers, and a
+  write ceiling of `0xA178` so calibration is preserved. Offline protocol
+  coverage uses the reporter's exact hello frame. Physical read/write and
+  read-back validation are still pending.
+- Verification for the F4HWN 6.3 profile: the complete Python suite ran 278
+  tests with 2 fixture-dependent skips, `flutter analyze` is clean, and all
+  186 Flutter tests pass.
 - The 2026-11-06 email triage found 16 unread bug-report messages. UID 448
   (macOS DM-32UV zone capacity) received an explanation of the radio's
   64-members-per-zone limit. UIDs 459 and 460 (Quansheng TK11) exposed a

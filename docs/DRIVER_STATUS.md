@@ -29,6 +29,7 @@ Last updated: 2026-11-05
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
+| Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -694,6 +695,35 @@ Last updated: 2026-11-05
 - Next milestone: affected owner retests after restarting the radio in normal
   mode; if it still fails, submit the hexadecimal `UV-K5 hello` reply and the
   firmware string shown by the radio.
+
+### Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3)
+
+- Maintained profile: `QuanshengUVK1F4HWN63` in
+  `drivers/newchirp_uvk5.py`
+- Protocol notes: `docs/QUANSHENG_UVK1_F4HWN_PROTOCOL.md`
+- Identity: the reporter's hello deobfuscates to `F4HWN v6.3.0`
+- Firmware evidence: `armel/uv-k1-k5v3-firmware-custom` release `v6.3.0`,
+  source commit `3261ca7883d5b0b60c0905d8766612dee7b4191d`, and the matching
+  F4HWN CHIRP driver SHA-256
+  `a307886d90b6481b441c2cd34b622c8dacfc2080a34fc1e0ea2377054ee4ef96`
+- Transport: UV-K5 framed protocol at 38400 8N1, 128-byte chunks
+- Memory: `0xB190`-byte image, 1,024 channels, 1,024 channel names, 1,031
+  attributes, 24 scan lists, and 14 VFO records
+- Implemented: channel and VFO read/write, frequency, offset, duplex, CTCSS,
+  DCS, mode, tuning step, power, TX lock, busy-channel lockout, frequency
+  reverse, PTT ID, compander, and scan-list assignment
+- Read/write policy: require `F4HWN v6.3.x`; write only
+  `0x0000-0xA177`; preserve calibration at `0xB000-0xB18F`
+- Settings: hidden until the complete F4HWN settings layout has dedicated
+  validation. Firmware and scan-list MIX data remain untouched by channel
+  edits.
+- Evidence: static tracing of the F4HWN firmware serial paths and matching
+  official CHIRP driver, plus replay tests derived from the reporter's exact
+  obfuscated hello and synthetic EEPROM traffic
+- Hardware validation: none. Offline protocol and image tests pass.
+- Next milestone: reporter downloads and saves an image, edits one unused
+  channel, uploads it, reconnects, reads it back, and confirms the channel on
+  the radio before wider write support is enabled.
 
 ### Baofeng UV-9R
 
