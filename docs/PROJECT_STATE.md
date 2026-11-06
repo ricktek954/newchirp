@@ -78,11 +78,12 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The cross-platform `1.0.43` release is live. The Linux artifacts are from
-  source commit `747afb48` and include the latest GitHub bridge fixes for
-  BF-F8HP-PRO port guidance and metadata-backed channel comments on dynamic
-  subdevices, plus the `1.0.42` UV-5RH stray-handshake retry and the `1.0.41`
-  radio-driver and UX work. The Windows installer is
+- The cross-platform `1.0.43` release is live. Windows and macOS are from
+  source commit `f37f138b`; the Linux artifacts are from `747afb48`. They
+  include the latest GitHub bridge fixes for BF-F8HP-PRO port guidance and
+  metadata-backed channel comments on dynamic subdevices, plus the `1.0.42`
+  UV-5RH stray-handshake retry and the `1.0.41` radio-driver and UX work. The
+  Windows installer is
   `NewChirp-Installer-1.0.43.exe`, SHA-256
   `80c969b4e3a4af78d0d027cb7b6d9894474dc0b3503dec63dae9f41b693f07f5`,
   size `61,152,977` bytes.
@@ -232,7 +233,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.43` artifact source commit: `f37f138b`
-- Windows `1.0.43` artifact source commit: native-builder recorded separately
+- Windows `1.0.43` artifact source commit: `f37f138b`
 - Linux `1.0.43` artifact source commit: `747afb48`
 - Open pull requests: none
 - Checked-out source version: `1.0.43+43`
@@ -266,15 +267,15 @@ macOS artifact:
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows artifact:
+Windows `1.0.43` artifact:
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.43.exe`
 - Version/build: `1.0.43` / `43`
 - SHA-256:
   `80c969b4e3a4af78d0d027cb7b6d9894474dc0b3503dec63dae9f41b693f07f5`
 - Size: `61,152,977` bytes
-- Server checksum recorded from the live artifact
-- Authenticode: native-builder recorded separately
+- Server checksum matched the local artifact
+- Authenticode: not signed
 
 Windows `1.0.42` artifact (historical):
 
@@ -401,6 +402,14 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.43` from source commit `f37f138b`. Verified installer
+  file/product metadata `1.0.43.0` / `1.0.43`, app version `1.0.43+43`,
+  bundled Python `3.13.15`, matching local/server SHA-256, public HTTP 200,
+  and the live platform manifest. The focused bridge suite ran 56 tests with
+  one known Windows temporary-file `PermissionError`; Flutter ran 183 passing
+  tests with the five known Windows sandbox/Help failures; `flutter analyze`
+  reported only three pre-existing `avoid_print` infos in `build_support`.
+  The installer remains unsigned.
 - Published macOS `1.0.43` from source commit `f37f138b` as a universal
   signed, notarized, stapled DMG. Verified the TK-7160K subdevice metadata fix,
   BF-F8HP Pro selected-port guidance, app/build version, both Python runtimes,
