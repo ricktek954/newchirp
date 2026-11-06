@@ -8,6 +8,9 @@ release requirements.
 
 ## Resume here
 
+- The Windows `1.0.44` installer is live from source commit `9929f997`.
+  Windows and macOS advertise `1.0.44`; the legacy shared manifest remains
+  `1.0.43` until the Linux `1.0.44` DEB exists.
 - The 2026-11-06 UV-5RH Pro report on 1.0.43 still used the legacy
   `Baofeng_UV-5RH` entry. Official 5RH PRO CPS V1.17 uses an `A` announce,
   a seeded `PROGRAM` handshake, password and `INFORMATION` stages, then
@@ -240,7 +243,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.44` artifact source commit: `9929f997`
-- Windows `1.0.43` artifact source commit: `f37f138b`
+- Windows `1.0.44` artifact source commit: `9929f997`
 - Linux `1.0.43` artifact source commit: `747afb48`
 - Open pull requests: none
 - Checked-out source version: `1.0.44+44`
@@ -258,9 +261,12 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.44 |
-| Windows | 1.0.43 |
+| Windows | 1.0.44 |
 | Linux | 1.0.43 |
 | Legacy shared manifest version | 1.0.43 |
+
+Windows and macOS advertise `1.0.44`; the legacy shared version stays
+`1.0.43` until Linux `1.0.44` packages are published.
 
 macOS artifact:
 
@@ -274,7 +280,17 @@ macOS artifact:
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.43` artifact:
+Windows `1.0.44` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.44.exe`
+- Version/build: `1.0.44` / `44`
+- SHA-256:
+  `a90addfb67fed26ff27a846a9820884a37a4f2874f6183642003958c5df868c1`
+- Size: `61,169,590` bytes
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.43` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.43.exe`
 - Version/build: `1.0.43` / `43`
@@ -409,6 +425,16 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.44` from source commit `9929f997`. Verified installer
+  file/product metadata `1.0.44.0` / `1.0.44`, app version `1.0.44+44`,
+  bundled Python `3.13.15`, the bundled CPS-derived Baofeng 5RH Pro v2
+  driver, matching local/server SHA-256, public HTTP 200, and the Windows
+  platform manifest entry. The new 5RH Pro driver suite passed 5 tests; the
+  bridge suite ran 57 tests with one known Windows temporary-file
+  `PermissionError`; Flutter ran 183 passing tests with the five known
+  Windows sandbox/Help failures; `flutter analyze` reported only three
+  pre-existing `avoid_print` infos in `build_support`. The installer remains
+  unsigned.
 - Published macOS `1.0.44` from source commit `9929f997` as a universal
   signed, notarized, stapled DMG. Verified the CPS-derived Baofeng 5RH Pro
   v2 driver and legacy-model recovery guidance, app/build version, both
