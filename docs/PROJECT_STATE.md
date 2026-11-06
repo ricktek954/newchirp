@@ -8,6 +8,16 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-06 Kenwood TK-7160K report downloaded the complete radio image
+  but failed while decoding its dynamic zone subdevice because
+  `TKx160Zone` has no external metadata owner. NewChirp now skips metadata
+  augmentation when neither the subdevice nor its parent owns a metadata
+  store. The upstream `Kenwood_TK-7160K.img` fixture covers the decode path.
+  This radio uses upstream CHIRP `tk8160.py`; no NewChirp CPS reverse
+  engineering is recorded.
+- The 2026-11-06 BF-F8HP Pro timeout guidance now names the selected COM port
+  and asks the reporter to compare against Baofeng CPS instead of repeatedly
+  directing the user to the stale COM4 example.
 - UID 464 reported that `Quansheng_UV-K1` rejected an `F4HWN v6.3.0`
   handshake on Linux. The current UV-K1 profile supports only stock 7.03.x and
   the official Quansheng CPS is also stock-only. NewChirp now routes a

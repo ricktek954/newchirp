@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T10:47:08Z"
+timestamp: "2026-11-06T17:51:31Z"
 concept_id: chirp_bridge/memory_json
 language: python
 ---
@@ -29,7 +29,7 @@ def memory_json(mem)
 | `mem` | `—` | `—` |
 
 ## Source
-Lines 678–698 in `chirp_bridge.py`
+Lines 681–701 in `chirp_bridge.py`
 
 ## Relationships
 

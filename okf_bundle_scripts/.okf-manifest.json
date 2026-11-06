@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp-triage-check/scripts",
+  "source_root": "/Volumes/RICKEXT/desktop/newchirp/scripts",
   "files": {
     "build_macos_dmg.py": {
       "path": "build_macos_dmg.py",
-      "mtime_ns": 1793961133639265632,
+      "mtime_ns": 1792753027569896057,
       "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
       "concept_ids": [
         "build_macos_dmg/build_background",
@@ -16,7 +16,7 @@
     },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1793961133640577271,
+      "mtime_ns": 1787526889873622751,
       "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
       "concept_ids": [
         "generate_gmrs_frs_pdf/PdfWriter",
@@ -38,7 +38,7 @@
     },
     "generate_repeater_counties.py": {
       "path": "generate_repeater_counties.py",
-      "mtime_ns": 1793961133640639853,
+      "mtime_ns": 1793439376655566408,
       "hash": "5b41696728c60fba0706a10867eadf154b89b4d803f0ed4e9038319bc7fe3c24",
       "concept_ids": [
         "generate_repeater_counties/dart_string",
@@ -51,7 +51,7 @@
     },
     "newchirp_mass_storage.py": {
       "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1793961133640721727,
+      "mtime_ns": 1792893456081463146,
       "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
       "concept_ids": [
         "newchirp_mass_storage/CS750Profile",
@@ -78,7 +78,7 @@
     },
     "newchirp_usb_dfu.py": {
       "path": "newchirp_usb_dfu.py",
-      "mtime_ns": 1793961133640816933,
+      "mtime_ns": 1793532981625641026,
       "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
       "concept_ids": [
         "newchirp_usb_dfu/DeviceDescriptor",
@@ -111,8 +111,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793962028368955710,
-      "hash": "153d17369f3225980f96145ac76bd707e90dc0ef32884d78dd0c895ea5da49e1",
+      "mtime_ns": 1793987491410269047,
+      "hash": "0e4db47c304c6ff8b2239f8bf06e4f751ba9f3148bb87920cc115a4d98cb341d",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -1323,7 +1323,15 @@
       "render_hash": "stale",
       "edge_hash": "e17b8b4d8413c816dea57ecb28e57934a27c2fca4fe68c0c5f8fa25f4349bcc5",
       "enriched": false
+    },
+    "chirp_bridge/link_subdevice_metadata": {
+      "concept_id": "chirp_bridge/link_subdevice_metadata",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "7932be4a6a23d5571caa64a385a17cf316ccd2c5870e2db2eea5fe4b8b72d38e",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-06T10:47:14Z"
+  "generated_at": "2026-11-06T17:51:32Z"
 }

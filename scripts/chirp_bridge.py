@@ -443,15 +443,18 @@ def bridge_error_message(exc, command=None, model=None, port=None):
         and model == "Baofeng_BF-F8HP-PRO"
         and "no response from radio" in message.lower()
     ):
+        selected_port = str(port or "the selected COM port")
         message = (
             "No response from the BF-F8HP-PRO. Confirm that the radio label "
             "includes PRO. The older BF-F8HP is a different model and uses "
             "the separate Baofeng BF-F8HP entry. For the PRO, fully insert "
             "the two-pin programming cable, turn the radio on to a normal "
-            "channel, close the Baofeng CPS, and keep COM4 selected. "
-            "NewChirp currently supports the PRO protocol through firmware "
-            "v0.52; if the radio has newer firmware, include the firmware "
-            "version shown on the radio in the support report."
+            "channel, close the Baofeng CPS, and keep %s selected. "
+            "If the Baofeng CPS can read the radio, compare its COM port and "
+            "programming-cable driver with NewChirp. NewChirp currently "
+            "supports the PRO protocol through firmware v0.52; include the "
+            "firmware version shown on the radio in the support report."
+            % selected_port
         )
     if (
         command == "download"
@@ -712,7 +715,7 @@ def external_memory_owner(radio):
         and hasattr(parent, "_metadata")
     ):
         return parent
-    return radio
+    return None
 
 
 def memory_with_extras(radio, number):
