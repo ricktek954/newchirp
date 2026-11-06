@@ -68,12 +68,14 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The Windows `1.0.41` installer is live from source commit `4fc6177f`.
-  It adds the CPS-derived Wouxun KG-Q10H driver, read-only Radtel RT-860
-  support, the experimental KSUN UV-K60 UV-K5 rebrand profile, malformed
-  UV-17ProGPS CTCSS handling, cancellable myGMRS sign-in, TD-9800 malformed
-  DTCS handling, expanded UV-K5 and F4HWN support, and updated GM-21 and TD-H3
-  drivers. The versioned installer is `NewChirp-Installer-1.0.41.exe`, SHA-256
+- The cross-platform `1.0.41` release is live from source commit `4fc6177f`.
+  Staged macOS and Linux artifacts became public when the Windows installer
+  completed the release set. Windows adds the CPS-derived Wouxun KG-Q10H
+  driver, read-only Radtel RT-860 support, the experimental KSUN UV-K60 UV-K5
+  rebrand profile, malformed UV-17ProGPS CTCSS handling, cancellable myGMRS
+  sign-in, TD-9800 malformed DTCS handling, expanded UV-K5 and F4HWN support,
+  and updated GM-21 and TD-H3 drivers. The Windows installer is
+  `NewChirp-Installer-1.0.41.exe`, SHA-256
   `1b74852f3201216c8e5e5c8739575516fc39821742400282c4cedf8bbafc5518`,
   size `61,150,266` bytes.
 - myGMRS approved the confidential server-side client and callback on
@@ -93,22 +95,18 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
-- The Linux `1.0.40` DEB, RPM, AppImage, and Pacman artifacts are live from
-  source commit `8fdcef21`. This release includes the experimental Wouxun
-  KG-905G Plus driver, multi-row channel copy/cut/paste and bulk properties
-  editing, the A9305B read checksum correction, UV-5G Mini simplex channels
-  15-22, and TD-H8 Gen 4 read-only identity support.
-- Linux `1.0.40` verification: quick safety scan of the new KG-905G driver and
-  tests found no process execution, network, environment, or arbitrary
-  filesystem access; `flutter analyze` is clean; all 186 Flutter tests pass;
-  all 265 Python tests pass with 2 fixture-dependent skips; embedded
-  `version.json`, package metadata, package payloads, extracted AppImage
-  payload, bundled Python/CHIRP runtime, bundled `libusb-1.0.so.0`, absence of
-  GLib 2.80 once-init pointer symbols, server checksums, public HTTP 200
-  checks, and the live platform manifest were verified.
-- Post-`1.0.40` source adds an experimental `KSUN UV-K60` model profile using
-  the pinned Quansheng UV-K5 transport and memory layout. Physical read/write
-  comparison is still required, and this is not in live artifacts yet.
+- The Linux `1.0.41` DEB, RPM, AppImage, and Pacman artifacts are live from
+  source commit `4fc6177f`. This release includes the CPS-derived Wouxun
+  KG-Q10H driver, read-only Radtel RT-860 support, the experimental KSUN UV-K60
+  UV-K5 rebrand profile, malformed-tone handling, cancellable myGMRS sign-in,
+  and the numeric channel-setting upload correction.
+- Linux `1.0.41` verification: embedded `version.json` reports `1.0.41` / `41`,
+  DEB metadata reports `1.0.41-1`, and the package payload includes the
+  KG-Q10H, RT-860, and UV-17ProGPS compatibility drivers. Live checksums,
+  sizes, public downloads, and the platform manifest were verified.
+- The `1.0.41` artifacts include the experimental `KSUN UV-K60` model profile
+  using the pinned Quansheng UV-K5 transport and memory layout. Physical
+  read/write comparison is still required.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:
@@ -193,7 +191,7 @@ release requirements.
   encoding and response-length rules, build replay fixtures, and record
   static/OEM-capture/physical evidence separately.
 - The Linux `1.0.37` DEB, RPM, AppImage, and Pacman artifacts are superseded
-  by Linux `1.0.40`. The `1.0.37` release was built from `5a5e79a9` and
+  by Linux `1.0.41`. The `1.0.37` release was built from `5a5e79a9` and
   included the RT-950 transport correction while keeping the GLib 2.74 API cap
   so Debian 12/MX Linux systems do not fail at startup with missing
   `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
@@ -226,7 +224,7 @@ release requirements.
 - Branch: `main`
 - macOS `1.0.41` artifact source commit: `4fc6177f`
 - Windows `1.0.41` artifact source commit: `4fc6177f`
-- Linux `1.0.40` artifact source commit: `8fdcef21`
+- Linux `1.0.41` artifact source commit: `4fc6177f`
 - Open pull requests: none
 - Checked-out source version: `1.0.41+41`
 - macOS builds are pinned to CocoaPods with
@@ -259,7 +257,7 @@ macOS artifact:
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.40` artifact (historical):
+Windows artifact:
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.41.exe`
 - Version/build: `1.0.41` / `41`
@@ -286,37 +284,46 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux `1.0.40` artifacts (historical):
+Linux artifacts:
 
 - DEB URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.deb`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.41.deb`
 - RPM URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.rpm`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.41.rpm`
 - AppImage URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.AppImage`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.41.AppImage`
 - Pacman URL:
-  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.pkg.tar.zst`
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.41.pkg.tar.zst`
 
-Linux 1.0.40 SHA-256:
+Linux 1.0.41 SHA-256:
 
 - DEB:
-  `c30ed97a95e406b371c94dccaffa97e9fcaa1c865137431da72fe7fa5a2100ac`
+  `4180a1b1a7960133b4e7cb5e83f49da0dc0f3bed2e4cef17183378f7ab7327c3`
 - RPM:
-  `11225c702eb408e097cb5702264bbad71676ad52203744e6f87886669e39d54b`
+  `71a4cc10351414213cf95e30be15245729500ad4b5e879d54471ab7895c7b0c9`
 - AppImage:
-  `79c272e8fd0cf93a6625b006e30d655aa38db56a2dada65f0192180c72949268`
+  `3e839e0ec46938a38b224091adc8b7886833424cec5e6bc82988fa7b5ff42da5`
 - Pacman:
-  `3f8147564daad683c6d82f8f11d65f894168288bcd8768371e0a47251042c8e8`
+  `260777c04470b0e022d4a606c3fe847dbc05f0096115754e90826f2968a7512c`
 
-Linux 1.0.40 sizes:
+Linux 1.0.41 sizes:
 
-- DEB: `48,412,260` bytes
-- RPM: `38,883,730` bytes
-- AppImage: `144,401,600` bytes
-- Pacman: `46,895,161` bytes
+- DEB: `48,431,176` bytes
+- RPM: `38,899,633` bytes
+- AppImage: `144,417,984` bytes
+- Pacman: `46,918,623` bytes
 
 ## Recently completed
 
+- Published Windows `1.0.41` from source commit `4fc6177f`. Verified installer
+  file/product metadata `1.0.41.0` / `1.0.41`, app version `1.0.41+41`,
+  focused Python driver suites (47 tests), myGMRS Flutter tests, the bundled
+  KG-Q10H and RT-860 payloads, matching local/server SHA-256, public HTTP 200,
+  and the live platform manifest.
+- Published Linux `1.0.41` from source commit `4fc6177f` with DEB, RPM,
+  AppImage, and Pacman `.pkg.tar.zst` artifacts. Verified package metadata,
+  embedded `version.json`, driver payloads, live checksums and sizes, public
+  downloads, and the platform manifest.
 - Published macOS `1.0.41` from source commit `4fc6177f` as a universal
   signed, notarized, stapled DMG. Verified app/build version, the KSUN
   UV-K60 and read-only RT-860 driver payloads, both Python runtimes, universal
