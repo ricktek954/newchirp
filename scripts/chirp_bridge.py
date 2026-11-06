@@ -477,6 +477,20 @@ def bridge_error_message(exc, command=None, model=None, port=None):
         )
     if (
         command in ("download", "read-settings")
+        and model == "Baofeng_UV-5RH"
+        and "no response from radio" in message.lower()
+    ):
+        selected_port = str(port or "the selected COM port")
+        message = (
+            "The radio did not answer the legacy UV-5RH handshake on %s. "
+            "If the label says 5RH Pro, UV-5RH Pro, or UV-5RH Plus, go back "
+            "and select the matching v2 model. Those radios use a different "
+            "encrypted clone protocol and are tested on firmware v2_0_09. "
+            "Close the Baofeng CPS before retrying."
+            % selected_port
+        )
+    if (
+        command in ("download", "read-settings")
         and model == "Wouxun_KG-UVD1P"
         and (
             "failed to read full block" in lowered_message
