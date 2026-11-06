@@ -7316,6 +7316,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   Size? _dialogSize;
   final MapController _mapController = MapController();
   late final MyGmrsService _myGmrs;
+  bool _myGmrsSigningIn = false;
+  bool _myGmrsSignInCancelled = false;
 
   List<String> get _regions => repeaterRegionsForCountry(_country);
 
@@ -7352,6 +7354,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   }
 
   void _selectProvider(_RepeaterProvider provider) {
+    if (_myGmrsSigningIn) {
+      _myGmrs.cancelSignIn();
+      _myGmrsSigningIn = false;
+    }
     setState(() {
       _provider = provider;
       _results = null;
@@ -7368,10 +7374,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   }
 
   Future<void> _signInMyGmrs() async {
+    _myGmrsSignInCancelled = false;
     setState(() {
       _loading = true;
+      _myGmrsSigningIn = true;
       _error = null;
-      _status = 'Opening myGMRS sign-in…';
+      _status = 'Waiting for myGMRS sign-in. You can cancel this attempt.';
     });
     try {
       await _myGmrs.signIn();
@@ -7379,9 +7387,29 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         setState(() => _status = 'Signed in to myGMRS for this session.');
       }
     } catch (error) {
-      if (mounted) setState(() => _error = '$error');
+      if (mounted && !_myGmrsSignInCancelled) {
+        setState(() => _error = '$error');
+      }
     } finally {
-      if (mounted) setState(() => _loading = false);
+      if (mounted) {
+        setState(() {
+          _loading = false;
+          _myGmrsSigningIn = false;
+        });
+      }
+    }
+  }
+
+  void _cancelMyGmrsSignIn() {
+    _myGmrsSignInCancelled = true;
+    _myGmrs.cancelSignIn();
+    if (mounted) {
+      setState(() {
+        _loading = false;
+        _myGmrsSigningIn = false;
+        _status = 'myGMRS sign-in cancelled.';
+        _error = null;
+      });
     }
   }
 
@@ -7417,6 +7445,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     _resultFilterController.dispose();
     _countyFilterController.dispose();
     _mapController.dispose();
+    if (_myGmrsSigningIn) _myGmrs.cancelSignIn();
     super.dispose();
   }
 
@@ -7457,6 +7486,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
     if (distance != null && distance <= 0) {
       setState(() => _error = 'Radius must be greater than zero.');
+      return;
+    }
+    if (_provider == _RepeaterProvider.myGmrs && !_myGmrs.signedIn) {
+      setState(() => _error = 'Sign in to myGMRS before searching.');
       return;
     }
     try {
@@ -7943,18 +7976,24 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   const SizedBox(width: 12),
                                   OutlinedButton.icon(
                                     key: const ValueKey('mygmrs-sign-in'),
-                                    onPressed: _loading
+                                    onPressed: _myGmrsSigningIn
+                                        ? _cancelMyGmrsSignIn
+                                        : _loading
                                         ? null
                                         : _myGmrs.signedIn
                                         ? _signOutMyGmrs
                                         : _signInMyGmrs,
                                     icon: Icon(
-                                      _myGmrs.signedIn
+                                      _myGmrsSigningIn
+                                          ? Icons.cancel_outlined
+                                          : _myGmrs.signedIn
                                           ? Icons.logout
                                           : Icons.login,
                                     ),
                                     label: Text(
-                                      _myGmrs.signedIn
+                                      _myGmrsSigningIn
+                                          ? 'Cancel sign-in'
+                                          : _myGmrs.signedIn
                                           ? 'Sign out'
                                           : 'Sign in to myGMRS',
                                     ),
@@ -8248,6 +8287,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                           if (_loading) ...[
                             const LinearProgressIndicator(),
                             const SizedBox(height: 6),
+                          ],
+                          if (_status.isNotEmpty) ...[
                             Text(
                               _status,
                               style: const TextStyle(color: Colors.black54),
@@ -8440,7 +8481,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                       ),
                       const SizedBox(width: 8),
                       FilledButton.tonalIcon(
-                        onPressed: _loading ? null : _search,
+                        onPressed:
+                            _loading ||
+                                (_provider == _RepeaterProvider.myGmrs &&
+                                    !_myGmrs.signedIn)
+                            ? null
+                            : _search,
                         icon: const Icon(Icons.search),
                         label: const Text('Search'),
                       ),

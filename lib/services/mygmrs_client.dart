@@ -14,6 +14,8 @@ abstract interface class MyGmrsService {
 
   Future<void> signIn();
 
+  void cancelSignIn();
+
   Future<void> signOut();
 
   Future<RepeaterSearchResults> searchRepeaters({
@@ -40,17 +42,21 @@ class MyGmrsClient implements MyGmrsService {
   MyGmrsClient({
     Uri? brokerBase,
     Future<void> Function(Uri uri)? openBrowser,
-    Duration signInTimeout = const Duration(minutes: 5),
+    Duration signInTimeout = const Duration(seconds: 90),
+    Duration signInPollInterval = const Duration(milliseconds: 1200),
   }) : brokerBase = brokerBase ?? Uri.parse(myGmrsBrokerBase),
        _openBrowser = openBrowser ?? _openSystemBrowser,
-       _signInTimeout = signInTimeout;
+       _signInTimeout = signInTimeout,
+       _signInPollInterval = signInPollInterval;
 
   final Uri brokerBase;
   final Future<void> Function(Uri uri) _openBrowser;
   final Duration _signInTimeout;
+  final Duration _signInPollInterval;
 
   String? _sessionToken;
   DateTime? _sessionExpiresAt;
+  int _signInAttempt = 0;
   static final _zipCodePattern = RegExp(r'^\d{5}(?:-\d{4})?$');
 
   @override
@@ -60,6 +66,7 @@ class MyGmrsClient implements MyGmrsService {
 
   @override
   Future<void> signIn() async {
+    final attempt = ++_signInAttempt;
     final start = await _postJson('/api/mygmrs/oauth/start', const {});
     final handoffToken = '${start['handoffToken'] ?? ''}';
     final authorizeUrl = Uri.tryParse('${start['authorizeUrl'] ?? ''}');
@@ -73,7 +80,9 @@ class MyGmrsClient implements MyGmrsService {
     await _openBrowser(authorizeUrl);
     final deadline = DateTime.now().add(_signInTimeout);
     while (DateTime.now().isBefore(deadline)) {
-      await Future<void>.delayed(const Duration(milliseconds: 1200));
+      if (attempt != _signInAttempt) _throwSignInCancelled();
+      await Future<void>.delayed(_signInPollInterval);
+      if (attempt != _signInAttempt) _throwSignInCancelled();
       final poll = await _jsonRequest(
         'POST',
         brokerBase.replace(path: '/api/mygmrs/oauth/poll'),
@@ -83,6 +92,7 @@ class MyGmrsClient implements MyGmrsService {
       );
       if (poll.statusCode == HttpStatus.accepted) continue;
       if (poll.statusCode == HttpStatus.ok) {
+        if (attempt != _signInAttempt) _throwSignInCancelled();
         _storeSession(poll.body);
         return;
       }
@@ -96,6 +106,15 @@ class MyGmrsClient implements MyGmrsService {
     throw const MyGmrsException(
       'myGMRS sign-in timed out. Return to NewChirp and try again.',
     );
+  }
+
+  void _throwSignInCancelled() {
+    throw const MyGmrsException('myGMRS sign-in was cancelled.');
+  }
+
+  @override
+  void cancelSignIn() {
+    _signInAttempt++;
   }
 
   void _storeSession(Map<String, dynamic> response) {
@@ -112,6 +131,7 @@ class MyGmrsClient implements MyGmrsService {
 
   @override
   Future<void> signOut() async {
+    _signInAttempt++;
     final sessionToken = _sessionToken;
     _sessionToken = null;
     _sessionExpiresAt = null;
