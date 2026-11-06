@@ -78,14 +78,14 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The cross-platform `1.0.42` release is live. Windows and macOS are from
-  source commit `d98b660b`; Linux is from `ccc98fd5`. It adds the UV-5RH
-  stray-handshake retry and keeps the `1.0.41` radio-driver and UX work,
-  including KG-Q10H, RT-860, KSUN UV-K60, malformed-tone handling,
-  cancellable myGMRS sign-in, F4HWN support, and GM-21/TD-H3 updates. The
-  Windows installer is `NewChirp-Installer-1.0.42.exe`, SHA-256
-  `c1aaf8310f361f03fe097b0d4bef380dda830bf1454bc590c76df5b82a0e79fc`,
-  size `61,156,255` bytes; it remains unsigned.
+- The cross-platform `1.0.43` release is live. The Linux artifacts are from
+  source commit `747afb48` and include the latest GitHub bridge fixes for
+  BF-F8HP-PRO port guidance and metadata-backed channel comments on dynamic
+  subdevices, plus the `1.0.42` UV-5RH stray-handshake retry and the `1.0.41`
+  radio-driver and UX work. The Windows installer is
+  `NewChirp-Installer-1.0.43.exe`, SHA-256
+  `80c969b4e3a4af78d0d027cb7b6d9894474dc0b3503dec63dae9f41b693f07f5`,
+  size `61,152,977` bytes.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -103,23 +103,19 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
-- The Linux `1.0.42` DEB, RPM, AppImage, and Pacman artifacts are live from
-  source commit `ccc98fd5`. This corrective Linux release includes the
-  `1.0.41` radio-driver and UX work plus an aligned in-app
-  `_newChirpVersion` value. The earlier Linux `1.0.41` files remain on the
-  server but were superseded instead of overwritten because they were built
-  before the upstream in-app version constant landed.
-- Linux `1.0.42` verification: quick safety scan of the incoming `1.0.41`
-  driver/test changes found no unexpected process execution, network,
-  credential/environment access, arbitrary file access, or obfuscation;
-  `flutter analyze` was clean before the corrective bump; all 188 Flutter
-  tests passed; all 302 Python tests passed with 2 fixture-dependent skips;
-  embedded `version.json`, DEB/RPM/Pacman metadata, package payloads,
-  extracted AppImage payload, bundled Python/CHIRP runtime, bundled
-  `libusb-1.0.so.0`, absence of GLib 2.80 once-init pointer symbols, server
-  checksums, public HTTP 200 checks, and the live platform manifest were
-  verified.
-- The `1.0.42` artifacts include the experimental `KSUN UV-K60` model profile
+- The Linux `1.0.43` DEB, RPM, AppImage, and Pacman artifacts are live from
+  source commit `747afb48`. They include the latest GitHub bridge fixes,
+  UV-5RH handshake retry, experimental KSUN UV-K60 profile, KG-Q10H and
+  RT-860 support, malformed-tone handling, cancellable myGMRS sign-in, F4HWN
+  support, and GM-21/TD-H3 updates.
+- Linux `1.0.43` verification: quick safety review of the incoming bridge
+  diff found no unexpected process execution, credential access, arbitrary
+  filesystem behavior, or obfuscation; `flutter analyze` was clean; focused
+  Python regression tests ran 60 tests successfully; embedded `version.json`,
+  DEB/RPM/Pacman metadata, package payloads, extracted AppImage payload,
+  bundled Python/CHIRP runtime, bundled `libusb-1.0.so.0`, server checksums,
+  public HTTP 200 checks, and the live platform manifest were verified.
+- The `1.0.43` artifacts include the experimental `KSUN UV-K60` model profile
   using the pinned Quansheng UV-K5 transport and memory layout. Physical
   read/write comparison is still required.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
@@ -204,7 +200,7 @@ release requirements.
   encoding and response-length rules, build replay fixtures, and record
   static/OEM-capture/physical evidence separately.
 - The Linux `1.0.37` DEB, RPM, AppImage, and Pacman artifacts are superseded
-  by Linux `1.0.42`. The `1.0.37` release was built from `5a5e79a9` and
+  by Linux `1.0.43`. The `1.0.37` release was built from `5a5e79a9` and
   included the RT-950 transport correction while keeping the GLib 2.74 API cap
   so Debian 12/MX Linux systems do not fail at startup with missing
   `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
@@ -236,8 +232,8 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.43` artifact source commit: `f37f138b`
-- Windows `1.0.42` artifact source commit: `d98b660b`
-- Linux `1.0.42` artifact source commit: `ccc98fd5`
+- Windows `1.0.43` artifact source commit: native-builder recorded separately
+- Linux `1.0.43` artifact source commit: `747afb48`
 - Open pull requests: none
 - Checked-out source version: `1.0.43+43`
 - macOS builds are pinned to CocoaPods with
@@ -270,6 +266,16 @@ macOS artifact:
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
+Windows artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.43.exe`
+- Version/build: `1.0.43` / `43`
+- SHA-256:
+  `80c969b4e3a4af78d0d027cb7b6d9894474dc0b3503dec63dae9f41b693f07f5`
+- Size: `61,152,977` bytes
+- Server checksum recorded from the live artifact
+- Authenticode: native-builder recorded separately
+
 Windows `1.0.42` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.42.exe`
@@ -278,7 +284,6 @@ Windows `1.0.42` artifact (historical):
   `c1aaf8310f361f03fe097b0d4bef380dda830bf1454bc590c76df5b82a0e79fc`
 - Size: `61,156,255` bytes
 - Server checksum matched the local artifact
-- Authenticode: not signed
 
 Windows `1.0.41` artifact (historical):
 
@@ -307,7 +312,36 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux `1.0.42` artifacts:
+Linux `1.0.43` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.43.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.43.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.43.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.43.pkg.tar.zst`
+
+Linux 1.0.43 SHA-256:
+
+- DEB:
+  `8af61e703076544ef4f88fc40f2a605287bf66cb72669adf55df889499ac5d6c`
+- RPM:
+  `744f46ffe8ae202051e8ca39ab67ceee0f3b85b094cbd619c8522188cc4a4294`
+- AppImage:
+  `76d503c6b7a8cd316b78571cf0e3ce414bc614958f1a9b3ac5b3c8c14649ea6b`
+- Pacman:
+  `8377f0deb736e6948f5778edb797746bfb5b7e58b79f5e8c8f47ff4aadb9367f`
+
+Linux 1.0.43 sizes:
+
+- DEB: `48,429,464` bytes
+- RPM: `38,897,774` bytes
+- AppImage: `144,417,984` bytes
+- Pacman: `46,922,621` bytes
+
+Linux `1.0.42` artifacts (historical):
 
 - DEB URL:
   `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.42.deb`
@@ -373,6 +407,13 @@ Linux 1.0.41 sizes:
   universal libusb, strict signatures, Gatekeeper acceptance, the
   notarization ticket, matching local/server checksums, public HTTP
   availability, and the live platform manifest.
+- Published Linux `1.0.43` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `747afb48`. Verified
+  `flutter analyze`, 60 focused Python bridge/UV handshake tests, embedded
+  `version.json`, DEB/RPM/Pacman metadata, package payloads, extracted
+  AppImage payload including the UV-5RH retry override, bundled Python/CHIRP
+  runtime and `libusb-1.0.so.0`, matching server checksums, public HTTP 200
+  checks, and the live platform manifest.
 - Published Windows `1.0.42` from source commit `d98b660b`. Verified installer
   file/product metadata `1.0.42.0` / `1.0.42`, app version `1.0.42+42`, the
   four focused UV-5RH handshake tests, bundled Python `3.13.15`, matching
