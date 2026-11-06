@@ -478,11 +478,14 @@ class UploadHandshakeTest(unittest.TestCase):
             self.errors.RadioNoResponse(),
             command="download",
             model="Baofeng_BF-F8HP-PRO",
+            port="COM8",
         )
 
         self.assertIn("includes PRO", message)
         self.assertIn("separate Baofeng BF-F8HP entry", message)
         self.assertIn("firmware v0.52", message)
+        self.assertIn("keep COM8 selected", message)
+        self.assertNotIn("COM4", message)
 
     def test_uv5r_mini_timeout_checks_for_the_usb_com_port(self):
         message = bridge.bridge_error_message(
@@ -743,6 +746,15 @@ class UploadHandshakeTest(unittest.TestCase):
         restored = bridge.memory_with_extras(channel_radio, 1)
 
         self.assertEqual(restored.comment, "Zone A repeater")
+
+    def test_dynamic_tkx160_zone_uses_parent_metadata(self):
+        image = SOURCE / "tests/images/Kenwood_TK-7160K.img"
+        radio = self.directory.get_radio_by_image(str(image))
+        channel_radio, zones, _selected_zone = bridge.channel_context(radio)
+
+        self.assertTrue(zones)
+        memory = bridge.memory_with_extras(channel_radio, 1)
+        self.assertEqual(memory.number, 1)
 
     def test_live_radio_gets_headless_sync_interface(self):
         from chirp import chirp_common
