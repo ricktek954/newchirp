@@ -53,6 +53,20 @@ class EmailTriageCompatibilityTest(unittest.TestCase):
         self.assertEqual(memory.rtone, 88.5)
         self.assertEqual(memory.ctone, 88.5)
 
+    def test_th9800_reserved_dtcs_does_not_abort_channel_read(self):
+        radio = self.directory.get_radio_by_image(
+            str(IMAGES / "TYT_TH-9800.img")
+        )
+        radio._memobj.memory[0].dtcs.set_raw(b"\x30\x12")
+
+        memory = radio.get_memory(1)
+
+        self.assertFalse(memory.empty)
+        self.assertEqual(memory.freq, 144_000_000)
+        self.assertEqual(memory.dtcs, 23)
+        # Keep the malformed DTCS field unchanged in the saved radio image.
+        self.assertEqual(int(radio._memobj.memory[0].dtcs), 1230)
+
     def test_vx6_unprogrammable_slot_does_not_abort_radio_read(self):
         radio = self.directory.get_radio_by_image(
             str(IMAGES / "Yaesu_VX-6.img")
