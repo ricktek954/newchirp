@@ -47,6 +47,7 @@ Last updated: 2026-11-06
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
+| Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image; invisible-slot guard | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -1176,6 +1177,45 @@ Last updated: 2026-11-06
   CPS export, and verify all 400 slots and preserved settings in a controlled
   write/read-back.
 - Website catalog: not listed
+
+### Wouxun KG-Q10H
+
+- Maintained driver: `drivers/newchirp_kgq10h.py`
+- Protocol notes: `docs/KGQ10H_PROTOCOL.md`
+- Driver SHA-256:
+  `2e16877778f29f660db9934797f5c912b4de86ccccdad150f3a1c184209f254d`
+- Official programming software:
+  `kg-q10h_setup_v2_1_.02.02_20231115_.zip`, SHA-256
+  `a83483f9393fc4ff794faa2c0a703017a0f3bec7f054f62767bb2548b60807e7`
+- Installer SHA-256:
+  `7f2bdd283ef839d5ef61b6b6b20dd5ae2c13c754cdbeabb0a2f30654a8aa816b`
+- Extracted CPS SHA-256:
+  `2314ca128659c470ab4a8ca592d0751cb4f8b1e9f48fc8418871cd055a194ed6`
+- Transport: Wouxun encrypted clone serial, 115200 8N1, DTR/RTS asserted,
+  64-byte reads and 32-byte writes
+- Image: `0x8000` bytes. The CPS reads a 256-byte identity region at `0x0340`
+  but never uploads it.
+- Implemented: 999 channels, 12-byte names, receive/transmit frequencies,
+  CTCSS/DCS and cross tones, four power levels, FM/NFM/AM, and scan skip.
+  Unknown channel bits and all hidden program-memory regions are preserved.
+- Read policy: read the identity region followed by the nine program-data
+  ranges assigned by `ReadFreqData_Init`.
+- Write policy: write only those nine program-data ranges and never write the
+  identity/calibration region. Transmit is limited to the KG-Q10H amateur
+  bands.
+- Evidence: REA 6.5.0 managed metadata/CIL inspection of the official CPS.
+  The IL traces cover serial setup, request construction, chained encryption,
+  receive fragmentation and completion, checksum validation, retry timing,
+  identity parsing, channel serialization, and all memory-region boundaries.
+- Offline validation: CPS frame vectors, fragmented responses, all checksum
+  and address checks, all read/write boundaries, 1,000-slot bounds, tones,
+  modes, power, unknown-bit preservation, and malformed-image no-write tests.
+- Hardware validation: pending. The upstream prototype claimed physical
+  round trips, but its seed and checksum differed from the official CPS and
+  do not validate this implementation.
+- Next milestone: open the reporter's saved image, complete a physical read,
+  compare channels with the CPS, then perform one controlled write/read-back.
+- Website catalog: add as experimental when this driver is released.
 
 ### Motorola MOTOTRBO R7
 
