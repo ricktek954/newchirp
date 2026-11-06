@@ -95,16 +95,23 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
-- The Linux `1.0.41` DEB, RPM, AppImage, and Pacman artifacts are live from
-  source commit `4fc6177f`. This release includes the CPS-derived Wouxun
-  KG-Q10H driver, read-only Radtel RT-860 support, the experimental KSUN UV-K60
-  UV-K5 rebrand profile, malformed-tone handling, cancellable myGMRS sign-in,
-  and the numeric channel-setting upload correction.
-- Linux `1.0.41` verification: embedded `version.json` reports `1.0.41` / `41`,
-  DEB metadata reports `1.0.41-1`, and the package payload includes the
-  KG-Q10H, RT-860, and UV-17ProGPS compatibility drivers. Live checksums,
-  sizes, public downloads, and the platform manifest were verified.
-- The `1.0.41` artifacts include the experimental `KSUN UV-K60` model profile
+- The Linux `1.0.42` DEB, RPM, AppImage, and Pacman artifacts are live from
+  source commit `ccc98fd5`. This corrective Linux release includes the
+  `1.0.41` radio-driver and UX work plus an aligned in-app
+  `_newChirpVersion` value. The earlier Linux `1.0.41` files remain on the
+  server but were superseded instead of overwritten because they were built
+  before the upstream in-app version constant landed.
+- Linux `1.0.42` verification: quick safety scan of the incoming `1.0.41`
+  driver/test changes found no unexpected process execution, network,
+  credential/environment access, arbitrary file access, or obfuscation;
+  `flutter analyze` was clean before the corrective bump; all 188 Flutter
+  tests passed; all 302 Python tests passed with 2 fixture-dependent skips;
+  embedded `version.json`, DEB/RPM/Pacman metadata, package payloads,
+  extracted AppImage payload, bundled Python/CHIRP runtime, bundled
+  `libusb-1.0.so.0`, absence of GLib 2.80 once-init pointer symbols, server
+  checksums, public HTTP 200 checks, and the live platform manifest were
+  verified.
+- The `1.0.42` artifacts include the experimental `KSUN UV-K60` model profile
   using the pinned Quansheng UV-K5 transport and memory layout. Physical
   read/write comparison is still required.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
@@ -191,7 +198,7 @@ release requirements.
   encoding and response-length rules, build replay fixtures, and record
   static/OEM-capture/physical evidence separately.
 - The Linux `1.0.37` DEB, RPM, AppImage, and Pacman artifacts are superseded
-  by Linux `1.0.41`. The `1.0.37` release was built from `5a5e79a9` and
+  by Linux `1.0.42`. The `1.0.37` release was built from `5a5e79a9` and
   included the RT-950 transport correction while keeping the GLib 2.74 API cap
   so Debian 12/MX Linux systems do not fail at startup with missing
   `g_once_init_enter_pointer` / `g_once_init_leave_pointer` symbols.
@@ -224,9 +231,9 @@ release requirements.
 - Branch: `main`
 - macOS `1.0.41` artifact source commit: `4fc6177f`
 - Windows `1.0.41` artifact source commit: `4fc6177f`
-- Linux `1.0.41` artifact source commit: `4fc6177f`
+- Linux `1.0.42` artifact source commit: `ccc98fd5`
 - Open pull requests: none
-- Checked-out source version: `1.0.41+41`
+- Checked-out source version: `1.0.42+42`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -242,7 +249,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.41 |
 | Windows | 1.0.41 |
-| Linux | 1.0.41 |
+| Linux | 1.0.42 |
 | Legacy shared manifest version | 1.0.41 |
 
 macOS artifact:
@@ -257,7 +264,7 @@ macOS artifact:
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows artifact:
+Windows `1.0.41` artifact:
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.41.exe`
 - Version/build: `1.0.41` / `41`
@@ -284,7 +291,36 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux artifacts:
+Linux `1.0.42` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.42.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.42.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.42.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.42.pkg.tar.zst`
+
+Linux 1.0.42 SHA-256:
+
+- DEB:
+  `012d0c716e22eaa0c726668ddeebf2d348779764440ee870ed41874547bc5356`
+- RPM:
+  `0c0487b8f0ef6d6a51b1b94a44786309a070d5c3549997a80b3b33a0efc08c86`
+- AppImage:
+  `b62094f5f5df7833ae8b7043d37af2a8b38ffe038372f8aa2a55016ccc0a60ac`
+- Pacman:
+  `90bf7df07cec69f5fac33fe2438f366a9cb2730b40638dfe5ce203d12d071900`
+
+Linux 1.0.42 sizes:
+
+- DEB: `48,428,642` bytes
+- RPM: `38,900,093` bytes
+- AppImage: `144,417,984` bytes
+- Pacman: `46,918,355` bytes
+
+Linux `1.0.41` artifacts (historical):
 
 - DEB URL:
   `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.41.deb`
@@ -315,6 +351,15 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Linux `1.0.42` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `ccc98fd5`. This supersedes the
+  same-day Linux `1.0.41` files without overwriting them because the first
+  Linux `1.0.41` build had correct package metadata but was built before the
+  app's in-code version constant was updated. Verified embedded
+  `version.json`, DEB/RPM/Pacman metadata, package payloads, extracted
+  AppImage payload, bundled Python/CHIRP runtime and `libusb-1.0.so.0`,
+  absence of GLib 2.80 once-init pointer symbols, server checksums, public
+  HTTP 200 checks, and the live platform manifest.
 - Published Windows `1.0.41` from source commit `4fc6177f`. Verified installer
   file/product metadata `1.0.41.0` / `1.0.41`, app version `1.0.41+41`,
   focused Python driver suites (47 tests), myGMRS Flutter tests, the bundled
