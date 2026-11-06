@@ -1516,6 +1516,14 @@ def _mapping_index_key(index):
     return str(index)
 
 
+def display_mapping_name(value):
+    """Return a safe display name for a CHIRP bank or zone."""
+    text = str(value).split("\x00", 1)[0].replace("\xff", "").strip()
+    return "".join(
+        character if character.isprintable() else "?" for character in text
+    )
+
+
 def mapping_payload(radio):
     """Describe CHIRP's bank/zone models for an image or channel owner."""
     from chirp import chirp_common
@@ -1536,7 +1544,7 @@ def mapping_payload(radio):
                 locations = [int(memory.number) for memory in members]
                 mappings_json.append({
                     "index": _mapping_index_key(mapping.get_index()),
-                    "name": str(mapping.get_name()),
+                    "name": display_mapping_name(mapping.get_name()),
                     "channelLocations": list(dict.fromkeys(locations)),
                     "nameEditable": (
                         editable
@@ -1579,7 +1587,7 @@ def apply_mapping_payload(radio, requested_models, active_locations):
     banks. Removing memberships happens before additions, which also supports
     one-bank-per-channel models when a channel moves between banks.
     """
-    from chirp import chirp_common
+    from chirp import chirp_common, errors
 
     active_locations = {int(location) for location in active_locations}
     models = _mapping_models_by_index(radio)
@@ -1699,14 +1707,35 @@ def apply_mapping_payload(radio, requested_models, active_locations):
             }
             for location in entry["locations"]:
                 if location not in current_locations:
-                    model.add_memory_to_mapping(
-                        radio.get_memory(location), mapping
-                    )
+                    try:
+                        model.add_memory_to_mapping(
+                            radio.get_memory(location), mapping
+                        )
+                    except errors.RadioError as exc:
+                        message = str(exc)
+                        if " is full" not in message:
+                            raise
+                        name = display_mapping_name(mapping.get_name())
+                        capacity = re.search(
+                            r"\((\d+) channels\)", message
+                        )
+                        limit = (
+                            "This radio allows at most %s channels per zone."
+                            % capacity.group(1)
+                            if capacity
+                            else "This radio limits the channels in each zone."
+                        )
+                        raise RuntimeError(
+                            "Zone %r is full. %s Remove at least one channel "
+                            "from this zone or place the additional channels "
+                            "in another zone, then try the write again."
+                            % (name, limit)
+                        ) from exc
 
         for key, entry in desired.items():
             mapping = entry["mapping"]
             if (
-                entry["name"] != str(mapping.get_name())
+                entry["name"] != display_mapping_name(mapping.get_name())
                 and callable(getattr(mapping, "set_name", None))
             ):
                 mapping.set_name(entry["name"])

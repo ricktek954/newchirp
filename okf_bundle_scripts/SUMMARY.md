@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 140 concepts across 6 domains and 6 modules'
-git_branch: main
+description: 'Top-level OKF summary: 141 concepts across 6 domains and 6 modules'
+git_branch: HEAD
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-06T10:28:28Z'
+timestamp: '2026-11-06T10:47:14Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 140 concepts | 6 domains | 6 modules
+> OKF v0.2 bundle | 141 concepts | 6 domains | 6 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 121 |
+| Function | 122 |
 | Class | 13 |
 | Module | 6 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 140 |
+| python | 141 |
 
 ## Domain Map
 
@@ -32,9 +32,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [build_macos_dmg](build_macos_dmg/index.md) (4 concepts) — Build a styled NewChirp macOS DMG with a drag-to-Applications window.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 69 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 70 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (69 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (70 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [generate_gmrs_frs_pdf.py](generate_gmrs_frs_pdf.py/index.md) — 15 concepts
 
