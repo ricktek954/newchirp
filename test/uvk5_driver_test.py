@@ -6,6 +6,7 @@ import importlib.util
 from pathlib import Path
 import sys
 import unittest
+from unittest import mock
 
 
 from chirp_test_source import chirp_source
@@ -82,6 +83,29 @@ class UVK5DriverTest(unittest.TestCase):
         self.assertTrue(
             getattr(self.uvk5._sayhello, "newchirp_hello_retry", False)
         )
+
+    def test_ksun_uvk60_is_a_uvk5_rebrand_profile(self):
+        radio_class = self.directory.get_radio("KSUN_UV-K60")
+
+        self.assertTrue(issubclass(radio_class, self.uvk5.UVK5Radio))
+        self.assertEqual(radio_class.VENDOR, "KSUN")
+        self.assertEqual(radio_class.MODEL, "UV-K60")
+        self.assertEqual(radio_class.BAUD_RATE, self.uvk5.UVK5Radio.BAUD_RATE)
+        self.assertIn(
+            "Quansheng UV-K5-family rebrand",
+            radio_class.get_prompts().experimental,
+        )
+
+    def test_ksun_uvk60_keeps_its_profile_after_download_probe(self):
+        radio_class = self.directory.get_radio("KSUN_UV-K60")
+
+        with mock.patch.object(self.uvk5, "_sayhello", return_value="2.01.26"):
+            self.assertIs(radio_class.detect_from_serial(None), radio_class)
+        with mock.patch.object(self.uvk5, "_sayhello", return_value="unknown"):
+            self.assertIs(
+                radio_class.detect_from_serial(None),
+                self.uvk5.UVK5RestrictedRadio,
+            )
 
     def test_hello_retries_after_reply_without_printable_firmware(self):
         serial = _SequenceSerial([
