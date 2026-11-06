@@ -28,6 +28,7 @@
 - [channel_radio_for](channel_radio_for.md) — Return the radio object that owns channel memories.
 - [channel_validation_message](channel_validation_message.md) — Add a frequency suggestion to CHIRP's unsupported-step error.
 - [close](close.md)
+- [coerce_setting_value](coerce_setting_value.md) — Match JSON values to labels or native option values.
 - [download_decode_error_message](download_decode_error_message.md) — Explain a post-download map failure without losing the saved image.
 - [emit_progress](emit_progress.md) — Send structured transfer progress without touching the JSON stdout.
 - [emit_read_ready](emit_read_ready.md) — Tell the user when a manual PTT-triggered clone read can begin.
