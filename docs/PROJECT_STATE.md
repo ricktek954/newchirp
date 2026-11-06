@@ -15,10 +15,14 @@ release requirements.
   firmware's 1,024-channel `0xB190` memory map, 128-byte transfers, and a
   write ceiling of `0xA178` so calibration is preserved. Offline protocol
   coverage uses the reporter's exact hello frame. Physical read/write and
-  read-back validation are still pending.
+  read-back validation are still pending. The reply to rfox@foxconsult.eu is
+  in `Sent` as UID 296, and the original UID 464 is verified `\Seen`.
 - Verification for the F4HWN 6.3 profile: the complete Python suite ran 278
   tests with 2 fixture-dependent skips, `flutter analyze` is clean, and all
   186 Flutter tests pass.
+- After UID 464, 11 matching reports remain unread because they require
+  Windows or Linux diagnosis: UIDs 446, 447, 450, 451, 452, 455, 456, 457,
+  461, 462, and 463.
 - The 2026-11-06 email triage found 16 unread bug-report messages. UID 448
   (macOS DM-32UV zone capacity) received an explanation of the radio's
   64-members-per-zone limit. UIDs 459 and 460 (Quansheng TK11) exposed a
