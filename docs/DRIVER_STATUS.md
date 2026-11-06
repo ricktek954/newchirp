@@ -23,6 +23,7 @@ Last updated: 2026-11-06
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
+| Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
@@ -336,6 +337,41 @@ Last updated: 2026-11-06
 - Next milestone: confirm the reported RT-950 model code, classify any
   variant that does not answer the `BT-9000` handshake, then capture a
   complete successful read and export a test image
+
+### Radtel RT-860
+
+- Maintained driver: `drivers/newchirp_rt860.py`
+- Protocol notes: `docs/RT860_PROTOCOL.md`
+- Evidence: official RT-860 CPS V1.06 (2025-06-20), .NET metadata and CIL
+- CPS artifact SHA-256:
+  `4a5a4b00a79fa4f6aae8ab77ae40cbaa954033b0089a3250e0a02448ae478a26`
+- Extracted CPS executable SHA-256:
+  `f9b3d9d3fadae96caa3a1a0480a0f8a8622957d2142a745e70c1b711393ada69`
+- Transport: 115200 8N1, DTR asserted, RTS not asserted, no hardware or
+  XON/XOFF flow control
+- Handshake: `34 52 05 10 9B`, one-byte ACK `06`; exit is
+  `34 52 05 EE 79`
+- Read blocks: 1,028-byte binary frames with an echoed `52` page header,
+  1,024-byte payload, and one-byte additive checksum over the first 1,027
+  bytes
+- Read strategy: the exact OEM sparse 184-page sequence for settings,
+  1,024 channels, 256 zones, and 128 broadcast memories
+- Implemented: receive/transmit frequency, duplex, CTCSS/DCS, FM/NFM/AM/USB,
+  Low/High power, scan skip, 16-character GBK names, channel extras inherited
+  from the shared RT-880G record layout, and GBK zone membership
+- Read/write state: read implemented; every upload entry point is disabled.
+  The CPS write opcodes are recorded but the password branch and complete
+  acknowledgement flow are not yet validated.
+- Offline validation: registration, serial policy, exact sparse-page order,
+  fragmented 1,028-byte responses, malformed checksums, wrong page echoes,
+  short responses, channel decoding, zone decoding, GBK names, and write
+  rejection
+- Hardware validation: none. No RT-860 serial capture or physical read is
+  recorded.
+- Unresolved: LSB/USB/CW selection, setting-block semantics, unknown channel
+  bytes, and the complete upload state machine
+- Next milestone: capture the OEM reading a physical RT-860, compare an
+  unedited NewChirp read with the CPS export, then replay-test the write path
 
 ### Retevis MA1 and MA1 model A9305B
 
