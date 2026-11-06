@@ -35,6 +35,7 @@ Last updated: 2026-11-06
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1 | 640 channels + 10 zones, offline-tested | Full image, offline-tested | Basic settings and zone names | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5RH | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-17ProGPS | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv17progps_compat.py` | UV-17-family serial, 115200 8N1 | Malformed CTCSS values no longer abort channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -68,6 +69,30 @@ Last updated: 2026-11-06
 | Yaesu VX-6 | Pinned CHIRP `vx6.py` with `drivers/newchirp_vx6_compat.py` | Yaesu clone serial, 19200 8N1 | Unprogrammable stored slots are treated as empty | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 
 ## Radio details
+
+### Baofeng 5RH Pro v2 family
+
+- Maintained driver: `drivers/newchirp_baofeng_5rh_pro.py`
+- Protocol notes: `docs/BAOFENG_5RH_PRO_PROTOCOL.md`
+- Official CPS: `Baofeng_UV-5RM_Plus_GPS_CPS_V1.17.zip`, SHA-256
+  `12dbcbce64381d03e1922e481ddc7455da04755244efa5090bcdd372528318cb`
+- Extracted CPS executable SHA-256:
+  `0a455577b791204c42f538b04e23bfd83fef4d509f8826d753a5379d92981300`
+- Driver SHA-256:
+  `b9e74ca2e6d367ca205bae3dbac83f641745185157ff32b5efe413307198e10d`
+- Transport: 115200 then 19200 baud, 8N1, DTR and RTS asserted
+- Implemented: `A` announce, seeded `PROGRAM` handshake,
+  `INFORMATION` model stage, read/write direction, twelve encrypted
+  4,100-byte image blocks, 640 channels, ten zones, basic settings, and
+  the separate boot-image write path
+- Read/write policy: full-image read and write; existing channels preserve
+  firmware fields without established semantics
+- Evidence: official CPS V1.17 CIL/PDB analysis plus public CHIRP PR 1625
+  hardware testing on firmware `v2_0_09`
+- NewChirp hardware validation: none. Offline protocol and image tests pass.
+- Next milestone: the 2026-11-06 UV-5RH Pro reporter completes a read,
+  compares channels with the radio, edits one unused channel, uploads it,
+  reads it back, and verifies it on the radio.
 
 ### Baofeng UV-5RM Plus and UV-5RH
 

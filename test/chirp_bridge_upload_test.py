@@ -498,6 +498,18 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertIn("newly appears", message)
         self.assertIn("Bluetooth serial port", message)
 
+    def test_uv5rh_timeout_points_pro_owners_to_v2_model(self):
+        message = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(),
+            command="download",
+            model="Baofeng_UV-5RH",
+            port="COM6",
+        )
+
+        self.assertIn("legacy UV-5RH handshake on COM6", message)
+        self.assertIn("select the matching v2 model", message)
+        self.assertIn("firmware v2_0_09", message)
+
     def test_setting_error_names_the_rejected_setting_and_value(self):
         from chirp.settings import RadioSetting, RadioSettingValueList
 

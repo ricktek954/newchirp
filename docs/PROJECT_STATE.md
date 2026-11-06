@@ -8,6 +8,14 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-06 UV-5RH Pro report on 1.0.43 still used the legacy
+  `Baofeng_UV-5RH` entry. Official 5RH PRO CPS V1.17 uses an `A` announce,
+  a seeded `PROGRAM` handshake, password and `INFORMATION` stages, then
+  encrypted 4,100-byte clone blocks. The experimental
+  `Baofeng_UV-5RH_Pro`, `Baofeng_5RH_Pro`, `Baofeng_UV-5RH_Plus`, and
+  `Baofeng_UV-5RM_Plus_v2` entries now use that protocol. The public CHIRP
+  contributor reports hardware validation on firmware v2_0_09; NewChirp
+  physical validation is still pending.
 - The 2026-11-06 Kenwood TK-7160K report downloaded the complete radio image
   but failed while decoding its dynamic zone subdevice because
   `TKx160Zone` has no external metadata owner. NewChirp now skips metadata
