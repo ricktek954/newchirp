@@ -539,7 +539,8 @@ Last updated: 2026-11-06
 - Maintained file: `drivers/newchirp_tdh3.py`
 - Driver SHA-256:
   `7fd6dc0cfacc0b574293862142b28826379edcf489de9ea49b2385010cd7f8f1`
-- Transport: upstream CHIRP TD-H3 clone serial at 38400 8N1
+- Transport: OEM-confirmed TD-H3 clone serial at 38400 8N1; the framing
+  matches the pinned upstream CHIRP driver
 - Implemented: all channel, settings, and write behavior from the pinned
   upstream TD-H3 drivers. The override normalizes a stored brightness value of
   `0xFF`, which upstream treats as list index `-251`, to the brightest valid
