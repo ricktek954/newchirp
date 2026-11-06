@@ -106,6 +106,9 @@ release requirements.
   payload, bundled Python/CHIRP runtime, bundled `libusb-1.0.so.0`, absence of
   GLib 2.80 once-init pointer symbols, server checksums, public HTTP 200
   checks, and the live platform manifest were verified.
+- Post-`1.0.40` source adds an experimental `KSUN UV-K60` model profile using
+  the pinned Quansheng UV-K5 transport and memory layout. Physical read/write
+  comparison is still required, and this is not in live artifacts yet.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
   `0600`. It is not present in either repository or in desktop builds.
 - Verification for the confidential relay and desktop session path:

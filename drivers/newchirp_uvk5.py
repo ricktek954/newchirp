@@ -798,3 +798,28 @@ def _detect_uvk1_profile(cls, pipe):
 
 
 uvk5.UVK1Radio.detect_from_serial = classmethod(_detect_uvk1_profile)
+
+@directory.register
+class KSUNUVK60(uvk5.UVK5Radio):
+    """KSUN UV-K60 compatibility profile for UV-K5-family hardware."""
+
+    VENDOR = "KSUN"
+    MODEL = "UV-K60"
+
+    @classmethod
+    def detect_from_serial(cls, pipe):
+        firmware = uvk5._sayhello(pipe)
+        if cls.k5_approve_firmware(firmware):
+            return cls
+        return uvk5.UVK5RestrictedRadio
+
+    @classmethod
+    def get_prompts(cls):
+        prompts = uvk5.UVK5Radio.get_prompts()
+        prompts.experimental = (
+            "The KSUN UV-K60 is treated as a Quansheng UV-K5-family rebrand. "
+            "It uses the same transport and memory layout for now, but has "
+            "not yet been physically validated by NewChirp. Download and keep "
+            "the original image before writing changes."
+        )
+        return prompts

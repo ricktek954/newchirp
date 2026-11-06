@@ -30,6 +30,7 @@ Last updated: 2026-11-06
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
+| KSUN UV-K60 rebrand | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Stock UV-K5-family profile | Stock UV-K5-family policy | Stock UV-K5-family policy | Experimental |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -761,6 +762,26 @@ Last updated: 2026-11-06
 - Next milestone: reporter downloads and saves an image, edits one unused
   channel, uploads it, reconnects, reads it back, and confirms the channel on
   the radio before wider write support is enabled.
+
+### KSUN UV-K60 rebrand
+
+- Compatibility profile: `KSUNUVK60` in
+  `drivers/newchirp_uvk5.py`
+- Transport: pinned CHIRP Quansheng UV-K5 framed serial at 38400 8N1
+- Implemented: the complete stock UV-K5-family channel, settings, read, and
+  write path under the selectable `KSUN_UV-K60` model identifier
+- Read/write policy: unchanged from the selected pinned UV-K5 profile. Known
+  UV-K5-family firmware prefixes use the normal driver; unknown firmware uses
+  CHIRP's read-only restricted profile.
+- Evidence: HamTech M0FXB community documentation identifies the KSUN UV60
+  family as UV-K5-family hardware, and the 2026-11-05 submission uses the same
+  family protocol. No NewChirp physical read or write comparison exists yet.
+- Driver SHA-256:
+  `ef1a5561b2bc2e64b8273faec2db8510d5ca29434a9ffce6f44547d59d7cb83a`
+- Hardware validation: none
+- Next milestone: select `KSUN UV-K60`, download the full image, compare its
+  channel and settings fields with the stock UV-K5 profile, then perform a
+  controlled write and read-back before promoting it beyond experimental.
 
 ### Baofeng UV-9R
 

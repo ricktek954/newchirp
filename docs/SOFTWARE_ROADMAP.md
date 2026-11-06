@@ -166,6 +166,8 @@ Column layout is stored at:
   updates, and is experimental until verified on a radio.
 - [x] Kept UV-5G Mini channels 15-22 simplex or repeater selectable while
   preserving fixed frequencies and the dedicated repeater slots 23-30.
+- [x] Added an experimental KSUN UV-K60 model profile that reuses the pinned
+  Quansheng UV-K5 transport and memory layout.
 
 The bridge protocol uses JSON over a spawned process:
 
