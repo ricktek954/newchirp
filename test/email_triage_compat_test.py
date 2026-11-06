@@ -67,6 +67,26 @@ class EmailTriageCompatibilityTest(unittest.TestCase):
         # Keep the malformed DTCS field unchanged in the saved radio image.
         self.assertEqual(int(radio._memobj.memory[0].dtcs), 1230)
 
+    def test_uv17progps_malformed_ctcss_does_not_abort_channel_read(self):
+        radio = self.directory.get_radio_by_image(
+            str(IMAGES / "Baofeng_UV-17ProGPS.img")
+        )
+        raw = radio._memobj.memory[0]
+        raw.txtone.set_raw(b"\x12\x43")
+        raw.rxtone.set_raw(b"\x12\x43")
+        original = radio._mmap.get_packed()
+
+        memory = radio.get_memory(1)
+
+        self.assertFalse(memory.empty)
+        self.assertEqual(memory.tmode, "")
+        self.assertEqual(radio._mmap.get_packed(), original)
+
+        memory.name = "TEST"
+        radio.set_memory(memory)
+        self.assertEqual(int(raw.txtone), 0x4312)
+        self.assertEqual(int(raw.rxtone), 0x4312)
+
     def test_vx6_unprogrammable_slot_does_not_abort_radio_read(self):
         radio = self.directory.get_radio_by_image(
             str(IMAGES / "Yaesu_VX-6.img")
