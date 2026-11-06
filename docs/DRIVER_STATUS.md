@@ -136,15 +136,19 @@ Last updated: 2026-11-06
 ### TYT TH-9800
 
 - Maintained compatibility: `drivers/newchirp_th9800_compat.py`
+- Driver SHA-256:
+  `4e472f1b772ebb61ea2ac03886d55d75d5646f57d24e476cd33e5bb1245ad62f`
 - Transport: upstream CHIRP TYT clone serial at 38400 8N1
-- Decode policy: preserve active channels when a stored CTCSS field is
-  outside CHIRP's supported tone range; use the 88.5 Hz default in the decoded
-  memory while retaining the original image bytes
-- Evidence: upstream CHIRP fixture `TYT_TH-9800.img` plus the 2026-11-01
-  report showing `1666.5` rejected as an invalid `ctone`
+- Decode policy: preserve active channels when a stored CTCSS or DTCS field
+  is outside CHIRP's supported range; use the 88.5 Hz or DTCS 23 default in
+  the decoded memory while retaining the original image bytes
+- Evidence: upstream CHIRP fixture `TYT_TH-9800.img`; the 2026-11-01 report
+  showing `1666.5` rejected as an invalid `ctone`; and the 2026-11-06 report
+  showing DTCS `1230` rejected as not in CHIRP's valid list
 - Hardware validation: pending
-- Next milestone: retest with the reporter's saved image and compare one
-  edited channel against the radio display before an upload/re-read cycle
+- Next milestone: the 2026-11-06 reporter retests the download and, if it
+  succeeds, compares one edited channel against the radio display before an
+  upload/re-read cycle
 
 ### Yaesu VX-6
 
