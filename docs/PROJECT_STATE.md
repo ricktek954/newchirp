@@ -68,16 +68,14 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The cross-platform `1.0.41` release is live from source commit `4fc6177f`.
-  Staged macOS and Linux artifacts became public when the Windows installer
-  completed the release set. Windows adds the CPS-derived Wouxun KG-Q10H
-  driver, read-only Radtel RT-860 support, the experimental KSUN UV-K60 UV-K5
-  rebrand profile, malformed UV-17ProGPS CTCSS handling, cancellable myGMRS
-  sign-in, TD-9800 malformed DTCS handling, expanded UV-K5 and F4HWN support,
-  and updated GM-21 and TD-H3 drivers. The Windows installer is
-  `NewChirp-Installer-1.0.41.exe`, SHA-256
-  `1b74852f3201216c8e5e5c8739575516fc39821742400282c4cedf8bbafc5518`,
-  size `61,150,266` bytes.
+- The cross-platform `1.0.42` release is live. Windows and macOS are from
+  source commit `d98b660b`; Linux is from `ccc98fd5`. It adds the UV-5RH
+  stray-handshake retry and keeps the `1.0.41` radio-driver and UX work,
+  including KG-Q10H, RT-860, KSUN UV-K60, malformed-tone handling,
+  cancellable myGMRS sign-in, F4HWN support, and GM-21/TD-H3 updates. The
+  Windows installer is `NewChirp-Installer-1.0.42.exe`, SHA-256
+  `c1aaf8310f361f03fe097b0d4bef380dda830bf1454bc590c76df5b82a0e79fc`,
+  size `61,156,255` bytes; it remains unsigned.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -230,7 +228,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.42` artifact source commit: `d98b660b`
-- Windows `1.0.41` artifact source commit: `4fc6177f`
+- Windows `1.0.42` artifact source commit: `d98b660b`
 - Linux `1.0.42` artifact source commit: `ccc98fd5`
 - Open pull requests: none
 - Checked-out source version: `1.0.42+42`
@@ -248,9 +246,9 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.42 |
-| Windows | 1.0.41 |
+| Windows | 1.0.42 |
 | Linux | 1.0.42 |
-| Legacy shared manifest version | 1.0.41 |
+| Legacy shared manifest version | 1.0.42 |
 
 macOS artifact:
 
@@ -264,7 +262,17 @@ macOS artifact:
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.41` artifact:
+Windows artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.42.exe`
+- Version/build: `1.0.42` / `42`
+- SHA-256:
+  `c1aaf8310f361f03fe097b0d4bef380dda830bf1454bc590c76df5b82a0e79fc`
+- Size: `61,156,255` bytes
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.41` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.41.exe`
 - Version/build: `1.0.41` / `41`
@@ -351,6 +359,13 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.42` from source commit `d98b660b`. Verified installer
+  file/product metadata `1.0.42.0` / `1.0.42`, app version `1.0.42+42`, the
+  four focused UV-5RH handshake tests, bundled Python `3.13.15`, matching
+  server SHA-256, public HTTP 200, and the live platform manifest. Flutter ran
+  183 passing tests with five known Windows sandbox/Help failures; the Python
+  suite ran 303 tests with three Windows temporary-file permission errors and
+  two fixture-dependent skips. The installer remains unsigned.
 - Published macOS `1.0.42` from source commit `d98b660b` as a universal
   signed, notarized, stapled DMG. Verified the UV-5RH startup-handshake retry,
   app/build version, both Python runtimes, universal libusb, strict
