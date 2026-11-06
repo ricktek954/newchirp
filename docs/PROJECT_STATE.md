@@ -68,14 +68,14 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The Windows `1.0.40` installer is live from source commit `8fdcef21`.
-  It adds the CPS-derived Wouxun KG-905G Plus driver and keeps multi-row channel
-  editing, the A9305B read checksum correction, UV-5G Mini simplex support,
-  TD-H8 Gen 4 read-only identity support, myGMRS ZIP-radius search, and Windows
-  serial diagnostics. The versioned installer is
-  `NewChirp-Installer-1.0.40.exe`, SHA-256
-  `16c99f969b05b742497eaf23f943a12c2384e756bf931987fed881b0544ddf90`,
-  size `61,124,631` bytes.
+- The Windows `1.0.41` installer is live from source commit `4fc6177f`.
+  It adds the CPS-derived Wouxun KG-Q10H driver, read-only Radtel RT-860
+  support, the experimental KSUN UV-K60 UV-K5 rebrand profile, malformed
+  UV-17ProGPS CTCSS handling, cancellable myGMRS sign-in, TD-9800 malformed
+  DTCS handling, expanded UV-K5 and F4HWN support, and updated GM-21 and TD-H3
+  drivers. The versioned installer is `NewChirp-Installer-1.0.41.exe`, SHA-256
+  `1b74852f3201216c8e5e5c8739575516fc39821742400282c4cedf8bbafc5518`,
+  size `61,150,266` bytes.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -222,10 +222,10 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.40` artifact source commit: `8fdcef21`
-- Windows `1.0.40` artifact source commit: `8fdcef21`
+- Windows `1.0.41` artifact source commit: `4fc6177f`
 - Linux `1.0.40` artifact source commit: `8fdcef21`
 - Open pull requests: none
-- Checked-out source version: `1.0.40+40`
+- Checked-out source version: `1.0.41+41`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -240,7 +240,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.40 |
-| Windows | 1.0.40 |
+| Windows | 1.0.41 |
 | Linux | 1.0.40 |
 | Legacy shared manifest version | 1.0.40 |
 
@@ -257,6 +257,15 @@ macOS artifact:
 - Server checksum recorded from the live artifact
 
 Windows artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.41.exe`
+- Version/build: `1.0.41` / `41`
+- SHA-256:
+  `1b74852f3201216c8e5e5c8739575516fc39821742400282c4cedf8bbafc5518`
+- Size: `61,150,266` bytes
+- Server checksum matched the local artifact
+
+Windows `1.0.40` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.40.exe`
 - Version/build: `1.0.40` / `40`
