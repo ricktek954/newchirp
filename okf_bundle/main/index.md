@@ -58,6 +58,7 @@
 - [_buildResultsMap](buildResultsMap.md)
 - [_buildWelcome](buildWelcome.md)
 - [_bulkChannelDraftChanged](bulkChannelDraftChanged.md)
+- [_cancelMyGmrsSignIn](cancelMyGmrsSignIn.md)
 - [_cancelTransfer](cancelTransfer.md)
 - [_changed](changed.md)
 - [_ChannelColumn](ChannelColumn.md)

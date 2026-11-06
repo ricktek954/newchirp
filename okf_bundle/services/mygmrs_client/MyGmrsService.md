@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T10:49:20Z"
+timestamp: "2026-11-06T15:24:31Z"
 concept_id: services/mygmrs_client/MyGmrsService
 language: dart
 ---
@@ -26,11 +26,12 @@ class MyGmrsService
 ## Methods
 
 - `signIn`
+- `cancelSignIn`
 - `signOut`
 - `searchRepeaters`
 
 ## Source
-Lines 12–28 in `services/mygmrs_client.dart`
+Lines 12–30 in `services/mygmrs_client.dart`
 
 ## Relationships
 

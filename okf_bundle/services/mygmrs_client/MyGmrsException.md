@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T10:49:20Z"
+timestamp: "2026-11-06T15:24:31Z"
 concept_id: services/mygmrs_client/MyGmrsException
 language: dart
 ---
@@ -28,7 +28,7 @@ class MyGmrsException
 - `toString`
 
 ## Source
-Lines 30–37 in `services/mygmrs_client.dart`
+Lines 32–39 in `services/mygmrs_client.dart`
 
 ## Relationships
 

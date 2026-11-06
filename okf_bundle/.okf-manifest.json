@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/private/tmp/newchirp-email-triage-clean/newchirp/lib",
+  "source_root": "/home/rlopez/newchirp.net/lib",
   "files": {
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1793960886611345614,
+      "mtime_ns": 1793569934904800892,
       "hash": "2601598292269d2a7553a28afb0aca562505cae29f434063e530e095a503f8b5",
       "concept_ids": [
         "models/channel_image_baseline/ChannelImageBaseline",
@@ -22,7 +22,7 @@
     },
     "models/gm32_channel.dart": {
       "path": "models/gm32_channel.dart",
-      "mtime_ns": 1793960886611429404,
+      "mtime_ns": 1793018006929487856,
       "hash": "930587b2146e7df167512e071e8c2a52387e0aca8a87d54116de682213854a61",
       "concept_ids": [
         "models/gm32_channel/applyGm32Rules",
@@ -44,7 +44,7 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1793960886611510652,
+      "mtime_ns": 1793529282569778128,
       "hash": "590cff9bdfa4e6ae7bed35e5f3136bcd3198216ff67bed2e7a5db6bf6fd77fa4",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
@@ -88,7 +88,7 @@
     },
     "models/radio_mapping.dart": {
       "path": "models/radio_mapping.dart",
-      "mtime_ns": 1793960886611576400,
+      "mtime_ns": 1793443811321273875,
       "hash": "a835d17faa50b5c40846505454eb4248b72a474502c1dfae1bf60c448b88b02b",
       "concept_ids": [
         "models/radio_mapping/RadioMappingEntry",
@@ -106,7 +106,7 @@
     },
     "models/repeater_counties.dart": {
       "path": "models/repeater_counties.dart",
-      "mtime_ns": 1793960886611699814,
+      "mtime_ns": 1793443811322177379,
       "hash": "f92810c9a3f2cdb8667a1dd56766b62592b03bb80615b8d12c1f8abc8c756b0b",
       "concept_ids": [
         "models/repeater_counties"
@@ -114,7 +114,7 @@
     },
     "models/repeater_regions.dart": {
       "path": "models/repeater_regions.dart",
-      "mtime_ns": 1793960886611796021,
+      "mtime_ns": 1793443811322177379,
       "hash": "a142415518e9cbd2ac6ae88672a3827b0e37776fbe00112fe93e6ef123e448c6",
       "concept_ids": [
         "models/repeater_regions/normalizeRepeaterCounty",
@@ -126,7 +126,7 @@
     },
     "models/repeater_search.dart": {
       "path": "models/repeater_search.dart",
-      "mtime_ns": 1793960886611879894,
+      "mtime_ns": 1793464076655657436,
       "hash": "39452b3cc44dc30581c212251a0374201bae351b52707b5378ea8ae262bf9369",
       "concept_ids": [
         "models/repeater_search/RepeaterSearchResult",
@@ -140,7 +140,7 @@
     },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
-      "mtime_ns": 1793960886611994266,
+      "mtime_ns": 1791109641575079505,
       "hash": "1d0d2204b57a9fe4753793712ec972cdd40ba6099dca82b4b249a2165a80806f",
       "concept_ids": [
         "services/chirp_csv/ChirpCsv",
@@ -157,7 +157,7 @@
     },
     "services/column_layout_store.dart": {
       "path": "services/column_layout_store.dart",
-      "mtime_ns": 1793960886612062432,
+      "mtime_ns": 1793109703288279614,
       "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
       "concept_ids": [
         "services/column_layout_store/ColumnLayout",
@@ -170,7 +170,7 @@
     },
     "services/diagnostic_log.dart": {
       "path": "services/diagnostic_log.dart",
-      "mtime_ns": 1793960886612159971,
+      "mtime_ns": 1793179018197438614,
       "hash": "a558b6c5fba1da4f792851526694cce02c803df8a52bd71c4f1897c809974b7b",
       "concept_ids": [
         "services/diagnostic_log/DiagnosticEntry",
@@ -191,7 +191,7 @@
     },
     "services/file_save_warning_store.dart": {
       "path": "services/file_save_warning_store.dart",
-      "mtime_ns": 1793960886612226637,
+      "mtime_ns": 1793018006929487856,
       "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
       "concept_ids": [
         "services/file_save_warning_store/FileSaveWarningStore",
@@ -203,7 +203,7 @@
     },
     "services/local_file_opener.dart": {
       "path": "services/local_file_opener.dart",
-      "mtime_ns": 1793960886612281885,
+      "mtime_ns": 1793355746085706779,
       "hash": "64762d56067019bad41ed7ab786cad3b638a9646245a57e9c88f2f3c984fdea5",
       "concept_ids": [
         "services/local_file_opener/LocalFilePlatform",
@@ -214,7 +214,7 @@
     },
     "services/module_sandbox.dart": {
       "path": "services/module_sandbox.dart",
-      "mtime_ns": 1793960886612365675,
+      "mtime_ns": 1793544041256836363,
       "hash": "aae98b91ca6084a15f5e04a7d8dbd23948600f84f063c8befd4794f8820afd22",
       "concept_ids": [
         "services/module_sandbox/ModuleSandbox",
@@ -257,7 +257,7 @@
     },
     "services/mototrbo_cps2_xml.dart": {
       "path": "services/mototrbo_cps2_xml.dart",
-      "mtime_ns": 1793960886612709918,
+      "mtime_ns": 1793109703288279614,
       "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
       "concept_ids": [
         "services/mototrbo_cps2_xml/CpsTone",
@@ -279,36 +279,9 @@
         "services/mototrbo_cps2_xml"
       ]
     },
-    "services/mygmrs_client.dart": {
-      "path": "services/mygmrs_client.dart",
-      "mtime_ns": 1793960886612805916,
-      "hash": "c13b1ca769385c3c856229bac6cf179b110b43d6f76b7ad936f91ae43bb772af",
-      "concept_ids": [
-        "services/mygmrs_client/JsonResponse",
-        "services/mygmrs_client/MyGmrsClient",
-        "services/mygmrs_client/MyGmrsException",
-        "services/mygmrs_client/MyGmrsService",
-        "services/mygmrs_client/apiError",
-        "services/mygmrs_client/applyTones",
-        "services/mygmrs_client/convertRepeaterResponse",
-        "services/mygmrs_client/ctcssTone",
-        "services/mygmrs_client/ensureSignedIn",
-        "services/mygmrs_client/gmrsRepeaterOutput",
-        "services/mygmrs_client/jsonRequest",
-        "services/mygmrs_client/openSystemBrowser",
-        "services/mygmrs_client/postJson",
-        "services/mygmrs_client/searchRepeaters",
-        "services/mygmrs_client/signIn",
-        "services/mygmrs_client/signOut",
-        "services/mygmrs_client/stateCode",
-        "services/mygmrs_client/storeSession",
-        "services/mygmrs_client/toString",
-        "services/mygmrs_client"
-      ]
-    },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1793960886612901164,
+      "mtime_ns": 1793535331151239246,
       "hash": "74d1b9ac774ad705e92a0b42e0b920a8518d22b77aee0202391c96daa506f17c",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
@@ -365,7 +338,7 @@
     },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
-      "mtime_ns": 1793960886612968788,
+      "mtime_ns": 1793355746085706779,
       "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
       "concept_ids": [
         "services/radio_image_store/RadioImageStore",
@@ -380,7 +353,7 @@
     },
     "services/radio_selection_store.dart": {
       "path": "services/radio_selection_store.dart",
-      "mtime_ns": 1793960886613032328,
+      "mtime_ns": 1791109641575292000,
       "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
       "concept_ids": [
         "services/radio_selection_store/RadioSelection",
@@ -393,7 +366,7 @@
     },
     "services/repeater_search_preferences_store.dart": {
       "path": "services/repeater_search_preferences_store.dart",
-      "mtime_ns": 1793960886613094951,
+      "mtime_ns": 1793876564229583344,
       "hash": "a2ef964b272c768a80fec8ef6fcd2792987f22b431ed10c79be8f48d61706c24",
       "concept_ids": [
         "services/repeater_search_preferences_store/RepeaterSearchPreferences",
@@ -407,7 +380,7 @@
     },
     "services/update_checker.dart": {
       "path": "services/update_checker.dart",
-      "mtime_ns": 1793960886613175617,
+      "mtime_ns": 1793443811322647700,
       "hash": "529e8c81263d771702ba7a9d00c8bddb76640b079a9e2eaed3673214703e4a6f",
       "concept_ids": [
         "services/update_checker/PlatformRelease",
@@ -432,7 +405,7 @@
     },
     "services/update_installer.dart": {
       "path": "services/update_installer.dart",
-      "mtime_ns": 1793960886613256323,
+      "mtime_ns": 1793109703288928523,
       "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
       "concept_ids": [
         "services/update_installer/DownloadedUpdate",
@@ -450,7 +423,7 @@
     },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
-      "mtime_ns": 1793960886613312572,
+      "mtime_ns": 1791109641575292000,
       "hash": "86c6b4a01b10d3a881e9437259adb1984e015cf75e552fdaa395c8b89c7fffb0",
       "concept_ids": [
         "services/window_state_store/WindowState",
@@ -464,7 +437,7 @@
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1793960886613413611,
+      "mtime_ns": 1793569934904800892,
       "hash": "57cd150df865177f067ed9a3d2454c0d48731c63ccb2311322c24a63f0aaf9b4",
       "concept_ids": [
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
@@ -474,7 +447,7 @@
     },
     "widgets/error_report_dialog.dart": {
       "path": "widgets/error_report_dialog.dart",
-      "mtime_ns": 1793960886613515734,
+      "mtime_ns": 1793179018197438614,
       "hash": "1ff6ddb8d7c1b0114196d8f4a5ba6eb79af5bdcaee1c8ba900de0e08f532bec7",
       "concept_ids": [
         "widgets/error_report_dialog/ErrorReportDialog",
@@ -488,7 +461,7 @@
     },
     "widgets/file_save_warning_dialog.dart": {
       "path": "widgets/file_save_warning_dialog.dart",
-      "mtime_ns": 1793960886613575400,
+      "mtime_ns": 1793018006929487856,
       "hash": "b6627d11b8cd15e4712b3b3cc786602d60504246f5bc4ce890afbe2c33c6f729",
       "concept_ids": [
         "widgets/file_save_warning_dialog/FileSaveWarningDialog",
@@ -500,7 +473,7 @@
     },
     "widgets/radio_mapping_dialog.dart": {
       "path": "widgets/radio_mapping_dialog.dart",
-      "mtime_ns": 1793960886613802978,
+      "mtime_ns": 1793443811322767449,
       "hash": "800eee7b3d1ceb1ad70a88e539ac6aa3d31b8319b60c67523e679118345cd6b7",
       "concept_ids": [
         "widgets/radio_mapping_dialog/RadioMappingDialog",
@@ -522,7 +495,7 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1793960886613877852,
+      "mtime_ns": 1793443811322767449,
       "hash": "1419e1af48e748ae47a45eb27457c36e62e8456519c99db1d8f7a5bced953044",
       "concept_ids": [
         "widgets/radio_model_picker/ModelChoice",
@@ -557,8 +530,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793960891991721413,
-      "hash": "9ef834b7739a4847b2769b91a9b38c572fdc53ff3e5e7c2de2532cbc487e73f9",
+      "mtime_ns": 1793979261237480005,
+      "hash": "17dad85afe2a3c830f800544dc690459959300d5cfb1fff80673597e99f76784",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -756,6 +729,7 @@
         "main/selectCountry",
         "main/selectProvider",
         "main/signInMyGmrs",
+        "main/cancelMyGmrsSignIn",
         "main/signOutMyGmrs",
         "main/search",
         "main/emptyResultsMessage",
@@ -771,6 +745,35 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
+      ]
+    },
+    "services/mygmrs_client.dart": {
+      "path": "services/mygmrs_client.dart",
+      "mtime_ns": 1793978671702776958,
+      "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
+      "concept_ids": [
+        "services/mygmrs_client",
+        "services/mygmrs_client/MyGmrsService",
+        "services/mygmrs_client/MyGmrsException",
+        "services/mygmrs_client/MyGmrsClient",
+        "services/mygmrs_client/JsonResponse",
+        "services/mygmrs_client/signIn",
+        "services/mygmrs_client/cancelSignIn",
+        "services/mygmrs_client/signOut",
+        "services/mygmrs_client/searchRepeaters",
+        "services/mygmrs_client/ctcssTone",
+        "services/mygmrs_client/stateCode",
+        "services/mygmrs_client/gmrsRepeaterOutput",
+        "services/mygmrs_client/applyTones",
+        "services/mygmrs_client/openSystemBrowser",
+        "services/mygmrs_client/toString",
+        "services/mygmrs_client/throwSignInCancelled",
+        "services/mygmrs_client/storeSession",
+        "services/mygmrs_client/ensureSignedIn",
+        "services/mygmrs_client/convertRepeaterResponse",
+        "services/mygmrs_client/postJson",
+        "services/mygmrs_client/jsonRequest",
+        "services/mygmrs_client/apiError"
       ]
     }
   },
@@ -1420,7 +1423,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "3348fd840c5c9c0da21800cf63b29d30b3cf584911c8a1c78946aabbbee4ccf3",
+      "edge_hash": "ae6862525e1cbeaf14a19ea0a6597eddb5a8b19e42466a22c21ecac68b37a7de",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -5380,7 +5383,7 @@
       "type": "Module",
       "resource": "services/mygmrs_client.dart",
       "render_hash": "stale",
-      "edge_hash": "d82cf71e414f52f8e424f29048c22a111bbde6e00e7d7608c95fdd55173c4c88",
+      "edge_hash": "23b385ecd8388b2a77d3d4cbd1d6f6214eaa0bdcdbbef191438e8cd20b92c8c9",
       "enriched": false
     },
     "services/mygmrs_client/MyGmrsService": {
@@ -5750,7 +5753,31 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "main/cancelMyGmrsSignIn": {
+      "concept_id": "main/cancelMyGmrsSignIn",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "services/mygmrs_client/cancelSignIn": {
+      "concept_id": "services/mygmrs_client/cancelSignIn",
+      "type": "Function",
+      "resource": "services/mygmrs_client.dart",
+      "render_hash": "stale",
+      "edge_hash": "b4b739be2b81a2debb19ab874a000dcc578dc6c09aff8e741e378e1c2667a9b9",
+      "enriched": false
+    },
+    "services/mygmrs_client/throwSignInCancelled": {
+      "concept_id": "services/mygmrs_client/throwSignInCancelled",
+      "type": "Function",
+      "resource": "services/mygmrs_client.dart",
+      "render_hash": "stale",
+      "edge_hash": "b4b739be2b81a2debb19ab874a000dcc578dc6c09aff8e741e378e1c2667a9b9",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-06T10:28:28Z"
+  "generated_at": "2026-11-06T15:34:24Z"
 }

@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T10:49:20Z"
+timestamp: "2026-11-06T15:24:31Z"
 concept_id: services/mygmrs_client/storeSession
 language: dart
 ---
@@ -24,7 +24,7 @@ void_storeSession(Map<String, dynamic> response)
 ```
 
 ## Source
-Lines 101–101 in `services/mygmrs_client.dart`
+Lines 120–120 in `services/mygmrs_client.dart`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T10:49:20Z"
+timestamp: "2026-11-06T15:24:31Z"
 concept_id: services/mygmrs_client/convertRepeaterResponse
 language: dart
 ---
@@ -27,7 +27,7 @@ RepeaterSearchResultsconvertRepeaterResponse(
 ```
 
 ## Source
-Lines 188–191 in `services/mygmrs_client.dart`
+Lines 208–211 in `services/mygmrs_client.dart`
 
 ## Relationships
 
