@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/models/repeater_search.dart';
 import 'package:newchirp/services/column_layout_store.dart';
 import 'package:newchirp/services/file_save_warning_store.dart';
+import 'package:newchirp/services/mygmrs_client.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 import 'package:newchirp/services/repeater_search_preferences_store.dart';
 import 'package:newchirp/services/update_checker.dart';
@@ -188,6 +190,57 @@ class _FakeRepeaterSearchPreferencesStore
   @override
   Future<void> save(RepeaterSearchPreferences next) async {
     preferences = next;
+  }
+}
+
+class _FakeMyGmrsService implements MyGmrsService {
+  bool _signedIn = false;
+  int signInCalls = 0;
+  int cancelCalls = 0;
+  Completer<void>? _pendingSignIn;
+
+  @override
+  bool get signedIn => _signedIn;
+
+  @override
+  Future<void> signIn() {
+    signInCalls++;
+    _pendingSignIn = Completer<void>();
+    return _pendingSignIn!.future;
+  }
+
+  @override
+  void cancelSignIn() {
+    cancelCalls++;
+    final pending = _pendingSignIn;
+    if (pending != null && !pending.isCompleted) {
+      pending.completeError(
+        const MyGmrsException('myGMRS sign-in was cancelled.'),
+      );
+    }
+  }
+
+  @override
+  Future<void> signOut() async {
+    _signedIn = false;
+  }
+
+  @override
+  Future<RepeaterSearchResults> searchRepeaters({
+    required String state,
+    String query = '',
+    double? latitude,
+    double? longitude,
+    double? distanceKm,
+    bool openOnly = false,
+    int limit = 100,
+  }) async {
+    return const RepeaterSearchResults(
+      source: 'myGMRS',
+      sourceUrl: 'https://mygmrs.com',
+      totalMatches: 0,
+      results: [],
+    );
   }
 }
 
@@ -606,6 +659,61 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('mygmrs-sign-in')), findsOneWidget);
+  });
+
+  testWidgets('myGMRS search requires explicit sign-in and can cancel', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final myGmrs = _FakeMyGmrsService();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: TextButton(
+              onPressed: () => showDialog<List<RadioChannel>>(
+                context: context,
+                builder: (context) => RepeaterBookDialog(
+                  bridge: _FakeRepeaterBridge(),
+                  preferencesStore: _FakeRepeaterSearchPreferencesStore(),
+                  myGmrsService: myGmrs,
+                ),
+              ),
+              child: const Text('Open repeater search'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open repeater search'));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('repeater-provider-repeaterBook')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('myGMRS.com').last);
+    await tester.pumpAndSettle();
+
+    final search = find.widgetWithText(FilledButton, 'Search');
+    expect(tester.widget<FilledButton>(search).onPressed, isNull);
+    await tester.tap(search);
+    await tester.pump();
+    expect(myGmrs.signInCalls, 0);
+
+    await tester.tap(find.byKey(const ValueKey('mygmrs-sign-in')));
+    await tester.pump();
+    expect(myGmrs.signInCalls, 1);
+    expect(find.text('Cancel sign-in'), findsOneWidget);
+
+    await tester.tap(find.text('Cancel sign-in'));
+    await tester.pumpAndSettle();
+    expect(myGmrs.cancelCalls, 1);
+    expect(find.text('myGMRS sign-in cancelled.'), findsOneWidget);
+    expect(find.text('Sign in to myGMRS'), findsOneWidget);
   });
 
   testWidgets('startup update check offers a newer release', (tester) async {

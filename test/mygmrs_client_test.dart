@@ -168,4 +168,50 @@ void main() {
     expect(signedOut, isTrue);
     expect(client.signedIn, isFalse);
   });
+
+  test('cancelSignIn stops a pending OAuth wait', () async {
+    final broker = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    addTearDown(() => broker.close(force: true));
+    broker.listen((request) async {
+      if (request.uri.path == '/api/mygmrs/oauth/start') {
+        request.response
+          ..statusCode = HttpStatus.ok
+          ..headers.contentType = ContentType.json
+          ..write(
+            '{"handoffToken":"cancel-handoff",'
+            '"authorizeUrl":"https://mygmrs.test/oauth/authorize"}',
+          );
+      } else if (request.uri.path == '/api/mygmrs/oauth/poll') {
+        request.response
+          ..statusCode = HttpStatus.accepted
+          ..headers.contentType = ContentType.json
+          ..write('{"status":"pending"}');
+      } else {
+        request.response.statusCode = HttpStatus.notFound;
+      }
+      await request.response.close();
+    });
+    final client = MyGmrsClient(
+      brokerBase: Uri.parse('http://127.0.0.1:${broker.port}'),
+      openBrowser: (_) async {},
+      signInTimeout: const Duration(seconds: 5),
+      signInPollInterval: const Duration(milliseconds: 20),
+    );
+
+    final signIn = client.signIn();
+    final expectation = expectLater(
+      signIn,
+      throwsA(
+        isA<MyGmrsException>().having(
+          (error) => error.message,
+          'message',
+          contains('cancelled'),
+        ),
+      ),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 50));
+    client.cancelSignIn();
+    await expectation;
+    expect(client.signedIn, isFalse);
+  });
 }
