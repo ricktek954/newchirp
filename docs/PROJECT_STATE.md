@@ -162,9 +162,12 @@ release requirements.
   the randomized 25-byte `SEND` authentication exchange is performed with
   session-symbol payload decryption, and the Web Programmer's 3.5-second
   block response window is allowed. It keeps the `1.0.27`-`1.0.36` fixes.
-- The macOS `1.0.40` release is live. It adds the official-CPS-derived Wouxun
-  KG-905G Plus driver with all 400 channels and retains the A9305B,
-  multi-row editing, UV-5G Mini, and myGMRS fixes from `1.0.39`.
+- The macOS `1.0.41` release is live from source commit `4fc6177f`. It adds
+  the experimental KSUN UV-K60 profile, the read-only Radtel RT-860 driver,
+  the F4HWN 6.3 UV-K1 profile, the CPS-derived Wouxun KG-Q10H driver,
+  malformed-tone handling for UV-17ProGPS and TH-9800, paired GM-21
+  handshakes, cancellable myGMRS sign-in, and the numeric channel-setting
+  upload correction.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
@@ -198,7 +201,7 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.40` release is built, signed, notarized, stapled, uploaded,
+- The macOS `1.0.41` release is built, signed, notarized, stapled, uploaded,
   and live. The universal DMG contains both Python architectures and universal
   libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
@@ -221,7 +224,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.40` artifact source commit: `8fdcef21`
+- macOS `1.0.41` artifact source commit: `4fc6177f`
 - Windows `1.0.41` artifact source commit: `4fc6177f`
 - Linux `1.0.40` artifact source commit: `8fdcef21`
 - Open pull requests: none
@@ -239,24 +242,24 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.40 |
+| macOS | 1.0.41 |
 | Windows | 1.0.41 |
-| Linux | 1.0.40 |
-| Legacy shared manifest version | 1.0.40 |
+| Linux | 1.0.41 |
+| Legacy shared manifest version | 1.0.41 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.40.dmg`
-- Version/build: `1.0.40` / `40`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.41.dmg`
+- Version/build: `1.0.41` / `41`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `318630cd494fe8e8620a1ccddd8e7fd0f8846fb068300bbeb1a5ec6b75f1ea62`
-- Size: `81,283,507` bytes
-- Notarization submission: `a387d9c2-2953-4383-9612-c370f1c08d8f`
+  `76ca5d4e8ec9a5d68938c1936fb4243ef6c35260aa66cb12cd004060f1263ab5`
+- Size: `82,430,370` bytes
+- Notarization submission: `a69a7f58-069d-42e1-b8c5-afc45baae284`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows artifact:
+Windows `1.0.40` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.41.exe`
 - Version/build: `1.0.41` / `41`
@@ -283,7 +286,7 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux artifacts:
+Linux `1.0.40` artifacts (historical):
 
 - DEB URL:
   `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.40.deb`
@@ -314,6 +317,12 @@ Linux 1.0.40 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.41` from source commit `4fc6177f` as a universal
+  signed, notarized, stapled DMG. Verified app/build version, the KSUN
+  UV-K60 and read-only RT-860 driver payloads, both Python runtimes, universal
+  libusb, strict signatures, Gatekeeper acceptance, the notarization ticket,
+  matching local/server checksums, public HTTP availability, and the live
+  platform manifest.
 - Published macOS `1.0.40` from source commit `8fdcef21` as a universal
   signed, notarized, stapled DMG. Verified the official-CPS-derived Wouxun
   KG-905G Plus driver, app/build version, both Python runtimes, universal
@@ -531,6 +540,30 @@ Linux 1.0.40 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.41 verification status
+
+Full verification before the macOS `1.0.41` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 188 tests passed
+- Python test discovery: 302 tests passed, 2 fixture-dependent tests skipped
+- Standalone CHIRP bridge upload suite: all 55 tests passed
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.41` / `41`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled RT-860 driver SHA-256:
+  `394c978f4cd62276567fdcb5b21535a2276b7910afea7d0fe5f1b19f7a3f2698`
+- Bundled UV-K5-family driver SHA-256:
+  `ef1a5561b2bc2e64b8273faec2db8510d5ca29434a9ffce6f44547d59d7cb83a`
+- Notarization submission: `a69a7f58-069d-42e1-b8c5-afc45baae284`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.41`
+- The documented separate raw-SCSI helper remains `arm64`-only.
 
 ## macOS 1.0.40 verification status
 
