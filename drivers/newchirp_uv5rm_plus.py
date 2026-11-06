@@ -5,12 +5,13 @@
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 
-"""Match the UV-5RM Plus CPS handshake retry policy.
+"""Match the UV-17-family CPS handshake retry policy.
 
 The official T6UV CPS retries ``PROGRAMBFNORMALU`` once per second, up to
 five times, when the radio returns a stray byte instead of the required 0x06.
 Upstream CHIRP aborts immediately after the first unexpected byte. Keep the
-protocol unchanged while matching the OEM recovery behavior for this model.
+protocol unchanged while matching the OEM recovery behavior for models that
+have shown the same startup mismatch.
 """
 
 import time
@@ -22,12 +23,13 @@ from chirp.drivers import baofeng_uv17Pro
 HANDSHAKE_RETRIES = 5
 RETRY_DELAY = 1.0
 UNEXPECTED_RESPONSE = "Unexpected response from radio"
+RETRY_MODELS = {"UV-5RH", "UV-5RM Plus"}
 _ORIGINAL_DO_IDENT = baofeng_uv17Pro._do_ident
 _ORIGINAL_GET_MEMORY = baofeng_uv17Pro.BaofengUV5RMPlus.get_memory
 
 
 def _do_ident(radio):
-    if getattr(radio, "MODEL", "") != "UV-5RM Plus":
+    if getattr(radio, "MODEL", "") not in RETRY_MODELS:
         return _ORIGINAL_DO_IDENT(radio)
 
     last_error = None

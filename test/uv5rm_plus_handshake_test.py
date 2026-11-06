@@ -83,6 +83,25 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
             b"PROGRAMBFNORMALU",
         ])
 
+    def test_retries_stray_byte_for_uv5rh(self):
+        serial = _SequenceSerial([
+            b"\xE0",
+            b"\x06",
+            b"F" * 16,
+            b"M" * 15,
+            b"\x06",
+        ])
+        radio = self.radio_module.UV5RH(serial)
+
+        with mock.patch.object(self.compat.time, "sleep") as sleep:
+            self.assertTrue(self.radio_module._do_ident(radio))
+
+        sleep.assert_called_once_with(self.compat.RETRY_DELAY)
+        self.assertEqual(serial.writes[:2], [
+            b"PROGRAMBFNORMALU",
+            b"PROGRAMBFNORMALU",
+        ])
+
     def test_does_not_retry_other_handshake_failures(self):
         serial = _SequenceSerial([])
         radio = self.radio_module.BaofengUV5RMPlus(serial)

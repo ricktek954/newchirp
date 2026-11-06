@@ -36,6 +36,7 @@ Last updated: 2026-11-06
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng UV-5RH | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-17ProGPS | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv17progps_compat.py` | UV-17-family serial, 115200 8N1 | Malformed CTCSS values no longer abort channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5G Mini | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5g_mini.py` | UV-17-family serial, 115200 8N1 | Fixed GMRS frequencies; channels 15-22 retain stored duplex | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng GM-21 | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_baofeng_gm21.py` | UV-17-family serial; GM-5RH and UV-17Pro GPS handshakes | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -68,7 +69,7 @@ Last updated: 2026-11-06
 
 ## Radio details
 
-### Baofeng UV-5RM Plus
+### Baofeng UV-5RM Plus and UV-5RH
 
 - Maintained compatibility: `drivers/newchirp_uv5rm_plus.py`
 - Protocol notes: `docs/BAOFENG_UV5RM_PLUS_PROTOCOL.md`
@@ -89,9 +90,16 @@ Last updated: 2026-11-06
   unexpected byte at the first handshake
 - Additional evidence: the 2026-11-03 macOS report UID 388 opened an edited
   image and failed during upload because channel memory 0 stored `pttid=0xFF`
+- Additional evidence: the 2026-11-06 Windows 10 report from
+  `kg4fxf@gmail.com` selected `Baofeng_UV-5RH`, opened `COM5`, and received
+  the single stray byte `0xE0` instead of `0x06` from
+  `PROGRAMBFNORMALU`. Official CHIRP completed the same read, showing that
+  the radio and cable support the protocol.
 - Hardware validation: none for the retry override
-- Next milestone: reporters retest the next normal build; the macOS reporter
-  should confirm the edited channel library uploads and reads back correctly
+- Next milestone: reporters retest the next normal build; the UV-5RH reporter
+  should confirm that settings and channels download successfully, while the
+  macOS reporter should confirm the edited channel library uploads and reads
+  back correctly
 
 ### Baofeng UV-17ProGPS
 
