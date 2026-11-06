@@ -9,8 +9,7 @@ release requirements.
 ## Resume here
 
 - The Windows `1.0.44` installer is live from source commit `9929f997`.
-  Windows and macOS advertise `1.0.44`; the legacy shared manifest remains
-  `1.0.43` until the Linux `1.0.44` DEB exists.
+  Windows, macOS, Linux, and the legacy shared manifest advertise `1.0.44`.
 - The 2026-11-06 UV-5RH Pro report on 1.0.43 still used the legacy
   `Baofeng_UV-5RH` entry. Official 5RH PRO CPS V1.17 uses an `A` announce,
   a seeded `PROGRAM` handshake, password and `INFORMATION` stages, then
@@ -89,15 +88,10 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The cross-platform `1.0.43` release is live. Windows and macOS are from
-  source commit `f37f138b`; the Linux artifacts are from `747afb48`. They
-  include the latest GitHub bridge fixes for BF-F8HP-PRO port guidance and
-  metadata-backed channel comments on dynamic subdevices, plus the `1.0.42`
-  UV-5RH stray-handshake retry and the `1.0.41` radio-driver and UX work. The
-  Windows installer is
-  `NewChirp-Installer-1.0.43.exe`, SHA-256
-  `80c969b4e3a4af78d0d027cb7b6d9894474dc0b3503dec63dae9f41b693f07f5`,
-  size `61,152,977` bytes.
+- The cross-platform `1.0.44` release is live. macOS is from source commit
+  `9929f997`; the Linux artifacts are from `ec059527`. They add the
+  CPS-derived Baofeng 5RH Pro / UV-5RH Pro v2 driver, fix TK-7160K
+  dynamic-zone metadata decoding, and correct BF-F8HP Pro port guidance.
 - myGMRS approved the confidential server-side client and callback on
   2026-11-05. The desktop myGMRS directory is enabled again.
 - Added myGMRS.com repeater search with OAuth 2.0 Authorization Code plus PKCE
@@ -115,19 +109,22 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
-- The Linux `1.0.43` DEB, RPM, AppImage, and Pacman artifacts are live from
-  source commit `747afb48`. They include the latest GitHub bridge fixes,
+- The Linux `1.0.44` DEB, RPM, AppImage, and Pacman artifacts are live from
+  source commit `ec059527`. They add the CPS-derived Baofeng 5RH Pro /
+  UV-5RH Pro v2 driver, include the latest GitHub bridge fixes, and keep the
   UV-5RH handshake retry, experimental KSUN UV-K60 profile, KG-Q10H and
   RT-860 support, malformed-tone handling, cancellable myGMRS sign-in, F4HWN
   support, and GM-21/TD-H3 updates.
-- Linux `1.0.43` verification: quick safety review of the incoming bridge
-  diff found no unexpected process execution, credential access, arbitrary
-  filesystem behavior, or obfuscation; `flutter analyze` was clean; focused
-  Python regression tests ran 60 tests successfully; embedded `version.json`,
-  DEB/RPM/Pacman metadata, package payloads, extracted AppImage payload,
-  bundled Python/CHIRP runtime, bundled `libusb-1.0.so.0`, server checksums,
-  public HTTP 200 checks, and the live platform manifest were verified.
-- The `1.0.43` artifacts include the experimental `KSUN UV-K60` model profile
+- Linux `1.0.44` verification: quick safety review of the incoming Baofeng
+  5RH Pro v2 driver and tests found no unexpected process execution,
+  credential access, arbitrary filesystem behavior, or obfuscation;
+  `flutter analyze` was clean; focused Python regression tests ran 62 tests
+  successfully; embedded `version.json`, DEB/RPM/Pacman metadata, package
+  payloads, extracted AppImage payload, bundled Python/CHIRP runtime, bundled
+  `libusb-1.0.so.0`, absence of GLib 2.80 once-init pointer symbols, server
+  checksums, public HTTP 200 checks, and the live platform manifest were
+  verified.
+- The `1.0.44` artifacts include the experimental `KSUN UV-K60` model profile
   using the pinned Quansheng UV-K5 transport and memory layout. Physical
   read/write comparison is still required.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
@@ -244,7 +241,7 @@ release requirements.
 - Branch: `main`
 - macOS `1.0.44` artifact source commit: `9929f997`
 - Windows `1.0.44` artifact source commit: `9929f997`
-- Linux `1.0.43` artifact source commit: `747afb48`
+- Linux `1.0.44` artifact source commit: `ec059527`
 - Open pull requests: none
 - Checked-out source version: `1.0.44+44`
 - macOS builds are pinned to CocoaPods with
@@ -262,11 +259,8 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.44 |
 | Windows | 1.0.44 |
-| Linux | 1.0.43 |
-| Legacy shared manifest version | 1.0.43 |
-
-Windows and macOS advertise `1.0.44`; the legacy shared version stays
-`1.0.43` until Linux `1.0.44` packages are published.
+| Linux | 1.0.44 |
+| Legacy shared manifest version | 1.0.44 |
 
 macOS artifact:
 
@@ -336,7 +330,36 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux `1.0.43` artifacts:
+Linux `1.0.44` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.44.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.44.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.44.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.44.pkg.tar.zst`
+
+Linux 1.0.44 SHA-256:
+
+- DEB:
+  `e214cbbe5c451a4d75b1f8ceedcf95d82081f522270739b8dd5b23eb70e3a17c`
+- RPM:
+  `9eb26a4c90e42daefee28f4821da06490dab8a7656a485b9d88f3410a9f5b8d5`
+- AppImage:
+  `125f26772d5e2370fb16f8b79e9fe0acd71251d06bb65ffcb4bd174d6ce10916`
+- Pacman:
+  `8e56e26e9fc25b648e662c1e0cab76d522274e172accff395b6ca53bdf3e2d5f`
+
+Linux 1.0.44 sizes:
+
+- DEB: `48,433,842` bytes
+- RPM: `38,900,664` bytes
+- AppImage: `144,426,176` bytes
+- Pacman: `46,928,936` bytes
+
+Linux `1.0.43` artifacts (historical):
 
 - DEB URL:
   `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.43.deb`
@@ -425,6 +448,15 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Linux `1.0.44` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `ec059527`. Verified the
+  incoming Baofeng 5RH Pro v2 driver safety surface, `flutter analyze`,
+  62 focused Python bridge/5RH Pro tests, embedded `version.json`,
+  DEB/RPM/Pacman metadata, package payloads, extracted AppImage payload
+  including the Baofeng 5RH Pro v2 driver, bundled Python/CHIRP runtime and
+  `libusb-1.0.so.0`, absence of GLib 2.80 once-init pointer symbols,
+  matching server checksums, public HTTP 200 checks, and the live platform
+  manifest.
 - Published Windows `1.0.44` from source commit `9929f997`. Verified installer
   file/product metadata `1.0.44.0` / `1.0.44`, app version `1.0.44+44`,
   bundled Python `3.13.15`, the bundled CPS-derived Baofeng 5RH Pro v2
