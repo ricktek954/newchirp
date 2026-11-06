@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from collections import deque
 
 
 from chirp_test_source import chirp_source
@@ -15,6 +16,42 @@ SOURCE = chirp_source()
 PYTHON_VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 TDH3_IMAGE = SOURCE / "tests/images/TIDRADIO_TD-H3.img"
 BRIGHTNESS_OFFSET = 0x0CA5
+TDH3_MAGIC = b"PVOJH\x5c\x14"
+
+
+class FakeTDH3Serial:
+    def __init__(self, silent_probes=0):
+        self.timeout = 0.25
+        self.silent_probes = silent_probes
+        self.probes = 0
+        self.resets = 0
+        self._responses = deque()
+
+    def reset_input_buffer(self):
+        self.resets += 1
+
+    def write(self, data):
+        data = bytes(data)
+        if data == TDH3_MAGIC:
+            self.probes += 1
+            if self.probes > self.silent_probes:
+                self._responses.append(b"\x06")
+        elif data == b"\x02":
+            self._responses.append(b"P31183\xff\xff")
+        elif data == b"\x06":
+            self._responses.append(b"\x06")
+
+    def read(self, size):
+        result = bytearray()
+        while self._responses and len(result) < size:
+            data = self._responses[0]
+            take = min(size - len(result), len(data))
+            result.extend(data[:take])
+            if take == len(data):
+                self._responses.popleft()
+            else:
+                self._responses[0] = data[take:]
+        return bytes(result)
 
 
 def _load_bridge():
@@ -71,6 +108,27 @@ class TDH3DriverTest(unittest.TestCase):
             self.radio_class.__module__,
             "newchirp.drivers.newchirp_tdh3",
         )
+
+    def test_detection_retries_a_silent_probe(self):
+        serial = FakeTDH3Serial(silent_probes=1)
+
+        detected = self.radio_class.detect_from_serial(serial)
+
+        self.assertIs(
+            detected,
+            self.directory.get_radio("TIDRADIO_TD-H3"),
+        )
+        self.assertEqual(serial.probes, 2)
+        self.assertEqual(serial.resets, 1)
+
+    def test_detection_stops_after_five_silent_probes(self):
+        serial = FakeTDH3Serial(silent_probes=10)
+        from chirp import errors
+
+        with self.assertRaises(errors.RadioNoResponse):
+            self.radio_class.detect_from_serial(serial)
+
+        self.assertEqual(serial.probes, 5)
 
     def test_unset_brightness_becomes_a_visible_setting(self):
         radio = self._radio_with_brightness(0xFF)
