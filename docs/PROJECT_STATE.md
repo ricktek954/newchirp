@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-05
+Last updated: 2026-11-06
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,20 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-06 email triage found 16 unread bug-report messages. UID 448
+  (macOS DM-32UV zone capacity) received an explanation of the radio's
+  64-members-per-zone limit. UIDs 459 and 460 (Quansheng TK11) exposed a
+  shared bridge bug in which JSON string values were applied directly to
+  numeric `RadioSettingValueList` extras; commit `d5a6f1b5` restores the
+  driver's native option value before upload. The fix will be in the next
+  build. Replies for UIDs 448 and 460 were verified in `Sent`, and source
+  UIDs 448, 459 (duplicate report), and 460 were verified `\Seen`.
+- Verification for `d5a6f1b5`: the complete Python suite ran 268 tests with
+  2 fixture-dependent skips, `flutter analyze` is clean, and all 186 Flutter
+  tests pass from a native-path worktree. The standalone formatter still
+  reports the same two pre-existing files it would rewrite:
+  `lib/models/repeater_counties.dart` and
+  `lib/services/window_state_store.dart`.
 - Scott's 2026-11-05 GM-21 1.0.40 report showed the GM-5RH identification
   string succeeding but the UV-17Pro GPS follow-up magic being sent next, so
   the first clone read returned eight bytes instead of 68. The compatibility
