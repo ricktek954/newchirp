@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T17:00:37Z"
+timestamp: "2026-11-06T10:28:18Z"
 concept_id: chirp_bridge/serial_read_timeout
 language: python
 ---
@@ -29,7 +29,7 @@ def serial_read_timeout(radio_class)
 | `radio_class` | `—` | `—` |
 
 ## Source
-Lines 1161–1167 in `chirp_bridge.py`
+Lines 1173–1179 in `chirp_bridge.py`
 
 ## Relationships
 

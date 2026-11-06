@@ -1008,6 +1008,23 @@ def settings_tree_json(elements, prefix=()):
     return result
 
 
+def coerce_setting_value(element, value):
+    """Match JSON values to labels or native option values.
+
+    Some drivers expose numeric RadioSettingValueList options such as
+    0-8. JSON serializes those as strings, but CHIRP expects the original
+    integer when applying the value.
+    """
+    from chirp.settings import RadioSettingValueList
+
+    if not isinstance(element.value, RadioSettingValueList):
+        return value
+    for option in element.value.get_options():
+        if option == value or str(option) == str(value):
+            return option
+    return value
+
+
 def apply_setting_changes(settings, changes):
     from chirp.settings import RadioSetting, RadioSettingValueList
 
@@ -1029,14 +1046,7 @@ def apply_setting_changes(settings, changes):
             )
         if not element.value.get_mutable():
             continue
-        value = change.get("value")
-        if isinstance(element.value, RadioSettingValueList):
-            for option in element.value.get_options():
-                if option == value:
-                    break
-                if str(option) == str(value):
-                    value = option
-                    break
+        value = coerce_setting_value(element, change.get("value"))
         try:
             element.value = value
         except Exception as exc:
@@ -1080,7 +1090,9 @@ def apply_json(radio, mem, item):
     }
     for setting in mem.extra:
         if setting.get_name() in extra_values and setting.value.get_mutable():
-            setting.value = extra_values[setting.get_name()]
+            setting.value = coerce_setting_value(
+                setting, extra_values[setting.get_name()]
+            )
     set_mem("empty", False)
     return skipped_fields
 

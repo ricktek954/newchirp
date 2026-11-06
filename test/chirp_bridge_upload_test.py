@@ -189,6 +189,66 @@ class UploadHandshakeTest(unittest.TestCase):
             list(range(1, 10)) + [13, 14],
         )
 
+    def test_apply_json_coerces_stringified_numeric_extra_choice(self):
+        from chirp import chirp_common
+        from chirp.settings import (
+            RadioSetting,
+            RadioSettingGroup,
+            RadioSettingValueList,
+        )
+
+        memory = chirp_common.Memory()
+        memory.number = 1
+        memory.freq = 146_520_000
+        memory.name = "TEST"
+        memory.duplex = ""
+        memory.tmode = ""
+        memory.mode = "FM"
+        memory.tuning_step = 5.0
+        memory.skip = ""
+        memory.comment = ""
+        memory.power = None
+        memory.extra = RadioSettingGroup("Extra", "extra")
+        memory.extra.append(
+            RadioSetting(
+                "squelch",
+                "Squelch",
+                RadioSettingValueList(list(range(0, 9)), current_index=4),
+            )
+        )
+
+        extras = bridge.extra_fields_json(memory)
+        self.assertEqual(extras[0]["value"], "4")
+        bridge.apply_json(
+            SimpleNamespace(),
+            memory,
+            {
+                "location": 1,
+                "frequency": 146.52,
+                "offset": 0,
+                "name": "TEST",
+                "duplex": "",
+                "tone": "",
+                "txTone": memory.rtone,
+                "rxTone": memory.ctone,
+                "dtcs": memory.dtcs,
+                "dtcsPolarity": memory.dtcs_polarity,
+                "rxDtcs": memory.rx_dtcs,
+                "crossMode": memory.cross_mode,
+                "mode": "FM",
+                "step": 5.0,
+                "skip": "",
+                "comment": "",
+                "power": None,
+                "extras": extras,
+            },
+        )
+
+        setting = next(
+            item for item in memory.extra if item.get_name() == "squelch"
+        )
+        self.assertEqual(setting.value.get_value(), 4)
+
     def test_dm32uv_mapping_changes_create_rename_and_keep_multi_zone(self):
         radio = self.directory.get_radio_by_image(str(DM32UV_IMAGE))
         models = bridge.mapping_payload(radio)

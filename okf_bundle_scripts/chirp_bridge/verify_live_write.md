@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T17:00:37Z"
+timestamp: "2026-11-06T10:28:18Z"
 concept_id: chirp_bridge/verify_live_write
 language: python
 ---
@@ -40,7 +40,7 @@ Read back live memories so a rejected write cannot report success.
 | `cleared` | `—` | `—` |
 
 ## Source
-Lines 1319–1336 in `chirp_bridge.py`
+Lines 1331–1348 in `chirp_bridge.py`
 
 ## Relationships
 

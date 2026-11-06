@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/private/tmp/newchirp-a9305b/scripts",
+  "source_root": "/private/tmp/newchirp-email-triage-clean/newchirp/scripts",
   "files": {
     "build_macos_dmg.py": {
       "path": "build_macos_dmg.py",
-      "mtime_ns": 1793898026391121624,
+      "mtime_ns": 1793960886658043252,
       "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
       "concept_ids": [
         "build_macos_dmg/build_background",
@@ -16,7 +16,7 @@
     },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1793898026391980088,
+      "mtime_ns": 1793960886658822069,
       "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
       "concept_ids": [
         "generate_gmrs_frs_pdf/PdfWriter",
@@ -38,7 +38,7 @@
     },
     "generate_repeater_counties.py": {
       "path": "generate_repeater_counties.py",
-      "mtime_ns": 1793898026392054505,
+      "mtime_ns": 1793960886658902067,
       "hash": "5b41696728c60fba0706a10867eadf154b89b4d803f0ed4e9038319bc7fe3c24",
       "concept_ids": [
         "generate_repeater_counties/dart_string",
@@ -51,7 +51,7 @@
     },
     "newchirp_mass_storage.py": {
       "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1793898026392134214,
+      "mtime_ns": 1793960886658972024,
       "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
       "concept_ids": [
         "newchirp_mass_storage/CS750Profile",
@@ -78,7 +78,7 @@
     },
     "newchirp_usb_dfu.py": {
       "path": "newchirp_usb_dfu.py",
-      "mtime_ns": 1793898026392227256,
+      "mtime_ns": 1793960886659048939,
       "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
       "concept_ids": [
         "newchirp_usb_dfu/DeviceDescriptor",
@@ -111,8 +111,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1793898037665526363,
-      "hash": "1cb8b389eac016343ef6f1ab547212e7b8e053e4e54610443302b1c79eba1498",
+      "mtime_ns": 1793960898564174822,
+      "hash": "3ec4cd8dfbcb220ad201e9cc554e5f25185dffa9da80c70aebd22c2f58e9a2fa",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -148,6 +148,7 @@
         "chirp_bridge/setting_doc",
         "chirp_bridge/setting_value_json",
         "chirp_bridge/settings_tree_json",
+        "chirp_bridge/coerce_setting_value",
         "chirp_bridge/apply_setting_changes",
         "chirp_bridge/apply_json",
         "chirp_bridge/nearest_programmable_frequency",
@@ -191,7 +192,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "539f18bc373576cf4267e0f3e9720c19b251d88dfac851ba104ff8885ff28318",
+      "edge_hash": "6ca72b16064da6ad483543ce53425d4e3754096807ceaaa06220cc33049e9ceb",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -271,7 +272,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
+      "edge_hash": "467644ca4e4051f17fa169fe28ced39a7e87c5dab0bf60b37529f45a9d2e816b",
       "enriched": false
     },
     "chirp_bridge/apply_json": {
@@ -279,7 +280,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
+      "edge_hash": "467644ca4e4051f17fa169fe28ced39a7e87c5dab0bf60b37529f45a9d2e816b",
       "enriched": false
     },
     "chirp_bridge/open_serial": {
@@ -1305,7 +1306,15 @@
       "render_hash": "stale",
       "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
       "enriched": false
+    },
+    "chirp_bridge/coerce_setting_value": {
+      "concept_id": "chirp_bridge/coerce_setting_value",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "fc11035ea4a45f899a85650551c9fa7d343f4b625243d0bf13798cc05bbf1776",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-05T17:01:38Z"
+  "generated_at": "2026-11-06T10:28:28Z"
 }

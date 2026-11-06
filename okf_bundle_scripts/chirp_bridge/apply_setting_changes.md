@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T17:00:37Z"
+timestamp: "2026-11-06T10:28:18Z"
 concept_id: chirp_bridge/apply_setting_changes
 language: python
 ---
@@ -31,11 +31,12 @@ def apply_setting_changes(settings, changes)
 | `changes` | `—` | `—` |
 
 ## Source
-Lines 1011–1047 in `chirp_bridge.py`
+Lines 1028–1057 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
+| calls | [coerce_setting_value](/chirp_bridge/coerce_setting_value.md) |
 | called_by | [main](/chirp_bridge/main.md) |
