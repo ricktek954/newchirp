@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-05
+Last updated: 2026-11-06
 
 ## Status definitions
 
@@ -41,7 +41,7 @@ Last updated: 2026-11-05
 | TYT MD-UV380 | `drivers/newchirp_tyt_mduv380.py` | ST DfuSe USB 0483:DF11 + libusb | 3000 channels + zones | Yes, offline-tested | Hidden | Experimental |
 | Baofeng UV-9G | Pinned CHIRP `baofeng_wp970i.py` with `drivers/newchirp_uv9g.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Stock CHIRP driver | Invalid service calibration values are read-only and preserved | Experimental compatibility override |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
-| TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | CHIRP TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | OEM-verified TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized; five-attempt identity probe | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | HAM and generic G4 identities accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
@@ -538,7 +538,7 @@ Last updated: 2026-11-05
   `TDH3_GMRS` settings path
 - Maintained file: `drivers/newchirp_tdh3.py`
 - Driver SHA-256:
-  `60d6c1fbe241c0222ca0ad938e7100b8b647287bc98a9467e63ba26dc5eb1358`
+  `7fd6dc0cfacc0b574293862142b28826379edcf489de9ea49b2385010cd7f8f1`
 - Transport: upstream CHIRP TD-H3 clone serial at 38400 8N1
 - Implemented: all channel, settings, and write behavior from the pinned
   upstream TD-H3 drivers. The override normalizes a stored brightness value of
@@ -550,6 +550,11 @@ Last updated: 2026-11-05
 - Identity routing: selecting the HAM or GMRS catalog entry now delegates to
   the TD-H3 family detector. The reported `P31183` identity therefore resolves
   to the generic TD-H3 profile even when a variant entry was selected.
+- OEM CPS evidence: the official `TD-H3 GMRS` package dated 2025-03-31 was
+  reverse engineered. It sends the same `PVOJH 5C 14` probe at 38400 8N1,
+  enables RTS, uses 5-second serial timeouts, and retries the probe up to five
+  times. NewChirp now matches the retry policy and clears stale input once
+  before identification. See `docs/TIDRADIO_TD-H3_PROTOCOL.md`.
 - Evidence: pinned CHIRP `tdh8.py` SHA-256
   `6cc013c387f4728df4db826cd758fad805fd855e43bc44e70e2004aac845cc6c`;
   2026-10-30 NewChirp 1.0.25 report from caitlinfireblood@gmail.com. The radio
