@@ -189,6 +189,37 @@ class UploadHandshakeTest(unittest.TestCase):
             list(range(1, 10)) + [13, 14],
         )
 
+    def test_dm32uv_zone_name_stops_at_embedded_nul(self):
+        radio = self.directory.get_radio_by_image(str(DM32UV_IMAGE))
+        radio._zone(1).name = "Analog\x00o".ljust(16, "\x00")
+
+        models = bridge.mapping_payload(radio)
+
+        self.assertEqual(models[0]["mappings"][0]["name"], "Analog")
+
+    def test_dm32uv_full_zone_explains_the_capacity_limit(self):
+        radio = self.directory.get_radio_by_image(str(DM32UV_IMAGE))
+        for location in range(15, 66):
+            memory = radio.get_memory(1)
+            memory.number = location
+            radio.set_memory(memory)
+        active_locations = set(range(1, 66))
+        models = bridge.mapping_payload(radio)
+        models[0]["mappings"][0]["channelLocations"] = list(
+            range(1, 66)
+        )
+
+        with self.assertRaisesRegex(
+            RuntimeError,
+            r"Zone 'Analog' is full.*at most 64 channels per zone"
+            r".*another zone",
+        ):
+            bridge.apply_mapping_payload(
+                radio,
+                [models[0]],
+                active_locations=active_locations,
+            )
+
     def test_apply_json_coerces_stringified_numeric_extra_choice(self):
         from chirp import chirp_common
         from chirp.settings import (
