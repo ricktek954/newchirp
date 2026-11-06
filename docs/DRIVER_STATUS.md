@@ -34,6 +34,7 @@ Last updated: 2026-11-06
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng UV-17ProGPS | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv17progps_compat.py` | UV-17-family serial, 115200 8N1 | Malformed CTCSS values no longer abort channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5G Mini | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5g_mini.py` | UV-17-family serial, 115200 8N1 | Fixed GMRS frequencies; channels 15-22 retain stored duplex | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng GM-21 | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_baofeng_gm21.py` | UV-17-family serial; GM-5RH and UV-17Pro GPS handshakes | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -89,6 +90,31 @@ Last updated: 2026-11-06
 - Hardware validation: none for the retry override
 - Next milestone: reporters retest the next normal build; the macOS reporter
   should confirm the edited channel library uploads and reads back correctly
+
+### Baofeng UV-17ProGPS
+
+- Maintained compatibility: `drivers/newchirp_uv17progps_compat.py`
+- Driver SHA-256:
+  `079a2c975ba08857a2f99f2e3ce0be7dcc1b56a2fdc03759a6b6edac36007126`
+- Transport: pinned CHIRP `baofeng_uv17Pro.py`, UV-17-family serial at
+  115200 8N1
+- Decode policy: a stored CTCSS word outside CHIRP's supported tone table is
+  exposed as no tone instead of aborting the entire channel map. The original
+  image bytes remain unchanged.
+- Write policy: stock CHIRP channel, settings, and upload logic. When an
+  affected channel is edited without changing its tone settings, its malformed
+  tone bytes are preserved rather than silently replaced.
+- Evidence: upstream CHIRP fixture `Baofeng_UV-17ProGPS.img`, SHA-256
+  `0a9966909fd2acde913f50370bf114d7bd02b60d785468764f611f623575cd68`,
+  plus the 2026-11-06 report in email UID 468 where the downloaded image
+  decoded as invalid `rtone=1717.0` (raw CTCSS word `0x4312`).
+- Offline validation: channel decode succeeds with the malformed word, the
+  image bytes remain unchanged, and editing another field preserves the
+  malformed tone bytes.
+- Hardware validation: pending for this compatibility override.
+- Next milestone: the reporter retests Download From Radio in the next normal
+  build, confirms the affected channel appears with no tone, and compares one
+  edited non-tone field against the radio display before upload.
 
 ### Baofeng UV-5G Mini
 
