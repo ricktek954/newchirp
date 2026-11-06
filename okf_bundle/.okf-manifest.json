@@ -279,6 +279,35 @@
         "services/mototrbo_cps2_xml"
       ]
     },
+    "services/mygmrs_client.dart": {
+      "path": "services/mygmrs_client.dart",
+      "mtime_ns": 1793978671702776958,
+      "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
+      "concept_ids": [
+        "services/mygmrs_client/JsonResponse",
+        "services/mygmrs_client/MyGmrsClient",
+        "services/mygmrs_client/MyGmrsException",
+        "services/mygmrs_client/MyGmrsService",
+        "services/mygmrs_client/apiError",
+        "services/mygmrs_client/applyTones",
+        "services/mygmrs_client/cancelSignIn",
+        "services/mygmrs_client/convertRepeaterResponse",
+        "services/mygmrs_client/ctcssTone",
+        "services/mygmrs_client/ensureSignedIn",
+        "services/mygmrs_client/gmrsRepeaterOutput",
+        "services/mygmrs_client/jsonRequest",
+        "services/mygmrs_client/openSystemBrowser",
+        "services/mygmrs_client/postJson",
+        "services/mygmrs_client/searchRepeaters",
+        "services/mygmrs_client/signIn",
+        "services/mygmrs_client/signOut",
+        "services/mygmrs_client/stateCode",
+        "services/mygmrs_client/storeSession",
+        "services/mygmrs_client/throwSignInCancelled",
+        "services/mygmrs_client/toString",
+        "services/mygmrs_client"
+      ]
+    },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
       "mtime_ns": 1793535331151239246,
@@ -530,8 +559,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1793979261237480005,
-      "hash": "17dad85afe2a3c830f800544dc690459959300d5cfb1fff80673597e99f76784",
+      "mtime_ns": 1793987773816522135,
+      "hash": "ff67219cc97f476c9a4af5fc16b03f15ec92bbd84c63ffe8980ab43ab6f0dafa",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -745,35 +774,6 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
-      ]
-    },
-    "services/mygmrs_client.dart": {
-      "path": "services/mygmrs_client.dart",
-      "mtime_ns": 1793978671702776958,
-      "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
-      "concept_ids": [
-        "services/mygmrs_client",
-        "services/mygmrs_client/MyGmrsService",
-        "services/mygmrs_client/MyGmrsException",
-        "services/mygmrs_client/MyGmrsClient",
-        "services/mygmrs_client/JsonResponse",
-        "services/mygmrs_client/signIn",
-        "services/mygmrs_client/cancelSignIn",
-        "services/mygmrs_client/signOut",
-        "services/mygmrs_client/searchRepeaters",
-        "services/mygmrs_client/ctcssTone",
-        "services/mygmrs_client/stateCode",
-        "services/mygmrs_client/gmrsRepeaterOutput",
-        "services/mygmrs_client/applyTones",
-        "services/mygmrs_client/openSystemBrowser",
-        "services/mygmrs_client/toString",
-        "services/mygmrs_client/throwSignInCancelled",
-        "services/mygmrs_client/storeSession",
-        "services/mygmrs_client/ensureSignedIn",
-        "services/mygmrs_client/convertRepeaterResponse",
-        "services/mygmrs_client/postJson",
-        "services/mygmrs_client/jsonRequest",
-        "services/mygmrs_client/apiError"
       ]
     }
   },
@@ -5779,5 +5779,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-06T15:34:24Z"
+  "generated_at": "2026-11-06T17:56:17Z"
 }
