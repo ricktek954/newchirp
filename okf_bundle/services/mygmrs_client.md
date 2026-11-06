@@ -10,7 +10,7 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-05T10:49:20Z"
+timestamp: "2026-11-06T15:24:31Z"
 concept_id: services/mygmrs_client
 language: dart
 ---
@@ -26,6 +26,7 @@ language: dart
 | related | [MyGmrsClient](/services/mygmrs_client/MyGmrsClient.md) |
 | related | [_JsonResponse](/services/mygmrs_client/JsonResponse.md) |
 | related | [signIn](/services/mygmrs_client/signIn.md) |
+| related | [cancelSignIn](/services/mygmrs_client/cancelSignIn.md) |
 | related | [signOut](/services/mygmrs_client/signOut.md) |
 | related | [searchRepeaters](/services/mygmrs_client/searchRepeaters.md) |
 | related | [_ctcssTone](/services/mygmrs_client/ctcssTone.md) |
@@ -34,10 +35,13 @@ language: dart
 | related | [_applyTones](/services/mygmrs_client/applyTones.md) |
 | related | [_openSystemBrowser](/services/mygmrs_client/openSystemBrowser.md) |
 | related | [signIn](/services/mygmrs_client/signIn.md) |
+| related | [cancelSignIn](/services/mygmrs_client/cancelSignIn.md) |
 | related | [signOut](/services/mygmrs_client/signOut.md) |
 | related | [searchRepeaters](/services/mygmrs_client/searchRepeaters.md) |
 | related | [toString](/services/mygmrs_client/toString.md) |
 | related | [signIn](/services/mygmrs_client/signIn.md) |
+| related | [_throwSignInCancelled](/services/mygmrs_client/throwSignInCancelled.md) |
+| related | [cancelSignIn](/services/mygmrs_client/cancelSignIn.md) |
 | related | [_storeSession](/services/mygmrs_client/storeSession.md) |
 | related | [signOut](/services/mygmrs_client/signOut.md) |
 | related | [ensureSignedIn](/services/mygmrs_client/ensureSignedIn.md) |

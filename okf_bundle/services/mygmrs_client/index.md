@@ -17,6 +17,8 @@
 - [_postJson](postJson.md)
 - [_stateCode](stateCode.md)
 - [_storeSession](storeSession.md)
+- [_throwSignInCancelled](throwSignInCancelled.md)
+- [cancelSignIn](cancelSignIn.md)
 - [convertRepeaterResponse](convertRepeaterResponse.md)
 - [ensureSignedIn](ensureSignedIn.md)
 - [MyGmrsClient](MyGmrsClient.md)

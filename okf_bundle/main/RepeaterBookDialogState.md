@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T10:28:11Z"
+timestamp: "2026-11-06T15:34:21Z"
 concept_id: main/RepeaterBookDialogState
 language: dart
 ---
@@ -29,6 +29,7 @@ class _RepeaterBookDialogState
 - `_selectCountry`
 - `_selectProvider`
 - `_signInMyGmrs`
+- `_cancelMyGmrsSignIn`
 - `_signOutMyGmrs`
 - `dispose`
 - `_search`
@@ -43,7 +44,7 @@ class _RepeaterBookDialogState
 - `resizeBy`
 
 ## Source
-Lines 7293–8552 in `main.dart`
+Lines 7293–8598 in `main.dart`
 
 ## Relationships
 
