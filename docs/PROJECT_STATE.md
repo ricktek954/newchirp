@@ -175,12 +175,10 @@ release requirements.
   the randomized 25-byte `SEND` authentication exchange is performed with
   session-symbol payload decryption, and the Web Programmer's 3.5-second
   block response window is allowed. It keeps the `1.0.27`-`1.0.36` fixes.
-- The macOS `1.0.42` release is live from source commit `d98b660b`. It adds
-  the UV-5RH stray-handshake retry and keeps the experimental KSUN UV-K60
-  profile, read-only Radtel RT-860 driver, F4HWN 6.3 UV-K1 profile,
-  CPS-derived Wouxun KG-Q10H driver, malformed-tone handling, paired GM-21
-  handshakes, cancellable myGMRS sign-in, and numeric channel-setting upload
-  correction from `1.0.41`.
+- The macOS `1.0.43` release is live from source commit `f37f138b`. It fixes
+  TK-7160K dynamic-zone metadata decoding, corrects BF-F8HP Pro port guidance,
+  and keeps the UV-5RH stray-handshake retry and all `1.0.41` radio-driver and
+  UX work.
 - The 2026-11-01 macOS triage handled RT-950 report UID 309 and FT-5D report
   UID 313. The fixes are committed as `9ab7e522`; both replies were verified
   in `Sent`, and both source messages were marked `\Seen`.
@@ -214,7 +212,7 @@ release requirements.
   and Pacman. Keep Pacman labeled for Arch/Omarchy/Manjaro and keep the
   copyable `sudo pacman -U ~/Downloads/NewChirp-linux-x64-<version>.pkg.tar.zst`
   helper under that row.
-- The macOS `1.0.42` release is built, signed, notarized, stapled, uploaded,
+- The macOS `1.0.43` release is built, signed, notarized, stapled, uploaded,
   and live. The universal DMG contains both Python architectures and universal
   libusb.
 - The RT97L serial protocol is implemented and offline-tested, but its
@@ -237,11 +235,11 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.42` artifact source commit: `d98b660b`
+- macOS `1.0.43` artifact source commit: `f37f138b`
 - Windows `1.0.42` artifact source commit: `d98b660b`
 - Linux `1.0.42` artifact source commit: `ccc98fd5`
 - Open pull requests: none
-- Checked-out source version: `1.0.42+42`
+- Checked-out source version: `1.0.43+43`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -255,24 +253,24 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.42 |
-| Windows | 1.0.42 |
-| Linux | 1.0.42 |
-| Legacy shared manifest version | 1.0.42 |
+| macOS | 1.0.43 |
+| Windows | 1.0.43 |
+| Linux | 1.0.43 |
+| Legacy shared manifest version | 1.0.43 |
 
 macOS artifact:
 
-- URL: `https://newchirp.net/downloads/NewChirp-1.0.42.dmg`
-- Version/build: `1.0.42` / `42`
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.43.dmg`
+- Version/build: `1.0.43` / `43`
 - Architectures: `arm64` and `x86_64`
 - SHA-256:
-  `f05d5e18c19efc5279b1c4f2e1895d679913c1ca2d30ffde9d4fdacf1672ae86`
-- Size: `82,430,479` bytes
-- Notarization submission: `9696ab38-f44e-482e-b7a5-8bad69be0106`
+  `a28383a142c05594a426e3ae35daf94d2e1cb8734dfe08e3d44c10a2a79b32bb`
+- Size: `82,430,265` bytes
+- Notarization submission: `56f61681-8605-4919-b38a-00c4d3a1ce33`
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows artifact:
+Windows `1.0.42` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.42.exe`
 - Version/build: `1.0.42` / `42`
@@ -369,6 +367,12 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.43` from source commit `f37f138b` as a universal
+  signed, notarized, stapled DMG. Verified the TK-7160K subdevice metadata fix,
+  BF-F8HP Pro selected-port guidance, app/build version, both Python runtimes,
+  universal libusb, strict signatures, Gatekeeper acceptance, the
+  notarization ticket, matching local/server checksums, public HTTP
+  availability, and the live platform manifest.
 - Published Windows `1.0.42` from source commit `d98b660b`. Verified installer
   file/product metadata `1.0.42.0` / `1.0.42`, app version `1.0.42+42`, the
   four focused UV-5RH handshake tests, bundled Python `3.13.15`, matching
@@ -623,6 +627,28 @@ Linux 1.0.41 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.43 verification status
+
+Full verification before the macOS `1.0.43` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 188 tests passed
+- Python test discovery: 304 tests passed, 2 fixture-dependent tests skipped
+- Standalone CHIRP bridge upload suite: all 56 tests passed
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.43` / `43`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled CHIRP bridge SHA-256:
+  `0e4db47c304c6ff8b2239f8bf06e4f751ba9f3148bb87920cc115a4d98cb341d`
+- Notarization submission: `56f61681-8605-4919-b38a-00c4d3a1ce33`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.43`
+- The documented separate raw-SCSI helper remains `arm64`-only.
 
 ## macOS 1.0.42 verification status
 
