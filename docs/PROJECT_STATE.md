@@ -22,6 +22,12 @@ release requirements.
   reports the same two pre-existing files it would rewrite:
   `lib/models/repeater_counties.dart` and
   `lib/services/window_state_store.dart`.
+- Follow-up UX fix `da1a744c` replaces the raw DM-32UV full-zone exception
+  with the radio's actual capacity and recovery steps, and stops zone display
+  names at an embedded NUL terminator. Regression tests cover a 65th zone
+  membership and the malformed stored name. The complete Python suite now
+  runs 270 tests with 2 fixture-dependent skips; all 186 Flutter tests and
+  `flutter analyze` pass.
 - Scott's 2026-11-05 GM-21 1.0.40 report showed the GM-5RH identification
   string succeeding but the UV-17Pro GPS follow-up magic being sent next, so
   the first clone read returned eight bytes instead of 68. The compatibility
