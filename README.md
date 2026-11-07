@@ -210,6 +210,20 @@ Use an SCU-56 USB cable or CT-163 serial cable on the DATA jack. Keep a complete
 microSD ALL backup before uploading. The radio-side menu entries are
 **59 Other -> This** for download and **58 This -> Other** for upload.
 
+### Experimental Retevis RA89 support
+
+NewChirp includes a maintained experimental driver for the Retevis RA89. It
+uses the official RA89 Programming Software V1.08 transport at 57,600 baud
+with DTR and RTS asserted, including its programming-code stage and protected
+factory-region skip. The editor covers 200 channels, names, tones, power,
+bandwidth, scan skip, core radio settings, startup text, side keys, and work
+modes. Unknown fields are preserved in the image.
+
+Download and save an unedited image before uploading. Read the radio back after
+the first experimental write and keep the original backup. Protocol evidence
+and the physical-validation checklist are in
+[RA89 protocol notes](docs/RA89_PROTOCOL.md).
+
 ### Experimental RT-950 support
 
 NewChirp also includes a read-only driver for the Radtel RT-950. Select

@@ -65,6 +65,7 @@ Last updated: 2026-11-07
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
+| Retevis RA89 | `drivers/newchirp_ra89.py` | OEM addressed blocks, 57,600 8N1, DTR/RTS on | 200 channels + core settings | Yes, offline-tested | Core settings and startup text | Experimental |
 | TYT TH-9800 | Pinned CHIRP `th9800.py` with `drivers/newchirp_th9800_compat.py` | TYT clone serial, 38400 8N1 | Reserved tone values no longer abort the read | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Yaesu VX-6 | Pinned CHIRP `vx6.py` with `drivers/newchirp_vx6_compat.py` | Yaesu clone serial, 19200 8N1 | Unprogrammable stored slots are treated as empty | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 
@@ -480,6 +481,51 @@ Last updated: 2026-11-07
 - Next milestone: complete an unedited physical read, save the raw backup,
   compare it with a CPS-exported image, then perform one channel edit,
   read-back, and restore test.
+
+### Retevis RA89
+
+- Maintained driver: `drivers/newchirp_ra89.py`
+- Protocol notes: `docs/RA89_PROTOCOL.md`
+- Official CPS package: `RA89-Programming-Software.zip`, SHA-256
+  `ba792a74a122f33c4b70405aae0ab35018efa3e75842b8efe4e94f360015a500`
+- Inner installer: `RA89_20230909_V108.exe`, SHA-256
+  `610cbca1ba74cde6fed09ea7ff8639a23f7bced111210569f4c86c14ab61194e`
+- Main .NET application SHA-256:
+  `d313f027c3310ca5166cdcfe98022e6f59d98716584487e5b47210825b0ea3c6`
+- Driver SHA-256:
+  `1df11114ceedcc3c12c1fff1dc088f57e051c61a97e4b12a8d2ca08fafee49cf`
+- Transport: 57,600 baud, 8N1, DTR and RTS asserted, no hardware or software
+  flow control. The OEM CPS waits 500 ms after opening the port and allows
+  three seconds per response.
+- Session: `UV99` identify, optional `E7` programming-code stage, 57,600-baud
+  setup, `E2`/`E3` read/write mode, 32-byte addressed block commands, and
+  `E5` exit. The receive path uses exact 36-byte identify, 7-byte ACK, and
+  `payload length + 13` block response counts. The OEM callback requires
+  `BytesToRead == ReceivedBytesThreshold`; NewChirp accumulates fragmented
+  responses until the exact count arrives or the command deadline expires.
+- Implemented: all 200 channels, 16-character names, RX/TX frequency,
+  duplex/split/off, CTCSS/DCS with polarity and cross modes, FM/NFM/WFM, three
+  power levels, scan skip, bus lock, optional signaling, PTT ID, tuning step,
+  scramble, core settings, startup text, side keys, and work modes.
+- Read/write policy: full 0x22A0 image read and ordered 32-byte writes, except
+  the OEM protected range `0x1680-0x193F`. Read-side checksum differences are
+  logged but not rejected because the OEM receive path discards that field.
+  Unknown fields and the protected range are preserved byte-for-byte.
+- Evidence: static CIL analysis of `serialPortResSetPro`, `SendComDatPro`,
+  `SendBaudComDatPro`, `GetDataTxRxBytePro`, `SendReadDatAddComPro`,
+  `GetChkSum_AddrPro`, `SendWriteDatAddComPro`, `SaveReadDataPro`,
+  `DisplayText`, and `serialPort1_DataReceived`; vendor sample ICF SHA-256
+  `cd5fb8f5ad492d6e28bc6db108547558176783ea965e32cfcbd5da30b01ed811`
+  independently confirms the 21-byte channel records, 200-bit active/skip
+  maps, 10-byte extended names, and sample frequencies. The pinned CHIRP
+  `th_uv88.py` profile was used only as a field-semantic comparison.
+- Hardware validation: none. The 2026-11-07 report from xe2jlg@gmail.com
+  stopped at the inherited CHIRP driver's 10-byte TYT handshake. The OEM CPS
+  asserts DTR/RTS and emits the same `FEFEEEEFE055563939FD` identify frame
+  after its 500 ms setup delay; this maintained driver now follows that path.
+- Next milestone: the reporter reads the radio on the next build, saves an
+  unedited image, and compares channels/settings with the CPS or radio display.
+  Enable the first controlled write only after that read succeeds.
 
 ### Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950
 
