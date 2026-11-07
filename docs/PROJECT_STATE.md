@@ -8,6 +8,23 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-07 GA-510 follow-up (email UID 497) showed stock CHIRP
+  succeeded on the same COM4 radio and cable while both NewChirp GA-510
+  entries failed at the first five-byte serial exchange. The official
+  newer-hardware `GA-510 CPS v1.00.36` and original 2020 CPS were downloaded.
+  Static REA of the native v1.00.36 CPS recovered `PSEARCH`, `PASSSTA`,
+  `SYSINFO`, `DMR1702`, the second identity handshake, explicit memory unlock,
+  three memory-info queries, descriptor-mapped 4 KiB pages, and 64-byte
+  addressed reads/writes. `drivers/newchirp_ga510_v2.py` now owns that
+  transport, replaces the bundled V2 entry, and makes the generic GA-510
+  selector probe V2 before falling back to the legacy 9,600-baud protocol.
+  Protocol evidence is in `docs/GA510_V2_PROTOCOL.md`. The official CPS ZIPs
+  and manual are retained in `/Users/rlopez/Downloads/`. Physical validation
+  is still pending; the next reporter test must begin with an OEM CPS backup
+  and a read-only image comparison.
+- Verification for the GA-510 V2 transport: focused CPS replay tests pass
+  5/5; the complete Python suite passes 357 tests with 2 fixture-dependent
+  skips; `flutter analyze` is clean; and all 195 Flutter tests pass.
 - The 2026-11-07 Radioddity X1 Pro GMRS request led to download and static
   REA of the official 2026-07-15 firmware/CPS package. The managed CPS shows
   a `02PROGRAM` / `SMP558` handshake, settings read at `0xE000`, 30 fixed
