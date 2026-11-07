@@ -8,11 +8,10 @@ release requirements.
 
 ## Resume here
 
-- The cross-platform `1.0.45` release is live. Linux artifacts are from
-  source commit `4ca2a6f9` and include the Retevis RA89 driver plus the safe
-  TK-270G driver. Windows and macOS `1.0.45` artifacts are present on the
-  server; native-platform verification details still need to be recorded by
-  those builders.
+- The cross-platform `1.0.45` release is live. Windows and Linux artifacts are
+  from source commit `4ca2a6f9` and include the Retevis RA89 driver plus the
+  safe TK-270G driver. The macOS `1.0.45` artifact is present; its native
+  verification details still need to be recorded by that builder.
 - The 2026-11-07 Retevis RA89 report UID 485 failed at the inherited CHIRP
   driver's 10-byte TYT handshake. The official RA89 CPS V1.08 was downloaded,
   statically reverse engineered, and documented in
@@ -263,7 +262,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.45` artifact source commit: pending native-builder record
-- Windows `1.0.45` artifact source commit: pending native-builder record
+- Windows `1.0.45` artifact source commit: `4ca2a6f9`
 - Linux `1.0.45` artifact source commit: `4ca2a6f9`
 - Open pull requests: none
 - Checked-out source version: `1.0.45+45`
@@ -314,8 +313,8 @@ Windows `1.0.45` artifact:
 - SHA-256:
   `f6fdaaf75d82380d3ee86de9d6e333167de2cef1a98c2aa1f3766252cdc82b31`
 - Size: `61,189,999` bytes
-- Server checksum recorded from the live artifact
-- Native installer metadata verification is pending a Windows builder record
+- Server checksum matched the local artifact
+- Authenticode: not signed
 
 Windows `1.0.44` artifact (historical):
 
@@ -520,6 +519,14 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.45` from source commit `4ca2a6f9`. Verified installer
+  file/product metadata `1.0.45.0` / `1.0.45`, app version `1.0.45+45`,
+  bundled Python `3.13.15`, the bundled RA89 and safe TK-270G drivers,
+  matching local/server SHA-256, public HTTP 200, and the live platform
+  manifest. RA89 and TK-270G focused suites passed 12 tests; Flutter ran 183
+  passing tests with the five known Windows sandbox/Help failures;
+  `flutter analyze` reported only three pre-existing `avoid_print` infos in
+  `build_support`. The installer remains unsigned.
 - Published Linux `1.0.45` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts from source commit `4ca2a6f9`. Verified the
   incoming RA89 and TK-270G driver safety surface, `flutter analyze`,
