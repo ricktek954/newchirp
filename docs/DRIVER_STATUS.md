@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-06
+Last updated: 2026-11-07
 
 ## Status definitions
 
@@ -61,7 +61,7 @@ Last updated: 2026-11-06
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
 | Kenwood TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710G clone serial | Stock driver | Stock driver | Stock driver | Regional identity compatibility |
-| Kenwood TK-270G | Pinned CHIRP `tk760g.py` with `drivers/newchirp_kenwood_tk270g.py` | CHIRP Kenwood clone serial, 9600 8N1 | Stock driver; invalid bank metadata normalized | Stock driver | Stock driver | Experimental compatibility override |
+| Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation; offline-tested, physical readback pending | Stock driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
@@ -949,22 +949,43 @@ Last updated: 2026-11-06
   considering any upload capability.
 - Website catalog: must be listed as experimental.
 
-### Kenwood TK-270G bank metadata
+### Kenwood TK-270G
 
-- Maintained compatibility: `drivers/newchirp_kenwood_tk270g.py`
-- Transport: pinned CHIRP Kenwood Series 60G clone serial at 9600 8N1
-- Issue: an active channel with an unprogrammed bank index above 127 aborts
-  channel decode when upstream constructs its 0-127 bank-index setting
-- Correction: normalize an invalid index to the channel's zero-based position
-  and move it to bank 1, matching the driver's existing defaults for `0xFF`
-- Evidence: the 2026-11-03 Windows report UID 391 read 24 channels, then
-  failed its write with `bnumb value 128 not in range 0-127`
-- Offline validation: the upstream `Kenwood_TK-272G.img` fixture is
-  re-identified as a TK-270G for the shared Series 60G layout and covers the
-  invalid-index normalization
-- Hardware validation: none for this override
-- Next milestone: the reporter retests upload in the next normal build, then
-  reads the radio back and verifies the edited channels and bank assignments
+- Maintained driver: `drivers/newchirp_kenwood_tk270g.py`; the
+  `NewChirpTK270G` class supersedes CHIRP's `Kenwood_TK-270G` registration.
+- Transport: pinned CHIRP Kenwood Series 60G clone serial at 9600 with even
+  parity and one stop bit. KPG-56D statically configures `9600,N,8,2`; the
+  live serial setting remains unchanged pending an OEM capture or physical
+  comparison.
+- OEM evidence: KPG-56D v4.22 package SHA-256
+  `7168c25603ab592cb5f3061ac56f71f80c6a83dccede4fbd54165bda5ea023e4`;
+  main executable SHA-256
+  `51530de3587c72c7cd4a7d6808b7a202614affbcc63a9f66917b90b61d380b28`.
+  Full artifact and protocol evidence is in `docs/KPG56D_PROTOCOL.md`.
+- Issue: the pinned `tk760g.py` extra-setting loop tests
+  `setting != "bank" or setting != "bnumb"`, which is always true. It converts
+  `bank` and `bnumb` to inverted booleans during every channel write. The
+  NewChirp bridge writes active channels one at a time, so each upload can
+  clear another channel from its bank and eventually generate zero programmed
+  channels and zero banks.
+- Correction: NewChirp now owns the channel decode and write methods. Decoded
+  bank metadata no longer mutates raw image bytes. `set_memory()` writes
+  `bank` and `bnumb` directly and never sends those two fields through the
+  broken upstream boolean loop. Existing inversion handling for beat shift,
+  compander, and busy-channel lockout is unchanged. A post-write bank-state
+  check stops the upload before radio I/O if generated counts disagree with
+  the active channel records.
+- Offline validation: the shared `Kenwood_TK-272G.img` fixture is
+  re-identified as a TK-270G. Its 36 active channels are round-tripped through
+  the same decode/write path used by the bridge; all active bank assignments
+  and bank indexes are retained and the generated channel/bank counts remain
+  nonzero.
+- Hardware validation: none. No controlled NewChirp write/read-back has been
+  performed on a TK-270G, and the OEM serial setting has not been compared on
+  the wire.
+- Next milestone: with a saved radio image and physical TK-270G, compare
+  KPG-56D and NewChirp reads, perform an unchanged NewChirp write, then compare
+  both read-backs for all channel and group metadata.
 
 ### Kenwood TM-D710GP regional identity
 
