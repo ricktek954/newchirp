@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T20:09:01Z"
+timestamp: "2026-11-07T14:59:39Z"
 concept_id: chirp_bridge/command_summary
 language: python
 ---
@@ -19,21 +19,19 @@ language: python
 ## Signature
 
 ```python
-def _command_summary(data)
+def _command_summary(self, data)
 ```
-
-## Decorators
-
-- `staticmethod`
 
 ## Parameters
 
 | Name | Type | Default |
 |------|------|---------|
+| `self` | `—` | `—` |
+
 | `data` | `—` | `—` |
 
 ## Source
-Lines 49–107 in `chirp_bridge.py`
+Lines 54–135 in `chirp_bridge.py`
 
 ## Relationships
 

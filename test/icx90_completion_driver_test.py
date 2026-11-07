@@ -97,7 +97,8 @@ class FakeIcomSerial:
 class Icx90CompletionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.directory = _load_bridge().load_chirp(
+        cls.bridge = _load_bridge()
+        cls.directory = cls.bridge.load_chirp(
             str(chirp_source()),
             str(PYTHON_VENDOR),
             str(ROOT / "drivers"),
@@ -126,6 +127,24 @@ class Icx90CompletionTest(unittest.TestCase):
         radio.sync_in()
 
         self.assertEqual(len(radio.get_mmap()), IMAGE_SIZE)
+
+    def test_upload_prompt_requires_a_fresh_clone_in_session(self):
+        prompts = self.radio_class.get_prompts()
+        self.assertIn("completely off and back on", prompts.pre_upload)
+        self.assertIn("CL OUT to CL IN", prompts.pre_upload)
+        self.assertIn("power-cycle", prompts.pre_upload)
+
+    def test_icom_clone_frames_are_not_labeled_as_tyt(self):
+        trace = self.bridge.RadioCommunicationTrace()
+        trace.set_radio_class(self.radio_class)
+        frame = _frame(
+            0xEE,
+            0xEF,
+            0xE4,
+            _data_payload(0x29A0, bytes(32)),
+        )
+        self.assertEqual(trace._command_summary(frame),
+                         "Icom clone data addr=0x29a0 len=32 (78 bytes)")
 
     def test_incomplete_image_still_fails(self):
         from chirp import errors

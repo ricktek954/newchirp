@@ -1105,6 +1105,9 @@ Last updated: 2026-11-07
   malform the generic final end frame after sending the complete image. A
   normal end frame is still accepted.
 - Write policy: unchanged from upstream CHIRP.
+- Upload procedure: power-cycle the radio and enter cloning mode as a fresh
+  operation before writing. The radio must display `CL IN`; a radio left on
+  `CL OUT` from the preceding download will not accept the write.
 - Evidence: official CS-T90A CPS archive SHA-256
   `725c37e44a781b972af49fca6b48f9190b0cd2f757e42af05eb79a7992a90038`;
   executable SHA-256
@@ -1119,14 +1122,16 @@ Last updated: 2026-11-07
   With the visibility guard, the image loads 82 visible channels and no
   parser exception.
 - Driver SHA-256:
-  `c7bebdcea4e70092fcd112e17997f1ea4f260b6c97831c6bc4c89309055d5233`
+  `010e1c98c23034fb47d17830fdea6ce4ecc83dc0958321e7b13028eea1c772ba`
 - Hardware validation: none for this override. Offline tests cover complete
   image coverage without an end frame, normal end-frame completion, and
   truncated rejection. The public 500-channel image also loaded successfully
   during manual validation.
 - Next milestone: Klas retests the committed fix with the same OPC-478UD port,
   confirms that the read completes after the full image arrives, and verifies
-  the displayed channels before any upload.
+  the displayed channels before any upload. The 2026-11-07 Linux report adds
+  the requirement to power-cycle before upload and confirm the `CL IN`
+  indication.
 
 ### Icom IC-7200 memory grammar compatibility
 
