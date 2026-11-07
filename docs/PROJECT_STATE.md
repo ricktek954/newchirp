@@ -8,6 +8,9 @@ release requirements.
 
 ## Resume here
 
+- The Windows `1.0.46` installer is live from source commit `e4d4db35`.
+  Its platform manifest entry reports `1.0.46`; macOS, Linux, and the legacy
+  shared manifest remain `1.0.45` until their `1.0.46` artifacts exist.
 - The 2026-11-07 GA-510 follow-up (email UID 497) showed stock CHIRP
   succeeded on the same COM4 radio and cable while both NewChirp GA-510
   entries failed at the first five-byte serial exchange. The official
@@ -341,10 +344,10 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.45` artifact source commit: `4ca2a6f9`
-- Windows `1.0.45` artifact source commit: `4ca2a6f9`
+- Windows `1.0.46` artifact source commit: `e4d4db35`
 - Linux `1.0.45` artifact source commit: `4ca2a6f9`
 - Open pull requests: none
-- Checked-out source version: `1.0.45+45`
+- Checked-out source version: `1.0.46+46`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -359,9 +362,12 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.45 |
-| Windows | 1.0.45 |
+| Windows | 1.0.46 |
 | Linux | 1.0.45 |
 | Legacy shared manifest version | 1.0.45 |
+
+Windows reports `1.0.46`; the legacy shared version stays `1.0.45` until
+macOS and Linux `1.0.46` artifacts are published.
 
 macOS `1.0.45` artifact:
 
@@ -387,7 +393,17 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.45` artifact:
+Windows `1.0.46` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.46.exe`
+- Version/build: `1.0.46` / `46`
+- SHA-256:
+  `6e9a6f649a147634d9aef033cdbc33fdd7c99219d334e29c858051a61f1a31e9`
+- Size: `61,221,115` bytes
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.45` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.45.exe`
 - Version/build: `1.0.45` / `45`
@@ -600,6 +616,16 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.46` from source commit `e4d4db35`. Verified installer
+  file/product metadata `1.0.46.0` / `1.0.46`, app version `1.0.46+46`,
+  bundled Python `3.13.15`, the bundled DB25-G, X1 Pro, GA-510 V2,
+  retry-safe IC-E90, and hardware-tested MXT295 drivers, matching
+  local/server SHA-256, public HTTP 200, and the Windows platform manifest
+  entry. DB25-G, X1 Pro, GA-510 V2, IC-E90, and MXT295 focused suites passed
+  54 tests with one fixture-dependent skip; Flutter ran 184 passing tests
+  with the five known Windows sandbox/Help failures; `flutter analyze`
+  reported only three pre-existing `avoid_print` infos in `build_support`.
+  The installer remains unsigned.
 - Published macOS `1.0.45` from source commit `4ca2a6f9` as a universal
   signed, notarized, stapled DMG. The release carries the CPS-derived Retevis
   RA89 driver, app/build version `1.0.45` / `45`, both Python 3.13.15 runtime
