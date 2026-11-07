@@ -12,6 +12,16 @@ release requirements.
   landed. After this handoff commit is pushed, repository `main` should be
   clean and synced. Immediate follow-ups are normal unread-email triage and
   any physical RA89/TK-270G read/write validation from reporters.
+- The 2026-11-07 IC-E90 report UID 486 completed a read but failed an upload
+  while the radio remained on `CL OUT`. The CS-T90A transport is unchanged
+  and correct; the radio must be power-cycled and enter a fresh clone session
+  before a write, then display `CL IN`. Commit `cdcb81d9` adds explicit
+  pre-upload prompts, documents the recovery procedure, and stops the bridge
+  trace from labeling Icom clone frames as TYT. The reply is in `Sent` as UID
+  316 and source UID 486 is verified `\Seen`. Verification: focused IC-E90
+  tests passed 7/7; the complete Python suite passed 323 tests with 2
+  fixture-dependent skips; the bridge upload suite passed 57 tests; and
+  `flutter analyze` is clean.
 - The cross-platform `1.0.45` release is live. Windows and Linux artifacts are
   from source commit `4ca2a6f9` and include the Retevis RA89 driver plus the
   safe TK-270G driver. macOS is from source commit `4ca2a6f9` and is fully
