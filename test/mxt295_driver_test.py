@@ -1,4 +1,4 @@
-"""Round-trip tests for the experimental Midland MXT295 driver."""
+"""Round-trip tests for the hardware-tested Midland MXT295 driver."""
 
 from __future__ import annotations
 
@@ -118,14 +118,10 @@ class MXT295DriverTest(unittest.TestCase):
         self.assertEqual(radio_cls.__name__, mxt.MXT295Radio.__name__)
         self.assertEqual(radio_cls.__module__, mxt.MXT295Radio.__module__)
         prompts = radio_cls.get_prompts()
-        self.assertEqual(prompts.experimental, "")
-        self.assertIsNone(prompts.info)
+        self.assertIsNone(prompts.experimental)
+        self.assertIn("Hardware-tested MXT295 support.", prompts.info)
         self.assertIn(
-            "This driver for Midland radios is experimental.",
-            prompts.pre_download,
-        )
-        self.assertIn(
-            "keep a backup of your radio from the Midland program.",
+            "Keep a backup of your radio from the Midland program.",
             prompts.pre_download,
         )
         self.assertIn("1. Power the radio with 12 volts.", prompts.pre_download)
@@ -137,9 +133,8 @@ class MXT295DriverTest(unittest.TestCase):
         self.assertIn("Click OK to download.", prompts.pre_download)
         self.assertEqual(
             prompts.pre_upload,
-            "This Midland driver is experimental.  Make a backup of "
-            "your radio before using this experimental driver to make "
-            "any changes.",
+            "Make a backup of your radio from the Midland program before "
+            "changing it with NewChirp.",
         )
 
     def test_simplex_channel_round_trip(self):

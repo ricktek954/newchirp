@@ -175,7 +175,7 @@ Map<String, String> scanChoices(List<String>? allowed) {
   return {for (final value in values) value: scanLabel(value)};
 }
 
-/// CHIRP id for the experimental Midland MXT295 driver.
+/// CHIRP id for the hardware-tested Midland MXT295 driver.
 const midlandMxt295Model = 'Midland_MXT295';
 
 /// This radio's list uses Midland's channel numbers instead of raw slots.

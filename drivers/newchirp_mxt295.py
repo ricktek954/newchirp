@@ -13,7 +13,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-"""Midland MXT295 experimental clone driver.
+"""Midland MXT295 hardware-tested clone driver.
 
 Built from one MXPG15 read and one write of a single radio. The radio
 answers as SMP558 at 115200 8N1. Channel rows are 32 bytes. 107 rows
@@ -354,8 +354,7 @@ def _tx_frequency(mem):
 
 
 @directory.register
-class MXT295Radio(chirp_common.CloneModeRadio,
-                  chirp_common.ExperimentalRadio):
+class MXT295Radio(chirp_common.CloneModeRadio):
     """Midland MXT295"""
 
     VENDOR = "Midland"
@@ -367,13 +366,13 @@ class MXT295Radio(chirp_common.CloneModeRadio,
     @classmethod
     def get_prompts(cls):
         radio_prompts = chirp_common.RadioPrompts()
-        # Read and write use different wording. A blank experimental
-        # value stays set so the warning icon still shows.
-        radio_prompts.experimental = ""
+        radio_prompts.info = (
+            "Hardware-tested MXT295 support. Keep a backup from the Midland "
+            "program before changing the radio."
+        )
         radio_prompts.pre_download = (
-            "This driver for Midland radios is experimental.  Download "
-            "first and check the channels before you upload and keep a "
-            "backup of your radio from the Midland program.\n"
+            "Keep a backup of your radio from the Midland program. Download "
+            "first and check the channels before you upload.\n"
             "\n"
             "1. Power the radio with 12 volts.\n"
             "2. Turn the Bluetooth mic off.\n"
@@ -381,9 +380,8 @@ class MXT295Radio(chirp_common.CloneModeRadio,
             "4. Click OK to download."
         )
         radio_prompts.pre_upload = (
-            "This Midland driver is experimental.  Make a backup of "
-            "your radio before using this experimental driver to make "
-            "any changes."
+            "Make a backup of your radio from the Midland program before "
+            "changing it with NewChirp."
         )
         return radio_prompts
 

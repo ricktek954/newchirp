@@ -281,8 +281,9 @@ release requirements.
   The TS-2000 write-timeout fix still needs a physical upload/read-back retest.
   TS-2000 settings reads now report unsupported cleanly, and failed serial
   operations include a sanitized command trace for support reports.
-- The Midland MXT295 has completed physical read and write testing and remains
-  labeled experimental.
+- The Midland MXT295 has completed physical read and write testing. It is
+  normal supported hardware on desktop and in the Web Programmer, not
+  experimental.
 - `tshirt - i chirp often.png` is an untracked user asset and must not be
   committed or deleted.
 - `pubspec.lock` may be locally modified by the installed Flutter SDK. Do not
