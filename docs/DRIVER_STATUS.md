@@ -50,6 +50,7 @@ Last updated: 2026-11-07
 | TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | HAM and generic G4 identities accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
 | Radioddity DB25-G | `drivers/newchirp_db25g.py` | OEM DB25-G CPS clone serial, 9600 8N1, no DTR/RTS | CPS retry handshake; block framing | 16-byte blocks through 0x30FF; hardware pending | Stock decoder cross-check | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
+| Radioddity X1 Pro GMRS | `drivers/newchirp_x1pro.py` | OEM X1 Pro CPS serial, 115200 8N1, no DTR/RTS | Settings + 30 channel pages, offline-tested | Settings + all 30 channel pages, offline-tested | Full exposed settings page | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
@@ -812,6 +813,40 @@ Last updated: 2026-11-07
 - Next milestone: read a physical DB35-G, compare every channel and setting
   against CPS, then write one modified channel page and verify it by reading
   the radio back with CPS and NewChirp.
+
+### Radioddity X1 Pro GMRS
+
+- Maintainer: NewChirp driver recovered from the official Radioddity X1 Pro
+  firmware/CPS package dated 2026-07-15
+- Maintained file: `drivers/newchirp_x1pro.py`
+- Protocol notes: `docs/X1PRO_PROTOCOL.md`
+- Transport: 115200 8N1, no flow control, no DTR/RTS; fixed `02PROGRAM` and
+  `SMP558 FF FF` CPS handshake
+- Commands: 16-byte settings and channel pages. Read is
+  `52 <address:u16be> 10` and returns the four-byte echo plus 16 data bytes.
+  Write is `57 <address:u16be> 10 <16 bytes>` and requires ACK `06`.
+- Memory map: 30 channel records from `0x0000` through `0x01DF`, plus the
+  settings record at `0xE000`. No channel-name field exists.
+- Implemented: RX/TX frequency, simplex and +/-5 MHz repeater offsets,
+  arbitrary split TX, CTCSS/DCS including independent TX/RX tones and DCS
+  inversion, three power levels, narrow/wide, scan add/skip, busy lock,
+  squelch, key tone, record, Roger beep, power save, scan mode, NRC, and VOX.
+- Read/write policy: both are enabled for experimental testing. Upload writes
+  the settings page followed by all 30 channel pages, matching the OEM state
+  machine, and never writes the undocumented image gap.
+- Evidence: official ZIP SHA-256
+  `88715c06694994d58b4791deeaa6641d7b4303fb15c317f062591eff56bb9519`;
+  executable SHA-256
+  `64f90289b838adae6d01691649b08812e5783751a6bbcae157b39d5e2af87339`;
+  `model.xml` SHA-256
+  `51b0e546fe644a865fe46c021f1fccf655723d953fc326a0cdd9276f7dde0005`;
+  CIL static call-path analysis E1 and synthetic replay E2
+- Driver SHA-256:
+  `2ae43ec7302890808f3402f717409eb735bfa23fac77021176bd90849a9d09aa`
+- Hardware validation: none. Focused offline transport and field tests pass.
+- Next milestone: read a physical X1 Pro and compare all 30 channels plus
+  settings with the OEM CPS, then perform a controlled edit, upload, and
+  read-back with a saved backup.
 
 ### Baofeng DM-32UV
 

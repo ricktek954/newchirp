@@ -8,6 +8,23 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-07 Radioddity X1 Pro GMRS request led to download and static
+  REA of the official 2026-07-15 firmware/CPS package. The managed CPS shows
+  a `02PROGRAM` / `SMP558` handshake, settings read at `0xE000`, 30 fixed
+  16-byte channel pages beginning at `0x0000`, and 16-byte addressed writes.
+  The new experimental driver in `drivers/newchirp_x1pro.py` implements the
+  recovered read/write state machine and field map. The matching browser
+  profile is in `/Volumes/RICKEXT/web/newchirpweb/lib/radioddity-x1pro-web.ts`;
+  it supports experimental read/write and preserves unchanged split tones.
+  Website commit `068f655` adds the experimental catalog entry and raises the
+  browser inventory to 651 selectable profiles.
+  The ZIP is retained at
+  `/Users/rlopez/Downloads/2026-07-15_Radioddity_X1_PRO_Firmware_Update_with_CPS.zip`;
+  full evidence is in `docs/X1PRO_PROTOCOL.md`. Physical read/write/read-back
+  validation is still pending. Verification: 10 focused X1 Pro tests pass;
+  all 352 Python tests pass with 2 fixture-dependent skips;
+  `flutter analyze` is clean; all 195 Flutter tests pass; the website build
+  and complete Web Programmer suite pass.
 - Session saved on 2026-11-07 after all `1.0.45` platform release records
   landed. After this handoff commit is pushed, repository `main` should be
   clean and synced. Immediate follow-ups are normal unread-email triage and
