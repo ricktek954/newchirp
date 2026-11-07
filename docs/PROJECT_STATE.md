@@ -18,10 +18,14 @@ release requirements.
   addressed reads/writes. `drivers/newchirp_ga510_v2.py` now owns that
   transport, replaces the bundled V2 entry, and makes the generic GA-510
   selector probe V2 before falling back to the legacy 9,600-baud protocol.
+  Desktop commit `87587bd7` is pushed. Website commit `6a60abb` adds
+  `GA-510 V2 (experimental)` to the catalog and the New Experimental Radio
+  Support section; live asset `index-CPA29zpe.js` was verified.
   Protocol evidence is in `docs/GA510_V2_PROTOCOL.md`. The official CPS ZIPs
   and manual are retained in `/Users/rlopez/Downloads/`. Physical validation
   is still pending; the next reporter test must begin with an OEM CPS backup
-  and a read-only image comparison.
+  and a read-only image comparison. Don Huey received the threaded diagnosis
+  and test plan in `Sent` UID 322; source email UID 497 is verified `\Seen`.
 - Verification for the GA-510 V2 transport: focused CPS replay tests pass
   5/5; the complete Python suite passes 357 tests with 2 fixture-dependent
   skips; `flutter analyze` is clean; and all 195 Flutter tests pass.
