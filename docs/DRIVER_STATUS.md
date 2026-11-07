@@ -48,6 +48,7 @@ Last updated: 2026-11-07
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | OEM-verified TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized; five-attempt identity probe | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | HAM and generic G4 identities accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
+| Radioddity GA-510 V2 | `drivers/newchirp_ga510_v2.py` | OEM CPS v1.00.36, 57,600 8N1, DTR/RTS | Dynamic five-block `0x5000` image, offline-tested | Mapped 64-byte blocks, offline-tested | Stock V2 decoder | Experimental |
 | Radioddity DB25-G | `drivers/newchirp_db25g.py` | OEM DB25-G CPS clone serial, 9600 8N1, no DTR/RTS | CPS retry handshake; block framing | 16-byte blocks through 0x30FF; hardware pending | Stock decoder cross-check | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Radioddity X1 Pro GMRS | `drivers/newchirp_x1pro.py` | OEM X1 Pro CPS serial, 115200 8N1, no DTR/RTS | Settings + 30 channel pages, offline-tested | Settings + all 30 channel pages, offline-tested | Full exposed settings page | Experimental |
@@ -749,6 +750,37 @@ Last updated: 2026-11-07
   write, and read-back validate this fourth-generation address space
 - Next milestone: reporter retests the read and supplies the saved image if
   channel decoding differs
+
+### Radioddity GA-510 V2
+
+- Maintainer: NewChirp transport recovered from official GA-510 CPS
+  v1.00.36
+- Maintained file: `drivers/newchirp_ga510_v2.py`
+- Protocol evidence: `docs/GA510_V2_PROTOCOL.md`
+- Transport: 57,600 8N1, DTR and RTS asserted, no flow control
+- Implemented: the full OEM `PSEARCH`, `PASSSTA`, `SYSINFO`, `DMR1702`,
+  memory-info, unlock, descriptor-map, 64-byte read/write, and ACK sequence
+- Memory: five logical 4 KiB blocks (`2, 4, 6, 16, 24`) assembled into a
+  `0x5000` image; physical page locations are read from the radio
+- Read/write policy: read and write are enabled for experimental testing;
+  the driver fails closed on a missing or malformed page map
+- Selection policy: the explicit `Radioddity_GA-510_V2` entry uses this
+  transport directly. The generic `Radioddity_GA-510` entry probes V2 first
+  and falls back to the legacy 9,600-baud protocol.
+- Evidence: official CPS ZIP SHA-256
+  `e4e9638dd86e88a05299ed38886ccfc2b2d8a05942e565fc8d6392718b5067f5`;
+  native CPS executable SHA-256
+  `28e865070f5a46024b4f5e30458b9b044689dc99c6f1c5a68a6ba127ef6631b9`;
+  upstream V2 fixture SHA-256
+  `ab9848966a53ad26fd065d5d7101e77109120113ba467664b90a4c8c3d64ce4a`;
+  static call-path analysis E1 and synthetic replay E2
+- Driver SHA-256:
+  `397dd55f847983c64cfdc91cb5200d00e20e85b49df62beb09d630aed836bc88`
+- Hardware validation: none. This replaces the bundled CHIRP transport while
+  retaining its pinned channel/settings decoder.
+- Next milestone: Don Huey should test the generic and explicit V2 entries on
+  the same COM4 cable, compare a full read with CPS, then perform one channel
+  edit and read-back.
 
 ### Radioddity DB25-G
 
