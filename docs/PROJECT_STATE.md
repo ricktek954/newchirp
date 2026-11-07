@@ -10,8 +10,9 @@ release requirements.
 
 - The cross-platform `1.0.45` release is live. Windows and Linux artifacts are
   from source commit `4ca2a6f9` and include the Retevis RA89 driver plus the
-  safe TK-270G driver. The macOS `1.0.45` artifact is present; its native
-  verification details still need to be recorded by that builder.
+  safe TK-270G driver. macOS is from source commit `4ca2a6f9` and is fully
+  recorded below. All three platform release records are verified by their
+  native builders.
 - The 2026-11-07 Retevis RA89 report UID 485 failed at the inherited CHIRP
   driver's 10-byte TYT handshake. The official RA89 CPS V1.08 was downloaded,
   statically reverse engineered, and documented in
@@ -261,7 +262,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.45` artifact source commit: pending native-builder record
+- macOS `1.0.45` artifact source commit: `4ca2a6f9`
 - Windows `1.0.45` artifact source commit: `4ca2a6f9`
 - Linux `1.0.45` artifact source commit: `4ca2a6f9`
 - Open pull requests: none
@@ -288,11 +289,13 @@ macOS `1.0.45` artifact:
 
 - URL: `https://newchirp.net/downloads/NewChirp-1.0.45.dmg`
 - Version/build: `1.0.45` / `45`
+- Architectures: `arm64` and `x86_64`
 - SHA-256:
   `be6deab704e7df5383562f7dd26da45fdcf9fb9c0251489bdfd57c6ff1ba2c5c`
 - Size: `82,456,304` bytes
+- Notarization submission: `b22c8d76-7069-4ed1-9043-35711adfd0d3`
+- Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
-- Native signing/notarization verification is pending a macOS builder record
 
 macOS `1.0.44` artifact (historical):
 
@@ -519,6 +522,12 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.45` from source commit `4ca2a6f9` as a universal
+  signed, notarized, stapled DMG. The release carries the CPS-derived Retevis
+  RA89 driver, app/build version `1.0.45` / `45`, both Python 3.13.15 runtime
+  trees, universal libusb, and the pinned CHIRP tree. Strict codesigning,
+  Apple notarization, stapling, mounted-DMG inspection, Gatekeeper, local and
+  server SHA-256, public HTTP, and the live macOS manifest entry all verified.
 - Published Windows `1.0.45` from source commit `4ca2a6f9`. Verified installer
   file/product metadata `1.0.45.0` / `1.0.45`, app version `1.0.45+45`,
   bundled Python `3.13.15`, the bundled RA89 and safe TK-270G drivers,
@@ -836,6 +845,33 @@ Linux 1.0.41 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.45 verification status
+
+Full verification before and after the macOS `1.0.45` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 188 tests passed
+- Python test discovery: 321 tests passed, 2 fixture-dependent tests skipped
+- Standalone CHIRP bridge upload suite: all 57 tests passed
+- Release source commit: `4ca2a6f9`
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.45` / `45`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled RA89 driver SHA-256:
+  `1df11114ceedcc3c12c1fff1dc088f57e051c61a97e4b12a8d2ca08fafee49cf`
+- Bundled CHIRP bridge SHA-256:
+  `6433b39508c7e60c6d34711f5e144a46e454d787b15f64c2e5152e1168c59f93`
+- DMG SHA-256:
+  `be6deab704e7df5383562f7dd26da45fdcf9fb9c0251489bdfd57c6ff1ba2c5c`
+- Notarization submission: `b22c8d76-7069-4ed1-9043-35711adfd0d3`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.45`
+- The documented separate raw-SCSI helper remains `arm64`-only.
 
 ## macOS 1.0.44 verification status
 
