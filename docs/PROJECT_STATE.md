@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-06
+Last updated: 2026-11-07
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -10,6 +10,25 @@ release requirements.
 
 - The Windows `1.0.44` installer is live from source commit `9929f997`.
   Windows, macOS, Linux, and the legacy shared manifest advertise `1.0.44`.
+- The 2026-11-07 Retevis RA89 report UID 485 failed at the inherited CHIRP
+  driver's 10-byte TYT handshake. The official RA89 CPS V1.08 was downloaded,
+  statically reverse engineered, and documented in
+  `docs/RA89_PROTOCOL.md`. The new `NewChirpRA89Radio` driver is committed as
+  `ba9adab1`: it asserts 57,600-baud DTR/RTS, waits 500 ms, uses the OEM UV99
+  session and optional programming-code stage, accumulates fragmented exact
+  reads, reads/writes 32-byte addressed blocks, and skips
+  `0x1680-0x193F` on writes. It implements 200 channels, names, tones, power,
+  bandwidth, skip, startup text, core settings, side keys, and work modes.
+  Physical read/write validation is still pending. The reply is in `Sent` as
+  UID 311; source UID 485 is verified `\Seen`.
+- RA89 verification: focused driver tests passed 8/8; the complete Python
+  suite passed 321 tests with 2 fixture-dependent skips; `flutter analyze` is
+  clean; and all 188 Flutter tests passed.
+- Website commit `58c6d81` adds RA89 to New Experimental Radio Support. The
+  prebuilt site was deployed from that commit after comparing the live source
+  hashes with the prior source; the live bundle contains
+  `RA89 (experimental)`. The pre-deploy source/dist backup is
+  `/root/newchirp-before-ra89-20261107053812`.
 - The 2026-11-06 UV-5RH Pro report on 1.0.43 still used the legacy
   `Baofeng_UV-5RH` entry. Official 5RH PRO CPS V1.17 uses an `A` announce,
   a seeded `PROGRAM` handshake, password and `INFORMATION` stages, then
