@@ -12,6 +12,13 @@ release requirements.
   landed. After this handoff commit is pushed, repository `main` should be
   clean and synced. Immediate follow-ups are normal unread-email triage and
   any physical RA89/TK-270G read/write validation from reporters.
+- Repeater search now persists the directory, country, region, service, sort
+  order, text query, latitude, longitude, radius, open/FM filters, and map
+  mode. Changes are saved after a short debounce and again before searching,
+  and the stored defaults remain backward compatible with version-1 files.
+  Commit `a4533d11`. Verification: the complete Flutter suite passed 189
+  tests, the focused persistence/dialog tests passed, and `flutter analyze`
+  is clean.
 - The 2026-11-07 IC-E90 report UID 486 completed a read but failed an upload
   while the radio remained on `CL OUT`. The CS-T90A transport is unchanged
   and correct; the radio must be power-cycled and enter a fresh clone session
