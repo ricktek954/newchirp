@@ -8,8 +8,11 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.44` installer is live from source commit `9929f997`.
-  Windows, macOS, Linux, and the legacy shared manifest advertise `1.0.44`.
+- The cross-platform `1.0.45` release is live. Linux artifacts are from
+  source commit `4ca2a6f9` and include the Retevis RA89 driver plus the safe
+  TK-270G driver. Windows and macOS `1.0.45` artifacts are present on the
+  server; native-platform verification details still need to be recorded by
+  those builders.
 - The 2026-11-07 Retevis RA89 report UID 485 failed at the inherited CHIRP
   driver's 10-byte TYT handshake. The official RA89 CPS V1.08 was downloaded,
   statically reverse engineered, and documented in
@@ -107,7 +110,7 @@ release requirements.
 - Triage added and pushed `f66e6ecc`, accepting the TIDRADIO TD-H8 Gen 4
   generic identity `TDH84GEN` as read-only. Writes remain disabled pending
   physical write/read-back validation.
-- The cross-platform `1.0.44` release is live. macOS is from source commit
+- The cross-platform `1.0.44` release is superseded. macOS is from source commit
   `9929f997`; the Linux artifacts are from `ec059527`. They add the
   CPS-derived Baofeng 5RH Pro / UV-5RH Pro v2 driver, fix TK-7160K
   dynamic-zone metadata decoding, and correct BF-F8HP Pro port guidance.
@@ -128,22 +131,23 @@ release requirements.
   names. NewChirp now treats a 5-digit search entry as a myGMRS ZIP-radius
   search and explains the limitation instead of returning a misleading empty
   result.
-- The Linux `1.0.44` DEB, RPM, AppImage, and Pacman artifacts are live from
-  source commit `ec059527`. They add the CPS-derived Baofeng 5RH Pro /
+- The Linux `1.0.45` DEB, RPM, AppImage, and Pacman artifacts are live from
+  source commit `4ca2a6f9`. They add the Retevis RA89 driver and safe TK-270G
+  driver, keep the CPS-derived Baofeng 5RH Pro /
   UV-5RH Pro v2 driver, include the latest GitHub bridge fixes, and keep the
   UV-5RH handshake retry, experimental KSUN UV-K60 profile, KG-Q10H and
   RT-860 support, malformed-tone handling, cancellable myGMRS sign-in, F4HWN
   support, and GM-21/TD-H3 updates.
-- Linux `1.0.44` verification: quick safety review of the incoming Baofeng
-  5RH Pro v2 driver and tests found no unexpected process execution,
-  credential access, arbitrary filesystem behavior, or obfuscation;
-  `flutter analyze` was clean; focused Python regression tests ran 62 tests
-  successfully; embedded `version.json`, DEB/RPM/Pacman metadata, package
-  payloads, extracted AppImage payload, bundled Python/CHIRP runtime, bundled
+- Linux `1.0.45` verification: quick safety review of the incoming RA89 and
+  TK-270G driver changes found no unexpected process execution, credential
+  access, arbitrary filesystem behavior, or obfuscation; `flutter analyze`
+  was clean; focused Python regression tests ran 74 tests successfully;
+  embedded `version.json`, DEB/RPM/Pacman metadata, package payloads,
+  extracted AppImage payload, bundled Python/CHIRP runtime, bundled
   `libusb-1.0.so.0`, absence of GLib 2.80 once-init pointer symbols, server
   checksums, public HTTP 200 checks, and the live platform manifest were
   verified.
-- The `1.0.44` artifacts include the experimental `KSUN UV-K60` model profile
+- The `1.0.45` artifacts include the experimental `KSUN UV-K60` model profile
   using the pinned Quansheng UV-K5 transport and memory layout. Physical
   read/write comparison is still required.
 - The client secret is stored only in `/opt/newchirp/.env.mygmrs` with mode
@@ -258,11 +262,11 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.44` artifact source commit: `9929f997`
-- Windows `1.0.44` artifact source commit: `9929f997`
-- Linux `1.0.44` artifact source commit: `ec059527`
+- macOS `1.0.45` artifact source commit: pending native-builder record
+- Windows `1.0.45` artifact source commit: pending native-builder record
+- Linux `1.0.45` artifact source commit: `4ca2a6f9`
 - Open pull requests: none
-- Checked-out source version: `1.0.44+44`
+- Checked-out source version: `1.0.45+45`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -276,12 +280,22 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.44 |
-| Windows | 1.0.44 |
-| Linux | 1.0.44 |
-| Legacy shared manifest version | 1.0.44 |
+| macOS | 1.0.45 |
+| Windows | 1.0.45 |
+| Linux | 1.0.45 |
+| Legacy shared manifest version | 1.0.45 |
 
-macOS artifact:
+macOS `1.0.45` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.45.dmg`
+- Version/build: `1.0.45` / `45`
+- SHA-256:
+  `be6deab704e7df5383562f7dd26da45fdcf9fb9c0251489bdfd57c6ff1ba2c5c`
+- Size: `82,456,304` bytes
+- Server checksum recorded from the live artifact
+- Native signing/notarization verification is pending a macOS builder record
+
+macOS `1.0.44` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-1.0.44.dmg`
 - Version/build: `1.0.44` / `44`
@@ -293,7 +307,17 @@ macOS artifact:
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.44` artifact:
+Windows `1.0.45` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.45.exe`
+- Version/build: `1.0.45` / `45`
+- SHA-256:
+  `f6fdaaf75d82380d3ee86de9d6e333167de2cef1a98c2aa1f3766252cdc82b31`
+- Size: `61,189,999` bytes
+- Server checksum recorded from the live artifact
+- Native installer metadata verification is pending a Windows builder record
+
+Windows `1.0.44` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.44.exe`
 - Version/build: `1.0.44` / `44`
@@ -349,7 +373,36 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux `1.0.44` artifacts:
+Linux `1.0.45` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.45.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.45.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.45.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.45.pkg.tar.zst`
+
+Linux 1.0.45 SHA-256:
+
+- DEB:
+  `1695f2c890ca589943b8ecfe3efe2f7d8ab54c7352ba7642ed26b1ccab1780ee`
+- RPM:
+  `a3a9bb35b0abaf9a9ad93c9413c333528864bbc8b16d3455623428135b93f57e`
+- AppImage:
+  `ae545cb84e405230f69f97d7e3db3c26fcd74adcad323a1fa8aace6bc7d88efc`
+- Pacman:
+  `b65e1d82f6721a43bffcf2c31a2264fb7e8283aa488414bf14dd8aed272f5a46`
+
+Linux 1.0.45 sizes:
+
+- DEB: `48,453,562` bytes
+- RPM: `38,895,452` bytes
+- AppImage: `144,438,464` bytes
+- Pacman: `46,942,112` bytes
+
+Linux `1.0.44` artifacts (historical):
 
 - DEB URL:
   `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.44.deb`
@@ -467,6 +520,15 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Linux `1.0.45` with DEB, RPM, AppImage, and Pacman
+  `.pkg.tar.zst` artifacts from source commit `4ca2a6f9`. Verified the
+  incoming RA89 and TK-270G driver safety surface, `flutter analyze`,
+  74 focused Python RA89/TK-270G/5RH Pro/bridge tests, embedded
+  `version.json`, DEB/RPM/Pacman metadata, package payloads, extracted
+  AppImage payload including the RA89 and TK-270G drivers, bundled
+  Python/CHIRP runtime and `libusb-1.0.so.0`, absence of GLib 2.80
+  once-init pointer symbols, matching server checksums, public HTTP 200
+  checks, and the live platform manifest.
 - Published Linux `1.0.44` with DEB, RPM, AppImage, and Pacman
   `.pkg.tar.zst` artifacts from source commit `ec059527`. Verified the
   incoming Baofeng 5RH Pro v2 driver safety surface, `flutter analyze`,
