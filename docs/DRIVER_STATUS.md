@@ -48,6 +48,7 @@ Last updated: 2026-11-07
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | OEM-verified TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized; five-attempt identity probe | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | HAM and generic G4 identities accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
+| Radioddity DB25-G | `drivers/newchirp_db25g.py` | OEM DB25-G CPS clone serial, 9600 8N1, no DTR/RTS | CPS retry handshake; block framing | 16-byte blocks through 0x30FF; hardware pending | Stock decoder cross-check | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
@@ -747,6 +748,36 @@ Last updated: 2026-11-07
   write, and read-back validate this fourth-generation address space
 - Next milestone: reporter retests the read and supplies the saved image if
   channel decoding differs
+
+### Radioddity DB25-G
+
+- Maintainer: NewChirp driver recovered from the official Radioddity DB25-G
+  GMRS CPS 20250903
+- Maintained file: `drivers/newchirp_db25g.py`
+- Protocol evidence: `docs/DB25G_PROTOCOL.md`
+- Transport: 9600 8N1 through the programming cable; InputMode is binary,
+  InputLen is one byte, and the OEM CPS does not assert DTR or RTS
+- Handshake: `55 20 16 08 01 FF DC 02`, then a 50-byte binary identity reply
+  beginning with ACK `06` and containing fingerprint `VC7062` or `VC6182`
+- Commands: read uses `06 53 <address:u16be> <length:u8>` and expects
+  `ACK X <address:u16be> <length:u8> <payload>`; write uses the corresponding
+  21-byte `X` frame with a 16-byte payload
+- Implemented: OEM-style four-attempt handshake retry, fragment-safe exact
+  reads, header validation, and the inherited DB25-G channel/settings decode
+- Read/write policy: read enabled; write enabled only through the OEM
+  `0x3100` upload range in 16-byte blocks. The driver does not write
+  `0x3100` through `0x3FFF` or calibration pages
+- Evidence: CPS archive SHA-256
+  `97e18276039ea344297fc7be2f4d45ec7433015ee547b3c1a46803418666a258`;
+  CPS executable SHA-256
+  `f4e3affa512eca914888a888af156365a1b4f06df55da1a31d71a2b67a77ea87`;
+  REA/Ghidra 12.1.4 static call-path analysis E1 and synthetic replay E2
+- Driver SHA-256:
+  `375174dffa76fec537ea3a17befffe0359102cbbcf0da5f2df31ebf19b1cde9e`
+- Hardware validation: none
+- Next milestone: reporter performs a physical read and one controlled write
+  with the new profile, compares channels/settings against CPS, and returns
+  the resulting diagnostic report and read-back image
 
 ### Radioddity DB35-G
 

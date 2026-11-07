@@ -19,6 +19,18 @@ release requirements.
   Commit `a4533d11`. Verification: the complete Flutter suite passed 189
   tests, the focused persistence/dialog tests passed, and `flutter analyze`
   is clean.
+- The 2026-11-07 Radioddity DB25-G report led to the official
+  `Radioddity_DB25_G_GMRS_CPS_20250903.zip` download and static REA of
+  `DB25_G_GMRS_CPS.exe`. The OEM CPS shows 9600 8N1 binary MSComm framing,
+  the eight-byte `55 20 16 08 01 FF DC 02` programming request, OEM handshake
+  retries, 69-byte block replies, and 16-byte `X` writes. The new
+  `drivers/newchirp_db25g.py` uses the traced retry/framing behavior, writes
+  the OEM `0x3100` upload range, and inherits the pinned DB25-G memory decode.
+  The CPS archive is retained at
+  `/Users/rlopez/Downloads/Radioddity_DB25_G_GMRS_CPS_20250903.zip`;
+  protocol evidence is in `docs/DB25G_PROTOCOL.md`. Website commit `a70df5c`
+  marks DB25-G as experimental and is live. The reporter reply is in `Sent`
+  as UID 319; source UID 489 is verified `\Seen`.
 - The 2026-11-07 IC-E90 report UID 486 completed a read but failed an upload
   while the radio remained on `CL OUT`. The CS-T90A transport is unchanged
   and correct; the radio must be power-cycled and enter a fresh clone session
