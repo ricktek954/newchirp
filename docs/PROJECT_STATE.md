@@ -31,16 +31,17 @@ release requirements.
   protocol evidence is in `docs/DB25G_PROTOCOL.md`. Website commit `a70df5c`
   marks DB25-G as experimental and is live. The reporter reply is in `Sent`
   as UID 319; source UID 489 is verified `\Seen`. Desktop commit `d8191436`.
-- The 2026-11-07 IC-E90 report UID 486 completed a read but failed an upload
-  while the radio remained on `CL OUT`. The CS-T90A transport is unchanged
-  and correct; the radio must be power-cycled and enter a fresh clone session
-  before a write, then display `CL IN`. Commit `cdcb81d9` adds explicit
-  pre-upload prompts, documents the recovery procedure, and stops the bridge
-  trace from labeling Icom clone frames as TYT. The reply is in `Sent` as UID
-  316 and source UID 486 is verified `\Seen`. Verification: focused IC-E90
-  tests passed 7/7; the complete Python suite passed 323 tests with 2
-  fixture-dependent skips; the bridge upload suite passed 57 tests; and
-  `flutter analyze` is clean.
+- Tony G4WIF's follow-up on the 2026-11-07 IC-E90 report shows the radio
+  stayed on `CLONE` during the first failed writes, then accepted writes and
+  displayed `CL IN` after a full reset and a successful CHIRP Next write.
+  NewChirp 1.0.45 subsequently read and wrote the cleaned radio successfully.
+  This rules out the previous assumption that the CS-T90A stream should be
+  inherited unchanged. `drivers/newchirp_icx90.py` now owns the transport,
+  retries identity four times, handles cable echo, waits after clone-in,
+  checksums every block, writes all 362 blocks explicitly, and requires
+  completion status `E6 00`. The CS-T90A CPS archive is retained at
+  `/Users/rlopez/Downloads/CS-T90A-251201-001044.ZIP`; protocol evidence is in
+  `docs/ICX90_PROTOCOL.md`.
 - The cross-platform `1.0.45` release is live. Windows and Linux artifacts are
   from source commit `4ca2a6f9` and include the Retevis RA89 driver plus the
   safe TK-270G driver. macOS is from source commit `4ca2a6f9` and is fully
