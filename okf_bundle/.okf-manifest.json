@@ -395,8 +395,8 @@
     },
     "services/repeater_search_preferences_store.dart": {
       "path": "services/repeater_search_preferences_store.dart",
-      "mtime_ns": 1793791479989693562,
-      "hash": "a2ef964b272c768a80fec8ef6fcd2792987f22b431ed10c79be8f48d61706c24",
+      "mtime_ns": 1794065847464720490,
+      "hash": "36b1360b1c97955db3fd4130e6d09c79586dc0982c591c6f993f0244fe4ed300",
       "concept_ids": [
         "services/repeater_search_preferences_store/RepeaterSearchPreferences",
         "services/repeater_search_preferences_store/RepeaterSearchPreferencesStore",
@@ -559,8 +559,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794048294277622283,
-      "hash": "3c8c9c9f02d687c81b0fe35ac3ac1738ee9f5ec34049b47ce7d34a77f721594a",
+      "mtime_ns": 1794065953338706295,
+      "hash": "8d611822591766c803971e1b200bd578e144c83923c8ab055d417be0c8487088",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -755,6 +755,10 @@
         "main/submit",
         "main/apply",
         "main/loadPreferences",
+        "main/enumByName",
+        "main/currentPreferences",
+        "main/savePreferencesNow",
+        "main/preferencesChanged",
         "main/selectCountry",
         "main/selectProvider",
         "main/signInMyGmrs",
@@ -1423,7 +1427,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "ae6862525e1cbeaf14a19ea0a6597eddb5a8b19e42466a22c21ecac68b37a7de",
+      "edge_hash": "7db5cbd3e88808b29bf4c47d215c7e3a3892b993cbfb6be66d4352cc21f1e42c",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -5777,7 +5781,39 @@
       "render_hash": "stale",
       "edge_hash": "b4b739be2b81a2debb19ab874a000dcc578dc6c09aff8e741e378e1c2667a9b9",
       "enriched": false
+    },
+    "main/enumByName": {
+      "concept_id": "main/enumByName",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/currentPreferences": {
+      "concept_id": "main/currentPreferences",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/savePreferencesNow": {
+      "concept_id": "main/savePreferencesNow",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/preferencesChanged": {
+      "concept_id": "main/preferencesChanged",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-07T10:44:55Z"
+  "generated_at": "2026-11-07T15:39:14Z"
 }

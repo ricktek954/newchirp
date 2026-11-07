@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T10:44:54Z"
+timestamp: "2026-11-07T15:39:13Z"
 concept_id: main/RepeaterBookDialogState
 language: dart
 ---
@@ -26,6 +26,10 @@ class _RepeaterBookDialogState
 
 - `initState`
 - `_loadPreferences`
+- `_enumByName`
+- `_currentPreferences`
+- `_savePreferencesNow`
+- `_preferencesChanged`
 - `_selectCountry`
 - `_selectProvider`
 - `_signInMyGmrs`
@@ -44,7 +48,7 @@ class _RepeaterBookDialogState
 - `resizeBy`
 
 ## Source
-Lines 7293–8598 in `main.dart`
+Lines 7293–8724 in `main.dart`
 
 ## Relationships
 

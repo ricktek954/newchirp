@@ -7303,8 +7303,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   _RepeaterProvider _provider = _RepeaterProvider.repeaterBook;
   bool _fmOnly = false;
   bool _openOnly = false;
+  bool _preferencesLoaded = false;
   bool _preferencesTouched = false;
   late final Future<void> _preferencesLoad;
+  Future<void> _preferencesSave = Future.value();
+  Timer? _preferencesSaveTimer;
   bool _mapView = false;
   bool _loading = false;
   String _status = '';
@@ -7332,16 +7335,104 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
 
   Future<void> _loadPreferences() async {
     final preferences = await widget.preferencesStore.load();
-    if (!mounted || _preferencesTouched) return;
+    if (!mounted) return;
+    _preferencesLoaded = true;
+    if (_preferencesTouched) return;
+    final provider = _enumByName(
+      _RepeaterProvider.values,
+      preferences.provider,
+      _RepeaterProvider.repeaterBook,
+    );
+    var country = repeaterCountryChoices.contains(preferences.country)
+        ? preferences.country
+        : 'United States';
+    if (provider == _RepeaterProvider.myGmrs) {
+      country = 'United States';
+    }
+    final regions = repeaterRegionsForCountry(country);
+    final region = regions.contains(preferences.region)
+        ? preferences.region
+        : regions.first;
+    var service = const {'all', 'amateur', 'gmrs'}.contains(preferences.service)
+        ? preferences.service
+        : 'all';
+    if (provider == _RepeaterProvider.myGmrs) {
+      service = 'gmrs';
+    }
+    service = repeaterCountrySupportsGmrs(country) ? service : 'amateur';
+    final sortOrder = _enumByName(
+      RepeaterSortOrder.values,
+      preferences.sortOrder,
+      RepeaterSortOrder.source,
+    );
     setState(() {
+      _provider = provider;
+      _country = country;
+      _state = region;
+      _service = service;
+      _sortOrder = sortOrder;
+      _filterController.text = preferences.query;
+      _latitudeController.text = preferences.latitude;
+      _longitudeController.text = preferences.longitude;
+      _distanceController.text = preferences.radiusKm;
       _fmOnly = preferences.fmOnly;
       _openOnly = preferences.openOnly;
+      _mapView = preferences.mapView;
+      if (provider == _RepeaterProvider.myGmrs) {
+        _fmOnly = false;
+      }
+    });
+  }
+
+  T _enumByName<T extends Enum>(List<T> values, String name, T fallback) {
+    for (final value in values) {
+      if (value.name == name) return value;
+    }
+    return fallback;
+  }
+
+  RepeaterSearchPreferences _currentPreferences() {
+    return RepeaterSearchPreferences(
+      provider: _provider.name,
+      country: _country,
+      region: _state,
+      service: _service,
+      sortOrder: _sortOrder.name,
+      query: _filterController.text,
+      latitude: _latitudeController.text,
+      longitude: _longitudeController.text,
+      radiusKm: _distanceController.text,
+      openOnly: _openOnly,
+      fmOnly: _fmOnly,
+      mapView: _mapView,
+    );
+  }
+
+  Future<void> _savePreferencesNow() {
+    final preferences = _currentPreferences();
+    _preferencesSave = _preferencesSave.then((_) async {
+      try {
+        await widget.preferencesStore.save(preferences);
+      } on FileSystemException {
+        // Search preferences should never prevent a repeater query.
+      }
+    });
+    return _preferencesSave;
+  }
+
+  void _preferencesChanged() {
+    _preferencesTouched = true;
+    if (!_preferencesLoaded) return;
+    _preferencesSaveTimer?.cancel();
+    _preferencesSaveTimer = Timer(const Duration(milliseconds: 250), () {
+      if (mounted) unawaited(_savePreferencesNow());
     });
   }
 
   void _selectCountry(String country) {
     final regions = repeaterRegionsForCountry(country);
     setState(() {
+      _preferencesTouched = true;
       _country = country;
       _state = regions.first;
       _service = repeaterCountrySupportsGmrs(country) ? _service : 'amateur';
@@ -7351,6 +7442,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _error = null;
       _status = '';
     });
+    _preferencesChanged();
   }
 
   void _selectProvider(_RepeaterProvider provider) {
@@ -7359,6 +7451,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _myGmrsSigningIn = false;
     }
     setState(() {
+      _preferencesTouched = true;
       _provider = provider;
       _results = null;
       _selected.clear();
@@ -7371,6 +7464,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         _fmOnly = false;
       }
     });
+    _preferencesChanged();
   }
 
   Future<void> _signInMyGmrs() async {
@@ -7438,6 +7532,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
 
   @override
   void dispose() {
+    _preferencesSaveTimer?.cancel();
+    if (_preferencesTouched) unawaited(_savePreferencesNow());
     _filterController.dispose();
     _latitudeController.dispose();
     _longitudeController.dispose();
@@ -7492,13 +7588,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() => _error = 'Sign in to myGMRS before searching.');
       return;
     }
-    try {
-      await widget.preferencesStore.save(
-        RepeaterSearchPreferences(openOnly: _openOnly, fmOnly: _fmOnly),
-      );
-    } on FileSystemException {
-      // Search preferences should never prevent a RepeaterBook query.
-    }
+    _preferencesSaveTimer?.cancel();
+    _preferencesTouched = true;
+    await _savePreferencesNow();
     if (!mounted) return;
     setState(() {
       _loading = true;
@@ -7706,9 +7798,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
 
   void _searchAmateurInstead() {
     setState(() {
+      _preferencesTouched = true;
       _provider = _RepeaterProvider.repeaterBook;
       _service = 'amateur';
     });
+    _preferencesChanged();
     _search();
   }
 
@@ -8082,7 +8176,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       ],
                                       onChanged: (value) {
                                         if (value != null) {
-                                          setState(() => _sortOrder = value);
+                                          setState(() {
+                                            _preferencesTouched = true;
+                                            _sortOrder = value;
+                                          });
+                                          _preferencesChanged();
                                         }
                                       },
                                     ),
@@ -8117,11 +8215,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       : (value) {
                                           if (value != null) {
                                             setState(() {
+                                              _preferencesTouched = true;
                                               _state = value;
                                               _results = null;
                                               _selected.clear();
                                               _selectedCounties.clear();
                                             });
+                                            _preferencesChanged();
                                           }
                                         },
                                 ),
@@ -8160,11 +8260,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       : (value) {
                                           if (value != null) {
                                             setState(() {
+                                              _preferencesTouched = true;
                                               _service = value;
                                               _results = null;
                                               _selected.clear();
                                               _selectedCounties.clear();
                                             });
+                                            _preferencesChanged();
                                           }
                                         },
                                 ),
@@ -8176,7 +8278,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             key: const ValueKey('repeater-search-filter'),
                             controller: _filterController,
                             enabled: !_loading,
-                            onChanged: (_) => setState(() {}),
+                            onChanged: (_) {
+                              setState(() => _preferencesTouched = true);
+                              _preferencesChanged();
+                            },
                             onSubmitted: (_) => _search(),
                             decoration: InputDecoration(
                               labelText: _provider == _RepeaterProvider.myGmrs
@@ -8194,8 +8299,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         'repeater-search-clear',
                                       ),
                                       tooltip: 'Clear repeater search',
-                                      onPressed: () =>
-                                          setState(_filterController.clear),
+                                      onPressed: () {
+                                        setState(() {
+                                          _preferencesTouched = true;
+                                          _filterController.clear();
+                                        });
+                                        _preferencesChanged();
+                                      },
                                       icon: const Icon(Icons.clear),
                                     ),
                             ),
@@ -8205,8 +8315,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             children: [
                               Expanded(
                                 child: TextField(
+                                  key: const ValueKey('repeater-latitude'),
                                   controller: _latitudeController,
                                   enabled: !_loading,
+                                  onChanged: (_) => _preferencesChanged(),
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                         decimal: true,
@@ -8220,8 +8332,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: TextField(
+                                  key: const ValueKey('repeater-longitude'),
                                   controller: _longitudeController,
                                   enabled: !_loading,
+                                  onChanged: (_) => _preferencesChanged(),
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                         decimal: true,
@@ -8235,8 +8349,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: TextField(
+                                  key: const ValueKey('repeater-radius-km'),
                                   controller: _distanceController,
                                   enabled: !_loading,
+                                  onChanged: (_) => _preferencesChanged(),
                                   keyboardType:
                                       const TextInputType.numberWithOptions(
                                         decimal: true,
@@ -8261,10 +8377,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 value: _openOnly,
                                 onChanged: _loading
                                     ? null
-                                    : (value) => setState(() {
-                                        _preferencesTouched = true;
-                                        _openOnly = value ?? false;
-                                      }),
+                                    : (value) {
+                                        setState(() {
+                                          _preferencesTouched = true;
+                                          _openOnly = value ?? false;
+                                        });
+                                        _preferencesChanged();
+                                      },
                               ),
                               CheckboxListTile(
                                 contentPadding: EdgeInsets.zero,
@@ -8277,10 +8396,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     _loading ||
                                         _provider == _RepeaterProvider.myGmrs
                                     ? null
-                                    : (value) => setState(() {
-                                        _preferencesTouched = true;
-                                        _fmOnly = value ?? false;
-                                      }),
+                                    : (value) {
+                                        setState(() {
+                                          _preferencesTouched = true;
+                                          _fmOnly = value ?? false;
+                                        });
+                                        _preferencesChanged();
+                                      },
                               ),
                             ],
                           ),
@@ -8397,7 +8519,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     visualDensity: VisualDensity.compact,
                                   ),
                                   onSelectionChanged: (selection) {
-                                    setState(() => _mapView = selection.first);
+                                    setState(() {
+                                      _preferencesTouched = true;
+                                      _mapView = selection.first;
+                                    });
+                                    _preferencesChanged();
                                   },
                                 ),
                                 const SizedBox(width: 8),

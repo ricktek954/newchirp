@@ -2,7 +2,7 @@
 
 ## Classs
 
-- [RepeaterSearchPreferences](RepeaterSearchPreferences.md) — Optional filters remembered between repeater-directory searches.
+- [RepeaterSearchPreferences](RepeaterSearchPreferences.md) — Search criteria remembered between repeater-directory sessions.
 
 ## Functions
 

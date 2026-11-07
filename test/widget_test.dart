@@ -96,6 +96,10 @@ class _FakeRepeaterBridge extends RadioBridge {
   String? lastCountry;
   String? lastState;
   String? lastService;
+  String? lastFilter;
+  double? lastLatitude;
+  double? lastLongitude;
+  double? lastDistance;
   bool? lastFmOnly;
   bool? lastOpenOnly;
 
@@ -115,6 +119,10 @@ class _FakeRepeaterBridge extends RadioBridge {
     lastCountry = country;
     lastState = state;
     lastService = service;
+    lastFilter = filter;
+    lastLatitude = latitude;
+    lastLongitude = longitude;
+    lastDistance = distance;
     lastFmOnly = fmOnly;
     lastOpenOnly = openOnly;
     if (emptyResults) {
@@ -380,8 +388,9 @@ void main() {
     await tester.pumpAndSettle();
     final searchFilter = find.byKey(const ValueKey('repeater-search-filter'));
     await tester.enterText(searchFilter, 'Buffalo');
-    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 300));
     expect(find.byKey(const ValueKey('repeater-search-clear')), findsOneWidget);
+    expect(preferencesStore.preferences.query, 'Buffalo');
     await tester.tap(find.byKey(const ValueKey('repeater-search-clear')));
     await tester.pump();
     expect(tester.widget<TextField>(searchFilter).controller?.text, isEmpty);
@@ -613,6 +622,134 @@ void main() {
 
     expect(bridge.lastOpenOnly, isTrue);
     expect(bridge.lastFmOnly, isFalse);
+  });
+
+  testWidgets('repeater search restores all saved criteria', (tester) async {
+    tester.view.physicalSize = const Size(1200, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final bridge = _FakeRepeaterBridge();
+    final preferencesStore = _FakeRepeaterSearchPreferencesStore(
+      const RepeaterSearchPreferences(
+        country: 'Canada',
+        region: 'Ontario',
+        service: 'amateur',
+        sortOrder: 'city',
+        query: 'Toronto',
+        latitude: '43.6532',
+        longitude: '-79.3832',
+        radiusKm: '75',
+        openOnly: true,
+        fmOnly: true,
+        mapView: true,
+      ),
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: TextButton(
+              onPressed: () async {
+                await showDialog<List<RadioChannel>>(
+                  context: context,
+                  builder: (context) => RepeaterBookDialog(
+                    bridge: bridge,
+                    preferencesStore: preferencesStore,
+                  ),
+                );
+              },
+              child: const Text('Open full repeater search'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open full repeater search'));
+    await tester.pumpAndSettle();
+
+    expect(
+      tester
+          .widget<TextField>(
+            find.byKey(const ValueKey('repeater-search-filter')),
+          )
+          .controller
+          ?.text,
+      'Toronto',
+    );
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const ValueKey('repeater-latitude')))
+          .controller
+          ?.text,
+      '43.6532',
+    );
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const ValueKey('repeater-longitude')))
+          .controller
+          ?.text,
+      '-79.3832',
+    );
+    expect(
+      tester
+          .widget<TextField>(find.byKey(const ValueKey('repeater-radius-km')))
+          .controller
+          ?.text,
+      '75',
+    );
+    expect(
+      tester
+          .widget<DropdownButtonFormField<String>>(
+            find.byKey(const ValueKey('repeater-country-Canada')),
+          )
+          .initialValue,
+      'Canada',
+    );
+    expect(
+      tester
+          .widget<DropdownButtonFormField<String>>(
+            find.byKey(const ValueKey('repeater-region-Canada-Ontario')),
+          )
+          .initialValue,
+      'Ontario',
+    );
+    expect(
+      tester
+          .widget<DropdownButtonFormField<String>>(
+            find.byKey(const ValueKey('repeater-service-Canada-amateur')),
+          )
+          .initialValue,
+      'amateur',
+    );
+    expect(
+      tester
+          .widget<DropdownButtonFormField<RepeaterSortOrder>>(
+            find.byKey(const ValueKey('repeater-sort-city')),
+          )
+          .initialValue,
+      RepeaterSortOrder.city,
+    );
+
+    await tester.tap(find.text('Search'));
+    await tester.pumpAndSettle();
+
+    expect(bridge.lastCountry, 'Canada');
+    expect(bridge.lastState, 'Ontario');
+    expect(bridge.lastService, 'amateur');
+    expect(bridge.lastFilter, 'Toronto');
+    expect(bridge.lastLatitude, 43.6532);
+    expect(bridge.lastLongitude, -79.3832);
+    expect(bridge.lastDistance, 75);
+    expect(bridge.lastOpenOnly, isTrue);
+    expect(bridge.lastFmOnly, isTrue);
+    expect(preferencesStore.preferences.sortOrder, 'city');
+    expect(preferencesStore.preferences.query, 'Toronto');
+    expect(preferencesStore.preferences.latitude, '43.6532');
+    expect(preferencesStore.preferences.longitude, '-79.3832');
+    expect(preferencesStore.preferences.radiusKm, '75');
+    expect(preferencesStore.preferences.mapView, isTrue);
   });
 
   testWidgets('myGMRS directory is available after credential approval', (
