@@ -56,7 +56,7 @@ Last updated: 2026-11-07
 | Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
-| Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | Legacy Icom clone serial, 9600 8N1 | Completion-safe full image; invisible-slot guard | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | NewChirp ICF clone transport, 9600 8N1 | Four identity attempts; checksum-validated contiguous full image; invisible-slot guard | NewChirp clone-in boundary, 362 32-byte blocks, required `E6 00` | Stock ICX90 decoder | Experimental |
 | Icom IC-746PRO | `drivers/newchirp_icom_ic746pro.py` | Icom CI-V serial, 9600 8N1 | Stock IC-746 family logic | Stock IC-746 family logic | Stock IC-746 family logic | Experimental model profile |
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, physical image verified | Disabled | Hidden | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
@@ -1120,31 +1120,37 @@ Last updated: 2026-11-07
   rate 115200, `Unlink from [REMOTE]`, and `CI-V Transceive off`; then record
   a successful multi-band read and separate read/write validation
 
-### Icom IC-E90 / IC-T90A clone completion
+### Icom IC-E90 / IC-T90A clone transport
 
-- Maintainer: NewChirp override of the upstream CHIRP `icx90.py`
+- Maintainer: NewChirp-owned transport with the upstream ICX90 memory schema
 - Maintained file: `drivers/newchirp_icx90.py`
 - Protocol notes: `docs/ICX90_PROTOCOL.md`
 - Models: Icom IC-E90 and IC-T90A
 - Transport: legacy Icom ICF clone serial at 9600 8N1
 - Image: model bytes `25 07 00 01`, fixed size `0x2D40`
-- Implemented: the upstream channel, bank, settings, special-memory, read, and
-  write behavior. The override changes download completion and treats memories
-  marked `invisible_channel` as empty before decoding stale channel fields.
+- Implemented: NewChirp ICF frame construction/parsing, four identity attempts,
+  echo handling, checksum validation, fixed 32-byte block writes, clone-in
+  turnaround, required clone completion, completion-safe readout, and the
+  upstream channel, bank, settings, and special-memory schema. Memories marked
+  `invisible_channel` are treated as empty before stale fields are decoded.
 - Read policy: a download is successful when decoded frames cover the entire
   `0x2D40` image contiguously. This handles IC-E90 revisions that omit or
   malform the generic final end frame after sending the complete image. A
-  normal end frame is still accepted.
-- Write policy: unchanged from upstream CHIRP.
+  normal end frame is still accepted. Every data frame's address, returned
+  length, and checksum are validated.
+- Write policy: wait for clone-in after `E3` before streaming 362 32-byte
+  blocks. Each block uses the CPS checksum. The driver requires a final `E6`
+  status byte `00` and reports a radio that does not complete the clone rather
+  than claiming success.
 - Upload procedure: power-cycle the radio and enter cloning mode as a fresh
   operation before writing. The radio must display `CL IN`; a radio left on
   `CL OUT` from the preceding download will not accept the write.
-- Evidence: official CS-T90A CPS archive SHA-256
-  `725c37e44a781b972af49fca6b48f9190b0cd2f757e42af05eb79a7992a90038`;
+- Evidence: CS-T90A CPS archive SHA-256
+  `c520827dd586f4bcd4304c999699b01c723ee0d4cbc0fbb0f07b6d04892d0fae`;
   executable SHA-256
   `aae6ea1353a3b0f85379bf30eb66a69fc7814a5a370a555acee2579d64ff7adf`;
-  a field report received 39 bytes of model data followed by 28,261 bytes of
-  clone traffic before the generic end-frame wait failed.
+  VB6 inventory identifies `clsCmcIcf3Drv`, `clsCmcIcf3Sequence`, and
+  `clsCmcRadio`, with retry, answer, echo, and packet-size state.
 - Field image 2026-11-02: Klas supplied a 11,769-byte CHIRP image,
   SHA-256
   `356041292a5b3edb9204c023359798981c19e406ccd02b5f87993ff3d770cc26`.
@@ -1153,16 +1159,17 @@ Last updated: 2026-11-07
   With the visibility guard, the image loads 82 visible channels and no
   parser exception.
 - Driver SHA-256:
-  `010e1c98c23034fb47d17830fdea6ce4ecc83dc0958321e7b13028eea1c772ba`
-- Hardware validation: none for this override. Offline tests cover complete
-  image coverage without an end frame, normal end-frame completion, and
-  truncated rejection. The public 500-channel image also loaded successfully
-  during manual validation.
-- Next milestone: Klas retests the committed fix with the same OPC-478UD port,
-  confirms that the read completes after the full image arrives, and verifies
-  the displayed channels before any upload. The 2026-11-07 Linux report adds
-  the requirement to power-cycle before upload and confirm the `CL IN`
-  indication.
+  `a846c3a353f4c302cd89ae5110e853dc1f896957027bee13269b95ac4061c73a`
+- Hardware validation: NewChirp 1.0.45 completed a read and repeated writes on
+  Tony G4WIF's IC-E90 once the radio had been reset to a clean codeplug. The
+  new retry transport has not yet been physically retested.
+- Offline tests cover identity retries, echoed and non-echoed cables, normal
+  and missing download end frames, malformed checksums, truncated images,
+  clone-in ordering, all 362 write blocks, exact image round trips, and
+  missing completion status. The public 500-channel image also loads.
+- Next milestone: Tony retests the next build from an unrepaired radio state,
+  confirms the display changes to `CL IN`, and verifies the edited channel by
+  read-back.
 
 ### Icom IC-7200 memory grammar compatibility
 
