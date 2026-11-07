@@ -8,9 +8,13 @@ release requirements.
 
 ## Resume here
 
-- The Windows `1.0.46` installer is live from source commit `e4d4db35`.
-  Its platform manifest entry reports `1.0.46`; macOS, Linux, and the legacy
-  shared manifest remain `1.0.45` until their `1.0.46` artifacts exist.
+- Windows `1.0.46` is live from source commit `e4d4db35`.
+- macOS `1.0.46` is released from source commit `e4d4db35` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. This release adds the
+  CPS-derived Radioddity X1 Pro and GA-510 V2 experimental drivers, the
+  CPS-derived DB25-G driver, the retry-safe Icom IC-E90 transport,
+  hardware-tested Midland MXT295 promotion, and persisted RepeaterBook/myGMRS
+  search settings.
 - The 2026-11-07 GA-510 follow-up (email UID 497) showed stock CHIRP
   succeeded on the same COM4 radio and cable while both NewChirp GA-510
   entries failed at the first five-byte serial exchange. The official
@@ -343,7 +347,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.45` artifact source commit: `4ca2a6f9`
+- macOS `1.0.46` artifact source commit: `e4d4db35`
 - Windows `1.0.46` artifact source commit: `e4d4db35`
 - Linux `1.0.45` artifact source commit: `4ca2a6f9`
 - Open pull requests: none
@@ -361,13 +365,22 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.45 |
+| macOS | 1.0.46 |
 | Windows | 1.0.46 |
-| Linux | 1.0.45 |
-| Legacy shared manifest version | 1.0.45 |
+| Linux | 1.0.46 |
+| Legacy shared manifest version | 1.0.46 |
 
-Windows reports `1.0.46`; the legacy shared version stays `1.0.45` until
-macOS and Linux `1.0.46` artifacts are published.
+macOS `1.0.46` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.46.dmg`
+- Version/build: `1.0.46` / `46`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `572dc95bc348674533d71ffb2ef878d312a1b34b7e8ea69ce171c6912228c9ed`
+- Size: `82,479,689` bytes
+- Notarization submission: `07c91153-ab4d-4e3b-bdb2-153f17acf283`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Server checksum matched the final stapled DMG
 
 macOS `1.0.45` artifact:
 
@@ -616,6 +629,14 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.46` from source commit `e4d4db35` as a universal,
+  signed, notarized, stapled DMG. The release carries the CPS-derived
+  DB25-G, X1 Pro, GA-510 V2, and retry-safe IC-E90 drivers plus
+  hardware-tested MXT295 support. App/build version `1.0.46` / `46`, both
+  Python 3.13.15 runtimes, universal libusb, and the pinned CHIRP tree were
+  verified. Strict codesigning, Apple notarization, stapling, mounted-DMG
+  inspection, Gatekeeper, local/server/public SHA-256, launch smoke test,
+  and the live macOS manifest entry all passed.
 - Published Windows `1.0.46` from source commit `e4d4db35`. Verified installer
   file/product metadata `1.0.46.0` / `1.0.46`, app version `1.0.46+46`,
   bundled Python `3.13.15`, the bundled DB25-G, X1 Pro, GA-510 V2,
@@ -949,6 +970,35 @@ Linux 1.0.41 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.46 verification status
+
+Full verification before and after the macOS `1.0.46` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 189 tests passed
+- Python test discovery: 352 tests passed, 2 fixture-dependent tests skipped
+- Standalone CHIRP bridge upload suite: all 57 tests passed
+- Release source commit: `e4d4db35`
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.46` / `46`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled X1 Pro driver SHA-256:
+  `2ae43ec7302890808f3402f717409eb735bfa23fac77021176bd90849a9d09aa`
+- Bundled GA-510 V2 driver SHA-256:
+  `397dd55f847983c64cfdc91cb5200d00e20e85b49df62beb09d630aed836bc88`
+- Bundled CHIRP bridge SHA-256:
+  `905f53f26564e966fd4f7da97ac23672cf5436339c244b6fb345f899712c8fe7`
+- DMG SHA-256:
+  `572dc95bc348674533d71ffb2ef878d312a1b34b7e8ea69ce171c6912228c9ed`
+- Notarization submission: `07c91153-ab4d-4e3b-bdb2-153f17acf283`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.46`
+- The documented separate raw-SCSI helper remains `arm64`-only.
 
 ## macOS 1.0.45 verification status
 
