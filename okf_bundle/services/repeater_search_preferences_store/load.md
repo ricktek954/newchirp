@@ -10,7 +10,7 @@ tags:
   - "domain:repeater_search_preferences_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:24:39Z"
+timestamp: "2026-11-07T15:37:27Z"
 concept_id: services/repeater_search_preferences_store/load
 language: dart
 ---
@@ -24,7 +24,7 @@ Futureloadload
 ```
 
 ## Source
-Lines 20–20 in `services/repeater_search_preferences_store.dart`
+Lines 56–56 in `services/repeater_search_preferences_store.dart`
 
 ## Relationships
 

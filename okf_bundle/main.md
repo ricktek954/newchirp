@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T10:44:54Z"
+timestamp: "2026-11-07T15:39:13Z"
 concept_id: main
 language: dart
 ---
@@ -256,6 +256,10 @@ language: dart
 | related | [createState](/main/createState.md) |
 | related | [initState](/main/initState.md) |
 | related | [_loadPreferences](/main/loadPreferences.md) |
+| related | [_enumByName](/main/enumByName.md) |
+| related | [_currentPreferences](/main/currentPreferences.md) |
+| related | [_savePreferencesNow](/main/savePreferencesNow.md) |
+| related | [_preferencesChanged](/main/preferencesChanged.md) |
 | related | [_selectCountry](/main/selectCountry.md) |
 | related | [_selectProvider](/main/selectProvider.md) |
 | related | [_signInMyGmrs](/main/signInMyGmrs.md) |

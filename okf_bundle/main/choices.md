@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T10:44:54Z"
+timestamp: "2026-11-07T15:39:13Z"
 concept_id: main/choices
 language: dart
 ---
@@ -23,7 +23,7 @@ Mapchoiceschoices
 ```
 
 ## Source
-Lines 9607–9611 in `main.dart`
+Lines 9733–9737 in `main.dart`
 
 ## Relationships
 

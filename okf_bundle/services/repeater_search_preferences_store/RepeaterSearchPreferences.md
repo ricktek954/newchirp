@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: Class
 title: RepeaterSearchPreferences
-description: Optional filters remembered between repeater-directory searches.
+description: Search criteria remembered between repeater-directory sessions.
 resource: services/repeater_search_preferences_store.dart
 tags:
   - "lang:dart"
@@ -11,14 +11,14 @@ tags:
   - "domain:repeater_search_preferences_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-04T11:24:39Z"
+timestamp: "2026-11-07T15:37:27Z"
 concept_id: services/repeater_search_preferences_store/RepeaterSearchPreferences
 language: dart
 ---
 
 # RepeaterSearchPreferences
 
-Optional filters remembered between repeater-directory searches.
+Search criteria remembered between repeater-directory sessions.
 
 ## Signature
 
@@ -28,14 +28,14 @@ class RepeaterSearchPreferences
 
 ## Docstring
 
-Optional filters remembered between repeater-directory searches.
+Search criteria remembered between repeater-directory sessions.
 
 ## Methods
 
 - `toJson`
 
 ## Source
-Lines 5–12 in `services/repeater_search_preferences_store.dart`
+Lines 5–48 in `services/repeater_search_preferences_store.dart`
 
 ## Relationships
 
