@@ -56,3 +56,16 @@ Offline tests cover full coverage without an end frame, the normal end-frame
 path, truncated-image rejection, and registration as the active IC-E90 driver.
 The public 500-channel reference image was also loaded successfully during
 manual validation. Physical IC-E90 read/write validation remains required.
+
+## Upload recovery
+
+The 2026-11-07 Linux report from `spiny-commode-slip@duck.com` completed the
+download and then failed during upload while the radio remained on `CL OUT`.
+The trace is consistent with starting a clone-in write while the radio was
+still in the preceding clone-out transfer state.
+
+NewChirp now tells the operator to power-cycle the radio and enter cloning
+mode again before every write. The radio must display `CL IN` when the write
+starts. If it remains on `CL OUT`, the transfer is not in the correct direction
+and should be stopped before retrying. Do not treat displayed `CL OUT` as a
+successful upload.

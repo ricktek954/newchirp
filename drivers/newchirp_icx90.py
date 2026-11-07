@@ -58,9 +58,29 @@ class ICx90Radio(icx90.ICx90Radio):
     def get_prompts(cls):
         prompts = super().get_prompts()
         prompts.info = (
-            "Put the IC-E90 in clone mode before starting a transfer. If the "
-            "radio sends the complete image without a final end frame, "
-            "NewChirp accepts the download after every image byte arrives."
+            "Put the IC-E90 in clone mode before starting a transfer. Power "
+            "cycle the radio before a new read or write so it is not left in "
+            "the previous CL OUT/CL IN state. If the radio sends the complete "
+            "image without a final end frame, NewChirp accepts the download "
+            "after every image byte arrives."
+        )
+        prompts.pre_download = (
+            "1. Turn the radio off.\n"
+            "2. Hold [8 SET] and [MR], then power on to enter cloning mode.\n"
+            "3. Connect the OPC-478 programming cable and start the download.\n\n"
+            "The radio normally displays CL OUT while data is read. Do not "
+            "start a write from a radio left in that transfer state."
+        )
+        prompts.pre_upload = (
+            "Before writing, turn the radio completely off and back on. "
+            "Re-enter cloning mode, connect the programming cable, and start "
+            "the write as a new operation.\n\n"
+            "The radio must change from CL OUT to CL IN when the write starts. "
+            "If it remains on CL OUT, stop the transfer, power-cycle the radio, "
+            "and enter cloning mode again before retrying.\n\n"
+            "Keep an unedited image downloaded from this radio. After the "
+            "write succeeds, power-cycle the radio and read it back to verify "
+            "the edited channels."
         )
         return prompts
 

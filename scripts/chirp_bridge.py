@@ -44,9 +44,14 @@ class RadioCommunicationTrace:
         self.max_entries = max_entries
         self._entries = []
         self._pending = None
+        self._protocol = "TYT"
 
-    @staticmethod
-    def _command_summary(data):
+    def set_radio_class(self, radio_class):
+        self._protocol = (
+            "Icom" if getattr(radio_class, "VENDOR", "") == "Icom" else "TYT"
+        )
+
+    def _command_summary(self, data):
         try:
             raw = bytes(data)
         except (TypeError, ValueError):
@@ -54,6 +59,29 @@ class RadioCommunicationTrace:
         if not raw:
             return "<empty write>"
         if len(raw) >= 5 and raw[:4] == b"\xfe\xfe\xee\xef":
+            if self._protocol == "Icom":
+                commands = {
+                    0xE0: "identify",
+                    0xE1: "identify response",
+                    0xE2: "clone out/read",
+                    0xE3: "clone in/write",
+                    0xE4: "clone data",
+                    0xE5: "clone end",
+                    0xE6: "clone result",
+                }
+                label = commands.get(raw[4], "command %02x" % raw[4])
+                if raw[4] == 0xE4 and len(raw) >= 9:
+                    try:
+                        decoded = bytes.fromhex(
+                            raw[5:-1].decode("ascii")
+                        )
+                        address = int.from_bytes(decoded[:2], "big")
+                        length = decoded[2]
+                        label += " addr=0x%04x len=%i" % (address, length)
+                    except (UnicodeDecodeError, ValueError, IndexError):
+                        pass
+                return "Icom %s (%i bytes)" % (label, len(raw))
+
             commands = {
                 0xE0: "handshake",
                 0xE2: "enter read",
@@ -1403,6 +1431,7 @@ def radio_for(
     from chirp import chirp_common
 
     radio_class = directory.get_radio(model)
+    RADIO_TRACE.set_radio_class(radio_class)
     if image is not None and not issubclass(
         radio_class, chirp_common.LiveRadio
     ):
@@ -1428,6 +1457,7 @@ def radio_for(
         if detect_serial and transport_kind is None:
             try:
                 radio_class = radio_class.detect_from_serial(handle)
+                RADIO_TRACE.set_radio_class(radio_class)
             except NotImplementedError:
                 pass
         radio = radio_class(handle)

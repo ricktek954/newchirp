@@ -67,6 +67,7 @@
 - [search_repeaterbook](search_repeaterbook.md)
 - [serial_read_timeout](serial_read_timeout.md)
 - [set_memory_with_extras](set_memory_with_extras.md) — Write a channel and persist fields CHIRP stores outside radio memory.
+- [set_radio_class](set_radio_class.md)
 - [setting_doc](setting_doc.md)
 - [setting_value_json](setting_value_json.md)
 - [settings_payload](settings_payload.md)

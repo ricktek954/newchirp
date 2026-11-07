@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T20:09:01Z"
+timestamp: "2026-11-07T14:59:39Z"
 concept_id: chirp_bridge/coerce_setting_value
 language: python
 ---
@@ -42,7 +42,7 @@ integer when applying the value.
 | `value` | `—` | `—` |
 
 ## Source
-Lines 1028–1042 in `chirp_bridge.py`
+Lines 1056–1070 in `chirp_bridge.py`
 
 ## Relationships
 

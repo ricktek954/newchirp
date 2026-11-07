@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T20:09:01Z"
+timestamp: "2026-11-07T14:59:39Z"
 concept_id: chirp_bridge/repeaterbook_cache_path
 language: python
 ---
@@ -29,7 +29,7 @@ def repeaterbook_cache_path(resource)
 | `resource` | `—` | `—` |
 
 ## Source
-Lines 1778–1781 in `chirp_bridge.py`
+Lines 1808–1811 in `chirp_bridge.py`
 
 ## Relationships
 

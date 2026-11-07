@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T20:09:01Z"
+timestamp: "2026-11-07T14:59:39Z"
 concept_id: chirp_bridge/init
 language: python
 ---
@@ -33,7 +33,7 @@ def __init__(self, serial_port, trace)
 | `trace` | `—` | `—` |
 
 ## Source
-Lines 211–213 in `chirp_bridge.py`
+Lines 239–241 in `chirp_bridge.py`
 
 ## Relationships
 
