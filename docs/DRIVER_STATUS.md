@@ -1327,10 +1327,10 @@ Last updated: 2026-11-07
 - Mic Gain is stored with the other settings. The Midland guide says it is only used by the MXT115P.
 - Read/write state: a full image upload is implemented. NewChirp has written this radio several times, and those writes worked. Settings edits stay in the saved image until someone uses Write settings, which sends the whole image.
 - Hardware validation: several NewChirp uploads to this MXT295 succeeded. The byte map was first checked against the captured read.
-- Read warning: the Midland driver is experimental, download and check channels before an upload, and keep a backup of your radio from the Midland program. Steps: 12 volt power, Bluetooth mic off, MXPG15 on the radio base.
-- Write warning: the Midland driver is experimental. Make a backup before using it to change the radio.
-- Next milestone: none for a first write. That write has already succeeded more than once. The app still warns that the driver is experimental.
-- Website catalog: not listed
+- Read guidance: download and check channels before an upload, and keep a backup of your radio from the Midland program. Steps: 12 volt power, Bluetooth mic off, MXPG15 on the radio base.
+- Write guidance: make a backup before using NewChirp to change the radio.
+- Next milestone: none for first read/write support. Several physical uploads have succeeded.
+- Website catalog: listed in the normal Midland catalog with desktop and Web Programmer support, and not included in New Experimental Radio Support.
 
 ### Wouxun KG-UVD1P / KG-UV2D
 
