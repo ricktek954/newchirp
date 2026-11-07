@@ -30,7 +30,7 @@ release requirements.
   `/Users/rlopez/Downloads/Radioddity_DB25_G_GMRS_CPS_20250903.zip`;
   protocol evidence is in `docs/DB25G_PROTOCOL.md`. Website commit `a70df5c`
   marks DB25-G as experimental and is live. The reporter reply is in `Sent`
-  as UID 319; source UID 489 is verified `\Seen`.
+  as UID 319; source UID 489 is verified `\Seen`. Desktop commit `d8191436`.
 - The 2026-11-07 IC-E90 report UID 486 completed a read but failed an upload
   while the radio remained on `CL OUT`. The CS-T90A transport is unchanged
   and correct; the radio must be power-cycled and enter a fresh clone session
