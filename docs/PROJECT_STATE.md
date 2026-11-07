@@ -8,6 +8,10 @@ release requirements.
 
 ## Resume here
 
+- Session saved on 2026-11-07 after all `1.0.45` platform release records
+  landed. After this handoff commit is pushed, repository `main` should be
+  clean and synced. Immediate follow-ups are normal unread-email triage and
+  any physical RA89/TK-270G read/write validation from reporters.
 - The cross-platform `1.0.45` release is live. Windows and Linux artifacts are
   from source commit `4ca2a6f9` and include the Retevis RA89 driver plus the
   safe TK-270G driver. macOS is from source commit `4ca2a6f9` and is fully
