@@ -129,6 +129,7 @@ class DiagnosticLog {
     required String email,
     required String description,
     required String radio,
+    required String firmware,
     required String version,
     required String cable,
   }) async {
@@ -145,6 +146,7 @@ class DiagnosticLog {
         jsonEncode({
           'email': email.trim(),
           'radio': radio,
+          'firmware': firmware.trim(),
           'os': Platform.operatingSystemVersion,
           'version': version,
           'cable': cable,

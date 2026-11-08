@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:diagnostic_log.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T09:16:58Z"
+timestamp: "2026-11-08T13:12:13Z"
 concept_id: services/diagnostic_log/redact
 language: dart
 ---
@@ -24,7 +24,7 @@ String_redact(String value)
 ```
 
 ## Source
-Lines 194–194 in `services/diagnostic_log.dart`
+Lines 196–196 in `services/diagnostic_log.dart`
 
 ## Relationships
 

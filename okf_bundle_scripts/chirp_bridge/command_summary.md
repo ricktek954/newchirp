@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:56:04Z"
+timestamp: "2026-11-08T13:12:45Z"
 concept_id: chirp_bridge/command_summary
 language: python
 ---
@@ -31,7 +31,7 @@ def _command_summary(self, data)
 | `data` | `—` | `—` |
 
 ## Source
-Lines 54–135 in `chirp_bridge.py`
+Lines 129–210 in `chirp_bridge.py`
 
 ## Relationships
 

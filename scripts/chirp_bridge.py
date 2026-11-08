@@ -19,6 +19,81 @@ import urllib.request
 import warnings
 PROGRESS_PREFIX = "__NEWCHIRP_PROGRESS__ "
 RADIO_TRACE_MARKER = "\n\nRadio communication trace:\n"
+_UVK5_HELLO_XOR = bytes.fromhex(
+    "16 6c 14 e6 2e 91 0d 40 21 35 d5 40 13 03 e9 80"
+)
+_FIRMWARE_METADATA_KEYS = (
+    "uvk5_firmware",
+    "f4hwn_firmware",
+    "dm32uv_firmware",
+    "tk11_firmware_version",
+    "ha1g_firmware",
+    "tkx80_ver",
+    "firmware",
+    "firmware_version",
+    "fw_version",
+)
+
+
+def uvk5_firmware_from_hello(reply):
+    """Decode the UV-K5 hello reply without trusting non-printable bytes."""
+    if (
+        not isinstance(reply, (bytes, bytearray))
+        or len(reply) < 20
+        or bytes(reply[:2]) != b"\xab\xcd"
+    ):
+        return None
+    body_length = int.from_bytes(reply[2:4], "little")
+    encoded = bytes(reply[4:4 + body_length])
+    if len(encoded) < 12:
+        return None
+    body = bytes(
+        value ^ _UVK5_HELLO_XOR[index % len(_UVK5_HELLO_XOR)]
+        for index, value in enumerate(encoded)
+    )
+    if body[:2] != b"\x15\x05":
+        return None
+    firmware = body[4:]
+    for index, value in enumerate(firmware):
+        if value == 0 or value < 0x20 or value > 0x7E:
+            firmware = firmware[:index]
+            break
+    text = firmware.decode("ascii", errors="ignore").strip()
+    return text or None
+
+
+def radio_firmware(radio):
+    """Return the best available firmware identity from a radio or image."""
+    metadata = getattr(radio, "metadata", None)
+    if isinstance(metadata, dict):
+        for key in _FIRMWARE_METADATA_KEYS:
+            value = metadata.get(key)
+            if value is None:
+                continue
+            if isinstance(value, bytes):
+                value = value.decode("ascii", errors="replace")
+            elif isinstance(value, int):
+                value = "0x%04X" % value
+            text = str(value).replace("\x00", "").strip()
+            if text:
+                return text[:120]
+
+    for name in (
+        "_firmware",
+        "FIRMWARE_VERSION",
+        "F4HWN_FIRMWARE",
+    ):
+        value = getattr(radio, name, None)
+        if value is None:
+            continue
+        if isinstance(value, bytes):
+            value = value.decode("ascii", errors="replace")
+        elif isinstance(value, int):
+            value = "0x%04X" % value
+        text = str(value).replace("\x00", "").strip()
+        if text:
+            return text[:120]
+    return ""
 MANUAL_READ_READY_MESSAGE = (
     "Listening for the radio - hold PTT for one second."
 )
@@ -176,7 +251,13 @@ class RadioCommunicationTrace:
             preview = response[:32].hex(" ")
             if len(response) > 32:
                 preview += " …"
-            result = "reply=%s (%i bytes)" % (preview, len(response))
+            firmware = uvk5_firmware_from_hello(response)
+            result = (
+                "firmware=%s | reply=%s (%i bytes)"
+                % (firmware, preview, len(response))
+                if firmware
+                else "reply=%s (%i bytes)" % (preview, len(response))
+            )
         elif response.strip() in (
             b"N;",
             b"?;",
@@ -2331,6 +2412,7 @@ def main():
                         channels.append(memory_json(mem))
             print(json.dumps({
                 "model": model,
+                "firmware": radio_firmware(radio),
                 "channels": channels,
                 "imagePath": image_path,
                 "zones": zones,
@@ -2364,13 +2446,16 @@ def main():
                     radio.save_mmap(image)
                     payload = settings_payload(radio)
                     payload["imagePath"] = image
+                    payload["firmware"] = radio_firmware(radio)
                     emit_progress("Radio settings read.", 1.0)
                     print(json.dumps(payload))
                 finally:
                     radio.pipe.close()
             else:
                 radio = radio_from_image(directory, args.model, args.image)
-                print(json.dumps(settings_payload(radio)))
+                payload = settings_payload(radio)
+                payload["firmware"] = radio_firmware(radio)
+                print(json.dumps(payload))
             return
         if args.command == "download":
             progress_range = (0.02, 0.92)
@@ -2428,6 +2513,7 @@ def main():
                     ) from exc
                 emit_progress("Read complete.", 1.0)
                 print(json.dumps({
+                    "firmware": radio_firmware(radio),
                     "channels": channels,
                     "imagePath": image,
                     "zones": zones,
@@ -2568,6 +2654,7 @@ def main():
                 emit_progress("Write complete.", 1.0)
                 print(json.dumps({
                     "ok": True,
+                    "firmware": radio_firmware(radio),
                     "skipped": skipped,
                     "adjusted": adjusted,
                     "mappings": (
@@ -2595,7 +2682,11 @@ def main():
                 emit_progress("Saving the updated image...", 0.99)
                 radio.save_mmap(args.image)
                 emit_progress("Settings write complete.", 1.0)
-                print(json.dumps({"ok": True, "changed": len(changes)}))
+                print(json.dumps({
+                    "ok": True,
+                    "firmware": radio_firmware(radio),
+                    "changed": len(changes),
+                }))
         finally:
             radio.pipe.close()
     except Exception as exc:

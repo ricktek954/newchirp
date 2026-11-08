@@ -20,6 +20,7 @@
 - [_findLibusbRuntime](findLibusbRuntime.md)
 - [_findNewChirpDrivers](findNewChirpDrivers.md)
 - [_findScsiHelper](findScsiHelper.md)
+- [_firmwareFromPayload](firmwareFromPayload.md)
 - [_loadAssetBytes](loadAssetBytes.md)
 - [_massStoragePortDetails](massStoragePortDetails.md)
 - [_materializeBridge](materializeBridge.md)

@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:56:04Z"
+timestamp: "2026-11-08T13:12:45Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 2196–2611 in `chirp_bridge.py`
+Lines 2277–2702 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -37,11 +37,12 @@ Lines 2196–2611 in `chirp_bridge.py`
 | calls | [channel_context](/chirp_bridge/channel_context.md) |
 | calls | [close](/chirp_bridge/close.md) |
 | calls | [radio_from_image](/chirp_bridge/radio_from_image.md) |
+| calls | [settings_payload](/chirp_bridge/settings_payload.md) |
+| calls | [radio_firmware](/chirp_bridge/radio_firmware.md) |
 | calls | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | calls | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |
 | calls | [search_repeaterbook](/chirp_bridge/search_repeaterbook.md) |
 | calls | [memory_with_extras](/chirp_bridge/memory_with_extras.md) |
-| calls | [settings_payload](/chirp_bridge/settings_payload.md) |
 | calls | [apply_setting_changes](/chirp_bridge/apply_setting_changes.md) |
 | calls | [mapping_payload](/chirp_bridge/mapping_payload.md) |
 | calls | [features_json](/chirp_bridge/features_json.md) |

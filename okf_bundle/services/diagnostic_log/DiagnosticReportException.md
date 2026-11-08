@@ -8,9 +8,9 @@ tags:
   - "type:Class"
   - "module:services"
   - "domain:diagnostic_log.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T09:16:58Z"
+timestamp: "2026-11-08T13:12:13Z"
 concept_id: services/diagnostic_log/DiagnosticReportException
 language: dart
 ---
@@ -28,7 +28,7 @@ class DiagnosticReportException
 - `toString`
 
 ## Source
-Lines 226–233 in `services/diagnostic_log.dart`
+Lines 228–235 in `services/diagnostic_log.dart`
 
 ## Relationships
 

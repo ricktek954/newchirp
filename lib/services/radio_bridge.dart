@@ -16,6 +16,11 @@ const _progressPrefix = '__NEWCHIRP_PROGRESS__ ';
 /// Keep those bytes from aborting an otherwise valid radio operation.
 const bridgeProcessDecoder = Utf8Decoder(allowMalformed: true);
 
+String? _firmwareFromPayload(Map<String, dynamic> data) {
+  final firmware = '${data['firmware'] ?? ''}'.trim();
+  return firmware.isEmpty ? null : firmware;
+}
+
 const _windowsSerialPortDeviceScript = r'''
 $ports = @(
   Get-CimInstance Win32_PnPEntity |
@@ -291,16 +296,19 @@ class RadioSettings {
     required this.hasSettings,
     required this.items,
     this.imagePath,
+    this.firmware,
   });
 
   final bool hasSettings;
   final List<RadioSettingNode> items;
   final String? imagePath;
+  final String? firmware;
 
   factory RadioSettings.fromJson(Map<String, dynamic> json) {
     return RadioSettings(
       hasSettings: json['hasSettings'] as bool? ?? false,
       imagePath: json['imagePath'] as String?,
+      firmware: _firmwareFromPayload(json),
       items: (json['settings'] as List? ?? const [])
           .map(
             (item) => RadioSettingNode.fromJson(
@@ -534,6 +542,7 @@ class RadioBridge {
       List<RadioChannel> channels,
       String model,
       String imagePath,
+      String? firmware,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
       List<RadioMappingModel> mappings,
@@ -556,6 +565,7 @@ class RadioBridge {
           .toList(),
       model: '${data['model']}',
       imagePath: '${data['imagePath']}',
+      firmware: _firmwareFromPayload(data),
       capabilities: RadioCapabilities.fromJson(
         (data['features'] as Map).cast<String, dynamic>(),
       ),
@@ -573,6 +583,7 @@ class RadioBridge {
   Future<
     ({
       RadioCapabilities capabilities,
+      String? firmware,
       List<RadioZone> zones,
       List<RadioMappingModel> mappings,
       int? zone,
@@ -586,6 +597,7 @@ class RadioBridge {
       '--metadata-only',
     ]);
     return (
+      firmware: _firmwareFromPayload(data),
       capabilities: RadioCapabilities.fromJson(
         (data['features'] as Map).cast<String, dynamic>(),
       ),
@@ -607,6 +619,7 @@ class RadioBridge {
     ({
       List<RadioChannel> channels,
       String imagePath,
+      String? firmware,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
       List<RadioMappingModel> mappings,
@@ -632,6 +645,7 @@ class RadioBridge {
           .map((e) => RadioChannel.fromJson((e as Map).cast<String, dynamic>()))
           .toList(),
       imagePath: data['imagePath'] as String,
+      firmware: _firmwareFromPayload(data),
       capabilities: RadioCapabilities.fromJson(
         (data['features'] as Map).cast<String, dynamic>(),
       ),

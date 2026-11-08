@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:56:04Z"
+timestamp: "2026-11-08T13:12:45Z"
 concept_id: chirp_bridge/received
 language: python
 ---
@@ -31,7 +31,7 @@ def received(self, data)
 | `data` | `—` | `—` |
 
 ## Source
-Lines 145–150 in `chirp_bridge.py`
+Lines 220–225 in `chirp_bridge.py`
 
 ## Relationships
 

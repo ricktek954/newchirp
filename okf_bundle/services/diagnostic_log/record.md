@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:diagnostic_log.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T09:16:58Z"
+timestamp: "2026-11-08T13:12:13Z"
 concept_id: services/diagnostic_log/record
 language: dart
 ---
