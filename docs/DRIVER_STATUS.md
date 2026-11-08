@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-07
+Last updated: 2026-11-08
 
 ## Status definitions
 
@@ -52,6 +52,7 @@ Last updated: 2026-11-07
 | Radioddity DB25-G | `drivers/newchirp_db25g.py` | OEM DB25-G CPS clone serial, 9600 8N1, no DTR/RTS | CPS retry handshake; block framing | 16-byte blocks through 0x30FF; hardware pending | Stock decoder cross-check | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
 | Radioddity X1 Pro GMRS | `drivers/newchirp_x1pro.py` | OEM X1 Pro CPS serial, 115200 8N1, no DTR/RTS | Settings + 30 channel pages, offline-tested | Settings + all 30 channel pages, offline-tested | Full exposed settings page | Experimental |
+| Radioddity GS-5B 1.XX | `drivers/newchirp_gs5b.py` | OEM GS-5B Pro CPS v1.1.3 serial, 115200 8N1, DTR/RTS on | 512 channels, offline-tested | All mapped pages, offline-tested | Preserved, hidden | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
@@ -908,6 +909,34 @@ Last updated: 2026-11-07
 - Next milestone: ask Dustin to test the corrected CPS-matched write order on
   the next prerelease, then compare all 30 channels plus settings with a saved
   OEM image before promoting the driver.
+
+### Radioddity GS-5B 1.XX
+
+- Maintained driver: `drivers/newchirp_gs5b.py`
+- Protocol notes: `docs/GS5B_PROTOCOL.md`
+- Transport: `PROGRAMSHXPU`, 115200 8N1, DTR/RTS asserted, 64-byte pages
+- Memory map: 512 inline 32-byte channel records plus VFO, settings, DTMF,
+  zone-name, and FM ranges through `0xB03F`
+- Implemented: RX/TX frequency, names, independent CTCSS/DCS, DCS polarity,
+  cross tones, three power levels, wide/narrow, scan add/skip, and busy lock
+- Read/write policy: both enabled for experimental testing. All documented
+  pages are written; gaps are never touched. Settings and aux data are
+  preserved but not yet exposed in the editor.
+- Compatibility: the normal `Radioddity_GS-5B` entry remains the upstream
+  0.XX driver. Select `Radioddity GS-5B (1.XX)` for the current CPS transport.
+- Evidence: official CPS ZIP SHA-256
+  `628ed2f64c644673a8a9a3c7aa6d45d1d42f2baaf32f860e3922c824e501396f`;
+  extracted CPS SHA-256
+  `7878a58b2e33a153e3e137ab803b90db43ac438a00851853641fe2bccba92d54`;
+  CIL static call-path analysis E1 and synthetic replay E2
+- Driver SHA-256:
+  `b33acbb7e43ab83b46e1e7b16719d082f4366aca093cafbfd3ac2294370cd48a`
+- Hardware validation: none. The 2026-11-08 report confirmed that the same
+  cable and COM4 successfully read 52 channels when using `Baofeng_5RM`, while
+  the upstream GS-5B selector failed at `PROGROMSHXU`.
+- Next milestone: ask reporter `369peace@proton.me` to select
+  `Radioddity GS-5B (1.XX)`, save the full image, and compare it with the OEM
+  CPS before any controlled write.
 
 ### Baofeng DM-32UV
 
