@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import importlib.util
+import io
+import json
 import struct
 import sys
 import tempfile
@@ -962,6 +964,153 @@ class UploadHandshakeTest(unittest.TestCase):
             )
 
         self.assertEqual(results["totalMatches"], 0)
+
+    def test_repeaterbook_zip_search_uses_default_radius(self):
+        def item(callsign, frequency, latitude, longitude):
+            return {
+                "Frequency": frequency,
+                "Input Freq": "0",
+                "PL": "",
+                "TSQ": "",
+                "Callsign": callsign,
+                "Landmark": callsign,
+                "County": "Broward",
+                "State": "Florida",
+                "Use": "OPEN",
+                "Operational Status": "On-air",
+                "FM Analog": "Yes",
+                "DMR": "No",
+                "D-Star": "No",
+                "System Fusion": "No",
+                "Lat": latitude,
+                "Long": longitude,
+            }
+
+        zip_location = {
+            "zip": "33004",
+            "city": "Dania",
+            "state": "Florida",
+            "latitude": 26.0476,
+            "longitude": -80.1447,
+        }
+        repeaters = {
+            "results": [
+                item("NEARBY", "146.865000", "26.1224", "-80.1373"),
+                item("TOOFAR", "147.000000", "28.5383", "-81.3792"),
+            ]
+        }
+        with (
+            mock.patch.object(
+                bridge,
+                "resolve_us_zip_code",
+                return_value=zip_location,
+            ) as resolve_zip,
+            mock.patch.object(
+                bridge,
+                "fetch_repeaterbook_data",
+                return_value=repeaters,
+            ),
+        ):
+            results = bridge.search_repeaterbook(
+                "United States",
+                "Florida",
+                query="33004",
+            )
+
+        resolve_zip.assert_called_once_with("33004")
+        self.assertEqual(results["totalMatches"], 1)
+        self.assertEqual(results["results"][0]["callsign"], "NEARBY")
+        self.assertLessEqual(results["results"][0]["distanceKm"], 50)
+
+    def test_repeaterbook_zip_must_match_selected_region(self):
+        zip_location = {
+            "zip": "33004",
+            "city": "Dania",
+            "state": "Florida",
+            "latitude": 26.0476,
+            "longitude": -80.1447,
+        }
+        with mock.patch.object(
+            bridge,
+            "resolve_us_zip_code",
+            return_value=zip_location,
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "ZIP code 33004 is in Florida, but Region is New York",
+            ):
+                bridge.search_repeaterbook(
+                    "United States",
+                    "New York",
+                    query="33004",
+                )
+
+    def test_repeaterbook_zip_lookup_failure_is_not_an_empty_search(self):
+        with mock.patch.object(
+            bridge,
+            "resolve_us_zip_code",
+            side_effect=RuntimeError("Could not resolve ZIP code 33004"),
+        ):
+            with self.assertRaisesRegex(
+                RuntimeError,
+                "Could not resolve ZIP code 33004",
+            ):
+                bridge.search_repeaterbook(
+                    "United States",
+                    "Florida",
+                    query="33004",
+                )
+
+    def test_us_zip_lookup_parses_and_caches_zippopotam_response(self):
+        payload = json.dumps({
+            "places": [
+                {
+                    "place name": "Dania",
+                    "state": "Florida",
+                    "latitude": "26.0476",
+                    "longitude": "-80.1447",
+                }
+            ]
+        })
+        with (
+            tempfile.TemporaryDirectory() as cache_dir,
+            mock.patch.object(
+                bridge.tempfile,
+                "gettempdir",
+                return_value=cache_dir,
+            ),
+            mock.patch.object(
+                bridge.urllib.request,
+                "urlopen",
+                return_value=io.StringIO(payload),
+            ) as urlopen,
+        ):
+            first = bridge.resolve_us_zip_code("33004-1234")
+            second = bridge.resolve_us_zip_code("33004")
+
+        self.assertEqual(first, second)
+        self.assertEqual(first["city"], "Dania")
+        self.assertEqual(first["state"], "Florida")
+        self.assertAlmostEqual(first["latitude"], 26.0476)
+        self.assertAlmostEqual(first["longitude"], -80.1447)
+        self.assertEqual(urlopen.call_count, 1)
+        self.assertEqual(
+            urlopen.call_args.args[0].full_url,
+            "https://api.zippopotam.us/us/33004",
+        )
+
+    def test_repeaterbook_zip_and_coordinates_are_mutually_exclusive(self):
+        with self.assertRaisesRegex(
+            RuntimeError,
+            "Use either a ZIP code or latitude and longitude",
+        ):
+            bridge.search_repeaterbook(
+                "United States",
+                "Florida",
+                query="33004",
+                latitude=26.0476,
+                longitude=-80.1447,
+            )
 
     def test_repeaterbook_query_normalizes_county_suffix(self):
         self.assertEqual(

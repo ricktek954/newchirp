@@ -1919,6 +1919,105 @@ def repeaterbook_item_to_channel(item, number):
     return memory_json(memory)
 
 
+US_ZIP_PATTERN = re.compile(r"^\d{5}(?:-\d{4})?$")
+REPEATERBOOK_DEFAULT_ZIP_RADIUS_KM = 50.0
+ZIP_LOOKUP_MAX_AGE_SECONDS = 30 * 86400
+
+
+def zip_lookup_cache_path(zip_code):
+    cache_dir = os.path.join(tempfile.gettempdir(), "newchirp-zipcodes")
+    os.makedirs(cache_dir, exist_ok=True)
+    return os.path.join(cache_dir, "%s.json" % zip_code)
+
+
+def resolve_us_zip_code(zip_code):
+    """Resolve a US ZIP code to a representative latitude and longitude."""
+    requested_zip = str(zip_code or "").strip()
+    if not US_ZIP_PATTERN.fullmatch(requested_zip):
+        raise RuntimeError("Enter a valid 5-digit US ZIP code.")
+    lookup_zip = requested_zip[:5]
+    cache_path = zip_lookup_cache_path(lookup_zip)
+
+    def cached_result():
+        try:
+            with open(cache_path, encoding="utf-8") as handle:
+                cached = json.load(handle)
+            latitude = float(cached["latitude"])
+            longitude = float(cached["longitude"])
+            state = str(cached["state"]).strip()
+            city = str(cached.get("city") or "").strip()
+            if not state:
+                return None
+            return {
+                "zip": lookup_zip,
+                "city": city,
+                "state": state,
+                "latitude": latitude,
+                "longitude": longitude,
+            }
+        except (OSError, KeyError, TypeError, ValueError):
+            return None
+
+    cache_age = (
+        time.time() - os.path.getmtime(cache_path)
+        if os.path.exists(cache_path)
+        else None
+    )
+    if cache_age is not None and cache_age < ZIP_LOOKUP_MAX_AGE_SECONDS:
+        result = cached_result()
+        if result is not None:
+            return result
+
+    emit_progress("Resolving ZIP code...", 0.06)
+    url = "https://api.zippopotam.us/us/%s" % lookup_zip
+    request = urllib.request.Request(
+        url,
+        headers={"User-Agent": "NewChirp repeater search"},
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            payload = json.load(response)
+        places = payload.get("places") or []
+        if not places:
+            raise ValueError("ZIP lookup returned no places")
+        place = places[0]
+        result = {
+            "zip": lookup_zip,
+            "city": str(place.get("place name") or "").strip(),
+            "state": str(place.get("state") or "").strip(),
+            "latitude": float(place["latitude"]),
+            "longitude": float(place["longitude"]),
+        }
+        if not result["state"]:
+            raise ValueError("ZIP lookup returned no state")
+        if not -90 <= result["latitude"] <= 90:
+            raise ValueError("ZIP lookup returned an invalid latitude")
+        if not -180 <= result["longitude"] <= 180:
+            raise ValueError("ZIP lookup returned an invalid longitude")
+        with open(cache_path + ".tmp", "w", encoding="utf-8") as handle:
+            json.dump(result, handle)
+        os.replace(cache_path + ".tmp", cache_path)
+        return result
+    except urllib.error.HTTPError as exc:
+        if exc.code == 404:
+            raise RuntimeError(
+                "Could not resolve ZIP code %s. Check the ZIP code and try "
+                "again." % lookup_zip
+            ) from exc
+        failure = str(exc)
+    except Exception as exc:
+        failure = str(exc)
+
+    result = cached_result()
+    if result is not None:
+        emit_progress("Using cached ZIP location.", 0.07)
+        return result
+    raise RuntimeError(
+        "Could not resolve ZIP code %s (%s). Try again, or enter latitude "
+        "and longitude instead." % (lookup_zip, failure)
+    )
+
+
 def normalize_repeaterbook_query(query):
     """Treat location words like "Broward County" as a county name."""
     normalized = re.sub(
@@ -1944,7 +2043,44 @@ def search_repeaterbook(
 ):
     if country != "United States":
         service = "amateur"
-    query = normalize_repeaterbook_query(query)
+    if (latitude is None) != (longitude is None):
+        raise RuntimeError("Enter both latitude and longitude, or neither.")
+    query_text = str(query or "").strip()
+    zip_search = US_ZIP_PATTERN.fullmatch(query_text)
+    if zip_search:
+        if country != "United States":
+            raise RuntimeError(
+                "ZIP-code repeater searches are available for the United "
+                "States. Choose United States or enter latitude and longitude."
+            )
+        if latitude is not None:
+            raise RuntimeError(
+                "Use either a ZIP code or latitude and longitude, not both."
+            )
+        zip_location = resolve_us_zip_code(query_text)
+        if (
+            state
+            and str(state).strip().lower() != "all"
+            and str(state).strip().casefold()
+            != zip_location["state"].strip().casefold()
+        ):
+            raise RuntimeError(
+                "ZIP code %s is in %s, but Region is %s. Choose %s or enter "
+                "the correct ZIP code."
+                % (
+                    query_text[:5],
+                    zip_location["state"],
+                    state,
+                    zip_location["state"],
+                )
+            )
+        latitude = zip_location["latitude"]
+        longitude = zip_location["longitude"]
+        if distance is None:
+            distance = REPEATERBOOK_DEFAULT_ZIP_RADIUS_KM
+        query = ""
+    else:
+        query = normalize_repeaterbook_query(query_text)
     has_origin = latitude is not None and longitude is not None
     matches = []
     requested_services = (

@@ -531,6 +531,57 @@ void main() {
     expect(selected!.single.location, 1);
   });
 
+  testWidgets('RepeaterBook accepts and remembers a ZIP-code search', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final bridge = _FakeRepeaterBridge();
+    final preferencesStore = _FakeRepeaterSearchPreferencesStore();
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: TextButton(
+              onPressed: () async {
+                await showDialog<List<RadioChannel>>(
+                  context: context,
+                  builder: (context) => RepeaterBookDialog(
+                    bridge: bridge,
+                    preferencesStore: preferencesStore,
+                  ),
+                );
+              },
+              child: const Text('Open ZIP repeater search'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open ZIP repeater search'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('A 5-digit ZIP searches repeaters within 50 km by default.'),
+      findsOneWidget,
+    );
+
+    await tester.enterText(
+      find.byKey(const ValueKey('repeater-search-filter')),
+      '33004',
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+    await tester.tap(find.text('Search'));
+    await tester.pumpAndSettle();
+
+    expect(bridge.lastFilter, '33004');
+    expect(bridge.lastLatitude, isNull);
+    expect(bridge.lastDistance, isNull);
+    expect(preferencesStore.preferences.query, '33004');
+  });
+
   testWidgets('RepeaterBook empty results explain country and filters', (
     tester,
   ) async {

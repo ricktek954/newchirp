@@ -7726,9 +7726,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() => _error = 'Longitude must be between -180 and 180.');
       return;
     }
-    if (_provider == _RepeaterProvider.myGmrs &&
-        zipSearch &&
-        latitude != null) {
+    if (zipSearch && latitude != null) {
       setState(
         () => _error = 'Use either a ZIP code or coordinates, not both.',
       );
@@ -7812,10 +7810,15 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
     final location = _state == 'All' ? _country : '$_state, $_country';
     final radius = double.tryParse(_distanceController.text.trim());
-    final range = radius == null || radius <= 0
+    final zip = RegExp(
+      r'^\d{5}(?:-\d{4})?$',
+    ).hasMatch(_filterController.text.trim());
+    final effectiveRadius = radius == null && zip ? 50.0 : radius;
+    final range = effectiveRadius == null || effectiveRadius <= 0
         ? ' in $location'
-        : ' within ${radius.toStringAsFixed(radius == radius.roundToDouble() ? 0 : 1)} km '
-              'of your coordinates in $location';
+        : ' within ${effectiveRadius.toStringAsFixed(effectiveRadius == effectiveRadius.roundToDouble() ? 0 : 1)} km '
+              'of ${zip ? 'ZIP code ${_filterController.text.trim()}' : 'your coordinates'} '
+              'in $location';
     if (_country == 'United States' && _service == 'gmrs') {
       final sourceHint = _provider == _RepeaterProvider.myGmrs
           ? 'myGMRS requires an active GMRS license to expose repeater '
@@ -7831,6 +7834,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         ? ''
         : ' Active filters require ${activeFilters.join(' and ')}; try '
               'turning them off.';
+    if (zip) {
+      return 'No matching repeaters were found$range. ZIP searches default to '
+          '50 km; increase the radius or turn off active filters.$filterHint';
+    }
     return 'No matching repeaters were found$range. Coordinates do not '
         'change Country or Region; check that both match your location, '
         'clear the location filter, or increase the radius.$filterHint';
@@ -8447,11 +8454,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             decoration: InputDecoration(
                               labelText: _provider == _RepeaterProvider.myGmrs
                                   ? 'Repeater name, city, or ZIP code'
-                                  : 'City, county, callsign, landmark, or notes',
+                                  : 'City, ZIP, county, callsign, landmark, or notes',
                               helperText: _provider == _RepeaterProvider.myGmrs
                                   ? 'A 5-digit ZIP searches nearby repeaters. '
                                         'County names are not supported by myGMRS.'
-                                  : null,
+                                  : 'A 5-digit ZIP searches repeaters within '
+                                        '50 km by default.',
                               prefixIcon: const Icon(Icons.search),
                               suffixIcon: _filterController.text.isEmpty
                                   ? null
