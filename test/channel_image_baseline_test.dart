@@ -278,6 +278,30 @@ void main() {
     expect(identical(unknownModes, analogOnly), isFalse);
   });
 
+  test('library stats refresh when the radio name limit changes', () {
+    final channels = [_channel(60, 'TOO LONG FOR RADIO')];
+    final cache = ChannelLibraryStatsCache();
+
+    ChannelLibrarySnapshot read(int? maximumNameLength) => cache.read(
+      imagePath: null,
+      zone: null,
+      channels: channels,
+      cleared: const <int>[],
+      baseline: null,
+      memoryStart: 1,
+      memoryEnd: 999,
+      maximumNameLength: maximumNameLength,
+      radioModel: 'Baofeng_UV-5R_Mini',
+    );
+
+    final roomyNameLimit = read(30);
+    expect(roomyNameLimit.needsAttention, 0);
+
+    final uv5rMiniNameLimit = read(12);
+    expect(uv5rMiniNameLimit.needsAttention, 1);
+    expect(identical(roomyNameLimit, uv5rMiniNameLimit), isFalse);
+  });
+
   testWidgets('channel image bar reflects the supplied action state', (
     tester,
   ) async {
