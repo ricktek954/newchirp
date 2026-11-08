@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:chirp_csv.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-11-08T10:41:56Z"
 concept_id: services/chirp_csv/parse
 language: dart
 ---
@@ -24,7 +24,7 @@ List_parse_parse
 ```
 
 ## Source
-Lines 106–106 in `services/chirp_csv.dart`
+Lines 110–110 in `services/chirp_csv.dart`
 
 ## Relationships
 

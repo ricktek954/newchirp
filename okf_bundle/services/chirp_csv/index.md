@@ -10,6 +10,7 @@
 - [_parse](parse.md)
 - [col](col.md)
 - [decode](decode.md)
+- [dtcsPolarity](dtcsPolarity.md)
 - [encode](encode.md)
 - [integer](integer.md)
 - [number](number.md)
