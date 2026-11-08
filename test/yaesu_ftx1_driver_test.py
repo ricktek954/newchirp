@@ -35,6 +35,7 @@ class FakeFTX1Serial:
         self._rx = bytearray()
         self.active = 1
         self.ack_ai = ack_ai
+        self.commands = []
         self.memories = {
             1: {
                 "freq": 146_940_000,
@@ -77,16 +78,16 @@ class FakeFTX1Serial:
 
     def write(self, data):
         command = bytes(data).decode("ascii", errors="replace")
+        self.commands.append(command)
         if command == "ID;":
             self._ack("ID0840")
         elif command == "AI0;":
             if self.ack_ai:
                 self._ack("AI0")
-        elif command == "MC;":
+        elif command == "MC0;":
             self._ack("MC0%05i" % self.active)
         elif re.fullmatch(r"MC0\d{5};", command):
             self.active = int(command[3:8])
-            self._ack(command[:-1])
         elif re.fullmatch(r"MR\d{5};", command):
             self._mr(int(command[2:7]))
         elif re.fullmatch(r"MT\d{5};", command):
@@ -168,7 +169,8 @@ class YaesuFTX1Test(unittest.TestCase):
         self.assertEqual(features.valid_name_length, 12)
 
     def test_reads_frequencies_names_modes_and_tone(self):
-        radio = self.radio_class(FakeFTX1Serial())
+        serial = FakeFTX1Serial()
+        radio = self.radio_class(serial)
         first = radio.get_memory(1)
         self.assertEqual(first.freq, 146_940_000)
         self.assertEqual(first.name, "146.94 RPT")
@@ -178,6 +180,9 @@ class YaesuFTX1Test(unittest.TestCase):
         self.assertEqual(first.tmode, "TSQL")
         self.assertEqual(first.rtone, 141.3)
         self.assertEqual(first.ctone, 141.3)
+        self.assertIn("MC0;", serial.commands)
+        self.assertIn("MC000001;", serial.commands)
+        self.assertNotIn("MC;", serial.commands)
 
         second = radio.get_memory(37)
         self.assertEqual(second.freq, 446_006_250)

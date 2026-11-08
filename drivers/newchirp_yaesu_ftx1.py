@@ -192,6 +192,10 @@ class YaesuFTX1Radio(
     def _command(self, command, timeout=0.8):
         return _read_command(self.pipe, command, timeout=timeout)
 
+    def _send(self, command):
+        """Send a CAT set command whose protocol has no response."""
+        self.pipe.write(command.encode("ascii"))
+
     def _memory_read(self, number):
         response = self._command("MR%05i;" % number)
         if not response:
@@ -221,7 +225,7 @@ class YaesuFTX1Radio(
         return response[7:].strip().replace("\x00", "")[:12]
 
     def _active_channel(self):
-        response = self._command("MC;")
+        response = self._command("MC0;")
         if (
             len(response) >= 8
             and response.startswith("MC")
@@ -234,7 +238,7 @@ class YaesuFTX1Radio(
     def _memory_tone(self, number, tone_mode):
         previous = self._active_channel()
         try:
-            self._command("MC0%05i;" % number)
+            self._send("MC0%05i;" % number)
             sql_type = self._command("CT0;")
             if not sql_type:
                 return "", None, None, "NN"
@@ -255,7 +259,7 @@ class YaesuFTX1Radio(
                 return "DTCS", None, None, "NN", DCS_CODES[index]
         finally:
             if previous:
-                self._command("MC%s;" % previous)
+                self._send("MC%s;" % previous)
         return "", None, None, "NN"
 
     def get_memory(self, number):
@@ -317,7 +321,7 @@ class YaesuFTX1Radio(
     def _set_memory_tone(self, number, memory):
         previous = self._active_channel()
         try:
-            self._command("MC0%05i;" % number)
+            self._send("MC0%05i;" % number)
             if memory.tmode in ("Tone", "TSQL"):
                 index = self._ctcss_index(memory.rtone)
                 if index is None:
@@ -340,7 +344,7 @@ class YaesuFTX1Radio(
                 self._command("CT00;")
         finally:
             if previous:
-                self._command("MC%s;" % previous)
+                self._send("MC%s;" % previous)
 
     def set_memory(self, memory):
         number = int(memory.number)

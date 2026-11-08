@@ -1,6 +1,6 @@
 # Yaesu FTX-1 CAT memory notes
 
-Last updated: 2026-11-01
+Last updated: 2026-11-08
 
 ## Status
 
@@ -62,9 +62,16 @@ The driver supports names up to 12 ASCII characters.
 
 ## Tones
 
-`MC` temporarily selects the requested main-channel memory. `CT` reports the
-CTCSS/DCS mode and `CN` reports the tone number. The previously active channel
-is restored after reading or writing the tone.
+The active main-channel memory is read with `MC0;`. Selecting a main-channel
+memory uses `MC0nnnnn;` and has no protocol response. The driver sends the
+selection without waiting, then uses `CT` to report the CTCSS/DCS mode and
+`CN` to report the tone number. The previously active channel is restored
+after reading or writing the tone.
+
+The 2026-11-08 1.0.48 field trace showed that the previous implementation sent
+the invalid query `MC;`, which the FTX-1 rejected, and then incorrectly waited
+for a response to the no-response `MC0nnnnn;` set command. The corrected path
+uses `MC0;` for the query and treats `MC0nnnnn;` as send-only.
 
 Yaesu's documented 50-entry CTCSS table and 104-entry DCS table are included
 in the driver.
