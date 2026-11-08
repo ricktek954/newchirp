@@ -17,6 +17,18 @@ release requirements.
 - Windows `1.0.47` is live from source commit `19dcd4c1` with the BQ-889
   read-only probe, X1 Pro tone correction, channel validation and bulk
   clearing, and ZIP-code repeater searches.
+- The 2026-11-08 BF-V12D password failure led to a full REA of Baofeng
+  BF_Series CPS 1.5.1. The CPS is an Electron application; its renderer and
+  main process prove the exact fixed unlock sequence,
+  `02ucbfpwd`/`10c5ea35`/encoded model token, P3107 magic, eight-byte clone
+  commands, retries, and sparse memory map. The official ZIP is retained at
+  `/Users/rlopez/Downloads/Baofeng_BF_Series_CPS_1.5.1.zip`, SHA-256
+  `c07f3664c7bf87721376042c53a06b29055fec0c2ccc3d6192c8d005b4582f72`.
+  `drivers/newchirp_baofeng_bfv12d.py` now owns that read-only unlock
+  transport and fails closed on the newer V1.19/V2.02 password variants,
+  which the official CPS also cannot read. Evidence is in
+  `docs/BAOFENG_BF_V12D_PROTOCOL.md`. Verification: 6 focused BF-V12D tests,
+  all 379 Python tests, `flutter analyze`, and all 196 Flutter tests pass.
 - The 2026-11-08 TD-H8 G4 write blocker led to the official ODMaster Android
   `2.6.4` package and its public protocol service. ODMaster exposes distinct
   Normal, Ham, and GMRS G4 profiles (`TDH84GEN`, `TDH84GEH`, and
