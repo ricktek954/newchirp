@@ -71,6 +71,7 @@ Last updated: 2026-11-07
 | Retevis RA89 | `drivers/newchirp_ra89.py` | OEM addressed blocks, 57,600 8N1, DTR/RTS on | 200 channels + core settings | Yes, offline-tested | Core settings and startup text | Experimental |
 | TYT TH-9800 | Pinned CHIRP `th9800.py` with `drivers/newchirp_th9800_compat.py` | TYT clone serial, 38400 8N1 | Reserved tone values no longer abort the read | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Yaesu VX-6 | Pinned CHIRP `vx6.py` with `drivers/newchirp_vx6_compat.py` | Yaesu clone serial, 19200 8N1 | Unprogrammable stored slots are treated as empty | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Binqi BQ-889 analog | `drivers/newchirp_bq889_probe.py` | USB/AT probe, baud auto-detect | Read-only transport probe; no channel decoder | Disabled | Hidden | Experimental probe |
 
 ## Radio details
 
@@ -228,6 +229,25 @@ Last updated: 2026-11-07
 - Hardware validation: pending
 - Next milestone: retest with the reporter's saved image and confirm the
   channel count against the radio
+
+### Binqi BQ-889 analog probe
+
+- Maintained probe: `drivers/newchirp_bq889_probe.py`
+- Protocol notes: `docs/BQ889_PROTOCOL.md`
+- Related OEM utility: KSUN `POC写号通用工具V6.2_BLT`, SHA-256
+  `9e2d4a316225e1e5837d535b53c7fa1d9a34c625af96723a222b22304fab5577`
+- Hardware evidence: FCC ID `2BNNE-BQ-889`, Beken `BK4819`, and
+  `BQ-889_MAIN_V2.3`
+- Transport: candidate USB/AT serial interface; baud rate and control lines
+  are not yet confirmed
+- Implemented: selectable read-only probe for `AT`, `AT*READVER`, `AT+CGMR`,
+  `AT+HSQ=R`, `AT+HXTO=R`, and `AT+HCHDATA=R`, with a bounded transcript
+- Read/write policy: no codeplug decode yet; all writes disabled
+- Evidence: FCC teardown, manual, and static strings from the related KSUN
+  utility only (E0)
+- NewChirp hardware validation: none
+- Next milestone: Frank Lopez Sr. selects `Binqi BQ-889 Analog Probe`, runs
+  Download From Radio, and sends the generated read-only transcript
 
 ### AnyTone AT-D578UVIII Plus
 
