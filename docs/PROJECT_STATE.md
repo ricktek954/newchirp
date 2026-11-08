@@ -17,6 +17,18 @@ release requirements.
 - Windows `1.0.47` is live from source commit `19dcd4c1` with the BQ-889
   read-only probe, X1 Pro tone correction, channel validation and bulk
   clearing, and ZIP-code repeater searches.
+- The 2026-11-08 TD-H8 G4 write blocker led to the official ODMaster Android
+  `2.6.4` package and its public protocol service. ODMaster exposes distinct
+  Normal, Ham, and GMRS G4 profiles (`TDH84GEN`, `TDH84GEH`, and
+  `TDH84GEG`) with a common 170-page write map. NewChirp now enables
+  experimental writes only for those verified 32-byte pages, validates the
+  image and regional identity before transmitting, checks every ACK, and
+  preserves all unlisted bytes. Protocol evidence is in
+  `docs/TIDRADIO_TD-H8_G4_PROTOCOL.md`. The reporter's 1.0.46 trace proves a
+  complete 151-channel read but not a write; controlled write/read-back
+  validation remains the next milestone. Verification: 6 focused G4 tests
+  pass, all 373 discovered Python tests pass with 2 fixture-dependent skips,
+  `flutter analyze` is clean, and all 196 Flutter tests pass.
 - The 2026-11-07 GA-510 follow-up (email UID 497) showed stock CHIRP
   succeeded on the same COM4 radio and cable while both NewChirp GA-510
   entries failed at the first five-byte serial exchange. The official
