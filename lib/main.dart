@@ -41,7 +41,7 @@ import 'widgets/radio_mapping_dialog.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
-const String _newChirpVersion = '1.0.47';
+const String _newChirpVersion = '1.0.48';
 const bool _enableMyGmrsDirectory = true;
 
 bool radioModelSelectionReady(List<String> models, String? model) {
