@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:39:13Z"
+timestamp: "2026-11-08T09:53:14Z"
 concept_id: main/legendItem
 language: dart
 ---
@@ -23,7 +23,7 @@ WidgetlegendItem(Color color, String label)
 ```
 
 ## Source
-Lines 5095–5095 in `main.dart`
+Lines 5256–5256 in `main.dart`
 
 ## Relationships
 

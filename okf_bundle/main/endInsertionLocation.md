@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:39:13Z"
+timestamp: "2026-11-08T09:53:14Z"
 concept_id: main/endInsertionLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ int_endInsertionLocation_endInsertionLocation
 ```
 
 ## Source
-Lines 2471–2471 in `main.dart`
+Lines 2487–2487 in `main.dart`
 
 ## Relationships
 

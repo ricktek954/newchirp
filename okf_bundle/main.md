@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:39:13Z"
+timestamp: "2026-11-08T09:53:14Z"
 concept_id: main
 language: dart
 ---
@@ -144,6 +144,7 @@ language: dart
 | related | [_applyChannels](/main/applyChannels.md) |
 | related | [_nextChannelLocation](/main/nextChannelLocation.md) |
 | related | [_channelIssues](/main/channelIssues.md) |
+| related | [_reviewChannelIssues](/main/reviewChannelIssues.md) |
 | related | [_sortChannelsByLocation](/main/sortChannelsByLocation.md) |
 | related | [_moveChannel](/main/moveChannel.md) |
 | related | [_moveChannelToLocation](/main/moveChannelToLocation.md) |
@@ -183,7 +184,7 @@ language: dart
 | related | [_confirmOverwriteChannels](/main/confirmOverwriteChannels.md) |
 | related | [_confirmOverwriteChannel](/main/confirmOverwriteChannel.md) |
 | related | [_deleteChannelAt](/main/deleteChannelAt.md) |
-| related | [_clearChannel](/main/clearChannel.md) |
+| related | [_clearChannelsAtLocations](/main/clearChannelsAtLocations.md) |
 | related | [_keepMidlandRepeater](/main/keepMidlandRepeater.md) |
 | related | [_noteRepeaterRowKept](/main/noteRepeaterRowKept.md) |
 | related | [_downloadRadio](/main/downloadRadio.md) |

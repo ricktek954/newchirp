@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T14:59:39Z"
+timestamp: "2026-11-07T15:56:04Z"
 concept_id: chirp_bridge/emit_progress
 language: python
 ---
@@ -49,4 +49,5 @@ Lines 281–293 in `chirp_bridge.py`
 | called_by | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | called_by | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
 | called_by | [main](/chirp_bridge/main.md) |
+| called_by | [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) |
 | called_by | [status_progress](/chirp_bridge/status_progress.md) |

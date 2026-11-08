@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T14:59:39Z"
+timestamp: "2026-11-07T15:56:04Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -76,6 +76,8 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
 | related | [repeaterbook_tone](/chirp_bridge/repeaterbook_tone.md) |
 | related | [repeaterbook_item_to_channel](/chirp_bridge/repeaterbook_item_to_channel.md) |
+| related | [zip_lookup_cache_path](/chirp_bridge/zip_lookup_cache_path.md) |
+| related | [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) |
 | related | [normalize_repeaterbook_query](/chirp_bridge/normalize_repeaterbook_query.md) |
 | related | [search_repeaterbook](/chirp_bridge/search_repeaterbook.md) |
 | related | [has_global_settings](/chirp_bridge/has_global_settings.md) |

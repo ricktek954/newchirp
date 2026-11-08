@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:39:13Z"
+timestamp: "2026-11-08T09:53:14Z"
 concept_id: main/friendlyActionError
 language: dart
 ---
@@ -23,7 +23,7 @@ String_friendlyActionError(Object error)
 ```
 
 ## Source
-Lines 1302–1302 in `main.dart`
+Lines 1306–1306 in `main.dart`
 
 ## Relationships
 

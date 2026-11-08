@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _clearChannel
+title: _clearChannelsAtLocations
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,21 +9,21 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:39:13Z"
-concept_id: main/clearChannel
+timestamp: "2026-11-08T09:53:14Z"
+concept_id: main/clearChannelsAtLocations
 language: dart
 ---
 
-# _clearChannel
+# _clearChannelsAtLocations
 
 ## Signature
 
 ```dart
-void_clearChannel(int index)
+void_clearChannelsAtLocations(Iterable<int> locations)
 ```
 
 ## Source
-Lines 2907–2907 in `main.dart`
+Lines 2923–2923 in `main.dart`
 
 ## Relationships
 

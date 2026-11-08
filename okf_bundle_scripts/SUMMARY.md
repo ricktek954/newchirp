@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 142 concepts across 6 domains and 6 modules'
+description: 'Top-level OKF summary: 144 concepts across 6 domains and 6 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-07T14:59:40Z'
+timestamp: '2026-11-07T15:56:05Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 142 concepts | 6 domains | 6 modules
+> OKF v0.2 bundle | 144 concepts | 6 domains | 6 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 123 |
+| Function | 125 |
 | Class | 13 |
 | Module | 6 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 142 |
+| python | 144 |
 
 ## Domain Map
 
@@ -32,9 +32,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [build_macos_dmg](build_macos_dmg/index.md) (4 concepts) — Build a styled NewChirp macOS DMG with a drag-to-Applications window.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 71 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 73 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (71 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (73 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [generate_gmrs_frs_pdf.py](generate_gmrs_frs_pdf.py/index.md) — 15 concepts
 
@@ -70,6 +70,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [verify_live_write](/chirp_bridge/verify_live_write.md) | Function | `chirp_bridge.py` | Read back live memories so a rejected write cannot report su… |
 | [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
 | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) | Function | `chirp_bridge.py` | Apply bank/zone names and memberships to an already loaded i… |
+| [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) | Function | `chirp_bridge.py` | Resolve a US ZIP code to a representative latitude and longi… |
 | [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
 | [live_channel_context](/chirp_bridge/live_channel_context.md) | Function | `chirp_bridge.py` | Choose a live-radio subdevice without probing every memory s… |
 | [mapping_payload](/chirp_bridge/mapping_payload.md) | Function | `chirp_bridge.py` | Describe CHIRP's bank/zone models for an image or channel ow… |
@@ -77,7 +78,6 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) | Function | `chirp_bridge.py` | Give a live radio the file-backed interfaces NewChirp requir… |
 | [live_memory_matches](/chirp_bridge/live_memory_matches.md) | Function | `chirp_bridge.py` | Compare fields that every live radio must retain after a wri… |
 | [emit_read_ready](/chirp_bridge/emit_read_ready.md) | Function | `chirp_bridge.py` | Tell the user when a manual PTT-triggered clone read can beg… |
-| [channel_validation_message](/chirp_bridge/channel_validation_message.md) | Function | `chirp_bridge.py` | Add a frequency suggestion to CHIRP's unsupported-step error… |
 
 ## Usage with OpenCode
 

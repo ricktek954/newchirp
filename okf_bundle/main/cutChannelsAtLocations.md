@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:39:13Z"
+timestamp: "2026-11-08T09:53:14Z"
 concept_id: main/cutChannelsAtLocations
 language: dart
 ---
@@ -23,7 +23,7 @@ void_cutChannelsAtLocations(Iterable<int> locations)
 ```
 
 ## Source
-Lines 2697–2697 in `main.dart`
+Lines 2713–2713 in `main.dart`
 
 ## Relationships
 
