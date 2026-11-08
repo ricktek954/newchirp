@@ -47,7 +47,7 @@ Last updated: 2026-11-08
 | Baofeng UV-9G | Pinned CHIRP `baofeng_wp970i.py` with `drivers/newchirp_uv9g.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Stock CHIRP driver | Invalid service calibration values are read-only and preserved | Experimental compatibility override |
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | OEM-verified TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized; five-attempt identity probe | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
-| TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | CHIRP TD-H8 serial, 38400 8N1 | HAM and generic G4 identities accepted, read-only | Disabled pending physical validation | Stock CHIRP driver | Experimental |
+| TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | ODMaster-verified TD-H8 G4 clone serial, 38,400 8N1 | Normal, HAM, and GMRS G4 identities; 151-channel physical read | Official 170-page map, offline-tested | Stock CHIRP driver | Experimental |
 | Radioddity GA-510 V2 | `drivers/newchirp_ga510_v2.py` | OEM CPS v1.00.36, 57,600 8N1, DTR/RTS | Dynamic five-block `0x5000` image, offline-tested | Mapped 64-byte blocks, offline-tested | Stock V2 decoder | Experimental |
 | Radioddity DB25-G | `drivers/newchirp_db25g.py` | OEM DB25-G CPS clone serial, 9600 8N1, no DTR/RTS | CPS retry handshake; block framing | 16-byte blocks through 0x30FF; hardware pending | Stock decoder cross-check | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
@@ -761,16 +761,30 @@ Last updated: 2026-11-08
 ### TIDRADIO TD-H8 fourth-generation serial
 
 - Maintained file: `drivers/newchirp_tdh8_serial.py`
-- Transport: pinned CHIRP TD-H8 serial protocol at 38400 8N1
-- Identities: `TDH84GEH`, observed in the 2026-11-01 NewChirp 1.0.30 report
-  from 99kelly@comcast.net; `TDH84GEN`, observed in 2026-11-05 NewChirp
-  1.0.37 reports from hils73@hotmail.com and nymetssuck@gmail.com
-- Implemented: identity resolution against the later `0x1FEF` TD-H8 address
-  space and read-only image download/offline editing
-- Read/write policy: writes remain disabled until a physical read, controlled
-  write, and read-back validate this fourth-generation address space
-- Next milestone: reporter retests the read and supplies the saved image if
-  channel decoding differs
+- Protocol evidence: `docs/TIDRADIO_TD-H8_G4_PROTOCOL.md`
+- Transport: pinned CHIRP TD-H8 clone serial at 38,400 8N1; ODMaster uses the
+  same application frames over its Bluetooth programmer
+- Identities: `TDH84GEH` Ham, `TDH84GEN` Normal, and `TDH84GEG` GMRS from
+  ODMaster 2.6.4. The first two were also observed in NewChirp 1.0.30 and
+  1.0.37 reports.
+- Implemented: complete `0x1FEF` image download/offline editing and the
+  ODMaster G4 write state machine
+- Write map: exactly 170 32-byte pages across `0x0000-0x1380`,
+  `0x1800-0x18E0`, `0x1900-0x1980`, `0x1C00-0x1C40`, and
+  `0x1F20-0x1F40`; every other image byte is preserved
+- Failure policy: validate image completeness and regional identity before
+  the first write, then stop immediately on a missing or incorrect page ACK
+- Evidence: ODMaster APK SHA-256
+  `52e6d0516f49de17f2869c800ef8fc84f41933b768e1205a0d7876705e2afdf5`;
+  identical 170-page maps from all three public G4 templates; E1 call-path
+  analysis and E2 synthetic replay
+- Driver SHA-256:
+  `840a95135128bcd9ba7a2240f7ed3ae8c0530072ecf21212afc4584ce66f23b8`
+- Hardware validation: E4 reads only. The 2026-11-08 NewChirp 1.0.46 report
+  completed a 151-channel read with `TDH84GEN`.
+- Next milestone: the reporter edits one unused channel, uploads, reads back,
+  and verifies the edited channel on the radio. This is required before
+  claiming E5 hardware validation.
 
 ### Radioddity GA-510 V2
 
