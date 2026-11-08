@@ -262,6 +262,23 @@ void main() {
     );
   });
 
+  test('channel validation reports the selected radio name limit', () {
+    final longName = RadioChannel(
+      location: 60,
+      name: 'TOO LONG FOR RADIO',
+      frequency: 146.52,
+    );
+
+    expect(
+      longName.validate(maximumNameLength: 12),
+      contains(
+        'Name is 18 characters; this radio allows at most 12. '
+        'Shorten it before writing.',
+      ),
+    );
+    expect(longName.validate(maximumNameLength: 30), isEmpty);
+  });
+
   test('frequency validation names the nearest supported tuning step', () {
     const uv5rSteps = [2.5, 5.0, 6.25, 10.0, 12.5, 20.0, 25.0, 50.0];
     final unsupported = RadioChannel(

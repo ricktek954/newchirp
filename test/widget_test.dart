@@ -1586,6 +1586,55 @@ void main() {
     expect(find.text('GMRS 1'), findsNothing);
   });
 
+  testWidgets('invalid channel names explain why writing is blocked', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pumpAndSettle();
+    final nameField = find.descendant(
+      of: find.byType(Dialog),
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration?.labelText == 'Name',
+      ),
+    );
+    tester.widget<TextField>(nameField).onChanged!('THIS NAME IS LONG');
+    await tester.pump();
+    await tester.tap(find.text('Save channel'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('channel-attention-banner')), findsOneWidget);
+    expect(
+      find.textContaining(
+        '1: Name is 17 characters; many radios allow at most 16.',
+      ),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const Key('review-channel-attention')));
+    await tester.pumpAndSettle();
+    expect(nameField, findsOneWidget);
+    expect(
+      tester.widget<TextField>(nameField).controller?.text,
+      'THIS NAME IS LONG',
+    );
+    tester.widget<TextField>(nameField).onChanged!('SHORT');
+    await tester.pump();
+    await tester.tap(find.text('Save channel'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const Key('channel-attention-banner')), findsNothing);
+  });
+
   testWidgets('changing a channel location sorts the table by memory slot', (
     tester,
   ) async {
@@ -2047,6 +2096,71 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('GMRS 1'), findsNothing);
+  });
+
+  testWidgets('right-click can clear all selected channels', (tester) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pump();
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump();
+    expect(find.text('Edit 3 selected'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('clear-selected-channels')),
+      findsOneWidget,
+    );
+
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.text('GMRS 3').first),
+      buttons: kSecondaryMouseButton,
+    );
+    await tester.pump();
+    await gesture.up();
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Clear 3 selected channels'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('GMRS 1'), findsNothing);
+    expect(find.text('GMRS 2'), findsNothing);
+    expect(find.text('GMRS 3'), findsNothing);
+    expect(find.text('GMRS 4'), findsOneWidget);
+    expect(find.textContaining('Cleared 3 channels'), findsOneWidget);
+  });
+
+  testWidgets('toolbar can clear all selected channels', (tester) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pump();
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.tap(find.text('GMRS 2').first);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.shiftLeft);
+    await tester.pump();
+
+    await tester.tap(find.byKey(const ValueKey('clear-selected-channels')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('GMRS 1'), findsNothing);
+    expect(find.text('GMRS 2'), findsNothing);
+    expect(find.text('GMRS 3'), findsOneWidget);
+    expect(find.textContaining('Cleared 2 channels'), findsOneWidget);
   });
 
   testWidgets('right-click cut clears the row in place and paste can move it', (

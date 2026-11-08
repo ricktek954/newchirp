@@ -666,6 +666,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     ...channel.validate(
                       minimumLocation: _capabilities?.memoryStart,
                       maximumLocation: _capabilities?.memoryEnd,
+                      maximumNameLength: _capabilities?.nameLength,
                       validTuningSteps: _capabilities?.steps ?? const [],
                       validBands: _capabilities?.validBands ?? const [],
                       validModes: _capabilities?.modes ?? const [],
@@ -827,10 +828,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     baseline: _channelImageBaseline,
     memoryStart: _capabilities?.memoryStart,
     memoryEnd: _capabilities?.memoryEnd,
+    maximumNameLength: _capabilities?.nameLength,
     radioModel: _model,
     validTuningSteps: _capabilities?.steps ?? const [],
     validBands: _capabilities?.validBands ?? const [],
     validModes: _capabilities?.modes ?? const [],
+    validToneModes: _capabilities?.toneModes ?? const [],
+    validCrossModes: _capabilities?.crossModes ?? const [],
     hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
 
@@ -1780,6 +1784,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   List<String> _channelIssues(RadioChannel channel) => channel.validate(
     minimumLocation: _capabilities?.memoryStart,
     maximumLocation: _capabilities?.memoryEnd,
+    maximumNameLength: _capabilities?.nameLength,
     radioModel: _model,
     validTuningSteps: _capabilities?.steps ?? const [],
     validBands: _capabilities?.validBands ?? const [],
@@ -1788,6 +1793,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     validCrossModes: _capabilities?.crossModes ?? const [],
     hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
+
+  Future<void> _reviewChannelIssues(RadioChannel channel) async {
+    final index = _channels.indexOf(channel);
+    if (index < 0) return;
+    setState(() {
+      _selected = index;
+      _extraSelectedLocations.clear();
+      _selectionAnchorLocation = channel.location;
+    });
+    await _showChannelEditorAtLocation(channel.location);
+  }
 
   void _sortChannelsByLocation() {
     _channels.sort((left, right) => left.location.compareTo(right.location));
@@ -2904,39 +2920,60 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
-  void _clearChannel(int index) {
-    if (index < 0 || index >= _channels.length) return;
-    if (_channels[index].cleared) return;
-    final channel = _channels[index];
-    if (isMidlandRepeaterRow(_model, channel.location)) {
-      _recordHistory();
+  void _clearChannelsAtLocations(Iterable<int> locations) {
+    final channels = _channelsAtLocations(locations);
+    if (channels.isEmpty) return;
+    final protectedChannels = channels
+        .where((channel) => isMidlandRepeaterRow(_model, channel.location))
+        .toList();
+    final clearableChannels = channels
+        .where((channel) => !isMidlandRepeaterRow(_model, channel.location))
+        .toList();
+    if (clearableChannels.isEmpty) {
+      _recordHistory(preserveMultiSelection: true);
       setState(() {
-        _keepMidlandRepeater(channel);
-        _selected = index;
+        for (final channel in protectedChannels) {
+          _keepMidlandRepeater(channel);
+        }
         _dirty = true;
         _markChannelLibraryDirty();
       });
-      _noteRepeaterRowKept(channel);
+      for (final channel in protectedChannels) {
+        _noteRepeaterRowKept(channel);
+      }
       return;
     }
-    _recordHistory();
-    final location = channel.location;
+
+    _recordHistory(preserveMultiSelection: true);
+    final firstClearIndex = _channels.indexWhere(
+      (channel) => channel.location == clearableChannels.first.location,
+    );
     setState(() {
-      channel.clear();
-      _remapRadioMappingChannels({location: null});
-      _clearedLocations.add(location);
+      for (final channel in protectedChannels) {
+        _keepMidlandRepeater(channel);
+      }
+      final clearedLocations = [
+        for (final channel in clearableChannels) channel.location,
+      ];
+      for (final channel in clearableChannels) {
+        channel.clear();
+      }
+      _remapRadioMappingChannels({
+        for (final location in clearedLocations) location: null,
+      });
+      _clearedLocations.addAll(clearedLocations);
       if (_showEmptySlots) {
-        _selected = index;
+        _selected = firstClearIndex;
       } else {
         var replacement = -1;
-        for (var next = index + 1; next < _channels.length; next++) {
+        for (var next = firstClearIndex + 1; next < _channels.length; next++) {
           if (!_channels[next].cleared) {
             replacement = next;
             break;
           }
         }
         if (replacement < 0) {
-          for (var previous = index - 1; previous >= 0; previous--) {
+          for (var previous = firstClearIndex - 1; previous >= 0; previous--) {
             if (!_channels[previous].cleared) {
               replacement = previous;
               break;
@@ -2945,9 +2982,28 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         }
         _selected = replacement;
       }
+      _extraSelectedLocations.clear();
+      _selectionAnchorLocation = _current?.location;
       _dirty = true;
       _markChannelLibraryDirty();
     });
+    if (clearableChannels.length > 1) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              'Cleared ${clearableChannels.length} channels. '
+              'Use Cmd/Ctrl+Z to undo.',
+            ),
+            behavior: SnackBarBehavior.floating,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+    }
+    for (final channel in protectedChannels) {
+      _noteRepeaterRowKept(channel);
+    }
   }
 
   void _keepMidlandRepeater(RadioChannel channel) {
@@ -4245,6 +4301,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _model != null &&
         _radioImage != null &&
         _radioImage == _imageStore.pathForModel(_model!);
+    final channelsNeedingAttention = _activeChannels
+        .where((channel) => _channelIssues(channel).isNotEmpty)
+        .toList();
+    final channelIssueDetails = [
+      for (final channel in channelsNeedingAttention)
+        for (final issue in _channelIssues(channel))
+          '${channelNumberLabel(_model, channel.location)}: $issue',
+    ];
+    final firstChannelNeedingAttention = channelsNeedingAttention.isEmpty
+        ? null
+        : channelsNeedingAttention.first;
     return Padding(
       padding: const EdgeInsets.all(22),
       child: Column(
@@ -4272,6 +4339,69 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               ),
             ],
           ),
+          if (invalid > 0) ...[
+            const SizedBox(height: 12),
+            DecoratedBox(
+              key: const Key('channel-attention-banner'),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFFF3E7),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFFE7C9A5)),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 10, 8, 10),
+                child: Row(
+                  children: [
+                    const Icon(Icons.error_outline, color: Color(0xFF9B5B18)),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '$invalid ${invalid == 1 ? 'channel needs' : 'channels need'} '
+                            'attention before writing.',
+                            style: const TextStyle(
+                              color: Color(0xFF8A4C0E),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          if (channelIssueDetails.isNotEmpty) ...[
+                            const SizedBox(height: 3),
+                            Text(
+                              channelIssueDetails.first,
+                              style: const TextStyle(
+                                color: Color(0xFF8A4C0E),
+                                fontSize: 12,
+                              ),
+                            ),
+                            if (channelIssueDetails.length > 1)
+                              Text(
+                                '${channelIssueDetails.length - 1} more '
+                                'validation '
+                                '${channelIssueDetails.length == 2 ? 'issue' : 'issues'}.',
+                                style: const TextStyle(
+                                  color: Color(0xFF8A4C0E),
+                                  fontSize: 12,
+                                ),
+                              ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    if (firstChannelNeedingAttention != null)
+                      TextButton(
+                        key: const Key('review-channel-attention'),
+                        onPressed: () => unawaited(
+                          _reviewChannelIssues(firstChannelNeedingAttention),
+                        ),
+                        child: const Text('Review'),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ],
           if (_radioImage == null) ...[
             const SizedBox(height: 12),
             DecoratedBox(
@@ -4470,6 +4600,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                       'channels',
                                   icon: const Icon(Icons.edit_note_outlined),
                                 ),
+                              if (selectedChannelCount > 1)
+                                IconButton(
+                                  key: const ValueKey(
+                                    'clear-selected-channels',
+                                  ),
+                                  onPressed: () => _clearChannelsAtLocations(
+                                    _selectedChannelLocations,
+                                  ),
+                                  tooltip:
+                                      'Clear $selectedChannelCount selected '
+                                      'channels',
+                                  color: const Color(0xFF9B3D34),
+                                  icon: const Icon(Icons.delete_sweep_outlined),
+                                ),
                               IconButton(
                                 onPressed: _duplicateChannel,
                                 tooltip: 'Duplicate channel',
@@ -4499,6 +4643,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   label: Text(
                                     'Edit $selectedChannelCount selected',
                                   ),
+                                ),
+                                const SizedBox(width: 8),
+                                IconButton(
+                                  key: const ValueKey(
+                                    'clear-selected-channels',
+                                  ),
+                                  onPressed: () => _clearChannelsAtLocations(
+                                    _selectedChannelLocations,
+                                  ),
+                                  tooltip:
+                                      'Clear $selectedChannelCount selected '
+                                      'channels',
+                                  color: const Color(0xFF9B3D34),
+                                  icon: const Icon(Icons.delete_sweep_outlined),
                                 ),
                                 const SizedBox(width: 8),
                               ],
@@ -4545,7 +4703,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   'channels shift through the same memory slots. '
                                   'Show empty slots keeps the radio memory layout visible; '
                                   'double-click an empty slot to create a channel there. '
-                                  'Clear removes it from the radio on the next write. Use '
+                                  'Clear removes the selected row or all selected rows '
+                                  'from the radio on the next write. Use '
                                   'Cmd/Ctrl+Z to undo and Cmd/Ctrl+Shift+Z to redo.',
                             ),
                           ],
@@ -4593,10 +4752,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               if (index >= 0) _duplicateChannelAt(index);
                             },
                             onClear: (location) {
-                              final index = _channels.indexWhere(
-                                (channel) => channel.location == location,
+                              final selected = _selectedChannelLocations;
+                              _clearChannelsAtLocations(
+                                selected.contains(location)
+                                    ? selected
+                                    : {location},
                               );
-                              if (index >= 0) _clearChannel(index);
                             },
                             onMove: (fromLocation, toLocation) {
                               final fromIndex = _channels.indexWhere(
@@ -9054,7 +9215,11 @@ class _ChannelTableState extends State<_ChannelTable> {
         PopupMenuItem(
           value: 4,
           enabled: !isCleared,
-          child: const Text('Clear channel'),
+          child: Text(
+            multiSelected
+                ? 'Clear ${widget.selectedLocations.length} selected channels'
+                : 'Clear channel',
+          ),
         ),
       ],
     ).then((value) {
@@ -9696,6 +9861,7 @@ class _ChannelEditor extends StatelessWidget {
     final issues = channel.validate(
       minimumLocation: capabilities?.memoryStart,
       maximumLocation: capabilities?.memoryEnd,
+      maximumNameLength: capabilities?.nameLength,
       radioModel: radioModel,
       validTuningSteps: capabilities?.steps ?? const [],
       validBands: capabilities?.validBands ?? const [],

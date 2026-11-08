@@ -136,10 +136,13 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
   required ChannelImageBaseline? baseline,
   required int? memoryStart,
   required int? memoryEnd,
+  int? maximumNameLength,
   required String? radioModel,
   List<double> validTuningSteps = const [],
   List<({double startMhz, double endMhz})> validBands = const [],
   List<String> validModes = const [],
+  List<String> validToneModes = const [],
+  List<String> validCrossModes = const [],
   bool hasTuningStep = true,
 }) {
   var activeCount = 0;
@@ -153,10 +156,13 @@ ChannelLibrarySnapshot channelLibrarySnapshot({
         .validate(
           minimumLocation: memoryStart,
           maximumLocation: memoryEnd,
+          maximumNameLength: maximumNameLength,
           radioModel: radioModel,
           validTuningSteps: validTuningSteps,
           validBands: validBands,
           validModes: validModes,
+          validToneModes: validToneModes,
+          validCrossModes: validCrossModes,
           hasTuningStep: hasTuningStep,
         )
         .isNotEmpty) {
@@ -196,10 +202,13 @@ class ChannelLibraryStatsCache {
   ChannelImageBaseline? _baseline;
   int? _memoryStart;
   int? _memoryEnd;
+  int? _maximumNameLength;
   String? _radioModel;
   int _tuningStepsHash = 0;
   int _validBandsHash = 0;
   int _validModesHash = 0;
+  int _validToneModesHash = 0;
+  int _validCrossModesHash = 0;
 
   void markDirty() {
     _dirty = true;
@@ -214,10 +223,13 @@ class ChannelLibraryStatsCache {
     required ChannelImageBaseline? baseline,
     required int? memoryStart,
     required int? memoryEnd,
+    int? maximumNameLength,
     required String? radioModel,
     List<double> validTuningSteps = const [],
     List<({double startMhz, double endMhz})> validBands = const [],
     List<String> validModes = const [],
+    List<String> validToneModes = const [],
+    List<String> validCrossModes = const [],
     bool hasTuningStep = true,
   }) {
     final tuningStepsHash = Object.hash(
@@ -228,6 +240,8 @@ class ChannelLibraryStatsCache {
       validBands.map((band) => Object.hash(band.startMhz, band.endMhz)),
     );
     final validModesHash = Object.hashAll(validModes);
+    final validToneModesHash = Object.hashAll(validToneModes);
+    final validCrossModesHash = Object.hashAll(validCrossModes);
     final sameInputs =
         !_dirty &&
         identical(channels, _channels) &&
@@ -240,10 +254,13 @@ class ChannelLibraryStatsCache {
         identical(baseline, _baseline) &&
         memoryStart == _memoryStart &&
         memoryEnd == _memoryEnd &&
+        maximumNameLength == _maximumNameLength &&
         radioModel == _radioModel &&
         tuningStepsHash == _tuningStepsHash &&
         validBandsHash == _validBandsHash &&
-        validModesHash == _validModesHash;
+        validModesHash == _validModesHash &&
+        validToneModesHash == _validToneModesHash &&
+        validCrossModesHash == _validCrossModesHash;
     if (sameInputs) return _snapshot;
 
     final snapshot = channelLibrarySnapshot(
@@ -255,10 +272,13 @@ class ChannelLibraryStatsCache {
       baseline: baseline,
       memoryStart: memoryStart,
       memoryEnd: memoryEnd,
+      maximumNameLength: maximumNameLength,
       radioModel: radioModel,
       validTuningSteps: validTuningSteps,
       validBands: validBands,
       validModes: validModes,
+      validToneModes: validToneModes,
+      validCrossModes: validCrossModes,
       hasTuningStep: hasTuningStep,
     );
     _dirty = false;
@@ -272,10 +292,13 @@ class ChannelLibraryStatsCache {
     _baseline = baseline;
     _memoryStart = memoryStart;
     _memoryEnd = memoryEnd;
+    _maximumNameLength = maximumNameLength;
     _radioModel = radioModel;
     _tuningStepsHash = tuningStepsHash;
     _validBandsHash = validBandsHash;
     _validModesHash = validModesHash;
+    _validToneModesHash = validToneModesHash;
+    _validCrossModesHash = validCrossModesHash;
     _snapshot = snapshot;
     return snapshot;
   }

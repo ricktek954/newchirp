@@ -681,6 +681,7 @@ class RadioChannel {
   List<String> validate({
     int? minimumLocation,
     int? maximumLocation,
+    int? maximumNameLength,
     String? radioModel,
     List<double> validTuningSteps = const [],
     List<({double startMhz, double endMhz})> validBands = const [],
@@ -746,7 +747,17 @@ class RadioChannel {
         'cross tones: ${validCrossModes.join(', ')}.',
       );
     }
-    if (name.length > 16) issues.add('Name may be too long for many radios.');
+    if (maximumNameLength != null && name.length > maximumNameLength) {
+      issues.add(
+        'Name is ${name.length} characters; this radio allows at most '
+        '$maximumNameLength. Shorten it before writing.',
+      );
+    } else if (maximumNameLength == null && name.length > 16) {
+      issues.add(
+        'Name is ${name.length} characters; many radios allow at most 16. '
+        'Shorten it before writing.',
+      );
+    }
     if (hasTuningStep && validTuningSteps.isNotEmpty && frequency > 0) {
       final frequencyHz = (frequency * 1000000).round();
       final stepSupported = validTuningSteps.any(
