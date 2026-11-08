@@ -31,7 +31,9 @@ release requirements.
   all 379 Python tests, `flutter analyze`, and all 196 Flutter tests pass.
   Desktop commit `0da89ffb` is pushed. Website commits `cb44b2f` and
   `e007427` add and deploy `BF-V12D (experimental)`; live asset
-  `index-1anbK7Q1.js` was verified.
+  `index-1anbK7Q1.js` was verified. Neil received the CPS findings, K-type
+  cable requirement, and newer-firmware limitation in a threaded follow-up;
+  the reply is verified in `Sent`.
 - The 2026-11-08 TD-H8 G4 write blocker led to the official ODMaster Android
   `2.6.4` package and its public protocol service. ODMaster exposes distinct
   Normal, Ham, and GMRS G4 profiles (`TDH84GEN`, `TDH84GEH`, and
