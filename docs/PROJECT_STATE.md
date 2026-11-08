@@ -28,7 +28,9 @@ release requirements.
   complete 151-channel read but not a write; controlled write/read-back
   validation remains the next milestone. Verification: 6 focused G4 tests
   pass, all 373 discovered Python tests pass with 2 fixture-dependent skips,
-  `flutter analyze` is clean, and all 196 Flutter tests pass.
+  `flutter analyze` is clean, and all 196 Flutter tests pass. Desktop commit
+  `c433bd1e` is pushed. The reporter received the controlled-test procedure
+  in `Sent`, and source email UID 502 is verified `\Seen`.
 - The 2026-11-07 GA-510 follow-up (email UID 497) showed stock CHIRP
   succeeded on the same COM4 radio and cable while both NewChirp GA-510
   entries failed at the first five-byte serial exchange. The official
