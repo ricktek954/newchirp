@@ -393,12 +393,13 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.47` artifact source commit: `19dcd4c1`
-- Windows `1.0.47` artifact source commit: `19dcd4c1`
-- Linux `1.0.47` is live; its artifact source is recorded by the Linux release
-  work rather than this macOS release session.
+- Windows `1.0.48` artifact source commit: `11053cfd`
+- macOS `1.0.48` is live; its artifact source is recorded by the macOS release
+  work rather than this Windows release session.
+- Linux `1.0.48` is live; its artifact source is recorded by the Linux release
+  work rather than this Windows release session.
 - Open pull requests: none
-- Checked-out source version: `1.0.47+47`
+- Checked-out source version: `1.0.48+48`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -412,12 +413,22 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.47 |
-| Windows | 1.0.47 |
-| Linux | 1.0.47 |
-| Legacy shared manifest version | 1.0.47 |
+| macOS | 1.0.48 |
+| Windows | 1.0.48 |
+| Linux | 1.0.48 |
+| Legacy shared manifest version | 1.0.48 |
 
-macOS `1.0.47` artifact:
+macOS `1.0.48` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.48.dmg`
+- Version/build: `1.0.48` / `48`
+- SHA-256:
+  `4ef865249f0f72d7c53b8747071b05ca9463dcd0406a2e854edf0be56af279bd`
+- Size: `82,507,658` bytes
+- Recorded from the live artifact on the Windows release host; codesigning and
+  notarization verification are recorded by the macOS release session.
+
+macOS `1.0.47` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-1.0.47.dmg`
 - Version/build: `1.0.47` / `47`
@@ -465,7 +476,17 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.47` artifact:
+Windows `1.0.48` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.48.exe`
+- Version/build: `1.0.48` / `48`
+- SHA-256:
+  `5614055bf4b5efa72e65ac2fb36884690bdfa8c606a0b875d0faa718b1473939`
+- Size: `61,246,193` bytes
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.47` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.47.exe`
 - Version/build: `1.0.47` / `47`
@@ -551,7 +572,40 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux `1.0.45` artifacts:
+Linux `1.0.48` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.48.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.48.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.48.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.48.pkg.tar.zst`
+- Embedded `version.json`: `1.0.48` / `48`
+
+Linux 1.0.48 SHA-256:
+
+- DEB:
+  `c22f56551b906675856d12391b8a04c9a870867f791ce8dbc78db7d35c69066a`
+- RPM:
+  `42144e1464f2a295cb99754f55cec7ed56848b1199d9b064d719bd93320e1aaa`
+- AppImage:
+  `aab0a4f67fc872c2cd30fc95ff31617cdf3991cd0451c9e6fa498347348d0e8f`
+- Pacman:
+  `8517df7914d95906fe7fc2394521828a3a255b4972469b4736cd4ed1e26845ff`
+
+Linux 1.0.48 sizes:
+
+- DEB: `48,478,818` bytes
+- RPM: `38,919,942` bytes
+- AppImage: `145,171,648` bytes
+- Pacman: `46,983,837` bytes
+
+Linux 1.0.46 and 1.0.47 artifact details were recorded by the Linux release
+sessions and are not duplicated here.
+
+Linux `1.0.45` artifacts (historical):
 
 - DEB URL:
   `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.45.deb`
@@ -698,6 +752,16 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.48` from source commit `11053cfd`. Verified installer
+  file/product metadata `1.0.48.0` / `1.0.48`, app version `1.0.48+48`,
+  bundled Python `3.13.15`, the bundled GS-5B 1.XX, BF-V12D, and TD-H8 G4
+  drivers, matching local/server SHA-256, public HTTP 200, and the live
+  platform manifest. GS-5B, BF-V12D, experimental serial, and UVK5 suites
+  passed 28 tests; Flutter ran 192 passing tests with the five known Windows
+  sandbox/Help failures; `flutter analyze` reported only three pre-existing
+  `avoid_print` infos in `build_support`. The installer remains unsigned.
+  macOS, Linux, and the legacy shared manifest also report `1.0.48`; those
+  artifacts were published by their native release sessions.
 - Published Windows `1.0.47` from source commit `19dcd4c1`. Verified installer
   file/product metadata `1.0.47.0` / `1.0.47`, app version `1.0.47+47`,
   bundled Python `3.13.15`, the bundled BQ-889 probe and corrected X1 Pro
