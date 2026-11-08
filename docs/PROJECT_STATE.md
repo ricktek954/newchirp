@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-07
+Last updated: 2026-11-08
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,13 +8,13 @@ release requirements.
 
 ## Resume here
 
+- macOS `1.0.47` is live from source commit `19dcd4c1` as a universal, signed,
+  notarized, stapled, Gatekeeper-accepted DMG. This release includes the
+  CPS-aligned X1 Pro tone write order, the BQ-889 read-only probe, channel
+  name validation and bulk clearing, write-review guidance, and ZIP-code
+  RepeaterBook searches. Windows remains on `1.0.46`; Linux `1.0.47` is also
+  live in the release manifest.
 - Windows `1.0.46` is live from source commit `e4d4db35`.
-- macOS `1.0.46` is released from source commit `e4d4db35` as a universal,
-  signed, notarized, stapled, Gatekeeper-accepted DMG. This release adds the
-  CPS-derived Radioddity X1 Pro and GA-510 V2 experimental drivers, the
-  CPS-derived DB25-G driver, the retry-safe Icom IC-E90 transport,
-  hardware-tested Midland MXT295 promotion, and persisted RepeaterBook/myGMRS
-  search settings.
 - The 2026-11-07 GA-510 follow-up (email UID 497) showed stock CHIRP
   succeeded on the same COM4 radio and cable while both NewChirp GA-510
   entries failed at the first five-byte serial exchange. The official
@@ -347,11 +347,12 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- macOS `1.0.46` artifact source commit: `e4d4db35`
+- macOS `1.0.47` artifact source commit: `19dcd4c1`
 - Windows `1.0.46` artifact source commit: `e4d4db35`
-- Linux `1.0.45` artifact source commit: `4ca2a6f9`
+- Linux `1.0.47` is live; its artifact source is recorded by the Linux release
+  work rather than this macOS release session.
 - Open pull requests: none
-- Checked-out source version: `1.0.46+46`
+- Checked-out source version: `1.0.47+47`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -365,10 +366,22 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.46 |
+| macOS | 1.0.47 |
 | Windows | 1.0.46 |
-| Linux | 1.0.46 |
+| Linux | 1.0.47 |
 | Legacy shared manifest version | 1.0.46 |
+
+macOS `1.0.47` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.47.dmg`
+- Version/build: `1.0.47` / `47`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `4a8d8f6f35533ba6824a00ccb9b0f711c5dc1b56f2d77ff4f82efc0cfbc9940a`
+- Size: `82,488,386` bytes
+- Notarization submission: `62383717-2440-4ac7-aea9-38fd1ef017b9`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Server checksum matched the final stapled DMG
 
 macOS `1.0.46` artifact:
 
@@ -629,6 +642,15 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.47` from source commit `19dcd4c1` as a universal,
+  signed, notarized, stapled DMG. The release carries the CPS-aligned X1 Pro
+  tone write order, the BQ-889 read-only probe, channel name validation and
+  bulk clearing, write-review guidance, and ZIP-code RepeaterBook searches.
+  App/build version `1.0.47` / `47`, both Python 3.13.15 runtimes, universal
+  libusb, and the pinned CHIRP tree were verified. Strict codesigning, Apple
+  notarization, stapling, mounted-DMG inspection, Gatekeeper, launch smoke
+  test, local/server SHA-256, public HTTP, and the live macOS manifest entry
+  all passed.
 - Published macOS `1.0.46` from source commit `e4d4db35` as a universal,
   signed, notarized, stapled DMG. The release carries the CPS-derived
   DB25-G, X1 Pro, GA-510 V2, and retry-safe IC-E90 drivers plus
@@ -970,6 +992,34 @@ Linux 1.0.41 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.47 verification status
+
+Full verification before and after the macOS `1.0.47` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 195 tests passed
+- Python test discovery: 362 tests passed, 2 fixture-dependent tests skipped
+- Release source commit: `19dcd4c1`
+- Release app: universal, signed, notarized, stapled, Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.47` / `47`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled X1 Pro driver SHA-256:
+  `4e262b160e698b957b480cacc9df9ac9fa999a1cf429773b70f2e8b516090dd2`
+- Bundled BQ-889 probe SHA-256:
+  `9e8d50ba78673e295025a84163eeddbbed03f80ec11d4b1b91791650160fd9ae`
+- Bundled CHIRP bridge SHA-256:
+  `2f83c9ce1d726522ecd1e2ac4865a85d385068d14bf41f5c5961dff5a873d714`
+- DMG SHA-256:
+  `4a8d8f6f35533ba6824a00ccb9b0f711c5dc1b56f2d77ff4f82efc0cfbc9940a`
+- Notarization submission: `62383717-2440-4ac7-aea9-38fd1ef017b9`
+- Server SHA-256 matched the final stapled DMG
+- `/api/releases/latest` reports macOS `1.0.47`
+- The documented separate raw-SCSI helper remains `arm64`-only.
 
 ## macOS 1.0.46 verification status
 
