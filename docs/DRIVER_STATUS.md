@@ -35,6 +35,7 @@ Last updated: 2026-11-08
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Baofeng BF-V12D | `drivers/newchirp_baofeng_bfv12d.py` | CPS-derived P3107 clone serial, 9600 8N1 | Original-firmware sequence traced; hardware pending | Stock image/upload path | Stock channel decoder | Experimental |
 | Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1 | 640 channels + 10 zones, offline-tested | Full image, offline-tested | Basic settings and zone names | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5RH | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -993,6 +994,49 @@ Last updated: 2026-11-08
   read and verified write with both a working cable and the affected cable.
   Include a zone rename, a spare-zone creation, a channel in two zones, and a
   read-back comparison against the CHIRP CPS image.
+
+### Baofeng BF-V12D
+
+- Maintainer: NewChirp transport recovered from the official Baofeng
+  BF_Series CPS 1.5.1
+- Maintained file: `drivers/newchirp_baofeng_bfv12d.py`
+- Protocol evidence: `docs/BAOFENG_BF_V12D_PROTOCOL.md`
+- Transport: 9,600 8N1 through a standard Baofeng K-type programming cable.
+  FTDI adapters are explicitly not recommended based on public field reports.
+- Unlock: fixed CPS sequence `02ucbfpwd`, `10c5ea35`, encoded model token
+  `Q041OTUwMA==` plus four NUL bytes, then `02prOGRAM`; every password stage
+  requires ACK `06` and the radio ID must report P3107 model byte `0x0A`
+- Clone protocol: model A with magic `80 82`, eight-byte read/write blocks,
+  `52` reads, `57` writes, ACK after each block, and exit `45`/reply `46`
+- Memory: legal `0x03E0` image with sparse read windows
+  `0x0000-0x010F`, `0x02B0-0x02BF`, `0x0330-0x033F`, and
+  `0x0380-0x03DF`; channel rows are `0x0010-0x010F`
+- Implemented: NewChirp-owned unlock transport with fragment-safe fixed-length
+  reads, exact CPS frame bytes, five one-second retries, and detailed
+  fail-closed diagnostics
+- Read/write policy: retained from the pinned CHIRP image/upload implementation
+  after the NewChirp unlock succeeds. The image and channel decoder remain
+  experimental until a physical read/write/read-back is reported.
+- Evidence: official CPS ZIP SHA-256
+  `c07f3664c7bf87721376042c53a06b29055fec0c2ccc3d6192c8d005b4582f72`;
+  installer SHA-256
+  `6bf5c0feda83007e7d5bce468c059af499bd2fd89335422b28771d787e655a2a`;
+  ASAR renderer/main hashes and E1 call-path analysis, plus public E3 read and
+  write captures from an original-firmware unit
+- Driver SHA-256:
+  `2adc7e1e35ccb597e5b8ad0580393c3dd9915eebc60794c4953b5ef381bcb93d`
+- Unsupported firmware: public V1.19 and V2.02 units reject the fixed password
+  stage. Baofeng CPS 1.5.1 also reports password failures on those units, and
+  its renderer contains no alternate version-dependent handshake. NewChirp
+  does not guess credentials or attempt writes on those variants.
+- Hardware validation: none by NewChirp. Upstream support was validated by its
+  author on earlier firmware, and public OEM captures prove the same sequence.
+- Official CPS retained at
+  `/Users/rlopez/Downloads/Baofeng_BF_Series_CPS_1.5.1.zip`.
+- Next milestone: read an original-firmware radio with a standard K-type cable,
+  compare its image with CPS, then perform one controlled write/read-back.
+  Supporting V1.19/V2.02 requires a working OEM capture or documented newer
+  password challenge.
 
 ### Quansheng UV-K5 family
 
