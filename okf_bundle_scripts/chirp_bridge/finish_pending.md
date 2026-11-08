@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:56:04Z"
+timestamp: "2026-11-08T13:12:45Z"
 concept_id: chirp_bridge/finish_pending
 language: python
 ---
@@ -29,13 +29,14 @@ def _finish_pending(self)
 | `self` | `—` | `—` |
 
 ## Source
-Lines 152–212 in `chirp_bridge.py`
+Lines 227–293 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [RadioCommunicationTrace](/chirp_bridge/RadioCommunicationTrace.md) |
+| calls | [uvk5_firmware_from_hello](/chirp_bridge/uvk5_firmware_from_hello.md) |
 | called_by | [begin](/chirp_bridge/begin.md) |
 | called_by | [format](/chirp_bridge/format.md) |
 | called_by | [received](/chirp_bridge/received.md) |

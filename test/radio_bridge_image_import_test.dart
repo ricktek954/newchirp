@@ -144,4 +144,19 @@ void main() {
     expect(fields['pttid'], contains('DTMF PTT-ID'));
     expect(fields['scode'], contains('DTMF PTT-ID codes'));
   });
+
+  test('UV-K5 images expose their stored firmware', () async {
+    final source = requireChirpSourceForTests();
+    final stock = await RadioBridge(
+      sourcePath: source,
+      newDriversPath: 'drivers',
+    ).readImage('$source/tests/images/Quansheng_UV-K5.img');
+    final egzumer = await RadioBridge(
+      sourcePath: source,
+      newDriversPath: 'drivers',
+    ).readImage('$source/tests/images/Quansheng_UV-K5_egzumer.img');
+
+    expect(stock.firmware, 'app_2.01.17');
+    expect(egzumer.firmware, 'EGZUMER v0.21');
+  });
 }

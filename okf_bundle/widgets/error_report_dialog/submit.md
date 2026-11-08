@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:widgets"
   - "domain:error_report_dialog.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T09:16:58Z"
+timestamp: "2026-11-08T13:12:10Z"
 concept_id: widgets/error_report_dialog/submit
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_submit_submit
 ```
 
 ## Source
-Lines 41–41 in `widgets/error_report_dialog.dart`
+Lines 43–43 in `widgets/error_report_dialog.dart`
 
 ## Relationships
 

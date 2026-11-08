@@ -111,10 +111,12 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1794066964896871067,
-      "hash": "2f83c9ce1d726522ecd1e2ac4865a85d385068d14bf41f5c5961dff5a873d714",
+      "mtime_ns": 1794143565747369498,
+      "hash": "ce86a6d850b4d19205a4c1b6b0aeae6b541da977a990718b02d6ccec32ffb1bc",
       "concept_ids": [
         "chirp_bridge",
+        "chirp_bridge/uvk5_firmware_from_hello",
+        "chirp_bridge/radio_firmware",
         "chirp_bridge/init",
         "chirp_bridge/set_radio_class",
         "chirp_bridge/command_summary",
@@ -196,7 +198,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "44da064ef08b1655f2eea027f4078f637720351c5a05ff51dbcb7e11c2f062b9",
+      "edge_hash": "21708dcfa4bcef102ee43d2b3982d699b3a6fb775e6edc2911f5f25489e261e6",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -324,7 +326,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "276ed9ea7cd04c0fa61f8053a542ba742b129d7221faad3e4ff6e89c3df15261",
+      "edge_hash": "2208258b9606e4196c02ef030db1ae5d93fc9f43937410e81a2ba84780415fe7",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -796,7 +798,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "374596e8c1e1b163a91d630226522e79d0111e05997051b0ea79e72995054f1a",
+      "edge_hash": "508726b2620939b8d1c5904b2849d9076a833f9895e352c834b8f5149f0b2303",
       "enriched": false
     },
     "chirp_bridge/format": {
@@ -1358,7 +1360,23 @@
       "render_hash": "stale",
       "edge_hash": "7712ea5b2276c142b0c1d99101f8a9bae05be9a89288c854f6cb2bb7aa03d6b0",
       "enriched": false
+    },
+    "chirp_bridge/uvk5_firmware_from_hello": {
+      "concept_id": "chirp_bridge/uvk5_firmware_from_hello",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "ea569de7b9e5bc19888fe69d7dd4956058642fd03d1d751f20bb846c881549ef",
+      "enriched": false
+    },
+    "chirp_bridge/radio_firmware": {
+      "concept_id": "chirp_bridge/radio_firmware",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-07T15:56:05Z"
+  "generated_at": "2026-11-08T13:12:46Z"
 }

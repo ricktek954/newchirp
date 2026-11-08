@@ -8,6 +8,15 @@ release requirements.
 
 ## Resume here
 
+- Desktop bug reports now include a dedicated radio-firmware field when
+  available. NewChirp reads firmware from CHIRP image/driver metadata for
+  supported models and decodes the UV-K5 hello frame directly, so failed
+  handshakes can still report identities such as `2.01.39` before a radio
+  image exists. The website bug-report API accepts, sanitizes, and displays
+  the field in report email. Verification: all 381 Python tests pass with 2
+  fixture-dependent skips; all 197 Flutter tests pass; `flutter analyze` is
+  clean; the website production build and complete Web Programmer/RepeaterBook
+  suites pass. No release was built.
 - macOS `1.0.47` is live from source commit `19dcd4c1` as a universal, signed,
   notarized, stapled, Gatekeeper-accepted DMG. This release includes the
   CPS-aligned X1 Pro tone write order, the BQ-889 read-only probe, channel

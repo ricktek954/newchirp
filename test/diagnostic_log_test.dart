@@ -62,12 +62,14 @@ void main() {
       email: 'operator@example.com',
       description: 'Radio identification failed.',
       radio: 'Retevis RT86S',
+      firmware: '2.01.39',
       version: '1.0.23',
       cable: 'FTDI COM5',
     );
 
     expect(received?['source'], 'newchirp-desktop');
     expect(received?['radio'], 'Retevis RT86S');
+    expect(received?['firmware'], '2.01.39');
     expect(received?['debugLog'], contains('Radio identification failed'));
     expect(received?['debugLog'], contains('"model":"Retevis_RT86S"'));
   });
@@ -99,6 +101,7 @@ void main() {
         email: 'operator@example.com',
         description: 'Radio identification failed.',
         radio: 'Retevis RT86S',
+        firmware: '2.01.39',
         version: '1.0.23',
         cable: 'FTDI COM5',
       ),

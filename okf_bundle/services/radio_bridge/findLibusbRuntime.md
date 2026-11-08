@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:34:06Z"
+timestamp: "2026-11-08T13:11:24Z"
 concept_id: services/radio_bridge/findLibusbRuntime
 language: dart
 ---
@@ -24,7 +24,7 @@ String_findLibusbRuntime_findLibusbRuntime
 ```
 
 ## Source
-Lines 1106–1106 in `services/radio_bridge.dart`
+Lines 1120–1120 in `services/radio_bridge.dart`
 
 ## Relationships
 

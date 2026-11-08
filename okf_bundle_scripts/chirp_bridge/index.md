@@ -54,6 +54,7 @@
 - [normalize_repeaterbook_query](normalize_repeaterbook_query.md) — Treat location words like "Broward County" as a county name.
 - [normalize_upload_memory](normalize_upload_memory.md) — Apply safe coercions advertised by CHIRP validation warnings.
 - [open_serial](open_serial.md)
+- [radio_firmware](radio_firmware.md) — Return the best available firmware identity from a radio or image.
 - [radio_for](radio_for.md)
 - [radio_from_image](radio_from_image.md) — Build a driver instance backed only by a saved radio image.
 - [read](read.md)
@@ -74,6 +75,7 @@
 - [settings_payload](settings_payload.md)
 - [settings_tree_json](settings_tree_json.md)
 - [status_progress](status_progress.md) — Translate a CHIRP Status message into a structured progress event.
+- [uvk5_firmware_from_hello](uvk5_firmware_from_hello.md) — Decode the UV-K5 hello reply without trusting non-printable bytes.
 - [verify_live_write](verify_live_write.md) — Read back live memories so a rejected write cannot report success.
 - [write](write.md)
 - [zip_lookup_cache_path](zip_lookup_cache_path.md)

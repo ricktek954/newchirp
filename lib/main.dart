@@ -433,6 +433,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   String? _port;
   String? _model;
   String? _radioImage;
+  String? _radioFirmware;
   String? _chirpModuleName;
   RadioCapabilities? _capabilities;
   List<RadioZone> _radioZones = [];
@@ -1041,6 +1042,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     setState(() {
       _model = selection.model;
       _port = selection.port;
+      _radioFirmware = null;
       _capabilities = null;
       _radioZones = [];
       _radioMappings = [];
@@ -1062,6 +1064,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       final info = await _bridge.imageInfo(imagePath);
       if (!mounted || _radioImage != imagePath) return;
       setState(() {
+        _radioFirmware = info.firmware;
         _capabilities = info.capabilities;
         _radioZones = info.zones;
         _radioMappings = info.mappings;
@@ -1091,6 +1094,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       List<RadioChannel> channels,
       String model,
       String imagePath,
+      String? firmware,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
       List<RadioMappingModel> mappings,
@@ -1110,6 +1114,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ..sort((left, right) => left.location.compareTo(right.location));
       _selected = _channels.isEmpty ? -1 : 0;
       _clearedLocations.clear();
+      _radioFirmware = imported.firmware;
       _capabilities = imported.capabilities;
       _radioZones = imported.zones;
       _radioMappings = imported.mappings;
@@ -1226,6 +1231,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           for (final group in catalog.groups) group.name: group.models,
         };
         if (_model != null && !models.contains(_model)) _model = null;
+        _radioFirmware = null;
         _capabilities = null;
         _radioZones = [];
         _radioMappings = [];
@@ -1263,6 +1269,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     String? storedImage;
     setState(() {
       _model = model;
+      _radioFirmware = null;
       _capabilities = null;
       _radioZones = [];
       _radioMappings = [];
@@ -1465,7 +1472,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _diagnosticLog.record(
       'report',
       'Error report dialog opened',
-      context: {'radio': _model ?? '', 'page': _page},
+      context: {
+        'radio': _model ?? '',
+        'page': _page,
+        'firmware': _radioFirmware ?? '',
+      },
     );
     return showDialog<void>(
       context: context,
@@ -1474,6 +1485,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         summary: summary,
         technical: technical,
         radio: _model ?? 'No radio selected',
+        firmware: _radioFirmware ?? 'Not available',
         version: _newChirpVersion,
         cable: _port == null ? 'No serial port selected' : 'Serial port $_port',
       ),
@@ -1603,6 +1615,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _models = models;
         _modelGroups = {};
         _model = null;
+        _radioFirmware = null;
         _capabilities = null;
         _radioZones = [];
         _radioMappings = [];
@@ -1633,6 +1646,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           for (final group in catalog.groups) group.name: group.models,
         };
         _model = null;
+        _radioFirmware = null;
         _capabilities = null;
         _radioZones = [];
         _radioMappings = [];
@@ -1655,6 +1669,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       List<RadioChannel> channels,
       String model,
       String imagePath,
+      String? firmware,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
       List<RadioMappingModel> mappings,
@@ -1694,6 +1709,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       setState(() {
         _model = imported.model;
         _radioImage = storedImage;
+        _radioFirmware = imported.firmware;
         _capabilities = imported.capabilities;
         _radioZones = imported.zones;
         _radioMappings = imported.mappings;
@@ -2376,6 +2392,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           if (!mounted || _model != model || _port != port) return;
           setState(() {
             _radioSettings = settings;
+            _radioFirmware = settings.firmware ?? _radioFirmware;
             _settingsLoadedModel = model;
             if (storedImage != null) {
               _radioImage = storedImage;
@@ -3060,7 +3077,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _diagnosticLog.record(
       'radio',
       'Radio read started',
-      context: {'model': _model!, 'port': _port!, 'zone': _selectedZone ?? ''},
+      context: {
+        'model': _model!,
+        'port': _port!,
+        'zone': _selectedZone ?? '',
+        'firmware': _radioFirmware ?? '',
+      },
     );
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
@@ -3084,6 +3106,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           _clearedLocations.clear();
           _selected = _channels.isEmpty ? -1 : 0;
           _radioImage = storedImage;
+          _radioFirmware = result.firmware;
           _capabilities = result.capabilities;
           _radioZones = result.zones;
           _radioMappings = result.mappings;
@@ -3106,6 +3129,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             'model': _model!,
             'port': _port!,
             'channels': result.channels.length,
+            'firmware': result.firmware ?? '',
           },
         );
       },
@@ -3194,6 +3218,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           ..sort((left, right) => left.location.compareTo(right.location));
         _selected = _channels.isEmpty ? -1 : 0;
         _clearedLocations.clear();
+        _radioFirmware = imported.firmware ?? _radioFirmware;
         _capabilities = imported.capabilities;
         _radioZones = imported.zones;
         _radioMappings = imported.mappings;
@@ -3226,6 +3251,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         'port': _port!,
         'channels': _activeChannels.length,
         'mappingsChanged': mappingsChanged,
+        'firmware': _radioFirmware ?? '',
       },
     );
     final invalidChannels = _activeChannels
@@ -3356,6 +3382,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           'model': _model!,
           'port': _port!,
           'adjustments': changes.length,
+          'firmware': _radioFirmware ?? '',
         },
       );
     });
@@ -7161,6 +7188,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
         email: email,
         description: description,
         radio: widget.radio,
+        firmware: 'Not available',
         version: widget.version,
         cable: widget.cable,
       );

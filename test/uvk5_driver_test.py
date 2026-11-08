@@ -7,6 +7,7 @@ from pathlib import Path
 import sys
 import unittest
 from unittest import mock
+from types import SimpleNamespace
 
 
 from chirp_test_source import chirp_source
@@ -141,6 +142,36 @@ class UVK5DriverTest(unittest.TestCase):
 
         self.assertIn("UV-K5 hello | reply=", rendered)
         self.assertIn("ab cd 06 00", rendered)
+
+    def test_trace_decodes_uvk5_firmware_from_hello(self):
+        bridge = _load_bridge()
+        trace = bridge.RadioCommunicationTrace()
+        body = b"\x15\x05\x24\x00" + b"2.01.39\x00"
+        body = body.ljust(0x24, b"\x00")
+        reply = _reply(body)
+
+        trace.begin(b"\xab\xcd\x08\x00" + b"\x00" * 12)
+        trace.received(reply)
+        rendered = trace.format()
+
+        self.assertIn("firmware=2.01.39", rendered)
+        self.assertIn("UV-K5 hello", rendered)
+
+    def test_radio_firmware_uses_driver_metadata(self):
+        bridge = _load_bridge()
+
+        self.assertEqual(
+            bridge.radio_firmware(
+                SimpleNamespace(metadata={"uvk5_firmware": "2.01.39"})
+            ),
+            "2.01.39",
+        )
+        self.assertEqual(
+            bridge.radio_firmware(
+                SimpleNamespace(metadata={"dm32uv_firmware": b"V1.2.3"})
+            ),
+            "V1.2.3",
+        )
 
 
 if __name__ == "__main__":

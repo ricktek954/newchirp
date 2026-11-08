@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:56:04Z"
+timestamp: "2026-11-08T13:12:45Z"
 concept_id: chirp_bridge/TracedSerial
 language: python
 ---
@@ -37,7 +37,7 @@ Delegate a serial port while recording sanitized CAT transactions.
 - `__exit__`
 
 ## Source
-Lines 236–278 in `chirp_bridge.py`
+Lines 317–359 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -9,6 +9,7 @@ class ErrorReportDialog extends StatefulWidget {
     required this.summary,
     required this.technical,
     required this.radio,
+    required this.firmware,
     required this.version,
     required this.cable,
   });
@@ -17,6 +18,7 @@ class ErrorReportDialog extends StatefulWidget {
   final String summary;
   final String? technical;
   final String radio;
+  final String firmware;
   final String version;
   final String cable;
 
@@ -60,13 +62,18 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
         email: email,
         description: description,
         radio: widget.radio,
+        firmware: widget.firmware,
         version: widget.version,
         cable: widget.cable,
       );
       widget.diagnosticLog.record(
         'report',
         'Error report submitted',
-        context: {'radio': widget.radio, 'version': widget.version},
+        context: {
+          'radio': widget.radio,
+          'firmware': widget.firmware,
+          'version': widget.version,
+        },
       );
       if (mounted) setState(() => _sent = true);
     } on DiagnosticReportException catch (error) {
@@ -146,7 +153,8 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                     ),
                     const Text(
                       'The report includes app and operating-system versions, '
-                      'the selected radio and serial port, and recent '
+                      'the selected radio, firmware when available, serial '
+                      'port, and recent '
                       'diagnostic events. Channel contents and loaded files '
                       'are not logged.',
                       style: TextStyle(color: Colors.black54, height: 1.4),
