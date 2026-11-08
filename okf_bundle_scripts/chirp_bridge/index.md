@@ -64,6 +64,7 @@
 - [repeaterbook_item_to_channel](repeaterbook_item_to_channel.md)
 - [repeaterbook_resource_name](repeaterbook_resource_name.md)
 - [repeaterbook_tone](repeaterbook_tone.md)
+- [resolve_us_zip_code](resolve_us_zip_code.md) — Resolve a US ZIP code to a representative latitude and longitude.
 - [search_repeaterbook](search_repeaterbook.md)
 - [serial_read_timeout](serial_read_timeout.md)
 - [set_memory_with_extras](set_memory_with_extras.md) — Write a channel and persist fields CHIRP stores outside radio memory.
@@ -75,3 +76,4 @@
 - [status_progress](status_progress.md) — Translate a CHIRP Status message into a structured progress event.
 - [verify_live_write](verify_live_write.md) — Read back live memories so a rejected write cannot report success.
 - [write](write.md)
+- [zip_lookup_cache_path](zip_lookup_cache_path.md)

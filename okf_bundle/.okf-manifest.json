@@ -5,8 +5,8 @@
   "files": {
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1793569318185419310,
-      "hash": "2601598292269d2a7553a28afb0aca562505cae29f434063e530e095a503f8b5",
+      "mtime_ns": 1794131594814920016,
+      "hash": "3b3c2576ef9db94f4fcf007d94f031ca4bba3282a90ef1ca7b7e2b8c8e9d8a4e",
       "concept_ids": [
         "models/channel_image_baseline/ChannelImageBaseline",
         "models/channel_image_baseline/ChannelImageMatch",
@@ -44,8 +44,8 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1793476547389014652,
-      "hash": "590cff9bdfa4e6ae7bed35e5f3136bcd3198216ff67bed2e7a5db6bf6fd77fa4",
+      "mtime_ns": 1794131594815058276,
+      "hash": "3ff3918631c7945a8515df2da42319b8d182a0ea04da270893692c92ed375f51",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
         "models/radio_channel/RadioChannel",
@@ -559,8 +559,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794065953338706295,
-      "hash": "8d611822591766c803971e1b200bd578e144c83923c8ab055d417be0c8487088",
+      "mtime_ns": 1794131594814737687,
+      "hash": "209559b27b33315238152ad52273e870189654c855b184808e812437d8828bdd",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -682,6 +682,7 @@
         "main/applyChannels",
         "main/nextChannelLocation",
         "main/channelIssues",
+        "main/reviewChannelIssues",
         "main/sortChannelsByLocation",
         "main/moveChannel",
         "main/moveChannelToLocation",
@@ -720,7 +721,7 @@
         "main/confirmOverwriteChannels",
         "main/confirmOverwriteChannel",
         "main/deleteChannelAt",
-        "main/clearChannel",
+        "main/clearChannelsAtLocations",
         "main/keepMidlandRepeater",
         "main/noteRepeaterRowKept",
         "main/downloadRadio",
@@ -1427,7 +1428,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "7db5cbd3e88808b29bf4c47d215c7e3a3892b993cbfb6be66d4352cc21f1e42c",
+      "edge_hash": "13bbc3509552230831e8c1697683ed70eeb6ad397e0ca31c8a0767b26321ff82",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -5813,7 +5814,23 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "main/reviewChannelIssues": {
+      "concept_id": "main/reviewChannelIssues",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/clearChannelsAtLocations": {
+      "concept_id": "main/clearChannelsAtLocations",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-07T15:39:14Z"
+  "generated_at": "2026-11-08T09:53:16Z"
 }

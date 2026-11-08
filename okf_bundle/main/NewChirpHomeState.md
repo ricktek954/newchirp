@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:39:13Z"
+timestamp: "2026-11-08T09:53:14Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -70,6 +70,7 @@ class _NewChirpHomeState
 - `_applyChannels`
 - `_nextChannelLocation`
 - `_channelIssues`
+- `_reviewChannelIssues`
 - `_sortChannelsByLocation`
 - `_moveChannel`
 - `_moveChannelToLocation`
@@ -109,7 +110,7 @@ class _NewChirpHomeState
 - `_confirmOverwriteChannels`
 - `_confirmOverwriteChannel`
 - `_deleteChannelAt`
-- `_clearChannel`
+- `_clearChannelsAtLocations`
 - `_keepMidlandRepeater`
 - `_noteRepeaterRowKept`
 - `_downloadRadio`
@@ -149,7 +150,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 396–5913 in `main.dart`
+Lines 396–6074 in `main.dart`
 
 ## Relationships
 

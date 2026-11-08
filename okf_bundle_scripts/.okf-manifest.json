@@ -111,8 +111,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1794063579812592159,
-      "hash": "905f53f26564e966fd4f7da97ac23672cf5436339c244b6fb345f899712c8fe7",
+      "mtime_ns": 1794066964896871067,
+      "hash": "2f83c9ce1d726522ecd1e2ac4865a85d385068d14bf41f5c5961dff5a873d714",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/init",
@@ -178,6 +178,8 @@
         "chirp_bridge/fetch_repeaterbook_data",
         "chirp_bridge/repeaterbook_tone",
         "chirp_bridge/repeaterbook_item_to_channel",
+        "chirp_bridge/zip_lookup_cache_path",
+        "chirp_bridge/resolve_us_zip_code",
         "chirp_bridge/normalize_repeaterbook_query",
         "chirp_bridge/search_repeaterbook",
         "chirp_bridge/has_global_settings",
@@ -194,7 +196,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "90c46e3c286d7cd7c1f20a5ee5dca6d0a90b4acc453ecaa8b03a780cdb555d6b",
+      "edge_hash": "44da064ef08b1655f2eea027f4078f637720351c5a05ff51dbcb7e11c2f062b9",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -202,7 +204,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "4cbe76ce3a9e6c98abdeaedf18f0a3e2b6324aaa9f10f0559c477fdc84d49a75",
+      "edge_hash": "76a66e4ccdfa7450bf33ed2041b2a56ff9f1f2f4fcaa29cb8b032a338d2c30ee",
       "enriched": false
     },
     "chirp_bridge/status_progress": {
@@ -578,7 +580,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "00473a05ded1ce8339d79cc02529db6fb7fd70cdb1bc7216f9d5fecc0b6d7f72",
+      "edge_hash": "48063ba8a984649872282edc0720d7625f9572ed9531e12c5168fe9064bcfd9e",
       "enriched": false
     },
     "chirp_bridge/normalize_repeaterbook_query": {
@@ -1340,7 +1342,23 @@
       "render_hash": "stale",
       "edge_hash": "9628ede1cb2e2e1aa03d3b88b8d7c11fba6a3679a618df3b37b4ab037502cab9",
       "enriched": false
+    },
+    "chirp_bridge/zip_lookup_cache_path": {
+      "concept_id": "chirp_bridge/zip_lookup_cache_path",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "ccac954e8b1107c2817f7500136a917ec6a40572c3ab82975c66d3ccae82b897",
+      "enriched": false
+    },
+    "chirp_bridge/resolve_us_zip_code": {
+      "concept_id": "chirp_bridge/resolve_us_zip_code",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "7712ea5b2276c142b0c1d99101f8a9bae05be9a89288c854f6cb2bb7aa03d6b0",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-07T14:59:40Z"
+  "generated_at": "2026-11-07T15:56:05Z"
 }
