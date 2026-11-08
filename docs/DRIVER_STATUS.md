@@ -21,6 +21,7 @@ Last updated: 2026-11-08
 | --- | --- | --- | --- | --- | --- | --- |
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
+| Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
@@ -285,10 +286,40 @@ Last updated: 2026-11-08
 - Evidence: Yaesu FTX-1 CAT reference and public `cat-ftx1` commit
   `e77b599dbb27eff5b4bd49c01a689989cfcc9495`
 - Driver SHA-256:
-  `cbc60dc846bdaa78c55b1967f7f7ca0cf755c565e31d0c84f23a8a4738b7d6e9`
+  `273e6a444854e8fcc6cb6a07d0faed021aa2a0957421d98eddbaa8101666a176`
 - Hardware validation: none
+- 1.0.48 field correction: active-channel selection now reads with `MC0;`
+  and sends `MC0nnnnn;` without waiting for a nonexistent response.
 - Next milestone: physical empty-memory behavior, one controlled memory write,
   read-back, tone comparison, and repeater-shift verification
+
+### Yaesu FT-991A
+
+- Maintained driver: `drivers/newchirp_yaesu_ft991a.py`
+- Protocol notes: `docs/YAESU_FT991A_PROTOCOL.md`
+- Transport: Yaesu live CAT serial at 38400, 19200, 9600, or 4800 baud;
+  identity `0670`
+- Implemented: 117 live memory channels, 12-character tags, frequency,
+  repeater shift, FM/NFM, AM, LSB/USB, CW sideband, RTTY sideband, DATA
+  sideband/FM, C4FM, CTCSS, and DCS
+- Write policy: read/modify/write only validated channel pairs through
+  documented/field-traced SPR and SPW commands; unknown channel bytes remain
+  unchanged
+- Safety limits: unsupported nonstandard split frequencies, per-channel RF
+  power, and radio-wide DCS polarity are not modified
+- Evidence: Yaesu CAT reference SHA-256
+  `52164f737e37a3ffc8276eccedf8ecb524607198c38d386ae4ff7b2fc1d60c95`,
+  Gil Kloepfer memory map revision 0.7f SHA-256
+  `dc72359ca2c5b983b5821a727c0b5f62a5d9b7b87461259765bcf4d450e26e5c`,
+  SPR/SPW pseudocode SHA-256
+  `ae87abeac11960fcd65a18ae0d1bb00e39cfd1649b0e6e651844d9610a8c5bee`,
+  and CHIRP issue 2531 packet capture SHA-256
+  `8ca3fe60db1ad2294c963ecc2db495d647fc32cda2ae6b801d1214935b9949c0`
+- Driver SHA-256:
+  `6c406c883c30a29d4ceed14c7058500c450a1b0f70bcc8bb03faa4316be7cfcb`
+- Hardware validation: none
+- Next milestone: physical read-only comparison against the radio and an
+  existing programmer, followed by one inactive-channel write and read-back
 
 ### TYT MD-UV380
 

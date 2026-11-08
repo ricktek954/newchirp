@@ -20,6 +20,18 @@ release requirements.
   `index-qGNixYAS.js` contains the optional firmware field. The pre-deploy
   source backup is
   `/root/newchirp-firmware-report-before-cb74792/site-sources.tgz`.
+- The FT-991A forum request led to a NewChirp-owned experimental live CAT
+  driver in `drivers/newchirp_yaesu_ft991a.py`. Yaesu's CAT reference,
+  Gil Kloepfer's public FT-991A NVRAM map and SPR/SPW pseudocode, and a public
+  RT Systems exchange capture establish the `0670` identity, 117-channel
+  bitmap, 96-byte records, and read/modify/write transport. NewChirp exposes
+  frequency, name, shift, mode, CTCSS, and DCS while preserving unknown channel
+  bytes. RT Systems ADMS-991A itself is a paid serial-gated download and was
+  not obtained. Protocol evidence is in
+  `docs/YAESU_FT991A_PROTOCOL.md`; physical validation remains pending.
+  Verification: 7 focused FT-991A tests pass, all 388 Python tests pass with
+  2 fixture-dependent skips, all 197 Flutter tests pass, `flutter analyze` is
+  clean, and the website build plus Web Programmer/RepeaterBook suites pass.
 - macOS `1.0.48` is live from source commit `11053cfd` as a universal, signed,
   notarized, stapled, Gatekeeper-accepted DMG. It adds firmware identities to
   desktop bug reports, including direct decoding of UV-K5 hello frames.
