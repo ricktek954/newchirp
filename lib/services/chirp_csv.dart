@@ -71,6 +71,10 @@ class ChirpCsv {
         double.tryParse(value(row, name)) ?? fallback;
     int integer(List<String> row, String name, int fallback) =>
         int.tryParse(value(row, name)) ?? fallback;
+    String dtcsPolarity(List<String> row) {
+      final polarity = value(row, 'DtcsPolarity', 'NN').toUpperCase();
+      return polarity.isEmpty ? 'NN' : polarity;
+    }
 
     return rows.skip(1).where((r) => r.any((v) => v.trim().isNotEmpty)).map((
       r,
@@ -85,7 +89,7 @@ class ChirpCsv {
         txTone: number(r, 'rToneFreq', 88.5),
         rxTone: number(r, 'cToneFreq', 88.5),
         dtcs: integer(r, 'DtcsCode', 23),
-        dtcsPolarity: value(r, 'DtcsPolarity', 'NN'),
+        dtcsPolarity: dtcsPolarity(r),
         rxDtcs: integer(r, 'RxDtcsCode', 23),
         crossMode: value(r, 'CrossMode', 'Tone->Tone'),
         mode: value(r, 'Mode', 'FM'),

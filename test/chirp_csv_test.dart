@@ -24,6 +24,18 @@ void main() {
     expect(decoded.single.comment, source.comment);
   });
 
+  test('blank DTCS polarity from OpenGD77 imports as NN', () {
+    const source = '''
+Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPolarity,RxDtcsCode,CrossMode,Mode,TStep,Skip,Power,Comment,URCALL,RPT1CALL,RPT2CALL,DVCODE
+1,RX ONLY,146.520000,,,,88.5,88.5,023,,023,Tone->Tone,FM,5.0,,,Imported,,,,
+''';
+
+    final decoded = ChirpCsv.decode(source);
+
+    expect(decoded, hasLength(1));
+    expect(decoded.single.dtcsPolarity, 'NN');
+  });
+
   test('GMRS starter library contains all 22 channels', () {
     final channels = gmrsStarterChannels();
     expect(channels, hasLength(22));

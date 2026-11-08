@@ -8,9 +8,9 @@ tags:
   - "type:Class"
   - "module:services"
   - "domain:chirp_csv.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-11-08T10:41:56Z"
 concept_id: services/chirp_csv/ChirpCsv
 language: dart
 ---
@@ -31,11 +31,12 @@ class ChirpCsv
 - `value`
 - `number`
 - `integer`
+- `dtcsPolarity`
 - `_escape`
 - `_parse`
 
 ## Source
-Lines 3–139 in `services/chirp_csv.dart`
+Lines 3–143 in `services/chirp_csv.dart`
 
 ## Relationships
 
