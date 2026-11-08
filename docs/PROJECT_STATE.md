@@ -16,16 +16,15 @@ release requirements.
   the field in report email. Verification: all 381 Python tests pass with 2
   fixture-dependent skips; all 197 Flutter tests pass; `flutter analyze` is
   clean; the website production build and complete Web Programmer/RepeaterBook
-  suites pass. No release was built.
-- macOS `1.0.47` is live from source commit `19dcd4c1` as a universal, signed,
-  notarized, stapled, Gatekeeper-accepted DMG. This release includes the
-  CPS-aligned X1 Pro tone write order, the BQ-889 read-only probe, channel
-  name validation and bulk clearing, write-review guidance, and ZIP-code
-  RepeaterBook searches. Windows and Linux `1.0.47` are also live in the
-  release manifest.
-- Windows `1.0.47` is live from source commit `19dcd4c1` with the BQ-889
-  read-only probe, X1 Pro tone correction, channel validation and bulk
-  clearing, and ZIP-code repeater searches.
+  suites pass. Website commit `cb74792` is deployed; the live bundle
+  `index-qGNixYAS.js` contains the optional firmware field. The pre-deploy
+  source backup is
+  `/root/newchirp-firmware-report-before-cb74792/site-sources.tgz`.
+- macOS `1.0.48` is live from source commit `11053cfd` as a universal, signed,
+  notarized, stapled, Gatekeeper-accepted DMG. It adds firmware identities to
+  desktop bug reports, including direct decoding of UV-K5 hello frames.
+- Windows `1.0.48` is live from source commit `11053cfd`. Linux `1.0.48` is
+  live from its native release session.
 - The 2026-11-08 BF-V12D password failure led to a full REA of Baofeng
   BF_Series CPS 1.5.1. The CPS is an Electron application; its renderer and
   main process prove the exact fixed unlock sequence,
@@ -394,8 +393,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.48` artifact source commit: `11053cfd`
-- macOS `1.0.48` is live; its artifact source is recorded by the macOS release
-  work rather than this Windows release session.
+- macOS `1.0.48` artifact source commit: `11053cfd`
 - Linux `1.0.48` is live; its artifact source is recorded by the Linux release
   work rather than this Windows release session.
 - Open pull requests: none
@@ -422,11 +420,13 @@ macOS `1.0.48` artifact:
 
 - URL: `https://newchirp.net/downloads/NewChirp-1.0.48.dmg`
 - Version/build: `1.0.48` / `48`
+- Architectures: `arm64` and `x86_64`
 - SHA-256:
   `4ef865249f0f72d7c53b8747071b05ca9463dcd0406a2e854edf0be56af279bd`
 - Size: `82,507,658` bytes
-- Recorded from the live artifact on the Windows release host; codesigning and
-  notarization verification are recorded by the macOS release session.
+- Notarization submission: `03759f9e-520c-492e-8eb6-b2677dea1c6c`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Server checksum matched the final stapled DMG
 
 macOS `1.0.47` artifact (historical):
 
@@ -752,6 +752,14 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.48` from source commit `11053cfd` as a universal,
+  signed, notarized, stapled DMG. The release adds firmware identities to
+  desktop bug reports and decodes UV-K5 hello frames before a radio image is
+  available. App/build version `1.0.48` / `48`, both Python 3.13.15 runtimes,
+  universal libusb, and the pinned CHIRP tree were verified. Strict
+  codesigning, Apple notarization, stapling, mounted-DMG inspection,
+  Gatekeeper, launch smoke test, local/server SHA-256, public HTTP, and the
+  live macOS manifest entry all passed.
 - Published Windows `1.0.48` from source commit `11053cfd`. Verified installer
   file/product metadata `1.0.48.0` / `1.0.48`, app version `1.0.48+48`,
   bundled Python `3.13.15`, the bundled GS-5B 1.XX, BF-V12D, and TD-H8 G4
@@ -1121,6 +1129,36 @@ Linux 1.0.41 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.48 verification status
+
+Full verification before and after the macOS `1.0.48` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 197 tests passed
+- Python test discovery: 381 tests passed, 2 fixture-dependent tests skipped
+- Release source commit: `11053cfd`
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.48` / `48`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled BF-V12D driver SHA-256:
+  `2adc7e1e35ccb597e5b8ad0580393c3dd9915eebc60794c4953b5ef381bcb93d`
+- Bundled UV-K5 override SHA-256:
+  `ef1a5561b2bc2e64b8273faec2db8510d5ca29434a9ffce6f44547d59d7cb83a`
+- Bundled CHIRP bridge SHA-256:
+  `ce86a6d850b4d19205a4c1b6b0aeae6b541da977a990718b02d6ccec32ffb1bc`
+- DMG SHA-256:
+  `4ef865249f0f72d7c53b8747071b05ca9463dcd0406a2e854edf0be56af279bd`
+- Notarization submission: `03759f9e-520c-492e-8eb6-b2677dea1c6c`
+- Strict codesigning, Apple stapling validation, Gatekeeper, mounted-DMG
+  inspection, launch smoke test, local/server SHA-256, public HTTP, and the
+  live macOS manifest entry passed
+- `/api/releases/latest` reports macOS `1.0.48`
+- The documented separate raw-SCSI helper remains `arm64`-only.
 
 ## macOS 1.0.47 verification status
 
