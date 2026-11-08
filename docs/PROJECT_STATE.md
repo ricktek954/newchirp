@@ -12,9 +12,11 @@ release requirements.
   notarized, stapled, Gatekeeper-accepted DMG. This release includes the
   CPS-aligned X1 Pro tone write order, the BQ-889 read-only probe, channel
   name validation and bulk clearing, write-review guidance, and ZIP-code
-  RepeaterBook searches. Windows remains on `1.0.46`; Linux `1.0.47` is also
-  live in the release manifest.
-- Windows `1.0.46` is live from source commit `e4d4db35`.
+  RepeaterBook searches. Windows and Linux `1.0.47` are also live in the
+  release manifest.
+- Windows `1.0.47` is live from source commit `19dcd4c1` with the BQ-889
+  read-only probe, X1 Pro tone correction, channel validation and bulk
+  clearing, and ZIP-code repeater searches.
 - The 2026-11-07 GA-510 follow-up (email UID 497) showed stock CHIRP
   succeeded on the same COM4 radio and cable while both NewChirp GA-510
   entries failed at the first five-byte serial exchange. The official
@@ -348,7 +350,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - macOS `1.0.47` artifact source commit: `19dcd4c1`
-- Windows `1.0.46` artifact source commit: `e4d4db35`
+- Windows `1.0.47` artifact source commit: `19dcd4c1`
 - Linux `1.0.47` is live; its artifact source is recorded by the Linux release
   work rather than this macOS release session.
 - Open pull requests: none
@@ -367,9 +369,9 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.47 |
-| Windows | 1.0.46 |
+| Windows | 1.0.47 |
 | Linux | 1.0.47 |
-| Legacy shared manifest version | 1.0.46 |
+| Legacy shared manifest version | 1.0.47 |
 
 macOS `1.0.47` artifact:
 
@@ -419,7 +421,17 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.46` artifact:
+Windows `1.0.47` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.47.exe`
+- Version/build: `1.0.47` / `47`
+- SHA-256:
+  `b385cd811419b7b9998d858d3b2a4d05e01b5f3051cc52b0dee5f1c2bc0fa37b`
+- Size: `61,236,623` bytes
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.46` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.46.exe`
 - Version/build: `1.0.46` / `46`
@@ -642,6 +654,15 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.47` from source commit `19dcd4c1`. Verified installer
+  file/product metadata `1.0.47.0` / `1.0.47`, app version `1.0.47+47`,
+  bundled Python `3.13.15`, the bundled BQ-889 probe and corrected X1 Pro
+  driver, matching local/server SHA-256, public HTTP 200, and the live
+  platform manifest. BQ-889, X1 Pro, and bridge suites passed 77 tests with
+  one known Windows temporary-file `PermissionError`; Flutter ran 190 passing
+  tests with the five known Windows sandbox/Help failures; `flutter analyze`
+  reported only three pre-existing `avoid_print` infos in `build_support`.
+  The installer remains unsigned.
 - Published macOS `1.0.47` from source commit `19dcd4c1` as a universal,
   signed, notarized, stapled DMG. The release carries the CPS-aligned X1 Pro
   tone write order, the BQ-889 read-only probe, channel name validation and
