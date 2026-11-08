@@ -859,6 +859,10 @@ Last updated: 2026-11-07
   Write is `57 <address:u16be> 10 <16 bytes>` and requires ACK `06`.
 - Memory map: 30 channel records from `0x0000` through `0x01DF`, plus the
   settings record at `0xE000`. No channel-name field exists.
+- Tone byte order: read replies return CTCSS/DCS words little-endian.
+  `writeChannelAsync` accepts big-endian tone words, so NewChirp converts only
+  channel payload bytes 8-11 at the transmission boundary. Download images
+  remain in read order for lossless reloads and comparisons.
 - Implemented: RX/TX frequency, simplex and +/-5 MHz repeater offsets,
   arbitrary split TX, CTCSS/DCS including independent TX/RX tones and DCS
   inversion, three power levels, narrow/wide, scan add/skip, busy lock,
@@ -872,13 +876,18 @@ Last updated: 2026-11-07
   `64f90289b838adae6d01691649b08812e5783751a6bbcae157b39d5e2af87339`;
   `model.xml` SHA-256
   `51b0e546fe644a865fe46c021f1fccf655723d953fc326a0cdd9276f7dde0005`;
-  CIL static call-path analysis E1 and synthetic replay E2
+  CIL static call-path analysis E1 and synthetic replay E2. The CPS tone table
+  stores `03 75` for 88.5 Hz; `writeChannelAsync` writes those bytes directly,
+  while `readChannelAsync` reverses them when assembling the same table value.
+  A 1.0.46 physical report from Dustin showed an unedited write causing the
+  radio to reboot at channel 23, which is the first receive-tone exception.
+  That report exposed the previous little-endian-on-write assumption.
 - Driver SHA-256:
-  `2ae43ec7302890808f3402f717409eb735bfa23fac77021176bd90849a9d09aa`
+  `4e262b160e698b957b480cacc9df9ac9fa999a1cf429773b70f2e8b516090dd2`
 - Hardware validation: none. Focused offline transport and field tests pass.
-- Next milestone: read a physical X1 Pro and compare all 30 channels plus
-  settings with the OEM CPS, then perform a controlled edit, upload, and
-  read-back with a saved backup.
+- Next milestone: ask Dustin to test the corrected CPS-matched write order on
+  the next prerelease, then compare all 30 channels plus settings with a saved
+  OEM image before promoting the driver.
 
 ### Baofeng DM-32UV
 

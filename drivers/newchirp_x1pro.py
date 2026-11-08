@@ -186,6 +186,18 @@ def _encode_dcs(code, inverted):
     return struct.pack("<H", value)
 
 
+def _channel_page_for_write(page):
+    """Convert canonical read-order tone words to the OEM write byte order."""
+    if len(page) != BLOCK_SIZE:
+        raise errors.RadioError(
+            "X1 Pro channel pages must contain %i bytes." % BLOCK_SIZE
+        )
+    wire = bytearray(page)
+    wire[8:10] = bytes((wire[9], wire[8]))
+    wire[10:12] = bytes((wire[11], wire[10]))
+    return bytes(wire)
+
+
 def _tone_fields(mem):
     tx = rx = None
     tx_inverted = rx_inverted = False
@@ -647,10 +659,11 @@ class RadioddityX1Pro(chirp_common.CloneModeRadio,
             _write_block(self, PARAM_BASE, image[PARAM_BASE:IMAGE_SIZE])
             for index in range(CHANNEL_COUNT):
                 address = CHANNEL_BASE + index * BLOCK_SIZE
+                page = image[address:address + BLOCK_SIZE]
                 _write_block(
                     self,
                     address,
-                    image[address:address + BLOCK_SIZE],
+                    _channel_page_for_write(page),
                     delay=INTER_BLOCK_DELAY,
                 )
                 status.cur = index + 1

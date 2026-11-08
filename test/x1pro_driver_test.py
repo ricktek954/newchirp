@@ -250,11 +250,60 @@ class X1ProDriverTest(unittest.TestCase):
             radio.pipe.memory[self.driver.PARAM_BASE:self.driver.IMAGE_SIZE],
             image[self.driver.PARAM_BASE:self.driver.IMAGE_SIZE],
         )
+        expected_channels = bytearray()
+        for index in range(30):
+            page = bytearray(image[index * 16:(index + 1) * 16])
+            page[8:10] = bytes((page[9], page[8]))
+            page[10:12] = bytes((page[11], page[10]))
+            expected_channels.extend(page)
         self.assertEqual(
             radio.pipe.memory[:30 * self.driver.BLOCK_SIZE],
-            image[:30 * self.driver.BLOCK_SIZE],
+            expected_channels,
         )
         self.assertEqual(radio.pipe.writes[-1], b"\x62")
+
+    def test_upload_uses_oem_big_endian_tone_words_without_changing_other_bytes(
+        self,
+    ):
+        image = bytearray(self.driver.IMAGE_SIZE)
+        image[22 * 16:23 * 16] = (
+            struct.pack(">II", 462_550_000, 467_550_000)
+            + bytes.fromhex("9e 02 ff ff 21 a5 c3 d4")
+        )
+        radio = self._new_radio(image)
+        radio.pipe = FakeX1ProSerial(b"\xff" * self.driver.IMAGE_SIZE)
+
+        with mock.patch.object(self.driver, "INTER_BLOCK_DELAY", 0):
+            radio.sync_out()
+
+        written = radio.pipe.memory[22 * 16:23 * 16]
+        self.assertEqual(
+            written,
+            bytes.fromhex(
+                "1b 91 f3 f0 1b de 3f 30 "
+                "02 9e ff ff 21 a5 c3 d4"
+            ),
+        )
+        self.assertEqual(
+            bytes(radio._mmap[22 * 16:23 * 16]),
+            bytes(image[22 * 16:23 * 16]),
+        )
+        decoded = radio.get_memory(23)
+        self.assertEqual(decoded.tmode, "Cross")
+        self.assertEqual(decoded.cross_mode, "->Tone")
+        self.assertEqual(decoded.ctone, 67.0)
+
+    def test_inclusive_upper_frequency_bound_is_writable(self):
+        radio = self._new_radio()
+        memory = _memory(
+            self.chirp_common,
+            number=30,
+            freq=467_725_000,
+        )
+
+        radio.set_memory(memory)
+
+        self.assertEqual(radio.get_memory(30).freq, 467_725_000)
 
     def test_every_write_must_return_the_oem_ack(self):
         radio = self._new_radio()

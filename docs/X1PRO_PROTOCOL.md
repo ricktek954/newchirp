@@ -1,6 +1,6 @@
 # Radioddity X1 Pro Programming Protocol
 
-Last updated: 2026-11-07
+Last updated: 2026-11-08
 
 This document records the evidence and wire contract used by
 `drivers/newchirp_x1pro.py`. The implementation was recovered from the
@@ -104,8 +104,8 @@ NewChirp channel number 1 is record 0; channel number 30 is record 29.
 | --- | ---: | --- | --- |
 | `0..3` | 4 | Receive frequency | Unsigned big-endian Hz |
 | `4..7` | 4 | Transmit frequency | Unsigned big-endian Hz |
-| `8..9` | 2 | Receive CTCSS/DCS | Little-endian raw tone word |
-| `10..11` | 2 | Transmit CTCSS/DCS | Little-endian raw tone word |
+| `8..9` | 2 | Receive CTCSS/DCS | Read-order little-endian raw tone word |
+| `10..11` | 2 | Transmit CTCSS/DCS | Read-order little-endian raw tone word |
 | `12` bit 0-1 | 2 | Power | `0=Low 0.5 W`, `1=Medium 5 W`, `2=High 7 W` |
 | `12` bit 2 | 1 | Bandwidth | `0=Narrow`, `1=Wide` |
 | `12` bit 4 | 1 | Scan add | `0=skip`, `1=scan` |
@@ -115,7 +115,7 @@ NewChirp channel number 1 is record 0; channel number 30 is record 29.
 The CPS has no channel-name column. NewChirp reports `has_name=False` rather
 than synthesizing names from record numbers.
 
-Tone words use these rules:
+Tone words use these rules in the canonical image returned by the radio:
 
 | Tone type | Raw word |
 | --- | --- |
@@ -127,6 +127,15 @@ Tone words use these rules:
 For example, CTCSS 100.0 Hz is `E8 03`; DCS 023 normal is `13 28`; and
 inverted DCS 023 is `13 A8`. The model XML table agrees with the decoded
 values in `readChannelAsync`.
+
+The OEM channel write path is not byte-order symmetric with the read path.
+`writeChannelAsync` splits each `model.xml` table value such as `03 75` and
+writes the first byte at payload byte 8 and the second at byte 9. The read path
+does the reverse: it reads payload byte 9 before byte 8 to reconstruct the same
+table value. Therefore, the radio's read replies use little-endian tone words,
+but write requests require big-endian tone words. NewChirp keeps downloaded
+images in read order and swaps only bytes 8-11 of each channel page immediately
+before transmission. Frequencies remain big-endian in both directions.
 
 ## Settings map
 
