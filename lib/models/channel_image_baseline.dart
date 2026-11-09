@@ -89,6 +89,7 @@ bool channelLibraryWriteReady({
   required ChannelImageMatch match,
   required bool busy,
   required int invalidCount,
+  bool allowIncompatibleReview = false,
   required bool hasPort,
   required bool hasRadioModel,
   required bool hasRadioImage,
@@ -100,7 +101,7 @@ bool channelLibraryWriteReady({
     ChannelImageMatch.noImage || ChannelImageMatch.notLoaded => false,
   };
   return !busy &&
-      invalidCount == 0 &&
+      (invalidCount == 0 || allowIncompatibleReview) &&
       hasPort &&
       hasRadioModel &&
       hasRadioImage &&

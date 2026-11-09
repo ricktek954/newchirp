@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/applyBulkChannelDraft
 language: dart
 ---
@@ -27,7 +27,7 @@ void_applyBulkChannelDraft(
 ```
 
 ## Source
-Lines 776–780 in `main.dart`
+Lines 786–790 in `main.dart`
 
 ## Relationships
 

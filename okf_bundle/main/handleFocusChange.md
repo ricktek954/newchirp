@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/handleFocusChange
 language: dart
 ---
@@ -23,7 +23,7 @@ void_handleFocusChange()
 ```
 
 ## Source
-Lines 10631–10631 in `main.dart`
+Lines 10866–10866 in `main.dart`
 
 ## Relationships
 

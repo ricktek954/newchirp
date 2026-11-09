@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/endInsertionLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ int_endInsertionLocation_endInsertionLocation
 ```
 
 ## Source
-Lines 2524–2524 in `main.dart`
+Lines 2588–2588 in `main.dart`
 
 ## Relationships
 

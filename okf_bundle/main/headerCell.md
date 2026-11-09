@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/headerCell
 language: dart
 ---
@@ -23,7 +23,7 @@ Widget_headerCell(_ChannelColumn column, List<_ChannelColumn> columns)
 ```
 
 ## Source
-Lines 9539–9539 in `main.dart`
+Lines 9739–9739 in `main.dart`
 
 ## Relationships
 

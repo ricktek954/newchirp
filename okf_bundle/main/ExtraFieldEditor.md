@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/ExtraFieldEditor
 language: dart
 ---
@@ -27,7 +27,7 @@ class ExtraFieldEditor
 - `build`
 
 ## Source
-Lines 10509–10575 in `main.dart`
+Lines 10744–10810 in `main.dart`
 
 ## Relationships
 

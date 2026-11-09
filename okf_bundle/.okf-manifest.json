@@ -5,19 +5,21 @@
   "files": {
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1794131594814920016,
-      "hash": "3b3c2576ef9db94f4fcf007d94f031ca4bba3282a90ef1ca7b7e2b8c8e9d8a4e",
+      "mtime_ns": 1794240991056859800,
+      "hash": "9ed1d6d7c78691a4c5cbba88c4a0410a56b9cff2d6c087366bf6da757cfc7396",
       "concept_ids": [
+        "models/channel_image_baseline",
         "models/channel_image_baseline/ChannelImageBaseline",
         "models/channel_image_baseline/ChannelImageMatch",
         "models/channel_image_baseline/ChannelLibrarySnapshot",
         "models/channel_image_baseline/ChannelLibraryStatsCache",
+        "models/channel_image_baseline/channelListSignature",
+        "models/channel_image_baseline/channelImageMatch",
         "models/channel_image_baseline/channelImageStatusText",
         "models/channel_image_baseline/channelLibraryWriteReady",
-        "models/channel_image_baseline/channelListSignature",
+        "models/channel_image_baseline/channelLibrarySnapshot",
         "models/channel_image_baseline/markDirty",
-        "models/channel_image_baseline/read",
-        "models/channel_image_baseline"
+        "models/channel_image_baseline/read"
       ]
     },
     "models/gm32_channel.dart": {
@@ -484,12 +486,12 @@
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1793569318276516403,
-      "hash": "57cd150df865177f067ed9a3d2454c0d48731c63ccb2311322c24a63f0aaf9b4",
+      "mtime_ns": 1794240948874411000,
+      "hash": "c56a7970fc51cfbae550ae1a10dd3e0cfc38fda117973ee878a37f4e02852498",
       "concept_ids": [
+        "widgets/channel_library_image_bar",
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
-        "widgets/channel_library_image_bar/build",
-        "widgets/channel_library_image_bar"
+        "widgets/channel_library_image_bar/build"
       ]
     },
     "widgets/error_report_dialog.dart": {
@@ -589,8 +591,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794227946394547846,
-      "hash": "1f16d32a598a959b4c63f0adf18ab0e9d82fb51fa15726927dc09d751d3214c6",
+      "mtime_ns": 1794240949469348400,
+      "hash": "6da29c130a18fb5d1c509af9e3438d6659b361b9e2a2f3debea9c0f9187aa85a",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -713,6 +715,7 @@
         "main/nextChannelLocation",
         "main/channelIssues",
         "main/reviewChannelIssues",
+        "main/reviewAllChannelIssues",
         "main/sortChannelsByLocation",
         "main/moveChannel",
         "main/moveChannelToLocation",
@@ -801,6 +804,7 @@
         "main/chooseCounties",
         "main/searchAmateurInstead",
         "main/channelDetail",
+        "main/resultIssues",
         "main/setResultSelected",
         "main/buildResultsMap",
         "main/revealSelectedChannel",

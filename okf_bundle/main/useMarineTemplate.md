@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/useMarineTemplate
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_useMarineTemplate_useMarineTemplate
 ```
 
 ## Source
-Lines 2218–2218 in `main.dart`
+Lines 2282–2282 in `main.dart`
 
 ## Relationships
 

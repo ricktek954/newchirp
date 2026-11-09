@@ -31,12 +31,14 @@ class _AnalogBridge extends RadioBridge {
   Future<
     ({
       RadioCapabilities capabilities,
+      String? firmware,
       List<RadioZone> zones,
       List<RadioMappingModel> mappings,
       int? zone,
     })
   >
   imageInfo(String imagePath) async => (
+    firmware: null,
     capabilities: RadioCapabilities.fromJson({
       'modes': ['FM', 'NFM', 'AM'],
       'nameLength': 30,
@@ -95,6 +97,7 @@ class _WritingBridge extends _AnalogBridge {
       List<RadioChannel> channels,
       String model,
       String imagePath,
+      String? firmware,
       RadioCapabilities capabilities,
       List<RadioZone> zones,
       List<RadioMappingModel> mappings,
@@ -107,6 +110,7 @@ class _WritingBridge extends _AnalogBridge {
       channels: imageChannels.map((channel) => channel.copy()).toList(),
       model: _model,
       imagePath: imagePath,
+      firmware: null,
       capabilities: (await imageInfo(imagePath)).capabilities,
       zones: const <RadioZone>[],
       mappings: const <RadioMappingModel>[],
@@ -214,8 +218,10 @@ void main() {
       });
       await tester.pumpAndSettle();
       expect(
-        find.textContaining('3 channels need attention'),
-        findsOneWidget,
+        tester
+            .widget<Text>(find.byKey(const Key('channel-library-write-issues')))
+            .data,
+        contains('3 channels need attention'),
         reason: tester
             .widgetList<Text>(find.byType(Text))
             .map((text) => text.data)
@@ -347,7 +353,12 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 100));
       });
       await tester.pumpAndSettle();
-      expect(find.textContaining('2 channels need attention'), findsOneWidget);
+      expect(
+        tester
+            .widget<Text>(find.byKey(const Key('channel-library-write-issues')))
+            .data,
+        contains('2 channels need attention'),
+      );
       expect(find.byKey(const ValueKey('channel-issues-1')), findsNothing);
       expect(find.byKey(const ValueKey('channel-issues-2')), findsOneWidget);
       expect(find.byKey(const ValueKey('channel-issues-3')), findsOneWidget);
@@ -364,7 +375,10 @@ void main() {
       expect(find.text('Channel 2 — Digital one'), findsOneWidget);
       expect(find.text('Channel 3 — Digital two'), findsOneWidget);
       expect(
-        find.textContaining('Mode DMR is not supported'),
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.textContaining('Mode DMR is not supported'),
+        ),
         findsNWidgets(2),
       );
       expect(source.readAsStringSync(), csv);

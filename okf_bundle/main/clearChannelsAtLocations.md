@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/clearChannelsAtLocations
 language: dart
 ---
@@ -23,7 +23,7 @@ void_clearChannelsAtLocations(Iterable<int> locations)
 ```
 
 ## Source
-Lines 2960–2960 in `main.dart`
+Lines 3024–3024 in `main.dart`
 
 ## Relationships
 

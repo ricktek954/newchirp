@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T16:01:11Z"
+timestamp: "2026-11-09T16:16:31Z"
 concept_id: models/channel_image_baseline/markDirty
 language: dart
 ---
@@ -24,7 +24,7 @@ voidmarkDirty()
 ```
 
 ## Source
-Lines 213–213 in `models/channel_image_baseline.dart`
+Lines 216–216 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

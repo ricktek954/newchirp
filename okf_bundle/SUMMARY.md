@@ -1,44 +1,44 @@
 ---
-description: 'Top-level OKF summary: 599 concepts across 4 domains and 30 modules'
-git_branch: main
+description: 'Top-level OKF summary: 603 concepts across 4 domains and 30 modules'
+git_branch: fix/repeater-compatibility
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-09T12:39:08Z'
+timestamp: '2026-11-09T16:17:09Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 599 concepts | 4 domains | 30 modules
+> OKF v0.2 bundle | 603 concepts | 4 domains | 30 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 462 |
+| Function | 466 |
 | Class | 98 |
 | Module | 30 |
 | Enum | 9 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 599 |
+| dart | 603 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 218 concepts
+### [main.dart](main.dart/index.md) — 220 concepts
 
-- [main](main/index.md) (218 concepts)
+- [main](main/index.md) (220 concepts)
 
-### [models](models/index.md) — 93 concepts
+### [models](models/index.md) — 95 concepts
 
 - [models/radio_channel](models/radio_channel/index.md) (37 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
+- [models/channel_image_baseline](models/channel_image_baseline/index.md) (12 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (11 concepts)
-- [models/channel_image_baseline](models/channel_image_baseline/index.md) (10 concepts)
 - [models/marine_channels](models/marine_channels/index.md) (7 concepts)
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
@@ -71,14 +71,15 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
-| [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) | Class | `models/channel_image_baseline.dart` | Remembers the last library snapshot so search and row select… |
 | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
+| [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) | Class | `models/channel_image_baseline.dart` | Remembers the last library snapshot so search and row select… |
 | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
 | [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
 | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
-| [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
+| [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
+| [channelLibraryWriteReady](/models/channel_image_baseline/channelLibraryWriteReady.md) | Function | `models/channel_image_baseline.dart` | Allow incompatible rows only when the caller provides a revi… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
 | [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
@@ -90,7 +91,6 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [restorePlainMidlandRepeater](/models/radio_channel/restorePlainMidlandRepeater.md) | Function | `models/radio_channel.dart` | Puts the standard GMRS repeater back in this row and clears … |
 | [isHidden](/services/file_save_warning_store/isHidden.md) | Function | `services/file_save_warning_store.dart` | True only when the person checked "Do not show me this messa… |
 | [DownloadedUpdate](/services/update_installer/DownloadedUpdate.md) | Class | `services/update_installer.dart` | A downloaded installer ready for the platform-specific updat… |
-| [midlandReceiveGmrsChannel](/models/radio_channel/midlandReceiveGmrsChannel.md) | Function | `models/radio_channel.dart` | GMRS channel shown for this row. Fixed rows use the slot. Ot… |
 
 ## Usage with OpenCode
 

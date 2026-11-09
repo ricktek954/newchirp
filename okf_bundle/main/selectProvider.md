@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/selectProvider
 language: dart
 ---
@@ -23,7 +23,7 @@ void_selectProvider(_RepeaterProvider provider)
 ```
 
 ## Source
-Lines 7665–7665 in `main.dart`
+Lines 7781–7781 in `main.dart`
 
 ## Relationships
 

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Enum"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/ChannelSelectionMode
 language: dart
 ---
@@ -32,7 +32,7 @@ enum _ChannelSelectionMode
 - `range`
 
 ## Source
-Lines 9101–9101 in `main.dart`
+Lines 9299–9299 in `main.dart`
 
 ## Relationships
 

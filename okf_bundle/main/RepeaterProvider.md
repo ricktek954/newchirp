@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Enum"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/RepeaterProvider
 language: dart
 ---
@@ -30,7 +30,7 @@ enum _RepeaterProvider
 - `myGmrs`
 
 ## Source
-Lines 7492–7492 in `main.dart`
+Lines 7604–7604 in `main.dart`
 
 ## Relationships
 

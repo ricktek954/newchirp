@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/TopBar
 language: dart
 ---
@@ -31,7 +31,7 @@ class _TopBar
 - `toggle`
 
 ## Source
-Lines 6802–7125 in `main.dart`
+Lines 6914–7237 in `main.dart`
 
 ## Relationships
 
