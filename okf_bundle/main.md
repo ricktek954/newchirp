@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Module"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main
 language: dart
 ---
@@ -145,6 +145,7 @@ language: dart
 | related | [_nextChannelLocation](/main/nextChannelLocation.md) |
 | related | [_channelIssues](/main/channelIssues.md) |
 | related | [_reviewChannelIssues](/main/reviewChannelIssues.md) |
+| related | [_reviewAllChannelIssues](/main/reviewAllChannelIssues.md) |
 | related | [_sortChannelsByLocation](/main/sortChannelsByLocation.md) |
 | related | [_moveChannel](/main/moveChannel.md) |
 | related | [_moveChannelToLocation](/main/moveChannelToLocation.md) |
@@ -273,6 +274,7 @@ language: dart
 | related | [_chooseCounties](/main/chooseCounties.md) |
 | related | [_searchAmateurInstead](/main/searchAmateurInstead.md) |
 | related | [_channelDetail](/main/channelDetail.md) |
+| related | [_resultIssues](/main/resultIssues.md) |
 | related | [_setResultSelected](/main/setResultSelected.md) |
 | related | [_buildResultsMap](/main/buildResultsMap.md) |
 | related | [fitAllPoints](/main/fitAllPoints.md) |

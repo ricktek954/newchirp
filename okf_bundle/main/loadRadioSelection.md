@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/loadRadioSelection
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_loadRadioSelection_loadRadioSelection
 ```
 
 ## Source
-Lines 1040–1040 in `main.dart`
+Lines 1050–1050 in `main.dart`
 
 ## Relationships
 

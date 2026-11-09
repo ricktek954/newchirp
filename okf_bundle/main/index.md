@@ -144,6 +144,8 @@
 - [_restoreLibrary](restoreLibrary.md)
 - [_restoreMappingMembershipsAt](restoreMappingMembershipsAt.md)
 - [_restoreStockChannels](restoreStockChannels.md)
+- [_resultIssues](resultIssues.md)
+- [_reviewAllChannelIssues](reviewAllChannelIssues.md)
 - [_reviewChannelIssues](reviewChannelIssues.md)
 - [_saveColumnLayout](saveColumnLayout.md)
 - [_saveCsv](saveCsv.md)

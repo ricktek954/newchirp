@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T12:39:06Z"
+timestamp: "2026-11-09T16:15:49Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -71,6 +71,7 @@ class _NewChirpHomeState
 - `_nextChannelLocation`
 - `_channelIssues`
 - `_reviewChannelIssues`
+- `_reviewAllChannelIssues`
 - `_sortChannelsByLocation`
 - `_moveChannel`
 - `_moveChannelToLocation`
@@ -151,7 +152,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 398–6122 in `main.dart`
+Lines 408–6234 in `main.dart`
 
 ## Relationships
 
