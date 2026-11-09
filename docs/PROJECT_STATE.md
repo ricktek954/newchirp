@@ -63,11 +63,15 @@ release requirements.
   first successful load and reports an actionable reinstall message if the
   asset is genuinely absent. Verification: 2 focused asset tests pass and the
   complete Flutter suite now passes 199 tests with a clean analyzer.
+- macOS `1.0.49` is live from source commit `d4b20d0a` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the built-in
+  US/International Marine VHF templates, independent RT-950 model selection,
+  the separate read-only RT-950 Pro driver, and the channel validation and
+  radio-helper reliability fixes.
 - macOS `1.0.48` is live from source commit `11053cfd` as a universal, signed,
   notarized, stapled, Gatekeeper-accepted DMG. It adds firmware identities to
   desktop bug reports, including direct decoding of UV-K5 hello frames.
-- Windows `1.0.48` is live from source commit `11053cfd`. Linux `1.0.48` is
-  live from its native release session.
+- Windows and Linux `1.0.49` are live from their native release sessions.
 - The 2026-11-08 BF-V12D password failure led to a full REA of Baofeng
   BF_Series CPS 1.5.1. The CPS is an Electron application; its renderer and
   main process prove the exact fixed unlock sequence,
@@ -436,9 +440,9 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.49` artifact source commit: `d4b20d0a`
-- macOS `1.0.48` artifact source commit: `11053cfd`
-- Linux `1.0.49` is live; its artifact source is recorded by the Linux release
-  work rather than this Windows release session.
+- macOS `1.0.49` artifact source commit: `d4b20d0a`
+- Linux `1.0.49` is live; its artifact source is recorded by the native Linux
+  release session.
 - Open pull requests: none
 - Checked-out source version: `1.0.49+49`
 - macOS builds are pinned to CocoaPods with
@@ -454,12 +458,24 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.48 |
+| macOS | 1.0.49 |
 | Windows | 1.0.49 |
 | Linux | 1.0.49 |
-| Legacy shared manifest version | 1.0.48 |
+| Legacy shared manifest version | 1.0.49 |
 
-macOS `1.0.48` artifact:
+macOS `1.0.49` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.49.dmg`
+- Version/build: `1.0.49` / `49`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `b94b57f1f2577fa4d032dd979d6c4e33e6487017007608d19023c54502fd0d79`
+- Size: `81,438,614` bytes
+- Notarization submission: `45ef102a-4597-47e5-8458-4c4605ec9dab`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Server checksum matched the final stapled DMG
+
+macOS `1.0.48` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-1.0.48.dmg`
 - Version/build: `1.0.48` / `48`
@@ -848,7 +864,16 @@ Linux 1.0.41 sizes:
   201 passing tests with the five known Windows sandbox/Help failures;
   `flutter analyze` reported only three pre-existing `avoid_print` infos in
   `build_support`. The installer remains unsigned. Linux `1.0.49` artifacts
-  are live; macOS remains at `1.0.48` until its native build is published.
+  are live.
+- Published macOS `1.0.49` from source commit `d4b20d0a` as a universal,
+  signed, notarized, stapled DMG. The release adds Marine VHF templates,
+  separate RT-950 and RT-950 Pro models, the Pro read-only CPS transport,
+  channel validation/clearing improvements, and radio-helper asset recovery.
+  App/build version `1.0.49` / `49`, both Python 3.13.15 runtimes, universal
+  libusb, and the pinned CHIRP tree were verified. Strict codesigning, Apple
+  notarization, stapling, mounted-DMG inspection, Gatekeeper, launch smoke
+  test, local/server SHA-256, public HTTP, and the live macOS manifest entry
+  all passed.
 - Published macOS `1.0.48` from source commit `11053cfd` as a universal,
   signed, notarized, stapled DMG. The release adds firmware identities to
   desktop bug reports and decodes UV-K5 hello frames before a radio image is
@@ -1226,6 +1251,35 @@ Linux 1.0.41 sizes:
 - Added CHIRP module sandboxing, pinned CHIRP source downloads, a file-save
   warning that distinguishes files from radio writes, and Channel Library
   Discard/Write controls tied to the stored radio image.
+
+## macOS 1.0.49 verification status
+
+Full verification before and after the macOS `1.0.49` release:
+
+- `flutter analyze`: clean
+- `flutter test`: all 206 tests passed
+- Python test discovery: 394 tests passed, 2 fixture-dependent tests skipped
+- Focused bridge upload suite: 62 tests passed
+- Release source commit: `d4b20d0a`
+- Release app: universal, signed, notarized, stapled, and Gatekeeper-accepted
+- App version/build in the mounted DMG: `1.0.49` / `49`
+- Main executable architectures: `arm64` and `x86_64`
+- Bundled Python: `3.13.15` for both architectures
+- Universal libusb bundled for `arm64` and `x86_64`
+- Bundled CHIRP commit:
+  `21e42e4518c167548af90ed7f9edf75e516c491a`
+- Bundled RT-950 Pro driver SHA-256:
+  `6f1be304873772878378ea6fbcc5761881ec5b88fa71fa406aa5e6b318c5ae94`
+- Bundled CHIRP bridge SHA-256:
+  `ce86a6d850b4d19205a4c1b6b0aeae6b541da977a990718b02d6ccec32ffb1bc`
+- DMG SHA-256:
+  `b94b57f1f2577fa4d032dd979d6c4e33e6487017007608d19023c54502fd0d79`
+- Notarization submission: `45ef102a-4597-47e5-8458-4c4605ec9dab`
+- Strict codesigning, Apple stapling validation, Gatekeeper, mounted-DMG
+  inspection, launch smoke test, local/server SHA-256, public HTTP, and the
+  live macOS manifest entry passed
+- `/api/releases/latest` reports macOS `1.0.49`
+- The documented separate raw-SCSI helper remains `arm64`-only.
 
 ## macOS 1.0.48 verification status
 
