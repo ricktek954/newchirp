@@ -435,12 +435,12 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.48` artifact source commit: `11053cfd`
+- Windows `1.0.49` artifact source commit: `d4b20d0a`
 - macOS `1.0.48` artifact source commit: `11053cfd`
-- Linux `1.0.48` is live; its artifact source is recorded by the Linux release
+- Linux `1.0.49` is live; its artifact source is recorded by the Linux release
   work rather than this Windows release session.
 - Open pull requests: none
-- Checked-out source version: `1.0.48+48`
+- Checked-out source version: `1.0.49+49`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -455,8 +455,8 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.48 |
-| Windows | 1.0.48 |
-| Linux | 1.0.48 |
+| Windows | 1.0.49 |
+| Linux | 1.0.49 |
 | Legacy shared manifest version | 1.0.48 |
 
 macOS `1.0.48` artifact:
@@ -519,7 +519,17 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.48` artifact:
+Windows `1.0.49` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.49.exe`
+- Version/build: `1.0.49` / `49`
+- SHA-256:
+  `59dae47deef1129ec096fb94c48c756a31392a48a6d48ca0ce1d8b826eb25278`
+- Size: `61,269,593` bytes
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.48` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.48.exe`
 - Version/build: `1.0.48` / `48`
@@ -615,7 +625,36 @@ Windows `1.0.39` artifact (historical):
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
 
-Linux `1.0.48` artifacts:
+Linux `1.0.49` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.49.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.49.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.49.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.49.pkg.tar.zst`
+
+Linux 1.0.49 SHA-256:
+
+- DEB:
+  `535f6b06680265b90f60c35e48dd279dc1b2f0851e00900085189bcc84620878`
+- RPM:
+  `b9fdeb1fdf3f928a9493446951bd75de3ae8ce1e5703286f397dcb9843d55a5e`
+- AppImage:
+  `39b40d3705ec9e0bfd9711d86f720d57a3584ad0af37b22cc4d06e7e39bdf74f`
+- Pacman:
+  `7a2f43aca9a42c29e93c38acd5f8d69fc329c2eaa327b7a6e25f3a7d3a20778e`
+
+Linux 1.0.49 sizes:
+
+- DEB: `48,489,136` bytes
+- RPM: `38,938,920` bytes
+- AppImage: `145,183,936` bytes
+- Pacman: `47,014,491` bytes
+
+Linux `1.0.48` artifacts (historical):
 
 - DEB URL:
   `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.48.deb`
@@ -795,6 +834,21 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.49` from source commit `d4b20d0a`. Verified installer
+  file/product metadata `1.0.49.0` / `1.0.49`, app version `1.0.49+49`,
+  bundled Python `3.13.15`, the bundled RT-950 Pro, FT-991A, FTX-1,
+  MA1-A9305B, GS-5B, BF-V12D, and TD-H8 G4 drivers plus the bundled
+  `scripts/chirp_bridge.py` asset, matching local/server/public SHA-256, and
+  the live platform manifest. The release carries the marine VHF template
+  plans, the RT-950 Pro read driver, FT-991A CAT support, the FTX-1 selection
+  fix, and the cached bundled-helper loader that keeps radio writes working if
+  the installed helper file disappears mid-session. RT-950 Pro, FT-991A,
+  FTX-1, and MA1-A9305B suites passed 28 tests; the new marine, model-picker,
+  dialog, and asset-cache Flutter tests passed 15; the full Flutter suite ran
+  201 passing tests with the five known Windows sandbox/Help failures;
+  `flutter analyze` reported only three pre-existing `avoid_print` infos in
+  `build_support`. The installer remains unsigned. Linux `1.0.49` artifacts
+  are live; macOS remains at `1.0.48` until its native build is published.
 - Published macOS `1.0.48` from source commit `11053cfd` as a universal,
   signed, notarized, stapled DMG. The release adds firmware identities to
   desktop bug reports and decodes UV-K5 hello frames before a radio image is
