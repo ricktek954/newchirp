@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:18:21Z"
+timestamp: "2026-11-09T10:31:41Z"
 concept_id: main/nextChannelLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ int_nextChannelLocation_nextChannelLocation
 ```
 
 ## Source
-Lines 1794–1794 in `main.dart`
+Lines 1796–1796 in `main.dart`
 
 ## Relationships
 

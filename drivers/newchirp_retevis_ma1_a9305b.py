@@ -579,10 +579,14 @@ class RetevisMA1A9305BRadio(
                 "MA1-A9305B image is %i bytes; expected %i"
                 % (len(image), MEM_SIZE)
             )
-        if not image.startswith(MODEL_MARKER, MODEL_MARKER_OFFSET):
-            raise errors.InvalidDataError(
-                "MA1-A9305B model marker is missing at 0x%04X"
-                % MODEL_MARKER_OFFSET
+        self._model_marker_valid = image.startswith(
+            MODEL_MARKER, MODEL_MARKER_OFFSET
+        )
+        if not self._model_marker_valid:
+            LOG.warning(
+                "MA1-A9305B model marker is missing at 0x%04X; "
+                "read retained, upload disabled",
+                MODEL_MARKER_OFFSET,
             )
 
     @classmethod
@@ -604,6 +608,12 @@ class RetevisMA1A9305BRadio(
         self.process_mmap()
 
     def sync_out(self):
+        if not getattr(self, "_model_marker_valid", False):
+            raise errors.RadioError(
+                "This image is read-only because the MA1-A9305B marker is "
+                "missing at 0x%04X. Send the downloaded image to NewChirp "
+                "for variant analysis." % MODEL_MARKER_OFFSET
+            )
         try:
             _upload(self)
         except errors.RadioError:

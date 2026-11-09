@@ -496,7 +496,7 @@ Last updated: 2026-11-09
 - Maintained A9305B driver:
   `drivers/newchirp_retevis_ma1_a9305b.py`
 - Driver SHA-256:
-  `efecd7c568f2d162905943e5751eb85a71d875c5b83de07c56cc15c4aff39a85`
+  `d6d3169d24df59d6936e35970b9339c1125c656500c68bc4f8e9bea5d64a218c`
 - Official CPS evidence:
   `MA1-A9305B Programming Software-V1.0.zip`, downloaded from Retevis'
   official software page. Archive SHA-256:
@@ -536,6 +536,10 @@ Last updated: 2026-11-09
 - A9305B writable ranges mirror the CPS and exclude
   `0x1680-0x19BF`, `0x2B80-0x31FF`, `0x3284-0x3FFF`, and
   `0xBED0-0xCFFF`.
+- A 2026-11-08 complete read from another A9305B-labelled unit omitted the
+  expected `MA1-A9305B` marker at `0x19C0`. NewChirp now retains and decodes
+  that image for evidence collection but forces it read-only until the variant
+  is compared with its CPS.
 - Offline validation: registration of both MA1 variants, channel decoding
   across both 200/800 sections, 16-character names, tone fields, active/skip
   bitmaps, model fingerprinting, complete binary and ASCII-hex read framing,

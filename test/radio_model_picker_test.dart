@@ -53,6 +53,47 @@ void main() {
     );
   });
 
+  testWidgets('selected model fits below the floating label', (tester) async {
+    final models = [
+      for (var index = 0; index < 574; index++)
+        'Vendor${index}_Model-${index.toString().padLeft(3, '0')}',
+    ];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(24),
+            child: RadioModelPicker(
+              models: models,
+              selectedModel: 'Vendor321_Model-321',
+              onSelected: (_) {},
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final field = tester.getRect(
+      find.byKey(const ValueKey('radio-model-picker-field')),
+    );
+    final label = tester.getRect(find.text('Radio model'));
+    final selected = tester.getRect(
+      find.byKey(const ValueKey('radio-model-picker-selection')),
+    );
+
+    expect(label.overlaps(selected), isFalse);
+    expect(selected.top, greaterThanOrEqualTo(field.top));
+    expect(selected.bottom, lessThanOrEqualTo(field.bottom));
+    expect(
+      tester
+          .widget<Text>(
+            find.byKey(const ValueKey('radio-model-picker-selection')),
+          )
+          .data,
+      'Vendor321 Model-321',
+    );
+  });
+
   testWidgets('search selects across manufacturer and model', (tester) async {
     String? selectedModel = 'Yaesu_FTM-150R';
     await tester.pumpWidget(

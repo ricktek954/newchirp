@@ -321,13 +321,26 @@ class RadioSettings {
 }
 
 class RadioBridge {
-  RadioBridge({this.sourcePath, this.newDriversPath});
+  RadioBridge({
+    this.sourcePath,
+    this.newDriversPath,
+    Future<List<int>> Function(String key)? assetLoader,
+  }) : _assetLoader = assetLoader ?? _loadRootBundleAsset;
   final String? sourcePath;
   final String? newDriversPath;
+  final Future<List<int>> Function(String key) _assetLoader;
+  final Map<String, Uint8List> _assetCache = {};
   String? _loadedModulePath;
   final ModuleSandbox _moduleSandbox = ModuleSandbox();
   Process? _activeProcess;
   bool _cancelRequested = false;
+
+  static Future<List<int>> _loadRootBundleAsset(String key) async {
+    final data = await rootBundle.load(key);
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
+
+  Future<List<int>> loadBundledAsset(String key) => _loadAssetBytes(key);
 
   String get chirpSource => _findChirpSource();
   String? get loadedModulePath => _loadedModulePath;
@@ -1035,14 +1048,25 @@ class RadioBridge {
   }
 
   Future<List<int>> _loadAssetBytes(String key) async {
+    final cached = _assetCache[key];
+    if (cached != null) return cached;
     try {
-      final data = await rootBundle.load(key);
-      return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
-    } catch (bundleError, bundleStack) {
+      final data = Uint8List.fromList(await _assetLoader(key));
+      _assetCache[key] = data;
+      return data;
+    } catch (_) {
       for (final candidate in _bundledAssetCandidates(key)) {
-        if (await candidate.exists()) return candidate.readAsBytes();
+        if (await candidate.exists()) {
+          final data = Uint8List.fromList(await candidate.readAsBytes());
+          _assetCache[key] = data;
+          return data;
+        }
       }
-      Error.throwWithStackTrace(bundleError, bundleStack);
+      throw RadioBridgeException(
+        'NewChirp could not load its bundled helper "$key". '
+        'Reinstall the current NewChirp build or verify that the installation '
+        'contains data/flutter_assets/$key.',
+      );
     }
   }
 

@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-08
+Last updated: 2026-11-09
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,24 @@ release requirements.
 
 ## Resume here
 
+- Radtel RT-950 and RT-950 Pro now have separate NewChirp models. The base
+  RT-950 driver is unchanged. Christophe Marcant supplied a MIT-licensed
+  community RT-950 Pro CHIRP driver that confirms the Pro's larger CPS map
+  and 259-block read: channels, VFO, function, DTMF, modulation, and
+  `0x54/0x55` APRS data. `drivers/newchirp_rt950pro.py` uses the shared
+  `PROGRAMBT9000U` transport, a three-second initial ACK window, and all Pro
+  blocks. It remains read-only until Christophe completes a physical read.
+  Evidence is in `docs/RT950PRO_PROTOCOL.md`. Verification: 5 focused Pro
+  transport tests pass.
+- NewChirp now has a built-in Marine VHF frequency template under **New →
+  Marine VHF template**. It offers a nationwide US plan based on FCC 47 CFR
+  80.371(c) and 80.373(f) plus NOAA weather channels, and an ITU Appendix 18
+  international plan. Templates are selected by regulatory plan rather than
+  ZIP code. Receive-only is the default; ship transmit requires explicit
+  opt-in, while DSC, AIS, weather, and government-only channels remain
+  transmit-disabled. CHIRP's marine stock CSVs are not used. Evidence and
+  safety rules are in `docs/MARINE_VHF_PLANS.md`. Verification: all 205
+  Flutter tests pass and `flutter analyze` is clean.
 - Desktop bug reports now include a dedicated radio-firmware field when
   available. NewChirp reads firmware from CHIRP image/driver metadata for
   supported models and decodes the UV-K5 hello frame directly, so failed
@@ -32,6 +50,19 @@ release requirements.
   Verification: 7 focused FT-991A tests pass, all 388 Python tests pass with
   2 fixture-dependent skips, all 197 Flutter tests pass, `flutter analyze` is
   clean, and the website build plus Web Programmer/RepeaterBook suites pass.
+- The 2026-11-08 RT-950 DTCS report was a shared-versus-split tone
+  presentation bug, not a memory decode failure. For ordinary `DTCS` mode,
+  CHIRP uses one code for transmit and receive; the separate receive code is
+  meaningful only for `DTCS -> DTCS` cross mode. The channel table and detail
+  editor now show one `DTCS code` field for ordinary DTCS and retain separate
+  transmit/receive fields for cross tone. The RT-950 remains read-only.
+  Verification: all 197 Flutter tests pass and `flutter analyze` is clean.
+- A Windows 1.0.48 DM-32UV report completed the radio read but lost the
+  bundled `scripts/chirp_bridge.py` asset when loading write instructions
+  three minutes later. `RadioBridge` now caches bundled helper bytes after the
+  first successful load and reports an actionable reinstall message if the
+  asset is genuinely absent. Verification: 2 focused asset tests pass and the
+  complete Flutter suite now passes 199 tests with a clean analyzer.
 - macOS `1.0.48` is live from source commit `11053cfd` as a universal, signed,
   notarized, stapled, Gatekeeper-accepted DMG. It adds firmware identities to
   desktop bug reports, including direct decoding of UV-K5 hello frames.
@@ -100,7 +131,7 @@ release requirements.
   The new experimental driver in `drivers/newchirp_x1pro.py` implements the
   recovered read/write state machine and field map. The matching browser
   profile is in `/Volumes/RICKEXT/web/newchirpweb/lib/radioddity-x1pro-web.ts`;
-  it supports experimental read/write and preserves unchanged split tones.
+  it supports experimental read/write and independent TX/RX CTCSS/DCS editing.
   Website commit `068f655` adds the experimental catalog entry and raises the
   browser inventory to 651 selectable profiles. The live site now serves
   `index-D0eCIYT3.js`, which contains both `X1 Pro (experimental)` and the

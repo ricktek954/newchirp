@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:18:21Z"
+timestamp: "2026-11-09T10:31:41Z"
 concept_id: main/bulkChannelDraftChanged
 language: dart
 ---
@@ -23,7 +23,7 @@ bool_bulkChannelDraftChanged(RadioChannel initial, RadioChannel draft)
 ```
 
 ## Source
-Lines 740–740 in `main.dart`
+Lines 742–742 in `main.dart`
 
 ## Relationships
 

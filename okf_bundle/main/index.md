@@ -186,6 +186,7 @@
 - [_unloadChirpModule](unloadChirpModule.md)
 - [_uploadRadio](uploadRadio.md)
 - [_useGmrsStarter](useGmrsStarter.md)
+- [_useMarineTemplate](useMarineTemplate.md)
 - [_useSavedRadioSnapshot](useSavedRadioSnapshot.md)
 - [_WindowStateManager](WindowStateManager.md)
 - [_writeRadioSettings](writeRadioSettings.md)

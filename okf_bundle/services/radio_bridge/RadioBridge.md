@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:11:24Z"
+timestamp: "2026-11-08T20:46:51Z"
 concept_id: services/radio_bridge/RadioBridge
 language: dart
 ---
@@ -20,11 +20,15 @@ language: dart
 ## Signature
 
 ```dart
-RadioBridge({this.sourcePath, this.newDriversPath})
+RadioBridge({
+    this.sourcePath,
+    this.newDriversPath,
+    Future<List<int>> Function(String key)? assetLoader,
+  })
 ```
 
 ## Source
-Lines 324–324 in `services/radio_bridge.dart`
+Lines 324–328 in `services/radio_bridge.dart`
 
 ## Relationships
 
