@@ -232,6 +232,10 @@ the 960 channel memories. Uploads are disabled because the CPS write path has
 not yet been independently validated. Protocol details and reverse-engineering
 evidence are recorded in `docs/RT950_PROTOCOL.md`.
 
+The RT-950 Pro is a separate **Radtel RT-950 Pro** model with its own larger CPS
+read map and a three-second initial ACK window. Its read-only protocol evidence
+is recorded in `docs/RT950PRO_PROTOCOL.md`.
+
 ### Experimental nicFW950 support
 
 For a Radtel RT-950 Pro or Bajeton BJ-9000 already running nicsure

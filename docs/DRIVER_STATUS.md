@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-08
+Last updated: 2026-11-09
 
 ## Status definitions
 
@@ -24,6 +24,7 @@ Last updated: 2026-11-08
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
+| Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR | 960 channels + Pro map, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
@@ -427,6 +428,26 @@ Last updated: 2026-11-08
 - Next milestone: confirm the reported RT-950 model code, classify any
   variant that does not answer the `BT-9000` handshake, then capture a
   complete successful read and export a test image
+
+### Radtel RT-950 Pro
+
+- Maintained driver: `drivers/newchirp_rt950pro.py`
+- Protocol notes: `docs/RT950PRO_PROTOCOL.md`
+- Separation: distinct `Radtel_RT-950_Pro` model; the base RT-950 driver is
+  unchanged
+- Evidence: OEM RT-950/BT-9000 CPS plus the MIT-licensed RT-950 Pro community
+  reference driver SHA-256
+  `359e673eeafa8ccee20d222276cc4d57194f2a826a443a4cb4b710a81297f2e5`
+- Transport: shared RT-950/BT-9000 clone handshake at 115200 8N1, with a
+  3.0-second initial ACK window
+- Read map: 259 blocks covering channels, VFO, function settings, DTMF,
+  modulation parameters and names, and the `0x54/0x55` APRS block
+- Implemented: complete read transport and inherited 960-channel decoding
+- Read/write policy: read-only; every write entry point is disabled
+- Hardware validation: none; a macOS Pro reached Program mode but returned no
+  bytes before the previous shorter timeout
+- Next milestone: physical Pro read, model-code confirmation, settings-image
+  comparison, then a controlled one-channel write/read-back
 
 ### Radtel RT-860
 
