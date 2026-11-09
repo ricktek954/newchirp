@@ -65,10 +65,7 @@ void main() {
       {2, 3, 5, 6},
     );
     expect(
-      clearedLocationsForUpload(
-        channels: channels,
-        existingCleared: const [2],
-      ),
+      clearedLocationsForUpload(channels: channels, existingCleared: const [2]),
       {2},
     );
   });

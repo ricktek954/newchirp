@@ -2,20 +2,23 @@
 okf_version: "0.2"
 type: Function
 title: channelLibraryWriteReady
-resource: models/channel_image_baseline.dart
+description: Allow incompatible rows only when the caller provides a review/skip step.
+resource: models\channel_image_baseline.dart
 tags:
   - "lang:dart"
   - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-21T12:45:31Z"
 concept_id: models/channel_image_baseline/channelLibraryWriteReady
 language: dart
 ---
 
 # channelLibraryWriteReady
+
+Allow incompatible rows only when the caller provides a review/skip step.
 
 ## Signature
 
@@ -24,14 +27,20 @@ boolchannelLibraryWriteReady({
   required ChannelImageMatch match,
   required bool busy,
   required int invalidCount,
+  bool allowIncompatibleReview = false,
   required bool hasPort,
   required bool hasRadioModel,
   required bool hasRadioImage,
 })
 ```
 
+## Docstring
+
+Allow incompatible rows only when the caller provides a review/skip step.
+Connection and image requirements still apply to that workflow.
+
 ## Source
-Lines 134–141 in `models/channel_image_baseline.dart`
+Lines 136–144 in `models\channel_image_baseline.dart`
 
 ## Relationships
 

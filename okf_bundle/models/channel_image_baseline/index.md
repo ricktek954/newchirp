@@ -11,7 +11,7 @@
 - [channelImageMatch](channelImageMatch.md)
 - [channelImageStatusText](channelImageStatusText.md)
 - [channelLibrarySnapshot](channelLibrarySnapshot.md)
-- [channelLibraryWriteReady](channelLibraryWriteReady.md)
+- [channelLibraryWriteReady](channelLibraryWriteReady.md) — Allow incompatible rows only when the caller provides a review/skip step.
 - [channelListSignature](channelListSignature.md)
 - [clearedLocationsAfterReplacement](clearedLocationsAfterReplacement.md) — Cleared slots to retain when replacing the current channel library.
 - [clearedLocationsForUpload](clearedLocationsForUpload.md) — All radio locations that must be blank for the current library to match.

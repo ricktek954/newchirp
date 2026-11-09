@@ -3,15 +3,15 @@ okf_version: "0.2"
 type: Class
 title: ChannelImageBaseline
 description: "Fingerprint of the channel list last read from, imported from, or written"
-resource: models/channel_image_baseline.dart
+resource: models\channel_image_baseline.dart
 tags:
   - "lang:dart"
   - "type:Class"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-21T12:45:31Z"
 concept_id: models/channel_image_baseline/ChannelImageBaseline
 language: dart
 ---
@@ -35,7 +35,7 @@ Screen edits are compared with this so Discard and Write follow the radio
 image, not whether a CSV file was saved.
 
 ## Source
-Lines 10–24 in `models/channel_image_baseline.dart`
+Lines 10–24 in `models\channel_image_baseline.dart`
 
 ## Relationships
 

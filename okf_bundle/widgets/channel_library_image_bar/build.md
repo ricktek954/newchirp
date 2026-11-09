@@ -2,15 +2,15 @@
 okf_version: "0.2"
 type: Function
 title: build
-resource: widgets/channel_library_image_bar.dart
+resource: widgets\channel_library_image_bar.dart
 tags:
   - "lang:dart"
   - "type:Function"
   - "module:widgets"
   - "domain:channel_library_image_bar.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T21:41:58Z"
+timestamp: "2026-11-21T12:43:27Z"
 concept_id: widgets/channel_library_image_bar/build
 language: dart
 ---
@@ -24,7 +24,7 @@ Widgetbuild(BuildContext context)
 ```
 
 ## Source
-Lines 27–27 in `widgets/channel_library_image_bar.dart`
+Lines 33–33 in `widgets\channel_library_image_bar.dart`
 
 ## Relationships
 

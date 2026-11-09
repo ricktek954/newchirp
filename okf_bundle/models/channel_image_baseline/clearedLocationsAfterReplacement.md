@@ -3,15 +3,15 @@ okf_version: "0.2"
 type: Function
 title: clearedLocationsAfterReplacement
 description: Cleared slots to retain when replacing the current channel library.
-resource: models/channel_image_baseline.dart
+resource: models\channel_image_baseline.dart
 tags:
   - "lang:dart"
   - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-21T12:45:31Z"
 concept_id: models/channel_image_baseline/clearedLocationsAfterReplacement
 language: dart
 ---
@@ -35,7 +35,7 @@ list must be erased from the radio on upload. Explicit clears remain unless
 the replacement puts a channel in that slot.
 
 ## Source
-Lines 52–56 in `models/channel_image_baseline.dart`
+Lines 52–56 in `models\channel_image_baseline.dart`
 
 ## Relationships
 

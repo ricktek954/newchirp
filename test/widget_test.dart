@@ -535,10 +535,7 @@ void main() {
     expect(preferencesStore.preferences.fmOnly, isFalse);
     expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
     expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
-    expect(
-      find.text('Data courtesy of RepeaterBook.com.'),
-      findsOneWidget,
-    );
+    expect(find.text('Data courtesy of RepeaterBook.com.'), findsOneWidget);
     await tester.ensureVisible(
       find.byKey(const ValueKey('repeater-sort-source')),
     );
@@ -802,10 +799,7 @@ void main() {
     await tester.tap(find.text('Search'));
     await tester.pumpAndSettle();
 
-    expect(
-      find.textContaining('HTTP Error 403: Forbidden'),
-      findsWidgets,
-    );
+    expect(find.textContaining('HTTP Error 403: Forbidden'), findsWidgets);
   });
 
   testWidgets('RepeaterBook restores saved optional filters', (tester) async {
@@ -1570,7 +1564,8 @@ void main() {
   testWidgets('Shift and Ctrl click select channels for bulk editing', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(1440, 900);
+    // Keep all selected rows visible below the compatibility notice.
+    tester.view.physicalSize = const Size(1440, 1000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T09:48:03Z"
+timestamp: "2026-11-21T12:45:27Z"
 concept_id: main/emptyResultsMessage
 language: dart
 ---
@@ -23,7 +23,7 @@ String_emptyResultsMessage(int totalMatches)
 ```
 
 ## Source
-Lines 8735–8735 in `main.dart`
+Lines 8837–8837 in `main.dart`
 
 ## Relationships
 
