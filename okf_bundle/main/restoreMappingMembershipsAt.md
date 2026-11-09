@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:18:21Z"
+timestamp: "2026-11-09T10:31:41Z"
 concept_id: main/restoreMappingMembershipsAt
 language: dart
 ---
@@ -26,7 +26,7 @@ void_restoreMappingMembershipsAt(
 ```
 
 ## Source
-Lines 862–865 in `main.dart`
+Lines 864–867 in `main.dart`
 
 ## Relationships
 

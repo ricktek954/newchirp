@@ -1563,7 +1563,7 @@ void main() {
 
     final dtcsButton = tester.widget<DropdownButton<String>>(
       find.descendant(
-        of: dropdown('Transmit DTCS'),
+        of: dropdown('DTCS code'),
         matching: find.byWidgetPredicate(
           (widget) => widget is DropdownButton<String>,
         ),
@@ -1572,6 +1572,13 @@ void main() {
     final values = dtcsButton.items!.map((item) => item.value).toList();
     expect(values, hasLength(standardDtcsCodes.length));
     expect(values, containsAll(['23', '25', '131', '754']));
+    expect(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.text('Receive DTCS'),
+      ),
+      findsNothing,
+    );
 
     tester
         .widget<DropdownButtonFormField<String>>(dropdown('Tone mode'))
@@ -1981,6 +1988,44 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('GMRS Starter Library'), findsOneWidget);
     expect(find.text('GMRS 1'), findsWidgets);
+  });
+
+  testWidgets('Marine VHF template applies the selected receive-only plan', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('New'));
+    await tester.pumpAndSettle();
+    expect(find.text('Marine VHF template'), findsOneWidget);
+    await tester.tap(find.text('Marine VHF template'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Marine VHF channel template'), findsOneWidget);
+    expect(
+      find.textContaining('The channel plan is selected by regulatory region'),
+      findsOneWidget,
+    );
+    expect(
+      tester
+          .widget<CheckboxListTile>(
+            find.byKey(const ValueKey('marine-program-transmit')),
+          )
+          .value,
+      isFalse,
+    );
+
+    await tester.tap(find.byKey(const ValueKey('marine-template-continue')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('US Marine VHF'), findsOneWidget);
+    expect(find.text('SEA 01'), findsWidgets);
+    expect(find.text('SEA 05'), findsWidgets);
   });
 
   testWidgets('GMRS template can be inserted starting at a channel number', (

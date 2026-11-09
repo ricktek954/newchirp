@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:18:21Z"
+timestamp: "2026-11-09T10:31:41Z"
 concept_id: main/copyChannelsAtLocations
 language: dart
 ---
@@ -23,7 +23,7 @@ void_copyChannelsAtLocations(Iterable<int> locations)
 ```
 
 ## Source
-Lines 2719–2719 in `main.dart`
+Lines 2739–2739 in `main.dart`
 
 ## Relationships
 

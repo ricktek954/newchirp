@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:18:21Z"
+timestamp: "2026-11-09T10:31:41Z"
 concept_id: main/remapRadioMappingChannels
 language: dart
 ---
@@ -23,7 +23,7 @@ void_remapRadioMappingChannels(Map<int, int?> changes)
 ```
 
 ## Source
-Lines 848–848 in `main.dart`
+Lines 850–850 in `main.dart`
 
 ## Relationships
 

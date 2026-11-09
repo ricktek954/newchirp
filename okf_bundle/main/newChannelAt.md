@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:18:21Z"
+timestamp: "2026-11-09T10:31:41Z"
 concept_id: main/newChannelAt
 language: dart
 ---
@@ -23,7 +23,7 @@ RadioChannel_newChannelAt(int location)
 ```
 
 ## Source
-Lines 2491–2491 in `main.dart`
+Lines 2511–2511 in `main.dart`
 
 ## Relationships
 

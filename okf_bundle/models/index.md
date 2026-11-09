@@ -4,6 +4,7 @@
 
 - [channel_image_baseline](channel_image_baseline/index.md)
 - [gm32_channel](gm32_channel/index.md)
+- [marine_channels](marine_channels/index.md)
 - [radio_channel](radio_channel/index.md)
 - [radio_mapping](radio_mapping/index.md)
 - [repeater_regions](repeater_regions/index.md)
@@ -13,6 +14,7 @@
 
 - [channel_image_baseline](channel_image_baseline.md)
 - [gm32_channel](gm32_channel.md)
+- [marine_channels](marine_channels.md)
 - [radio_channel](radio_channel.md)
 - [radio_mapping](radio_mapping.md)
 - [repeater_counties](repeater_counties.md)

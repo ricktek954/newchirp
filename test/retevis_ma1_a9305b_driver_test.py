@@ -378,6 +378,16 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
             self.radio_class.match_model(bytes(invalid), "test.img")
         )
 
+    def test_unknown_marker_image_remains_readable_but_not_writable(self):
+        image = bytearray(_image())
+        image[0x19C0:0x19CA] = b"\xFF" * 10
+
+        radio = self._radio(bytes(image))
+
+        self.assertEqual(radio.get_memory(1).name, "CHAN01234567890")
+        with self.assertRaisesRegex(Exception, "marker is missing"):
+            radio.sync_out()
+
     def test_binary_trace_identifies_addressed_blocks(self):
         trace = _load_bridge().RadioCommunicationTrace()
         frame = (

@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:11:24Z"
+timestamp: "2026-11-08T20:46:51Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -40,6 +40,8 @@ language: dart
 | related | [strings](/services/radio_bridge/strings.md) |
 | related | [toChangeJson](/services/radio_bridge/toChangeJson.md) |
 | related | [RadioSettingNode](/services/radio_bridge/RadioSettingNode.md) |
+| related | [_loadRootBundleAsset](/services/radio_bridge/loadRootBundleAsset.md) |
+| related | [loadBundledAsset](/services/radio_bridge/loadBundledAsset.md) |
 | related | [cancelActive](/services/radio_bridge/cancelActive.md) |
 | related | [serialPortDetails](/services/radio_bridge/serialPortDetails.md) |
 | related | [_massStoragePortDetails](/services/radio_bridge/massStoragePortDetails.md) |

@@ -1,51 +1,52 @@
 ---
-description: 'Top-level OKF summary: 584 concepts across 4 domains and 28 modules'
+description: 'Top-level OKF summary: 599 concepts across 4 domains and 30 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-08T13:18:26Z'
+timestamp: '2026-11-09T10:37:31Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 584 concepts | 4 domains | 28 modules
+> OKF v0.2 bundle | 599 concepts | 4 domains | 30 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 454 |
-| Class | 94 |
-| Module | 28 |
-| Enum | 8 |
+| Function | 462 |
+| Class | 98 |
+| Module | 30 |
+| Enum | 9 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 584 |
+| dart | 599 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 217 concepts
+### [main.dart](main.dart/index.md) — 218 concepts
 
-- [main](main/index.md) (217 concepts)
+- [main](main/index.md) (218 concepts)
 
-### [models](models/index.md) — 86 concepts
+### [models](models/index.md) — 93 concepts
 
 - [models/radio_channel](models/radio_channel/index.md) (37 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (11 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (10 concepts)
+- [models/marine_channels](models/marine_channels/index.md) (7 concepts)
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - [models/repeater_counties](models/repeater_counties/index.md) (1 concepts)
 
-### [services](services/index.md) — 223 concepts
+### [services](services/index.md) — 225 concepts
 
-- [services/radio_bridge](services/radio_bridge/index.md) (51 concepts)
+- [services/radio_bridge](services/radio_bridge/index.md) (53 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/mygmrs_client](services/mygmrs_client/index.md) (22 concepts)
 - [services/update_checker](services/update_checker/index.md) (18 concepts)
@@ -55,12 +56,13 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/update_installer](services/update_installer/index.md) (11 concepts)
 - *…and 7 more modules*
 
-### [widgets](widgets/index.md) — 58 concepts
+### [widgets](widgets/index.md) — 63 concepts
 
 - [widgets/radio_model_picker](widgets/radio_model_picker/index.md) (28 concepts)
 - [widgets/radio_mapping_dialog](widgets/radio_mapping_dialog/index.md) (15 concepts)
 - [widgets/error_report_dialog](widgets/error_report_dialog/index.md) (7 concepts)
 - [widgets/file_save_warning_dialog](widgets/file_save_warning_dialog/index.md) (5 concepts)
+- [widgets/marine_template_dialog](widgets/marine_template_dialog/index.md) (5 concepts)
 - [widgets/channel_library_image_bar](widgets/channel_library_image_bar/index.md) (3 concepts)
 
 ## Key Concepts
@@ -82,9 +84,9 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
+| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 | [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
-| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
 | [restorePlainMidlandRepeater](/models/radio_channel/restorePlainMidlandRepeater.md) | Function | `models/radio_channel.dart` | Puts the standard GMRS repeater back in this row and clears … |
 | [isHidden](/services/file_save_warning_store/isHidden.md) | Function | `services/file_save_warning_store.dart` | True only when the person checked "Do not show me this messa… |
 | [DownloadedUpdate](/services/update_installer/DownloadedUpdate.md) | Class | `services/update_installer.dart` | A downloaded installer ready for the platform-specific updat… |

@@ -77,6 +77,7 @@ as a development artifact; the release build is the clean-machine package.
 - [x] Allowed CSV/GMRS templates to be inserted starting at a chosen channel
   number without replacing the rest of the library.
 - [x] Added the standard 22 GMRS channels as an optional starter template.
+- [x] Added receive-safe US and International Marine VHF channel templates.
 - [x] Added searchable channel rows.
 - [x] Added channel creation and duplication.
 - [x] Added right-click copy, cut, paste, and duplicate actions in the channel

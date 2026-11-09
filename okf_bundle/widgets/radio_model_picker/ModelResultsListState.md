@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T10:32:13Z"
+timestamp: "2026-11-09T10:37:30Z"
 concept_id: widgets/radio_model_picker/ModelResultsListState
 language: dart
 ---
@@ -29,7 +29,7 @@ class _ModelResultsListState
 - `build`
 
 ## Source
-Lines 535–584 in `widgets/radio_model_picker.dart`
+Lines 524–573 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

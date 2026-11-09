@@ -14,6 +14,7 @@ import 'package:window_manager/window_manager.dart';
 
 import 'models/channel_image_baseline.dart';
 import 'models/gm32_channel.dart';
+import 'models/marine_channels.dart';
 import 'models/radio_channel.dart';
 import 'models/radio_mapping.dart';
 import 'models/repeater_regions.dart';
@@ -36,6 +37,7 @@ import 'services/window_state_store.dart';
 import 'widgets/channel_library_image_bar.dart';
 import 'widgets/file_save_warning_dialog.dart';
 import 'widgets/error_report_dialog.dart';
+import 'widgets/marine_template_dialog.dart';
 import 'widgets/radio_model_picker.dart';
 import 'widgets/radio_mapping_dialog.dart';
 
@@ -2213,6 +2215,24 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _applyChannels(template, mode, libraryName: 'GMRS Starter Library');
   }
 
+  Future<void> _useMarineTemplate() async {
+    final selection = await showDialog<MarineTemplateSelection>(
+      context: context,
+      builder: (context) => const MarineTemplateDialog(),
+    );
+    if (selection == null || !mounted) return;
+    final template = marineTemplateChannels(selection);
+    final mode = _libraryOpen && _channels.isNotEmpty
+        ? await _chooseChannelApplyMode(
+            label: '${selection.plan.label} Marine VHF template',
+            count: template.length,
+          )
+        : const _ChannelApplyMode(replaceAll: true, startAt: 1);
+    if (mode == null || !mounted) return;
+    _recordHistory();
+    _applyChannels(template, mode, libraryName: selection.plan.libraryName);
+  }
+
   Future<void> _restoreStockChannels() async {
     final source = _bridge.chirpSource;
     final stockFile = File(
@@ -3561,6 +3581,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             onUnloadChirpModule: _unloadChirpModule,
                             onNew: _newLibrary,
                             onGmrsStarter: _useGmrsStarter,
+                            onMarineTemplate: _useMarineTemplate,
                             onRestoreStock: _restoreStockChannels,
                             onOpen: _openLibraryFile,
                             onSave: () => _saveCsv(),
@@ -6792,6 +6813,7 @@ class _TopBar extends StatelessWidget {
     required this.onUnloadChirpModule,
     required this.onNew,
     required this.onGmrsStarter,
+    required this.onMarineTemplate,
     required this.onRestoreStock,
     required this.onOpen,
     required this.onSave,
@@ -6815,6 +6837,7 @@ class _TopBar extends StatelessWidget {
   final VoidCallback onUnloadChirpModule;
   final VoidCallback onNew;
   final VoidCallback onGmrsStarter;
+  final VoidCallback onMarineTemplate;
   final VoidCallback onRestoreStock;
   final VoidCallback onOpen;
   final VoidCallback onSave;
@@ -6959,6 +6982,11 @@ class _TopBar extends StatelessWidget {
                     onPressed: onGmrsStarter,
                     leadingIcon: const Icon(Icons.view_list_outlined),
                     child: const Text('GMRS starter template'),
+                  ),
+                  MenuItemButton(
+                    onPressed: onMarineTemplate,
+                    leadingIcon: const Icon(Icons.sailing_outlined),
+                    child: const Text('Marine VHF template'),
                   ),
                   MenuItemButton(
                     onPressed: onRestoreStock,
@@ -9361,8 +9389,11 @@ class _ChannelTableState extends State<_ChannelTable> {
         'RX DTCS',
         76,
         (channel) => inactive(
-          channel.tone == 'Cross' && channel.crossMode.endsWith('DTCS'),
-          channel.rxDtcs.toString().padLeft(3, '0'),
+          channel.tone == 'DTCS' ||
+              (channel.tone == 'Cross' && channel.crossMode.endsWith('DTCS')),
+          (channel.tone == 'DTCS' ? channel.dtcs : channel.rxDtcs)
+              .toString()
+              .padLeft(3, '0'),
         ),
         help: 'Receive DTCS digital squelch code.',
       ),
@@ -9979,9 +10010,9 @@ class _ChannelEditor extends StatelessWidget {
     final usesTxDtcs =
         channel.tone == 'DTCS' ||
         (channel.tone == 'Cross' && channel.crossMode.startsWith('DTCS'));
+    final simpleDtcs = channel.tone == 'DTCS';
     final usesRxDtcs =
-        channel.tone == 'DTCS' ||
-        (channel.tone == 'Cross' && channel.crossMode.endsWith('DTCS'));
+        channel.tone == 'Cross' && channel.crossMode.endsWith('DTCS');
     final repeaterRow = isMidlandRepeaterRow(radioModel, channel.location);
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -10257,7 +10288,7 @@ class _ChannelEditor extends StatelessWidget {
                       if (usesTxDtcs)
                         Expanded(
                           child: _ChoiceField(
-                            label: 'Transmit DTCS',
+                            label: simpleDtcs ? 'DTCS code' : 'Transmit DTCS',
                             value: '${channel.dtcs}',
                             choices: dtcsChoices,
                             onValue: (v) =>

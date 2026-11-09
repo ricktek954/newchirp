@@ -177,10 +177,11 @@ Current evidence is E1/E2:
   ACKs, exit, fields, and settings preservation.
 
 The matching browser transport is
-`/Volumes/RICKEXT/web/newchirpweb/lib/radioddity-x1pro-web.ts`. The browser
-channel model exposes one shared TX/RX tone, so an unchanged split tone is
-preserved, while changing the displayed tone writes the new value to both
-sides. The desktop driver retains the full independent TX/RX tone model.
+`/Volumes/RICKEXT/web/newchirpweb/lib/radioddity-x1pro-web.ts`. Its X1 Pro
+channel model now retains independent RX and TX CTCSS/DCS values from the CPS
+`B8` and `B10` mappings, matching the desktop driver. Browser verification
+failures preserve both complete images and identify the affected channel and
+field.
 
 There is no OEM serial capture (E3), physical NewChirp read (E4), or
 controlled physical write/read-back (E5). The driver therefore remains

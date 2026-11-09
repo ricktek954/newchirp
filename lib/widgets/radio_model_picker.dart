@@ -133,12 +133,6 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final selectedModel = widget.selectedModel;
-    final selectedVendor = selectedModel == null
-        ? null
-        : _groupModels(
-            widget.models,
-            widget.vendorModels,
-          ).where((group) => group.models.contains(selectedModel)).firstOrNull;
     return Semantics(
       button: true,
       label: selectedModel == null
@@ -153,32 +147,27 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
           child: InputDecorator(
             isEmpty: selectedModel == null,
             decoration: InputDecoration(
-              labelText: 'Radio model (${widget.models.length} available)',
+              labelText: 'Radio model',
+              hintText: selectedModel == null
+                  ? 'Choose from ${widget.models.length} supported radios'
+                  : null,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 16,
+              ),
               prefixIcon: const Icon(Icons.settings_input_antenna),
               suffixIcon: const Icon(Icons.arrow_drop_down),
               enabled: widget.enabled,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  selectedModel == null
-                      ? 'Browse supported radios'
-                      : displayRadioModelName(selectedModel),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.titleMedium,
-                ),
-                if (selectedVendor != null)
-                  Text(
-                    selectedVendor.vendor,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
+            child: selectedModel == null
+                ? const SizedBox.shrink()
+                : Text(
+                    displayRadioModelName(selectedModel),
+                    key: const ValueKey('radio-model-picker-selection'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleMedium,
                   ),
-              ],
-            ),
           ),
         ),
       ),
