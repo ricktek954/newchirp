@@ -521,7 +521,7 @@ Last updated: 2026-11-12
 - Maintained A9305B driver:
   `drivers/newchirp_retevis_ma1_a9305b.py`
 - Driver SHA-256:
-  `d6d3169d24df59d6936e35970b9339c1125c656500c68bc4f8e9bea5d64a218c`
+  `a3166f66517999e3db2cd015bce69faf3f423c5ccb9446d124b1f9a58356ce03`
 - Official CPS evidence:
   `MA1-A9305B Programming Software-V1.0.zip`, downloaded from Retevis'
   official software page. Archive SHA-256:
@@ -558,6 +558,18 @@ Last updated: 2026-11-12
   transmit inhibit, talk-around, and reverse. Unknown channel bits,
   signalling fields, factory/calibration data, and unproven settings bytes
   are preserved.
+- A9305B channel byte 12 is split into four two-bit fields. Bits 0-1 are
+  transmit inhibit and reverse, bits 2-3 are busy-channel behavior, bits 4-5
+  select Wide/Mid/Narrow, and bits 6-7 select High/Mid/Low. The official CPS
+  reads and writes power with masks `0xC0`/shift 6 and bandwidth with
+  `0x30`/shift 4. The first driver had those two fields reversed, so power
+  appeared High and every wide channel appeared narrow.
+- Zoran's 2026-11-10 OEM CPS screenshot and 2026-11-05 `.icf` independently
+  show channels 6-14 as Low, channel 15 as Mid, channel 16 as High, channels
+  17-21 as Mid, channel 22 as Low, and all 22 as Wide. Decoding the payloads
+  from the `.icf` now matches that table exactly. An `.icf` row contains a
+  four-character address, a two-character row checksum, and 64 data
+  characters; the checksum is not part of the channel record stream.
 - A9305B writable ranges mirror the CPS and exclude
   `0x1680-0x19BF`, `0x2B80-0x31FF`, `0x3284-0x3FFF`, and
   `0xBED0-0xCFFF`.
@@ -569,7 +581,8 @@ Last updated: 2026-11-12
   across both 200/800 sections, 16-character names, tone fields, active/skip
   bitmaps, model fingerprinting, complete binary and ASCII-hex read framing,
   short response packets, opaque read checksums, write-side block checksums,
-  and complete write framing.
+  complete write framing, and the reported power/bandwidth table. The focused
+  A9305B suite runs 14 tests.
 - Hardware validation: the OEM software successfully read and wrote the radio
   from two Windows 11 PCs with two different USB cables. Zoran's 2026-11-01
   NewChirp 1.0.33 read reached every protocol stage, but reported a 214-byte

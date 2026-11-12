@@ -58,7 +58,7 @@ def _record(
     raw[0:4] = _frequency(rx)
     raw[4:8] = _frequency(tx)
     raw[8:12] = bytes.fromhex("FF0FFF0F")
-    raw[12] = ((power & 0x03) << 4) | (0x80 if narrow else 0)
+    raw[12] = ((power & 0x03) << 6) | (0x20 if narrow else 0)
     raw[13] = (0x01 if am else 0) | (0x04 if name else 0)
     raw[14] = step
     raw[15:21] = name.encode("ascii", "replace")[:6].ljust(6, b" ")
@@ -265,6 +265,83 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
         self.assertEqual(channel_201.offset, 8_000_000)
         self.assertEqual(channel_201.mode, "AM")
 
+    def test_cps_power_and_width_fields_match_the_reported_channels(self):
+        image = bytearray(_image())
+        power_codes = [
+            1,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            2,
+            1,
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2,
+        ]
+        expected = (
+            ["Mid"]
+            + ["Low"] * 13
+            + ["Mid"]
+            + ["High"]
+            + ["Mid"] * 5
+            + ["Low"]
+        )
+        frequencies = [
+            462_562_500,
+            462_587_500,
+            462_612_500,
+            462_637_500,
+            462_662_500,
+            462_687_500,
+            462_712_500,
+            467_562_500,
+            467_587_500,
+            467_612_500,
+            467_637_500,
+            467_662_500,
+            467_687_500,
+            467_712_500,
+            462_550_000,
+            462_575_000,
+            462_600_000,
+            462_625_000,
+            462_650_000,
+            462_675_000,
+            462_700_000,
+            462_725_000,
+        ]
+        for number, (frequency, power) in enumerate(
+            zip(frequencies, power_codes),
+            1,
+        ):
+            offset = (number - 1) * 21
+            image[offset:offset + 21] = _record(
+                frequency,
+                frequency,
+                name="FRS" if number < 15 else "GMRS",
+                power=power,
+            )
+            _set_bitmap(image, 0x1180, number - 1)
+
+        radio = self._radio(bytes(image))
+        for number, power in enumerate(expected, 1):
+            channel = radio.get_memory(number)
+            self.assertEqual(str(channel.power), power)
+            self.assertEqual(channel.mode, "FM")
+
     def test_set_memory_updates_proven_fields_and_preserves_tones(self):
         from chirp import chirp_common
 
@@ -293,8 +370,8 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
         self.assertEqual(restored.ctone, 100.0)
 
         raw = bytes(radio._mmap.get(0, 21))
-        self.assertEqual(raw[12] & 0x30, 0x10)
-        self.assertEqual(raw[12] & 0xC0, 0x80)
+        self.assertEqual(raw[12] & 0x30, 0x20)
+        self.assertEqual(raw[12] & 0xC0, 0x40)
         self.assertEqual(raw[8:10], bytes.fromhex("E803"))
         self.assertEqual(raw[10:12], bytes.fromhex("E803"))
         self.assertEqual(raw[15:21], b"NEW-NA")
@@ -304,6 +381,19 @@ class RetevisMA1A9305BDriverTest(unittest.TestCase):
         empty.empty = True
         radio.set_memory(empty)
         self.assertTrue(radio.get_memory(2).empty)
+
+    def test_power_levels_write_cps_codes_and_round_trip(self):
+        radio = self._radio()
+        expected_codes = {"High": 0x00, "Mid": 0x40, "Low": 0x80}
+
+        for level in radio.POWER_LEVELS:
+            memory = radio.get_memory(1)
+            memory.power = level
+            radio.set_memory(memory)
+
+            raw = bytes(radio._mmap.get(0, 21))
+            self.assertEqual(raw[12] & 0xC0, expected_codes[str(level)])
+            self.assertEqual(str(radio.get_memory(1).power), str(level))
 
     def test_serial_read_and_write_use_cps_ranges(self):
         serial = FakeA9305BSerial(_image())
