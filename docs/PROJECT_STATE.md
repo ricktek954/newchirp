@@ -441,10 +441,9 @@ release requirements.
 - Branch: `main`
 - Windows `1.0.49` artifact source commit: `d4b20d0a`
 - macOS `1.0.49` artifact source commit: `d4b20d0a`
-- Linux `1.0.49` is live; its artifact source is recorded by the native Linux
-  release session.
+- Linux `1.0.50` is live; artifact source commit: `e7b96c44`
 - Open pull requests: none
-- Checked-out source version: `1.0.49+49`
+- Checked-out source version: `1.0.50+50`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -460,7 +459,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.49 |
 | Windows | 1.0.49 |
-| Linux | 1.0.49 |
+| Linux | 1.0.50 |
 | Legacy shared manifest version | 1.0.49 |
 
 macOS `1.0.49` artifact:
@@ -640,6 +639,40 @@ Windows `1.0.39` artifact (historical):
   `b460f2e2f07ab8bd1b580e6d8c12a44e6c5d43f8c3554f855846247971d5594b`
 - Size: `61,115,880` bytes
 - Server checksum matched the local artifact
+
+Linux `1.0.50` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.50.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.50.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.50.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.50.pkg.tar.zst`
+- Embedded `version.json`: `1.0.50` / `50`
+- Artifact source commit: `e7b96c44`
+- Public HTTP checks returned `200 OK`
+- `/api/releases/latest` reports Linux `1.0.50`
+- Server checksums matched the local artifacts
+
+Linux 1.0.50 SHA-256:
+
+- DEB:
+  `0cb91f5c8793575388e838d53af4fd0069c24bfafda6c368e16780cef8242d47`
+- RPM:
+  `ad7aff10d5158bd8922cef1129c372745ce6520d0017af9688e62e1b663dcd79`
+- AppImage:
+  `d81ab972a3e421fe15afd1e00ab58da77a5b081db55436398d89c3dffe8e8fc2`
+- Pacman:
+  `e2e24531ef12a0f8b9dbb19a47910a71192509feae90c1534b2bb868439edf5b`
+
+Linux 1.0.50 sizes:
+
+- DEB: `48,498,338` bytes
+- RPM: `38,939,412` bytes
+- AppImage: `145,183,936` bytes
+- Pacman: `47,013,369` bytes
 
 Linux `1.0.49` artifacts:
 
