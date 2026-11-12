@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/setShowEmptySlots
 language: dart
 ---
@@ -23,7 +23,7 @@ void_setShowEmptySlots(bool show)
 ```
 
 ## Source
-Lines 1197–1197 in `main.dart`
+Lines 1177–1177 in `main.dart`
 
 ## Relationships
 

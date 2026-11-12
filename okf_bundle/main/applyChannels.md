@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/applyChannels
 language: dart
 ---
@@ -29,7 +29,7 @@ void_applyChannels(
 ```
 
 ## Source
-Lines 1748–1754 in `main.dart`
+Lines 1728–1734 in `main.dart`
 
 ## Relationships
 

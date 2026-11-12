@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/loadRadioInstructions
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_loadRadioInstructions_loadRadioInstructions
 ```
 
 ## Source
-Lines 3220–3220 in `main.dart`
+Lines 3200–3200 in `main.dart`
 
 ## Relationships
 

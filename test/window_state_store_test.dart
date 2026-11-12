@@ -39,4 +39,85 @@ void main() {
 
     expect(await WindowStateStore(path: path).load(), isNull);
   });
+
+  test('mixed-scale Windows displays center ambiguous saved bounds', () {
+    const state = WindowState(width: 1200, height: 800, x: 3840, y: 100);
+    const primary = WindowDisplayArea(
+      left: 0,
+      top: 0,
+      width: 1920,
+      height: 1040,
+      scaleFactor: 2,
+    );
+    const secondary = WindowDisplayArea(
+      left: 3840,
+      top: 0,
+      width: 1920,
+      height: 1080,
+      scaleFactor: 1,
+    );
+
+    final normalized = normalizeWindowStateForDisplays(
+      state: state,
+      displays: const [primary, secondary],
+      primary: primary,
+      centerOnMixedScale: true,
+    );
+
+    expect(normalized?.width, 1200);
+    expect(normalized?.height, 800);
+    expect(normalized?.x, 360);
+    expect(normalized?.y, 120);
+  });
+
+  test('matching-scale displays retain an accessible saved position', () {
+    const state = WindowState(width: 1200, height: 800, x: 2200, y: 100);
+    const primary = WindowDisplayArea(
+      left: 0,
+      top: 0,
+      width: 1920,
+      height: 1080,
+      scaleFactor: 1,
+    );
+    const secondary = WindowDisplayArea(
+      left: 1920,
+      top: 0,
+      width: 1920,
+      height: 1080,
+      scaleFactor: 1,
+    );
+
+    final normalized = normalizeWindowStateForDisplays(
+      state: state,
+      displays: const [primary, secondary],
+      primary: primary,
+      centerOnMixedScale: true,
+    );
+
+    expect(normalized?.x, 2200);
+    expect(normalized?.y, 100);
+  });
+
+  test('offscreen bounds are centered and clamped to the primary display', () {
+    const state = WindowState(width: 2600, height: 1400, x: 9000, y: 9000);
+    const primary = WindowDisplayArea(
+      left: 0,
+      top: 0,
+      width: 1920,
+      height: 1040,
+      scaleFactor: 1,
+    );
+
+    final normalized = normalizeWindowStateForDisplays(
+      state: state,
+      displays: const [primary],
+      primary: primary,
+      centerOnMixedScale: true,
+    );
+
+    expect(normalized?.width, 1920);
+    expect(normalized?.height, 1040);
+    expect(normalized?.x, 0);
+    expect(normalized?.y, 0);
+  });
 }

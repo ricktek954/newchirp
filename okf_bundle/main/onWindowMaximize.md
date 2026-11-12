@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/onWindowMaximize
 language: dart
 ---
@@ -23,7 +23,7 @@ voidonWindowMaximize()
 ```
 
 ## Source
-Lines 240–240 in `main.dart`
+Lines 220–220 in `main.dart`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "domain:window_state_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T10:26:10Z"
+timestamp: "2026-11-12T14:52:36Z"
 concept_id: services/window_state_store/save
 language: dart
 ---
@@ -24,7 +24,7 @@ Futuresavesave
 ```
 
 ## Source
-Lines 62–62 in `services/window_state_store.dart`
+Lines 122–122 in `services/window_state_store.dart`
 
 ## Relationships
 

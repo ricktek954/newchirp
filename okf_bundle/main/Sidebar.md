@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/Sidebar
 language: dart
 ---
@@ -27,7 +27,7 @@ class _Sidebar
 - `build`
 
 ## Source
-Lines 6141–6240 in `main.dart`
+Lines 6121–6220 in `main.dart`
 
 ## Relationships
 

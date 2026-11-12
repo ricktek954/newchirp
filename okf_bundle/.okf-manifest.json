@@ -472,13 +472,15 @@
     },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
-      "mtime_ns": 1793615170611932697,
-      "hash": "86c6b4a01b10d3a881e9437259adb1984e015cf75e552fdaa395c8b89c7fffb0",
+      "mtime_ns": 1794495156840950448,
+      "hash": "970f41d7e6aa528d25df4bb3e4aa192055e8a9c60a276c09b7a383b6fedb2754",
       "concept_ids": [
+        "services/window_state_store/WindowDisplayArea",
         "services/window_state_store/WindowState",
         "services/window_state_store/WindowStateStore",
         "services/window_state_store/defaultPath",
         "services/window_state_store/load",
+        "services/window_state_store/normalizeWindowStateForDisplays",
         "services/window_state_store/save",
         "services/window_state_store/toJson",
         "services/window_state_store"
@@ -492,6 +494,20 @@
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
         "widgets/channel_library_image_bar/build",
         "widgets/channel_library_image_bar"
+      ]
+    },
+    "widgets/error_report_dialog.dart": {
+      "path": "widgets/error_report_dialog.dart",
+      "mtime_ns": 1794492334528656807,
+      "hash": "a99b2b244e4d052be2b3830a80b6b0f51b3cf7f518fa5f4832a9bbba92277892",
+      "concept_ids": [
+        "widgets/error_report_dialog/ErrorReportDialog",
+        "widgets/error_report_dialog/ErrorReportDialogState",
+        "widgets/error_report_dialog/build",
+        "widgets/error_report_dialog/createState",
+        "widgets/error_report_dialog/dispose",
+        "widgets/error_report_dialog/submit",
+        "widgets/error_report_dialog"
       ]
     },
     "widgets/file_save_warning_dialog.dart": {
@@ -577,8 +593,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794492334507955112,
-      "hash": "bf2eb749fb8def8edcce2830316cc918d3db888c0935840a993d72008c75e4fc",
+      "mtime_ns": 1794495173259312873,
+      "hash": "b7962722f3ba80808cf72f830bb6ce79b7ad5b07e400701f58c78b9247cec007",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -630,6 +646,7 @@
         "main/adaptRadioPromptButton",
         "main/main",
         "main/clampWindowState",
+        "main/windowDisplayArea",
         "main/invalid",
         "main/walk",
         "main/changed",
@@ -798,20 +815,6 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
-      ]
-    },
-    "widgets/error_report_dialog.dart": {
-      "path": "widgets/error_report_dialog.dart",
-      "mtime_ns": 1794492334528656807,
-      "hash": "a99b2b244e4d052be2b3830a80b6b0f51b3cf7f518fa5f4832a9bbba92277892",
-      "concept_ids": [
-        "widgets/error_report_dialog",
-        "widgets/error_report_dialog/ErrorReportDialog",
-        "widgets/error_report_dialog/ErrorReportDialogState",
-        "widgets/error_report_dialog/createState",
-        "widgets/error_report_dialog/dispose",
-        "widgets/error_report_dialog/submit",
-        "widgets/error_report_dialog/build"
       ]
     }
   },
@@ -1405,7 +1408,7 @@
       "type": "Module",
       "resource": "services/window_state_store.dart",
       "render_hash": "stale",
-      "edge_hash": "20dcf48e016fe17546bad09e31aba4c3cb74ff8bf9af73f7cd80c76cbd658724",
+      "edge_hash": "4b15cbe5371ff6281daf93682dc355df1677ec454c8f27f5a1983349360bf78c",
       "enriched": false
     },
     "services/window_state_store/WindowState": {
@@ -1461,7 +1464,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "cc7288e62b0739d7a4e72437985bb1d9f2214908db7eb5cbdcf938a508170f32",
+      "edge_hash": "926f637ce55b500749dd03a470052741acd748cd5344cef2eec8a4d5b90374a9",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -6015,7 +6018,31 @@
       "render_hash": "stale",
       "edge_hash": "3239590f5028dcfdb25ec350f4afa359df850a98086ea77a4f579e6f00298df4",
       "enriched": false
+    },
+    "services/window_state_store/WindowDisplayArea": {
+      "concept_id": "services/window_state_store/WindowDisplayArea",
+      "type": "Class",
+      "resource": "services/window_state_store.dart",
+      "render_hash": "stale",
+      "edge_hash": "cda91b8f3576d050723a4403f6b2f0d18b19ba24d6d9abccc0fbb266ea31393b",
+      "enriched": false
+    },
+    "services/window_state_store/normalizeWindowStateForDisplays": {
+      "concept_id": "services/window_state_store/normalizeWindowStateForDisplays",
+      "type": "Function",
+      "resource": "services/window_state_store.dart",
+      "render_hash": "stale",
+      "edge_hash": "cda91b8f3576d050723a4403f6b2f0d18b19ba24d6d9abccc0fbb266ea31393b",
+      "enriched": false
+    },
+    "main/windowDisplayArea": {
+      "concept_id": "main/windowDisplayArea",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-12T14:05:35Z"
+  "generated_at": "2026-11-12T14:52:54Z"
 }

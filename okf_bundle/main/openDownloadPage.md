@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/openDownloadPage
 language: dart
 ---
@@ -30,7 +30,7 @@ Future_openDownloadPage_openDownloadPage
 Opens [url] in the browser and keeps the link reachable if that fails.
 
 ## Source
-Lines 4020–4020 in `main.dart`
+Lines 4000–4000 in `main.dart`
 
 ## Relationships
 

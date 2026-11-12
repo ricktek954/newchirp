@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/walk
 language: dart
 ---
@@ -23,7 +23,7 @@ voidwalk(RadioSettingNode node)
 ```
 
 ## Source
-Lines 2454–2454 in `main.dart`
+Lines 2434–2434 in `main.dart`
 
 ## Relationships
 
