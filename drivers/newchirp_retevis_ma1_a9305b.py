@@ -666,13 +666,13 @@ class RetevisMA1A9305BRadio(
         chirp_common.split_tone_decode(mem, tx_tone, rx_tone)
 
         am = bool(raw[13] & 0x01)
-        narrow = ((raw[12] >> 6) & 0x03) >= 2
+        narrow = ((raw[12] >> 4) & 0x03) >= 2
         if am:
             mem.mode = "NAM" if narrow else "AM"
         else:
             mem.mode = "NFM" if narrow else "FM"
 
-        power_index = (raw[12] >> 4) & 0x03
+        power_index = (raw[12] >> 6) & 0x03
         mem.power = POWER_LEVELS[
             power_index if power_index < len(POWER_LEVELS) else 0
         ]
@@ -748,12 +748,12 @@ class RetevisMA1A9305BRadio(
             power_index = POWER_LEVELS.index(memory.power)
         except ValueError:
             power_index = 0
-        raw[12] = (raw[12] & 0xCF) | ((power_index & 0x03) << 4)
+        raw[12] = (raw[12] & 0x3F) | ((power_index & 0x03) << 6)
 
         if memory.mode in ("NFM", "NAM"):
-            raw[12] = (raw[12] & 0x3F) | 0x80
+            raw[12] = (raw[12] & 0xCF) | 0x20
         else:
-            raw[12] &= 0x3F
+            raw[12] &= 0xCF
 
         raw[13] &= ~0x07
         if memory.mode in ("AM", "NAM"):

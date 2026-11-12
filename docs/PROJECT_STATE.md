@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-09
+Last updated: 2026-11-12
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -20,6 +20,15 @@ release requirements.
   nine require Windows/hardware diagnostics (540, 544, 547, 548, 565, 576,
   578, 579, and 580), two require macOS/hardware diagnostics (546 and 553),
   and two are Linux-owned (567 and 568).
+- The A9305B power report was traced through the official CPS instead of
+  waiting for another read. Channel byte 12 stores power in bits 6-7 and
+  wide/narrow in bits 4-5; the driver had those fields reversed. Zoran's CPS
+  UI and `.icf` agree on every reported row from channels 6-22, and the
+  corrected driver decodes that table exactly. The focused A9305B suite now
+  covers the OEM table and the write-side masks. Writes remain restricted by
+  the existing model-marker policy. Verification: 14 focused A9305B tests,
+  399 Python tests with two fixture-dependent skips, 213 Flutter tests, and a
+  clean `flutter analyze`.
 - A direct FTM-7250D/VX-7R report exposed a reversed Low/Mid/High power write
   mapping in the pinned CHIRP driver. `drivers/newchirp_ftm7250.py` now writes
   the stored codes in the same order the driver decodes them, with an image

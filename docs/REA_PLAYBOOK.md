@@ -1,6 +1,6 @@
 # Radio Driver Reverse-Engineering Playbook
 
-Last updated: 2026-11-02
+Last updated: 2026-11-12
 
 Use this process whenever a NewChirp driver is derived from an OEM
 programming application. The goal is to avoid implementing a plausible
@@ -235,6 +235,15 @@ algorithm from one direction is not evidence that the application validates it
 in the other direction. The driver must preserve the CPS' actual read policy:
 validate framing, address, returned length, payload, and terminator while
 treating the returned checksum field as part of the frame that the OEM ignores.
+
+A 2026-11-10 channel comparison exposed a second partial trace. The driver had
+the correct channel byte for power, but interpreted bits 4-5 while the CPS used
+bits 6-7. The same byte's bits 4-5 are the bandwidth field. `DisdataGridViewPro`
+masks power with `0xC0` and shifts right by six; the CPS write path shifts the
+selected power index left by six. A read/write field trace therefore has to
+record the mask, shift, label table, and surrounding fields together. Zoran's
+OEM CPS view and exported `.icf` now agree with the corrected decode for every
+reported channel.
 
 ## Review questions
 
