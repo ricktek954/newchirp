@@ -8,18 +8,24 @@ release requirements.
 
 ## Resume here
 
-- The 2026-11-12 mailbox pass found 37 unread NewChirp bug-report threads.
-  A TS-2000 trace showed `ID` replying after 1.20 seconds against the driver's
-  former one-second read timeout. The read window is now 2.0 seconds and a
-  regression test covers the delayed fragmented reply. The full Python suite
-  passes 395 tests with 2 fixture-dependent skips; `flutter analyze` is clean;
-  all 206 Flutter tests pass. Threaded replies were sent for 22 reports,
-  verified in `Sent`, and their 24 source UIDs were marked `\Seen`: 528, 529,
-  531, 532, 533, 535, 536, 537, 538, 539, 541, 542, 543, 545, 550, 551,
-  552, 562, 564, 566, 569, 571, 572, and 577. Thirteen reports remain unread:
-  nine require Windows/hardware diagnostics (540, 544, 547, 548, 565, 576,
-  578, 579, and 580), two require macOS/hardware diagnostics (546 and 553),
-  and two are Linux-owned (567 and 568).
+- The latest 2026-11-12 mailbox triage handled 20 unread threads. Eighteen
+  tailored report replies were sent and verified in `Sent` as UIDs 383-400,
+  and every source report was marked `\Seen`. Two account notices and three
+  Microsoft delivery bounces were also marked read; the inbox returned to
+  zero unread. Three replies did not reach recipients because Outlook blocks
+  the NewChirp server IP: `n5pnz@hotmail.com`, `johnwalker069@hotmail.com`,
+  and `jlaudoin@hotmail.com`.
+- New radio or firmware evidence requested from reporters: Radioddity DB40-G
+  (UID 540), Retevis RT86S (544), Baofeng DM-32UV firmware `DM32.NRF.01.049`
+  (546), Baofeng 5RM firmware 05 (547), and Wouxun KG-UV980P (578). The next
+  step for each is the exact label, OEM CPS version/archive, and proof that
+  the OEM CPS can read the same radio/cable before deriving or extending a
+  driver.
+- High-priority follow-ups from the same triage are the TK-270G bank-index
+  sentinel on channel 24 (UID 592), the nicFW950 RT-950 Pro invalid channel
+  map value 37777 (585), and the GS-5B 1.XX CPS handshake variant (583).
+  Reporters were told not to write until those images and OEM comparisons are
+  available.
 - The A9305B power report was traced through the official CPS instead of
   waiting for another read. Channel byte 12 stores power in bits 6-7 and
   wide/narrow in bits 4-5; the driver had those fields reversed. Zoran's CPS
