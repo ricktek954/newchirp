@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:52:53Z"
+timestamp: "2026-11-12T15:02:54Z"
 concept_id: main/handleFocusChange
 language: dart
 ---
@@ -23,7 +23,7 @@ void_handleFocusChange()
 ```
 
 ## Source
-Lines 10639–10639 in `main.dart`
+Lines 10650–10650 in `main.dart`
 
 ## Relationships
 

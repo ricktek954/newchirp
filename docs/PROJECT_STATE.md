@@ -36,6 +36,10 @@ release requirements.
   retain their saved position; off-screen and oversized bounds are centered
   and clamped. Focused tests cover mixed 4K/1080p-style scaling, valid
   secondary-display restoration, and off-screen recovery.
+- TSQL channels now expose their shared CTCSS tone consistently. The channel
+  table shows the same effective tone in both TX and RX columns, and the editor
+  uses one **CTCSS tone** field because CHIRP applies the receive-tone value in
+  both directions for TSQL. Cross modes still show independent TX/RX fields.
 - A 2026-11-08 RT-860 report completed two physical reads and decoded 311
   channels on macOS through a cable that had just read a UV-5R Mini. The report
   included no saved image, trace, or OEM-CPS comparison, and RT-860 writes

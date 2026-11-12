@@ -115,6 +115,28 @@ bool shouldShowTransmitPower({
       availablePowers.isNotEmpty;
 }
 
+/// TSQL stores one CTCSS value that CHIRP applies in both directions.
+bool hasSharedCtcssTone(RadioChannel channel) => channel.tone == 'TSQL';
+
+/// Effective transmit CTCSS value shown to the user.
+double? effectiveTransmitCtcssTone(RadioChannel channel) {
+  if (hasSharedCtcssTone(channel)) return channel.rxTone;
+  if (channel.tone == 'Tone' ||
+      (channel.tone == 'Cross' && channel.crossMode.startsWith('Tone'))) {
+    return channel.txTone;
+  }
+  return null;
+}
+
+/// Effective receive CTCSS value shown to the user.
+double? effectiveReceiveCtcssTone(RadioChannel channel) {
+  if (hasSharedCtcssTone(channel)) return channel.rxTone;
+  if (channel.tone == 'Cross' && channel.crossMode.endsWith('Tone')) {
+    return channel.rxTone;
+  }
+  return null;
+}
+
 const standardCtcssTones = <double>[
   67.0,
   69.3,

@@ -57,51 +57,6 @@
         "models/marine_channels"
       ]
     },
-    "models/radio_channel.dart": {
-      "path": "models/radio_channel.dart",
-      "mtime_ns": 1794491205576039137,
-      "hash": "d84e3ea4c4b8f6b18b2637fd1f8c83b44c919f843145dd4bca990210bb917a94",
-      "concept_ids": [
-        "models/radio_channel/ChannelExtraField",
-        "models/radio_channel/RadioChannel",
-        "models/radio_channel/channelNumberLabel",
-        "models/radio_channel/clear",
-        "models/radio_channel/copy",
-        "models/radio_channel/frequencyFitsStep",
-        "models/radio_channel/gmrsChannelForHz",
-        "models/radio_channel/gmrsChannelMenuLabel",
-        "models/radio_channel/gmrsStandardRxHz",
-        "models/radio_channel/gmrsStarterChannels",
-        "models/radio_channel/isGmrsRepeaterOutputMhz",
-        "models/radio_channel/isMidlandRepeaterRow",
-        "models/radio_channel/isPlusFiveMhz",
-        "models/radio_channel/isZeroMhz",
-        "models/radio_channel/mhzLabelFromHz",
-        "models/radio_channel/midlandCanSelectOffset",
-        "models/radio_channel/midlandDuplexChoices",
-        "models/radio_channel/midlandDuplexIsLocked",
-        "models/radio_channel/midlandFixedRxHz",
-        "models/radio_channel/midlandGmrsChannel",
-        "models/radio_channel/midlandGmrsIssues",
-        "models/radio_channel/midlandReceiveChannelChoices",
-        "models/radio_channel/midlandReceiveChannelIsLocked",
-        "models/radio_channel/midlandReceiveChannelIsUnset",
-        "models/radio_channel/midlandReceiveChannelValue",
-        "models/radio_channel/midlandReceiveGmrsChannel",
-        "models/radio_channel/nearestFrequencyForSteps",
-        "models/radio_channel/nextAvailableLocation",
-        "models/radio_channel/prepareMxt295Editor",
-        "models/radio_channel/restorePlainMidlandRepeater",
-        "models/radio_channel/scanChoices",
-        "models/radio_channel/scanLabel",
-        "models/radio_channel/shouldShowTransmitPower",
-        "models/radio_channel/showsMidlandChannelNumbers",
-        "models/radio_channel/toJson",
-        "models/radio_channel/useGmrsReceiveChannel",
-        "models/radio_channel/validate",
-        "models/radio_channel"
-      ]
-    },
     "models/radio_mapping.dart": {
       "path": "models/radio_mapping.dart",
       "mtime_ns": 1793404724722649469,
@@ -593,8 +548,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794495173259312873,
-      "hash": "b7962722f3ba80808cf72f830bb6ce79b7ad5b07e400701f58c78b9247cec007",
+      "mtime_ns": 1794495774459169672,
+      "hash": "9bb6efcb66ff8da15fe10eac0c1c80ca030bc7f2665aab0c1b6d29db5ba461a8",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -815,6 +770,54 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
+      ]
+    },
+    "models/radio_channel.dart": {
+      "path": "models/radio_channel.dart",
+      "mtime_ns": 1794495774427191494,
+      "hash": "cbb16dccc2111e424bb1b53d666fa428958bd43f28c7e7c21177bc0e63d524ee",
+      "concept_ids": [
+        "models/radio_channel",
+        "models/radio_channel/RadioChannel",
+        "models/radio_channel/ChannelExtraField",
+        "models/radio_channel/shouldShowTransmitPower",
+        "models/radio_channel/hasSharedCtcssTone",
+        "models/radio_channel/effectiveTransmitCtcssTone",
+        "models/radio_channel/effectiveReceiveCtcssTone",
+        "models/radio_channel/scanLabel",
+        "models/radio_channel/scanChoices",
+        "models/radio_channel/showsMidlandChannelNumbers",
+        "models/radio_channel/channelNumberLabel",
+        "models/radio_channel/isMidlandRepeaterRow",
+        "models/radio_channel/midlandGmrsChannel",
+        "models/radio_channel/gmrsStandardRxHz",
+        "models/radio_channel/gmrsChannelForHz",
+        "models/radio_channel/gmrsChannelMenuLabel",
+        "models/radio_channel/midlandFixedRxHz",
+        "models/radio_channel/midlandReceiveGmrsChannel",
+        "models/radio_channel/midlandReceiveChannelIsUnset",
+        "models/radio_channel/midlandReceiveChannelChoices",
+        "models/radio_channel/midlandReceiveChannelValue",
+        "models/radio_channel/midlandReceiveChannelIsLocked",
+        "models/radio_channel/isGmrsRepeaterOutputMhz",
+        "models/radio_channel/mhzLabelFromHz",
+        "models/radio_channel/isPlusFiveMhz",
+        "models/radio_channel/isZeroMhz",
+        "models/radio_channel/midlandDuplexChoices",
+        "models/radio_channel/midlandDuplexIsLocked",
+        "models/radio_channel/midlandCanSelectOffset",
+        "models/radio_channel/midlandGmrsIssues",
+        "models/radio_channel/frequencyFitsStep",
+        "models/radio_channel/nearestFrequencyForSteps",
+        "models/radio_channel/gmrsStarterChannels",
+        "models/radio_channel/copy",
+        "models/radio_channel/clear",
+        "models/radio_channel/useGmrsReceiveChannel",
+        "models/radio_channel/prepareMxt295Editor",
+        "models/radio_channel/restorePlainMidlandRepeater",
+        "models/radio_channel/toJson",
+        "models/radio_channel/nextAvailableLocation",
+        "models/radio_channel/validate"
       ]
     }
   },
@@ -1240,7 +1243,7 @@
       "type": "Module",
       "resource": "models/radio_channel.dart",
       "render_hash": "stale",
-      "edge_hash": "826088638110b7919e14904cc84ed4b9fdbad064aa78317283c534ed308dca64",
+      "edge_hash": "bda2b1b4f1f59c223fa510f1874db8163d90cae349c3dbb62e713337964a2dbe",
       "enriched": false
     },
     "models/radio_channel/RadioChannel": {
@@ -6042,7 +6045,31 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "models/radio_channel/hasSharedCtcssTone": {
+      "concept_id": "models/radio_channel/hasSharedCtcssTone",
+      "type": "Function",
+      "resource": "models/radio_channel.dart",
+      "render_hash": "stale",
+      "edge_hash": "3239590f5028dcfdb25ec350f4afa359df850a98086ea77a4f579e6f00298df4",
+      "enriched": false
+    },
+    "models/radio_channel/effectiveTransmitCtcssTone": {
+      "concept_id": "models/radio_channel/effectiveTransmitCtcssTone",
+      "type": "Function",
+      "resource": "models/radio_channel.dart",
+      "render_hash": "stale",
+      "edge_hash": "3239590f5028dcfdb25ec350f4afa359df850a98086ea77a4f579e6f00298df4",
+      "enriched": false
+    },
+    "models/radio_channel/effectiveReceiveCtcssTone": {
+      "concept_id": "models/radio_channel/effectiveReceiveCtcssTone",
+      "type": "Function",
+      "resource": "models/radio_channel.dart",
+      "render_hash": "stale",
+      "edge_hash": "3239590f5028dcfdb25ec350f4afa359df850a98086ea77a4f579e6f00298df4",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-12T14:52:54Z"
+  "generated_at": "2026-11-12T15:02:55Z"
 }
