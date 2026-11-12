@@ -17,9 +17,9 @@ release requirements.
   verified in `Sent`, and their 24 source UIDs were marked `\Seen`: 528, 529,
   531, 532, 533, 535, 536, 537, 538, 539, 541, 542, 543, 545, 550, 551,
   552, 562, 564, 566, 569, 571, 572, and 577. Thirteen reports remain unread:
-  ten require Windows/hardware diagnostics (540, 544, 547, 548, 553, 565, 576,
-  578, 579, and 580), one requires macOS/hardware diagnostics (546), and two
-  are Linux-owned (567 and 568).
+  nine require Windows/hardware diagnostics (540, 544, 547, 548, 565, 576,
+  578, 579, and 580), two require macOS/hardware diagnostics (546 and 553),
+  and two are Linux-owned (567 and 568).
 - A 2026-11-08 RT-860 report completed two physical reads and decoded 311
   channels on macOS through a cable that had just read a UV-5R Mini. The report
   included no saved image, trace, or OEM-CPS comparison, and RT-860 writes
