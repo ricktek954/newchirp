@@ -10,7 +10,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T16:01:11Z"
+timestamp: "2026-11-12T13:46:33Z"
 concept_id: models/channel_image_baseline/channelLibraryWriteReady
 language: dart
 ---
@@ -31,7 +31,7 @@ boolchannelLibraryWriteReady({
 ```
 
 ## Source
-Lines 86–93 in `models/channel_image_baseline.dart`
+Lines 110–117 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

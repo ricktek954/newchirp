@@ -10,7 +10,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T17:43:17Z"
+timestamp: "2026-11-12T13:46:45Z"
 concept_id: models/radio_channel
 language: dart
 ---
@@ -23,6 +23,7 @@ language: dart
 |------|--------|
 | related | [RadioChannel](/models/radio_channel/RadioChannel.md) |
 | related | [ChannelExtraField](/models/radio_channel/ChannelExtraField.md) |
+| related | [shouldShowTransmitPower](/models/radio_channel/shouldShowTransmitPower.md) |
 | related | [scanLabel](/models/radio_channel/scanLabel.md) |
 | related | [scanChoices](/models/radio_channel/scanChoices.md) |
 | related | [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) |

@@ -20,6 +20,16 @@ release requirements.
   nine require Windows/hardware diagnostics (540, 544, 547, 548, 565, 576,
   578, 579, and 580), two require macOS/hardware diagnostics (546 and 553),
   and two are Linux-owned (567 and 568).
+- A direct FTM-7250D/VX-7R report exposed a reversed Low/Mid/High power write
+  mapping in the pinned CHIRP driver. `drivers/newchirp_ftm7250.py` now writes
+  the stored codes in the same order the driver decodes them, with an image
+  round-trip test. The same pass explicitly clears radio locations removed by
+  a replacement channel library, hides transmit power for TX-off channels,
+  and opens Save As in the imported CSV directory. Physical power-level
+  validation on the reporter's radio remains pending.
+- The Help menu now offers **Report a problem…** at any time. It opens the
+  existing diagnostic report form even when the current page has no error;
+  the form was relabeled from error report to bug report.
 - A 2026-11-08 RT-860 report completed two physical reads and decoded 311
   channels on macOS through a cable that had just read a UV-5R Mini. The report
   included no saved image, trace, or OEM-CPS comparison, and RT-860 writes

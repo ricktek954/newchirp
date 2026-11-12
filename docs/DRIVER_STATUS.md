@@ -19,6 +19,7 @@ Last updated: 2026-11-12
 
 | Radio | Driver | Transport | Read | Write | Settings | Status |
 | --- | --- | --- | --- | --- | --- | --- |
+| Yaesu FTM-7250D | `drivers/newchirp_ftm7250.py` | CHIRP Yaesu clone serial, 38400 8N1 | Stock CHIRP driver | Corrected Low/Mid/High encoding | Not exposed by stock driver | Experimental compatibility override |
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
@@ -345,6 +346,27 @@ Last updated: 2026-11-12
 - Hardware validation: none
 - Next milestone: physical identify/read/edit/write/read-back test and
   libusb-runtime validation in native platform release builds
+
+### Yaesu FTM-7250D
+
+- Maintained file: `drivers/newchirp_ftm7250.py`
+- Driver SHA-256:
+  `72c2af9f086edc882bd402f612d5ac66f19d897424f35866aa5b186c264d18a6`
+- Transport: pinned CHIRP Yaesu clone serial at 38400 8N1
+- Read policy: stock `ftm7250d.py` image layout and 199-memory decoder
+- Field issue: the 2026-11-10 report from `dick.frijdal@frijdal.net` showed
+  that selecting Low power programmed High. The pinned driver's decode path
+  treats stored codes 1/2/3 as Low/Mid/High, but its inherited write helper
+  encoded them in reverse.
+- Change: NewChirp overrides `_encode_power_level()` so Low/Mid/High write as
+  1/2/3. The bundled FTM-7250D image test verifies all three values round-trip.
+- Settings: the pinned CHIRP driver does not implement radio-wide settings;
+  NewChirp reports that state rather than treating it as a failed read.
+- Hardware validation: Radio-Club Cyrano reported real FTM-7250D programming
+  before this correction. A physical Low/Mid/High write and radio-display check
+  after the fix is pending.
+- Next milestone: the reporter verifies power labels on a harmless channel,
+  then reuses the corrected image to confirm removed memory slots are erased.
 
 ### Yaesu FTM-150R/E/ASP
 

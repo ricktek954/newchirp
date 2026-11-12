@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T13:45:45Z"
+timestamp: "2026-11-08T20:46:51Z"
 concept_id: services/radio_bridge/RadioCapabilities
 language: dart
 ---
@@ -28,7 +28,7 @@ class RadioCapabilities
 - `strings`
 
 ## Source
-Lines 137–212 in `services/radio_bridge.dart`
+Lines 110–185 in `services/radio_bridge.dart`
 
 ## Relationships
 

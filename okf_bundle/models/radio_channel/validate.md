@@ -10,7 +10,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T17:43:17Z"
+timestamp: "2026-11-12T13:46:45Z"
 concept_id: models/radio_channel/validate
 language: dart
 ---
@@ -24,7 +24,7 @@ Listvalidatevalidate
 ```
 
 ## Source
-Lines 681–692 in `models/radio_channel.dart`
+Lines 691–702 in `models/radio_channel.dart`
 
 ## Relationships
 

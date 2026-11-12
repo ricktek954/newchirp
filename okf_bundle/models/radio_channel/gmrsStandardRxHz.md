@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T17:43:17Z"
+timestamp: "2026-11-12T13:46:45Z"
 concept_id: models/radio_channel/gmrsStandardRxHz
 language: dart
 ---
@@ -31,7 +31,7 @@ intgmrsStandardRxHzgmrsStandardRxHz
 Official receive frequency in Hz for one of the 22 GMRS channels.
 
 ## Source
-Lines 234–234 in `models/radio_channel.dart`
+Lines 244–244 in `models/radio_channel.dart`
 
 ## Relationships
 

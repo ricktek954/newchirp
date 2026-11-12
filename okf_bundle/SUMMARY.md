@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 600 concepts across 4 domains and 30 modules'
+description: 'Top-level OKF summary: 601 concepts across 4 domains and 30 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-12T13:54:20Z'
+timestamp: '2026-11-12T14:05:35Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 600 concepts | 4 domains | 30 modules
+> OKF v0.2 bundle | 601 concepts | 4 domains | 30 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 463 |
+| Function | 464 |
 | Class | 98 |
 | Module | 30 |
 | Enum | 9 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 600 |
+| dart | 601 |
 
 ## Domain Map
 
@@ -33,20 +33,20 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [main](main/index.md) (218 concepts)
 
-### [models](models/index.md) — 93 concepts
+### [models](models/index.md) — 95 concepts
 
-- [models/radio_channel](models/radio_channel/index.md) (37 concepts)
+- [models/radio_channel](models/radio_channel/index.md) (38 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
+- [models/channel_image_baseline](models/channel_image_baseline/index.md) (11 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (11 concepts)
-- [models/channel_image_baseline](models/channel_image_baseline/index.md) (10 concepts)
 - [models/marine_channels](models/marine_channels/index.md) (7 concepts)
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - [models/repeater_counties](models/repeater_counties/index.md) (1 concepts)
 
-### [services](services/index.md) — 226 concepts
+### [services](services/index.md) — 225 concepts
 
-- [services/radio_bridge](services/radio_bridge/index.md) (54 concepts)
+- [services/radio_bridge](services/radio_bridge/index.md) (53 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/mygmrs_client](services/mygmrs_client/index.md) (22 concepts)
 - [services/update_checker](services/update_checker/index.md) (18 concepts)

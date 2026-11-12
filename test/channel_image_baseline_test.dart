@@ -27,6 +27,27 @@ void main() {
     );
   });
 
+  test('replacing a library clears removed radio locations', () {
+    final previous = [_channel(1, 'A'), _channel(2, 'B'), _channel(4, 'D')];
+
+    expect(
+      clearedLocationsAfterReplacement(
+        previousChannels: previous,
+        previousCleared: const [5],
+        replacementChannels: [_channel(1, 'A'), _channel(4, 'D')],
+      ),
+      {2, 5},
+    );
+    expect(
+      clearedLocationsAfterReplacement(
+        previousChannels: previous,
+        previousCleared: const [2, 5],
+        replacementChannels: [_channel(2, 'B'), _channel(4, 'D')],
+      ),
+      {1, 5},
+    );
+  });
+
   test('match follows the stored image baseline', () {
     final channels = [_channel(1, 'A')];
     final baseline = ChannelImageBaseline(

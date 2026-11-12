@@ -97,7 +97,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
       maxCharacters: 6000,
     );
     return AlertDialog(
-      title: Text(_sent ? 'Error report sent' : 'Submit error report'),
+      title: Text(_sent ? 'Bug report sent' : 'Submit bug report'),
       content: SizedBox(
         width: 620,
         child: SingleChildScrollView(
@@ -114,7 +114,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                       ),
                       SizedBox(height: 14),
                       Text(
-                        'Thanks. The diagnostic log and error details were '
+                        'Thanks. The diagnostic log and problem details were '
                         'sent to the NewChirp developer.',
                         textAlign: TextAlign.center,
                       ),

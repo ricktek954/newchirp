@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T13:54:17Z"
+timestamp: "2026-11-12T14:05:34Z"
 concept_id: main/applyChannels
 language: dart
 ---
@@ -24,11 +24,12 @@ void_applyChannels(
     _ChannelApplyMode mode, {
     required String libraryName,
     String? libraryPath,
+    bool clearRemovedLocations = true,
   })
 ```
 
 ## Source
-Lines 1747–1752 in `main.dart`
+Lines 1748–1754 in `main.dart`
 
 ## Relationships
 

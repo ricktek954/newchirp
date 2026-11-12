@@ -5,6 +5,33 @@ RadioChannel channelAt(int location) =>
     RadioChannel(location: location, name: 'CH $location', frequency: 146.52);
 
 void main() {
+  test('transmit power is hidden when transmit is disabled', () {
+    final channel = RadioChannel(location: 1, name: 'AIR', frequency: 120);
+
+    expect(
+      shouldShowTransmitPower(
+        channel: channel,
+        availablePowers: const ['Low', 'Mid', 'High'],
+      ),
+      isTrue,
+    );
+    channel.duplex = 'off';
+    expect(
+      shouldShowTransmitPower(
+        channel: channel,
+        availablePowers: const ['Low', 'Mid', 'High'],
+      ),
+      isFalse,
+    );
+    expect(
+      shouldShowTransmitPower(
+        channel: RadioChannel(location: 2, name: 'VHF', frequency: 146.52),
+        availablePowers: const [],
+      ),
+      isFalse,
+    );
+  });
+
   test('Midland MXT295 shows Midland channel numbers', () {
     expect(channelNumberLabel('Baofeng_UV-5R', 16), '16');
     expect(showsMidlandChannelNumbers('Baofeng_UV-5R'), isFalse);
