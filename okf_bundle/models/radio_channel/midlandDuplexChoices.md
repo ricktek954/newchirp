@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T13:46:45Z"
+timestamp: "2026-11-12T15:02:54Z"
 concept_id: models/radio_channel/midlandDuplexChoices
 language: dart
 ---
@@ -36,7 +36,7 @@ any other row also stays simplex. The current value stays in the list
 when it is not legal, so the editor shows what is stored.
 
 ## Source
-Lines 359–363 in `models/radio_channel.dart`
+Lines 381–385 in `models/radio_channel.dart`
 
 ## Relationships
 

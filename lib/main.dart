@@ -9361,21 +9361,21 @@ class _ChannelTableState extends State<_ChannelTable> {
       _ChannelColumn(
         'TX TONE',
         82,
-        (channel) => inactive(
-          channel.tone == 'Tone' ||
-              (channel.tone == 'Cross' && channel.crossMode.startsWith('Tone')),
-          channel.txTone.toStringAsFixed(1),
-        ),
-        help: 'Transmit CTCSS tone in hertz. Set Tone Mode to Tone first.',
+        (channel) {
+          final tone = effectiveTransmitCtcssTone(channel);
+          return tone == null ? '—' : tone.toStringAsFixed(1);
+        },
+        help:
+            'Transmit CTCSS tone in hertz. TSQL uses the same CTCSS tone for '
+            'transmit and receive.',
       ),
       _ChannelColumn(
         'RX TONE',
         82,
-        (channel) => inactive(
-          channel.tone == 'TSQL' ||
-              (channel.tone == 'Cross' && channel.crossMode.endsWith('Tone')),
-          channel.rxTone.toStringAsFixed(1),
-        ),
+        (channel) {
+          final tone = effectiveReceiveCtcssTone(channel);
+          return tone == null ? '—' : tone.toStringAsFixed(1);
+        },
         help:
             'Receive CTCSS tone in hertz. Set Tone Mode to TSQL or a matching '
             'Cross mode first.',
@@ -10006,12 +10006,12 @@ class _ChannelEditor extends StatelessWidget {
     final dtcsChoices = {
       for (final code in dtcsCodes) '$code': code.toString().padLeft(3, '0'),
     };
+    final sharedCtcss = hasSharedCtcssTone(channel);
     final usesTxTone =
         channel.tone == 'Tone' ||
         (channel.tone == 'Cross' && channel.crossMode.startsWith('Tone'));
     final usesRxTone =
-        channel.tone == 'TSQL' ||
-        (channel.tone == 'Cross' && channel.crossMode.endsWith('Tone'));
+        channel.tone == 'Cross' && channel.crossMode.endsWith('Tone');
     final usesTxDtcs =
         channel.tone == 'DTCS' ||
         (channel.tone == 'Cross' && channel.crossMode.startsWith('DTCS'));
@@ -10256,10 +10256,21 @@ class _ChannelEditor extends StatelessWidget {
                     onValue: (v) => onChanged(() => channel.crossMode = v),
                   ),
                 ],
-                if (usesTxTone || usesRxTone) ...[
+                if (sharedCtcss || usesTxTone || usesRxTone) ...[
                   const SizedBox(height: 12),
                   Row(
                     children: [
+                      if (sharedCtcss)
+                        Expanded(
+                          child: _ChoiceField(
+                            label: 'CTCSS tone (Hz)',
+                            value: channel.rxTone.toStringAsFixed(1),
+                            choices: toneChoices,
+                            onValue: (v) => onChanged(
+                              () => channel.rxTone = double.parse(v),
+                            ),
+                          ),
+                        ),
                       if (usesTxTone)
                         Expanded(
                           child: _ChoiceField(

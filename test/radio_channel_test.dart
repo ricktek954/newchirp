@@ -5,6 +5,30 @@ RadioChannel channelAt(int location) =>
     RadioChannel(location: location, name: 'CH $location', frequency: 146.52);
 
 void main() {
+  test('TSQL exposes one shared CTCSS tone in both directions', () {
+    final channel = RadioChannel(
+      location: 1,
+      name: 'TSQL',
+      frequency: 462.575,
+      tone: 'TSQL',
+      txTone: 88.5,
+      rxTone: 141.3,
+    );
+
+    expect(hasSharedCtcssTone(channel), isTrue);
+    expect(effectiveTransmitCtcssTone(channel), 141.3);
+    expect(effectiveReceiveCtcssTone(channel), 141.3);
+
+    channel
+      ..tone = 'Cross'
+      ..crossMode = 'Tone->Tone'
+      ..txTone = 100
+      ..rxTone = 123;
+    expect(hasSharedCtcssTone(channel), isFalse);
+    expect(effectiveTransmitCtcssTone(channel), 100);
+    expect(effectiveReceiveCtcssTone(channel), 123);
+  });
+
   test('transmit power is hidden when transmit is disabled', () {
     final channel = RadioChannel(location: 1, name: 'AIR', frequency: 120);
 

@@ -11,10 +11,13 @@
 - [channelNumberLabel](channelNumberLabel.md) — Channel number shown in the list.
 - [clear](clear.md)
 - [copy](copy.md)
+- [effectiveReceiveCtcssTone](effectiveReceiveCtcssTone.md) — Effective receive CTCSS value shown to the user.
+- [effectiveTransmitCtcssTone](effectiveTransmitCtcssTone.md) — Effective transmit CTCSS value shown to the user.
 - [gmrsChannelForHz](gmrsChannelForHz.md) — GMRS channel 1-22 for a receive frequency, or null when it is not one.
 - [gmrsChannelMenuLabel](gmrsChannelMenuLabel.md) — Menu line for the receive-channel dropdown.
 - [gmrsStandardRxHz](gmrsStandardRxHz.md) — Official receive frequency in Hz for one of the 22 GMRS channels.
 - [gmrsStarterChannels](gmrsStarterChannels.md)
+- [hasSharedCtcssTone](hasSharedCtcssTone.md) — TSQL stores one CTCSS value that CHIRP applies in both directions.
 - [isGmrsRepeaterOutputMhz](isGmrsRepeaterOutputMhz.md) — GMRS repeater outputs from 462.550 through 462.725 MHz.
 - [isMidlandRepeaterRow](isMidlandRepeaterRow.md) — Whether [location] is one of the eight repeater rows on this radio.
 - [mhzLabelFromHz](mhzLabelFromHz.md)
