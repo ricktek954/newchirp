@@ -112,6 +112,10 @@ release requirements.
   first successful load and reports an actionable reinstall message if the
   asset is genuinely absent. Verification: 2 focused asset tests pass and the
   complete Flutter suite now passes 199 tests with a clean analyzer.
+- macOS `1.0.50` is live from source commit `23931970` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It includes the current
+  TS-2000 timing, FTM-7250D power, mixed-DPI restoration, TSQL presentation,
+  A9305B power/bandwidth, and Linux module diagnostics updates.
 - macOS `1.0.49` is live from source commit `d4b20d0a` as a universal,
   signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the built-in
   US/International Marine VHF templates, independent RT-950 model selection,
@@ -120,7 +124,8 @@ release requirements.
 - macOS `1.0.48` is live from source commit `11053cfd` as a universal, signed,
   notarized, stapled, Gatekeeper-accepted DMG. It adds firmware identities to
   desktop bug reports, including direct decoding of UV-K5 hello frames.
-- Windows and Linux `1.0.49` are live from their native release sessions.
+- Windows `1.0.49` and Linux `1.0.50` are live from their native release
+  sessions.
 - The 2026-11-08 BF-V12D password failure led to a full REA of Baofeng
   BF_Series CPS 1.5.1. The CPS is an Electron application; its renderer and
   main process prove the exact fixed unlock sequence,
@@ -489,7 +494,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.49` artifact source commit: `d4b20d0a`
-- macOS `1.0.49` artifact source commit: `d4b20d0a`
+- macOS `1.0.50` artifact source commit: `23931970`
 - Linux `1.0.50` is live; artifact source commit: `e7b96c44`
 - Open pull requests: none
 - Checked-out source version: `1.0.50+50`
@@ -506,10 +511,22 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.49 |
+| macOS | 1.0.50 |
 | Windows | 1.0.49 |
 | Linux | 1.0.50 |
-| Legacy shared manifest version | 1.0.49 |
+| Legacy shared manifest version | 1.0.50 |
+
+macOS `1.0.50` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.50.dmg`
+- Version/build: `1.0.50` / `50`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `04c259cff3433aec572fc3313b40834530db540d74fab90eb2118945279972da`
+- Size: `82,541,125` bytes
+- Notarization submission: `9baa7cba-e835-447f-ae73-ea47b3943948`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Server and public-download checksums matched the final stapled DMG
 
 macOS `1.0.49` artifact:
 
@@ -932,6 +949,17 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.50` from source commit `23931970` as a universal,
+  signed, notarized, stapled DMG. The release includes the TS-2000 delayed
+  read fix, FTM-7250D power correction, mixed-DPI window recovery, consistent
+  TSQL presentation, corrected A9305B power and bandwidth decoding, and the
+  Linux module-sandbox diagnostic update. App/build version `1.0.50` / `50`,
+  both Python 3.13.15 runtimes, universal libusb, the pinned CHIRP tree, and
+  the updated bundled drivers were verified. `flutter analyze`, all 215
+  Flutter tests, and all 62 bridge upload tests passed. Strict codesigning,
+  Apple notarization, stapling, mounted-DMG inspection, Gatekeeper, launch
+  smoke test, local/server/public SHA-256, public HTTP, and the live macOS
+  manifest entry all passed.
 - Published Windows `1.0.49` from source commit `d4b20d0a`. Verified installer
   file/product metadata `1.0.49.0` / `1.0.49`, app version `1.0.49+49`,
   bundled Python `3.13.15`, the bundled RT-950 Pro, FT-991A, FTX-1,
