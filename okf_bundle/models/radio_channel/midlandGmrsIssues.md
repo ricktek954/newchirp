@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T17:43:17Z"
+timestamp: "2026-11-12T13:46:45Z"
 concept_id: models/radio_channel/midlandGmrsIssues
 language: dart
 ---
@@ -33,7 +33,7 @@ Why this MXT295 channel is not legal. Empty for every other radio.
 The driver enforces the same rules in drivers/newchirp_mxt295.py.
 
 ## Source
-Lines 396–396 in `models/radio_channel.dart`
+Lines 406–406 in `models/radio_channel.dart`
 
 ## Relationships
 

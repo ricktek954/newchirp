@@ -10,7 +10,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T17:43:17Z"
+timestamp: "2026-11-12T13:46:45Z"
 concept_id: models/radio_channel/ChannelExtraField
 language: dart
 ---
@@ -32,7 +32,7 @@ ChannelExtraField({
 ```
 
 ## Source
-Lines 830–838 in `models/radio_channel.dart`
+Lines 840–848 in `models/radio_channel.dart`
 
 ## Relationships
 

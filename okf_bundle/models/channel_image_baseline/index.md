@@ -13,5 +13,6 @@
 - [channelLibrarySnapshot](channelLibrarySnapshot.md)
 - [channelLibraryWriteReady](channelLibraryWriteReady.md)
 - [channelListSignature](channelListSignature.md)
+- [clearedLocationsAfterReplacement](clearedLocationsAfterReplacement.md) — Cleared slots to retain when replacing the current channel library.
 - [markDirty](markDirty.md)
 - [read](read.md)

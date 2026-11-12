@@ -105,6 +105,16 @@ const standardDtcsCodes = <int>[
   754,
 ];
 
+/// Power is irrelevant when the channel has transmit disabled.
+bool shouldShowTransmitPower({
+  required RadioChannel channel,
+  required List<String>? availablePowers,
+}) {
+  return channel.duplex != 'off' &&
+      availablePowers != null &&
+      availablePowers.isNotEmpty;
+}
+
 const standardCtcssTones = <double>[
   67.0,
   69.3,

@@ -11,7 +11,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T16:01:11Z"
+timestamp: "2026-11-12T13:46:33Z"
 concept_id: models/channel_image_baseline/ChannelLibrarySnapshot
 language: dart
 ---
@@ -31,7 +31,7 @@ class ChannelLibrarySnapshot
 Channel counts and the radio-image match for one library refresh.
 
 ## Source
-Lines 109–128 in `models/channel_image_baseline.dart`
+Lines 133–152 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

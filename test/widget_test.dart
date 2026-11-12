@@ -1095,6 +1095,29 @@ void main() {
     expect(find.textContaining('Busy Channel Lockout'), findsOneWidget);
   });
 
+  testWidgets('Help menu can submit a problem report at any time', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Help'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Report a problem…'), findsOneWidget);
+    await tester.tap(find.text('Report a problem…'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Submit bug report'), findsOneWidget);
+    expect(find.text('Your email'), findsOneWidget);
+    expect(find.text('What were you trying to do?'), findsOneWidget);
+    expect(find.text('General problem report'), findsOneWidget);
+  });
+
   testWidgets('starts with configuration choices', (tester) async {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1;

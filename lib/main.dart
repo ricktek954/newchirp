@@ -1463,7 +1463,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               );
             },
             icon: const Icon(Icons.bug_report_outlined),
-            label: const Text('Submit Error Report'),
+            label: const Text('Submit Bug Report'),
           ),
         ],
       ),
@@ -1707,6 +1707,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         imported.channels,
         const _ChannelApplyMode(replaceAll: true, startAt: 1),
         libraryName: file.name.replaceFirst(RegExp(r'\.[^.]+$'), ''),
+        clearRemovedLocations: false,
       );
       setState(() {
         _model = imported.model;
@@ -1749,10 +1750,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _ChannelApplyMode mode, {
     required String libraryName,
     String? libraryPath,
+    bool clearRemovedLocations = true,
   }) {
     if (mode.replaceAll) {
       final sorted = [...incoming]
         ..sort((left, right) => left.location.compareTo(right.location));
+      final replacementClears = clearRemovedLocations
+          ? clearedLocationsAfterReplacement(
+              previousChannels: _channels,
+              previousCleared: _clearedLocations,
+              replacementChannels: sorted,
+            )
+          : <int>{};
       setState(() {
         _channels = sorted;
         _selected = sorted.isEmpty ? -1 : 0;
@@ -1765,7 +1774,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _radioZones = [];
         _radioMappings = [];
         _selectedZone = null;
-        _clearedLocations.clear();
+        _clearedLocations
+          ..clear()
+          ..addAll(replacementClears);
         _markChannelLibraryDirty();
       });
       return;
@@ -2134,6 +2145,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (saveAs || path == null) {
       const type = XTypeGroup(label: 'CHIRP CSV', extensions: ['csv']);
       final location = await getSaveLocation(
+        initialDirectory: _libraryPath == null
+            ? null
+            : File(_libraryPath!).parent.path,
         suggestedName: '${_libraryName.replaceAll(' ', '_')}.csv',
         acceptedTypeGroups: const [type],
       );
@@ -3577,6 +3591,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             ),
                             checkingForUpdates: _checkingForUpdates,
                             onCheckForUpdates: () => _checkForUpdates(),
+                            onReportProblem: () => _showErrorReport(
+                              summary: 'General problem report',
+                            ),
                             onLoadChirpModule: _loadChirpModule,
                             onUnloadChirpModule: _unloadChirpModule,
                             onNew: _newLibrary,
@@ -6809,6 +6826,7 @@ class _TopBar extends StatelessWidget {
     required this.moduleLoadingAvailable,
     required this.checkingForUpdates,
     required this.onCheckForUpdates,
+    required this.onReportProblem,
     required this.onLoadChirpModule,
     required this.onUnloadChirpModule,
     required this.onNew,
@@ -6833,6 +6851,7 @@ class _TopBar extends StatelessWidget {
   final bool moduleLoadingAvailable;
   final bool checkingForUpdates;
   final VoidCallback onCheckForUpdates;
+  final VoidCallback onReportProblem;
   final VoidCallback onLoadChirpModule;
   final VoidCallback onUnloadChirpModule;
   final VoidCallback onNew;
@@ -7098,6 +7117,12 @@ class _TopBar extends StatelessWidget {
         );
       },
       menuChildren: [
+        MenuItemButton(
+          onPressed: onReportProblem,
+          leadingIcon: const Icon(Icons.bug_report_outlined),
+          child: const Text('Report a problem…'),
+        ),
+        const Divider(height: 1),
         MenuItemButton(
           onPressed: () => _showAbbreviationGlossary(context),
           leadingIcon: const Icon(Icons.menu_book_outlined),
@@ -10366,7 +10391,10 @@ class _ChannelEditor extends StatelessWidget {
                   choices: scanChoices(capabilities?.skips),
                   onValue: (v) => onChanged(() => channel.skip = v),
                 ),
-                if ((capabilities?.powers ?? const []).isNotEmpty) ...[
+                if (shouldShowTransmitPower(
+                  channel: channel,
+                  availablePowers: capabilities?.powers,
+                )) ...[
                   const SizedBox(height: 12),
                   _ChoiceField(
                     key: narrowLow ? const ValueKey('gm32-power-low') : null,

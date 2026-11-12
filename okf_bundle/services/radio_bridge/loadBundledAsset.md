@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T13:45:45Z"
+timestamp: "2026-11-08T20:46:51Z"
 concept_id: services/radio_bridge/loadBundledAsset
 language: dart
 ---
@@ -24,7 +24,7 @@ FutureloadBundledAssetloadBundledAsset
 ```
 
 ## Source
-Lines 370–370 in `services/radio_bridge.dart`
+Lines 343–343 in `services/radio_bridge.dart`
 
 ## Relationships
 

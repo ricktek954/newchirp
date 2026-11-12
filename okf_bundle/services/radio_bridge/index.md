@@ -45,7 +45,6 @@
 - [parseWindowsSerialPortDetails](parseWindowsSerialPortDetails.md)
 - [RadioBridge](RadioBridge.md)
 - [RadioBridgeException](RadioBridgeException.md)
-- [radioBridgeFailureMessage](radioBridgeFailureMessage.md)
 - [RadioSettingNode](RadioSettingNode.md)
 - [readImage](readImage.md)
 - [readSettings](readSettings.md)

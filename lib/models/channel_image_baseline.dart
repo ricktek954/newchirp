@@ -44,6 +44,30 @@ String channelListSignature(
   });
 }
 
+/// Cleared slots to retain when replacing the current channel library.
+///
+/// Active locations present before the replacement but absent from the new
+/// list must be erased from the radio on upload. Explicit clears remain unless
+/// the replacement puts a channel in that slot.
+Set<int> clearedLocationsAfterReplacement({
+  required Iterable<RadioChannel> previousChannels,
+  required Iterable<int> previousCleared,
+  required Iterable<RadioChannel> replacementChannels,
+}) {
+  final replacementLocations = replacementChannels
+      .where((channel) => !channel.cleared)
+      .map((channel) => channel.location)
+      .toSet();
+  final previousActive = previousChannels
+      .where((channel) => !channel.cleared)
+      .map((channel) => channel.location)
+      .toSet();
+  return previousCleared
+      .where((location) => !replacementLocations.contains(location))
+      .toSet()
+    ..addAll(previousActive.difference(replacementLocations));
+}
+
 ChannelImageMatch channelImageMatch({
   required String? imagePath,
   required int? zone,
