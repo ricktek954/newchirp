@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math' as math;
 
 class WindowState {
   const WindowState({
@@ -23,6 +24,65 @@ class WindowState {
     'y': y,
     'maximized': maximized,
   };
+}
+
+class WindowDisplayArea {
+  const WindowDisplayArea({
+    required this.left,
+    required this.top,
+    required this.width,
+    required this.height,
+    required this.scaleFactor,
+  });
+
+  final double left;
+  final double top;
+  final double width;
+  final double height;
+  final double scaleFactor;
+}
+
+/// Normalize saved bounds against the current display layout.
+///
+/// Windows can save window rectangles under one monitor's DPI basis and then
+/// restore them after the window has moved to another monitor with a different
+/// scale. In that layout, center on the primary display rather than trying to
+/// reinterpret a position whose coordinate space is ambiguous.
+WindowState? normalizeWindowStateForDisplays({
+  required WindowState? state,
+  required List<WindowDisplayArea> displays,
+  required WindowDisplayArea primary,
+  required bool centerOnMixedScale,
+}) {
+  if (state == null || displays.isEmpty) return state;
+
+  final scaleFactors = displays
+      .where((display) => display.scaleFactor > 0)
+      .map((display) => (display.scaleFactor * 100).round())
+      .toSet();
+  final mixedScale = centerOnMixedScale && scaleFactors.length > 1;
+  final accessible = displays.any((display) {
+    final overlapWidth =
+        math.min(state.x + state.width, display.left + display.width) -
+        math.max(state.x, display.left);
+    final overlapHeight =
+        math.min(state.y + state.height, display.top + display.height) -
+        math.max(state.y, display.top);
+    final titleBarReachable =
+        state.y >= display.top && state.y < display.top + display.height;
+    return titleBarReachable && overlapWidth >= 100 && overlapHeight >= 100;
+  });
+  if (!mixedScale && accessible) return state;
+
+  final width = math.min(state.width, primary.width);
+  final height = math.min(state.height, primary.height);
+  return WindowState(
+    width: width,
+    height: height,
+    x: primary.left + (primary.width - width) / 2,
+    y: primary.top + (primary.height - height) / 2,
+    maximized: state.maximized,
+  );
 }
 
 class WindowStateStore {
@@ -63,10 +123,7 @@ class WindowStateStore {
     final file = File(_path);
     await file.parent.create(recursive: true);
     await file.writeAsString(
-      jsonEncode({
-        'version': 1,
-        ...state.toJson(),
-      }),
+      jsonEncode({'version': 1, ...state.toJson()}),
       flush: true,
     );
   }

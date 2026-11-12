@@ -30,6 +30,12 @@ release requirements.
 - The Help menu now offers **Report a problem…** at any time. It opens the
   existing diagnostic report form even when the current page has no error;
   the form was relabeled from error report to bug report.
+- Windows window restoration now detects mixed display scale factors and
+  centers the saved window on the primary work area instead of reapplying
+  coordinates saved under another monitor's DPI basis. Matching-scale layouts
+  retain their saved position; off-screen and oversized bounds are centered
+  and clamped. Focused tests cover mixed 4K/1080p-style scaling, valid
+  secondary-display restoration, and off-screen recovery.
 - A 2026-11-08 RT-860 report completed two physical reads and decoded 311
   channels on macOS through a cable that had just read a UV-5R Mini. The report
   included no saved image, trace, or OEM-CPS comparison, and RT-860 writes

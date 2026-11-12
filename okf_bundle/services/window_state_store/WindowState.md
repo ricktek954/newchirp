@@ -10,7 +10,7 @@ tags:
   - "domain:window_state_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-02T10:26:10Z"
+timestamp: "2026-11-12T14:52:36Z"
 concept_id: services/window_state_store/WindowState
 language: dart
 ---
@@ -28,7 +28,7 @@ class WindowState
 - `toJson`
 
 ## Source
-Lines 4–26 in `services/window_state_store.dart`
+Lines 5–27 in `services/window_state_store.dart`
 
 ## Relationships
 

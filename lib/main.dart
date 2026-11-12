@@ -163,48 +163,28 @@ Future<void> main() async {
 Future<WindowState?> _clampWindowState(WindowState? state) async {
   if (state == null) return null;
   try {
-    final rect = Rect.fromLTWH(state.x, state.y, state.width, state.height);
     final displays = await screenRetriever.getAllDisplays();
     if (displays.isEmpty) return state;
-    for (final display in displays) {
-      final visible = Rect.fromLTWH(
-        display.visiblePosition?.dx ?? 0.0,
-        display.visiblePosition?.dy ?? 0.0,
-        display.visibleSize?.width ?? display.size.width,
-        display.visibleSize?.height ?? display.size.height,
-      );
-      final overlap = rect.intersect(visible);
-      if (overlap.width >= 100 && overlap.height >= 100) return state;
-    }
     final primary = await screenRetriever.getPrimaryDisplay();
-    final visible = Rect.fromLTWH(
-      primary.visiblePosition?.dx ?? 0.0,
-      primary.visiblePosition?.dy ?? 0.0,
-      primary.visibleSize?.width ?? primary.size.width,
-      primary.visibleSize?.height ?? primary.size.height,
-    );
-    final x =
-        visible.left +
-        (((visible.width - state.width) / 2).clamp(
-          0.0,
-          double.infinity,
-        )).toDouble();
-    final y =
-        visible.top +
-        (((visible.height - state.height) / 2).clamp(
-          0.0,
-          double.infinity,
-        )).toDouble();
-    return WindowState(
-      width: state.width,
-      height: state.height,
-      x: x,
-      y: y,
-      maximized: state.maximized,
+    return normalizeWindowStateForDisplays(
+      state: state,
+      displays: displays.map(_windowDisplayArea).toList(),
+      primary: _windowDisplayArea(primary),
+      centerOnMixedScale: Platform.isWindows,
     );
   } on Exception {
     return state;
   }
+}
+
+WindowDisplayArea _windowDisplayArea(Display display) {
+  return WindowDisplayArea(
+    left: display.visiblePosition?.dx ?? 0.0,
+    top: display.visiblePosition?.dy ?? 0.0,
+    width: display.visibleSize?.width ?? display.size.width,
+    height: display.visibleSize?.height ?? display.size.height,
+    scaleFactor: display.scaleFactor?.toDouble() ?? 1.0,
+  );
 }
 
 class _WindowStateManager with WindowListener {

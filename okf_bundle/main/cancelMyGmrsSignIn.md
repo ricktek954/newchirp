@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:05:34Z"
+timestamp: "2026-11-12T14:52:53Z"
 concept_id: main/cancelMyGmrsSignIn
 language: dart
 ---
@@ -23,7 +23,7 @@ void_cancelMyGmrsSignIn()
 ```
 
 ## Source
-Lines 7739–7739 in `main.dart`
+Lines 7719–7719 in `main.dart`
 
 ## Relationships
 

@@ -188,6 +188,7 @@
 - [_useGmrsStarter](useGmrsStarter.md)
 - [_useMarineTemplate](useMarineTemplate.md)
 - [_useSavedRadioSnapshot](useSavedRadioSnapshot.md)
+- [_windowDisplayArea](windowDisplayArea.md)
 - [_WindowStateManager](WindowStateManager.md)
 - [_writeRadioSettings](writeRadioSettings.md)
 - [adaptRadioPromptButton](adaptRadioPromptButton.md)
