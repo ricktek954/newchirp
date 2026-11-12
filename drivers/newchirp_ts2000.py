@@ -22,7 +22,7 @@ directory.enable_reregistrations()
 class TS2000Radio(ChirpTS2000Radio):
     """Kenwood TS-2000 with NewChirp write timing safeguards."""
 
-    READ_COMMAND_TIMEOUT = 1.0
+    READ_COMMAND_TIMEOUT = 2.0
     WRITE_COMMAND_TIMEOUT = 5.0
 
     def __init__(self, *args, **kwargs):

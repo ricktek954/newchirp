@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-09
+Last updated: 2026-11-12
 
 ## Status definitions
 
@@ -477,8 +477,11 @@ Last updated: 2026-11-09
   fragmented 1,028-byte responses, malformed checksums, wrong page echoes,
   short responses, channel decoding, zone decoding, GBK names, and write
   rejection
-- Hardware validation: none. No RT-860 serial capture or physical read is
-  recorded.
+- Hardware validation: a 2026-11-08 macOS NewChirp 1.0.48 report from
+  `pmiguel4242@gmail.com` completed two RT-860 reads and decoded 311 channels
+  through the same USB serial adapter that had just read a UV-5R Mini. No
+  saved image, serial capture, or OEM-CPS comparison was attached, and
+  uploads remain disabled.
 - Unresolved: LSB/USB/CW selection, setting-block semantics, unknown channel
   bytes, and the complete upload state machine
 - Next milestone: capture the OEM reading a physical RT-860, compare an
@@ -1201,7 +1204,9 @@ Last updated: 2026-11-09
 - Field issue: channel upload can exceed the shared Kenwood live driver's
   one-second command-response ceiling
 - Change: NewChirp retains the upstream protocol implementation but allows up
-  to five seconds for `MW`/`MC` write commands
+  to two seconds for read commands and five seconds for `MW`/`MC` write
+  commands. A 2026-11-11 TS-2000 report showed `ID` replying after 1.20 seconds,
+  which exceeded the former one-second read window.
 - Settings: the TS-2000 does not expose radio-wide settings through CHIRP.
   NewChirp now reports that state without first downloading all 290 channels.
 - Diagnostics: serial errors include a bounded CAT trace with the failed
@@ -1209,9 +1214,10 @@ Last updated: 2026-11-09
   and detected radio ID. Channel contents are not recorded.
 - Write status: protocol-level tests pass; upload/read-back retest on physical
   hardware is required before calling the timeout fix hardware-verified
-- Next milestone: TS-2000 owner retest with both a small loadset and the full
-  258-channel loadset, followed by a read-back comparison and submission of
-  the generated communication trace if either write fails
+- Next milestone: the affected owner retests the identification/read with 2.0
+  seconds, then validates both a small loadset and the full 258-channel
+  loadset with a read-back comparison. Submit the generated communication
+  trace if either operation still fails.
 
 ### Kenwood TH-D75
 

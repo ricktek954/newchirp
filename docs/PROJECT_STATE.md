@@ -8,6 +8,22 @@ release requirements.
 
 ## Resume here
 
+- The 2026-11-12 mailbox pass found 37 unread NewChirp bug-report threads.
+  A TS-2000 trace showed `ID` replying after 1.20 seconds against the driver's
+  former one-second read timeout. The read window is now 2.0 seconds and a
+  regression test covers the delayed fragmented reply. The full Python suite
+  passes 395 tests with 2 fixture-dependent skips; `flutter analyze` is clean;
+  all 206 Flutter tests pass. The proposed reply batch has not been sent and
+  no source report has been marked read because the operator must explicitly
+  approve outbound replies to the listed recipients.
+- A 2026-11-08 RT-860 report completed two physical reads and decoded 311
+  channels on macOS through a cable that had just read a UV-5R Mini. The report
+  included no saved image, trace, or OEM-CPS comparison, and RT-860 writes
+  remain disabled.
+- A 2026-11-09 UV-17ProGPS follow-up reported that an upload erased all tones.
+  This remains unresolved and safety-sensitive. Ask for the NewChirp
+  version/build, pre-write image, source of the channel data, post-write image,
+  and affected channel/tone expectations before any further write.
 - Radtel RT-950 and RT-950 Pro now have separate NewChirp models. The base
   RT-950 driver is unchanged. Christophe Marcant supplied a MIT-licensed
   community RT-950 Pro CHIRP driver that confirms the Pro's larger CPS map
