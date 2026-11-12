@@ -2,8 +2,10 @@
 
 from pathlib import Path
 import importlib.util
+from itertools import chain, repeat
 import sys
 import unittest
+from unittest import mock
 
 
 from chirp_test_source import chirp_source
@@ -64,6 +66,18 @@ class _IdSerial:
         return result
 
 
+class _SlowIdSerial:
+    def __init__(self):
+        self.responses = [b"", b"", b"", b"ID TM-D7", b"00;"]
+
+    def write(self, data):
+        return len(data)
+
+    def read(self, size):
+        response = self.responses.pop(0)
+        return response[:size]
+
+
 class _NoSettingsRadio:
     class Features:
         has_settings = False
@@ -92,8 +106,20 @@ class TS2000DriverTest(unittest.TestCase):
             self.radio_class.__module__,
             "newchirp.drivers.newchirp_ts2000",
         )
-        self.assertEqual(self.radio_class.READ_COMMAND_TIMEOUT, 1.0)
+        self.assertEqual(self.radio_class.READ_COMMAND_TIMEOUT, 2.0)
         self.assertEqual(self.radio_class.WRITE_COMMAND_TIMEOUT, 5.0)
+
+    def test_slow_read_identifier_is_accepted(self):
+        radio = self.radio_class.__new__(self.radio_class)
+        radio.LAST_DELIMITER = (";", "")
+        radio.WRITE_COMMAND_TIMEOUT = 5.0
+        radio_module = sys.modules[self.radio_class.__module__]
+        clock = chain((0.0, 0.4, 0.8, 1.2, 1.6), repeat(1.6))
+
+        with mock.patch.object(radio_module.time, "time", side_effect=clock):
+            response = radio._command(_SlowIdSerial(), "ID")
+
+        self.assertEqual(response, "ID TM-D700")
 
     def test_write_command_echo_is_accepted(self):
         radio = self.radio_class.__new__(self.radio_class)
