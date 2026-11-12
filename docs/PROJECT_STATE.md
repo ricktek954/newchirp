@@ -493,11 +493,11 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.49` artifact source commit: `d4b20d0a`
+- Windows `1.0.51` artifact source commit: `6c02787e`
 - macOS `1.0.50` artifact source commit: `23931970`
 - Linux `1.0.50` is live; artifact source commit: `e7b96c44`
 - Open pull requests: none
-- Checked-out source version: `1.0.50+50`
+- Checked-out source version: `1.0.51+51`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -512,7 +512,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.50 |
-| Windows | 1.0.49 |
+| Windows | 1.0.51 |
 | Linux | 1.0.50 |
 | Legacy shared manifest version | 1.0.50 |
 
@@ -600,7 +600,29 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.49` artifact:
+Windows `1.0.51` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.51.exe`
+- Version/build: `1.0.51` / `51`
+- SHA-256:
+  `de0a55ce434de48523c19cd3163f435650e412ce5c504ec03717c6216b2286c8`
+- Size: `61,269,470` bytes
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.50` artifact (historical, superseded):
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.50.exe`
+- Version/build: `1.0.50` / `50`
+- SHA-256:
+  `3950843c54d40c64f7d2d1f4cbb9aa3a5fbfd7be60c2fadae546d48c015cf89e`
+- Size: `61,267,947` bytes
+- Built from `e7b96c44`; superseded the same day by `1.0.51` after the
+  TS-2000, FTM-7250D, TSQL, mixed-DPI, and A9305B fixes landed upstream
+- Server checksum matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.49` artifact (historical):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.49.exe`
 - Version/build: `1.0.49` / `49`
@@ -949,6 +971,21 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.51` from source commit `6c02787e`. Verified installer
+  file/product metadata `1.0.51.0` / `1.0.51`, app version `1.0.51+51`,
+  bundled Python `3.13.15`, the bundled `scripts/chirp_bridge.py` asset and
+  driver set including the updated TS-2000, FTM-7250D, and MA1-A9305B
+  drivers, matching local/server/public SHA-256, and the live platform
+  manifest. The release carries the TS-2000 slow-read allowance, FTM-7250D
+  power fix with problem reporting, corrected A9305B power and bandwidth
+  decoding, shared CTCSS tone display for TSQL, mixed-DPI window restoration
+  guard, and the Linux module-sandbox diagnostics. TS-2000, FTM-7250D, and
+  MA1-A9305B suites passed 24 tests; the full Flutter suite ran 210 passing
+  tests with the five known Windows sandbox/Help failures; `flutter analyze`
+  reported only three pre-existing `avoid_print` infos in `build_support`.
+  The installer remains unsigned. Windows `1.0.50` was published earlier the
+  same day from `e7b96c44` and superseded by `1.0.51` once those fixes landed
+  upstream; Linux and macOS remain at `1.0.50`.
 - Published macOS `1.0.50` from source commit `23931970` as a universal,
   signed, notarized, stapled DMG. The release includes the TS-2000 delayed
   read fix, FTM-7250D power correction, mixed-DPI window recovery, consistent
