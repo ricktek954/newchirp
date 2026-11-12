@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T20:46:51Z"
+timestamp: "2026-11-12T13:45:45Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -34,6 +34,7 @@ language: dart
 | related | [RadioBridge](/services/radio_bridge/RadioBridge.md) |
 | related | [_firmwareFromPayload](/services/radio_bridge/firmwareFromPayload.md) |
 | related | [isBenignBridgeStderrLine](/services/radio_bridge/isBenignBridgeStderrLine.md) |
+| related | [radioBridgeFailureMessage](/services/radio_bridge/radioBridgeFailureMessage.md) |
 | related | [strings](/services/radio_bridge/strings.md) |
 | related | [toString](/services/radio_bridge/toString.md) |
 | related | [RadioBridgeException](/services/radio_bridge/RadioBridgeException.md) |
