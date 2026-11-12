@@ -41,4 +41,27 @@ void main() {
       ),
     );
   });
+
+  test('bubblewrap loopback failure produces Linux sandbox guidance', () {
+    final message = radioBridgeFailureMessage(
+      exitCode: 1,
+      details: 'bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted',
+      moduleSandboxed: true,
+    );
+
+    expect(message, contains('private network sandbox'));
+    expect(message, contains('module was not run'));
+    expect(message, contains('bubblewrap network namespaces'));
+  });
+
+  test('Windows access violation guidance keeps readable paragraphs', () {
+    final message = radioBridgeFailureMessage(
+      exitCode: 0xC0000005,
+      details: '',
+      moduleSandboxed: false,
+    );
+
+    expect(message, contains('Windows access violation'));
+    expect(message, contains('\n\nUnplug and reconnect'));
+  });
 }

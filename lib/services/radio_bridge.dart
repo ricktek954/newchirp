@@ -57,6 +57,33 @@ bool isBenignBridgeStderrLine(String line) {
       trimmed.startsWith('Replacing existing driver id `');
 }
 
+String radioBridgeFailureMessage({
+  required int exitCode,
+  required String details,
+  required bool moduleSandboxed,
+}) {
+  if (moduleSandboxed &&
+      details.contains(
+        'bwrap: loopback: Failed RTM_NEWADDR: Operation not permitted',
+      )) {
+    return 'NewChirp could not load the CHIRP module because this Linux system '
+        "refused bubblewrap's private network sandbox. The module was not run.\n\n"
+        'Keep using the built-in NewChirp radio support for this model, or ask '
+        'your Linux administrator to allow unprivileged bubblewrap network '
+        'namespaces, then try loading the module again.';
+  }
+  if ((exitCode & 0xFFFFFFFF) == 0xC0000005) {
+    return 'NewChirp\u2019s radio helper crashed while communicating with the '
+        'radio (Windows access violation, exit code 0xC0000005).\n\n'
+        'Unplug and reconnect the programming cable, put the radio back in '
+        'CLONE mode, and try again. If it keeps happening, restart NewChirp '
+        'and the computer before retrying.';
+  }
+  return details.isEmpty
+      ? 'Radio bridge failed with exit code $exitCode.'
+      : details;
+}
+
 class RadioModelGroup {
   const RadioModelGroup({required this.name, required this.models});
 
@@ -938,19 +965,12 @@ class RadioBridge {
     }
     if (exitCode != 0) {
       final details = stderr.isNotEmpty ? stderr : stdout;
-      if ((exitCode & 0xFFFFFFFF) == 0xC0000005) {
-        throw RadioBridgeException(
-          'NewChirp\u2019s radio helper crashed while communicating with the '
-          'radio (Windows access violation, exit code 0xC0000005).\n\n'
-          'Unplug and reconnect the programming cable, put the radio back in '
-          'CLONE mode, and try again. If it keeps happening, restart NewChirp '
-          'and the computer before retrying.',
-        );
-      }
       throw RadioBridgeException(
-        details.isEmpty
-            ? 'Radio bridge failed with exit code $exitCode.'
-            : details,
+        radioBridgeFailureMessage(
+          exitCode: exitCode,
+          details: details,
+          moduleSandboxed: _loadedModulePath != null,
+        ),
       );
     }
     final output = stdout;

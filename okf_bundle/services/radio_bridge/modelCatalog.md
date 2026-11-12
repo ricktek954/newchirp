@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T20:46:51Z"
+timestamp: "2026-11-12T13:45:45Z"
 concept_id: services/radio_bridge/modelCatalog
 language: dart
 ---
@@ -24,7 +24,7 @@ FuturemodelCatalogmodelCatalog
 ```
 
 ## Source
-Lines 512–512 in `services/radio_bridge.dart`
+Lines 539–539 in `services/radio_bridge.dart`
 
 ## Relationships
 
