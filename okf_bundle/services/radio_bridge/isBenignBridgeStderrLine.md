@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T20:16:22Z"
+timestamp: "2026-11-13T14:01:49Z"
 concept_id: services/radio_bridge/isBenignBridgeStderrLine
 language: dart
 ---
@@ -24,7 +24,7 @@ boolisBenignBridgeStderrLine(String line)
 ```
 
 ## Source
-Lines 53–53 in `services/radio_bridge.dart`
+Lines 54–54 in `services/radio_bridge.dart`
 
 ## Relationships
 

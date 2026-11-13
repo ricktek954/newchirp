@@ -4124,6 +4124,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       ),
                       SizedBox(height: 12),
                       Text(
+                        'NewChirp also develops its own drivers for radios that do not yet have a CHIRP driver or whose existing CHIRP driver does not work correctly. These NewChirp-maintained drivers are released under GPLv3-or-later and are available for incorporation into upstream CHIRP under the same license, subject to CHIRP maintainer review and acceptance.',
+                      ),
+                      SizedBox(height: 12),
+                      Text(
                         'CHIRP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.',
                       ),
                       SizedBox(height: 12),

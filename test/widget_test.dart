@@ -2546,6 +2546,12 @@ void main() {
 
     expect(find.text('CHIRP compatibility layer'), findsOneWidget);
     expect(find.textContaining('GNU General Public License'), findsOneWidget);
+    expect(
+      find.textContaining(
+        'available for incorporation into upstream CHIRP',
+      ),
+      findsOneWidget,
+    );
     expect(find.textContaining('WITHOUT ANY WARRANTY'), findsOneWidget);
     expect(
       find.textContaining('https://github.com/ricktek954/newchirp'),
