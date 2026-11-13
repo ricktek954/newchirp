@@ -539,11 +539,11 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.51` artifact source commit: `6c02787e`
+- Windows `1.0.52` artifact source commit: `c6219ae7`
 - macOS `1.0.50` artifact source commit: `23931970`
 - Linux `1.0.50` is live; artifact source commit: `e7b96c44`
 - Open pull requests: none
-- Checked-out source version: `1.0.51+51`
+- Checked-out source version: `1.0.52+52`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -558,7 +558,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.50 |
-| Windows | 1.0.51 |
+| Windows | 1.0.52 |
 | Linux | 1.0.50 |
 | Legacy shared manifest version | 1.0.50 |
 
@@ -646,7 +646,21 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.51` artifact:
+Windows `1.0.52` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.52.exe`
+- Version/build: `1.0.52` / `52`
+- SHA-256:
+  `fa70d9830e19722bf965de87dc96df9b7e5b63e6ccf1580973583ad85a432779`
+- Size: `61,514,994` bytes
+- Built from `c6219ae7`
+- Extracted installer verified with embedded `1.0.52` metadata, app version
+  `1.0.52+52`, bundled Python `3.13.15`, 251 CHIRP driver modules, a successful
+  bridge `list-models` run, and the new missing-runtime guidance
+- Server and public-download checksums matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.51` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.51.exe`
 - Version/build: `1.0.51` / `51`
@@ -1017,6 +1031,18 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.52` from source commit `c6219ae7`. The release makes a
+  missing, damaged, or blocked bundled Python runtime fail with an explicit
+  reinstall message instead of silently falling back to the Microsoft Store
+  `python` aliases referenced by UID 609. Verification: extracted installer
+  metadata `1.0.52` / `1.0.52+52`, bundled Python `3.13.15`, 251 bundled CHIRP
+  driver modules, bridge `list-models` exit 0, release binary contains the new
+  Store-alias guidance, matching local/server/public SHA-256, public HTTP 200,
+  and live platform manifest Windows `1.0.52`. `flutter analyze lib test` is
+  clean. The full Flutter suite ran 213 passing tests with the five known
+  Windows-only sandbox/Help failures; the Python bridge suite ran 61 passing
+  tests with one Windows temporary-file-lock helper error. The installer
+  remains unsigned. macOS and Linux remain at `1.0.50`.
 - Published Windows `1.0.51` from source commit `6c02787e`. Verified installer
   file/product metadata `1.0.51.0` / `1.0.51`, app version `1.0.51+51`,
   bundled Python `3.13.15`, the bundled `scripts/chirp_bridge.py` asset and
