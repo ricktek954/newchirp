@@ -8,7 +8,7 @@ type: Index
 
 # okf_bundle
 
-OKF v0.2 knowledge bundle — 608 concepts across 4 top-level directories.
+OKF v0.2 knowledge bundle — 609 concepts across 4 top-level directories.
 
 ## Top-level Directories
 
