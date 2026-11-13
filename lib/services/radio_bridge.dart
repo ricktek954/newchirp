@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:ffi' show Abi;
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../models/radio_channel.dart';
@@ -82,6 +83,79 @@ String radioBridgeFailureMessage({
   return details.isEmpty
       ? 'Radio bridge failed with exit code $exitCode.'
       : details;
+}
+
+typedef PythonVersionProbe =
+    Future<ProcessResult> Function(String executable, List<String> arguments);
+
+/// Resolves a Python 3.10+ interpreter for the radio bridge.
+///
+/// Packaged Windows builds must use NewChirp's private runtime. Falling back to
+/// `python` or `python3` there can silently launch the Microsoft Store aliases,
+/// which produce a misleading Python-not-installed error for end users.
+@visibleForTesting
+Future<String> resolvePythonExecutable({
+  required String operatingSystem,
+  required String? resourcesDirectory,
+  required String? configuredPath,
+  required String? macRuntime,
+  required bool allowSystemPython,
+  required PythonVersionProbe probe,
+}) async {
+  final isWindows = operatingSystem == 'windows';
+  final isMacOS = operatingSystem == 'macos';
+  final separator = isWindows ? r'\' : '/';
+  final bundledCandidates = <String>[
+    if (resourcesDirectory != null && isWindows)
+      '$resourcesDirectory${separator}python${separator}python.exe',
+    if (resourcesDirectory != null && isMacOS && macRuntime != null)
+      '$resourcesDirectory$separator$macRuntime${separator}bin${separator}python3',
+    if (resourcesDirectory != null && !isWindows && !isMacOS)
+      '$resourcesDirectory${separator}python${separator}bin${separator}python3',
+    if (resourcesDirectory != null && isMacOS)
+      '$resourcesDirectory${separator}python${separator}bin${separator}python3',
+  ];
+  final candidates = <String>[
+    if (configuredPath != null && configuredPath.isNotEmpty) configuredPath,
+    ...bundledCandidates,
+    if (allowSystemPython && isMacOS) '/opt/homebrew/bin/python3',
+    if (allowSystemPython && isMacOS) '/usr/local/bin/python3',
+    if (allowSystemPython && isWindows) 'python',
+    if (allowSystemPython) 'python3',
+  ];
+  for (final candidate in candidates) {
+    try {
+      final result = await probe(candidate, [
+        '-c',
+        'import sys; print("%d.%d" % sys.version_info[:2])',
+      ]);
+      if (result.exitCode != 0) continue;
+      final parts = '${result.stdout}'.trim().split('.');
+      final major = int.tryParse(parts.first);
+      final minor = int.tryParse(parts.length > 1 ? parts[1] : '0');
+      if (major != null &&
+          minor != null &&
+          (major > 3 || (major == 3 && minor >= 10))) {
+        return candidate;
+      }
+    } on ProcessException {
+      // Candidate is not available; try the next interpreter.
+    }
+  }
+  if (isWindows && !allowSystemPython) {
+    final expectedPath = bundledCandidates.isEmpty
+        ? r'<NewChirp install>\python\python.exe'
+        : bundledCandidates.first;
+    throw RadioBridgeException(
+      'NewChirp could not start its bundled Python runtime at '
+      '"$expectedPath". The runtime is missing, damaged, or blocked from '
+      'running.\n\nReinstall NewChirp using the full official installer. If '
+      'the problem continues, check that antivirus or application-control '
+      'software did not remove or quarantine that file. Installing Python '
+      'from the Microsoft Store will not fix this problem.',
+    );
+  }
+  return 'python3';
 }
 
 class RadioModelGroup {
@@ -916,8 +990,9 @@ class RadioBridge {
       throw RadioBridgeException(error.message);
     } on ProcessException catch (error) {
       final detail = _loadedModulePath == null
-          ? 'NewChirp could not start its CHIRP helper. Python 3 was not found '
-                'or could not be launched (${error.message}).'
+          ? 'NewChirp could not start its CHIRP helper with "$python" '
+                '(${error.message}). If this is the bundled runtime, reinstall '
+                'NewChirp using the full official installer.'
           : 'NewChirp could not start the CHIRP module sandbox '
                 '(${error.message}).';
       throw RadioBridgeException(detail);
@@ -988,48 +1063,21 @@ class RadioBridge {
   /// The bundled CHIRP tree uses Python 3.10+ syntax, so prefer an interpreter
   /// that is new enough even when an older system Python is first on PATH.
   Future<String> _resolvePython() async {
-    final configured = Platform.environment['NEWCHIRP_PYTHON'];
-    final resources = _bundledResourcesDirectory();
     final macRuntime = switch (Abi.current()) {
       Abi.macosArm64 => 'python-arm64',
       Abi.macosX64 => 'python-x64',
       _ => null,
     };
-    final candidates = <String>[
-      if (configured != null && configured.isNotEmpty) configured,
-      if (resources != null && Platform.isWindows)
-        '${resources.path}/python/python.exe',
-      if (resources != null && Platform.isMacOS && macRuntime != null)
-        '${resources.path}/$macRuntime/bin/python3',
-      if (resources != null && !Platform.isWindows && !Platform.isMacOS)
-        '${resources.path}/python/bin/python3',
-      if (resources != null && Platform.isMacOS)
-        '${resources.path}/python/bin/python3',
-      if (Platform.isMacOS) '/opt/homebrew/bin/python3',
-      if (Platform.isMacOS) '/usr/local/bin/python3',
-      if (Platform.isWindows) 'python',
-      'python3',
-    ];
-    for (final candidate in candidates) {
-      try {
-        final result = await Process.run(candidate, [
-          '-c',
-          'import sys; print("%d.%d" % sys.version_info[:2])',
-        ]);
-        if (result.exitCode != 0) continue;
-        final parts = '${result.stdout}'.trim().split('.');
-        final major = int.tryParse(parts.first);
-        final minor = int.tryParse(parts.length > 1 ? parts[1] : '0');
-        if (major != null &&
-            minor != null &&
-            (major > 3 || (major == 3 && minor >= 10))) {
-          return candidate;
-        }
-      } on ProcessException {
-        // Candidate is not available; try the next interpreter.
-      }
-    }
-    return 'python3';
+    final allowSystemPython =
+        !Platform.isWindows || !kReleaseMode || sourcePath != null;
+    return resolvePythonExecutable(
+      operatingSystem: Platform.operatingSystem,
+      resourcesDirectory: _bundledResourcesDirectory()?.path,
+      configuredPath: Platform.environment['NEWCHIRP_PYTHON'],
+      macRuntime: macRuntime,
+      allowSystemPython: allowSystemPython,
+      probe: Process.run,
+    );
   }
 
   Directory? _bundledResourcesDirectory() {

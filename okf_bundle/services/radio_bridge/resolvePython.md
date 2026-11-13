@@ -32,7 +32,7 @@ The bundled CHIRP tree uses Python 3.10+ syntax, so prefer an interpreter
 that is new enough even when an older system Python is first on PATH.
 
 ## Source
-Lines 990–990 in `services/radio_bridge.dart`
+Lines 1065-1065 in `services/radio_bridge.dart`
 
 ## Relationships
 

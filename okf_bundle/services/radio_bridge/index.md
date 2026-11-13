@@ -49,6 +49,7 @@
 - [RadioSettingNode](RadioSettingNode.md)
 - [readImage](readImage.md)
 - [readSettings](readSettings.md)
+- [resolvePythonExecutable](resolvePythonExecutable.md)
 - [searchRepeaters](searchRepeaters.md)
 - [serialPortDetails](serialPortDetails.md)
 - [serialPorts](serialPorts.md)

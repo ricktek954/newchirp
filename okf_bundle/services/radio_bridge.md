@@ -35,6 +35,7 @@ language: dart
 | related | [_firmwareFromPayload](/services/radio_bridge/firmwareFromPayload.md) |
 | related | [isBenignBridgeStderrLine](/services/radio_bridge/isBenignBridgeStderrLine.md) |
 | related | [radioBridgeFailureMessage](/services/radio_bridge/radioBridgeFailureMessage.md) |
+| related | [resolvePythonExecutable](/services/radio_bridge/resolvePythonExecutable.md) |
 | related | [strings](/services/radio_bridge/strings.md) |
 | related | [toString](/services/radio_bridge/toString.md) |
 | related | [RadioBridgeException](/services/radio_bridge/RadioBridgeException.md) |

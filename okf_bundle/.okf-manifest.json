@@ -330,8 +330,8 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1794514582137901399,
-      "hash": "c42c12c6b2c789987ed4503251d761a9a216b8541f05319503685e71a921c4d2",
+      "mtime_ns": 1794575629836847400,
+      "hash": "742bda96b121382fd8e3439fff792793907bd717a3f2cd16aa5d191e00d82842",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
         "services/radio_bridge/RadioBridgeException",
@@ -373,6 +373,7 @@
         "services/radio_bridge/readImage",
         "services/radio_bridge/readSettings",
         "services/radio_bridge/resolvePython",
+        "services/radio_bridge/resolvePythonExecutable",
         "services/radio_bridge/run",
         "services/radio_bridge/runWithRuntime",
         "services/radio_bridge/searchRepeaters",

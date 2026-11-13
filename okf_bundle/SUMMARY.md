@@ -1,5 +1,5 @@
 ---
-description: 'Top-level OKF summary: 608 concepts across 4 domains and 30 modules'
+description: 'Top-level OKF summary: 609 concepts across 4 domains and 30 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
@@ -10,20 +10,20 @@ type: Index
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 608 concepts | 4 domains | 30 modules
+> OKF v0.2 bundle | 609 concepts | 4 domains | 30 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 470 |
+| Function | 471 |
 | Class | 99 |
 | Module | 30 |
 | Enum | 9 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 608 |
+| dart | 609 |
 
 ## Domain Map
 
