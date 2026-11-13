@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-12
+Last updated: 2026-11-13
 
 ## Status definitions
 
@@ -32,6 +32,7 @@ Last updated: 2026-11-12
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
+| Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8E2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
 | KSUN UV-K60 rebrand | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Stock UV-K5-family profile | Stock UV-K5-family policy | Stock UV-K5-family policy | Experimental |
@@ -1305,6 +1306,42 @@ Last updated: 2026-11-12
   records and names with KPG-171D, then map the remaining fields before
   considering any upload capability.
 - Website catalog: must be listed as experimental.
+
+### Kenwood TK-863G
+
+- Maintained driver: `drivers/newchirp_kenwood_tk863g.py`
+- Protocol notes: `docs/KPG76D_PROTOCOL.md`
+- OEM programmer: Kenwood KPG-76D 1.00 for TK-373G/TK-863G
+- CPS archive SHA-256:
+  `94cfae17605565e92cf14135c7a391a450395e697f2a8d7053090b73df63cbee`
+- CPS executable SHA-256:
+  `2041afe2b14883ea1411d139227bb6c19ff4292c909c89599a812c475bafcfde`
+- Uploader DAT SHA-256:
+  `5afb8f37a3a28a0882b98eb8d340e6caec64f1b8b53b742426cac52ca3b89434`
+- Transport: KPG-76D `PROGRAM` session at 9600 8E2 with the OEM
+  9600/19200/4800/2400/1200 fallback order, `M0863` identity, `NRK`
+  tuning record, `0x7C` memory-session request, 256-byte `R` blocks,
+  additive checksums, fill responses, three-attempt recovery, and `E` exit
+- Implemented: complete 32 KiB image read, OEM DAT unwrapping, model
+  validation, 128 channel records, RX/TX frequency, offset, name,
+  wide/narrow, CTCSS, DTCS, and cross-tone decode. All unknown channel bytes
+  remain unchanged in the image.
+- Read/write policy: read-only. The CPS write framing is understood, but the
+  complete ownership map and physical write/read-back behavior are not yet
+  validated.
+- Offline validation: five focused tests pass, including three-byte
+  fragmentation across all 128 blocks, checksum recovery, DAT unwrapping,
+  supplied record encoding, wrong-model rejection, and blocked writes. The
+  complete Python suite passes 404 tests with two fixture-dependent skips;
+  all 215 Flutter tests pass and `flutter analyze` is clean.
+- Hardware validation: none.
+- Next milestone: the uploader performs a NewChirp read, compares all decoded
+  channels with KPG-76D, and reports any missing option fields before the
+  write map is considered.
+- Website catalog: live as `TK-863G (experimental)` in the Kenwood catalog
+  and **New Experimental Radio Support** from website source `be979f0`
+  (`index-CbTrONP8.js`). The read-only `kenwood-tk863g` Web Programmer
+  profile is included.
 
 ### Kenwood TK-270G
 
