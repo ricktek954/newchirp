@@ -8,6 +8,12 @@ release requirements.
 
 ## Resume here
 
+- The About & licenses screen now explains that NewChirp develops drivers
+  for radios with missing or broken upstream CHIRP support, releases those
+  drivers under GPLv3-or-later, and makes them available for incorporation
+  into upstream CHIRP subject to maintainer review and acceptance.
+  Verification: the focused About test passes, all 215 Flutter tests pass,
+  and `flutter analyze` is clean.
 - Kenwood KPG-76D 1.00 was statically reverse engineered for the TK-863G
   upload from file-drop IDs 3 and 4 (`w8one`, account 586). The supplied
   CPS-read DAT maps to a 0x8000-byte image after a 0x70-byte DAT wrapper and
