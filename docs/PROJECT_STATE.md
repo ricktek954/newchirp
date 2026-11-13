@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-12
+Last updated: 2026-11-13
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,26 @@ release requirements.
 
 ## Resume here
 
+- Kenwood KPG-76D 1.00 was statically reverse engineered for the TK-863G
+  upload from file-drop IDs 3 and 4 (`w8one`, account 586). The supplied
+  CPS-read DAT maps to a 0x8000-byte image after a 0x70-byte DAT wrapper and
+  contains 128 32-byte channel records at image offset 0x02F0. The new
+  `drivers/newchirp_kenwood_tk863g.py` implements the OEM 9600 8E2
+  `PROGRAM`/`M0863`/`NRK`/`0x7C`/256-byte-`R` read transport, fragmented
+  reads, fill blocks, checksums, retries, model checks, and read-only decode
+  for frequency, offset, name, bandwidth, CTCSS, DTCS, and cross tones.
+  Protocol evidence is in `docs/KPG76D_PROTOCOL.md`. Uploads remain disabled
+  pending a physical read and controlled write/read-back. Verification: five
+  focused TK-863G tests pass, including all 128 blocks fragmented into
+  three-byte reads and checksum recovery; all 404 Python tests pass with two
+  fixture-dependent skips; all 215 Flutter tests pass; and `flutter analyze`
+  is clean. The uploader received the driver status and physical-read test
+  request at `w8one1@gmail.com`; the verified copy is in `Sent` UID 401.
+  The website now lists `TK-863G (experimental)` in both the Kenwood catalog
+  and **New Experimental Radio Support**, and exposes a read-only
+  `kenwood-tk863g` Web Programmer profile. Website source `be979f0` is live
+  as `index-CbTrONP8.js`; the source inventory now has 652 selectable
+  profiles.
 - The latest 2026-11-12 mailbox triage handled 20 unread threads. Eighteen
   tailored report replies were sent and verified in `Sent` as UIDs 383-400,
   and every source report was marked `\Seen`. Two account notices and three

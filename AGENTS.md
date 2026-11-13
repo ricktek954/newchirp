@@ -23,6 +23,17 @@ When adding or changing a NewChirp-maintained radio driver, update
 read/write policy, evidence hashes, physical-radio validation, and the next
 milestone. Do not infer hardware-tested or released status from offline tests.
 
+Every new radio driver must also be exposed on the website before handoff:
+
+1. Add the exact radio to the local site's experimental catalog by updating
+   `scripts/sync-chirp-radios.mjs` in `/Volumes/RICKEXT/web/newchirpweb` and
+   running `npm run sync:radios`.
+2. Add a matching Web Programmer profile using the same transport and
+   read/write safety policy as the desktop driver, then verify it appears in
+   both the catalog and the Web Programmer picker.
+
+Both website steps are required even when the browser transport is read-only.
+
 For any driver derived from an OEM programming application, follow
 `docs/REA_PLAYBOOK.md`. Trace both the UI-to-serial and serial-to-decoder call
 paths, document the wire encoding and response-length rules for every
