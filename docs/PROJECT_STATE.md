@@ -28,8 +28,9 @@ release requirements.
   `kenwood-tk863g` Web Programmer profile. Website source `be979f0` is live
   as `index-CbTrONP8.js`; the source inventory now has 652 selectable
   profiles.
-- The 2026-11-13 mailbox triage handled ten actionable messages. Replies were
-  sent and verified in `Sent` UIDs 402-411, and all source messages were marked
+- The 2026-11-13 mailbox triage handled eleven actionable messages. Replies
+  were sent and verified in `Sent` UIDs 402-412, and all source messages were
+  marked
   `\Seen`. RepeaterBook fixed its form; the Centralized backend
   application for NewChirp was submitted under account `WQWR692` as request
   `#295`, and Garrett received the request-ID follow-up in Sent UID 404.
@@ -38,8 +39,10 @@ release requirements.
   GM-32 label/OEM-CPS result (611), UV-5R model/cable/read result (607), and
   GS-5B 1.XX label/CPS version/OEM read result (603). Additional connection
   failures were answered with port/model/cable checks: UV-5R UID 613 and
-  DM-32UV UID 614. The UID 613 recipient did not exist; Gmail's non-delivery
-  notice was handled as UID 615. Mark received the TK-270G follow-up: Channel
+  DM-32UV UID 614. UV-5RM Plus UID 616 was directed to use a USB-C data cable
+  and select the matching v1/v2 entry after confirming firmware. The UID 613
+  recipient did not exist; Gmail's non-delivery notice was handled as UID
+  615. Mark received the TK-270G follow-up: Channel
   24 is NOAA 162.550 MHz in bank 1; the current source normalizes that
   unprogrammed bank-index sentinel and needs a next-build physical
   write/read-back. Mike was directed to reinstall the full Windows package
