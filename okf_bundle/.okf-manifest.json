@@ -598,8 +598,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794520131746068710,
-      "hash": "b01918754cc62addee10987e9f3ac15192b5e260950d332f5fd0033a93031682",
+      "mtime_ns": 1794575992124310200,
+      "hash": "4fbbc1b2a3c283254fa7efc10bce718d6347d02116c7247467dce8ddf619c998",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -6081,5 +6081,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-12T21:48:53Z"
+  "generated_at": "2026-11-13T13:19:52Z"
 }
