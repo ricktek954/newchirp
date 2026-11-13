@@ -8,6 +8,19 @@ release requirements.
 
 ## Resume here
 
+- The Kenwood TK-350/KPG-23D and TK-359/KPG-32D submissions from forum
+  topic 39 were analyzed on 2026-11-13. NewChirp now has read-only
+  experimental entries using the supplied OEM CPS files and sample data.
+  The drivers retain the complete image and decode 16-byte channel
+  records with RX/TX frequency and four-character names. Transport evidence
+  is documented in `docs/KPG23_PROTOCOL.md`; uploads remain disabled.
+  Verification: the focused driver suite passes, all 408 Python tests pass
+  with two fixture-dependent skips, all 84 standard Web Programmer tests,
+  16 experimental Web Programmer tests, and 9 RepeaterBook tests pass, and
+  the production website build is clean. The site is live as
+  `index-fwCJsaXw.js` with 654 selectable profiles. Replies are archived in
+  Sent UIDs 414 and 415. Physical reads on both models are the next
+  milestone.
 - The About & licenses screen now explains that NewChirp develops drivers
   for radios with missing or broken upstream CHIRP support, releases those
   drivers under GPLv3-or-later, and makes them available for incorporation
