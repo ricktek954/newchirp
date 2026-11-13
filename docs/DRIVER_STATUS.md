@@ -32,6 +32,8 @@ Last updated: 2026-11-13
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
+| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 9600 8N1, 0xF000 addressed blocks | Yes, offline-tested | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N1, 0xF000 addressed blocks | Yes, offline-tested | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8E2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
@@ -1306,6 +1308,39 @@ Last updated: 2026-11-13
   records and names with KPG-171D, then map the remaining fields before
   considering any upload capability.
 - Website catalog: must be listed as experimental.
+
+### Kenwood TK-350 and TK-359
+
+- Maintained driver: `drivers/newchirp_kenwood_kpg23.py`
+- Protocol notes: `docs/KPG23_PROTOCOL.md`
+- OEM programmers: KPG-23D 1.01 and KPG-32D 1.00
+- CPS archive SHA-256 values:
+  - `kpg23d.zip`:
+    `2407d17f2f8890db3b21bdfe69beb7154444c3ecd5d44dd743c4e9d45d0279af`
+  - `kpg32d.zip`:
+    `91b828a2d1e032b807ae3bed107426b844833483015a73c7b801f89446c8f37e`
+- Representative channel-data hashes:
+  - KPG-23D `SAMPLE.V1B`:
+    `6b61db4739fc1e19d18f47171620bdbb3ced2decb63c4aca9aaa87abb970b981`
+  - KPG-32D `SAMPLE.FDT`:
+    `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
+- Transport: 9,600 baud, 8N1; `0x02` identity query, eight-byte
+  family identity, `R <address:u16be> <length:u8>` block requests, `W`
+  read-data status, `Z` fill status, and ACK/retry handling
+- Implemented: full raw-image retention, the 16-byte channel record
+  layout, RX/TX frequency decoding for the 450-470 MHz band, and
+  four-character channel names
+- Read/write policy: read-only. Uploads remain disabled because the
+  channel option fields, settings map, model-specific write protection,
+  and final partial-block behavior have not been validated on hardware
+- Evidence: official CPS static traces plus the supplied KPG-23D/KPG-32D
+  sample data. The identity/read request sequence was also observed in a
+  controlled DOS VM. The response header after `W` remains classified as
+  a family-derived replay rule, not hardware capture.
+- NewChirp hardware validation: none
+- Next milestone: the requester performs complete reads on a TK-350 and
+  TK-359, saves both images, and compares frequencies, names, power, and
+  tone fields with the OEM CPS
 
 ### Kenwood TK-863G
 
