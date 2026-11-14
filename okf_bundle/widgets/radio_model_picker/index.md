@@ -21,6 +21,7 @@
 - [_groupModels](groupModels.md)
 - [_matchingGroups](matchingGroups.md)
 - [_modelNameWithinVendor](modelNameWithinVendor.md)
+- [_modelSearchText](modelSearchText.md)
 - [_openPicker](openPicker.md)
 - [_remember](remember.md)
 - [_selectVendor](selectVendor.md)
