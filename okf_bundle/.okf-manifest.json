@@ -5,8 +5,8 @@
   "files": {
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794659730859312976,
-      "hash": "1d93eda27f6e194b5fc987cbdf57ca84625352ce082de7a01b854d69fdb2b965",
+      "mtime_ns": 1794661447838546100,
+      "hash": "bd83092f8cbce1d412b6f3175ce214f33acbae3e576d70a1f5b8dd9adf5bd6e6",
       "concept_ids": [
         "main/AddChannelPlacement",
         "main/ChannelApplyDialog",
@@ -6098,5 +6098,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-14T12:37:41Z"
+  "generated_at": "2026-11-14T13:04:07Z"
 }
