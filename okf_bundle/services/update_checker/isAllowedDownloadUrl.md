@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
+timestamp: "2026-11-14T13:23:52Z"
 concept_id: services/update_checker/isAllowedDownloadUrl
 language: dart
 ---
@@ -31,7 +31,7 @@ boolisAllowedDownloadUrl(String url)
 True when [url] is an https link on newchirp.net, with no login or odd port.
 
 ## Source
-Lines 256–256 in `services/update_checker.dart`
+Lines 198–198 in `services/update_checker.dart`
 
 ## Relationships
 

@@ -54,19 +54,14 @@ class UpdateChecker {
   /// Expected JSON body:
   ///
   ///     {
+  ///       platform: macos,
   ///       version: 1.0.7,
+  ///       download_url: https://newchirp.net/downloads/NewChirp-1.0.7.dmg,
   ///       release_url: https://newchirp.net/#download,
-  ///       downloads: {windows: ..., macos: ..., linux: ...},
-  ///       platforms: {
-  ///         windows: {version: 1.0.8},
-  ///         macos: {version: 1.0.7},
-  ///         linux: {version: 1.0.7}
-  ///       }
   ///     }
   ///
-  /// The app prefers its own entry in `platforms`; `version` (or `latest`) is
-  /// the fallback for manifests from older servers. `release_url` (or `url`)
-  /// is optional.
+  /// The client requests only its own platform, whose version is authoritative.
+  /// `release_url` (or `url`) is optional.
   static final Uri defaultManifestUri = Uri.parse(
     'https://newchirp.net/api/releases/latest',
   );
@@ -78,7 +73,14 @@ class UpdateChecker {
   Future<UpdateCheckResult> check(String currentVersion) async {
     final client = HttpClient()..connectionTimeout = _timeout;
     try {
-      final request = await client.getUrl(manifestUri).timeout(_timeout);
+      final platform = _platform ?? currentUpdatePlatform();
+      if (platform.isEmpty) {
+        throw const FormatException('This platform cannot check for updates.');
+      }
+      final requestUri = manifestUri.replace(
+        queryParameters: {...manifestUri.queryParameters, 'platform': platform},
+      );
+      final request = await client.getUrl(requestUri).timeout(_timeout);
       request.headers.set(HttpHeaders.acceptHeader, 'application/json');
       final response = await request.close().timeout(_timeout);
       if (response.statusCode != HttpStatus.ok) {
@@ -90,21 +92,13 @@ class UpdateChecker {
           .transform(utf8.decoder)
           .join()
           .timeout(_timeout);
-      final manifest = _parseManifest(body);
-      final platformRelease =
-          manifest.platforms[_platform ?? currentUpdatePlatform()];
-      final latestVersion = platformRelease?.version ?? manifest.version;
-      if (latestVersion == null || latestVersion.isEmpty) {
-        throw const FormatException(
-          'Manifest is missing a version for this platform.',
-        );
-      }
+      final release = _parsePlatformRelease(body);
       return UpdateCheckResult(
         currentVersion: currentVersion,
-        latestVersion: latestVersion,
-        releaseUrl: manifest.releaseUrl,
-        downloadUrl: platformRelease?.downloadUrl,
-        sha256: platformRelease?.sha256,
+        latestVersion: release.version,
+        releaseUrl: release.releaseUrl,
+        downloadUrl: release.downloadUrl,
+        sha256: release.sha256,
       );
     } on UpdateCheckException {
       rethrow;
@@ -121,68 +115,26 @@ class UpdateChecker {
     }
   }
 
-  static _ReleaseManifest _parseManifest(String body) {
+  static _PlatformRelease _parsePlatformRelease(String body) {
     final decoded = jsonDecode(body);
     if (decoded is! Map) {
       throw const FormatException('Manifest is not a JSON object.');
     }
-    final version = decoded['version'] ?? decoded['latest'];
-    final platforms = <String, _PlatformRelease>{};
-    final platformValues = decoded['platforms'];
-    if (platformValues is Map) {
-      for (final entry in platformValues.entries) {
-        final key = entry.key;
-        final value = entry.value;
-        if (key is! String || value is! Map) continue;
-        final platformVersion = value['version'];
-        if (platformVersion is! String || platformVersion.trim().isEmpty) {
-          continue;
-        }
-        final downloadUrl = value['download_url'] ?? value['downloadUrl'];
-        final sha256 = value['sha256'];
-        platforms[key] = _PlatformRelease(
-          version: platformVersion.trim(),
-          downloadUrl: downloadUrl is String && downloadUrl.trim().isNotEmpty
-              ? downloadUrl.trim()
-              : null,
-          sha256: sha256 is String && sha256.trim().isNotEmpty
-              ? sha256.trim()
-              : null,
-        );
-      }
-    }
-    final fallbackVersion = version is String && version.trim().isNotEmpty
-        ? version.trim()
-        : null;
-    final downloadValues = decoded['downloads'];
-    final checksumValues = decoded['sha256'] ?? decoded['checksums'];
-    if (fallbackVersion != null && downloadValues is Map) {
-      for (final entry in downloadValues.entries) {
-        final key = entry.key;
-        final value = entry.value;
-        if (key is! String || value is! String || value.trim().isEmpty) {
-          continue;
-        }
-        final existing = platforms[key];
-        final checksum = checksumValues is Map ? checksumValues[key] : null;
-        platforms[key] = _PlatformRelease(
-          version: existing?.version ?? fallbackVersion,
-          downloadUrl: existing?.downloadUrl ?? value.trim(),
-          sha256:
-              existing?.sha256 ??
-              (checksum is String && checksum.trim().isNotEmpty
-                  ? checksum.trim()
-                  : null),
-        );
-      }
-    }
-    if (fallbackVersion == null && platforms.isEmpty) {
+    final version = decoded['version'];
+    if (version is! String || version.trim().isEmpty) {
       throw const FormatException('Manifest is missing a version.');
     }
+    final downloadUrl = decoded['download_url'] ?? decoded['downloadUrl'];
+    final sha256 = decoded['sha256'];
     final urlValue = decoded['release_url'] ?? decoded['url'];
-    return _ReleaseManifest(
-      version: fallbackVersion ?? platforms.values.first.version,
-      platforms: platforms,
+    return _PlatformRelease(
+      version: version.trim(),
+      downloadUrl: downloadUrl is String && downloadUrl.trim().isNotEmpty
+          ? downloadUrl.trim()
+          : null,
+      sha256: sha256 is String && sha256.trim().isNotEmpty
+          ? sha256.trim()
+          : null,
       releaseUrl: urlValue is String && urlValue.trim().isNotEmpty
           ? urlValue.trim()
           : null,
@@ -190,28 +142,18 @@ class UpdateChecker {
   }
 }
 
-class _ReleaseManifest {
-  const _ReleaseManifest({
-    required this.version,
-    required this.platforms,
-    this.releaseUrl,
-  });
-
-  final String? version;
-  final Map<String, _PlatformRelease> platforms;
-  final String? releaseUrl;
-}
-
 class _PlatformRelease {
   const _PlatformRelease({
     required this.version,
     this.downloadUrl,
     this.sha256,
+    this.releaseUrl,
   });
 
   final String version;
   final String? downloadUrl;
   final String? sha256;
+  final String? releaseUrl;
 }
 
 String currentUpdatePlatform() {

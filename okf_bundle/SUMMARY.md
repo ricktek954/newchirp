@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 610 concepts across 4 domains and 30 modules'
-git_branch: HEAD
+description: 'Top-level OKF summary: 609 concepts across 4 domains and 30 modules'
+git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-14T12:37:40Z'
+timestamp: '2026-11-14T13:23:53Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 610 concepts | 4 domains | 30 modules
+> OKF v0.2 bundle | 609 concepts | 4 domains | 30 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
 | Function | 472 |
-| Class | 99 |
+| Class | 98 |
 | Module | 30 |
 | Enum | 9 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 610 |
+| dart | 609 |
 
 ## Domain Map
 
@@ -44,13 +44,13 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - [models/repeater_counties](models/repeater_counties/index.md) (1 concepts)
 
-### [services](services/index.md) — 229 concepts
+### [services](services/index.md) — 228 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (55 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/mygmrs_client](services/mygmrs_client/index.md) (22 concepts)
-- [services/update_checker](services/update_checker/index.md) (18 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
+- [services/update_checker](services/update_checker/index.md) (17 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (11 concepts)
 - [services/update_installer](services/update_installer/index.md) (11 concepts)
@@ -75,8 +75,8 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
 | [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
-| [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
+| [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |

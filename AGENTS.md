@@ -97,10 +97,11 @@ Every production installer build must contain and expose its version.
 
 The website uses the version in the filename as its source of truth. Each
 versioned artifact becomes that platform's current download as soon as it is
-uploaded, so platform versions can differ. The update manifest's per-platform
-entries are authoritative; its top-level `version` remains the newest release
-shared by Windows, macOS, and Linux for older clients. The `.rpm`, AppImage,
-and Pacman extra buttons appear when matching files are present.
+uploaded, so platform versions can differ. The current app requests
+`/api/releases/latest?platform=<windows|macos|linux>` and receives only that
+installer's release object. There is no shared top-level desktop version. The
+`.rpm`, AppImage, and Pacman extra buttons appear when matching files are
+present.
 
 The Linux download page must distinguish each package format. Keep the helper
 text and badges near the matching download:

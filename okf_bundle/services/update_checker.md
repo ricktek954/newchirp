@@ -10,7 +10,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
+timestamp: "2026-11-14T13:23:52Z"
 concept_id: services/update_checker
 language: dart
 ---
@@ -24,7 +24,6 @@ language: dart
 | related | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) |
 | related | [UpdateCheckException](/services/update_checker/UpdateCheckException.md) |
 | related | [UpdateChecker](/services/update_checker/UpdateChecker.md) |
-| related | [_ReleaseManifest](/services/update_checker/ReleaseManifest.md) |
 | related | [_PlatformRelease](/services/update_checker/PlatformRelease.md) |
 | related | [currentUpdatePlatform](/services/update_checker/currentUpdatePlatform.md) |
 | related | [compareVersions](/services/update_checker/compareVersions.md) |
@@ -38,5 +37,5 @@ language: dart
 | related | [toString](/services/update_checker/toString.md) |
 | related | [UpdateCheckException](/services/update_checker/UpdateCheckException.md) |
 | related | [check](/services/update_checker/check.md) |
-| related | [_parseManifest](/services/update_checker/parseManifest.md) |
+| related | [_parsePlatformRelease](/services/update_checker/parsePlatformRelease.md) |
 | related | [UpdateChecker](/services/update_checker/UpdateChecker.md) |

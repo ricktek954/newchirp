@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
+timestamp: "2026-11-14T13:23:52Z"
 concept_id: services/update_checker/launchExternalUrl
 language: dart
 ---
@@ -38,7 +38,7 @@ Explorer exits with a non-zero code even when it opens the page, so only a
 failure to start the process counts as a failed launch.
 
 ## Source
-Lines 345–345 in `services/update_checker.dart`
+Lines 287–287 in `services/update_checker.dart`
 
 ## Relationships
 

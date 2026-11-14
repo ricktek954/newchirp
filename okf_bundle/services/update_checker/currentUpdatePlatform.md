@@ -10,7 +10,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
+timestamp: "2026-11-14T13:23:52Z"
 concept_id: services/update_checker/currentUpdatePlatform
 language: dart
 ---
@@ -24,7 +24,7 @@ StringcurrentUpdatePlatform()
 ```
 
 ## Source
-Lines 217–217 in `services/update_checker.dart`
+Lines 159–159 in `services/update_checker.dart`
 
 ## Relationships
 
