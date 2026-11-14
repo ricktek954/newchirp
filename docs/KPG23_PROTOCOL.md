@@ -32,6 +32,11 @@ FreeDOS/QEMU VM.
 
 KPG-23D was observed using COM1 at `9600,N,8,1`.
 
+The KPG-32D manual specifies a KPG-8 or KPG-22 cable. It also warns that
+automatic entry into PC mode is not reliable: for a failed connection, switch
+the radio off, hold `[LMP]` and `[CALL]` while switching it on, and wait for
+`-PC-` on the display before starting the read.
+
 | Step | Host bytes | Radio response |
 | --- | --- | --- |
 | Identity | `02` | Eight-byte family identity |

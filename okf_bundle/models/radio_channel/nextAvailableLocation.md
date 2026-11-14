@@ -10,7 +10,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T15:02:54Z"
+timestamp: "2026-11-14T15:16:59Z"
 concept_id: models/radio_channel/nextAvailableLocation
 language: dart
 ---
@@ -24,7 +24,7 @@ intnextAvailableLocationnextAvailableLocation
 ```
 
 ## Source
-Lines 686–690 in `models/radio_channel.dart`
+Lines 692–696 in `models/radio_channel.dart`
 
 ## Relationships
 

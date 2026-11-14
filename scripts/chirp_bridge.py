@@ -632,6 +632,26 @@ def bridge_error_message(exc, command=None, model=None, port=None):
             "try Read settings again. You can also use Load from stored image "
             "to view the settings saved from the completed channel write."
         )
+    if (
+        command in ("download", "read-settings")
+        and model in ("Kenwood_TK-350", "Kenwood_TK-359")
+        and (
+            "reading the radio identity" in lowered_message
+            or "no response from radio" in lowered_message
+        )
+    ):
+        selected_port = str(port or "the selected COM port")
+        message = (
+            "The Kenwood did not answer its identity request on %s. Use a "
+            "KPG-8 or KPG-22 programming cable, close KPG-32D, CHIRP, and "
+            "any terminal program, then put the radio in PC mode manually: "
+            "switch it off, connect the cable, hold [LMP] and [CALL] while "
+            "switching it on, and wait until \"-PC-\" appears. Then select "
+            "the COM port created by the cable and read again. If the OEM "
+            "KPG-32D software can read the radio with the same cable and "
+            "port, report that result with the cable model."
+            % selected_port
+        )
     trace = RADIO_TRACE.format()
     if trace:
         message += RADIO_TRACE_MARKER + trace
@@ -1294,6 +1314,136 @@ def normalize_upload_memory(radio, memory):
         warnings, errors = chirp_common.split_validation_msgs(messages)
 
     return errors, warnings, sorted(set(changed_fields)), notes
+
+
+def prepare_upload_channels(radio, items, progress_callback=None):
+    """Validate and apply imported channels without touching invalid slots."""
+    from chirp import chirp_common
+
+    start, end = radio.get_features().memory_bounds
+    skipped = []
+    adjusted = []
+    written = 0
+
+    for index, source_item in enumerate(items):
+        item = dict(source_item)
+        raw_location = item.get("location")
+        try:
+            location = int(raw_location)
+        except (TypeError, ValueError):
+            skipped.append({
+                "location": raw_location,
+                "name": str(item.get("name", "")),
+                "reason": (
+                    "Channel location must be a whole number between "
+                    "%s and %s." % (start, end)
+                ),
+                "skipped": True,
+            })
+            location = None
+
+        if location is not None and not start <= location <= end:
+            filtered_name = radio.filter_name(str(item.get("name", "")))
+            skipped.append({
+                "location": location,
+                "name": filtered_name,
+                "reason": (
+                    "Location %s is outside this radio's supported range "
+                    "%s-%s." % (location, start, end)
+                ),
+                "skipped": True,
+            })
+            location = None
+
+        if location is not None:
+            requested_name = str(item.get("name", ""))
+            filtered_name = radio.filter_name(requested_name)
+            item["location"] = location
+            item["name"] = filtered_name
+            try:
+                mem = radio.get_memory(location)
+            except Exception as exc:
+                skipped.append({
+                    "location": location,
+                    "name": filtered_name,
+                    "reason": (
+                        "The selected driver could not load channel %s: %s"
+                        % (location, exc)
+                    ),
+                    "skipped": True,
+                })
+                location = None
+
+        if location is not None:
+            try:
+                locked_fields = apply_json(radio, mem, item)
+                (
+                    errors,
+                    warnings,
+                    normalized_fields,
+                    normalization_notes,
+                ) = normalize_upload_memory(radio, mem)
+                if (errors or warnings) and locked_fields:
+                    skipped.append({
+                        "location": location,
+                        "name": filtered_name,
+                        "reason": (
+                            "locked field(s): %s left a required value "
+                            "unchanged" % ", ".join(locked_fields)
+                        ),
+                        "skipped": True,
+                    })
+                elif errors:
+                    skipped.append({
+                        "location": location,
+                        "name": filtered_name,
+                        "reason": channel_validation_message(
+                            mem,
+                            errors,
+                            radio.get_features().valid_tuning_steps,
+                        ),
+                        "skipped": True,
+                    })
+                else:
+                    set_memory_with_extras(radio, mem)
+                    written += 1
+                    if (
+                        locked_fields
+                        or normalized_fields
+                        or filtered_name != requested_name
+                    ):
+                        fields = sorted(
+                            set(locked_fields + normalized_fields)
+                        )
+                        adjusted.append({
+                            "location": location,
+                            "name": filtered_name,
+                            "fields": fields,
+                            "nameFrom": requested_name,
+                            "nameTo": filtered_name,
+                            "reason": (
+                                "; ".join(normalization_notes)
+                                if normalization_notes
+                                else None
+                            ),
+                        })
+            except chirp_common.ImmutableValueError as exc:
+                skipped.append({
+                    "location": location,
+                    "name": filtered_name,
+                    "reason": str(exc),
+                    "skipped": True,
+                })
+            except Exception as exc:
+                raise RuntimeError(
+                    "Could not prepare channel %s (%s): %s"
+                    % (location, filtered_name, exc)
+                ) from exc
+
+        if progress_callback is not None:
+            progress_callback(index, len(items))
+
+    return skipped, adjusted, written
 
 
 def serial_read_timeout(radio_class):
@@ -2529,87 +2679,18 @@ def main():
                 )
                 with open(args.channels, encoding="utf-8") as handle:
                     items = json.load(handle)
-                from chirp import chirp_common
-                skipped = []
-                adjusted = []
-                written = 0
-                for index, item in enumerate(items):
-                    requested_name = str(item.get("name", ""))
-                    filtered_name = channel_radio.filter_name(requested_name)
-                    item = dict(item)
-                    item["name"] = filtered_name
-                    try:
-                        mem = channel_radio.get_memory(int(item["location"]))
-                    except Exception:
-                        mem = chirp_common.Memory()
-                    try:
-                        locked_fields = apply_json(channel_radio, mem, item)
-                        (
-                            errors,
-                            warnings,
-                            normalized_fields,
-                            normalization_notes,
-                        ) = normalize_upload_memory(channel_radio, mem)
-                        if (errors or warnings) and locked_fields:
-                            skipped.append({
-                                "location": int(item["location"]),
-                                "name": filtered_name,
-                                "reason": (
-                                    "locked field(s): %s left a required "
-                                    "value unchanged" % ", ".join(locked_fields)
-                                ),
-                                "skipped": True,
-                            })
-                            continue
-                        if errors:
-                            skipped.append({
-                                "location": int(item["location"]),
-                                "name": filtered_name,
-                                "reason": channel_validation_message(
-                                    mem,
-                                    errors,
-                                    channel_radio.get_features()
-                                    .valid_tuning_steps,
-                                ),
-                                "skipped": True,
-                            })
-                            continue
-                        set_memory_with_extras(channel_radio, mem)
-                        written += 1
-                        if (
-                            locked_fields
-                            or normalized_fields
-                            or filtered_name != requested_name
-                        ):
-                            fields = sorted(
-                                set(locked_fields + normalized_fields)
-                            )
-                            adjusted.append({
-                                "location": int(item["location"]),
-                                "name": filtered_name,
-                                "fields": fields,
-                                "nameFrom": requested_name,
-                                "nameTo": filtered_name,
-                                "reason": (
-                                    "; ".join(normalization_notes)
-                                    if normalization_notes
-                                    else None
-                                ),
-                            })
-                    except chirp_common.ImmutableValueError as exc:
-                        skipped.append({
-                            "location": int(item["location"]),
-                            "name": filtered_name,
-                            "reason": str(exc),
-                            "skipped": True,
-                        })
-                    if items and (
-                        index % 10 == 0 or index == len(items) - 1
-                    ):
+                def channel_progress(index, total):
+                    if total and (index % 10 == 0 or index == total - 1):
                         emit_progress(
                             "Preparing channels...",
-                            0.03 + 0.06 * (index + 1) / len(items),
+                            0.03 + 0.06 * (index + 1) / total,
                         )
+
+                skipped, adjusted, written = prepare_upload_channels(
+                    channel_radio,
+                    items,
+                    channel_progress,
+                )
                 if items and written == 0:
                     detail = (
                         " First incompatible channel: %s."

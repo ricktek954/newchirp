@@ -9,6 +9,7 @@ final RegExp _queryTerms = RegExp(r'\s+');
 const Map<String, String> _modelPickerHints = {
   'Baofeng_UV-5R_Mini': 'General-purpose profile; used for the Baofeng 5 Mini',
   'Baofeng_UV-5G_Mini': 'GMRS-only profile; channels 1-30 are frequency-locked',
+  'Baofeng_UV-29Pro': "Uses Baofeng's UV-28 Plus compatibility profile",
 };
 
 String displayRadioModelName(String model) => model.replaceAll('_', ' ');

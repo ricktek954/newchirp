@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-13
+Last updated: 2026-11-14
 
 ## Status definitions
 
@@ -24,6 +24,7 @@ Last updated: 2026-11-13
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N1 | Odd-split channels decode; reporter image verified | Stock FT-50 encoder, offline round-trip | Stock FT-50 settings | Experimental compatibility override |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR | 960 channels + Pro map, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
@@ -38,6 +39,7 @@ Last updated: 2026-11-13
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
 | KSUN UV-K60 rebrand | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Stock UV-K5-family profile | Stock UV-K5-family policy | Stock UV-K5-family policy | Experimental |
+| KSUN UV-K60 Plus | `drivers/newchirp_uvk60plus.py` | MH-580 clone serial, 38400 8N1 | Sparse `0x2A00` image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -46,6 +48,7 @@ Last updated: 2026-11-13
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5RH | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-17ProGPS | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv17progps_compat.py` | UV-17-family serial, 115200 8N1 | Malformed CTCSS values no longer abort channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng UV-29 Pro | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_baofeng_uv29pro.py` | UV-17-family serial through the UV-28 Plus profile, 115200 8N1 | UV-28 Plus profile, offline fixture round-trip | Stock UV-28 Plus policy | Stock UV-28 Plus policy | Experimental vendor alias; hardware validation pending |
 | Baofeng UV-5G Mini | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5g_mini.py` | UV-17-family serial, 115200 8N1 | Fixed GMRS frequencies; channels 15-22 retain stored duplex | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng GM-21 | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_baofeng_gm21.py` | UV-17-family serial; GM-5RH and UV-17Pro GPS handshakes | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone 5888UV | `drivers/newchirp_anytone.py` | Stock AnyTone clone serial | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -163,6 +166,55 @@ Last updated: 2026-11-13
 - Next milestone: the reporter retests Download From Radio in the next normal
   build, confirms the affected channel appears with no tone, and compares one
   edited non-tone field against the radio display before upload.
+
+### Baofeng UV-29 Pro
+
+- Maintained compatibility alias: `drivers/newchirp_baofeng_uv29pro.py`
+- Vendor mapping: Baofeng's official UV-29 Pro product page instructs CHIRP
+  users to select the UV-28 Plus model
+- Model mapping: `Baofeng_UV-29Pro` subclasses the pinned CHIRP `UV28Plus`
+  class and intentionally does not redefine the transport, channel decoder,
+  settings, or upload path
+- Transport: pinned CHIRP UV-17-family serial at 115200 8N1
+- Read/write policy: exactly the pinned UV-28 Plus profile
+- Driver SHA-256:
+  `3eec557a98efcdac6f25a2e15a68e047ac01fa8802a42a0db65b3982f25053fe`
+- Website: `UV-29Pro (experimental)` catalog entry and matching UV-28 Plus
+  Web Serial profile
+- Evidence: official Baofeng product metadata and the 2026-11-14 Windows report
+  in email UID 670 where `Baofeng_UV-21ProV2` received no response to the
+  `PROGRAMBFNOR` identity probe
+- Offline validation: the upstream `Baofeng_UV-28Plus.img` fixture decodes
+  identically through both model identifiers, and an image saved as
+  `Baofeng_UV-29Pro` reopens under the alias. Fixture SHA-256:
+  `04c5de4c2fcb556190ddafbd9bab512326da1bf8895b8eae1d41a480c8514617`
+- Hardware validation: none
+- Next milestone: the reporter selects `Baofeng_UV-29Pro`, completes a read,
+  saves the image, and compares the decoded channels with the radio before
+  attempting any upload
+
+### Yaesu FT-50 odd split
+
+- Maintained compatibility: `drivers/newchirp_ft50_compat.py`
+- Transport: pinned CHIRP Yaesu clone serial at 9600 8N1
+- Decode policy: duplex code `3` represents an odd-split channel. Expose it as
+  CHIRP's `split` duplex with the stored offset as the transmit frequency.
+- Write policy: the stock FT-50 encoder now accepts `split`; channel fields
+  continue to use the established 16-byte record layout
+- Evidence: email UID 672 from `mark@kieffermail.com` supplied NewChirp image
+  `newchirp-1tmrlsdr.img`, SHA-256
+  `db87e5dd14f0333f1f7fe72e35cfb984054d96c30c543c33c7ef092cfbccca32`
+- Reporter image: 57 active channels, including ten odd-split channels
+  (`6, 7, 60, 77, 81, 83, 85, 86, 87, 89`); channel 6 receives on
+  155.700 MHz and transmits on 154.755 MHz
+- Driver SHA-256:
+  `05b5d9fa11f32c88d848d6cd173e02cd6eba2d41a2998259f685b55b4f852e0a`
+- Offline validation: all active channels decode, and editing a split channel
+  round-trips through the stock encoder
+- Hardware validation: none
+- Next milestone: the reporter updates NewChirp, reads the radio again, saves
+  the decoded image, and verifies one odd-split channel against the radio
+  before any upload
 
 ### Baofeng UV-5G Mini
 
@@ -1208,6 +1260,36 @@ Last updated: 2026-11-13
 - Next milestone: select `KSUN UV-K60`, download the full image, compare its
   channel and settings fields with the stock UV-K5 profile, then perform a
   controlled write and read-back before promoting it beyond experimental.
+
+### KSUN UV-K60 Plus
+
+- Maintained driver: `drivers/newchirp_uvk60plus.py`
+- Protocol evidence: `docs/KSUN_UVK60PLUS_PROTOCOL.md`
+- OEM programmer: KSUN `MH-580` version 0.2, dated 2025-10-24
+- OEM ZIP SHA-256:
+  `790507b60b875259a1a2ba665ca39f5be31793870722706494123ddd7e8b2ac9`
+- OEM executable SHA-256:
+  `b241af593ba2b327a0b155bd287813df37becaa275294bae5ca77b5c3a19e79f`
+- Radio evidence: `X-TFSI V5: UV60dplus`, serial `26UV60DPLUS00798`
+- Transport: 38,400 8N1, `P{OJI}E` entry, eight-byte `P311` family
+  identity, 32-byte `R <address:u16be> 20` reads, and `E` exit
+- Image: `0x2A00` bytes across `0x0000-0x1F40` and `0x2000-0x2A00`;
+  the `0x1F40-0x2000` gap is preserved without a read
+- Implemented: complete raw-image retention, 128 channel records, BCD
+  RX/TX frequency decoding, offset direction, CTCSS, and the apparent
+  `0x2000` name table
+- Read/write policy: read-only. Uploads and channel mutation fail closed
+  because the option bytes, write fields, and checksum acceptance policy
+  remain unvalidated
+- Evidence: E1 static MH-580 call-path analysis and E2 synthetic replay.
+  The supplied OEM dump decodes correctly for its 17 active records, but it
+  does not match the separate 97-channel CSV snapshot
+- Driver SHA-256:
+  `6dced38861e73cad495389234bba17b81658f901ac78b45d55b09b35e2291706`
+- Website: experimental catalog entry and read-only Web Serial profile
+- Hardware validation: none
+- Next milestone: compare a complete NewChirp read with an OEM CPS read of
+  the same radio state before promoting beyond read-only experimental
 
 ### Baofeng UV-9R
 

@@ -8,9 +8,9 @@ tags:
   - "type:Class"
   - "module:widgets"
   - "domain:radio_model_picker.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T12:36:25Z"
+timestamp: "2026-11-14T18:12:23Z"
 concept_id: widgets/radio_model_picker/ModelResultsList
 language: dart
 ---
@@ -28,7 +28,7 @@ class _ModelResultsList
 - `createState`
 
 ## Source
-Lines 520–533 in `widgets/radio_model_picker.dart`
+Lines 521–534 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

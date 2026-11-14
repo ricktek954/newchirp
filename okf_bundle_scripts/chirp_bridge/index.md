@@ -54,6 +54,7 @@
 - [normalize_repeaterbook_query](normalize_repeaterbook_query.md) — Treat location words like "Broward County" as a county name.
 - [normalize_upload_memory](normalize_upload_memory.md) — Apply safe coercions advertised by CHIRP validation warnings.
 - [open_serial](open_serial.md)
+- [prepare_upload_channels](prepare_upload_channels.md) — Validate and apply imported channels without touching invalid slots.
 - [radio_firmware](radio_firmware.md) — Return the best available firmware identity from a radio or image.
 - [radio_for](radio_for.md)
 - [radio_from_image](radio_from_image.md) — Build a driver instance backed only by a saved radio image.

@@ -207,6 +207,12 @@ Map<String, String> scanChoices(List<String>? allowed) {
   return {for (final value in values) value: scanLabel(value)};
 }
 
+/// Channels that can safely be passed to a radio upload.
+List<RadioChannel> compatibleChannelsForUpload(
+  Iterable<RadioChannel> channels,
+  List<String> Function(RadioChannel channel) issuesFor,
+) => channels.where((channel) => issuesFor(channel).isEmpty).toList();
+
 /// CHIRP id for the hardware-tested Midland MXT295 driver.
 const midlandMxt295Model = 'Midland_MXT295';
 

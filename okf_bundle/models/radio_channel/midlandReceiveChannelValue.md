@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T15:02:54Z"
+timestamp: "2026-11-14T15:16:59Z"
 concept_id: models/radio_channel/midlandReceiveChannelValue
 language: dart
 ---
@@ -31,7 +31,7 @@ StringmidlandReceiveChannelValue(int location, double frequencyMhz)
 Selected value for [midlandReceiveChannelChoices].
 
 ## Source
-Lines 344–344 in `models/radio_channel.dart`
+Lines 350–350 in `models/radio_channel.dart`
 
 ## Relationships
 

@@ -3250,9 +3250,6 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _radioImage == null) {
       return;
     }
-    final activeLocations = _activeChannels
-        .map((channel) => channel.location)
-        .toSet();
     final mappingSignature = radioMappingsSignature(_radioMappings);
     final mappingsChanged =
         _radioMappings.isNotEmpty &&
@@ -3271,6 +3268,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final invalidChannels = _activeChannels
         .where((channel) => _channelIssues(channel).isNotEmpty)
         .toList();
+    var channelsToWrite = _activeChannels;
     final compatibleCount = _activeChannels.length - invalidChannels.length;
     final issues = _activeChannels
         .expand(
@@ -3310,10 +3308,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
       if (skipIncompatible != true) return;
       if (!mounted) return;
+      channelsToWrite = compatibleChannelsForUpload(
+        _activeChannels,
+        _channelIssues,
+      );
     }
+    final activeLocations = channelsToWrite
+        .map((channel) => channel.location)
+        .toSet();
     final uppercasesNames =
         _capabilities?.uppercaseNames == true &&
-        _activeChannels.any(
+        channelsToWrite.any(
           (channel) => channel.name != channel.name.toUpperCase(),
         );
     final confirmed = await showDialog<bool>(
@@ -3352,13 +3357,22 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
     if (!await _confirmRadioInstructions(instructions, writing: true)) return;
+    final incompatibleChanges = <Map<String, dynamic>>[
+      for (final channel in invalidChannels)
+        {
+          'location': channel.location,
+          'name': channel.name,
+          'reason': _channelIssues(channel).join('; '),
+          'skipped': true,
+        },
+    ];
     var changes = <Map<String, dynamic>>[];
     await _transferTask('Writing radio — do not disconnect…', () async {
       final result = await _bridge.upload(
         model: _model!,
         port: _port!,
         imagePath: _radioImage!,
-        channels: _activeChannels,
+        channels: channelsToWrite,
         cleared: _clearedLocations.toList(),
         mappings: mappingsChanged
             ? _radioMappings
@@ -3368,7 +3382,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         zone: _selectedZone,
         onProgress: _reportTransferProgress,
       );
-      changes = result.adjustments;
+      changes = [...incompatibleChanges, ...result.adjustments];
       final nameChanges = changes.where((entry) {
         final from = entry['nameFrom'];
         final to = entry['nameTo'];
@@ -3401,21 +3415,35 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
     });
     if (changes.isNotEmpty && mounted) {
+      final skippedCount = changes
+          .where((entry) => entry['skipped'] == true)
+          .length;
+      final adjustedCount = changes.length - skippedCount;
       await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Some channel values were adjusted'),
+          title: Text(
+            skippedCount > 0
+                ? 'Some channels were not written'
+                : 'Some channel values were adjusted',
+          ),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Text(
-                  'The write finished, but NewChirp adjusted values the radio '
-                  'does not support or could not write some channels.',
+                Text(
+                  skippedCount > 0 && adjustedCount > 0
+                      ? 'The write finished. $adjustedCount channels were '
+                            'adjusted and $skippedCount could not be written.'
+                      : skippedCount > 0
+                      ? 'The compatible channels were written, but '
+                            '$skippedCount channels could not be written.'
+                      : 'The write finished, but NewChirp adjusted values the '
+                            'radio does not support.',
                 ),
                 const SizedBox(height: 12),
-                for (final entry in changes)
+                for (final entry in changes.take(20))
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Text(() {
@@ -3447,6 +3475,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       }
                       return 'Channel $location $name: ${notes.join('; ')}.';
                     }()),
+                  ),
+                if (changes.length > 20)
+                  Text(
+                    '…and ${changes.length - 20} more channels.',
+                    style: Theme.of(context).textTheme.bodySmall,
                   ),
                 const Text(
                   'Names are converted only when the selected radio requires '
