@@ -8,15 +8,15 @@ release requirements.
 
 ## Resume here
 
-- macOS `1.0.53` is live from source commit `76fcaf93` as a universal,
-  signed, notarized, stapled, Gatekeeper-accepted DMG. It is the first macOS
-  desktop release containing the read-only experimental TK-350 and TK-359
-  drivers. It also includes the Baofeng 5 Mini profile guidance and detailed
-  Wouxun KG-Q10H family identity diagnostics. Verification: 409 Python tests
-  with two fixture-dependent skips, 62 bridge tests, 219 Flutter tests, a
-  clean analyzer, strict codesigning, Apple notarization and stapling,
-  mounted-DMG inspection, Gatekeeper, launch smoke test, and matching
-  local/server/public SHA-256 all passed.
+- macOS `1.0.54` is live from source commit `c55530b9` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the Baofeng
+  UV-29 Pro alias, Yaesu FT-50 odd-split decoding, the read-only KSUN
+  UV-K60 Plus driver, TD-H8 upload safeguards, and the latest 596-model
+  bundled CHIRP catalog. Verification: 423 Python tests with two
+  fixture-dependent skips, 218 Flutter tests, a clean analyzer, strict app
+  codesigning, Apple notarization and stapling, mounted-DMG inspection,
+  Gatekeeper, launch smoke test, and matching local/server/public SHA-256 all
+  passed.
 - Update checks now request only their own platform manifest with
   `/api/releases/latest?platform=<windows|macos|linux>`. The server returns
   one `{platform, version, download_url, release_url}` object, and there is no
@@ -573,11 +573,11 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.53` artifact source commit: `76fcaf93`
-- macOS `1.0.53` artifact source commit: `76fcaf93`
+- macOS `1.0.54` artifact source commit: `c55530b9`
 - Linux `1.0.51` is live; artifact source commit is not recorded in this
   checkout
 - Open pull requests: none
-- Checked-out source version: `1.0.53+53`
+- Checked-out source version: `1.0.54+54`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -591,9 +591,24 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.53 |
+| macOS | 1.0.54 |
 | Windows | 1.0.53 |
 | Linux | 1.0.51 |
+
+macOS `1.0.54` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.54.dmg`
+- Version/build: `1.0.54` / `54`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `211c9c6c93e20aee232e6f931caf92750eb667288cf5ecfd8214f008feed190e`
+- Size: `86,642,668` bytes
+- Built from `c55530b9`
+- Notarization submission: `e19d0d70-9ace-4f97-bf70-aeb83c001174`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains Baofeng UV-29 Pro, Yaesu FT-50 odd-split, and KSUN
+  UV-K60 Plus support
+- Server and public-download checksums matched the final stapled DMG
 
 macOS `1.0.53` artifact:
 
@@ -1093,6 +1108,17 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.54` from source commit `c55530b9` as a universal,
+  signed, notarized, stapled DMG. The release includes the Baofeng UV-29 Pro
+  UV-28 Plus compatibility alias, Yaesu FT-50 odd-split decoding, read-only
+  KSUN UV-K60 Plus support, TD-H8 upload safeguards, and the latest radio
+  catalog. Verification: app/build version `1.0.54` / `54`; universal
+  `arm64` and `x86_64`; Python 3.13.15 arm64 and x86_64 runtimes; pinned
+  CHIRP commit `21e42e45`; 255 bundled driver modules; 596 selectable models;
+  423 Python tests with two fixture-dependent skips; 218 Flutter tests;
+  `flutter analyze` clean; notarization accepted; staple and DMG integrity
+  checks passed; mounted-DMG signature, Gatekeeper, driver inspection, and
+  launch smoke test passed; local, server, and public SHA-256 matched.
 - Published macOS `1.0.53` from source commit `76fcaf93` as a universal,
   signed, notarized, stapled DMG. This is the first macOS desktop release with
   the read-only experimental Kenwood TK-350 and TK-359 drivers. It also carries
