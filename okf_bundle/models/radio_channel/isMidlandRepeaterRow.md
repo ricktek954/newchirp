@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T15:02:54Z"
+timestamp: "2026-11-14T15:16:59Z"
 concept_id: models/radio_channel/isMidlandRepeaterRow
 language: dart
 ---
@@ -31,7 +31,7 @@ boolisMidlandRepeaterRow(String? model, int location)
 Whether [location] is one of the eight repeater rows on this radio.
 
 ## Source
-Lines 251–251 in `models/radio_channel.dart`
+Lines 257–257 in `models/radio_channel.dart`
 
 ## Relationships
 

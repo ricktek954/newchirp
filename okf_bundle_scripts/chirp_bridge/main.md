@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:12:45Z"
+timestamp: "2026-11-14T15:24:13Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 2277–2702 in `chirp_bridge.py`
+Lines 2427–2783 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -43,6 +43,7 @@ Lines 2277–2702 in `chirp_bridge.py`
 | calls | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |
 | calls | [search_repeaterbook](/chirp_bridge/search_repeaterbook.md) |
 | calls | [memory_with_extras](/chirp_bridge/memory_with_extras.md) |
+| calls | [prepare_upload_channels](/chirp_bridge/prepare_upload_channels.md) |
 | calls | [apply_setting_changes](/chirp_bridge/apply_setting_changes.md) |
 | calls | [mapping_payload](/chirp_bridge/mapping_payload.md) |
 | calls | [features_json](/chirp_bridge/features_json.md) |
@@ -50,8 +51,4 @@ Lines 2277–2702 in `chirp_bridge.py`
 | calls | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) |
 | calls | [memory_json](/chirp_bridge/memory_json.md) |
 | calls | [download_decode_error_message](/chirp_bridge/download_decode_error_message.md) |
-| calls | [apply_json](/chirp_bridge/apply_json.md) |
-| calls | [normalize_upload_memory](/chirp_bridge/normalize_upload_memory.md) |
-| calls | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) |
 | calls | [erase_memory_with_extras](/chirp_bridge/erase_memory_with_extras.md) |
-| calls | [channel_validation_message](/chirp_bridge/channel_validation_message.md) |

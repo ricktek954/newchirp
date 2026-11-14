@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = chirp_source()
 VENDOR = ROOT / "assets/python/pyserial-3.5-py2.py3-none-any.whl"
 TD_H3_IMAGE = SOURCE / "tests/images/TIDRADIO_TD-H3.img"
+TD_H8_IMAGE = SOURCE / "tests/images/TIDRADIO_TD-H8.img"
 A36PLUS_IMAGE = SOURCE / "tests/images/Talkpod_A36plus.img"
 GMRS_V2_IMAGE = SOURCE / "tests/images/BTECH_GMRS-V2.img"
 DM32UV_IMAGE = SOURCE / "tests/images/Baofeng_DM-32UV.img"
@@ -37,20 +38,26 @@ spec.loader.exec_module(bridge)
 
 
 class FakeTDH3Serial:
-    def __init__(self):
+    def __init__(
+        self,
+        magic=b"PVOJH\x5c\x14",
+        identity=b"P31183\xff\xff",
+    ):
         self.timeout = 0.25
         self.writes: list[bytes] = []
         self._responses: deque[bytes] = deque()
         self.ident_count = 0
+        self.magic = magic
+        self.identity = identity
 
     def write(self, data):
         self.writes.append(bytes(data))
-        if data == b"PVOJH\x5c\x14":
+        if data == self.magic:
             self.ident_count += 1
             if self.ident_count == 1:
                 self._responses.append(b"\x06")
         elif data == b"\x02":
-            self._responses.append(b"P31183\xff\xff")
+            self._responses.append(self.identity)
         elif data == b"\x06":
             self._responses.append(b"\x06")
         elif data[:1] == b"R":
@@ -1176,6 +1183,22 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertIn("turn the radio off and back on", message)
         self.assertIn("Load from stored image", message)
 
+    def test_tk359_identity_timeout_explains_pc_mode_and_cable(self):
+        message = bridge.bridge_error_message(
+            Exception(
+                "Radio returned 0 of 8 bytes while reading the radio identity"
+            ),
+            command="download",
+            model="Kenwood_TK-359",
+            port="COM3",
+        )
+
+        self.assertIn("KPG-8 or KPG-22", message)
+        self.assertIn("[LMP] and [CALL]", message)
+        self.assertIn('"-PC-"', message)
+        self.assertIn("COM3", message)
+        self.assertIn("OEM KPG-32D", message)
+
     def test_empty_live_radio_snapshot_can_be_filled_for_upload(self):
         from chirp import chirp_common
 
@@ -1231,6 +1254,69 @@ class UploadHandshakeTest(unittest.TestCase):
 
         self.assertEqual(written, [1])
         self.assertEqual(erased, [2])
+
+    def test_upload_preparation_skips_locations_outside_radio_bounds(self):
+        radio = self.directory.get_radio_by_image(str(TD_H8_IMAGE))
+        radio.load_mmap(str(TD_H8_IMAGE))
+        base = bridge.memory_json(radio.get_memory(1))
+        items = []
+        for location in range(1, 543):
+            item = dict(base)
+            item["location"] = location
+            item["name"] = "R%03d" % location
+            items.append(item)
+
+        skipped, adjusted, written = bridge.prepare_upload_channels(
+            radio,
+            items,
+        )
+
+        self.assertEqual(written, 199)
+        self.assertEqual(adjusted, [])
+        self.assertEqual(
+            [entry["location"] for entry in skipped],
+            list(range(200, 543)),
+        )
+        self.assertIn(
+            "outside this radio's supported range 1-199",
+            skipped[0]["reason"],
+        )
+
+    def test_td_h8_542_channel_library_writes_only_supported_slots(self):
+        serial = FakeTDH3Serial(
+            magic=b"PVOJH\x1c\x14",
+            identity=b"P31183\xff\xff",
+        )
+        with mock.patch.object(
+            bridge,
+            "open_serial",
+            lambda _radio_class, _port: serial,
+        ):
+            radio = bridge.radio_for(
+                self.directory,
+                "TIDRADIO_TD-H8",
+                "fake",
+                image=str(TD_H8_IMAGE),
+                detect_serial=False,
+            )
+        radio.load_mmap(str(TD_H8_IMAGE))
+        base = bridge.memory_json(radio.get_memory(1))
+        items = []
+        for location in range(1, 543):
+            item = dict(base)
+            item["location"] = location
+            item["name"] = "R%03d" % location
+            items.append(item)
+
+        skipped, _, written = bridge.prepare_upload_channels(radio, items)
+        radio.sync_out()
+
+        self.assertEqual(written, 199)
+        self.assertEqual(len(skipped), 343)
+        self.assertEqual(
+            sum(command[:1] == b"W" for command in serial.writes),
+            248,
+        )
 
     def test_live_write_verification_rejects_silent_changes(self):
         from chirp import chirp_common

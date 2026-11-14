@@ -5,6 +5,17 @@ RadioChannel channelAt(int location) =>
     RadioChannel(location: location, name: 'CH $location', frequency: 146.52);
 
 void main() {
+  test('upload filtering removes channels outside radio bounds', () {
+    final channels = [channelAt(1), channelAt(200), channelAt(542)];
+
+    final writable = compatibleChannelsForUpload(
+      channels,
+      (channel) => channel.validate(minimumLocation: 1, maximumLocation: 199),
+    );
+
+    expect(writable.map((channel) => channel.location), [1]);
+  });
+
   test('TSQL exposes one shared CTCSS tone in both directions', () {
     final channel = RadioChannel(
       location: 1,

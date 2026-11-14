@@ -10,6 +10,7 @@
 - [ChannelExtraField](ChannelExtraField.md)
 - [channelNumberLabel](channelNumberLabel.md) — Channel number shown in the list.
 - [clear](clear.md)
+- [compatibleChannelsForUpload](compatibleChannelsForUpload.md) — Channels that can safely be passed to a radio upload.
 - [copy](copy.md)
 - [effectiveReceiveCtcssTone](effectiveReceiveCtcssTone.md) — Effective receive CTCSS value shown to the user.
 - [effectiveTransmitCtcssTone](effectiveTransmitCtcssTone.md) — Effective transmit CTCSS value shown to the user.

@@ -10,7 +10,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T15:02:54Z"
+timestamp: "2026-11-14T15:16:59Z"
 concept_id: models/radio_channel/isZeroMhz
 language: dart
 ---
@@ -24,7 +24,7 @@ bool_isZeroMhz(double offset)
 ```
 
 ## Source
-Lines 373–373 in `models/radio_channel.dart`
+Lines 379–379 in `models/radio_channel.dart`
 
 ## Relationships
 

@@ -111,8 +111,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1794143565747369498,
-      "hash": "ce86a6d850b4d19205a4c1b6b0aeae6b541da977a990718b02d6ccec32ffb1bc",
+      "mtime_ns": 1794669853784635526,
+      "hash": "6a18ca7e9a0151de8946a9f1519ff04a4c4bc9d3a462b196ac5e24bbe68bf545",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -157,6 +157,7 @@
         "chirp_bridge/nearest_programmable_frequency",
         "chirp_bridge/channel_validation_message",
         "chirp_bridge/normalize_upload_memory",
+        "chirp_bridge/prepare_upload_channels",
         "chirp_bridge/serial_read_timeout",
         "chirp_bridge/open_serial",
         "chirp_bridge/headless_live_adapter",
@@ -198,7 +199,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "21708dcfa4bcef102ee43d2b3982d699b3a6fb775e6edc2911f5f25489e261e6",
+      "edge_hash": "fcaf9b049dd2056be05a0434b6fb6071711e210ed05af0e44e994d3c72533034",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -286,7 +287,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "467644ca4e4051f17fa169fe28ced39a7e87c5dab0bf60b37529f45a9d2e816b",
+      "edge_hash": "d6da3b103c5d1a9ffac2d062d2a12c0064c8380917898bff09a91a8356435614",
       "enriched": false
     },
     "chirp_bridge/open_serial": {
@@ -326,7 +327,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "2208258b9606e4196c02ef030db1ae5d93fc9f43937410e81a2ba84780415fe7",
+      "edge_hash": "ccd93f9f89faa5b26375988ec37f163241ad6e2bae1bea39414debc49bbdc279",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -902,7 +903,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "5cf4787ed968aa592bbffdd50c266db739a6ca63b1997c56466e61ad27e5c44f",
+      "edge_hash": "14d749e4850f899ade38cc34aa2ff09011361be33286fb53945a71414808287e",
       "enriched": false
     },
     "chirp_bridge/erase_memory_with_extras": {
@@ -942,7 +943,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "3b0164d00c39f0dc529756c570518af67c2d3533b4bad247e83b0dbbfde42987",
+      "edge_hash": "0a5226868eeddde346acd2201151e065a398cc15e2f682fecffeb62b3766ba37",
       "enriched": false
     },
     "chirp_bridge/normalize_upload_memory": {
@@ -950,7 +951,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
+      "edge_hash": "515eb108cc8e6d749c2ad1b18ad6bfb16befbad669a57ae69644d0d755ccf778",
       "enriched": false
     },
     "chirp_bridge/readline": {
@@ -1376,7 +1377,15 @@
       "render_hash": "stale",
       "edge_hash": "03f7d47fab4c5e055fc9cbe171f905280fc75adae34dbee13aaeb0a3f0f650a9",
       "enriched": false
+    },
+    "chirp_bridge/prepare_upload_channels": {
+      "concept_id": "chirp_bridge/prepare_upload_channels",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "3fd1b2ccfd0cfa8af73a4e6224c378db9cf0c72f9853ad32444d2aef147002e7",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-08T13:12:46Z"
+  "generated_at": "2026-11-14T15:24:14Z"
 }

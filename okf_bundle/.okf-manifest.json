@@ -5,8 +5,8 @@
   "files": {
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794661973820046750,
-      "hash": "208b4f5cdc2fcc462bfcd63b147231ba9f0964bbbfcc66e0e9aca637a0f2e9df",
+      "mtime_ns": 1794669569619220208,
+      "hash": "4afbe00986bc266badeab66d03eebe1e7505380de52484e9e77762e6a158f564",
       "concept_ids": [
         "main/AddChannelPlacement",
         "main/ChannelApplyDialog",
@@ -285,13 +285,14 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1794514612377369441,
-      "hash": "cbb16dccc2111e424bb1b53d666fa428958bd43f28c7e7c21177bc0e63d524ee",
+      "mtime_ns": 1794669419459116805,
+      "hash": "3e98d25a7de61e626abce16a3afb8eb9d46ac7ae89240a8451b44c0739089d07",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
         "models/radio_channel/RadioChannel",
         "models/radio_channel/channelNumberLabel",
         "models/radio_channel/clear",
+        "models/radio_channel/compatibleChannelsForUpload",
         "models/radio_channel/copy",
         "models/radio_channel/effectiveReceiveCtcssTone",
         "models/radio_channel/effectiveTransmitCtcssTone",
@@ -658,6 +659,30 @@
         "services/repeater_search_preferences_store"
       ]
     },
+    "services/update_checker.dart": {
+      "path": "services/update_checker.dart",
+      "mtime_ns": 1794662632996144606,
+      "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
+      "concept_ids": [
+        "services/update_checker/PlatformRelease",
+        "services/update_checker/UpdateCheckException",
+        "services/update_checker/UpdateCheckResult",
+        "services/update_checker/UpdateChecker",
+        "services/update_checker/check",
+        "services/update_checker/compareVersions",
+        "services/update_checker/currentUpdatePlatform",
+        "services/update_checker/isAllowedDownloadUrl",
+        "services/update_checker/launchExternalUrl",
+        "services/update_checker/openExternalUrl",
+        "services/update_checker/parsePlatformRelease",
+        "services/update_checker/toString",
+        "services/update_checker/trustedDownloadUrl",
+        "services/update_checker/trustedUpdateArtifactUrl",
+        "services/update_checker/updateArtifactExtension",
+        "services/update_checker/versionParts",
+        "services/update_checker"
+      ]
+    },
     "services/update_installer.dart": {
       "path": "services/update_installer.dart",
       "mtime_ns": 1793108770906624056,
@@ -764,62 +789,38 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1794660015587649963,
-      "hash": "5d259d63516c6f8696ab55ce472fc66850cf49d53fa0eccc37f62b81423558bb",
+      "mtime_ns": 1794679943412794641,
+      "hash": "bd465e83744256510b0ecf353cfbcd86f924a79aa49f1775bd190c8131e3e8cd",
       "concept_ids": [
-        "widgets/radio_model_picker/ModelChoice",
-        "widgets/radio_model_picker/ModelEntry",
-        "widgets/radio_model_picker/ModelResultsList",
-        "widgets/radio_model_picker/ModelResultsListState",
-        "widgets/radio_model_picker/RadioModelDialog",
-        "widgets/radio_model_picker/RadioModelDialogState",
+        "widgets/radio_model_picker",
+        "widgets/radio_model_picker/VendorModels",
         "widgets/radio_model_picker/RadioModelPicker",
         "widgets/radio_model_picker/RadioModelPickerState",
-        "widgets/radio_model_picker/SectionHeader",
+        "widgets/radio_model_picker/RadioModelDialog",
+        "widgets/radio_model_picker/RadioModelDialogState",
         "widgets/radio_model_picker/VendorChoice",
+        "widgets/radio_model_picker/ModelResultsList",
+        "widgets/radio_model_picker/ModelResultsListState",
         "widgets/radio_model_picker/VendorHeading",
-        "widgets/radio_model_picker/VendorModels",
-        "widgets/radio_model_picker/build",
-        "widgets/radio_model_picker/cacheGroups",
-        "widgets/radio_model_picker/createState",
-        "widgets/radio_model_picker/didUpdateWidget",
+        "widgets/radio_model_picker/ModelEntry",
+        "widgets/radio_model_picker/SectionHeader",
+        "widgets/radio_model_picker/ModelChoice",
         "widgets/radio_model_picker/displayRadioModelName",
-        "widgets/radio_model_picker/dispose",
-        "widgets/radio_model_picker/groupModels",
-        "widgets/radio_model_picker/initState",
-        "widgets/radio_model_picker/matchingGroups",
-        "widgets/radio_model_picker/modelNameWithinVendor",
         "widgets/radio_model_picker/modelSearchText",
-        "widgets/radio_model_picker/openPicker",
-        "widgets/radio_model_picker/remember",
-        "widgets/radio_model_picker/selectVendor",
-        "widgets/radio_model_picker/submitSearch",
         "widgets/radio_model_picker/vendorSlug",
-        "widgets/radio_model_picker"
-      ]
-    },
-    "services/update_checker.dart": {
-      "path": "services/update_checker.dart",
-      "mtime_ns": 1794662632996144606,
-      "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
-      "concept_ids": [
-        "services/update_checker",
-        "services/update_checker/UpdateCheckResult",
-        "services/update_checker/UpdateCheckException",
-        "services/update_checker/UpdateChecker",
-        "services/update_checker/PlatformRelease",
-        "services/update_checker/currentUpdatePlatform",
-        "services/update_checker/compareVersions",
-        "services/update_checker/versionParts",
-        "services/update_checker/isAllowedDownloadUrl",
-        "services/update_checker/trustedDownloadUrl",
-        "services/update_checker/updateArtifactExtension",
-        "services/update_checker/trustedUpdateArtifactUrl",
-        "services/update_checker/openExternalUrl",
-        "services/update_checker/launchExternalUrl",
-        "services/update_checker/toString",
-        "services/update_checker/check",
-        "services/update_checker/parsePlatformRelease"
+        "widgets/radio_model_picker/modelNameWithinVendor",
+        "widgets/radio_model_picker/groupModels",
+        "widgets/radio_model_picker/createState",
+        "widgets/radio_model_picker/initState",
+        "widgets/radio_model_picker/didUpdateWidget",
+        "widgets/radio_model_picker/remember",
+        "widgets/radio_model_picker/openPicker",
+        "widgets/radio_model_picker/build",
+        "widgets/radio_model_picker/dispose",
+        "widgets/radio_model_picker/matchingGroups",
+        "widgets/radio_model_picker/cacheGroups",
+        "widgets/radio_model_picker/selectVendor",
+        "widgets/radio_model_picker/submitSearch"
       ]
     }
   },
@@ -1245,7 +1246,7 @@
       "type": "Module",
       "resource": "models/radio_channel.dart",
       "render_hash": "stale",
-      "edge_hash": "bda2b1b4f1f59c223fa510f1874db8163d90cae349c3dbb62e713337964a2dbe",
+      "edge_hash": "b9d7fdd357d049eef66378d0952445b1092202d9757b122f8381829df2de74d0",
       "enriched": false
     },
     "models/radio_channel/RadioChannel": {
@@ -6103,7 +6104,15 @@
       "render_hash": "stale",
       "edge_hash": "65fa1c0d9985a476f5e611903a1939d4bd0fe0606483c3c6f570495f15f2ad72",
       "enriched": false
+    },
+    "models/radio_channel/compatibleChannelsForUpload": {
+      "concept_id": "models/radio_channel/compatibleChannelsForUpload",
+      "type": "Function",
+      "resource": "models/radio_channel.dart",
+      "render_hash": "stale",
+      "edge_hash": "3239590f5028dcfdb25ec350f4afa359df850a98086ea77a4f579e6f00298df4",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-14T13:23:53Z"
+  "generated_at": "2026-11-14T18:12:24Z"
 }
