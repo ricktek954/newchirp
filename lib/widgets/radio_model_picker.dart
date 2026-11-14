@@ -6,8 +6,17 @@ const String _recentVendors = 'Recent';
 const int _maxRecentModels = 8;
 final RegExp _querySeparators = RegExp(r'[\s_-]+');
 final RegExp _queryTerms = RegExp(r'\s+');
+const Map<String, String> _modelPickerHints = {
+  'Baofeng_UV-5R_Mini': 'General-purpose profile; used for the Baofeng 5 Mini',
+  'Baofeng_UV-5G_Mini': 'GMRS-only profile; channels 1-30 are frequency-locked',
+};
 
 String displayRadioModelName(String model) => model.replaceAll('_', ' ');
+
+String _modelSearchText(String model, String vendor) {
+  final hint = _modelPickerHints[model];
+  return [displayRadioModelName(model), vendor, ?hint].join(' ');
+}
 
 String _vendorSlug(String vendor) => vendor.replaceAll(' ', '_');
 
@@ -259,8 +268,10 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
     for (final group in source) {
       final models = group.models
           .where((model) {
-            final haystack = '${displayRadioModelName(model)} ${group.vendor}'
-                .toLowerCase();
+            final haystack = _modelSearchText(
+              model,
+              group.vendor,
+            ).toLowerCase();
             final compact = haystack.replaceAll(_querySeparators, '');
             return haystack.contains(query) ||
                 terms.every(haystack.contains) ||
@@ -627,6 +638,7 @@ class _ModelChoice extends StatelessWidget {
     final modelName = vendor == _recentVendors
         ? displayRadioModelName(model)
         : _modelNameWithinVendor(model, vendor);
+    final hint = _modelPickerHints[model];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 2),
       child: ListTile(
@@ -641,7 +653,11 @@ class _ModelChoice extends StatelessWidget {
               : theme.colorScheme.onSurfaceVariant,
         ),
         title: Text(modelName),
-        subtitle: Text(vendor),
+        subtitle: Text(
+          hint == null ? vendor : '$vendor · $hint',
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
         trailing: selected
             ? Text(
                 'Selected',

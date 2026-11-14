@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:widgets"
   - "domain:radio_model_picker.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T10:37:30Z"
+timestamp: "2026-11-14T12:36:25Z"
 concept_id: widgets/radio_model_picker
 language: dart
 ---
@@ -34,6 +34,7 @@ language: dart
 | related | [_SectionHeader](/widgets/radio_model_picker/SectionHeader.md) |
 | related | [_ModelChoice](/widgets/radio_model_picker/ModelChoice.md) |
 | related | [displayRadioModelName](/widgets/radio_model_picker/displayRadioModelName.md) |
+| related | [_modelSearchText](/widgets/radio_model_picker/modelSearchText.md) |
 | related | [_vendorSlug](/widgets/radio_model_picker/vendorSlug.md) |
 | related | [_modelNameWithinVendor](/widgets/radio_model_picker/modelNameWithinVendor.md) |
 | related | [_groupModels](/widgets/radio_model_picker/groupModels.md) |

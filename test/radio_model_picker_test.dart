@@ -5,7 +5,12 @@ import 'package:newchirp/widgets/radio_model_picker.dart';
 
 const _vendors = {
   'AOR': ['AOR_AR8200'],
-  'Baofeng': ['Baofeng_UV-5R', 'Baofeng_UV-9R'],
+  'Baofeng': [
+    'Baofeng_UV-5R',
+    'Baofeng_UV-5R_Mini',
+    'Baofeng_UV-5G_Mini',
+    'Baofeng_UV-9R',
+  ],
   'Connect Systems': ['Connect_Systems_CS750'],
   'Icom': ['Icom_ID-50', 'Icom_ID-52'],
   'Yaesu': ['Yaesu_FT-60', 'Yaesu_FTM-150R'],
@@ -137,6 +142,52 @@ void main() {
 
     expect(selectedModel, 'Connect_Systems_CS750');
     expect(find.text('Connect Systems CS750'), findsOneWidget);
+  });
+
+  testWidgets('Baofeng 5 Mini search explains the two Mini profiles', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: RadioModelPicker(
+            models: _models,
+            vendorModels: _vendors,
+            selectedModel: null,
+            onSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('radio-model-picker-field')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('radio-model-search')),
+      'baofeng 5 mini',
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('radio-model-option-Baofeng_UV-5R_Mini')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('radio-model-option-Baofeng_UV-5G_Mini')),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Baofeng · General-purpose profile; used for the Baofeng 5 Mini',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.text(
+        'Baofeng · GMRS-only profile; channels 1-30 are frequency-locked',
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('vendor browse makes model selection deliberate', (tester) async {

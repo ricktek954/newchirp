@@ -57,6 +57,8 @@ class ColocatedDriverCatalogTest(unittest.TestCase):
             self.assertIn("TIDRADIO_TD-H3", models)
             self.assertIn("Icom_ID-50", models)
             self.assertIn("Icom_ID-52", models)
+            self.assertIn("Baofeng_UV-5R_Mini", models)
+            self.assertIn("Baofeng_UV-5G_Mini", models)
 
 
 if __name__ == "__main__":
