@@ -17,6 +17,11 @@ release requirements.
   clean analyzer, strict codesigning, Apple notarization and stapling,
   mounted-DMG inspection, Gatekeeper, launch smoke test, and matching
   local/server/public SHA-256 all passed.
+- Update checks now request only their own platform manifest with
+  `/api/releases/latest?platform=<windows|macos|linux>`. The server returns
+  one `{platform, version, download_url, release_url}` object, and there is no
+  shared top-level desktop version. The website endpoint is deployed; the
+  platform-query client change awaits the next desktop builds.
 - The Kenwood TK-350/KPG-23D and TK-359/KPG-32D submissions from forum
   topic 39 were analyzed on 2026-11-13. NewChirp now has read-only
   experimental entries using the supplied OEM CPS files and sample data.
@@ -569,7 +574,8 @@ release requirements.
 - Branch: `main`
 - Windows `1.0.53` artifact source commit: `76fcaf93`
 - macOS `1.0.53` artifact source commit: `76fcaf93`
-- Linux `1.0.50` is live; artifact source commit: `e7b96c44`
+- Linux `1.0.51` is live; artifact source commit is not recorded in this
+  checkout
 - Open pull requests: none
 - Checked-out source version: `1.0.53+53`
 - macOS builds are pinned to CocoaPods with
@@ -587,8 +593,7 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.53 |
 | Windows | 1.0.53 |
-| Linux | 1.0.50 |
-| Legacy shared manifest version | 1.0.50 |
+| Linux | 1.0.51 |
 
 macOS `1.0.53` artifact:
 

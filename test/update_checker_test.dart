@@ -23,11 +23,14 @@ void main() {
 
   group('UpdateChecker', () {
     HttpServer? server;
+    Uri? requestedUri;
 
     Future<Uri> serve(String body, {int status = 200}) async {
       final bound = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
       server = bound;
+      requestedUri = null;
       bound.listen((request) async {
+        requestedUri = request.uri;
         request.response.statusCode = status;
         request.response.headers.contentType = ContentType.json;
         request.response.write(body);
@@ -48,52 +51,36 @@ void main() {
           'release_url': 'https://newchirp.net/#download',
         }),
       );
-      final result = await UpdateChecker(manifestUri: uri).check('1.0.1');
+      final result = await UpdateChecker(
+        manifestUri: uri,
+        platform: 'windows',
+      ).check('1.0.1');
       expect(result.updateAvailable, isTrue);
       expect(result.latestVersion, '1.0.2');
       expect(result.releaseUrl, 'https://newchirp.net/#download');
+      expect(requestedUri?.queryParameters['platform'], 'windows');
     });
 
-    test('uses the version published for the current platform', () async {
-      final uri = await serve(
-        jsonEncode({
-          'version': '1.0.7',
-          'platforms': {
-            'windows': {'version': '1.0.8'},
-            'macos': {'version': '1.0.7'},
-            'linux': {'version': '1.0.7'},
-          },
-        }),
-      );
+    test('uses the requested platform release', () async {
+      final uri = await serve(jsonEncode({'version': '1.0.8'}));
 
       final windows = await UpdateChecker(
         manifestUri: uri,
         platform: 'windows',
       ).check('1.0.7');
-      final macos = await UpdateChecker(
-        manifestUri: uri,
-        platform: 'macos',
-      ).check('1.0.7');
 
       expect(windows.latestVersion, '1.0.8');
       expect(windows.updateAvailable, isTrue);
-      expect(macos.latestVersion, '1.0.7');
-      expect(macos.updateAvailable, isFalse);
+      expect(requestedUri?.queryParameters['platform'], 'windows');
     });
 
     test('returns the direct platform installer and checksum', () async {
       final uri = await serve(
         jsonEncode({
-          'version': '1.0.7',
-          'platforms': {
-            'macos': {
-              'version': '1.0.8',
-              'download_url':
-                  'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
-              'sha256':
-                  'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-            },
-          },
+          'version': '1.0.8',
+          'download_url': 'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
+          'sha256':
+              'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
         }),
       );
 
@@ -112,68 +99,25 @@ void main() {
       );
     });
 
-    test('uses legacy downloads when platform metadata has no URL', () async {
+    test('requires a platform release version', () async {
       final uri = await serve(
-        jsonEncode({
-          'version': '1.0.8',
-          'downloads': {
-            'macos': 'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
-          },
-          'checksums': {
-            'macos':
-                'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-          },
-          'platforms': {
-            'macos': {'version': '1.0.8'},
-          },
-        }),
+        jsonEncode({'download_url': 'https://example.test'}),
       );
 
-      final result = await UpdateChecker(
-        manifestUri: uri,
-        platform: 'macos',
-      ).check('1.0.7');
-
-      expect(
-        result.downloadUrl,
-        'https://newchirp.net/downloads/NewChirp-1.0.8.dmg',
+      await expectLater(
+        UpdateChecker(manifestUri: uri, platform: 'windows').check('1.0.7'),
+        throwsA(isA<UpdateCheckException>()),
       );
-      expect(
-        result.sha256,
-        'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb',
-      );
-    });
-
-    test('accepts platform versions without a legacy version', () async {
-      final uri = await serve(
-        jsonEncode({
-          'platforms': {
-            'windows': {'version': '1.0.8'},
-          },
-        }),
-      );
-
-      final result = await UpdateChecker(
-        manifestUri: uri,
-        platform: 'windows',
-      ).check('1.0.7');
-
-      expect(result.latestVersion, '1.0.8');
-      expect(result.updateAvailable, isTrue);
     });
 
     test('reports up to date when versions match', () async {
       final uri = await serve(jsonEncode({'version': '1.0.1'}));
-      final result = await UpdateChecker(manifestUri: uri).check('1.0.1');
+      final result = await UpdateChecker(
+        manifestUri: uri,
+        platform: 'windows',
+      ).check('1.0.1');
       expect(result.updateAvailable, isFalse);
       expect(result.releaseUrl, isNull);
-    });
-
-    test('accepts the latest alias for the version field', () async {
-      final uri = await serve(jsonEncode({'latest': '2.0.0'}));
-      final result = await UpdateChecker(manifestUri: uri).check('1.0.1');
-      expect(result.latestVersion, '2.0.0');
-      expect(result.updateAvailable, isTrue);
     });
 
     test('throws UpdateCheckException when the response is not JSON', () async {

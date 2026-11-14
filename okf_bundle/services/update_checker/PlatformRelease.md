@@ -10,7 +10,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
+timestamp: "2026-11-14T13:23:52Z"
 concept_id: services/update_checker/PlatformRelease
 language: dart
 ---
@@ -24,7 +24,7 @@ class _PlatformRelease
 ```
 
 ## Source
-Lines 205–215 in `services/update_checker.dart`
+Lines 145–157 in `services/update_checker.dart`
 
 ## Relationships
 

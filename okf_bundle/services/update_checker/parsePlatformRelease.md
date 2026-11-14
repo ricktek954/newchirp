@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: _parseManifest
+title: _parsePlatformRelease
 description: Starts the platform browser for an already validated address.
 resource: services/update_checker.dart
 tags:
@@ -11,19 +11,19 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
-concept_id: services/update_checker/parseManifest
+timestamp: "2026-11-14T13:23:52Z"
+concept_id: services/update_checker/parsePlatformRelease
 language: dart
 ---
 
-# _parseManifest
+# _parsePlatformRelease
 
 Starts the platform browser for an already validated address.
 
 ## Signature
 
 ```dart
-_ReleaseManifest_parseManifest(String body)
+_PlatformRelease_parsePlatformRelease(String body)
 ```
 
 ## Docstring
@@ -38,7 +38,7 @@ Explorer exits with a non-zero code even when it opens the page, so only a
 failure to start the process counts as a failed launch.
 
 ## Source
-Lines 124–124 in `services/update_checker.dart`
+Lines 118–118 in `services/update_checker.dart`
 
 ## Relationships
 

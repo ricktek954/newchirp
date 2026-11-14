@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
+timestamp: "2026-11-14T13:23:52Z"
 concept_id: services/update_checker/openExternalUrl
 language: dart
 ---
@@ -37,7 +37,7 @@ newchirp.net, so a tricky string cannot change the site.
 [launcher] replaces the platform launcher in tests.
 
 ## Source
-Lines 320–323 in `services/update_checker.dart`
+Lines 262–265 in `services/update_checker.dart`
 
 ## Relationships
 

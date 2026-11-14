@@ -3,13 +3,12 @@
 ## Classs
 
 - [_PlatformRelease](PlatformRelease.md)
-- [_ReleaseManifest](ReleaseManifest.md)
 - [UpdateCheckResult](UpdateCheckResult.md) — Outcome of comparing the installed NewChirp version against the release
 
 ## Functions
 
 - [_launchExternalUrl](launchExternalUrl.md) — Starts the platform browser for an already validated address.
-- [_parseManifest](parseManifest.md) — Starts the platform browser for an already validated address.
+- [_parsePlatformRelease](parsePlatformRelease.md) — Starts the platform browser for an already validated address.
 - [_versionParts](versionParts.md)
 - [check](check.md) — Starts the platform browser for an already validated address.
 - [compareVersions](compareVersions.md) — Compares two dotted version strings, ignoring any `+build` metadata.

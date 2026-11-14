@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T14:31:44Z"
+timestamp: "2026-11-14T13:23:52Z"
 concept_id: services/update_checker/trustedUpdateArtifactUrl
 language: dart
 ---
@@ -34,7 +34,7 @@ The artifact must be HTTPS on newchirp.net and have the native desktop
 package extension. Fragments are discarded before the URL is used.
 
 ## Source
-Lines 299–299 in `services/update_checker.dart`
+Lines 241–241 in `services/update_checker.dart`
 
 ## Relationships
 
