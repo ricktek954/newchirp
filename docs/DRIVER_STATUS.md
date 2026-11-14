@@ -1781,6 +1781,9 @@ Last updated: 2026-11-13
 - Write policy: write only those nine program-data ranges and never write the
   identity/calibration region. Transmit is limited to the KG-Q10H amateur
   bands.
+- Identity failures report the decoded display name, internal model, and
+  software string so Q10G-family variants can be diagnosed without exposing
+  the raw identity-region image.
 - Evidence: REA 6.5.0 managed metadata/CIL inspection of the official CPS.
   The IL traces cover serial setup, request construction, chained encryption,
   receive fragmentation and completion, checksum validation, retry timing,
