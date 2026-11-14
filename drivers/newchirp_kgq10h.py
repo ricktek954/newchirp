@@ -160,6 +160,22 @@ def _identity_matches(image):
     )
 
 
+def _identity_details(image):
+    def field(offset, length):
+        raw = bytes(image[offset:offset + length]).rstrip(b"\x00 ")
+        text = raw.decode("ascii", errors="replace")
+        return text or "<empty>"
+
+    return (
+        "display=%s; internal=%s; software=%s"
+        % (
+            field(IDENT_OFFSET, 12),
+            field(INTERNAL_MODEL_OFFSET, 16),
+            field(SOFTWARE_OFFSET, 16),
+        )
+    )
+
+
 def _decode_tone(word):
     if word in (0, 0xFFFF):
         return "", None, None
@@ -584,7 +600,8 @@ class KGQ10HRadio(
             )
         if not _identity_matches(image):
             raise errors.InvalidDataError(
-                "The KG-Q10H model marker is missing or unsupported"
+                "The KG-Q10H model marker is missing or unsupported (%s)"
+                % _identity_details(image)
             )
         return image
 
@@ -723,7 +740,8 @@ class KGQ10HRadio(
             image = self._read_ranges(READ_RANGES, "Cloning from radio")
             if not _identity_matches(image):
                 raise errors.RadioError(
-                    "Radio did not identify as a supported KG-Q10H family model"
+                    "Radio did not identify as a supported KG-Q10H family "
+                    "model (%s)" % _identity_details(image)
                 )
             self._mmap = memmap.MemoryMapBytes(bytes(image))
         finally:
@@ -741,7 +759,8 @@ class KGQ10HRadio(
             )
             if not _identity_matches(identity):
                 raise errors.RadioError(
-                    "Connected radio does not identify as a KG-Q10H family model"
+                    "Connected radio does not identify as a KG-Q10H family "
+                    "model (%s)" % _identity_details(identity)
                 )
             total = sum(end - start for start, end in PROGRAM_RANGES)
             completed = 0

@@ -334,6 +334,30 @@ class KGQ10HDriverTest(unittest.TestCase):
             self.radio_class.match_model(bytes(foreign), "test.img")
         )
 
+    def test_identity_mismatch_reports_decoded_fields(self):
+        image = _image()
+        image[kg.IDENT_OFFSET:kg.IDENT_OFFSET + 12] = (
+            b"KG-Q10G".ljust(12, b"\x00")
+        )
+        image[
+            kg.INTERNAL_MODEL_OFFSET:
+            kg.INTERNAL_MODEL_OFFSET + 16
+        ] = b"KG-Q333".ljust(16, b"\x00")
+        image[
+            kg.SOFTWARE_OFFSET:
+            kg.SOFTWARE_OFFSET + 16
+        ] = b"VD1.02".ljust(16, b"\x00")
+        radio = self.radio_class(FakeKGQ10Serial(image))
+        radio.status_fn = lambda _status: None
+
+        with self.assertRaises(errors.RadioError) as raised:
+            radio.sync_in()
+
+        message = str(raised.exception)
+        self.assertIn("display=KG-Q10G", message)
+        self.assertIn("internal=KG-Q333", message)
+        self.assertIn("software=VD1.02", message)
+
     def test_rejects_unsafe_channel_values(self):
         radio = self._radio()
         with self.assertRaises(errors.InvalidValueError):
