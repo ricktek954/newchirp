@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-13
+Last updated: 2026-11-14
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -558,11 +558,11 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.52` artifact source commit: `c6219ae7`
+- Windows `1.0.53` artifact source commit: `76fcaf93`
 - macOS `1.0.50` artifact source commit: `23931970`
 - Linux `1.0.50` is live; artifact source commit: `e7b96c44`
 - Open pull requests: none
-- Checked-out source version: `1.0.52+52`
+- Checked-out source version: `1.0.53+53`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -577,7 +577,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.50 |
-| Windows | 1.0.52 |
+| Windows | 1.0.53 |
 | Linux | 1.0.50 |
 | Legacy shared manifest version | 1.0.50 |
 
@@ -665,7 +665,22 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.52` artifact:
+Windows `1.0.53` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.53.exe`
+- Version/build: `1.0.53` / `53`
+- SHA-256:
+  `cb64db20fa2a93a95d26bafaff6dd4261c9dae1e3caad5241c6176cda91baa83`
+- Size: `61,530,894` bytes
+- Built from `76fcaf93`
+- Installer metadata `1.0.53.0` / `1.0.53`; release app `1.0.53+53`
+- Bundled Python `3.13.15`, 252 CHIRP driver modules, and a successful bridge
+  `list-models` run with 594 models including `Kenwood_TK-350`,
+  `Kenwood_TK-359`, and `Wouxun_KG-Q10H`
+- Server and public-download checksums matched the local artifact
+- Authenticode: not signed
+
+Windows `1.0.52` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.52.exe`
 - Version/build: `1.0.52` / `52`
@@ -1050,6 +1065,18 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.53` from source commit `76fcaf93`. The release adds
+  read-only experimental Kenwood TK-350/KPG-23D and TK-359/KPG-32D support,
+  clarifies the Baofeng Mini radio profiles, and reports Wouxun identity
+  mismatches with more useful detail. Verification: installer metadata
+  `1.0.53.0` / `1.0.53`, release app `1.0.53+53`, bundled Python `3.13.15`,
+  252 CHIRP driver modules, bridge `list-models` exit 0 with 594 models,
+  matching local/server/public SHA-256, public HTTP 200, and live platform
+  manifest Windows `1.0.53`. `flutter analyze lib test` is clean. The full
+  Flutter suite ran 214 passing tests with the five known Windows-only
+  sandbox/Help failures. The complete Python suite ran 409 tests: 406 passed,
+  2 fixture-dependent tests skipped, and 3 Windows temporary-file-lock helper
+  errors. The installer remains unsigned. macOS and Linux remain at `1.0.50`.
 - Published Windows `1.0.52` from source commit `c6219ae7`. The release makes a
   missing, damaged, or blocked bundled Python runtime fail with an explicit
   reinstall message instead of silently falling back to the Microsoft Store
