@@ -8,6 +8,15 @@ release requirements.
 
 ## Resume here
 
+- macOS `1.0.53` is live from source commit `76fcaf93` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It is the first macOS
+  desktop release containing the read-only experimental TK-350 and TK-359
+  drivers. It also includes the Baofeng 5 Mini profile guidance and detailed
+  Wouxun KG-Q10H family identity diagnostics. Verification: 409 Python tests
+  with two fixture-dependent skips, 62 bridge tests, 219 Flutter tests, a
+  clean analyzer, strict codesigning, Apple notarization and stapling,
+  mounted-DMG inspection, Gatekeeper, launch smoke test, and matching
+  local/server/public SHA-256 all passed.
 - The Kenwood TK-350/KPG-23D and TK-359/KPG-32D submissions from forum
   topic 39 were analyzed on 2026-11-13. NewChirp now has read-only
   experimental entries using the supplied OEM CPS files and sample data.
@@ -559,7 +568,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.53` artifact source commit: `76fcaf93`
-- macOS `1.0.50` artifact source commit: `23931970`
+- macOS `1.0.53` artifact source commit: `76fcaf93`
 - Linux `1.0.50` is live; artifact source commit: `e7b96c44`
 - Open pull requests: none
 - Checked-out source version: `1.0.53+53`
@@ -576,10 +585,24 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.50 |
+| macOS | 1.0.53 |
 | Windows | 1.0.53 |
 | Linux | 1.0.50 |
 | Legacy shared manifest version | 1.0.50 |
+
+macOS `1.0.53` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.53.dmg`
+- Version/build: `1.0.53` / `53`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `17c3b3d3cea0611a43236470e0882919016f104a19adb997a296925beca6d233`
+- Size: `82,536,313` bytes
+- Built from `76fcaf93`
+- Notarization submission: `a0a24eaf-72d6-4307-b14b-465817df267a`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains the TK-350/TK-359 KPG-23D/KPG-32D driver
+- Server and public-download checksums matched the final stapled DMG
 
 macOS `1.0.50` artifact:
 
@@ -1065,6 +1088,18 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.53` from source commit `76fcaf93` as a universal,
+  signed, notarized, stapled DMG. This is the first macOS desktop release with
+  the read-only experimental Kenwood TK-350 and TK-359 drivers. It also carries
+  the Baofeng 5 Mini profile-selection guidance and the detailed KG-Q10H
+  family identity mismatch output. Verification: app/build version
+  `1.0.53` / `53`; universal `arm64` and `x86_64`; both Python 3.13.15
+  runtimes; pinned CHIRP tree; bundled TK-350/TK-359 driver; 409 Python tests
+  with two fixture-dependent skips; 62 bridge tests; 219 Flutter tests;
+  `flutter analyze` clean; strict codesigning; notarization accepted; staple
+  and DMG integrity checks passed; mounted-DMG version, signature, Gatekeeper,
+  and driver inspection passed; launch smoke test passed; local, server, and
+  public SHA-256 matched.
 - Published Windows `1.0.53` from source commit `76fcaf93`. The release adds
   read-only experimental Kenwood TK-350/KPG-23D and TK-359/KPG-32D support,
   clarifies the Baofeng Mini radio profiles, and reports Wouxun identity
@@ -1076,7 +1111,8 @@ Linux 1.0.41 sizes:
   Flutter suite ran 214 passing tests with the five known Windows-only
   sandbox/Help failures. The complete Python suite ran 409 tests: 406 passed,
   2 fixture-dependent tests skipped, and 3 Windows temporary-file-lock helper
-  errors. The installer remains unsigned. macOS and Linux remain at `1.0.50`.
+  errors. The installer remains unsigned. At Windows release time, macOS and
+  Linux remained at `1.0.50`.
 - Published Windows `1.0.52` from source commit `c6219ae7`. The release makes a
   missing, damaged, or blocked bundled Python runtime fail with an explicit
   reinstall message instead of silently falling back to the Microsoft Store
