@@ -192,6 +192,11 @@ Use `-Configuration debug` only for a local dev build; debug Flutter binaries
 link the Visual Studio debug CRT and are not intended for clean end-user
 machines.
 
+Linux AppImages must not bundle GLVND, EGL, or GLES loaders. Those libraries
+must match the host's Mesa or proprietary GPU driver; mixing an older bundled
+loader with newer drivers can leave the Flutter window blank. The AppImage
+uses the host graphics stack while retaining the Ubuntu 20.04 runtime baseline.
+
 ### Experimental FTM-150 support
 
 NewChirp includes an experimental Yaesu FTM-150R/E/ASP memory-channel driver

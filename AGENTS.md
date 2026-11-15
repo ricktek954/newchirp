@@ -95,6 +95,10 @@ Every production installer build must contain and expose its version.
    `newchirp.dmg`. The website intentionally ignores generic filenames when
    determining the published version.
 
+The AppImage must not bundle GLVND, EGL, or GLES loader libraries. They must
+match the host Mesa or proprietary driver; an old bundled loader can produce a
+blank Flutter window on newer distributions.
+
 The website uses the version in the filename as its source of truth. Each
 versioned artifact becomes that platform's current download as soon as it is
 uploaded, so platform versions can differ. The current app requests
