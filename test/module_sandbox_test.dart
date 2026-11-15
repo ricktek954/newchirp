@@ -163,7 +163,10 @@ void main() {
 
     expect(args, contains('--unshare-net'));
     expect(args, contains('--die-with-parent'));
-    expect(args, contains('--clearenv'));
+    // The launch starts bwrap with includeParentEnvironment: false. Avoid
+    // --clearenv because Ubuntu 20.04 still ships bubblewrap 0.4 without it.
+    expect(args, isNot(contains('--clearenv')));
+    expect(args, contains('--setenv'));
     expect(args.contains('--dev'), isFalse);
     expect(args, contains('/dev/ttyUSB0'));
     expect(args, contains('--dev-bind'));

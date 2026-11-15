@@ -388,7 +388,6 @@ List<String> linuxBubblewrapArguments({
   final args = <String>[
     '--unshare-net',
     '--die-with-parent',
-    '--clearenv',
     '--setenv',
     'HOME',
     workDir,

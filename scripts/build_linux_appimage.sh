@@ -102,6 +102,10 @@ for glvnd_library in libEGL.so.1 libGLESv2.so.2 libGLdispatch.so.0; do
   fi
 done
 
+python3 "$SCRIPT_DIR/check_linux_release_abi.py" \
+  "$APPDIR/opt/newchirp" \
+  "$APPDIR/usr"
+
 cat > "$APPDIR/AppRun" <<'APPRUN'
 #!/usr/bin/env bash
 set -euo pipefail
