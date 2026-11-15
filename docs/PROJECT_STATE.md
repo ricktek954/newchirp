@@ -8,7 +8,7 @@ release requirements.
 
 ## Resume here
 
-- Linux `1.0.55` is being prepared from the current `origin/main` plus the
+- Linux `1.0.55` is live from the current `origin/main` plus the
   Ubuntu 20.04 release hardening. It fixes blank AppImages caused by mixing an
   old bundled GLVND loader with newer NVIDIA/Mesa drivers, clears vacated
   channel locations when removing empty slots, makes occupied channel moves
@@ -16,7 +16,12 @@ release requirements.
   filters, shows bank boundaries, supports searchable regions and coordinate
   searches independent of the selected region, expands frequency references,
   and explains the pending RepeaterBook API application. Build and release
-  details are recorded below after publication.
+  details are recorded below. Verification: analyzer clean; 226 Flutter tests;
+  426 Python tests with two fixture-dependent skips; max glibc `2.18`;
+  package metadata and embedded version `1.0.55` / `55`; DEB and AppImage Xvfb
+  launch tests passed on Ubuntu 20.04; and the final AppImage launched under
+  host Wayland and XWayland. All four public downloads returned HTTP 200 and
+  the Linux platform manifest reports `1.0.55`.
 - Windows `1.0.54` is live from source commit `c55530b9`. It adds the
   read-only experimental KSUN UV-K60 Plus driver, the Baofeng UV-29 Pro
   compatibility profile, Yaesu FT-50 odd-split decoding, and upload
@@ -597,8 +602,7 @@ release requirements.
 - Branch: `main`
 - Windows `1.0.54` artifact source commit: `c55530b9`
 - macOS `1.0.54` artifact source commit: `c55530b9`
-- Linux `1.0.54` is live per the platform manifest; its detailed
-  artifact record and source commit are not recorded in this checkout
+- Linux `1.0.55` is live from source commit `190eac83`
 - Open pull requests: none
 - Checked-out source version: `1.0.55+55`
 - macOS builds are pinned to CocoaPods with
@@ -616,10 +620,33 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.54 |
 | Windows | 1.0.54 |
-| Linux | 1.0.54 |
+| Linux | 1.0.55 |
 
-Linux `1.0.54` is reported by the API; detailed artifact checksums are not
-yet recorded in this checkout.
+Linux `1.0.55` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.55.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.55.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.55.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.55.pkg.tar.zst`
+- Local DEB:
+  `build/NewChirp-linux-x64-1.0.55.deb`, `48,518,340` bytes, SHA-256
+  `8df63389b10c60208190c7e160113184da24ee96e887f7bf54eb497a2b08b294`
+- Local RPM:
+  `build/NewChirp-linux-x64-1.0.55.rpm`, `48,603,131` bytes, SHA-256
+  `898b127d0cd58a01d30dbd5a5898128bc15be545561d0dce0e581a0010d54a5b`
+- Local AppImage:
+  `build/NewChirp-linux-x64-1.0.55.AppImage`, `48,805,056` bytes, SHA-256
+  `2aa60dd242c15b071e35214ecb761dd09ef2fc7a988f614b80fd4397ccef3c89`
+- Local Pacman:
+  `build/NewChirp-linux-x64-1.0.55.pkg.tar.zst`, `47,467,554` bytes, SHA-256
+  `292fece7e7f1d06ff64a17f9f34f8b9316594f22954780444017c93879da7736`
+- Public HTTP checks returned `200 OK`
+- Server checksums matched the local artifacts
+- Linux platform manifest reports `1.0.55`
 
 Windows `1.0.54` artifact:
 
