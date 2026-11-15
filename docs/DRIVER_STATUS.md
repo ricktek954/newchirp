@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-14
+Last updated: 2026-11-15
 
 ## Status definitions
 
@@ -712,7 +712,7 @@ Last updated: 2026-11-14
 - Evidence: user-supplied `nicfw_950_v4.py`, SHA-256
   `bb20f6252dba38bfa604f2ba0c0e465f0d98c67b73d1cfdc5071576dfdcc1f45`
 - Driver SHA-256:
-  `9fb5b5260c80c9cc3e5324daec441990816d70d08dd0a9c4035077b8bda5d751`
+  `f333be00bea3c731006f256fa21d5d4446415a20a7760f7eff9f5fbc47fb9a29`
 - Transport: 38400 baud negotiation to 460800 baud, 8N1, 128-byte blocks,
   address echoes and additive checksums; no stock CPS handshake or flow control.
   Retry only an initial baud ACK timeout, once after a three-second quiet
@@ -754,6 +754,12 @@ Last updated: 2026-11-14
   displayed using its default and remained unchanged throughout testing.
 - The supplied standalone CHIRP reference was not executed. Validation is
   specific to this NewChirp port and this one unit, not every alias/version.
+- 2026-11-15: a read-only nicFW950 map on Ubuntu failed to decode because an
+  unset 16-bit subtone field stored `0xFFFF`; the driver treated it as DCS
+  octal `37777`, outside CHIRP's valid DCS list. The driver now treats
+  `0xFFFF` as no tone, matching an unset `0x0000`. This fixes the same
+  reported sentinel on the RT-950 Pro nicFW950 maps and does not change the
+  guarded write policy.
 - Next milestone: upstream review and additional firmware/alias coverage.
 
 ### Connect Systems CS750

@@ -509,7 +509,7 @@ def _finalize(pipe):
 
 def _tone_decode(value):
     value = int(value)
-    if value == 0:
+    if value in (0, 0xFFFF):
         return ("", None, None)
     if value & 0x8000:
         # nicFW stores the DCS designation as a binary octal value.

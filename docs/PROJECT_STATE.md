@@ -124,10 +124,11 @@ release requirements.
   the OEM CPS can read the same radio/cable before deriving or extending a
   driver.
 - High-priority follow-ups from the same triage are the TK-270G bank-index
-  sentinel on channel 24 (UID 592), the nicFW950 RT-950 Pro invalid channel
-  map value 37777 (585), and the GS-5B 1.XX CPS handshake variant (583).
-  Reporters were told not to write until those images and OEM comparisons are
-  available.
+  sentinel on channel 24 (UID 592) and the GS-5B 1.XX CPS handshake variant
+  (583). Reporters were told not to write until those images and OEM
+  comparisons are available. The nicFW950 RT-950 Pro invalid channel-map
+  value 37777 (UIDs 585 and 684) was traced to the `0xFFFF` no-tone sentinel
+  and corrected in source on 2026-11-15; focused tests cover the decode.
 - The A9305B power report was traced through the official CPS instead of
   waiting for another read. Channel byte 12 stores power in bits 6-7 and
   wide/narrow in bits 4-5; the driver had those fields reversed. Zoran's CPS
