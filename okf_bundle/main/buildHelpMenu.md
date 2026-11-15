@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:release/1.0.55"
+  - "git:branch:fix/triage-2026-11-15"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T12:27:44Z"
+timestamp: "2026-11-15T13:11:31Z"
 concept_id: main/buildHelpMenu
 language: dart
 ---
@@ -23,7 +23,7 @@ Widget_buildHelpMenu(BuildContext context, {required bool iconOnly})
 ```
 
 ## Source
-Lines 7610–7610 in `main.dart`
+Lines 7690–7690 in `main.dart`
 
 ## Relationships
 
