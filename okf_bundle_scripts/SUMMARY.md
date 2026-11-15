@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 152 concepts across 7 domains and 7 modules'
-git_branch: main
+description: 'Top-level OKF summary: 162 concepts across 8 domains and 8 modules'
+git_branch: release/1.0.55
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-15T10:28:21Z'
+timestamp: '2026-11-15T12:29:39Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 152 concepts | 7 domains | 7 modules
+> OKF v0.2 bundle | 162 concepts | 8 domains | 8 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 132 |
+| Function | 141 |
 | Class | 13 |
-| Module | 7 |
+| Module | 8 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 152 |
+| python | 162 |
 
 ## Domain Map
 
@@ -31,6 +31,10 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 ### [build_macos_dmg.py](build_macos_dmg.py/index.md) — 4 concepts
 
 - [build_macos_dmg](build_macos_dmg/index.md) (4 concepts) — Build a styled NewChirp macOS DMG with a drag-to-Applications window.
+
+### [check_linux_release_abi.py](check_linux_release_abi.py/index.md) — 10 concepts
+
+- [check_linux_release_abi](check_linux_release_abi/index.md) (10 concepts) — Reject Linux release payloads built against a newer desktop ABI.
 
 ### [chirp_bridge.py](chirp_bridge.py/index.md) — 76 concepts
 

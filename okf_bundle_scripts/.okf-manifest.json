@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/scripts",
+  "source_root": "/tmp/newchirp-1.0.55/scripts",
   "files": {
     "build_macos_dmg.py": {
       "path": "build_macos_dmg.py",
-      "mtime_ns": 1792753027569896057,
+      "mtime_ns": 1794745652127374441,
       "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
       "concept_ids": [
         "build_macos_dmg/build_background",
@@ -16,7 +16,7 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1794669853784635526,
+      "mtime_ns": 1794745652127374441,
       "hash": "6a18ca7e9a0151de8946a9f1519ff04a4c4bc9d3a462b196ac5e24bbe68bf545",
       "concept_ids": [
         "chirp_bridge/RadioCommunicationTrace",
@@ -99,7 +99,7 @@
     },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1787526889873622751,
+      "mtime_ns": 1794745652127374441,
       "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
       "concept_ids": [
         "generate_gmrs_frs_pdf/PdfWriter",
@@ -119,9 +119,21 @@
         "generate_gmrs_frs_pdf"
       ]
     },
+    "generate_international_frequency_pdfs.py": {
+      "path": "generate_international_frequency_pdfs.py",
+      "mtime_ns": 1794745652127374441,
+      "hash": "989f32e2f47eb789a437f0c5e0af17a331a9e65e11cf81b1e573d2878314a143",
+      "concept_ids": [
+        "generate_international_frequency_pdfs/draw_table",
+        "generate_international_frequency_pdfs/main",
+        "generate_international_frequency_pdfs/make_pdf",
+        "generate_international_frequency_pdfs/uhf_rows",
+        "generate_international_frequency_pdfs"
+      ]
+    },
     "generate_repeater_counties.py": {
       "path": "generate_repeater_counties.py",
-      "mtime_ns": 1793439376655566408,
+      "mtime_ns": 1794745652127374441,
       "hash": "5b41696728c60fba0706a10867eadf154b89b4d803f0ed4e9038319bc7fe3c24",
       "concept_ids": [
         "generate_repeater_counties/dart_string",
@@ -134,7 +146,7 @@
     },
     "newchirp_mass_storage.py": {
       "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1792893456081463146,
+      "mtime_ns": 1794745652127374441,
       "hash": "d656ec355db5ff1c38821454873eaca53a4cf0eb44563afc18d312785f9de32b",
       "concept_ids": [
         "newchirp_mass_storage/CS750Profile",
@@ -161,7 +173,7 @@
     },
     "newchirp_usb_dfu.py": {
       "path": "newchirp_usb_dfu.py",
-      "mtime_ns": 1793532981625641026,
+      "mtime_ns": 1794745652127374441,
       "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
       "concept_ids": [
         "newchirp_usb_dfu/DeviceDescriptor",
@@ -192,16 +204,21 @@
         "newchirp_usb_dfu"
       ]
     },
-    "generate_international_frequency_pdfs.py": {
-      "path": "generate_international_frequency_pdfs.py",
-      "mtime_ns": 1794738500464745311,
-      "hash": "989f32e2f47eb789a437f0c5e0af17a331a9e65e11cf81b1e573d2878314a143",
+    "check_linux_release_abi.py": {
+      "path": "check_linux_release_abi.py",
+      "mtime_ns": 1794745715860566520,
+      "hash": "5c1e7c15252615df653bacb9d7e54d6e9017657d73d3462009e0fa63a2f3ad64",
       "concept_ids": [
-        "generate_international_frequency_pdfs",
-        "generate_international_frequency_pdfs/uhf_rows",
-        "generate_international_frequency_pdfs/draw_table",
-        "generate_international_frequency_pdfs/make_pdf",
-        "generate_international_frequency_pdfs/main"
+        "check_linux_release_abi",
+        "check_linux_release_abi/version_tuple",
+        "check_linux_release_abi/read_os_release",
+        "check_linux_release_abi/command_version",
+        "check_linux_release_abi/require_release_host",
+        "check_linux_release_abi/elf_files",
+        "check_linux_release_abi/required_glibc_versions",
+        "check_linux_release_abi/check_roots",
+        "check_linux_release_abi/parse_args",
+        "check_linux_release_abi/main"
       ]
     }
   },
@@ -1437,7 +1454,87 @@
       "render_hash": "stale",
       "edge_hash": "f96148df3690a7317a187017a4dd0d345526234da7978362a12830e1756712bb",
       "enriched": false
+    },
+    "check_linux_release_abi": {
+      "concept_id": "check_linux_release_abi",
+      "type": "Module",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "aeca388cf4773766a3b4d0ec13fb2f49f5ba9893b21a3779d173c7abf338d03d",
+      "enriched": false
+    },
+    "check_linux_release_abi/version_tuple": {
+      "concept_id": "check_linux_release_abi/version_tuple",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "db51bb425a5a488f3448467370a24d9c72dcbbc953756bf6cb82500a6c272004",
+      "enriched": false
+    },
+    "check_linux_release_abi/read_os_release": {
+      "concept_id": "check_linux_release_abi/read_os_release",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "9a4dd6efdcb938969457017fddfe3980da83dad61c0a26156bb22fa9400e12af",
+      "enriched": false
+    },
+    "check_linux_release_abi/command_version": {
+      "concept_id": "check_linux_release_abi/command_version",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "9a4dd6efdcb938969457017fddfe3980da83dad61c0a26156bb22fa9400e12af",
+      "enriched": false
+    },
+    "check_linux_release_abi/require_release_host": {
+      "concept_id": "check_linux_release_abi/require_release_host",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "9834569b972a5be9854c6dbbce8fc61c37218c48501fa599f7833f4576ce3291",
+      "enriched": false
+    },
+    "check_linux_release_abi/elf_files": {
+      "concept_id": "check_linux_release_abi/elf_files",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "3b2f4947e4d8620c49fc37e951e3482a37bbdae5b77b810b6327154ae2e1c9bb",
+      "enriched": false
+    },
+    "check_linux_release_abi/required_glibc_versions": {
+      "concept_id": "check_linux_release_abi/required_glibc_versions",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "3b2f4947e4d8620c49fc37e951e3482a37bbdae5b77b810b6327154ae2e1c9bb",
+      "enriched": false
+    },
+    "check_linux_release_abi/check_roots": {
+      "concept_id": "check_linux_release_abi/check_roots",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "2e291b1cff178f23615ace8a03458d2dc5653bfb90fcb4c3bfdd555b6eff7bae",
+      "enriched": false
+    },
+    "check_linux_release_abi/parse_args": {
+      "concept_id": "check_linux_release_abi/parse_args",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "dc1cb273119fdd8052adfa0decc0930e28927491820b0b3a38fc5c887d12360d",
+      "enriched": false
+    },
+    "check_linux_release_abi/main": {
+      "concept_id": "check_linux_release_abi/main",
+      "type": "Function",
+      "resource": "check_linux_release_abi.py",
+      "render_hash": "stale",
+      "edge_hash": "863b1523acc45a5d092de1df91f10b37cdeec090f927f4f00f618da933fd62b2",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-15T10:28:21Z"
+  "generated_at": "2026-11-15T12:29:39Z"
 }
