@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:release/1.0.55"
+  - "git:branch:fix/triage-2026-11-15"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T12:27:44Z"
+timestamp: "2026-11-15T13:11:31Z"
 concept_id: main/EmptyLibrary
 language: dart
 ---
@@ -27,7 +27,7 @@ class _EmptyLibrary
 - `build`
 
 ## Source
-Lines 11494–11507 in `main.dart`
+Lines 11574–11587 in `main.dart`
 
 ## Relationships
 

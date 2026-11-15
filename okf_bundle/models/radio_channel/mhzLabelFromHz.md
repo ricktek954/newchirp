@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:fix/triage-2026-11-15"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:28:49Z"
+timestamp: "2026-11-15T13:11:31Z"
 concept_id: models/radio_channel/mhzLabelFromHz
 language: dart
 ---
