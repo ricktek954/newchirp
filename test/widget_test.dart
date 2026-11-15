@@ -90,9 +90,10 @@ class _FakeUpdateInstaller extends UpdateInstaller {
 }
 
 class _FakeRepeaterBridge extends RadioBridge {
-  _FakeRepeaterBridge({this.emptyResults = false});
+  _FakeRepeaterBridge({this.emptyResults = false, this.error});
 
   final bool emptyResults;
+  final String? error;
   String? lastCountry;
   String? lastState;
   String? lastService;
@@ -116,6 +117,7 @@ class _FakeRepeaterBridge extends RadioBridge {
     bool openOnly = false,
     void Function(RadioProgress)? onProgress,
   }) async {
+    if (error != null) throw Exception(error);
     lastCountry = country;
     lastState = state;
     lastService = service;
@@ -386,11 +388,20 @@ void main() {
     );
     await tester.tap(find.text('Open repeater search'));
     await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('repeaterbook-api-pending-notice')),
+      findsOneWidget,
+    );
+    expect(find.textContaining('We have applied for access'), findsOneWidget);
     final searchFilter = find.byKey(const ValueKey('repeater-search-filter'));
     await tester.enterText(searchFilter, 'Buffalo');
     await tester.pump(const Duration(milliseconds: 300));
     expect(find.byKey(const ValueKey('repeater-search-clear')), findsOneWidget);
     expect(preferencesStore.preferences.query, 'Buffalo');
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('repeater-search-clear')),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('repeater-search-clear')));
     await tester.pump();
     expect(tester.widget<TextField>(searchFilter).controller?.text, isEmpty);
@@ -406,6 +417,10 @@ void main() {
     expect(preferencesStore.preferences.fmOnly, isFalse);
     expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
     expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('repeater-sort-source')),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const ValueKey('repeater-sort-source')));
     await tester.pumpAndSettle();
     expect(find.text('Frequency'), findsOneWidget);
@@ -625,6 +640,49 @@ void main() {
     expect(
       find.textContaining('Check the selected region or increase the radius.'),
       findsOneWidget,
+    );
+  });
+
+  testWidgets('RepeaterBook denial explains the pending API application', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: TextButton(
+              onPressed: () async {
+                await showDialog<List<RadioChannel>>(
+                  context: context,
+                  builder: (context) => RepeaterBookDialog(
+                    bridge: _FakeRepeaterBridge(
+                      error:
+                          'Could not download RepeaterBook data: '
+                          'HTTP Error 403: Forbidden',
+                    ),
+                    preferencesStore: _FakeRepeaterSearchPreferencesStore(),
+                  ),
+                );
+              },
+              child: const Text('Open denied repeater search'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open denied repeater search'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Search'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.textContaining('awaiting credentials and approval (request #295)'),
+      findsWidgets,
     );
   });
 
