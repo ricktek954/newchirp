@@ -8124,6 +8124,12 @@ class RepeaterBookDialog extends StatefulWidget {
 }
 
 class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
+  static const _repeaterBookPendingMessage =
+      'RepeaterBook API access is pending. We have applied for access and are '
+      'awaiting credentials and approval (request #295). RepeaterBook’s legacy '
+      'bulk-data endpoint is currently blocking NewChirp, so searches may fail '
+      'until approved API access is available.';
+
   final _filterController = TextEditingController();
   final _latitudeController = TextEditingController();
   final _longitudeController = TextEditingController();
@@ -8357,7 +8363,18 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         });
       }
     } catch (error) {
-      if (mounted) setState(() => _error = '$error');
+      if (mounted) {
+        final detail = '$error';
+        setState(() {
+          _error =
+              _provider == _RepeaterProvider.repeaterBook &&
+                  (detail.contains('403') ||
+                      detail.contains('Forbidden') ||
+                      detail.contains('Could not download RepeaterBook'))
+              ? _repeaterBookPendingMessage
+              : detail;
+        });
+      }
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -8884,6 +8901,46 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             'before transmitting.',
                             style: TextStyle(color: Colors.black54),
                           ),
+                          if (_provider == _RepeaterProvider.repeaterBook) ...[
+                            const SizedBox(height: 12),
+                            DecoratedBox(
+                              key: const ValueKey(
+                                'repeaterbook-api-pending-notice',
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFF7EC),
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: const Color(0xFFE7C9A5),
+                                ),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 10,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(
+                                      Icons.schedule_outlined,
+                                      color: Color(0xFF9B5B18),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Text(
+                                        _repeaterBookPendingMessage,
+                                        style: TextStyle(
+                                          color: Color(0xFF7B4A16),
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 14),
                           if (_enableMyGmrsDirectory) ...[
                             Row(
