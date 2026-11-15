@@ -230,6 +230,19 @@ class NicFW950DriverTest(unittest.TestCase):
         )
         self.assertTrue(self.radio().get_memory(999).empty)
 
+    def test_unset_ffff_subtones_decode_as_no_tone(self):
+        image = _image()
+        offset = 248
+        image[offset + 12 : offset + 16] = b"\xff\xff\xff\xff"
+
+        memory = self.radio(image).get_memory(1)
+
+        self.assertEqual(memory.tmode, "")
+        self.assertEqual(
+            self.driver._tone_decode(0xFFFF),
+            ("", None, None),
+        )
+
     def test_unchanged_channel_is_byte_identical(self):
         radio = self.radio()
         before = radio.get_mmap().get_packed()
