@@ -1403,6 +1403,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   String _friendlyActionError(Object error) {
     final message = error.toString();
+    if (Platform.isMacOS &&
+        error is FileSystemException &&
+        (error.osError?.errorCode == 1 ||
+            message.contains('Operation not permitted'))) {
+      return '$message\n\n'
+          'macOS blocked NewChirp from writing to that folder. Choose a '
+          'different save location, or allow NewChirp access under:\n\n'
+          'System Settings > Privacy & Security > Files and Folders > '
+          'NewChirp\n\n'
+          'Grant access to Documents, then retry Save.';
+    }
     if (Platform.isLinux &&
         (message.contains('Permission denied') ||
             message.contains('Errno 13')) &&
@@ -2269,14 +2280,83 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       path = location?.path;
     }
     if (path == null) return;
-    final savePath = path.endsWith('.csv') ? path : '$path.csv';
-    await _task('Saving channel library…', () async {
-      await File(savePath).writeAsString(ChirpCsv.encode(_activeChannels));
-      setState(() {
-        _libraryPath = savePath;
-        _dirty = false;
-      });
+    var savePath = path.endsWith('.csv') ? path : '$path.csv';
+    setState(() {
+      _busy = true;
+      _status = 'Saving channel library…';
     });
+    try {
+      try {
+        await File(savePath).writeAsString(ChirpCsv.encode(_activeChannels));
+      } on FileSystemException catch (error) {
+        if (!Platform.isMacOS ||
+            (error.osError?.errorCode != 1 &&
+                !error.toString().contains('Operation not permitted'))) {
+          rethrow;
+        }
+        if (!mounted) rethrow;
+        final chooseAnother = await showDialog<bool>(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            icon: const Icon(
+              Icons.folder_off_outlined,
+              color: Color(0xFFC46A15),
+            ),
+            title: const Text('macOS blocked the save location'),
+            content: const Text(
+              'NewChirp does not have permission to write to this folder. '
+              'Choose another folder now, or allow NewChirp access in '
+              'System Settings > Privacy & Security > Files and Folders.',
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('Cancel'),
+              ),
+              FilledButton.icon(
+                onPressed: () => Navigator.pop(context, true),
+                icon: const Icon(Icons.folder_open_outlined),
+                label: const Text('Choose another folder'),
+              ),
+            ],
+          ),
+        );
+        if (!mounted) return;
+        if (chooseAnother != true) {
+          setState(() => _status = 'Save canceled');
+          return;
+        }
+        const type = XTypeGroup(label: 'CHIRP CSV', extensions: ['csv']);
+        final location = await getSaveLocation(
+          suggestedName: File(savePath).uri.pathSegments.last,
+          acceptedTypeGroups: const [type],
+        );
+        if (!mounted) return;
+        if (location == null) {
+          setState(() => _status = 'Save canceled');
+          return;
+        }
+        savePath = location.path.endsWith('.csv')
+            ? location.path
+            : '${location.path}.csv';
+        await File(savePath).writeAsString(ChirpCsv.encode(_activeChannels));
+      }
+      if (mounted) {
+        setState(() {
+          _libraryPath = savePath;
+          _dirty = false;
+          _status = 'Ready';
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        setState(() => _status = 'Action failed');
+        await _showActionError(error);
+      }
+    } finally {
+      if (mounted) setState(() => _busy = false);
+    }
   }
 
   Future<bool> _confirmReplaceLibrary({required String destination}) async {
