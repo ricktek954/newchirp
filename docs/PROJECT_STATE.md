@@ -8,6 +8,20 @@ release requirements.
 
 ## Resume here
 
+- Windows `1.0.54` is live from source commit `c55530b9`. It adds the
+  read-only experimental KSUN UV-K60 Plus driver, the Baofeng UV-29 Pro
+  compatibility profile, Yaesu FT-50 odd-split decoding, and upload
+  hardening. Verification: installer metadata `1.0.54.0` / `1.0.54`; release
+  app `1.0.54+54`; bundled Python `3.13.15`; a clean cached runtime with no
+  `okf`/`tree_sitter` contamination; 255 CHIRP driver modules; bridge
+  `list-models` exit 0 with 596 models including `KSUN_UV-K60-Plus`,
+  `Baofeng_UV-29Pro`, and `Yaesu_FT-50`; matching local/server/public
+  SHA-256; public HTTP 200; and live manifest Windows `1.0.54`. The installer
+  remains unsigned. `flutter analyze lib test` is clean. The full Flutter
+  suite ran 213 passing tests with the five known Windows-only
+  sandbox/Help failures. The full Python suite ran 423 tests: 418 passed,
+  2 fixture-dependent tests skipped, and 3 Windows temporary-file-lock
+  helper errors.
 - macOS `1.0.54` is live from source commit `c55530b9` as a universal,
   signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the Baofeng
   UV-29 Pro alias, Yaesu FT-50 odd-split decoding, the read-only KSUN
@@ -572,7 +586,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.53` artifact source commit: `76fcaf93`
+- Windows `1.0.54` artifact source commit: `c55530b9`
 - macOS `1.0.54` artifact source commit: `c55530b9`
 - Linux `1.0.51` is live; artifact source commit is not recorded in this
   checkout
@@ -592,8 +606,28 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.54 |
-| Windows | 1.0.53 |
+| Windows | 1.0.54 |
 | Linux | 1.0.51 |
+
+Windows `1.0.54` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.54.exe`
+- Version/build: `1.0.54` / `54`
+- SHA-256:
+  `29f703b75c699ecc72499c7e6f323ef0a571438ab1dfba1b128dd87946f26422`
+- Size: `55,303,832` bytes
+- Built from `c55530b9`
+- Installer metadata `1.0.54.0` / `1.0.54`; release app `1.0.54+54`
+- Bundled Python `3.13.15`, 255 CHIRP driver modules, and a successful bridge
+  `list-models` run with 596 models including `KSUN_UV-K60-Plus`,
+  `Baofeng_UV-29Pro`, and `Yaesu_FT-50`
+- The runtime was re-extracted from the pinned CPython archive with SHA-256
+  `44bf9ae71f4b45e3ba3104ae331c6eff3f7002593c26fd12453eb9310c4f259a`;
+  `python\Lib\site-packages` contains only the normal pip files, not the
+  `okf`/`tree_sitter` cache contamination
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.54`
+- Authenticode: not signed
 
 macOS `1.0.54` artifact:
 
@@ -708,7 +742,7 @@ macOS `1.0.44` artifact (historical):
 - Gatekeeper result: accepted as Notarized Developer ID
 - Server checksum recorded from the live artifact
 
-Windows `1.0.53` artifact:
+Windows `1.0.53` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.53.exe`
 - Version/build: `1.0.53` / `53`
@@ -1108,6 +1142,22 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.54` from source commit `c55530b9`. The release adds
+  the read-only experimental KSUN UV-K60 Plus driver derived from the MH-580
+  OEM programmer, the Baofeng UV-29 Pro compatibility profile, Yaesu FT-50
+  odd-split decoding, platform-specific update-manifest checks, and upload
+  validation hardening. Verification: installer metadata `1.0.54.0` /
+  `1.0.54`, release app `1.0.54+54`, bundled Python `3.13.15`, 255 bundled
+  CHIRP driver modules, bridge `list-models` exit 0 with 596 models, matching
+  local/server/public SHA-256, public HTTP 200, and live platform manifest
+  Windows `1.0.54`. The clean runtime was re-extracted from the pinned
+  CPython archive after a contaminated build cache was discarded.
+  `flutter analyze lib test` is clean. The full Flutter suite ran 213 passing
+  tests with the five known Windows-only sandbox/Help failures. The complete
+  Python suite ran 423 tests: 418 passed, 2 fixture-dependent tests skipped,
+  and 3 Windows temporary-file-lock helper errors. The installer remains
+  unsigned. At Windows release time, macOS had also advanced to `1.0.54` and
+  Linux remained at `1.0.51`.
 - Published macOS `1.0.54` from source commit `c55530b9` as a universal,
   signed, notarized, stapled DMG. The release includes the Baofeng UV-29 Pro
   UV-28 Plus compatibility alias, Yaesu FT-50 odd-split decoding, read-only
