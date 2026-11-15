@@ -588,8 +588,8 @@ release requirements.
 - Branch: `main`
 - Windows `1.0.54` artifact source commit: `c55530b9`
 - macOS `1.0.54` artifact source commit: `c55530b9`
-- Linux `1.0.51` is live; artifact source commit is not recorded in this
-  checkout
+- Linux `1.0.54` is live per the platform manifest; its detailed
+  artifact record and source commit are not recorded in this checkout
 - Open pull requests: none
 - Checked-out source version: `1.0.54+54`
 - macOS builds are pinned to CocoaPods with
@@ -607,7 +607,10 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.54 |
 | Windows | 1.0.54 |
-| Linux | 1.0.51 |
+| Linux | 1.0.54 |
+
+Linux `1.0.54` is reported by the API; detailed artifact checksums are not
+yet recorded in this checkout.
 
 Windows `1.0.54` artifact:
 
