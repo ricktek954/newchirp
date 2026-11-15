@@ -59,13 +59,14 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1794669419459116805,
-      "hash": "3e98d25a7de61e626abce16a3afb8eb9d46ac7ae89240a8451b44c0739089d07",
+      "mtime_ns": 1794737855484501308,
+      "hash": "3b44e4f5e25107fde2a8807a1bb3c621c0aea1369b1fb6cd7e62e0a65dcc0fb6",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
         "models/radio_channel/RadioChannel",
         "models/radio_channel/channelNumberLabel",
         "models/radio_channel/clear",
+        "models/radio_channel/clearedLocationsAfterEmptySlotRemoval",
         "models/radio_channel/compatibleChannelsForUpload",
         "models/radio_channel/copy",
         "models/radio_channel/effectiveReceiveCtcssTone",
@@ -599,8 +600,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1794681761954954935,
-      "hash": "4593590f5c26f878c3b40bff9dd487d1bf41d1439414afe73618aef5f29390f0",
+      "mtime_ns": 1794738027676126823,
+      "hash": "22fad9ecfb3cd288e827a699baa5080ff34af3acfc3a258d23e6fbe549379b4b",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -626,7 +627,9 @@
         "main/ChannelApplyDialog",
         "main/ChannelApplyDialogState",
         "main/AddChannelPlacement",
+        "main/ChannelLocationConflictAction",
         "main/RepeaterProvider",
+        "main/SearchableRegionField",
         "main/RepeaterBookDialog",
         "main/RepeaterBookDialogState",
         "main/HelpButton",
@@ -783,6 +786,8 @@
         "main/showUpToDate",
         "main/buildAbout",
         "main/showChannelEditorAtLocation",
+        "main/chooseChannelLocationConflictAction",
+        "main/saveEditedChannel",
         "main/confirmDeleteChannel",
         "main/buildLibrary",
         "main/printFrequencyReference",
@@ -1246,7 +1251,7 @@
       "type": "Module",
       "resource": "models/radio_channel.dart",
       "render_hash": "stale",
-      "edge_hash": "b9d7fdd357d049eef66378d0952445b1092202d9757b122f8381829df2de74d0",
+      "edge_hash": "f9237352e7ba6a2a8a759f4c5a0615f23aed6b47a8fd1cd24045aa9b71a30c9b",
       "enriched": false
     },
     "models/radio_channel/RadioChannel": {
@@ -1470,7 +1475,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "926f637ce55b500749dd03a470052741acd748cd5344cef2eec8a4d5b90374a9",
+      "edge_hash": "9881d11fe9bbd66a2fedaf493d1aa4ef5c63e68952d49dd108384b4febed18b0",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -6112,7 +6117,47 @@
       "render_hash": "stale",
       "edge_hash": "3239590f5028dcfdb25ec350f4afa359df850a98086ea77a4f579e6f00298df4",
       "enriched": false
+    },
+    "models/radio_channel/clearedLocationsAfterEmptySlotRemoval": {
+      "concept_id": "models/radio_channel/clearedLocationsAfterEmptySlotRemoval",
+      "type": "Function",
+      "resource": "models/radio_channel.dart",
+      "render_hash": "stale",
+      "edge_hash": "3239590f5028dcfdb25ec350f4afa359df850a98086ea77a4f579e6f00298df4",
+      "enriched": false
+    },
+    "main/ChannelLocationConflictAction": {
+      "concept_id": "main/ChannelLocationConflictAction",
+      "type": "Enum",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/chooseChannelLocationConflictAction": {
+      "concept_id": "main/chooseChannelLocationConflictAction",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/saveEditedChannel": {
+      "concept_id": "main/saveEditedChannel",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/SearchableRegionField": {
+      "concept_id": "main/SearchableRegionField",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-14T18:42:43Z"
+  "generated_at": "2026-11-15T10:20:29Z"
 }

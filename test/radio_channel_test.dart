@@ -16,6 +16,18 @@ void main() {
     expect(writable.map((channel) => channel.location), [1]);
   });
 
+  test('removing an empty slot clears the vacated highest location', () {
+    final channels = [channelAt(100), channelAt(101)];
+
+    final cleared = clearedLocationsAfterEmptySlotRemoval(
+      channels: channels,
+      clearedLocations: {90},
+      location: 90,
+    );
+
+    expect(cleared, {101});
+  });
+
   test('TSQL exposes one shared CTCSS tone in both directions', () {
     final channel = RadioChannel(
       location: 1,

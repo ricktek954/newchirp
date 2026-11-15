@@ -2005,6 +2005,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final selectedChannel = _current;
     _recordHistory();
     setState(() {
+      final shiftedClears = clearedLocationsAfterEmptySlotRemoval(
+        channels: _channels,
+        clearedLocations: _clearedLocations,
+        location: location,
+      );
       final locationChanges = <int, int?>{
         for (final channel in _channels)
           if (channel.location >= location)
@@ -2016,11 +2021,6 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         if (channel.location > location) channel.location -= 1;
       }
       _remapRadioMappingChannels(locationChanges);
-      final shiftedClears = <int>{};
-      for (final cleared in _clearedLocations) {
-        if (cleared < location) shiftedClears.add(cleared);
-        if (cleared > location) shiftedClears.add(cleared - 1);
-      }
       _clearedLocations
         ..clear()
         ..addAll(shiftedClears);
@@ -4259,33 +4259,30 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         builder: (context, setDialogState) {
           void changed(VoidCallback update) => setDialogState(() => update());
 
-          void save() {
+          Future<void> save() async {
             final saved = draft.copy()..cleared = false;
-            _recordHistory();
-            setState(() {
-              if (saved.location != location) {
-                _remapRadioMappingChannels({
-                  location: existing != null && !existing.cleared
-                      ? saved.location
-                      : null,
-                });
-              }
-              final currentIndex = _channels.indexWhere(
-                (channel) => channel.location == location,
-              );
-              if (currentIndex >= 0) {
-                _channels[currentIndex] = saved;
-              } else {
-                _channels.add(saved);
-              }
-              _clearedLocations
-                ..remove(location)
-                ..remove(saved.location);
-              _sortChannelsByLocation();
-              _selected = _channels.indexOf(saved);
-              _dirty = true;
-              _markChannelLibraryDirty();
-            });
+            final occupied = saved.location == location
+                ? null
+                : _channels
+                      .where(
+                        (channel) =>
+                            channel.location == saved.location &&
+                            !channel.cleared,
+                      )
+                      .firstOrNull;
+            final conflictAction = occupied == null
+                ? null
+                : await _chooseChannelLocationConflictAction(
+                    sourceLocation: location,
+                    target: occupied,
+                  );
+            if (occupied != null && conflictAction == null) return;
+            if (!dialogContext.mounted) return;
+            _saveEditedChannel(
+              saved,
+              originalLocation: location,
+              conflictAction: conflictAction,
+            );
             WidgetsBinding.instance.addPostFrameCallback((_) {
               if (mounted) {
                 _channelTableKey.currentState?.revealSelectedChannel();
@@ -4330,6 +4327,165 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         },
       ),
     );
+  }
+
+  Future<_ChannelLocationConflictAction?> _chooseChannelLocationConflictAction({
+    required int sourceLocation,
+    required RadioChannel target,
+  }) {
+    final source = _channels
+        .where(
+          (channel) => channel.location == sourceLocation && !channel.cleared,
+        )
+        .firstOrNull;
+    return showDialog<_ChannelLocationConflictAction>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        icon: const Icon(Icons.swap_horiz),
+        title: Text('Channel ${target.location} is occupied'),
+        content: Text(
+          '${target.name.isEmpty ? 'An existing channel' : target.name} '
+          'already uses channel ${target.location}. Choose how to place '
+          '${source?.name.isNotEmpty == true ? source!.name : 'this channel'}.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, _ChannelLocationConflictAction.replace),
+            child: const Text('Replace'),
+          ),
+          if (source != null)
+            TextButton(
+              onPressed: () =>
+                  Navigator.pop(context, _ChannelLocationConflictAction.swap),
+              child: const Text('Swap'),
+            ),
+          FilledButton(
+            onPressed: () =>
+                Navigator.pop(context, _ChannelLocationConflictAction.move),
+            child: const Text('Move and shift'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _saveEditedChannel(
+    RadioChannel saved, {
+    required int originalLocation,
+    _ChannelLocationConflictAction? conflictAction,
+  }) {
+    _recordHistory();
+    setState(() {
+      final sourceIndex = _channels.indexWhere(
+        (channel) => channel.location == originalLocation && !channel.cleared,
+      );
+      final source = sourceIndex < 0 ? null : _channels[sourceIndex];
+      final targetIndex = _channels.indexWhere(
+        (channel) =>
+            channel.location == saved.location &&
+            !channel.cleared &&
+            !identical(channel, source),
+      );
+      final oldClears = Set<int>.of(_clearedLocations);
+      final locationChanges = <int, int?>{};
+
+      if (saved.location == originalLocation || targetIndex < 0) {
+        if (saved.location != originalLocation) {
+          locationChanges[originalLocation] = saved.location;
+        }
+        if (sourceIndex >= 0) {
+          _channels[sourceIndex] = saved;
+        } else {
+          _channels.add(saved);
+        }
+      } else {
+        switch (conflictAction) {
+          case _ChannelLocationConflictAction.move:
+            if (saved.location > originalLocation) {
+              for (
+                var location = originalLocation + 1;
+                location <= saved.location;
+                location++
+              ) {
+                locationChanges[location] = location - 1;
+              }
+            } else {
+              for (
+                var location = saved.location;
+                location < originalLocation;
+                location++
+              ) {
+                locationChanges[location] = location + 1;
+              }
+            }
+            locationChanges[originalLocation] = saved.location;
+            for (final channel in _channels) {
+              if (identical(channel, source)) continue;
+              final next = locationChanges[channel.location];
+              if (locationChanges.containsKey(channel.location) &&
+                  next != null) {
+                channel.location = next;
+              }
+            }
+            if (sourceIndex >= 0) {
+              _channels[sourceIndex] = saved;
+            } else {
+              _channels.add(saved);
+            }
+          case _ChannelLocationConflictAction.swap:
+            if (sourceIndex < 0) return;
+            final destination = _channels[targetIndex];
+            locationChanges[originalLocation] = saved.location;
+            locationChanges[saved.location] = originalLocation;
+            _channels[sourceIndex] = saved;
+            destination.location = originalLocation;
+          case _ChannelLocationConflictAction.replace:
+            locationChanges[originalLocation] = saved.location;
+            locationChanges[saved.location] = null;
+            _channels.removeAt(targetIndex);
+            final replacementIndex = targetIndex < sourceIndex
+                ? sourceIndex - 1
+                : sourceIndex;
+            if (replacementIndex >= 0) {
+              _channels[replacementIndex] = saved;
+            } else {
+              _channels.add(saved);
+            }
+          case null:
+            return;
+        }
+      }
+
+      final remappedClears = <int>{};
+      for (final cleared in oldClears) {
+        final next = locationChanges.containsKey(cleared)
+            ? locationChanges[cleared]
+            : cleared;
+        if (next != null) remappedClears.add(next);
+      }
+      if (saved.location != originalLocation) {
+        remappedClears.add(originalLocation);
+      }
+      final activeLocations = _channels
+          .where((channel) => !channel.cleared)
+          .map((channel) => channel.location)
+          .toSet();
+      remappedClears.removeAll(activeLocations);
+      _clearedLocations
+        ..clear()
+        ..addAll(remappedClears);
+      _remapRadioMappingChannels(locationChanges);
+      _sortChannelsByLocation();
+      _selected = _channels.indexOf(saved);
+      _dirty = true;
+      _markChannelLibraryDirty();
+    });
   }
 
   Future<bool> _confirmDeleteChannel(RadioChannel channel) async {
@@ -7531,7 +7687,89 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
 
 enum _AddChannelPlacement { end, beforeSelected, afterSelected }
 
+enum _ChannelLocationConflictAction { move, swap, replace }
+
 enum _RepeaterProvider { repeaterBook, myGmrs }
+
+class _SearchableRegionField extends StatelessWidget {
+  const _SearchableRegionField({
+    required this.value,
+    required this.options,
+    required this.enabled,
+    required this.onSelected,
+  });
+
+  final String value;
+  final List<String> options;
+  final bool enabled;
+  final ValueChanged<String> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Autocomplete<String>(
+      key: ValueKey('repeater-region-$enabled-$value'),
+      initialValue: TextEditingValue(text: value),
+      displayStringForOption: (option) => option,
+      optionsBuilder: (textEditingValue) {
+        if (!enabled) return const Iterable<String>.empty();
+        final query = textEditingValue.text.trim().toLowerCase();
+        if (query.isEmpty) return options;
+        return options.where((option) => option.toLowerCase().contains(query));
+      },
+      onSelected: onSelected,
+      fieldViewBuilder: (context, controller, focusNode, onFieldSubmitted) =>
+          TextFormField(
+            key: const ValueKey('repeater-region-field'),
+            controller: controller,
+            focusNode: focusNode,
+            enabled: enabled,
+            decoration: InputDecoration(
+              labelText: options.length == 1 ? 'Region' : 'State or province',
+              helperText: enabled ? 'Type to search' : null,
+              suffixIcon: const Icon(Icons.search),
+            ),
+            onFieldSubmitted: (_) {
+              final query = controller.text.trim().toLowerCase();
+              final matches = options
+                  .where(
+                    (option) =>
+                        query.isEmpty || option.toLowerCase().contains(query),
+                  )
+                  .toList();
+              if (matches.length == 1) {
+                onSelected(matches.single);
+              } else {
+                onFieldSubmitted();
+              }
+            },
+          ),
+      optionsViewBuilder: (context, selectOption, matches) => Align(
+        alignment: Alignment.topLeft,
+        child: Material(
+          elevation: 8,
+          borderRadius: BorderRadius.circular(8),
+          clipBehavior: Clip.antiAlias,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 240, minWidth: 260),
+            child: ListView.builder(
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount: matches.length,
+              itemBuilder: (context, index) {
+                final option = matches.elementAt(index);
+                return ListTile(
+                  dense: true,
+                  title: Text(option),
+                  onTap: () => selectOption(option),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class RepeaterBookDialog extends StatefulWidget {
   const RepeaterBookDialog({
@@ -7845,6 +8083,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() => _error = 'Sign in to myGMRS before searching.');
       return;
     }
+    final coarseRegion = latitude != null && longitude != null ? 'All' : _state;
     _preferencesSaveTimer?.cancel();
     _preferencesTouched = true;
     await _savePreferencesNow();
@@ -7862,7 +8101,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     try {
       final results = _provider == _RepeaterProvider.myGmrs
           ? await _myGmrs.searchRepeaters(
-              state: _state,
+              state: coarseRegion,
               query: filter,
               latitude: latitude,
               longitude: longitude,
@@ -7871,7 +8110,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
             )
           : await widget.bridge.searchRepeaters(
               country: _country,
-              state: _state,
+              state: coarseRegion,
               service: _service,
               filter: _filterController.text.trim(),
               latitude: latitude,
@@ -7906,7 +8145,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
           '${totalMatches == 1 ? 'repeater' : 'repeaters'}, but none could '
           'be imported.';
     }
-    final location = _state == 'All' ? _country : '$_state, $_country';
+    final hasCoordinates =
+        double.tryParse(_latitudeController.text.trim()) != null &&
+        double.tryParse(_longitudeController.text.trim()) != null;
+    final location = hasCoordinates || _state == 'All'
+        ? _country
+        : '$_state, $_country';
     final radius = double.tryParse(_distanceController.text.trim());
     final zip = RegExp(
       r'^\d{5}(?:-\d{4})?$',
@@ -7924,8 +8168,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                 'account. myGMRS text search does not understand county names; '
                 'enter a 5-digit ZIP code for a nearby repeater search.'
           : 'RepeaterBook may not have a GMRS listing for this area yet.';
+      final scopeHint = hasCoordinates
+          ? 'State or province is ignored for coordinate searches; country '
+                'still scopes the directory.'
+          : 'Check that Country and Region are correct.';
       return 'No matching GMRS repeaters were found$range. $sourceHint '
-          'Check that Country and Region match your coordinates.';
+          '$scopeHint';
     }
     final activeFilters = [if (_openOnly) 'open use', if (_fmOnly) 'FM analog'];
     final filterHint = activeFilters.isEmpty
@@ -7936,9 +8184,14 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       return 'No matching repeaters were found$range. ZIP searches default to '
           '50 km; increase the radius or turn off active filters.$filterHint';
     }
-    return 'No matching repeaters were found$range. Coordinates do not '
-        'change Country or Region; check that both match your location, '
-        'clear the location filter, or increase the radius.$filterHint';
+    if (hasCoordinates) {
+      return 'No matching repeaters were found$range. State or province is '
+          'ignored for coordinate searches; country still scopes the '
+          'directory. Increase the radius or turn off active filters.'
+          '$filterHint';
+    }
+    return 'No matching repeaters were found$range. Check the selected region '
+        'or increase the radius.$filterHint';
   }
 
   List<RadioChannel> get _selectedChannels {
@@ -8457,39 +8710,20 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                           Row(
                             children: [
                               Expanded(
-                                child: DropdownButtonFormField<String>(
-                                  key: ValueKey(
-                                    'repeater-region-$_country-$_state',
-                                  ),
-                                  isExpanded: true,
-                                  initialValue: _state,
-                                  decoration: InputDecoration(
-                                    labelText: _regions.length == 1
-                                        ? 'Region'
-                                        : 'State or province',
-                                  ),
-                                  items: _regions
-                                      .map(
-                                        (region) => DropdownMenuItem(
-                                          value: region,
-                                          child: Text(region),
-                                        ),
-                                      )
-                                      .toList(),
-                                  onChanged: _loading || _regions.length == 1
-                                      ? null
-                                      : (value) {
-                                          if (value != null) {
-                                            setState(() {
-                                              _preferencesTouched = true;
-                                              _state = value;
-                                              _results = null;
-                                              _selected.clear();
-                                              _selectedCounties.clear();
-                                            });
-                                            _preferencesChanged();
-                                          }
-                                        },
+                                child: _SearchableRegionField(
+                                  value: _state,
+                                  options: _regions,
+                                  enabled: !_loading && _regions.length > 1,
+                                  onSelected: (value) {
+                                    setState(() {
+                                      _preferencesTouched = true;
+                                      _state = value;
+                                      _results = null;
+                                      _selected.clear();
+                                      _selectedCounties.clear();
+                                    });
+                                    _preferencesChanged();
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 12),
