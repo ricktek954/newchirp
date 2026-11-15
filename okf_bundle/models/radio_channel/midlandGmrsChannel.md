@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T15:16:59Z"
+timestamp: "2026-11-15T10:17:35Z"
 concept_id: models/radio_channel/midlandGmrsChannel
 language: dart
 ---
@@ -31,7 +31,7 @@ int_midlandGmrsChannel_midlandGmrsChannel
 Midland channel 1-22 for a memory slot. Slots 31-107 are not fixed.
 
 ## Source
-Lines 262–262 in `models/radio_channel.dart`
+Lines 288–288 in `models/radio_channel.dart`
 
 ## Relationships
 

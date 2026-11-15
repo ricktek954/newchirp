@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T15:16:59Z"
+timestamp: "2026-11-15T10:17:35Z"
 concept_id: models/radio_channel/isGmrsRepeaterOutputMhz
 language: dart
 ---
@@ -31,7 +31,7 @@ boolisGmrsRepeaterOutputMhz(double mhz)
 GMRS repeater outputs from 462.550 through 462.725 MHz.
 
 ## Source
-Lines 365–365 in `models/radio_channel.dart`
+Lines 391–391 in `models/radio_channel.dart`
 
 ## Relationships
 

@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T15:16:59Z"
+timestamp: "2026-11-15T10:17:35Z"
 concept_id: models/radio_channel/restorePlainMidlandRepeater
 language: dart
 ---
@@ -33,7 +33,7 @@ Puts the standard GMRS repeater back in this row and clears the name.
 Does nothing when [location] is not one of the eight repeater slots.
 
 ## Source
-Lines 620–620 in `models/radio_channel.dart`
+Lines 646–646 in `models/radio_channel.dart`
 
 ## Relationships
 

@@ -1,41 +1,41 @@
 ---
-description: 'Top-level OKF summary: 610 concepts across 4 domains and 30 modules'
+description: 'Top-level OKF summary: 615 concepts across 4 domains and 30 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-14T18:42:43Z'
+timestamp: '2026-11-15T10:20:29Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 610 concepts | 4 domains | 30 modules
+> OKF v0.2 bundle | 615 concepts | 4 domains | 30 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 473 |
-| Class | 98 |
+| Function | 476 |
+| Class | 99 |
 | Module | 30 |
-| Enum | 9 |
+| Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 610 |
+| dart | 615 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 219 concepts
+### [main.dart](main.dart/index.md) — 223 concepts
 
-- [main](main/index.md) (219 concepts)
+- [main](main/index.md) (223 concepts)
 
-### [models](models/index.md) — 99 concepts
+### [models](models/index.md) — 100 concepts
 
-- [models/radio_channel](models/radio_channel/index.md) (42 concepts)
+- [models/radio_channel](models/radio_channel/index.md) (43 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (11 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (11 concepts)

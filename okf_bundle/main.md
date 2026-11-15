@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T18:42:41Z"
+timestamp: "2026-11-15T10:20:27Z"
 concept_id: main
 language: dart
 ---
@@ -43,7 +43,9 @@ language: dart
 | related | [_ChannelApplyDialog](/main/ChannelApplyDialog.md) |
 | related | [_ChannelApplyDialogState](/main/ChannelApplyDialogState.md) |
 | related | [_AddChannelPlacement](/main/AddChannelPlacement.md) |
+| related | [_ChannelLocationConflictAction](/main/ChannelLocationConflictAction.md) |
 | related | [_RepeaterProvider](/main/RepeaterProvider.md) |
+| related | [_SearchableRegionField](/main/SearchableRegionField.md) |
 | related | [RepeaterBookDialog](/main/RepeaterBookDialog.md) |
 | related | [_RepeaterBookDialogState](/main/RepeaterBookDialogState.md) |
 | related | [_HelpButton](/main/HelpButton.md) |
@@ -209,6 +211,8 @@ language: dart
 | related | [_showChannelEditorAtLocation](/main/showChannelEditorAtLocation.md) |
 | related | [_changed](/main/changed.md) |
 | related | [save](/main/save.md) |
+| related | [_chooseChannelLocationConflictAction](/main/chooseChannelLocationConflictAction.md) |
+| related | [_saveEditedChannel](/main/saveEditedChannel.md) |
 | related | [_confirmDeleteChannel](/main/confirmDeleteChannel.md) |
 | related | [_buildLibrary](/main/buildLibrary.md) |
 | related | [_printFrequencyReference](/main/printFrequencyReference.md) |
@@ -256,6 +260,7 @@ language: dart
 | related | [dispose](/main/dispose.md) |
 | related | [build](/main/build.md) |
 | related | [_apply](/main/apply.md) |
+| related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |
 | related | [initState](/main/initState.md) |
 | related | [_loadPreferences](/main/loadPreferences.md) |

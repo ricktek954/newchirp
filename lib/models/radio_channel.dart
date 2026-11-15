@@ -213,6 +213,32 @@ List<RadioChannel> compatibleChannelsForUpload(
   List<String> Function(RadioChannel channel) issuesFor,
 ) => channels.where((channel) => issuesFor(channel).isEmpty).toList();
 
+Set<int> clearedLocationsAfterEmptySlotRemoval({
+  required Iterable<RadioChannel> channels,
+  required Set<int> clearedLocations,
+  required int location,
+}) {
+  int? highestLocation;
+  for (final candidate in [
+    ...channels.map((channel) => channel.location),
+    ...clearedLocations,
+  ]) {
+    if (highestLocation == null || candidate > highestLocation) {
+      highestLocation = candidate;
+    }
+  }
+
+  final shifted = <int>{};
+  for (final cleared in clearedLocations) {
+    if (cleared < location) shifted.add(cleared);
+    if (cleared > location) shifted.add(cleared - 1);
+  }
+  if (highestLocation != null && highestLocation > location) {
+    shifted.add(highestLocation);
+  }
+  return shifted;
+}
+
 /// CHIRP id for the hardware-tested Midland MXT295 driver.
 const midlandMxt295Model = 'Midland_MXT295';
 

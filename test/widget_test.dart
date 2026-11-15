@@ -623,7 +623,7 @@ void main() {
       findsOneWidget,
     );
     expect(
-      find.textContaining('Coordinates do not change Country or Region'),
+      find.textContaining('Check the selected region or increase the radius.'),
       findsOneWidget,
     );
   });
@@ -760,10 +760,11 @@ void main() {
     );
     expect(
       tester
-          .widget<DropdownButtonFormField<String>>(
-            find.byKey(const ValueKey('repeater-region-Canada-Ontario')),
+          .widget<Autocomplete<String>>(
+            find.byKey(const ValueKey('repeater-region-true-Ontario')),
           )
-          .initialValue,
+          .initialValue
+          ?.text,
       'Ontario',
     );
     expect(
@@ -787,7 +788,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(bridge.lastCountry, 'Canada');
-    expect(bridge.lastState, 'Ontario');
+    expect(bridge.lastState, 'All');
     expect(bridge.lastService, 'amateur');
     expect(bridge.lastFilter, 'Toronto');
     expect(bridge.lastLatitude, 43.6532);
@@ -802,6 +803,70 @@ void main() {
     expect(preferencesStore.preferences.radiusKm, '75');
     expect(preferencesStore.preferences.mapView, isTrue);
   });
+
+  testWidgets(
+    'state field supports typing and coordinate searches ignore the region',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 720);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final bridge = _FakeRepeaterBridge();
+      final preferencesStore = _FakeRepeaterSearchPreferencesStore();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () async {
+                  await showDialog<List<RadioChannel>>(
+                    context: context,
+                    builder: (context) => RepeaterBookDialog(
+                      bridge: bridge,
+                      preferencesStore: preferencesStore,
+                    ),
+                  );
+                },
+                child: const Text('Open keyboard repeater search'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open keyboard repeater search'));
+      await tester.pumpAndSettle();
+
+      final regionField = find.byKey(const ValueKey('repeater-region-field'));
+      await tester.enterText(regionField, 'Cali');
+      await tester.pumpAndSettle();
+      expect(find.text('California'), findsOneWidget);
+      await tester.tap(find.text('California'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(
+        find.byKey(const ValueKey('repeater-latitude')),
+        '34.0522',
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('repeater-longitude')),
+        '-118.2437',
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('repeater-radius-km')),
+        '50',
+      );
+      await tester.tap(find.text('Search'));
+      await tester.pumpAndSettle();
+
+      expect(bridge.lastCountry, 'United States');
+      expect(bridge.lastState, 'All');
+      expect(bridge.lastLatitude, 34.0522);
+      expect(bridge.lastLongitude, -118.2437);
+      expect(bridge.lastDistance, 50);
+      expect(preferencesStore.preferences.region, 'California');
+    },
+  );
 
   testWidgets('myGMRS directory is available after credential approval', (
     tester,
@@ -1752,21 +1817,84 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    Future<void> setLocation(int location) async {
+    Future<void> setLocation(int location, {String? conflictAction}) async {
       await tester.tap(locationField());
       await tester.pump();
       tester.testTextInput.enterText('$location');
       await tester.pump();
       await tester.tap(find.text('Save channel'));
       await tester.pumpAndSettle();
+      if (conflictAction != null) {
+        expect(find.text('Channel $location is occupied'), findsOneWidget);
+        await tester.tap(find.text(conflictAction));
+        await tester.pumpAndSettle();
+      }
     }
 
     await openChannel('GMRS 1');
-    await setLocation(30);
+    await setLocation(22, conflictAction: 'Move and shift');
 
-    final gmrs22 = tester.getTopLeft(find.text('GMRS 22'));
-    final gmrs1 = tester.getTopLeft(find.text('GMRS 1'));
-    expect(gmrs22.dy, lessThan(gmrs1.dy));
+    final gmrs1 = tester.getTopLeft(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-22')),
+        matching: find.text('GMRS 1'),
+      ),
+    );
+    expect(gmrs1.dy, isNonNegative);
+    expect(find.text('GMRS 1'), findsOneWidget);
+  });
+
+  testWidgets('occupied channel locations require an explicit swap', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 2').first);
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tap(find.text('GMRS 2').first);
+    await tester.pumpAndSettle();
+    final locationField = find.descendant(
+      of: find.byType(Dialog),
+      matching: find.byWidgetPredicate(
+        (widget) =>
+            widget is TextField && widget.decoration?.labelText == 'Location',
+      ),
+    );
+    await tester.tap(locationField);
+    await tester.pump();
+    tester.testTextInput.enterText('1');
+    await tester.pump();
+    await tester.tap(find.text('Save channel'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Channel 1 is occupied'), findsOneWidget);
+    expect(find.text('Replace'), findsOneWidget);
+    expect(find.text('Swap'), findsOneWidget);
+    expect(find.text('Move and shift'), findsOneWidget);
+    await tester.tap(find.text('Swap'));
+    await tester.pumpAndSettle();
+
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-1')),
+        matching: find.text('GMRS 2'),
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('channel-slot-2')),
+        matching: find.text('GMRS 1'),
+      ),
+      findsOneWidget,
+    );
   });
 
   testWidgets('vertical channel scrollbar stays at the visible table edge', (
@@ -2547,9 +2675,7 @@ void main() {
     expect(find.text('CHIRP compatibility layer'), findsOneWidget);
     expect(find.textContaining('GNU General Public License'), findsOneWidget);
     expect(
-      find.textContaining(
-        'available for incorporation into upstream CHIRP',
-      ),
+      find.textContaining('available for incorporation into upstream CHIRP'),
       findsOneWidget,
     );
     expect(find.textContaining('WITHOUT ANY WARRANTY'), findsOneWidget);
