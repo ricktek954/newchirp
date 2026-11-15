@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:module_sandbox.dart"
-  - "git:branch:main"
+  - "git:branch:release/1.0.55"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T13:03:39Z"
+timestamp: "2026-11-15T12:28:35Z"
 concept_id: services/module_sandbox/resolvePython
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_resolvePython_resolvePython
 ```
 
 ## Source
-Lines 605–605 in `services/module_sandbox.dart`
+Lines 604–604 in `services/module_sandbox.dart`
 
 ## Relationships
 

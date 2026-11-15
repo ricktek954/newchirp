@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-14
+Last updated: 2026-11-15
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,15 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.55` is being prepared from the current `origin/main` plus the
+  Ubuntu 20.04 release hardening. It fixes blank AppImages caused by mixing an
+  old bundled GLVND loader with newer NVIDIA/Mesa drivers, clears vacated
+  channel locations when removing empty slots, makes occupied channel moves
+  use an explicit swap/overwrite decision, adds exact decimal and per-column
+  filters, shows bank boundaries, supports searchable regions and coordinate
+  searches independent of the selected region, expands frequency references,
+  and explains the pending RepeaterBook API application. Build and release
+  details are recorded below after publication.
 - Windows `1.0.54` is live from source commit `c55530b9`. It adds the
   read-only experimental KSUN UV-K60 Plus driver, the Baofeng UV-29 Pro
   compatibility profile, Yaesu FT-50 odd-split decoding, and upload
@@ -591,7 +600,7 @@ release requirements.
 - Linux `1.0.54` is live per the platform manifest; its detailed
   artifact record and source commit are not recorded in this checkout
 - Open pull requests: none
-- Checked-out source version: `1.0.54+54`
+- Checked-out source version: `1.0.55+55`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
