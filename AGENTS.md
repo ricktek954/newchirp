@@ -99,6 +99,11 @@ The AppImage must not bundle GLVND, EGL, or GLES loader libraries. They must
 match the host Mesa or proprietary driver; an old bundled loader can produce a
 blank Flutter window on newer distributions.
 
+Linux artifacts must be built on the Ubuntu 20.04 baseline used by the release
+workflow. `scripts/check_linux_release_abi.py` must pass before publication; it
+rejects newer glibc/GLib requirements, `GLIBC_ABI_DT_RELR`, and GLib 2.80-only
+symbols. Do not publish Linux packages built on a rolling desktop host.
+
 The website uses the version in the filename as its source of truth. Each
 versioned artifact becomes that platform's current download as soon as it is
 uploaded, so platform versions can differ. The current app requests

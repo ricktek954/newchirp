@@ -150,3 +150,4 @@ else
 fi
 
 echo "Bundled Python and CHIRP into $BUNDLE_DIR"
+python3 "$SCRIPT_DIR/check_linux_release_abi.py" "$BUNDLE_DIR"

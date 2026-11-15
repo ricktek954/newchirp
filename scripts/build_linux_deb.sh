@@ -29,6 +29,7 @@ if [[ ! -x "$BUNDLE_DIR/newchirp" ]]; then
   echo "Run 'flutter build linux --release' and scripts/bundle_linux_runtime.sh first." >&2
   exit 1
 fi
+python3 "$SCRIPT_DIR/check_linux_release_abi.py" "$BUNDLE_DIR"
 
 VERSION_LINE="$(sed -n 's/^version:[[:space:]]*\([^+[:space:]]*\).*/\1/p' "$PROJECT_DIR/pubspec.yaml" | head -1)"
 if [[ -z "$VERSION_LINE" ]]; then

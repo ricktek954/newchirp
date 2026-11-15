@@ -184,6 +184,14 @@ artifacts to a GitHub release. Platforms do not need the same version or need
 to publish together; each versioned artifact becomes that platform's current
 download as soon as it is uploaded.
 
+Linux release packages must be built on the Ubuntu 20.04 baseline used by the
+release workflow. Building on a rolling distribution can leak a newer glibc,
+GLib, or bundled system library into the DEB and AppImage. The Linux bundling
+and packaging scripts run `scripts/check_linux_release_abi.py`, which rejects
+non-Ubuntu-20.04 hosts, glibc requirements newer than `2.31`,
+`GLIBC_ABI_DT_RELR`, and GLib 2.80-only symbols. Do not publish a Linux
+artifact if this compatibility check fails.
+
 Release AOT builds need `gen_snapshot.exe`, which Windows Smart App Control
 blocks when it is enabled. If `flutter build windows --release` fails with an
 Application Control message, turn Smart App Control off (Windows Security →
