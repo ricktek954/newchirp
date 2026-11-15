@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:17:35Z"
+timestamp: "2026-11-15T10:28:49Z"
 concept_id: models/radio_channel/midlandReceiveChannelIsLocked
 language: dart
 ---
@@ -32,7 +32,7 @@ Channels 1 through 22 already have a receive channel, so the list
 cannot move them.
 
 ## Source
-Lines 387–387 in `models/radio_channel.dart`
+Lines 395–395 in `models/radio_channel.dart`
 
 ## Relationships
 

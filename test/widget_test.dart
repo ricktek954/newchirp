@@ -1345,6 +1345,39 @@ void main() {
     expect(find.byKey(const ValueKey('channel-search-clear')), findsNothing);
   });
 
+  testWidgets('frequency filters match the entered decimal exactly', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    final frequencyFilter = find.byKey(
+      const ValueKey('channel-column-filter-RX FREQUENCY'),
+    );
+    await tester.enterText(frequencyFilter, '462.562500');
+    await tester.pumpAndSettle();
+
+    expect(find.text('GMRS 1'), findsOneWidget);
+    expect(find.text('GMRS 2'), findsNothing);
+
+    await tester.enterText(frequencyFilter, '462.56');
+    await tester.pumpAndSettle();
+    expect(find.text('GMRS 1'), findsNothing);
+
+    await tester.tap(
+      find.byKey(const ValueKey('clear-channel-column-filters')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('GMRS 1'), findsOneWidget);
+    expect(find.text('GMRS 2'), findsOneWidget);
+  });
+
   testWidgets('Shift and Ctrl click select channels for bulk editing', (
     tester,
   ) async {
@@ -2709,13 +2742,31 @@ void main() {
     await tester.tap(find.text('Frequency reference'));
     await tester.pumpAndSettle();
 
-    expect(find.text('GMRS & FRS Frequency Reference'), findsNWidgets(2));
+    expect(find.text('Frequency Reference'), findsOneWidget);
+    expect(find.text('GMRS & FRS Frequency Reference'), findsOneWidget);
     expect(find.text('462.5625'), findsOneWidget);
     expect(find.text('Repeater Pairs (GMRS Only)'), findsOneWidget);
     expect(find.text('467.5500'), findsOneWidget);
     expect(find.text('New'), findsNothing);
     expect(find.text('Open channel file'), findsNothing);
     expect(find.text('Print'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('frequency-plan-marine-vhf')));
+    await tester.pumpAndSettle();
+    expect(find.text('International Marine VHF'), findsNWidgets(2));
+    expect(find.text('156.800'), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('frequency-plan-cb-27')));
+    await tester.pumpAndSettle();
+    expect(find.text('27 MHz CB'), findsNWidgets(2));
+    expect(find.text('27.60125'), findsOneWidget);
+
+    await tester.tap(
+      find.byKey(const ValueKey('frequency-plan-australia-uhf-cb')),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Australian UHF CB'), findsNWidgets(2));
+    expect(find.text('476.4625'), findsOneWidget);
   });
 
   testWidgets('bundled serial backend loads the CHIRP radio catalog', (

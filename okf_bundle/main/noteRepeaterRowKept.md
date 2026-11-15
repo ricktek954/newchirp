@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/noteRepeaterRowKept
 language: dart
 ---
@@ -23,7 +23,7 @@ void_noteRepeaterRowKept(RadioChannel channel)
 ```
 
 ## Source
-Lines 3045–3045 in `main.dart`
+Lines 3180–3180 in `main.dart`
 
 ## Relationships
 

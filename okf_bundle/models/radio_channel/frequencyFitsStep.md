@@ -10,7 +10,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:17:35Z"
+timestamp: "2026-11-15T10:28:49Z"
 concept_id: models/radio_channel/frequencyFitsStep
 language: dart
 ---
@@ -24,7 +24,7 @@ bool_frequencyFitsStep(int frequencyHz, double stepKhz)
 ```
 
 ## Source
-Lines 867–867 in `models/radio_channel.dart`
+Lines 875–875 in `models/radio_channel.dart`
 
 ## Relationships
 

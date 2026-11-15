@@ -3,6 +3,7 @@
 ## Subdirectories
 
 - [channel_image_baseline](channel_image_baseline/index.md)
+- [frequency_reference](frequency_reference/index.md)
 - [gm32_channel](gm32_channel/index.md)
 - [marine_channels](marine_channels/index.md)
 - [radio_channel](radio_channel/index.md)
@@ -13,6 +14,7 @@
 ## Modules
 
 - [channel_image_baseline](channel_image_baseline.md)
+- [frequency_reference](frequency_reference.md)
 - [gm32_channel](gm32_channel.md)
 - [marine_channels](marine_channels.md)
 - [radio_channel](radio_channel.md)

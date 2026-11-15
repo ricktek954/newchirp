@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-11-15T10:26:50Z"
 concept_id: models/radio_mapping
 language: dart
 ---
@@ -26,6 +26,7 @@ language: dart
 | related | [radioMappingsFromJson](/models/radio_mapping/radioMappingsFromJson.md) |
 | related | [radioMappingsToJson](/models/radio_mapping/radioMappingsToJson.md) |
 | related | [radioMappingsSignature](/models/radio_mapping/radioMappingsSignature.md) |
+| related | [mappingRangeAt](/models/radio_mapping/mappingRangeAt.md) |
 | related | [remapRadioMappingLocations](/models/radio_mapping/remapRadioMappingLocations.md) |
 | related | [_remapLocations](/models/radio_mapping/remapLocations.md) |
 | related | [copyWith](/models/radio_mapping/copyWith.md) |
