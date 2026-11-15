@@ -974,7 +974,7 @@ List<RadioChannel> gmrsStarterChannels() {
         frequency: frequencies[i],
         duplex: i >= 14 ? '+' : '',
         offset: i >= 14 ? 5.0 : 0,
-        mode: i < 7 ? 'NFM' : 'FM',
+        mode: i < 7 || i >= 14 ? 'FM' : 'NFM',
         step: 2.5,
         comment: i >= 14 ? 'GMRS repeater output' : 'GMRS simplex',
       ),

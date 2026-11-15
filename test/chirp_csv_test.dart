@@ -42,5 +42,14 @@ Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPola
     expect(channels.first.frequency, 462.5625);
     expect(channels.last.duplex, '+');
     expect(channels.last.offset, 5.0);
+    expect(channels.take(7).map((channel) => channel.mode), everyElement('FM'));
+    expect(
+      channels.skip(7).take(7).map((channel) => channel.mode),
+      everyElement('NFM'),
+    );
+    expect(
+      channels.skip(14).map((channel) => channel.mode),
+      everyElement('FM'),
+    );
   });
 }
