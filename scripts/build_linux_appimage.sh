@@ -78,10 +78,8 @@ APPDIR="$PROJECT_DIR/build/linux-appimage/NewChirp.AppDir"
 rm -rf "$APPDIR"
 mkdir -p \
   "$APPDIR/opt/newchirp" \
-  "$APPDIR/opt/newchirp/dri" \
   "$APPDIR/usr/bin" \
   "$APPDIR/usr/share/applications" \
-  "$APPDIR/usr/share/glvnd/egl_vendor.d" \
   "$APPDIR/usr/share/icons/hicolor/16x16/apps" \
   "$APPDIR/usr/share/icons/hicolor/32x32/apps" \
   "$APPDIR/usr/share/icons/hicolor/64x64/apps" \
@@ -93,78 +91,14 @@ cp -a "$BUNDLE_DIR/." "$APPDIR/opt/newchirp/"
 find "$APPDIR/opt/newchirp" -type d -name __pycache__ -prune -exec rm -rf {} +
 find "$APPDIR/opt/newchirp" -type f -name '*.pyc' -delete
 
-copy_host_library() {
-  local soname="$1"
-  local path=""
-
-  if command -v ldconfig >/dev/null 2>&1; then
-    path="$(ldconfig -p 2>/dev/null | awk -v soname="$soname" '$1 == soname {print $NF; exit}')"
-  fi
-  if [[ -z "$path" || ! -r "$path" ]]; then
-    for candidate in \
-      "/usr/lib/$soname" \
-      "/usr/lib64/$soname" \
-      "/usr/lib/x86_64-linux-gnu/$soname" \
-      "/usr/lib/aarch64-linux-gnu/$soname" \
-      "/lib/x86_64-linux-gnu/$soname" \
-      "/lib/aarch64-linux-gnu/$soname"; do
-      if [[ -r "$candidate" ]]; then
-        path="$candidate"
-        break
-      fi
-    done
-  fi
-  if [[ -z "$path" || ! -r "$path" ]]; then
-    echo "Could not find $soname on the build host." >&2
+# GLVND, EGL, and GLES loaders must match the host graphics driver. Bundling the
+# Ubuntu 20.04 loader alongside a newer Mesa or NVIDIA driver can create the
+# Flutter engine but leave its first window blank. Keep these system-provided,
+# just like X11, Wayland, and Mesa.
+for glvnd_library in libEGL.so.1 libGLESv2.so.2 libGLdispatch.so.0; do
+  if [[ -e "$APPDIR/opt/newchirp/lib/$glvnd_library" ]]; then
+    echo "Refusing to bundle host GLVND library: $glvnd_library" >&2
     exit 1
-  fi
-
-  cp -L "$path" "$APPDIR/opt/newchirp/lib/$soname"
-
-  if command -v ldd >/dev/null 2>&1; then
-    ldd "$path" | awk '/=> \// {print $3}' | while read -r dep; do
-      case "$(basename "$dep")" in
-        libc.so.*|libdl.so.*|libm.so.*|libpthread.so.*|librt.so.*|ld-linux*.so.*)
-          continue
-          ;;
-      esac
-      cp -Ln "$dep" "$APPDIR/opt/newchirp/lib/$(basename "$dep")" 2>/dev/null || true
-    done
-  fi
-}
-
-copy_library_dependencies() {
-  local path="$1"
-
-  if command -v ldd >/dev/null 2>&1; then
-    ldd "$path" | awk '/=> \// {print $3}' | while read -r dep; do
-      case "$(basename "$dep")" in
-        libc.so.*|libdl.so.*|libm.so.*|libpthread.so.*|librt.so.*|ld-linux*.so.*)
-          continue
-          ;;
-      esac
-      cp -Ln "$dep" "$APPDIR/opt/newchirp/lib/$(basename "$dep")" 2>/dev/null || true
-    done
-  fi
-}
-
-copy_host_library libEGL.so.1
-copy_host_library libGLESv2.so.2
-copy_host_library libEGL_mesa.so.0
-
-if [[ -f /usr/share/glvnd/egl_vendor.d/50_mesa.json ]]; then
-  cp /usr/share/glvnd/egl_vendor.d/50_mesa.json "$APPDIR/usr/share/glvnd/egl_vendor.d/"
-fi
-for driver in \
-  /usr/lib/dri/swrast_dri.so \
-  /usr/lib/dri/kms_swrast_dri.so \
-  /usr/lib/x86_64-linux-gnu/dri/swrast_dri.so \
-  /usr/lib/x86_64-linux-gnu/dri/kms_swrast_dri.so \
-  /usr/lib/aarch64-linux-gnu/dri/swrast_dri.so \
-  /usr/lib/aarch64-linux-gnu/dri/kms_swrast_dri.so; do
-  if [[ -r "$driver" ]]; then
-    cp -L "$driver" "$APPDIR/opt/newchirp/dri/$(basename "$driver")"
-    copy_library_dependencies "$driver"
   fi
 done
 
@@ -174,12 +108,6 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export LD_LIBRARY_PATH="$HERE/opt/newchirp/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-if ! ldconfig -p 2>/dev/null | grep -q 'libEGL\.so\.1' ||
-  ! ldconfig -p 2>/dev/null | grep -q 'libGLESv2\.so\.2'; then
-  export __EGL_VENDOR_LIBRARY_DIRS="$HERE/usr/share/glvnd/egl_vendor.d"
-  export __EGL_VENDOR_LIBRARY_FILENAMES="$HERE/usr/share/glvnd/egl_vendor.d/50_mesa.json"
-  export LIBGL_DRIVERS_PATH="$HERE/opt/newchirp/dri"
-fi
 exec "$HERE/opt/newchirp/newchirp" "$@"
 APPRUN
 chmod 0755 "$APPDIR/AppRun"
