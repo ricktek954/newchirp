@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/channelRow
 language: dart
 ---
@@ -26,11 +26,12 @@ Widget_channelRow(
     double dragHandleWidth, {
     required bool startsEmptyGroup,
     required bool endsEmptyGroup,
+    required bool startsBank,
   })
 ```
 
 ## Source
-Lines 9911–9918 in `main.dart`
+Lines 10282–10290 in `main.dart`
 
 ## Relationships
 

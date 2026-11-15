@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/currentPreferences
 language: dart
 ---
@@ -23,7 +23,7 @@ RepeaterSearchPreferences_currentPreferences()
 ```
 
 ## Source
-Lines 7891–7891 in `main.dart`
+Lines 8227–8227 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/headerCell
 language: dart
 ---
@@ -23,7 +23,7 @@ Widget_headerCell(_ChannelColumn column, List<_ChannelColumn> columns)
 ```
 
 ## Source
-Lines 9815–9815 in `main.dart`
+Lines 10186–10186 in `main.dart`
 
 ## Relationships
 

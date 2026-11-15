@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/loadColumnLayout
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_loadColumnLayout_loadColumnLayout
 ```
 
 ## Source
-Lines 924–924 in `main.dart`
+Lines 1033–1033 in `main.dart`
 
 ## Relationships
 

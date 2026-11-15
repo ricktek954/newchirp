@@ -9,6 +9,7 @@
 
 - [_remapLocations](remapLocations.md)
 - [copyWith](copyWith.md)
+- [mappingRangeAt](mappingRangeAt.md)
 - [radioMappingsFromJson](radioMappingsFromJson.md)
 - [radioMappingsSignature](radioMappingsSignature.md)
 - [radioMappingsToJson](radioMappingsToJson.md)

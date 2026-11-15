@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main
 language: dart
 ---
@@ -72,11 +72,14 @@ language: dart
 | related | [main](/main/main.md) |
 | related | [_clampWindowState](/main/clampWindowState.md) |
 | related | [_windowDisplayArea](/main/windowDisplayArea.md) |
+| related | [matchesColumnFilters](/main/matchesColumnFilters.md) |
+| related | [matchesQuery](/main/matchesQuery.md) |
 | related | [invalid](/main/invalid.md) |
 | related | [walk](/main/walk.md) |
 | related | [_changed](/main/changed.md) |
 | related | [save](/main/save.md) |
 | related | [openInPdfViewer](/main/openInPdfViewer.md) |
+| related | [cell](/main/cell.md) |
 | related | [rowColor](/main/rowColor.md) |
 | related | [cell](/main/cell.md) |
 | related | [_headerCell](/main/headerCell.md) |
@@ -102,6 +105,11 @@ language: dart
 | related | [build](/main/build.md) |
 | related | [createState](/main/createState.md) |
 | related | [_channelTableRows](/main/channelTableRows.md) |
+| related | [matchesColumnFilters](/main/matchesColumnFilters.md) |
+| related | [matchesQuery](/main/matchesQuery.md) |
+| related | [_numericColumnFilter](/main/numericColumnFilter.md) |
+| related | [_channelColumnFilterValue](/main/channelColumnFilterValue.md) |
+| related | [_bankLabelsByLocation](/main/bankLabelsByLocation.md) |
 | related | [_selectChannelAtLocation](/main/selectChannelAtLocation.md) |
 | related | [_showBulkChannelEditor](/main/showBulkChannelEditor.md) |
 | related | [_bulkChannelDraftChanged](/main/bulkChannelDraftChanged.md) |
@@ -109,6 +117,7 @@ language: dart
 | related | [_markChannelLibraryDirty](/main/markChannelLibraryDirty.md) |
 | related | [_remapRadioMappingChannels](/main/remapRadioMappingChannels.md) |
 | related | [_mappingMembershipsAt](/main/mappingMembershipsAt.md) |
+| related | [_bankRangeAt](/main/bankRangeAt.md) |
 | related | [_restoreMappingMembershipsAt](/main/restoreMappingMembershipsAt.md) |
 | related | [_rememberChannelImageBaseline](/main/rememberChannelImageBaseline.md) |
 | related | [invalid](/main/invalid.md) |
@@ -220,6 +229,9 @@ language: dart
 | related | [_systemPrinters](/main/systemPrinters.md) |
 | related | [_defaultPrinterName](/main/defaultPrinterName.md) |
 | related | [_buildFrequencyReference](/main/buildFrequencyReference.md) |
+| related | [_buildInternationalFrequencyReference](/main/buildInternationalFrequencyReference.md) |
+| related | [cell](/main/cell.md) |
+| related | [_buildUsFrequencyReference](/main/buildUsFrequencyReference.md) |
 | related | [rowColor](/main/rowColor.md) |
 | related | [cell](/main/cell.md) |
 | related | [_headerCell](/main/headerCell.md) |
@@ -289,6 +301,7 @@ language: dart
 | related | [build](/main/build.md) |
 | related | [_ChannelColumn](/main/ChannelColumn.md) |
 | related | [createState](/main/createState.md) |
+| related | [didUpdateWidget](/main/didUpdateWidget.md) |
 | related | [revealSelectedChannel](/main/revealSelectedChannel.md) |
 | related | [dispose](/main/dispose.md) |
 | related | [_showRowMenu](/main/showRowMenu.md) |

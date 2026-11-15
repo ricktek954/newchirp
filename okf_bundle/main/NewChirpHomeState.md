@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -25,6 +25,11 @@ class _NewChirpHomeState
 ## Methods
 
 - `_channelTableRows`
+- `matchesColumnFilters`
+- `matchesQuery`
+- `_numericColumnFilter`
+- `_channelColumnFilterValue`
+- `_bankLabelsByLocation`
 - `_selectChannelAtLocation`
 - `_showBulkChannelEditor`
 - `_bulkChannelDraftChanged`
@@ -32,6 +37,7 @@ class _NewChirpHomeState
 - `_markChannelLibraryDirty`
 - `_remapRadioMappingChannels`
 - `_mappingMembershipsAt`
+- `_bankRangeAt`
 - `_restoreMappingMembershipsAt`
 - `_rememberChannelImageBaseline`
 - `invalid`
@@ -143,6 +149,9 @@ class _NewChirpHomeState
 - `_systemPrinters`
 - `_defaultPrinterName`
 - `_buildFrequencyReference`
+- `_buildInternationalFrequencyReference`
+- `cell`
+- `_buildUsFrequencyReference`
 - `rowColor`
 - `cell`
 - `headerCell`
@@ -153,7 +162,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 378–6312 in `main.dart`
+Lines 379–6648 in `main.dart`
 
 ## Relationships
 

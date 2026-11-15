@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/writeRadioSettings
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_writeRadioSettings_writeRadioSettings
 ```
 
 ## Source
-Lines 2450–2450 in `main.dart`
+Lines 2585–2585 in `main.dart`
 
 ## Relationships
 

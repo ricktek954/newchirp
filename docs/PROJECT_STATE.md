@@ -1145,6 +1145,12 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Completed the remaining radio usability requests except the external
+  RepeaterBook API blocker. Channel search now supports per-column filters and
+  exact frequency matching, radio bank membership is visible in the channel
+  grid with bank-scoped empty-slot insertion, and the frequency reference adds
+  International Marine VHF, 27 MHz CB, and Australian UHF CB plans with matching
+  printable PDFs and documented regulatory sources.
 - Published Windows `1.0.54` from source commit `c55530b9`. The release adds
   the read-only experimental KSUN UV-K60 Plus driver derived from the MH-580
   OEM programmer, the Baofeng UV-29 Pro compatibility profile, Yaesu FT-50

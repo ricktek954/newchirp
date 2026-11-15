@@ -13,6 +13,7 @@ import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'models/channel_image_baseline.dart';
+import 'models/frequency_reference.dart';
 import 'models/gm32_channel.dart';
 import 'models/marine_channels.dart';
 import 'models/radio_channel.dart';
@@ -401,7 +402,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   final Set<int> _extraSelectedLocations = {};
   int? _selectionAnchorLocation;
   int _page = 0;
+  int _frequencyReferenceIndex = -1;
   String _query = '';
+  final Map<String, String> _columnFilters = {};
   String _libraryName = 'NewChirp';
   String? _libraryPath;
   bool _libraryOpen = false;
@@ -478,15 +481,50 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   List<MapEntry<int, RadioChannel>> _channelTableRows() {
     final needle = _query.trim().toLowerCase();
+    bool matchesColumnFilters(RadioChannel channel) {
+      for (final filter in _columnFilters.entries) {
+        final value = filter.value.trim();
+        if (value.isEmpty) continue;
+        final columnValue = _channelColumnFilterValue(channel, filter.key);
+        if (_numericColumnFilter(filter.key)) {
+          final number = double.tryParse(value);
+          if (number != null && number.toStringAsFixed(6) != columnValue) {
+            return false;
+          }
+        } else if (!columnValue.toLowerCase().contains(value.toLowerCase())) {
+          return false;
+        }
+      }
+      return true;
+    }
+
+    bool matchesQuery(RadioChannel channel) {
+      if (needle.isEmpty) return true;
+      if (channel.name.toLowerCase().contains(needle) ||
+          channel.comment.toLowerCase().contains(needle)) {
+        return true;
+      }
+      final numeric = double.tryParse(needle);
+      if (numeric != null && RegExp(r'^\d+(?:\.\d+)?$').hasMatch(needle)) {
+        final exact = numeric.toStringAsFixed(6);
+        if (channel.frequency.toStringAsFixed(6) == exact ||
+            channel.offset.toStringAsFixed(6) == exact ||
+            channel.location.toString().contains(needle)) {
+          return true;
+        }
+        return false;
+      }
+      return channel.frequency.toString().contains(needle) ||
+          channel.location.toString().contains(needle);
+    }
+
     if (needle.isNotEmpty) {
       return _channels
           .where(
             (channel) =>
                 !channel.cleared &&
-                (channel.name.toLowerCase().contains(needle) ||
-                    channel.frequency.toString().contains(needle) ||
-                    channel.comment.toLowerCase().contains(needle) ||
-                    channel.location.toString().contains(needle)),
+                matchesQuery(channel) &&
+                matchesColumnFilters(channel),
           )
           .map((channel) => MapEntry(channel.location, channel))
           .toList()
@@ -498,7 +536,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     };
     if (!_showEmptySlots) {
       return byLocation.entries
-          .where((entry) => !entry.value.cleared)
+          .where(
+            (entry) =>
+                !entry.value.cleared && matchesColumnFilters(entry.value),
+          )
           .map((entry) => MapEntry(entry.key, entry.value))
           .toList()
         ..sort((left, right) => left.key.compareTo(right.key));
@@ -515,8 +556,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
     return [
       for (var location = minimum; location <= maximum; location++)
-        MapEntry(
-          location,
+        if (matchesColumnFilters(
           byLocation[location] ??
               RadioChannel(
                 location: location,
@@ -524,8 +564,73 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 frequency: 0,
                 cleared: true,
               ),
-        ),
+        ))
+          MapEntry(
+            location,
+            byLocation[location] ??
+                RadioChannel(
+                  location: location,
+                  name: '',
+                  frequency: 0,
+                  cleared: true,
+                ),
+          ),
     ];
+  }
+
+  bool _numericColumnFilter(String columnId) =>
+      columnId == 'RX FREQUENCY' || columnId == 'OFFSET / TX FREQ';
+
+  String _channelColumnFilterValue(RadioChannel channel, String columnId) {
+    if (columnId == 'BANK') {
+      return _bankLabelsByLocation()[channel.location] ?? '';
+    }
+    if (columnId.startsWith('extra:')) {
+      final name = columnId.substring('extra:'.length);
+      final match = channel.extras.where((field) => field.name == name);
+      if (match.isEmpty) return '';
+      final value = match.first.value;
+      return '${value is bool ? (value ? 'On' : 'Off') : value ?? ''}';
+    }
+    return switch (columnId) {
+      '#' => channelNumberLabel(_model, channel.location),
+      'NAME' => channel.name,
+      'RX FREQUENCY' => channel.frequency.toStringAsFixed(6),
+      'TONE MODE' => channel.tone.isEmpty ? 'None' : channel.tone,
+      'TX TONE' =>
+        effectiveTransmitCtcssTone(channel)?.toStringAsFixed(1) ?? '',
+      'RX TONE' => effectiveReceiveCtcssTone(channel)?.toStringAsFixed(1) ?? '',
+      'DTCS' => channel.dtcs.toString().padLeft(3, '0'),
+      'RX DTCS' =>
+        (channel.tone == 'DTCS' ? channel.dtcs : channel.rxDtcs)
+            .toString()
+            .padLeft(3, '0'),
+      'DTCS POL' => channel.dtcsPolarity,
+      'DUPLEX' => channel.duplex.isEmpty ? 'Simplex' : channel.duplex,
+      'OFFSET / TX FREQ' => channel.offset.toStringAsFixed(6),
+      'CROSS MODE' => channel.crossMode,
+      'MODE' => channel.mode,
+      'STEP' => channel.step.toStringAsFixed(2),
+      'POWER' => channel.power,
+      'SCAN' => scanLabel(channel.skip),
+      'COMMENT' => channel.comment,
+      _ => '',
+    };
+  }
+
+  Map<int, String> _bankLabelsByLocation() {
+    final labels = <int, Set<String>>{};
+    for (final model in _radioMappings) {
+      for (final mapping in model.mappings) {
+        for (final location in mapping.channelLocations) {
+          labels.putIfAbsent(location, () => <String>{}).add(mapping.name);
+        }
+      }
+    }
+    return {
+      for (final entry in labels.entries)
+        entry.key: (entry.value.toList()..sort()).join(' / '),
+    };
   }
 
   void _selectChannelAtLocation(int location, _ChannelSelectionMode mode) {
@@ -839,6 +944,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           if (mapping.channelLocations.contains(location))
             (modelIndex: modelIndex, mappingIndex: mapping.index),
     ];
+  }
+
+  ({int start, int end})? _bankRangeAt(int location) {
+    return mappingRangeAt(_radioMappings, location);
   }
 
   void _restoreMappingMembershipsAt(
@@ -1940,8 +2049,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       return;
     }
     final maximum = _capabilities?.memoryEnd;
+    final bankRange = _bankRangeAt(location);
+    final shiftEnd = bankRange?.end ?? maximum;
     if (maximum != null &&
+        bankRange == null &&
         _channels.any((channel) => channel.location >= maximum)) {
+      _showNoEmptyChannelSlot();
+      return;
+    }
+    if (bankRange != null &&
+        _channels.any(
+          (channel) => channel.location == bankRange.end && !channel.cleared,
+        )) {
       _showNoEmptyChannelSlot();
       return;
     }
@@ -1949,19 +2068,29 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final selectedChannel = _current;
     _recordHistory();
     setState(() {
-      final locationChanges = <int, int?>{
-        location: null,
-        for (final channel in _channels)
-          if (channel.location >= location)
-            channel.location: channel.location + 1,
-      };
+      final locationChanges = <int, int?>{};
       for (final channel in _channels) {
-        if (channel.location >= location) channel.location += 1;
+        if (channel.location >= location &&
+            (shiftEnd == null || channel.location <= shiftEnd)) {
+          locationChanges[channel.location] = channel.location + 1;
+          channel.location += 1;
+        }
+      }
+      if (!locationChanges.containsKey(location)) {
+        locationChanges[location] = null;
       }
       _remapRadioMappingChannels(locationChanges);
       final shiftedClears =
           _clearedLocations
-              .map((cleared) => cleared >= location ? cleared + 1 : cleared)
+              .map(
+                (cleared) =>
+                    cleared < location ||
+                        (shiftEnd != null && cleared > shiftEnd)
+                    ? cleared
+                    : shiftEnd != null && cleared == shiftEnd
+                    ? shiftEnd
+                    : cleared + 1,
+              )
               .toSet()
             ..add(location);
       _clearedLocations
@@ -2003,22 +2132,28 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
 
     final selectedChannel = _current;
+    final shiftEnd = _bankRangeAt(location)?.end;
     _recordHistory();
     setState(() {
       final shiftedClears = clearedLocationsAfterEmptySlotRemoval(
         channels: _channels,
         clearedLocations: _clearedLocations,
         location: location,
+        rangeEnd: shiftEnd,
       );
-      final locationChanges = <int, int?>{
-        for (final channel in _channels)
-          if (channel.location >= location)
-            channel.location: channel.location - 1,
-        location: null,
-      };
+      final locationChanges = <int, int?>{};
+      for (final channel in _channels) {
+        if (channel.location >= location &&
+            (shiftEnd == null || channel.location <= shiftEnd)) {
+          locationChanges[channel.location] = channel.location - 1;
+        }
+      }
       _channels.removeWhere((channel) => channel.location == location);
       for (final channel in _channels) {
-        if (channel.location > location) channel.location -= 1;
+        if (channel.location > location &&
+            (shiftEnd == null || channel.location <= shiftEnd)) {
+          channel.location -= 1;
+        }
       }
       _remapRadioMappingChannels(locationChanges);
       _clearedLocations
@@ -3620,13 +3755,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             minimalMode: _page == 2 || _page == 3 || _page == 4,
                             minimalTitle: switch (_page) {
                               2 => 'About & licenses',
-                              3 => 'GMRS & FRS Frequency Reference',
+                              3 => 'Frequency Reference',
                               _ => 'Radio settings',
                             },
                             minimalSubtitle: switch (_page) {
                               2 =>
                                 'Application information and open-source licenses',
-                              3 => 'Part 95 FRS/GMRS channel plan',
+                              3 =>
+                                _frequencyReferenceIndex < 0
+                                    ? 'United States Part 95 FRS/GMRS channel plan'
+                                    : internationalFrequencyReferencePlans[_frequencyReferenceIndex]
+                                          .subtitle,
                               _ =>
                                 'Radio-wide options exposed by the selected driver',
                             },
@@ -4872,6 +5011,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 tooltip:
                                     'Show every memory slot, including empty ones',
                               ),
+                              if (_columnFilters.values.any(
+                                (value) => value.trim().isNotEmpty,
+                              ))
+                                IconButton(
+                                  key: const ValueKey(
+                                    'clear-channel-column-filters',
+                                  ),
+                                  tooltip: 'Clear column filters',
+                                  onPressed: () =>
+                                      setState(_columnFilters.clear),
+                                  icon: const Icon(
+                                    Icons.filter_alt_off_outlined,
+                                  ),
+                                ),
                             ] else ...[
                               if (selectedChannelCount > 1) ...[
                                 OutlinedButton.icon(
@@ -4919,6 +5072,22 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 tooltip:
                                     'Show every memory slot, including empty ones',
                               ),
+                              if (_columnFilters.values.any(
+                                (value) => value.trim().isNotEmpty,
+                              )) ...[
+                                const SizedBox(width: 8),
+                                TextButton.icon(
+                                  key: const ValueKey(
+                                    'clear-channel-column-filters',
+                                  ),
+                                  onPressed: () =>
+                                      setState(_columnFilters.clear),
+                                  icon: const Icon(
+                                    Icons.filter_alt_off_outlined,
+                                  ),
+                                  label: const Text('Clear filters'),
+                                ),
+                              ],
                             ],
                             const SizedBox(width: 2),
                             const _HelpButton(
@@ -4964,6 +5133,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             columnWidths: _columnWidths,
                             onColumnOrderChanged: _setColumnOrder,
                             onColumnWidthChanged: _setColumnWidth,
+                            filterValues: _columnFilters,
+                            onFilterChanged: (id, value) => setState(() {
+                              if (value.trim().isEmpty) {
+                                _columnFilters.remove(id);
+                              } else {
+                                _columnFilters[id] = value;
+                              }
+                            }),
+                            bankLabels: _bankLabelsByLocation(),
                             onSelect: _selectChannelAtLocation,
                             clipboardCount: _channelClipboard.length,
                             onCopy: (location) {
@@ -5014,9 +5192,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             onInsertEmptyBefore: _insertEmptySlotBefore,
                             onRemoveEmpty: _removeEmptySlot,
                             onBulkEdit: _showBulkChannelEditor,
-                            reorderEnabled: _query.isEmpty,
-                            reorderDisabledMessage: _query.isNotEmpty
-                                ? 'Clear search to rearrange channels'
+                            reorderEnabled:
+                                _query.isEmpty &&
+                                !_columnFilters.values.any(
+                                  (value) => value.trim().isNotEmpty,
+                                ),
+                            reorderDisabledMessage:
+                                _query.isNotEmpty ||
+                                    _columnFilters.values.any(
+                                      (value) => value.trim().isNotEmpty,
+                                    )
+                                ? 'Clear search and column filters to rearrange channels'
                                 : 'Rearrange channels',
                             onOpen: (location) {
                               final index = _channels.indexWhere(
@@ -5061,11 +5247,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _printFrequencyReference() async {
     final temp = File(
-      '${Directory.systemTemp.path}/newchirp-gmrs-frs-reference.pdf',
+      '${Directory.systemTemp.path}/newchirp-frequency-reference.pdf',
     );
+    final asset = _frequencyReferenceIndex < 0
+        ? 'assets/GMRS_FRS_Frequency_Chart.pdf'
+        : internationalFrequencyReferencePlans[_frequencyReferenceIndex]
+              .pdfAsset;
     var prepared = false;
     await _task('Preparing frequency reference…', () async {
-      final data = await rootBundle.load('assets/GMRS_FRS_Frequency_Chart.pdf');
+      final data = await rootBundle.load(asset);
       await temp.writeAsBytes(
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
       );
@@ -5233,6 +5423,152 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Widget _buildFrequencyReference() {
+    final plan = _frequencyReferenceIndex < 0
+        ? null
+        : internationalFrequencyReferencePlans[_frequencyReferenceIndex];
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(24, 18, 24, 8),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              ChoiceChip(
+                key: const ValueKey('frequency-plan-us'),
+                selected: plan == null,
+                onSelected: (_) =>
+                    setState(() => _frequencyReferenceIndex = -1),
+                avatar: const Icon(Icons.public, size: 17),
+                label: const Text('US FRS / GMRS'),
+              ),
+              for (
+                var index = 0;
+                index < internationalFrequencyReferencePlans.length;
+                index++
+              )
+                ChoiceChip(
+                  key: ValueKey(
+                    'frequency-plan-${internationalFrequencyReferencePlans[index].id}',
+                  ),
+                  selected: _frequencyReferenceIndex == index,
+                  onSelected: (_) =>
+                      setState(() => _frequencyReferenceIndex = index),
+                  label: Text(
+                    internationalFrequencyReferencePlans[index].title,
+                  ),
+                ),
+            ],
+          ),
+        ),
+        Expanded(
+          child: plan == null
+              ? _buildUsFrequencyReference()
+              : _buildInternationalFrequencyReference(plan),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildInternationalFrequencyReference(FrequencyReferencePlan plan) {
+    const green = Color(0xFF1F7455);
+    const ink = Color(0xFF15211D);
+    const muted = Color(0xFF56615B);
+    const grid = Color(0xFFD8DEDA);
+
+    Widget cell(String text, {bool header = false}) => Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: header ? Colors.white : ink,
+          fontSize: 11,
+          fontWeight: header ? FontWeight.w700 : FontWeight.w400,
+        ),
+      ),
+    );
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1040),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                plan.title,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: green,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                plan.subtitle,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: muted),
+              ),
+              for (final group in plan.groups) ...[
+                const SizedBox(height: 18),
+                Text(
+                  group.title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: green,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(group.note, style: const TextStyle(color: muted)),
+                const SizedBox(height: 10),
+                Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Table(
+                      border: TableBorder.all(color: grid, width: 0.6),
+                      columnWidths: const {
+                        0: FixedColumnWidth(90),
+                        1: FixedColumnWidth(140),
+                        2: FixedColumnWidth(520),
+                      },
+                      children: [
+                        TableRow(
+                          decoration: const BoxDecoration(color: green),
+                          children: [
+                            cell('Channel', header: true),
+                            cell('Frequency (MHz)', header: true),
+                            cell('Use / notes', header: true),
+                          ],
+                        ),
+                        for (final row in group.rows)
+                          TableRow(
+                            children: [
+                              cell(row.channel),
+                              cell(row.frequency),
+                              cell(row.notes),
+                            ],
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 18),
+              Text(
+                'Reference source: ${plan.source} Verify current national '
+                'rules before transmitting.',
+                style: const TextStyle(color: muted, fontSize: 11),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUsFrequencyReference() {
     const green = Color(0xFF1F7455);
     const ink = Color(0xFF15211D);
     const muted = Color(0xFF56615B);
@@ -9398,6 +9734,9 @@ class _ChannelTable extends StatefulWidget {
     required this.columnWidths,
     required this.onColumnOrderChanged,
     required this.onColumnWidthChanged,
+    required this.filterValues,
+    required this.onFilterChanged,
+    required this.bankLabels,
     required this.onSelect,
     required this.clipboardCount,
     required this.onCopy,
@@ -9423,6 +9762,9 @@ class _ChannelTable extends StatefulWidget {
   final Map<String, double> columnWidths;
   final ValueChanged<List<String>> onColumnOrderChanged;
   final void Function(String id, double width) onColumnWidthChanged;
+  final Map<String, String> filterValues;
+  final void Function(String id, String value) onFilterChanged;
+  final Map<int, String> bankLabels;
   final void Function(int location, _ChannelSelectionMode mode) onSelect;
   final int clipboardCount;
   final ValueChanged<int> onCopy;
@@ -9448,6 +9790,23 @@ class _ChannelTableState extends State<_ChannelTable> {
   final Map<String, double> _workingWidths = {};
   final Map<String, double> _resizeStartX = {};
   final Map<String, double> _resizeStartWidth = {};
+  final Map<String, TextEditingController> _filterControllers = {};
+
+  @override
+  void didUpdateWidget(covariant _ChannelTable oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final ids = {...oldWidget.filterValues.keys, ...widget.filterValues.keys};
+    for (final id in ids) {
+      final value = widget.filterValues[id] ?? '';
+      final controller = _filterControllers[id];
+      if (controller != null && controller.text != value) {
+        controller.value = TextEditingValue(
+          text: value,
+          selection: TextSelection.collapsed(offset: value.length),
+        );
+      }
+    }
+  }
 
   void revealSelectedChannel() {
     if (!_verticalController.hasClients) return;
@@ -9480,6 +9839,9 @@ class _ChannelTableState extends State<_ChannelTable> {
   void dispose() {
     _horizontalController.dispose();
     _verticalController.dispose();
+    for (final controller in _filterControllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -9608,6 +9970,15 @@ class _ChannelTableState extends State<_ChannelTable> {
             ? 'Midland channel number. Repeater rows are labeled RPTR.'
             : 'Memory channel number or slot stored in the radio.',
       ),
+      if (widget.bankLabels.isNotEmpty)
+        _ChannelColumn(
+          'BANK',
+          138,
+          (channel) => widget.bankLabels[channel.location] ?? '—',
+          help:
+              'Bank or zone membership reported by the selected radio. '
+              'A green boundary marks the start of each bank.',
+        ),
       _ChannelColumn(
         'NAME',
         160,
@@ -9915,6 +10286,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     double dragHandleWidth, {
     required bool startsEmptyGroup,
     required bool endsEmptyGroup,
+    required bool startsBank,
   }) {
     final isCleared = entry.value.cleared;
     final canDrag = widget.reorderEnabled && !isCleared;
@@ -9960,7 +10332,9 @@ class _ChannelTableState extends State<_ChannelTable> {
                       : Colors.white,
                   foregroundDecoration: BoxDecoration(
                     border: Border(
-                      top: startsEmptyGroup
+                      top: startsBank
+                          ? const BorderSide(color: Color(0xFF1F7455), width: 2)
+                          : startsEmptyGroup
                           ? const BorderSide(color: Color(0xFFD8DEDA))
                           : BorderSide.none,
                       bottom: endsEmptyGroup
@@ -10124,6 +10498,53 @@ class _ChannelTableState extends State<_ChannelTable> {
                       ],
                     ),
                   ),
+                  ColoredBox(
+                    color: const Color(0xFFFAFCFB),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: dragHandleWidth,
+                          height: 38,
+                          child: Icon(
+                            Icons.filter_alt_outlined,
+                            size: 16,
+                            color: Colors.black45,
+                          ),
+                        ),
+                        for (final column in columns)
+                          SizedBox(
+                            width: column.width,
+                            height: 38,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+                              child: TextField(
+                                key: ValueKey(
+                                  'channel-column-filter-${column.id}',
+                                ),
+                                controller: _filterControllers.putIfAbsent(
+                                  column.id,
+                                  () => TextEditingController(
+                                    text: widget.filterValues[column.id] ?? '',
+                                  ),
+                                ),
+                                onChanged: (value) =>
+                                    widget.onFilterChanged(column.id, value),
+                                style: const TextStyle(fontSize: 11),
+                                decoration: const InputDecoration(
+                                  isDense: true,
+                                  hintText: 'Filter',
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 7,
+                                  ),
+                                  border: OutlineInputBorder(),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       controller: _verticalController,
@@ -10137,6 +10558,10 @@ class _ChannelTableState extends State<_ChannelTable> {
                         final next = index + 1 < widget.entries.length
                             ? widget.entries[index + 1].value
                             : null;
+                        final bank = widget.bankLabels[entry.key];
+                        final previousBank = previous == null
+                            ? null
+                            : widget.bankLabels[previous.location];
                         return _channelRow(
                           context,
                           entry,
@@ -10148,6 +10573,10 @@ class _ChannelTableState extends State<_ChannelTable> {
                           endsEmptyGroup:
                               entry.value.cleared &&
                               (next == null || !next.cleared),
+                          startsBank:
+                              bank != null &&
+                              !entry.value.cleared &&
+                              bank != previousBank,
                         );
                       },
                     ),

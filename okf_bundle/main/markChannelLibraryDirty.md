@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/markChannelLibraryDirty
 language: dart
 ---
@@ -23,7 +23,7 @@ void_markChannelLibraryDirty()
 ```
 
 ## Source
-Lines 826–826 in `main.dart`
+Lines 931–931 in `main.dart`
 
 ## Relationships
 

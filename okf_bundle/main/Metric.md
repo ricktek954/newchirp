@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/Metric
 language: dart
 ---
@@ -27,7 +27,7 @@ class _Metric
 - `build`
 
 ## Source
-Lines 9328–9375 in `main.dart`
+Lines 9664–9711 in `main.dart`
 
 ## Relationships
 

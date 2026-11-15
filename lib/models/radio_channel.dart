@@ -217,12 +217,16 @@ Set<int> clearedLocationsAfterEmptySlotRemoval({
   required Iterable<RadioChannel> channels,
   required Set<int> clearedLocations,
   required int location,
+  int? rangeEnd,
 }) {
   int? highestLocation;
   for (final candidate in [
     ...channels.map((channel) => channel.location),
     ...clearedLocations,
   ]) {
+    if (rangeEnd != null && (candidate < location || candidate > rangeEnd)) {
+      continue;
+    }
     if (highestLocation == null || candidate > highestLocation) {
       highestLocation = candidate;
     }
@@ -230,6 +234,10 @@ Set<int> clearedLocationsAfterEmptySlotRemoval({
 
   final shifted = <int>{};
   for (final cleared in clearedLocations) {
+    if (rangeEnd != null && (cleared < location || cleared > rangeEnd)) {
+      shifted.add(cleared);
+      continue;
+    }
     if (cleared < location) shifted.add(cleared);
     if (cleared > location) shifted.add(cleared - 1);
   }

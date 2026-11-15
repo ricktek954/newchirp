@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:17:35Z"
+timestamp: "2026-11-15T10:28:49Z"
 concept_id: models/radio_channel/midlandReceiveChannelIsUnset
 language: dart
 ---
@@ -31,7 +31,7 @@ boolmidlandReceiveChannelIsUnset(double frequencyMhz)
 A new row has no receive channel yet. 146.52 MHz is the old placeholder.
 
 ## Source
-Lines 345–345 in `models/radio_channel.dart`
+Lines 353–353 in `models/radio_channel.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/showAbbreviationGlossary
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_showAbbreviationGlossary_showAbbreviationGlossary
 ```
 
 ## Source
-Lines 6906–6906 in `main.dart`
+Lines 7242–7242 in `main.dart`
 
 ## Relationships
 

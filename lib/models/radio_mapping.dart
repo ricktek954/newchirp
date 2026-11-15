@@ -110,6 +110,28 @@ List<Map<String, Object?>> radioMappingsToJson(
 String radioMappingsSignature(Iterable<RadioMappingModel> models) =>
     jsonEncode(radioMappingsToJson(models));
 
+({int start, int end})? mappingRangeAt(
+  Iterable<RadioMappingModel> models,
+  int location,
+) {
+  ({int start, int end})? best;
+  for (final model in models) {
+    for (final mapping in model.mappings) {
+      if (!mapping.channelLocations.contains(location)) continue;
+      final start = mapping.channelLocations.reduce(
+        (current, value) => value < current ? value : current,
+      );
+      final end = mapping.channelLocations.reduce(
+        (current, value) => value > current ? value : current,
+      );
+      if (best == null || end - start < best.end - best.start) {
+        best = (start: start, end: end);
+      }
+    }
+  }
+  return best;
+}
+
 List<RadioMappingModel> remapRadioMappingLocations(
   Iterable<RadioMappingModel> models,
   Map<int, int?> locations,

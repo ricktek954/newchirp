@@ -109,4 +109,45 @@ void main() {
 
     expect(remapped.single.mappings.single.channelLocations, [2, 4]);
   });
+
+  test('finds the narrowest contiguous bank range for insertion', () {
+    const models = [
+      RadioMappingModel(
+        index: 0,
+        name: 'Banks',
+        editable: true,
+        multiple: false,
+        mappings: [
+          RadioMappingEntry(
+            index: '1',
+            name: 'Bank 1',
+            channelLocations: [1, 2, 3, 4],
+            nameEditable: true,
+          ),
+          RadioMappingEntry(
+            index: '2',
+            name: 'Bank 2',
+            channelLocations: [5, 6, 7, 8],
+            nameEditable: true,
+          ),
+        ],
+      ),
+      RadioMappingModel(
+        index: 1,
+        name: 'Zones',
+        editable: true,
+        multiple: true,
+        mappings: [
+          RadioMappingEntry(
+            index: 'A',
+            name: 'Across banks',
+            channelLocations: [1, 5, 6],
+            nameEditable: true,
+          ),
+        ],
+      ),
+    ];
+
+    expect(mappingRangeAt(models, 6), (start: 5, end: 8));
+  });
 }

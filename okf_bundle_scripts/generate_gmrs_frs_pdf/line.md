@@ -52,6 +52,4 @@ Lines 72–85 in `generate_gmrs_frs_pdf.py`
 |------|--------|
 | related | [PdfWriter](/generate_gmrs_frs_pdf/PdfWriter.md) |
 | calls | [set_stroke](/generate_gmrs_frs_pdf/set_stroke.md) |
-| called_by | [build_background](/build_macos_dmg/build_background.md) |
-| called_by | [main](/generate_gmrs_frs_pdf/main.md) |
-| called_by | [table_cell](/generate_gmrs_frs_pdf/table_cell.md) |
+| called_by | [make_pdf](/generate_international_frequency_pdfs/make_pdf.md) |

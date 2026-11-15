@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/fitAllPoints
 language: dart
 ---
@@ -23,7 +23,7 @@ voidfitAllPoints()
 ```
 
 ## Source
-Lines 8386–8386 in `main.dart`
+Lines 8722–8722 in `main.dart`
 
 ## Relationships
 

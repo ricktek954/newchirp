@@ -39,4 +39,4 @@ Lines 160–210 in `generate_gmrs_frs_pdf.py`
 | Type | Target |
 |------|--------|
 | related | [PdfWriter](/generate_gmrs_frs_pdf/PdfWriter.md) |
-| called_by | [main](/generate_gmrs_frs_pdf/main.md) |
+| called_by | [make_pdf](/generate_international_frequency_pdfs/make_pdf.md) |

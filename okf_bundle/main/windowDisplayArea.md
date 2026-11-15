@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/windowDisplayArea
 language: dart
 ---
@@ -23,7 +23,7 @@ WindowDisplayArea_windowDisplayArea(Display display)
 ```
 
 ## Source
-Lines 180–180 in `main.dart`
+Lines 181–181 in `main.dart`
 
 ## Relationships
 

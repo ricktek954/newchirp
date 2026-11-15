@@ -74,6 +74,9 @@ flutter:
     - assets/licenses/PYSERIAL-BSD-3-CLAUSE.txt
     - assets/licenses/LIBUSB-LGPL-2.1.txt
     - assets/GMRS_FRS_Frequency_Chart.pdf
+    - assets/Marine_VHF_Frequency_Reference.pdf
+    - assets/CB_27MHz_Frequency_Reference.pdf
+    - assets/Australia_UHF_CB_Frequency_Reference.pdf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:20:27Z"
+timestamp: "2026-11-15T10:29:04Z"
 concept_id: main/snapshotLibrary
 language: dart
 ---
@@ -23,7 +23,7 @@ _LibraryState_snapshotLibrary()
 ```
 
 ## Source
-Lines 950–950 in `main.dart`
+Lines 1059–1059 in `main.dart`
 
 ## Relationships
 
