@@ -21,7 +21,8 @@ release requirements.
   package metadata and embedded version `1.0.55` / `55`; DEB and AppImage Xvfb
   launch tests passed on Ubuntu 20.04; and the final AppImage launched under
   host Wayland and XWayland. All four public downloads returned HTTP 200 and
-  the Linux platform manifest reports `1.0.55`.
+  the Linux platform manifest reports `1.0.55`. Craig received the 1.0.55
+  AppImage and Pacman retest links in Sent UID 443.
 - Windows `1.0.54` is live from source commit `c55530b9`. It adds the
   read-only experimental KSUN UV-K60 Plus driver, the Baofeng UV-29 Pro
   compatibility profile, Yaesu FT-50 odd-split decoding, and upload
