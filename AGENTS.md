@@ -136,6 +136,17 @@ Build release artifacts only on their native platform:
 Do not trigger, wait for, or emulate another platform's build workflow from the
 current host. Each machine publishes only the artifact it built.
 
+For the current macOS development host:
+
+- Build, verify, sign, and publish only the macOS DMG here.
+- Windows and Linux builds are owned by their respective machines. Do not
+  trigger, monitor, or treat their CI jobs as release blockers from this host.
+- Coordinate a shared release version with the other platform owners before
+  pushing release tags or publishing a cross-platform release.
+- Notifying an external reporter requires an explicit request in the current
+  task. A completed build, fix, or release upload is not permission to send
+  email.
+
 ## Automatic freshness
 
 VS Code is configured to run `Watch OKF knowledge graph` when the workspace
