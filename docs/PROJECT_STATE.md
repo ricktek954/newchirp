@@ -26,21 +26,23 @@ release requirements.
   reports macOS `1.0.56`; and local/server DMG SHA-256 both match
   `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
   Physical FT-50 upload/read-back validation is still pending.
-- Windows `1.0.55` is live from source commit `26589b92`. It adds per-column
-  channel filters and exact frequency matching, bank-boundary visibility,
-  safer channel-location moves and removals, expanded marine/CB/UHF-CB
-  frequency references with printable PDFs, KG-UV8D reserved-DCS
-  compatibility, nicFW950 no-tone decoding, and corrected GMRS starter
-  bandwidths. Verification: installer metadata `1.0.55.0` / `1.0.55`;
-  release app `1.0.55+55`; bundled Python `3.13.15`; a clean runtime with no
-  `okf`/`tree_sitter` contamination; 256 CHIRP driver modules; bridge
-  `list-models` exit 0 with 596 models including `Wouxun_KG-UV8D`; matching
+- Windows `1.0.56` is live from source commit `361da9e9`. It adds the
+  OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and carries
+  the KG-UV8D reserved-DCS, nicFW950 no-tone, and GMRS starter-bandwidth work.
+  Verification: installer metadata `1.0.56.0` / `1.0.56`; release app
+  `1.0.56+56`; bundled Python `3.13.15`; a clean runtime with no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination; 256 CHIRP driver
+  modules; bridge `list-models` exit 0 with 596 models including
+  `Wouxun_KG-UV8D` and `Yaesu_FT-50`; the bundled FT-50 override sets
+  `SERIAL_STOPBITS = 2`; all four frequency-reference PDFs; matching
   local/server/public SHA-256; public HTTP 200; and live manifest Windows
-  `1.0.55`. The installer remains unsigned. `flutter analyze lib test` is
-  clean. The full Flutter suite ran 221 passing tests with the five known
-  Windows-only sandbox/Help failures. The full Python suite ran 432 tests:
-  427 passed, 2 fixture-dependent tests skipped, and 3 Windows
-  temporary-file-lock helper errors.
+  `1.0.56`. A silent install to a temporary directory launched the bundled
+  runtime, exited cleanly, and was removed. The installer remains unsigned.
+  `flutter analyze lib test` is clean. The full Flutter suite ran 221 passing
+  tests with the five known Windows-only sandbox/Help failures. The full
+  Python suite ran 433 tests: 428 passed, 2 fixture-dependent tests skipped,
+  and 3 Windows temporary-file-lock helper errors. At Windows release time,
+  macOS and Linux were also at `1.0.56`.
 - Linux `1.0.56` is live from current `origin/main`. It adds the
   KG-UV8D reserved-DCS compatibility override, treats nicFW950 all-ones
   subtones as no tone, corrects GMRS starter-channel bandwidths, and recovers
@@ -644,8 +646,8 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.55` artifact source commit: `26589b92`
-- macOS `1.0.54` artifact source commit: `c55530b9`
+- Windows `1.0.56` artifact source commit: `361da9e9`
+- macOS `1.0.56` artifact source commit: `b037f65a`
 - Linux `1.0.57` is live from source commit `437441f6`
 - Open pull requests: none
 - Checked-out source version: `1.0.57+57`
@@ -662,8 +664,8 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.54 |
-| Windows | 1.0.55 |
+| macOS | 1.0.56 |
+| Windows | 1.0.56 |
 | Linux | 1.0.57 |
 
 Linux `1.0.57` artifacts:
@@ -736,7 +738,31 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.55` artifact:
+Windows `1.0.56` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.56.exe`
+- Version/build: `1.0.56` / `56`
+- SHA-256:
+  `dca65cbe04297c2adae79cf0ac2d3e5d5505aca2fa002243178399bb4399d3be`
+- Size: `55,334,600` bytes
+- Built from `361da9e9`
+- Installer metadata `1.0.56.0` / `1.0.56`; release app `1.0.56+56`
+- Bundled Python `3.13.15`, 256 CHIRP driver modules, and a successful bridge
+  `list-models` run with 596 models including `Wouxun_KG-UV8D` and
+  `Yaesu_FT-50`
+- Bundled FT-50 override sets `SERIAL_STOPBITS = 2`; the bridge applies
+  driver-level serial framing overrides
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains only the normal pip files, with no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination
+- A silent install to a temporary directory launched the bundled runtime and
+  exited cleanly; the test installation was removed afterward
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.56`
+- Authenticode: not signed
+
+Windows `1.0.55` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.55.exe`
 - Version/build: `1.0.55` / `55`
@@ -1288,6 +1314,21 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.56` from source commit `361da9e9`. The release adds
+  the OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and carries
+  the KG-UV8D reserved-DCS, nicFW950 no-tone, and GMRS starter-bandwidth work.
+  Verification: installer metadata `1.0.56.0` / `1.0.56`, release app
+  `1.0.56+56`, bundled Python `3.13.15`, clean runtime, 256 CHIRP driver
+  modules, bridge `list-models` exit 0 with 596 models including
+  `Wouxun_KG-UV8D` and `Yaesu_FT-50`, FT-50 stop-bit override present, all
+  four frequency-reference PDFs, matching local/server/public SHA-256, public
+  HTTP 200, and live platform manifest Windows `1.0.56`. A silent temporary
+  install launched the bundled runtime and was removed. `flutter analyze lib
+  test` is clean. The full Flutter suite ran 221 passing tests with the five
+  known Windows-only sandbox/Help failures. The complete Python suite ran 433
+  tests: 428 passed, 2 fixture-dependent tests skipped, and 3 Windows
+  temporary-file-lock helper errors. The installer remains unsigned. At
+  Windows release time, macOS and Linux were also at `1.0.56`.
 - Published Windows `1.0.55` from source commit `26589b92`. The release adds
   per-column filters, bank boundaries, safer channel-location handling,
   expanded frequency references and PDFs, KG-UV8D reserved-DCS compatibility,
