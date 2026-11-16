@@ -44,7 +44,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: '3.47.1'
+          flutter-version: '3.47.8'
           cache: true
       - name: Build macOS DMG
         shell: bash
@@ -80,7 +80,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
-          flutter-version: '3.47.1'
+          flutter-version: '3.47.8'
           cache: true
       - name: Build Linux packages on Ubuntu 20.04 baseline
         shell: bash
@@ -101,7 +101,7 @@ jobs:
               export DEBIAN_FRONTEND=noninteractive
               apt-get update
               apt-get install -y --no-install-recommends \
-                binutils clang cmake curl file git libegl1 libegl-mesa0 \
+                binutils clang cmake curl file g++ git libegl1 libegl-mesa0 \
                 libgl1-mesa-dri libgles2 libgtk-3-dev liblzma-dev \
                 libstdc++-10-dev ninja-build pkg-config python3 python3-venv \
                 rpm xvfb zstd
