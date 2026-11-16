@@ -8,6 +8,7 @@ import unittest
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import newchirp_mass_storage as mass_storage  # noqa: E402
 from newchirp_mass_storage import (  # noqa: E402
     CS750Profile,
     CS750_SCSI_READ,
@@ -62,6 +63,23 @@ class FakeRapTransport:
 
 
 class RapTransportTest(unittest.TestCase):
+    def test_windows_read_only_open_and_access_denied_guidance(self):
+        self.assertEqual(
+            mass_storage._windows_open_access(False),
+            mass_storage.WINDOWS_GENERIC_READ,
+        )
+        self.assertEqual(
+            mass_storage._windows_open_access(True),
+            mass_storage.WINDOWS_GENERIC_READ_WRITE,
+        )
+        message = mass_storage._windows_open_error(5)
+        self.assertIn("Administrator", message)
+        self.assertIn("error 5", message)
+        self.assertIn(
+            "Administrator",
+            mass_storage._windows_io_error(5),
+        )
+
     def test_packet_round_trip_and_checksum(self):
         packet = rap_packet(0x8010, b"\x01\x02\x03")
         self.assertEqual(parse_rap_packet(packet), (0x8010, b"\x01\x02\x03"))

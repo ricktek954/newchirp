@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-bug-batch"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:57:36Z"
+timestamp: "2026-11-16T12:16:24Z"
 concept_id: newchirp_mass_storage/read_exact
 language: python
 ---
@@ -31,7 +31,7 @@ def _read_exact(self, size)
 | `size` | `—` | `—` |
 
 ## Source
-Lines 69–81 in `newchirp_mass_storage.py`
+Lines 94–106 in `newchirp_mass_storage.py`
 
 ## Relationships
 

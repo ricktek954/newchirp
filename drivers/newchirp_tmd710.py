@@ -25,12 +25,22 @@ def accepts_d710gp_identity(radio, exc):
     )
 
 
+def accepts_d710p_identity(radio, exc):
+    return (
+        radio.SHORT == ""
+        and "Radio responded as D710P, not D710." in str(exc)
+    )
+
+
 def _connect_radio_accepting_regional_identity(radio):
     try:
         return _original_connect_radio(radio)
     except errors.RadioError as exc:
-        if accepts_d710gp_identity(radio, exc):
-            LOG.info("Accepting TM-D710GP regional clone identity")
+        if accepts_d710gp_identity(radio, exc) or accepts_d710p_identity(
+            radio,
+            exc,
+        ):
+            LOG.info("Accepting TM-D710 regional clone identity")
             return None
         raise
 

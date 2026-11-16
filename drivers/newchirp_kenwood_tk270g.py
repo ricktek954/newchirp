@@ -23,6 +23,7 @@ from chirp.settings import (
 
 
 _BANK_SETTINGS = {"bank", "bnumb"}
+WRITE_ACK_RETRIES = 3
 
 
 def _extra_integer(memory, name):
@@ -200,6 +201,78 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
         self._prep_data()
         self._validate_bank_state()
         return mem
+
+    def _write_frame_with_retry(self, frame, address):
+        for attempt in range(1, WRITE_ACK_RETRIES + 1):
+            tk760g._raw_send(self, frame)
+            ack = tk760g._raw_recv(self, 1)
+            if ack == tk760g.ACK_CMD:
+                return
+            if ack == b"\x15" and attempt < WRITE_ACK_RETRIES:
+                continue
+            tk760g._close_radio(self)
+            if ack == b"\x15":
+                raise errors.RadioError(
+                    "Bad checksum in block %02x write after %i attempts"
+                    % (address, attempt)
+                )
+            if not ack:
+                raise errors.RadioNoResponse(
+                    "No acknowledgement for block %02x write" % address
+                )
+            raise errors.RadioError(
+                "Problem with the ack to block %02x write, ack %03i"
+                % (address, int(ack))
+            )
+
+    def sync_out(self):
+        self._fill(0xBB, b"Chirp")
+        if self._memobj is None:
+            self.process_mmap()
+        self._prep_data()
+        self._validate_bank_state()
+
+        status = chirp_common.Status()
+        tk760g._open_radio(self, status)
+        status.cur = 0
+        status.max = tk760g.MEM_SIZE // tk760g.BLOCK_SIZE
+        status.msg = "Cloning to radio..."
+        self.status_fn(status)
+
+        count = 0
+        raddr = 0
+        for address in tk760g.MEM_BLOCKS:
+            data = self.get_mmap()[raddr:raddr + tk760g.BLOCK_SIZE]
+            if address in self.RO_BLOCKS:
+                if (
+                    address >= 0x10
+                    and address <= 0x1F
+                    and data == tk760g.EMPTY_BLOCK
+                ):
+                    count += 1
+                    raddr = count * tk760g.BLOCK_SIZE
+                    continue
+                count += 1
+                raddr = count * tk760g.BLOCK_SIZE
+                continue
+
+            if data == tk760g.EMPTY_BLOCK:
+                frame = tk760g._make_frame(b"Z", address) + b"\xFF"
+            else:
+                checksum = tk760g.checksum.checksum_8bit(data)
+                frame = (
+                    tk760g._make_frame(b"W", address)
+                    + data
+                    + bytes([checksum])
+                )
+            self._write_frame_with_retry(frame, address)
+
+            status.cur = count
+            self.status_fn(status)
+            count += 1
+            raddr = count * tk760g.BLOCK_SIZE
+
+        tk760g._close_radio(self)
 
     def _validate_bank_state(self):
         active = []

@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Class"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-bug-batch"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:57:36Z"
+timestamp: "2026-11-16T12:16:24Z"
 concept_id: newchirp_mass_storage/ScsiPassthrough
 language: python
 ---
@@ -23,8 +23,15 @@ Reusable factory for platform-specific raw SCSI transport.
 
 Reusable factory for platform-specific raw SCSI transport.
 
+## Methods
+
+- `list_devices`
+- `__init__`
+- `transfer`
+- `close`
+
 ## Source
-Lines 301–391 in `newchirp_mass_storage.py`
+Lines 320–413 in `newchirp_mass_storage.py`
 
 ## Relationships
 
@@ -35,4 +42,3 @@ Lines 301–391 in `newchirp_mass_storage.py`
 | related | [__init__](/newchirp_mass_storage/init.md) |
 | related | [transfer](/newchirp_mass_storage/transfer.md) |
 | related | [close](/newchirp_mass_storage/close.md) |
-| called_by | [radio_for](/chirp_bridge/radio_for.md) |

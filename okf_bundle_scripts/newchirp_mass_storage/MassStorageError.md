@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Class"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-bug-batch"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:57:36Z"
+timestamp: "2026-11-16T12:16:24Z"
 concept_id: newchirp_mass_storage/MassStorageError
 language: python
 ---
@@ -21,7 +21,7 @@ language: python
 - `RuntimeError`
 
 ## Source
-Lines 25–26 in `newchirp_mass_storage.py`
+Lines 27–28 in `newchirp_mass_storage.py`
 
 ## Relationships
 

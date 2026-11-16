@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Module"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-bug-batch"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:57:36Z"
+timestamp: "2026-11-16T12:16:24Z"
 concept_id: newchirp_mass_storage
 language: python
 ---
@@ -32,6 +32,9 @@ other CPS families using SCSI mass-storage passthrough can reuse it.
 | Type | Target |
 |------|--------|
 | related | [MassStorageError](/newchirp_mass_storage/MassStorageError.md) |
+| related | [_windows_open_access](/newchirp_mass_storage/windows_open_access.md) |
+| related | [_windows_open_error](/newchirp_mass_storage/windows_open_error.md) |
+| related | [_windows_io_error](/newchirp_mass_storage/windows_io_error.md) |
 | related | [_helper_path](/newchirp_mass_storage/helper_path.md) |
 | related | [_MacScsiPassthrough](/newchirp_mass_storage/MacScsiPassthrough.md) |
 | related | [_WindowsScsiPassthrough](/newchirp_mass_storage/WindowsScsiPassthrough.md) |

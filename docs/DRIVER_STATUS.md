@@ -40,9 +40,9 @@ Last updated: 2026-11-16
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
 | KSUN UV-K60 rebrand | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Stock UV-K5-family profile | Stock UV-K5-family policy | Stock UV-K5-family policy | Experimental |
 | KSUN UV-K60 Plus | `drivers/newchirp_uvk60plus.py` | MH-580 clone serial, 38400 8N1 | Sparse `0x2A00` image, offline-tested | Disabled | Hidden | Experimental read-only |
-| Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware | Disabled | Hidden | Experimental |
+| Connect Systems CS750 | `drivers/newchirp_cs750.py` | NewChirp raw SCSI/RAP; CPS `.rdb` import | Yes, untested hardware; Windows opens read-only | Disabled | Hidden | Experimental |
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
-| Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver; receive-only airband accepted | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng BF-V12D | `drivers/newchirp_baofeng_bfv12d.py` | CPS-derived P3107 clone serial, 9600 8N1 | Original-firmware sequence traced; hardware pending | Stock image/upload path | Stock channel decoder | Experimental |
 | Baofeng K67 Pro | `drivers/newchirp_baofeng_k67pro.py` | Shared K6/K63 CPS serial, 115200 8N1 + DTR/RTS | 1,000 channels + sparse full image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1 | 640 channels + 10 zones, offline-tested | Full image, offline-tested | Basic settings and zone names | Experimental |
@@ -71,13 +71,14 @@ Last updated: 2026-11-16
 | Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Icom IC-7100 | `drivers/newchirp_icom_ic7100.py` | Icom CI-V serial, auto-baud | Opaque mode bytes decode read-only | Disabled for opaque channels | Stock IC-7100 settings | Experimental compatibility override |
 | Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | NewChirp ICF clone transport, 9600 8N1 | Four identity attempts; checksum-validated contiguous full image; invisible-slot guard | NewChirp clone-in boundary, 362 32-byte blocks, required `E6 00` | Stock ICX90 decoder | Experimental |
 | Icom IC-746PRO | `drivers/newchirp_icom_ic746pro.py` | Icom CI-V serial, 9600 8N1 | Stock IC-746 family logic | Stock IC-746 family logic | Stock IC-746 family logic | Experimental model profile |
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, physical image verified | Disabled | Hidden | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
-| Kenwood TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710G clone serial | Stock driver | Stock driver | Stock driver | Regional identity compatibility |
-| Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation; offline-tested, physical readback pending | Stock driver | Experimental |
+| Kenwood TM-D710P / TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710/TM-D710G clone serial | Stock driver | Stock driver | Stock driver | Regional identity compatibility |
+| Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation and transient checksum retry; offline-tested | Stock driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
@@ -773,6 +774,10 @@ Last updated: 2026-11-16
 ### Connect Systems CS750
 
 - Maintained importer: `drivers/newchirp_cs750.py`
+- Importer SHA-256:
+  `dec316cfd0a5e4bf3992605e90f5097bbed32f88e2540031e1ccdc11f4e530f1`
+- Raw transport SHA-256:
+  `6f449f1034003a5e5a5584c1f96a5fc7759fb7f2fc5d19b2c82afb700f2f57cc`
 - Protocol notes: `docs/CS750_PROTOCOL.md`
 - Evidence: official CSI CPS R4.01.010 / S8.00.10
 - CPS installer SHA-256:
@@ -791,7 +796,13 @@ Last updated: 2026-11-16
 - Reusable transport: `scripts/newchirp_mass_storage.py` plus
   `tools/newchirp_scsi_mac.c`
 - Transport adapters exist for macOS, Windows, and Linux behind one interface;
-  only the macOS IOKit helper has been compiled on this host
+  only the macOS IOKit helper has been compiled on this host. Windows opens
+  `PHYSICALDRIVE` handles with read-only access because CS750 writes are
+  disabled; access-denied errors now explain the Administrator requirement.
+- Field evidence: the 2026-11-15 report from [redacted-email] reached
+  `\\.\PHYSICALDRIVE2` but Windows rejected the previous read/write handle
+  with error 5. The new path requests read access only and retains an
+  explicit fail-closed diagnostic.
 - Next milestone: capture a `0x44010`-byte M100000 image from physical hardware
   and compare it byte-for-byte with a CPS export
 
@@ -1125,6 +1136,9 @@ Last updated: 2026-11-16
   membership, analog and DMR channel fields, contacts, RX groups, scan lists,
   privacy-key references, and settings provided by the pinned upstream CHIRP
   implementation
+- Receive coverage: 108-136 MHz airband channels are accepted when duplex is
+  `off`; transmit validation rejects the same channels because the radio only
+  supports airband reception.
 - Read/write policy: channel and zone writes use the upstream CHIRP image
   policy. NewChirp applies zone create, rename, and membership changes to the
   downloaded image before upload and returns the resulting mapping state to
@@ -1145,7 +1159,7 @@ Last updated: 2026-11-16
   A second report from [redacted-email] reached a slow, retried PSEARCH
   sequence and received a non-ACK SYSINFO reply.
 - Driver SHA-256:
-  `96bf74adfb0f561f17499c1687444ca47bbf7e14074c0e25732db9adb1beaa4f`
+  `59aca2e9624b57a173cd0b6964b5b922818684a26defe2311fee32d3a1036b9c`
 - Hardware validation: the upstream driver completed read and write tests on
   firmware DM32.01.01.047. This NewChirp timing and retry override has
   synthetic serial coverage but no physical revalidation. The NewChirp
@@ -1520,6 +1534,8 @@ Last updated: 2026-11-16
 
 - Maintained driver: `drivers/newchirp_kenwood_tk270g.py`; the
   `NewChirpTK270G` class supersedes CHIRP's `Kenwood_TK-270G` registration.
+- Driver SHA-256:
+  `6a6852dcffa67aa1f825706e430dc93f4585ee53b80fd7777b5ecec23b301201`
 - Transport: pinned CHIRP Kenwood Series 60G clone serial at 9600 with even
   parity and one stop bit. KPG-56D statically configures `9600,N,8,2`; the
   live serial setting remains unchanged pending an OEM capture or physical
@@ -1542,11 +1558,18 @@ Last updated: 2026-11-16
   compander, and busy-channel lockout is unchanged. A post-write bank-state
   check stops the upload before radio I/O if generated counts disagree with
   the active channel records.
+- Write recovery: if the radio rejects a data block with checksum status
+  `0x15`, NewChirp resends the identical block up to three times. A persistent
+  rejection closes programming mode and reports the block and attempt count.
+  Other write acknowledgements are not retried.
 - Offline validation: the shared `Kenwood_TK-272G.img` fixture is
   re-identified as a TK-270G. Its 36 active channels are round-tripped through
   the same decode/write path used by the bridge; all active bank assignments
   and bank indexes are retained and the generated channel/bank counts remain
-  nonzero.
+  nonzero. A regression injects one block-51 checksum rejection and verifies
+  that the identical frame is retried before the session exits.
+- Field evidence: the 2026-11-15 report from [redacted-email] failed
+  with `Bad checksum in block 51 write`.
 - Hardware validation: none. No controlled NewChirp write/read-back has been
   performed on a TK-270G, and the OEM serial setting has not been compared on
   the wire.
@@ -1554,14 +1577,19 @@ Last updated: 2026-11-16
   KPG-56D and NewChirp reads, perform an unchanged NewChirp write, then compare
   both read-backs for all channel and group metadata.
 
-### Kenwood TM-D710GP regional identity
+### Kenwood TM-D710P / TM-D710GP regional identity
 
 - Maintained file: `drivers/newchirp_tmd710.py`
-- Transport and layout: unchanged pinned CHIRP TM-D710G clone protocol
-- Implemented: accepts the regional `D710GP` clone identity returned when the
-  programming cable is connected through the TM-D710 control head
+- Driver SHA-256:
+  `63f9199a5d3ceca790228af78a3f782ac07e3133bed6c239e1531c40233f70a9`
+- Transport and layout: unchanged pinned CHIRP clone protocols
+- Implemented: accepts `D710GP` for the TM-D710G profile and `D710P` for the
+  TM-D710 profile
 - Evidence: 2026-11-01 NewChirp 1.0.30 report from [redacted-email]; the
   complete command handshake reached `ID TM-D710GP` instead of `TM-D710G`
+- Additional evidence: 2026-11-15 NewChirp 1.0.54 reports from
+  [redacted-email] reached `ID TM-D710P` while the non-G TM-D710 profile was
+  selected
 - Hardware validation: read/write validation on this identity is pending
 - Next milestone: perform a complete read and controlled write with the
   control-head connection required by the Kenwood programmer
@@ -1585,6 +1613,29 @@ Last updated: 2026-11-16
 - Hardware validation: none.
 - Next milestone: read the IC-746PRO with CI-V address `66h` and
   CI-V Transceive off, then perform one controlled memory edit and read-back.
+
+### Icom IC-7100
+
+- Maintained driver: `drivers/newchirp_icom_ic7100.py`
+- Driver SHA-256:
+  `5a1d39629cb1736c709d513b964672ab5dd44b90c6e4210f97a7f7556e2c011c`
+- Transport and layout: unchanged pinned CHIRP live CI-V driver
+- Issue: some stored memories contain reserved or undocumented mode indexes,
+  including `11` and `0x85`. The stock driver assigns `None` to
+  `Memory.mode`, which raises before its intended unknown-mode guard.
+- Correction: unknown mode indexes are displayed as FM with an explicit
+  comment, the mode field is immutable, and an upload to that channel stops
+  before radio I/O. Known modes and all other channel fields retain the stock
+  IC-7100 behavior.
+- Evidence: the 2026-11-16 report from [redacted-email] reached the channel
+  records and failed on mode `0x85` in bank 1 location 0, then exposed the
+  stock `None` valid-list exception.
+- Offline validation: fallback indexes, immutable-mode annotation, branch
+  registration, and pre-I/O upload blocking.
+- Hardware validation: pending. The reporter must retry a read and verify the
+  affected channels against the radio before editing.
+- Next milestone: identify the OEM meaning of the unknown mode byte from a
+  reviewed CPS export or the reporter's saved channel details.
 
 ### Icom IC-9700
 

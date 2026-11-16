@@ -4,6 +4,7 @@ import importlib
 import importlib.util
 from collections import deque
 from pathlib import Path
+import struct
 import sys
 import tempfile
 import unittest
@@ -26,6 +27,7 @@ class FakeTK270GSerial:
         self.stopbits = 1
         self.writes = []
         self._responses = deque()
+        self.rejected_writes = {}
 
     def write(self, data):
         data = bytes(data)
@@ -39,7 +41,12 @@ class FakeTK270GSerial:
         elif data == b"E":
             self._responses.append(b"\x06")
         elif data[:1] in (b"W", b"Z"):
-            self._responses.append(b"\x06")
+            address = struct.unpack(">H", data[1:3])[0]
+            if self.rejected_writes.get(address, 0):
+                self.rejected_writes[address] -= 1
+                self._responses.append(b"\x15")
+            else:
+                self._responses.append(b"\x06")
         return len(data)
 
     def read(self, size=1):
@@ -219,6 +226,58 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
             self.assertEqual(serial.writes[-1], b"E")
             self.assertEqual(int(radio._memobj.settings.banks), 4)
             self.assertEqual(int(radio._memobj.settings.channels), 36)
+
+    def test_transient_block_checksum_rejection_is_retried(self):
+        with tempfile.TemporaryDirectory() as temp:
+            image = Path(temp) / "Kenwood_TK-270G.img"
+            data = bytearray(
+                (SOURCE / "tests/images/Kenwood_TK-272G.img").read_bytes()
+            )
+            data[0xA7:0xAE] = b"P2700\x05\xff"
+            image.write_bytes(data)
+
+            serial = FakeTK270GSerial()
+            serial.rejected_writes[0x51] = 1
+            radio = self.radio_class(serial)
+            radio.load_mmap(str(image))
+            radio.status_fn = lambda _status: None
+
+            with mock.patch("time.sleep", return_value=None):
+                radio.sync_out()
+
+            block_51_frames = [
+                write
+                for write in serial.writes
+                if write[:1] in (b"W", b"Z")
+                and struct.unpack(">H", write[1:3])[0] == 0x51
+            ]
+            self.assertEqual(len(block_51_frames), 2)
+            self.assertEqual(block_51_frames[0], block_51_frames[1])
+            self.assertEqual(serial.writes[-1], b"E")
+
+    def test_persistent_block_checksum_rejection_stops_after_three(self):
+        with tempfile.TemporaryDirectory() as temp:
+            image = Path(temp) / "Kenwood_TK-270G.img"
+            data = bytearray(
+                (SOURCE / "tests/images/Kenwood_TK-272G.img").read_bytes()
+            )
+            data[0xA7:0xAE] = b"P2700\x05\xff"
+            image.write_bytes(data)
+
+            serial = FakeTK270GSerial()
+            serial.rejected_writes[0x51] = 3
+            radio = self.radio_class(serial)
+            radio.load_mmap(str(image))
+            radio.status_fn = lambda _status: None
+
+            with mock.patch("time.sleep", return_value=None):
+                with self.assertRaisesRegex(
+                    Exception,
+                    "after 3 attempts",
+                ):
+                    radio.sync_out()
+
+            self.assertEqual(serial.writes[-1], b"E")
 
 
 if __name__ == "__main__":

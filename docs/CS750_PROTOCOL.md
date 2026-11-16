@@ -35,6 +35,12 @@ bridge. The platform adapters are implemented in
 `tools/newchirp_scsi_mac.c`; Windows uses `IOCTL_SCSI_PASS_THROUGH_DIRECT`;
 Linux uses the generic `SG_IO` interface.
 
+The CS750 driver is read-only, so the Windows adapter requests a
+`GENERIC_READ` physical-drive handle instead of read/write access. Windows can
+still reject raw physical-drive access with error 5; the diagnostic now
+requires the CPS and Explorer removable-drive windows to be closed and tells
+the user to restart NewChirp as Administrator.
+
 ## RAP packet format
 
 CPS command packets are:

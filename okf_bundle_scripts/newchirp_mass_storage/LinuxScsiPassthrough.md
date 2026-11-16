@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Class"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-bug-batch"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:57:36Z"
+timestamp: "2026-11-16T12:16:24Z"
 concept_id: newchirp_mass_storage/LinuxScsiPassthrough
 language: python
 ---
@@ -30,7 +30,7 @@ Linux generic SCSI SG_IO backend.
 - `close`
 
 ## Source
-Lines 216–298 in `newchirp_mass_storage.py`
+Lines 235–317 in `newchirp_mass_storage.py`
 
 ## Relationships
 

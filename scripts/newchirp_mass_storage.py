@@ -20,10 +20,35 @@ CS750_SCSI_READ = bytes.fromhex(
 CS750_SCSI_WRITE = bytes.fromhex(
     "ff 2a 00 00 00 00 00 00 47 50 00 00 00 00 00 00"
 )
+WINDOWS_GENERIC_READ = 0x80000000
+WINDOWS_GENERIC_READ_WRITE = 0xC0000000
 
 
 class MassStorageError(RuntimeError):
     pass
+
+
+def _windows_open_access(writable):
+    return WINDOWS_GENERIC_READ_WRITE if writable else WINDOWS_GENERIC_READ
+
+
+def _windows_open_error(error):
+    if error == 5:
+        return (
+            "Windows denied raw read access to the CS750 disk (error 5). "
+            "Close the Connect Systems CPS and removable-drive windows, "
+            "then restart NewChirp as Administrator and try again."
+        )
+    return "Could not open raw CS750 disk: Windows error %i" % error
+
+
+def _windows_io_error(error):
+    if error == 5:
+        return (
+            "Windows denied the raw CS750 SCSI request (error 5). Close "
+            "the Connect Systems CPS, then restart NewChirp as Administrator."
+        )
+    return "SCSI pass-through failed: Windows error %i" % error
 
 
 def _helper_path():
@@ -126,7 +151,7 @@ class _WindowsScsiPassthrough:
     IOCTL_SCSI_PASS_THROUGH_DIRECT = 0x4D014
     INVALID_HANDLE_VALUE = -1
 
-    def __init__(self, device):
+    def __init__(self, device, writable=False):
         import ctypes
 
         self.ctypes = ctypes
@@ -134,7 +159,7 @@ class _WindowsScsiPassthrough:
         self.kernel32.CreateFileW.restype = ctypes.c_void_p
         self.handle = self.kernel32.CreateFileW(
             ctypes.c_wchar_p(device),
-            0xC0000000,
+            _windows_open_access(writable),
             3,
             None,
             3,
@@ -142,10 +167,7 @@ class _WindowsScsiPassthrough:
             None,
         )
         if self.handle == ctypes.c_void_p(self.INVALID_HANDLE_VALUE).value:
-            raise MassStorageError(
-                "Could not open raw CS750 disk: Windows error %i"
-                % ctypes.get_last_error()
-            )
+            raise MassStorageError(_windows_open_error(ctypes.get_last_error()))
 
     def transfer(self, cdb, size, write_data=None):
         import ctypes
@@ -196,10 +218,7 @@ class _WindowsScsiPassthrough:
             None,
         )
         if not ok:
-            raise MassStorageError(
-                "SCSI pass-through failed: Windows error %i"
-                % ctypes.get_last_error()
-            )
+            raise MassStorageError(_windows_io_error(ctypes.get_last_error()))
         result = ctypes.cast(raw, ctypes.POINTER(ScsiPassThroughDirect)).contents
         if result.scsi_status != 0:
             raise MassStorageError(
@@ -220,7 +239,7 @@ class _LinuxScsiPassthrough:
     SG_DXFER_TO_DEV = -2
     SG_DXFER_FROM_DEV = -3
 
-    def __init__(self, device):
+    def __init__(self, device, writable=False):
         import fcntl
 
         self.fcntl = fcntl
@@ -376,7 +395,10 @@ class ScsiPassthrough:
         if sys.platform == "darwin":
             self._backend = _MacScsiPassthrough(device)
         elif sys.platform == "win32":
-            self._backend = _WindowsScsiPassthrough(device)
+            self._backend = _WindowsScsiPassthrough(
+                device,
+                writable=writable,
+            )
         elif sys.platform.startswith("linux"):
             self._backend = _LinuxScsiPassthrough(device)
         else:

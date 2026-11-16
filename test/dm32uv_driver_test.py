@@ -85,6 +85,36 @@ class DM32UVDriverTest(unittest.TestCase):
             "newchirp.drivers.newchirp_dm32uv",
         )
 
+    def test_airband_is_accepted_only_as_receive_only(self):
+        radio = self.radio_class(None)
+        features = radio.get_features()
+        self.assertIn((108_000_000, 136_000_000), features.valid_bands)
+
+        from chirp import chirp_common
+
+        memory = chirp_common.Memory()
+        memory.number = 1
+        memory.freq = 122_975_000
+        memory.mode = "FM"
+        memory.duplex = "off"
+        memory.offset = 0
+        receive_errors = [
+            message
+            for message in radio.validate_memory(memory)
+            if isinstance(message, chirp_common.ValidationError)
+        ]
+        self.assertEqual(receive_errors, [])
+
+        memory.duplex = ""
+        transmit_errors = [
+            message
+            for message in radio.validate_memory(memory)
+            if isinstance(message, chirp_common.ValidationError)
+        ]
+        self.assertTrue(
+            any("receive-only" in str(message) for message in transmit_errors)
+        )
+
     def test_passsta_retries_a_transient_bad_reply(self):
         serial = _SequenceSerial([b"\x06\x00\x00", b"P\x00\x00"])
         link = self.driver.baofeng_dm32uv._Link(serial)

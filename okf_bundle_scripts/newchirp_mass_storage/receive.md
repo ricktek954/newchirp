@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:main"
+  - "git:branch:fix/email-bug-batch"
   - "git:repo:newchirp"
-timestamp: "2026-10-25T01:57:36Z"
+timestamp: "2026-11-16T12:16:24Z"
 concept_id: newchirp_mass_storage/receive
 language: python
 ---
@@ -33,7 +33,7 @@ def receive(self, expected_command, expected_size)
 | `expected_size` | `—` | `—` |
 
 ## Source
-Lines 448–456 in `newchirp_mass_storage.py`
+Lines 470–478 in `newchirp_mass_storage.py`
 
 ## Relationships
 

@@ -9,9 +9,11 @@
 
 import time
 
-from chirp import directory, errors
+from chirp import chirp_common, directory, errors
 from chirp.drivers import baofeng_dm32uv
 
+
+AIRBAND = (108_000_000, 136_000_000)
 
 _current_xfer = baofeng_dm32uv._Link.xfer
 _original_xfer = getattr(_current_xfer, "newchirp_original", _current_xfer)
@@ -177,6 +179,22 @@ directory.enable_reregistrations()
 @directory.register
 class DM32UV(baofeng_dm32uv.DM32UV):
     """Baofeng DM-32UV with a retry-safe password-state handshake."""
+
+    def get_features(self):
+        features = super().get_features()
+        features.valid_bands.insert(0, AIRBAND)
+        return features
+
+    def validate_memory(self, memory):
+        messages = []
+        if (
+            AIRBAND[0] <= memory.freq < AIRBAND[1]
+            and memory.duplex != "off"
+        ):
+            messages.append(chirp_common.ValidationError(
+                "DM-32UV airband memories must be set to receive-only"
+            ))
+        return messages + super().validate_memory(memory)
 
     @classmethod
     def get_prompts(cls):

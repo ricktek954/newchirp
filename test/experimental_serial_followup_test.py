@@ -90,6 +90,27 @@ class ExperimentalSerialFollowupTest(unittest.TestCase):
                 )
             )
 
+    def test_tm_d710p_regional_identity_is_accepted(self):
+        from chirp import errors
+        from chirp.drivers import tmd710
+        newchirp_tmd710 = importlib.import_module(
+            "newchirp.drivers.newchirp_tmd710"
+        )
+
+        radio = object.__new__(tmd710.KenwoodTMD710Radio)
+        with mock.patch.object(
+            newchirp_tmd710,
+            "_original_connect_radio",
+            side_effect=errors.RadioError(
+                "Radio responded as D710P, not D710."
+            ),
+        ):
+            self.assertIsNone(
+                newchirp_tmd710._connect_radio_accepting_regional_identity(
+                    radio
+                )
+            )
+
     def test_tdh8_fourth_generation_identities_are_detected(self):
         from chirp.drivers import tdh8
 
