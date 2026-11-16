@@ -5,6 +5,8 @@ import importlib.util
 from pathlib import Path
 import sys
 import unittest
+from types import SimpleNamespace
+from unittest import mock
 
 
 from chirp_test_source import chirp_source
@@ -94,6 +96,31 @@ class FT50OddSplitTest(unittest.TestCase):
 
         self.assertTrue(features.can_odd_split)
         self.assertIn("split", features.valid_duplexes)
+
+    def test_oem_serial_framing_uses_two_stop_bits(self):
+        self.assertEqual(
+            self.directory.get_radio("Yaesu_FT-50").SERIAL_STOPBITS,
+            2,
+        )
+        radio_class = SimpleNamespace(
+            MODEL="FT-50",
+            BAUD_RATE=9600,
+            HARDWARE_FLOW=False,
+            WANTS_RTS=True,
+            WANTS_DTR=True,
+            SERIAL_STOPBITS=2,
+        )
+
+        with mock.patch("serial.Serial") as serial_constructor:
+            self.bridge.open_serial(radio_class, "COM6")
+
+        serial_constructor.assert_called_once_with(
+            baudrate=9600,
+            rtscts=False,
+            xonxoff=False,
+            timeout=0.25,
+            stopbits=2,
+        )
 
 
 if __name__ == "__main__":

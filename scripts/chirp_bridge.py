@@ -1460,9 +1460,12 @@ def open_serial(radio_class, port):
 
     software_flow = getattr(radio_class, "XON_XOFF", False)
     timeout = serial_read_timeout(radio_class)
+    stopbits = getattr(radio_class, "SERIAL_STOPBITS", None)
     if "://" in port:
         handle = serial.serial_for_url(port, do_not_open=True)
         handle.timeout = timeout
+        if stopbits is not None:
+            handle.stopbits = stopbits
         handle.rtscts = radio_class.HARDWARE_FLOW
         handle.xonxoff = software_flow
         handle.rts = radio_class.WANTS_RTS
@@ -1472,12 +1475,15 @@ def open_serial(radio_class, port):
     else:
         # Configure baud and modem-control lines before opening the device.
         # This mirrors CHIRP's clone dialog and avoids a pulse at the radio.
-        handle = serial.Serial(
+        kwargs = dict(
             baudrate=radio_class.BAUD_RATE,
             rtscts=radio_class.HARDWARE_FLOW,
             xonxoff=software_flow,
             timeout=timeout,
         )
+        if stopbits is not None:
+            kwargs["stopbits"] = stopbits
+        handle = serial.Serial(**kwargs)
         handle.rts = radio_class.WANTS_RTS
         handle.dtr = radio_class.WANTS_DTR
         handle.port = port
@@ -1506,6 +1512,7 @@ def headless_live_adapter(live_radio):
             self.VARIANT = getattr(radio, "VARIANT", "")
             self.BAUD_RATE = radio.BAUD_RATE
             self.HARDWARE_FLOW = radio.HARDWARE_FLOW
+            self.SERIAL_STOPBITS = getattr(radio, "SERIAL_STOPBITS", 1)
             self.pipe = radio.pipe
             self._features = radio.get_features()
 

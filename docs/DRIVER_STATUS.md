@@ -4,7 +4,7 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 
-Last updated: 2026-11-15
+Last updated: 2026-11-16
 
 ## Status definitions
 
@@ -24,7 +24,7 @@ Last updated: 2026-11-15
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
-| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N1 | Odd-split channels decode; reporter image verified | Stock FT-50 encoder, offline round-trip | Stock FT-50 settings | Experimental compatibility override |
+| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Stock FT-50 encoder, offline round-trip | Stock FT-50 settings | Experimental compatibility override |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR | 960 channels + Pro map, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
@@ -197,7 +197,8 @@ Last updated: 2026-11-15
 ### Yaesu FT-50 odd split
 
 - Maintained compatibility: `drivers/newchirp_ft50_compat.py`
-- Transport: pinned CHIRP Yaesu clone serial at 9600 8N1
+- Transport: pinned CHIRP Yaesu clone serial at 9600 8N2. ADMS-1E builds a
+  Win16 DCB from the literal `9600,n,8,2` before opening communication.
 - Decode policy: duplex code `3` represents an odd-split channel. Expose it as
   CHIRP's `split` duplex with the stored offset as the transmit frequency.
 - Write policy: the stock FT-50 encoder now accepts `split`; channel fields
@@ -205,13 +206,18 @@ Last updated: 2026-11-15
 - Evidence: email UID 672 from `[redacted-email]` supplied NewChirp image
   `newchirp-1tmrlsdr.img`, SHA-256
   `db87e5dd14f0333f1f7fe72e35cfb984054d96c30c543c33c7ef092cfbccca32`
+- OEM evidence: ADMS-1E `Wft50.exe` SHA-256
+  `06f0be506b59153059d130e4fb5948049f0a40dd44f6df051097b9272f17945b`;
+  static call path at `1040:0a0d` uses `BuildCommDCB`, `SetCommState`,
+  `READCOMM`, and `WRITECOMM`. See `docs/YAESU_FT-50_PROTOCOL.md`.
 - Reporter image: 57 active channels, including ten odd-split channels
   (`6, 7, 60, 77, 81, 83, 85, 86, 87, 89`); channel 6 receives on
   155.700 MHz and transmits on 154.755 MHz
 - Driver SHA-256:
-  `05b5d9fa11f32c88d848d6cd173e02cd6eba2d41a2998259f685b55b4f852e0a`
-- Offline validation: all active channels decode, and editing a split channel
-  round-trips through the stock encoder
+  `8e4fd77434de056635168d609e2b0d0daa84cc1fd9be4bf3cd9fe76db9decbcf`
+- Offline validation: all active channels decode, editing a split channel
+  round-trips through the stock encoder, and the bridge opens the FT-50
+  transport with two stop bits.
 - Hardware validation: none
 - Next milestone: the reporter updates NewChirp, reads the radio again, saves
   the decoded image, and verifies one odd-split channel against the radio

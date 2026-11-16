@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T15:24:13Z"
+timestamp: "2026-11-16T11:29:53Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,13 +23,14 @@ def main()
 ```
 
 ## Source
-Lines 2427–2783 in `chirp_bridge.py`
+Lines 2434–2790 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
+| calls | [parse_args](/check_linux_release_abi/parse_args.md) |
 | calls | [load_chirp](/chirp_bridge/load_chirp.md) |
 | calls | [radio_for](/chirp_bridge/radio_for.md) |
 | calls | [live_models_by_vendor](/chirp_bridge/live_models_by_vendor.md) |

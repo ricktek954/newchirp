@@ -18,6 +18,11 @@
 from chirp.drivers import ft50
 
 
+# The OEM ADMS-1E programmer configures COM1 with "9600,n,8,2" before
+# entering clone mode. CHIRP's stock driver only declares the baud rate, so
+# NewChirp's bridge would otherwise use its pyserial default of one stop bit.
+ft50.FT50Radio.SERIAL_STOPBITS = 2
+
 _ORIGINAL_GET_FEATURES = ft50.FT50Radio.get_features
 
 
