@@ -23,11 +23,15 @@ release requirements.
   Windows-only sandbox/Help failures. The full Python suite ran 432 tests:
   427 passed, 2 fixture-dependent tests skipped, and 3 Windows
   temporary-file-lock helper errors.
-- Linux `1.0.56` is being prepared from current `origin/main`. It adds the
+- Linux `1.0.56` is live from current `origin/main`. It adds the
   KG-UV8D reserved-DCS compatibility override, treats nicFW950 all-ones
   subtones as no tone, corrects GMRS starter-channel bandwidths, and recovers
-  from macOS CSV save permission errors. Build and release verification will
-  be recorded after publication.
+  from macOS CSV save permission errors. Verification: analyzer clean; 226
+  Flutter tests; 432 Python tests with two fixture-dependent skips; max glibc
+  `2.18`; package metadata and embedded version `1.0.56` / `56`; DEB and
+  AppImage Xvfb launch tests passed on Ubuntu 20.04; the final AppImage
+  launched under host Wayland and XWayland; all public downloads returned HTTP
+  200; and the Linux platform manifest reports `1.0.56`.
 - Linux `1.0.55` is live from the current `origin/main` plus the
   Ubuntu 20.04 release hardening. It fixes blank AppImages caused by mixing an
   old bundled GLVND loader with newer NVIDIA/Mesa drivers, clears vacated
@@ -624,7 +628,7 @@ release requirements.
 - Branch: `main`
 - Windows `1.0.55` artifact source commit: `26589b92`
 - macOS `1.0.54` artifact source commit: `c55530b9`
-- Linux `1.0.55` is live from source commit `190eac83`
+- Linux `1.0.56` is live from source commit `a33b20d3`
 - Open pull requests: none
 - Checked-out source version: `1.0.56+56`
 - macOS builds are pinned to CocoaPods with
@@ -642,7 +646,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.54 |
 | Windows | 1.0.55 |
-| Linux | 1.0.55 |
+| Linux | 1.0.56 |
+
+Linux `1.0.56` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.56.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.56.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.56.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.56.pkg.tar.zst`
+- DEB: `48,522,850` bytes, SHA-256
+  `6b9a8ed78f606b59a19ea360ebb7a77d6e27e950d0bfc167dae75b0b86f095f5`
+- RPM: `48,605,228` bytes, SHA-256
+  `f718fc174b386b36e7b55675fba3d1bafbd5c050ab33603b40e057353526132c`
+- AppImage: `48,805,056` bytes, SHA-256
+  `b33ee9fda1fbeb85d44e7f4ad3bb4896e25b4a171e3d1b27fbfa5b11f1a93e82`
+- Pacman: `47,470,313` bytes, SHA-256
+  `9afbd59a68c62532b56e517ff530ef1f80903ce6f94a8a8217dd67857d81fa81`
+- Public HTTP checks returned `200 OK`
+- Server checksums matched the local artifacts
+- Linux platform manifest reports `1.0.56`
 
 Linux `1.0.55` artifacts:
 
