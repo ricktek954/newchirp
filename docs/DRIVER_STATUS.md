@@ -65,6 +65,7 @@ Last updated: 2026-11-15
 | Radioddity GS-5B 1.XX | `drivers/newchirp_gs5b.py` | OEM GS-5B Pro CPS v1.1.3 serial, 115200 8N1, DTR/RTS on | 512 channels, offline-tested | All mapped pages, offline-tested | Preserved, hidden | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
+| Wouxun KG-UV8D | Pinned CHIRP `kguv8d.py` with `drivers/newchirp_kg_uv8d_compat.py` | Wouxun clone serial, 19200 8N1, 64-byte blocks | Reserved DCS words no longer abort channel decode; raw bytes preserved | Stock CHIRP driver, offline round-trip | Stock CHIRP settings | Experimental compatibility override |
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -1804,6 +1805,48 @@ Last updated: 2026-11-15
   read. If the block is still short, capture whether Wouxun CPS can read it and
   provide the first response header bytes so the protocol variant can be
   separated from a cable timing issue.
+
+### Wouxun KG-UV8D reserved DCS code
+
+- Maintained compatibility: `drivers/newchirp_kg_uv8d_compat.py`
+- Protocol notes: `docs/WOUXUN_KG_UV8D_PROTOCOL.md`
+- Driver SHA-256:
+  `79d8ee3e8fe9b59caf5363f7b1e00b4c37e80eac93d2ce3e80142f6613a5e495`
+- Official CPS: `UV8D_SEN.rar`, SHA-256
+  `86a9fbe354682ba9cdc658dc9ea1e17835b6425ad979af01f910affb35302eb2`
+- Extracted CPS executable: KG-UV8D Commander B2.1.03 (140808), SHA-256
+  `534e0e82248b4ce8391e215fe56679ce6c1a2f2a235fde4c1986d6c34c280d57`
+- Transport: pinned CHIRP Wouxun clone serial, 19200 8N1, `0x7D` record
+  framing, `0x80` through `0x83` commands, additive checksum, and 64-byte
+  program blocks. The OEM application's DCB and serial call paths confirm
+  19200, eight data bits, no parity, and one stop bit.
+- Decode policy: a reserved DCS word whose recovered octal code is outside
+  CHIRP's `000`-`777` code set is exposed as no tone on that side. The raw tone
+  word remains unchanged in the image. Report error `3777` corresponds to the
+  stock decoder's reserved `0x2FFF` word and used to abort the entire map.
+- Write policy: stock CHIRP channel, settings, and upload logic. If an affected
+  channel is edited without changing its decoded tone state, both original
+  reserved tone words are restored after encoding. Deliberately selecting a
+  new tone writes the stock valid CHIRP encoding.
+- Evidence: official CPS static trace of serial setup at `0x0040A650`, read at
+  `0x0040A910`, write at `0x0040AA50`, tone formatting at `0x00420060`, and
+  the main read/write maps at `0x004243C0` and `0x00424790`; plus the
+  2026-11-04 and 2026-11-15 reports from `[redacted-email]`. The reporter's
+  macOS download completed and saved a 32 KiB image, then channel decoding
+  failed on code `3777`.
+- Reporter image: unavailable. The reports did not include an attachment, so
+  the regression uses the pinned upstream image SHA-256
+  `ab44d24d89e95e01e717d1de9eb5b5f83e6e1e8a43153c5abc5867b005a346a7`
+  with the reported reserved word inserted into channel 1.
+- Offline validation: all 999 slots decode with the reserved word present,
+  editing another field preserves the original tone bytes, valid DCS `023`
+  still decodes and round-trips, and `0xFFFF` remains no tone. All 433 Python
+  tests pass.
+- Hardware validation: pending. The reporter must read the radio with the next
+  NewChirp build and compare the formerly failing channel with the radio.
+- Next milestone: reporter confirms the complete channel map opens, sends the
+  saved image, and verifies the affected channel's tone and frequency before
+  any upload.
 
 ### Wouxun KG-905G Plus
 
