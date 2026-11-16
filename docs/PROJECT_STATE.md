@@ -8,10 +8,15 @@ release requirements.
 
 ## Resume here
 
-- Linux `1.0.57` is being prepared from current `origin/main`. It adds the
+- Linux `1.0.57` is live from current `origin/main`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and includes
-  the latest macOS release-build ownership documentation. Build and release
-  verification will be recorded after publication.
+  the latest macOS release-build ownership documentation. Verification:
+  analyzer clean; 226 Flutter tests; 433 Python tests with two
+  fixture-dependent skips; max glibc `2.18`; package metadata and embedded
+  version `1.0.57` / `57`; DEB and AppImage Xvfb launch tests passed on Ubuntu
+  20.04; the final AppImage launched under host Wayland and XWayland; all
+  public downloads returned HTTP 200; and the Linux platform manifest reports
+  `1.0.57`.
 - macOS `1.0.56` is live from source commit `b037f65a`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and carries
   the KG-UV8D reserved-DCS compatibility work. Verification: embedded version
@@ -641,7 +646,7 @@ release requirements.
 - Branch: `main`
 - Windows `1.0.55` artifact source commit: `26589b92`
 - macOS `1.0.54` artifact source commit: `c55530b9`
-- Linux `1.0.56` is live from source commit `a33b20d3`
+- Linux `1.0.57` is live from source commit `437441f6`
 - Open pull requests: none
 - Checked-out source version: `1.0.57+57`
 - macOS builds are pinned to CocoaPods with
@@ -659,7 +664,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.54 |
 | Windows | 1.0.55 |
-| Linux | 1.0.56 |
+| Linux | 1.0.57 |
+
+Linux `1.0.57` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.57.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.57.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.57.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.57.pkg.tar.zst`
+- DEB: `48,522,980` bytes, SHA-256
+  `fa28f01a9609ef3e9d2ffa74a96c759e812499f26dea69f5e5b767e1320774c8`
+- RPM: `48,605,433` bytes, SHA-256
+  `8cee77ab108eaf963d42b1ebbe6a14d6195f8fcaff6fbbc5ef5dccdbb957ba44`
+- AppImage: `48,805,056` bytes, SHA-256
+  `e0d53ad143d63e06ccff566b655af1a99df79efad001dff6d559321c1d1bca5c`
+- Pacman: `47,470,886` bytes, SHA-256
+  `7c3a8240f301e75eeba413879e2a751b5cffbd73e6ad1314363d63f5e0eb8323`
+- Public HTTP checks returned `200 OK`
+- Server checksums matched the local artifacts
+- Linux platform manifest reports `1.0.57`
 
 Linux `1.0.56` artifacts:
 
