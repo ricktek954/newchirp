@@ -8,6 +8,21 @@ release requirements.
 
 ## Resume here
 
+- Windows `1.0.55` is live from source commit `26589b92`. It adds per-column
+  channel filters and exact frequency matching, bank-boundary visibility,
+  safer channel-location moves and removals, expanded marine/CB/UHF-CB
+  frequency references with printable PDFs, KG-UV8D reserved-DCS
+  compatibility, nicFW950 no-tone decoding, and corrected GMRS starter
+  bandwidths. Verification: installer metadata `1.0.55.0` / `1.0.55`;
+  release app `1.0.55+55`; bundled Python `3.13.15`; a clean runtime with no
+  `okf`/`tree_sitter` contamination; 256 CHIRP driver modules; bridge
+  `list-models` exit 0 with 596 models including `Wouxun_KG-UV8D`; matching
+  local/server/public SHA-256; public HTTP 200; and live manifest Windows
+  `1.0.55`. The installer remains unsigned. `flutter analyze lib test` is
+  clean. The full Flutter suite ran 221 passing tests with the five known
+  Windows-only sandbox/Help failures. The full Python suite ran 432 tests:
+  427 passed, 2 fixture-dependent tests skipped, and 3 Windows
+  temporary-file-lock helper errors.
 - Linux `1.0.56` is being prepared from current `origin/main`. It adds the
   KG-UV8D reserved-DCS compatibility override, treats nicFW950 all-ones
   subtones as no tone, corrects GMRS starter-channel bandwidths, and recovers
@@ -607,7 +622,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.54` artifact source commit: `c55530b9`
+- Windows `1.0.55` artifact source commit: `26589b92`
 - macOS `1.0.54` artifact source commit: `c55530b9`
 - Linux `1.0.55` is live from source commit `190eac83`
 - Open pull requests: none
@@ -626,7 +641,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.54 |
-| Windows | 1.0.54 |
+| Windows | 1.0.55 |
 | Linux | 1.0.55 |
 
 Linux `1.0.55` artifacts:
@@ -655,7 +670,26 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.54` artifact:
+Windows `1.0.55` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.55.exe`
+- Version/build: `1.0.55` / `55`
+- SHA-256:
+  `c38b7f98c3527e727d6997f62f5f16b31db0ad9241ed402cc21aa8a2098be13a`
+- Size: `55,333,952` bytes
+- Built from `26589b92`
+- Installer metadata `1.0.55.0` / `1.0.55`; release app `1.0.55+55`
+- Bundled Python `3.13.15`, 256 CHIRP driver modules, and a successful bridge
+  `list-models` run with 596 models including `Wouxun_KG-UV8D`
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains only the normal pip files, with no
+  `okf`/`tree_sitter` cache contamination
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.55`
+- Authenticode: not signed
+
+Windows `1.0.54` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.54.exe`
 - Version/build: `1.0.54` / `54`
@@ -1188,6 +1222,20 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.55` from source commit `26589b92`. The release adds
+  per-column filters, bank boundaries, safer channel-location handling,
+  expanded frequency references and PDFs, KG-UV8D reserved-DCS compatibility,
+  nicFW950 no-tone decoding, and GMRS starter bandwidth corrections.
+  Verification: installer metadata `1.0.55.0` / `1.0.55`, release app
+  `1.0.55+55`, bundled Python `3.13.15`, clean runtime, 256 CHIRP driver
+  modules, bridge `list-models` exit 0 with 596 models including
+  `Wouxun_KG-UV8D`, matching local/server/public SHA-256, public HTTP 200,
+  and live platform manifest Windows `1.0.55`. `flutter analyze lib test` is
+  clean. The full Flutter suite ran 221 passing tests with the five known
+  Windows-only sandbox/Help failures. The complete Python suite ran 432
+  tests: 427 passed, 2 fixture-dependent tests skipped, and 3 Windows
+  temporary-file-lock helper errors. The installer remains unsigned. At
+  Windows release time, macOS remained at `1.0.54` and Linux was at `1.0.55`.
 - Completed the remaining radio usability requests except the external
   RepeaterBook API blocker. Channel search now supports per-column filters and
   exact frequency matching, radio bank membership is visible in the channel
