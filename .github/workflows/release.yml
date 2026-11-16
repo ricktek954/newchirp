@@ -38,7 +38,7 @@ jobs:
           if-no-files-found: error
 
   macos:
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
