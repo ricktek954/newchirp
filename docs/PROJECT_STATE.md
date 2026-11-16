@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-15
+Last updated: 2026-11-16
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,11 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.56` is being prepared from current `origin/main`. It adds the
+  KG-UV8D reserved-DCS compatibility override, treats nicFW950 all-ones
+  subtones as no tone, corrects GMRS starter-channel bandwidths, and recovers
+  from macOS CSV save permission errors. Build and release verification will
+  be recorded after publication.
 - Linux `1.0.55` is live from the current `origin/main` plus the
   Ubuntu 20.04 release hardening. It fixes blank AppImages caused by mixing an
   old bundled GLVND loader with newer NVIDIA/Mesa drivers, clears vacated
@@ -606,7 +611,7 @@ release requirements.
 - macOS `1.0.54` artifact source commit: `c55530b9`
 - Linux `1.0.55` is live from source commit `190eac83`
 - Open pull requests: none
-- Checked-out source version: `1.0.55+55`
+- Checked-out source version: `1.0.56+56`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
