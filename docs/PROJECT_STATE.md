@@ -8,6 +8,10 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.57` is being prepared from current `origin/main`. It adds the
+  OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and includes
+  the latest macOS release-build ownership documentation. Build and release
+  verification will be recorded after publication.
 - macOS `1.0.56` is live from source commit `b037f65a`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and carries
   the KG-UV8D reserved-DCS compatibility work. Verification: embedded version
@@ -639,7 +643,7 @@ release requirements.
 - macOS `1.0.54` artifact source commit: `c55530b9`
 - Linux `1.0.56` is live from source commit `a33b20d3`
 - Open pull requests: none
-- Checked-out source version: `1.0.56+56`
+- Checked-out source version: `1.0.57+57`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
