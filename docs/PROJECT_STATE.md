@@ -8,6 +8,15 @@ release requirements.
 
 ## Resume here
 
+- macOS `1.0.56` is live from source commit `b037f65a`. It adds the
+  OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and carries
+  the KG-UV8D reserved-DCS compatibility work. Verification: embedded version
+  `1.0.56` / `56`; bundled FT-50 override sets `SERIAL_STOPBITS = 2`; bundled
+  bridge honors driver-level stop-bit overrides; focused FT-50 tests pass;
+  strict app and DMG signatures verify inside the mounted image; live manifest
+  reports macOS `1.0.56`; and local/server DMG SHA-256 both match
+  `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
+  Physical FT-50 upload/read-back validation is still pending.
 - Windows `1.0.55` is live from source commit `26589b92`. It adds per-column
   channel filters and exact frequency matching, bank-boundary visibility,
   safer channel-location moves and removals, expanded marine/CB/UHF-CB
