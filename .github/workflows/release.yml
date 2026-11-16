@@ -81,7 +81,7 @@ jobs:
         with:
           channel: stable
           flutter-version: '3.47.8'
-          cache: true
+          cache: false
       - name: Build Linux packages on Ubuntu 20.04 baseline
         shell: bash
         run: |
