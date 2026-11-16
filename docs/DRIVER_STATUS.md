@@ -44,6 +44,7 @@ Last updated: 2026-11-16
 | Baofeng GM-32 | `drivers/newchirp_gm32.py` | UV-32 clone serial, 115200 8N1 | Yes | Yes | Yes, including bank names | Experimental |
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng BF-V12D | `drivers/newchirp_baofeng_bfv12d.py` | CPS-derived P3107 clone serial, 9600 8N1 | Original-firmware sequence traced; hardware pending | Stock image/upload path | Stock channel decoder | Experimental |
+| Baofeng K67 Pro | `drivers/newchirp_baofeng_k67pro.py` | Shared K6/K63 CPS serial, 115200 8N1 + DTR/RTS | 1,000 channels + sparse full image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1 | 640 channels + 10 zones, offline-tested | Full image, offline-tested | Basic settings and zone names | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5RH | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -1199,6 +1200,48 @@ Last updated: 2026-11-16
   compare its image with CPS, then perform one controlled write/read-back.
   Supporting V1.19/V2.02 requires a working OEM capture or documented newer
   password challenge.
+
+### Baofeng K67 Pro
+
+- Maintainer: NewChirp driver recovered from the official shared K6/K63 CPS
+- Maintained driver: `drivers/newchirp_baofeng_k67pro.py`
+- Protocol notes: `docs/BAOFENG_K67PRO_PROTOCOL.md`
+- Official CPS: `BAOFENG_K6_CPS_1.1.2_20240913.zip`, SHA-256
+  `3f9c52ece3a8b6726fba4135b5a0f458b5d81f47d2e83af75045e82d8931b917`
+- Installer SHA-256:
+  `62b3cd09bedc8c5d789e293743363efe7434fec2fe631959954e3ca80d91162e`
+- Extracted `BF-K6 CPS.exe` SHA-256:
+  `a9017b8b840c4e00e9d575077dc2d44f465ccab2f30fba6dbb4c18e58f08e271`
+- Driver SHA-256:
+  `1f3cebadf66c80d1d6d32151189df55c258941810fc2edf5413b4a13963680fc`
+- Transport: 115200 8N1 with DTR and RTS asserted; entry
+  `PROGRAMBF-K6PROU`, ACK `06`, identity request `F`, 31-byte identity response
+  containing `K6PROU`, 64-byte addressed reads, and exit `E`
+- Image: `0xd040` bytes with sparse program ranges. The first 1,000
+  32-byte records map CHIRP memories 1-1000 to CPS indexes 0-999.
+- Implemented: receive/transmit frequencies, split and transmit-disabled
+  channels, independent CTCSS/DCS and polarity, GB2312 names, wide/narrow FM,
+  airband AM presentation, High/Low power, and scan skip. All unknown bytes
+  remain in the saved image.
+- Read/write policy: complete sparse read; uploads disabled pending physical
+  validation. The CPS write request and ACK are documented but not implemented.
+- Evidence: static IL analysis of the artifact-hashed CPS, covering serial
+  setup, handshake, read framing, sparse ranges, channel serialization,
+  frequency packing, tone tables, and flags. No CPS executable was run.
+- Model provenance caution: Baofeng's official page names the CPS K6/K63 and
+  has no official K67 Pro product entry. The K67 Pro association currently
+  relies on a third-party CPS tutorial, so exact model/firmware variants remain
+  unverified.
+- Offline validation: raw frequency vectors, 68-byte block framing, all sparse
+  ranges, channels 1 and 1000, CTCSS/DCS, airband AM, sparse image assembly,
+  registration, and read-only policy.
+- Hardware validation: none. No physical read, OEM capture, or reporter image
+  has been received.
+- Website catalog: listed as `K67 Pro (experimental)`; the browser Web
+  Programmer exposes a matching read-only K67 Pro profile.
+- Next milestone: obtain a physical read and compare the identity, multiple
+  channels, and saved CPS image before reviewing any separate write
+  implementation.
 
 ### Quansheng UV-K5 family
 
