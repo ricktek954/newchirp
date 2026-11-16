@@ -230,17 +230,19 @@ class BaofengK67ProRadio(chirp_common.CloneModeRadio,
         total = sum(end - start for start, end in READ_RANGES)
         current = 0
         self._identify()
-        for start, end in READ_RANGES:
-            for address in range(start, end, 0x40):
-                image[address:address + 0x40] = self._read_block(address)
-                current += 0x40
-                if self.status_fn:
-                    status = chirp_common.Status()
-                    status.msg = "Cloning from K67 Pro"
-                    status.cur = current
-                    status.max = total
-                    self.status_fn(status)
-        self.pipe.write(END_COMMAND)
+        try:
+            for start, end in READ_RANGES:
+                for address in range(start, end, 0x40):
+                    image[address:address + 0x40] = self._read_block(address)
+                    current += 0x40
+                    if self.status_fn:
+                        status = chirp_common.Status()
+                        status.msg = "Cloning from K67 Pro"
+                        status.cur = current
+                        status.max = total
+                        self.status_fn(status)
+        finally:
+            self.pipe.write(END_COMMAND)
         return memmap.MemoryMapBytes(bytes(image))
 
     def sync_in(self):

@@ -1213,7 +1213,7 @@ Last updated: 2026-11-16
 - Extracted `BF-K6 CPS.exe` SHA-256:
   `a9017b8b840c4e00e9d575077dc2d44f465ccab2f30fba6dbb4c18e58f08e271`
 - Driver SHA-256:
-  `1f3cebadf66c80d1d6d32151189df55c258941810fc2edf5413b4a13963680fc`
+  `5d1498c497bb7f598dd82046838680ecc679bc3eb6492afed4fdd7481591d0b8`
 - Transport: 115200 8N1 with DTR and RTS asserted; entry
   `PROGRAMBF-K6PROU`, ACK `06`, identity request `F`, 31-byte identity response
   containing `K6PROU`, 64-byte addressed reads, and exit `E`

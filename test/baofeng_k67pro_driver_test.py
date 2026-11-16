@@ -55,12 +55,13 @@ def _image():
 
 
 class FakeK67Serial:
-    def __init__(self):
+    def __init__(self, corrupt_address=None):
         self.image = _image()
         self.queue = bytearray()
         self.writes = []
         self.read_addresses = []
         self.sent_f = False
+        self.corrupt_address = corrupt_address
 
     @property
     def in_waiting(self):
@@ -89,9 +90,14 @@ class FakeK67Serial:
             address, length = struct.unpack(">HB", data[1:])
             self.read_addresses.append(address)
             payload = self.image[address:address + length]
+            returned_address = (
+                address + 0x40
+                if address == self.corrupt_address
+                else address
+            )
             self.queue.extend(
                 k67.READ_COMMAND
-                + struct.pack(">HB", address, length)
+                + struct.pack(">HB", returned_address, length)
                 + payload
             )
         return len(data)
@@ -192,6 +198,16 @@ class BaofengK67ProTest(unittest.TestCase):
         self.assertEqual(radio.get_memory(1).name, "K67 TEST")
         self.assertEqual(radio.get_memory(1000).freq, 446_000_000)
         self.assertEqual(radio.get_memory(1000).name, "CHANNEL 1000")
+
+    def test_failed_read_still_exits_program_mode(self):
+        serial = FakeK67Serial(corrupt_address=0x40)
+        radio = self._radio(serial)
+        radio.status_fn = lambda _status: None
+
+        with self.assertRaisesRegex(errors.RadioError, "returned block"):
+            radio.sync_in()
+
+        self.assertEqual(serial.writes[-1], b"E")
 
 
 if __name__ == "__main__":
