@@ -174,6 +174,31 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         self.assertEqual(serial.writes[0], b"\x02")
         self.assertEqual(serial.writes[-1], b"E")
 
+    def test_identity_request_is_retried_when_radio_enters_pc_mode_late(self):
+        class SlowIdentitySerial(FakeKpgSerial):
+            def __init__(self, image):
+                super().__init__(image)
+                self.identity_requests = 0
+
+            def write(self, data):
+                if bytes(data) == b"\x02":
+                    self.identity_requests += 1
+                    self.writes.append(bytes(data))
+                    if self.identity_requests >= 2:
+                        self._rx.extend(b"P350S\x00\xe2\x00")
+                    return len(data)
+                return super().write(data)
+
+        serial = SlowIdentitySerial(_synthetic_image())
+        radio = self.tk350(serial)
+        radio.status_fn = lambda _status: None
+
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+
+        self.assertEqual(serial.identity_requests, 2)
+        self.assertEqual(serial.writes[-1], b"E")
+
     def test_short_block_is_retried_then_fails(self):
         class ShortSerial(FakeKpgSerial):
             def write(self, data):

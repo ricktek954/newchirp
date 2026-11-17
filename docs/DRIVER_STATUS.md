@@ -1482,19 +1482,26 @@ Last updated: 2026-11-16
     `6b61db4739fc1e19d18f47171620bdbb3ced2decb63c4aca9aaa87abb970b981`
   - KPG-32D `SAMPLE.FDT`:
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
+- Driver SHA-256:
+  `4b0f2a04c8055c3b4aa7a7af1f5109f2e1e08a52e7aaad26d2a916fe22459f4d`
 - Transport: 9,600 baud, 8N1; `0x02` identity query, eight-byte
   family identity, `R <address:u16be> <length:u8>` block requests, `W`
   read-data status, `Z` fill status, and ACK/retry handling
 - Implemented: full raw-image retention, the 16-byte channel record
   layout, RX/TX frequency decoding for the 450-470 MHz band, and
-  four-character channel names
+  four-character channel names. The `0x02` identity request is retried up
+  to three times when the radio enters PC mode late or the first reply is
+  fragmented.
 - Read/write policy: read-only. Uploads remain disabled because the
   channel option fields, settings map, model-specific write protection,
   and final partial-block behavior have not been validated on hardware
 - Evidence: official CPS static traces plus the supplied KPG-23D/KPG-32D
   sample data. The identity/read request sequence was also observed in a
   controlled DOS VM. The response header after `W` remains classified as
-  a family-derived replay rule, not hardware capture.
+  a family-derived replay rule, not hardware capture. On 2026-11-17,
+  [redacted-email] reported zero identity bytes on both COM3 and COM4
+  with NewChirp 1.0.56 and TK-350 selected; the bounded retry covers a
+  late-ready radio without retrying memory writes.
 - NewChirp hardware validation: none
 - Next milestone: the requester performs complete reads on a TK-350 and
   TK-359, saves both images, and compares frequencies, names, power, and

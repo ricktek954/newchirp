@@ -39,6 +39,7 @@ CHANNEL_SIZE = 16
 MAX_CHANNELS = 160
 IMAGE_SIZE = 0x0E00
 READ_LIMIT = 2
+IDENTITY_ATTEMPTS = 3
 
 RX_BASE_450 = 0x4D18
 TX_BASE_450 = 0x6940
@@ -80,8 +81,35 @@ def _open_session(radio):
     if reset is not None:
         reset()
 
-    pipe.write(b"\x02")
-    identity = _read_exact(radio, 8, "reading the radio identity")
+    last_error = None
+    identity = None
+    for attempt in range(1, IDENTITY_ATTEMPTS + 1):
+        pipe.write(b"\x02")
+        try:
+            identity = _read_exact(
+                radio,
+                8,
+                "reading the radio identity",
+            )
+            break
+        except errors.RadioError as exc:
+            last_error = exc
+            LOG.warning(
+                "Kenwood %s identity attempt %i/%i failed: %s",
+                radio.MODEL,
+                attempt,
+                IDENTITY_ATTEMPTS,
+                exc,
+            )
+            if attempt < IDENTITY_ATTEMPTS:
+                if reset is not None:
+                    reset()
+                time.sleep(0.15)
+    if identity is None:
+        raise errors.RadioNoResponse(
+            "Kenwood %s returned no identity after %i attempts; last result: %s"
+            % (radio.MODEL, IDENTITY_ATTEMPTS, last_error)
+        )
     if not _identity_matches(identity, radio.MODEL):
         raise errors.RadioError(
             "Connected Kenwood is not recognized as a %s: %s"
