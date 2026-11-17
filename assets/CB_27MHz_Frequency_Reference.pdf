@@ -19,7 +19,7 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Oblique >>
 endobj
 7 0 obj
-<< /Length 48186 >>
+<< /Length 48229 >>
 stream
 0.965 0.976 0.969 rg
 0.00 0.00 612.00 792.00 re f
@@ -447,7 +447,7 @@ BT /F1 6.40 Tf 89.02 460.89 Td (27.155) Tj ET
 0.35 w
 132.00 456.60 m 132.00 468.00 l S
 0.082 0.129 0.114 rg
-BT /F1 6.40 Tf 136.00 460.89 Td (AM/SSB CB) Tj ET
+BT /F1 6.40 Tf 136.00 460.89 Td (Australia: local calling \(LSB\)) Tj ET
 0.855 0.875 0.867 RG
 0.35 w
 34.00 445.20 m 66.00 445.20 l S
@@ -903,7 +903,7 @@ BT /F1 6.40 Tf 89.02 244.29 Td (27.355) Tj ET
 0.35 w
 132.00 240.00 m 132.00 251.40 l S
 0.082 0.129 0.114 rg
-BT /F1 6.40 Tf 136.00 244.29 Td (AM/SSB CB) Tj ET
+BT /F1 6.40 Tf 136.00 244.29 Td (Australia: DX calling \(LSB\)) Tj ET
 0.855 0.875 0.867 RG
 0.35 w
 34.00 228.60 m 66.00 228.60 l S
@@ -2036,5 +2036,5 @@ xref
 trailer
 << /Size 8 /Root 1 0 R >>
 startxref
-48729
+48772
 %%EOF

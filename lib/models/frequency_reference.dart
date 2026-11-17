@@ -50,13 +50,47 @@ List<FrequencyReferenceRow> _australianUhfRows() {
                     ? 476.425 + (channel - 1) * 0.025
                     : 476.4375 + (channel - 41) * 0.025)
                 .toStringAsFixed(4),
-        notes: channel == 5 || channel == 35
-            ? 'Emergency / calling'
-            : const {22, 23, 61, 62, 63}.contains(channel)
-            ? 'Reserved telemetry / data; check current ACMA rules'
-            : 'Citizen Band Radio Service, UHF',
+        notes: _australianUhfNote(channel),
       ),
   ];
+}
+
+String _australianUhfNote(int channel) {
+  if (channel >= 1 && channel <= 8) {
+    return channel == 5
+        ? 'Emergency output; input Ch 35'
+        : 'Repeater output; input Ch ${channel + 30}';
+  }
+  if (channel >= 31 && channel <= 38) {
+    return channel == 35
+        ? 'Emergency input; output Ch 05'
+        : 'Repeater input; output Ch ${(channel - 30).toString().padLeft(2, '0')}';
+  }
+  if (channel >= 41 && channel <= 48) {
+    return const {44, 45}.contains(channel)
+        ? 'Repeater output; guard caution'
+        : 'Repeater output; input Ch ${channel + 30}';
+  }
+  if (channel >= 71 && channel <= 78) {
+    return const {74, 75}.contains(channel)
+        ? 'Repeater input; guard caution'
+        : 'Repeater input; output Ch ${(channel - 30).toString().padLeft(2, '0')}';
+  }
+  if (channel >= 61 && channel <= 63) {
+    return 'Guard channel; receive-only';
+  }
+  if (channel == 22 || channel == 23) {
+    return 'Data/telemetry only; no voice';
+  }
+  return switch (channel) {
+    10 => '4WD / off-road / parks',
+    11 => 'Call channel; then move',
+    18 => 'Caravan / camper convoy',
+    29 => 'Road: Pacific / Hume Hwy',
+    30 => 'UHF CB broadcasts / simplex',
+    40 => 'Australia-wide road / truck',
+    _ => 'General simplex',
+  };
 }
 
 List<FrequencyReferenceRow> _standardCbRows() {
@@ -107,11 +141,13 @@ List<FrequencyReferenceRow> _standardCbRows() {
       FrequencyReferenceRow(
         channel: '${index + 1}',
         frequency: mhz[index].toStringAsFixed(3),
-        notes: index == 8
-            ? 'Emergency / calling convention'
-            : index == 18
-            ? 'Common highway / travel convention'
-            : 'AM/SSB 27 MHz CB',
+        notes: switch (index) {
+          8 => 'Emergency / calling convention',
+          15 => 'Australia: local calling (LSB)',
+          18 => 'Common highway / travel convention',
+          34 => 'Australia: DX calling (LSB)',
+          _ => 'AM/SSB 27 MHz CB',
+        },
       ),
   ];
 }
@@ -469,8 +505,9 @@ final australianUhfCbReferencePlan = FrequencyReferencePlan(
     FrequencyReferenceGroup(
       title: 'Australian UHF CB channels',
       note:
-          '12.5 kHz channel spacing. Emergency and telemetry channel use is '
-          'regulated; verify the current ACMA class licence before operating.',
+          'Two interleaved 25 kHz grids offset by 12.5 kHz. Repeater outputs '
+          'are channels 1-8 and 41-48; inputs are 31-38 and 71-78, 750 kHz '
+          'higher. Verify the current ACMA class licence before operating.',
       rows: _australianUhfRows(),
     ),
   ],

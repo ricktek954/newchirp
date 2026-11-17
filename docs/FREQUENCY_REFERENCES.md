@@ -24,13 +24,17 @@ store a frequency.
 - ACMA Citizens Band Radio Service class licence
 - Ofcom UK CB radio rules
 - Includes the common 40-channel AM/SSB plan and the UK 27/81 FM band
+- Australian calling notes: 27.155 MHz LSB local calling and 27.355 MHz LSB
+  DX calling
 
 ## Australian UHF CB
 
 - Australian Communications and Media Authority CB radio class licence
-- 80 channels from 476.4250 to 477.4125 MHz with 12.5 kHz spacing
-- Emergency, calling, and telemetry/data channel restrictions must be checked
-  against the current ACMA class licence
+- 80 channels in two interleaved 25 kHz grids offset by 12.5 kHz
+- Repeater outputs on channels 1-8 and 41-48; paired inputs on channels
+  31-38 and 71-78, 750 kHz higher
+- Emergency, calling, telemetry/data, road/truck, and guard-channel
+  restrictions must be checked against the current ACMA class licence
 
 ## Generated assets
 

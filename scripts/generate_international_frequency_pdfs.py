@@ -100,12 +100,43 @@ def uhf_rows():
             if channel <= 40
             else 476.4375 + (channel - 41) * 0.025
         )
-        if channel in (5, 35):
-            note = "Emergency / calling"
-        elif channel in (22, 23, 61, 62, 63):
-            note = "Reserved telemetry / data"
+        if 1 <= channel <= 8:
+            note = (
+                "Emergency output; input Ch 35"
+                if channel == 5
+                else "Repeater output; input Ch %02i" % (channel + 30)
+            )
+        elif 31 <= channel <= 38:
+            note = (
+                "Emergency input; output Ch 05"
+                if channel == 35
+                else "Repeater input; output Ch %02i" % (channel - 30)
+            )
+        elif 41 <= channel <= 48:
+            note = (
+                "Repeater output; guard caution"
+                if channel in (44, 45)
+                else "Repeater output; input Ch %02i" % (channel + 30)
+            )
+        elif 71 <= channel <= 78:
+            note = (
+                "Repeater input; guard caution"
+                if channel in (74, 75)
+                else "Repeater input; output Ch %02i" % (channel - 30)
+            )
+        elif 61 <= channel <= 63:
+            note = "Guard channel; receive-only"
+        elif channel in (22, 23):
+            note = "Data/telemetry only; no voice"
         else:
-            note = "UHF CB"
+            note = {
+                10: "4WD / off-road / parks",
+                11: "Call channel; then move",
+                18: "Caravan / camper convoy",
+                29: "Road: Pacific / Hume Hwy",
+                30: "UHF CB broadcasts / simplex",
+                40: "Australia-wide road / truck",
+            }.get(channel, "General simplex")
         rows.append((str(channel), f"{frequency:.4f}", note))
     return rows
 
@@ -212,8 +243,12 @@ def main():
             f"{frequency:.3f}",
             "Emergency / calling"
             if index == 8
+            else "Australia: local calling (LSB)"
+            if index == 15
             else "Highway / travel"
             if index == 18
+            else "Australia: DX calling (LSB)"
+            if index == 34
             else "AM/SSB CB",
         )
         for index, frequency in enumerate(STANDARD_CB)

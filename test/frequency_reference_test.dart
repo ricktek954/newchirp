@@ -15,22 +15,36 @@ void main() {
 
     expect(cb27ReferencePlan.groups, hasLength(2));
     expect(cb27ReferencePlan.groups[0].rows, hasLength(40));
+    expect(
+      cb27ReferencePlan.groups[0].rows[15].notes,
+      'Australia: local calling (LSB)',
+    );
+    expect(
+      cb27ReferencePlan.groups[0].rows[34].notes,
+      'Australia: DX calling (LSB)',
+    );
     expect(cb27ReferencePlan.groups[1].rows, hasLength(40));
     expect(cb27ReferencePlan.groups[1].rows.first.frequency, '27.60125');
 
     expect(australianUhfCbReferencePlan.groups.single.rows, hasLength(80));
+    final australianRows =
+        australianUhfCbReferencePlan.groups.single.rows;
+    expect(australianRows[0].frequency, '476.4250');
+    expect(australianRows[1].frequency, '476.4500');
+    expect(australianRows[39].frequency, '477.4000');
+    expect(australianRows[40].frequency, '476.4375');
+    expect(australianRows[70].frequency, '477.1875');
     expect(
-      australianUhfCbReferencePlan.groups.single.rows
-          .firstWhere((row) => row.channel == '41')
-          .frequency,
-      '476.4375',
-    );
-    expect(
-      australianUhfCbReferencePlan.groups.single.rows
-          .firstWhere((row) => row.channel == '80')
-          .frequency,
+      australianRows.last.frequency,
       '477.4125',
     );
+    expect(australianRows[0].notes, 'Repeater output; input Ch 31');
+    expect(australianRows[30].notes, 'Repeater input; output Ch 01');
+    expect(australianRows[40].notes, 'Repeater output; input Ch 71');
+    expect(australianRows[70].notes, 'Repeater input; output Ch 41');
+    expect(australianRows[61].notes, 'Guard channel; receive-only');
+    expect(australianRows[21].notes, 'Data/telemetry only; no voice');
+    expect(australianRows[39].notes, 'Australia-wide road / truck');
   });
 
   test('each international reference has a printable PDF asset', () {
