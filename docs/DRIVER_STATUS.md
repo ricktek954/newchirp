@@ -24,7 +24,7 @@ Last updated: 2026-11-16
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
-| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Stock FT-50 encoder, offline round-trip | Stock FT-50 settings | Experimental compatibility override |
+| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; odd-split field write pending | Stock FT-50 settings | Experimental; partial hardware validation |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR | 960 channels + Pro map, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
@@ -220,10 +220,16 @@ Last updated: 2026-11-16
 - Offline validation: all active channels decode, editing a split channel
   round-trips through the stock encoder, and the bridge opens the FT-50
   transport with two stop bits.
-- Hardware validation: none
-- Next milestone: the reporter updates NewChirp, reads the radio again, saves
-  the decoded image, and verifies one odd-split channel against the radio
-  before any upload
+- Hardware validation: partial. On 2026-11-17, Mark reported that NewChirp
+  1.0.56 changed one character in channel 1's name and committed that write.
+  Every other channel remained identical to the original image. Changing the
+  character back and writing again changed only channel 1's name. This
+  verifies the 9600 8N2 upload transport, targeted channel write, radio
+  commit, and preservation of unchanged channels.
+- Next milestone: write one unused odd-split channel with RX frequency, split
+  TX frequency, tone, name, and power; power-cycle the radio, read it back,
+  and verify every field. Do not promote the entire driver to hardware-tested
+  until that field-level round-trip succeeds.
 
 ### Baofeng UV-5G Mini
 
