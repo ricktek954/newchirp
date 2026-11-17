@@ -77,7 +77,7 @@ Last updated: 2026-11-16
 | Icom ID-50 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, physical image verified | Disabled | Hidden | Experimental |
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
-| Kenwood TM-D710P / TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710/TM-D710G clone serial | Stock driver | Stock driver | Stock driver | Regional identity compatibility |
+| Kenwood TM-D710P / TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710/TM-D710G clone serial | Hardware-read via rear PC port on one TM-D710A | Hardware write succeeded with 8-character names | Stock driver | Identity compatibility; read-back pending |
 | Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation and transient checksum retry; offline-tested | Stock driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -1590,22 +1590,30 @@ Last updated: 2026-11-16
   KPG-56D and NewChirp reads, perform an unchanged NewChirp write, then compare
   both read-backs for all channel and group metadata.
 
-### Kenwood TM-D710P / TM-D710GP regional identity
+### Kenwood TM-D710P / TM-D710GP identity compatibility
 
 - Maintained file: `drivers/newchirp_tmd710.py`
 - Driver SHA-256:
   `63f9199a5d3ceca790228af78a3f782ac07e3133bed6c239e1531c40233f70a9`
 - Transport and layout: unchanged pinned CHIRP clone protocols
 - Implemented: accepts `D710GP` for the TM-D710G profile and `D710P` for the
-  TM-D710 profile
+  TM-D710 profile. The P suffix is treated as a compatible identity response,
+  not as proof of a regional hardware model.
 - Evidence: 2026-11-01 NewChirp 1.0.30 report from [redacted-email]; the
   complete command handshake reached `ID TM-D710GP` instead of `TM-D710G`
 - Additional evidence: 2026-11-15 NewChirp 1.0.54 reports from
   [redacted-email] reached `ID TM-D710P` while the non-G TM-D710 profile was
   selected
-- Hardware validation: read/write validation on this identity is pending
-- Next milestone: perform a complete read and controlled write with the
-  control-head connection required by the Kenwood programmer
+- Name policy: the TM-D710 accepts eight-character channel names. NewChirp
+  blocks an upload before radio I/O when an imported name is longer, instead
+  of silently truncating it.
+- Hardware validation: partial. On 2026-11-17, Robby reported that the control
+  head COM port could not read, while the rear PC port read successfully on
+  a TM-D710A. A RepeaterBook HMK file with names within the eight-character
+  limit wrote successfully. A file containing longer names did not write.
+- Next milestone: read the radio back after a short-name write, power-cycle,
+  and compare every channel. Confirm the accepted `D710P` suffix on another
+  firmware/unit before treating it as universal.
 
 ### Icom IC-746PRO
 
