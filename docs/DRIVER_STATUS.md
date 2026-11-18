@@ -1551,7 +1551,7 @@ Last updated: 2026-11-18
 - Maintained driver: `drivers/newchirp_kenwood_tk270g.py`; the
   `NewChirpTK270G` class supersedes CHIRP's `Kenwood_TK-270G` registration.
 - Driver SHA-256:
-  `6a6852dcffa67aa1f825706e430dc93f4585ee53b80fd7777b5ecec23b301201`
+  `e4c4abd6c2f0e25af029eaff59694e78bc6fd0c40cc3ce976e1ab0418e8d74ac`
 - Transport: pinned CHIRP Kenwood Series 60G clone serial at 9600 with even
   parity and one stop bit. KPG-56D statically configures `9600,N,8,2`; the
   live serial setting remains unchanged pending an OEM capture or physical
@@ -1573,7 +1573,9 @@ Last updated: 2026-11-18
   broken upstream boolean loop. Existing inversion handling for beat shift,
   compander, and busy-channel lockout is unchanged. A post-write bank-state
   check stops the upload before radio I/O if generated counts disagree with
-  the active channel records.
+  the active channel records. Before rebuilding those tables, upload now
+  replaces erased bank and bank-index sentinels with safe defaults: bank 1
+  and the channel's zero-based memory position.
 - Write recovery: if the radio rejects a data block with checksum status
   `0x15`, NewChirp resends the identical block up to three times. A persistent
   rejection closes programming mode and reports the block and attempt count.
@@ -1583,9 +1585,16 @@ Last updated: 2026-11-18
   the same decode/write path used by the bridge; all active bank assignments
   and bank indexes are retained and the generated channel/bank counts remain
   nonzero. A regression injects one block-51 checksum rejection and verifies
-  that the identical frame is retried before the session exits.
+  that the identical frame is retried before the session exits. Another
+  regression changes an active channel's bank index to the erased sentinel
+  128 and verifies that an unchanged upload normalizes it before preparing
+  the bank tables.
 - Field evidence: the 2026-11-15 report from [redacted-email] failed
   with `Bad checksum in block 51 write`.
+- Field evidence: the 2026-11-16 report from [redacted-email] downloaded
+  channel 24 with bank index 128. NewChirp 1.0.56 then rejected the unchanged
+  upload before radio I/O because validation ran against the unnormalized
+  image.
 - Hardware validation: none. No controlled NewChirp write/read-back has been
   performed on a TK-270G, and the OEM serial setting has not been compared on
   the wire.

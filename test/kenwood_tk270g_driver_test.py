@@ -227,6 +227,38 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
             self.assertEqual(int(radio._memobj.settings.banks), 4)
             self.assertEqual(int(radio._memobj.settings.channels), 36)
 
+    def test_upload_normalizes_erased_bank_index(self):
+        with tempfile.TemporaryDirectory() as temp:
+            image = Path(temp) / "Kenwood_TK-270G.img"
+            data = bytearray(
+                (SOURCE / "tests/images/Kenwood_TK-272G.img").read_bytes()
+            )
+            data[0xA7:0xAE] = b"P2700\x05\xff"
+            image.write_bytes(data)
+
+            serial = FakeTK270GSerial()
+            radio = self.radio_class(serial)
+            radio.load_mmap(str(image))
+            radio.status_fn = lambda _status: None
+            number = next(
+                index
+                for index, memory in enumerate(radio._memobj.memory, start=1)
+                if memory.rxfreq[0].get_raw(asbytes=True) != b"\xff"
+            )
+            channel = radio._memobj.memory[number - 1]
+            channel.bank = 1
+            channel.bnumb = 128
+
+            with mock.patch("time.sleep", return_value=None):
+                radio.sync_out()
+
+            self.assertEqual(int(radio._memobj.memory[number - 1].bank), 1)
+            self.assertEqual(
+                int(radio._memobj.memory[number - 1].bnumb),
+                number - 1,
+            )
+            self.assertEqual(serial.writes[-1], b"E")
+
     def test_transient_block_checksum_rejection_is_retried(self):
         with tempfile.TemporaryDirectory() as temp:
             image = Path(temp) / "Kenwood_TK-270G.img"

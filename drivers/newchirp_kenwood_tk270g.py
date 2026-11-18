@@ -33,6 +33,16 @@ def _extra_integer(memory, name):
     return None
 
 
+def _normalized_bank_metadata(channel, number):
+    bank = int(channel.bank)
+    bank_index = int(channel.bnumb)
+    if not 1 <= bank <= 128:
+        bank = 1
+    if not 0 <= bank_index <= 127:
+        bank_index = number - 1
+    return bank, bank_index
+
+
 @directory.register
 class NewChirpTK270G(tk760g.TK270G_Radios):
     """Kenwood TK-270G with safe NewChirp bank handling."""
@@ -52,14 +62,6 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
         _mem = self._memobj.memory[number - 1]
         raw = _mem.get_raw(asbytes=True)
         try:
-            # Decode invalid metadata without silently changing the image.
-            if (
-                _mem.rxfreq[0].get_raw(asbytes=True) != b"\xFF"
-                and int(_mem.bnumb) > 127
-            ):
-                _mem.bnumb = number - 1
-                _mem.bank = 1
-
             mem = chirp_common.Memory()
             mem.number = number
 
@@ -67,6 +69,7 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
                 mem.empty = True
                 return mem
 
+            bank, bank_index = _normalized_bank_metadata(_mem, number)
             mem.freq = int(_mem.rxfreq) * 10
             if _mem.get_raw(asbytes=True)[16] == 0xFF:
                 mem.offset = 0
@@ -92,9 +95,6 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
             chirp_common.split_tone_decode(mem, txtone, rxtone)
 
             mem.extra = RadioSettingGroup("extra", "Extra")
-            bank = int(_mem.bank)
-            if bank > 127 or bank == 0:
-                bank = 1
             mem.extra.append(
                 RadioSetting(
                     "bank",
@@ -103,9 +103,6 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
                 )
             )
 
-            bank_index = int(_mem.bnumb)
-            if bank_index > 127:
-                bank_index = number - 1
             mem.extra.append(
                 RadioSetting(
                     "bnumb",
@@ -229,6 +226,7 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
         self._fill(0xBB, b"Chirp")
         if self._memobj is None:
             self.process_mmap()
+        self._normalize_invalid_bank_metadata()
         self._prep_data()
         self._validate_bank_state()
 
@@ -273,6 +271,15 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
             raddr = count * tk760g.BLOCK_SIZE
 
         tk760g._close_radio(self)
+
+    def _normalize_invalid_bank_metadata(self):
+        """Replace erased bank sentinels before rebuilding the bank tables."""
+        for number, channel in enumerate(self._memobj.memory, start=1):
+            if channel.rxfreq[0].get_raw(asbytes=True) == b"\xFF":
+                continue
+            bank, bank_index = _normalized_bank_metadata(channel, number)
+            channel.bank = bank
+            channel.bnumb = bank_index
 
     def _validate_bank_state(self):
         active = []
