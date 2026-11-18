@@ -81,6 +81,8 @@ Last updated: 2026-11-18
 | Icom ID-52 | `drivers/newchirp_icom_id50_id52.py` | Icom `IcomCloneFormat3` serial, 9600 8N1 | Yes, transport verified | Disabled | Hidden | Experimental |
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
 | Kenwood TM-D710P / TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710/TM-D710G clone serial | Hardware-read via rear PC port on one TM-D710A | Hardware write succeeded with 8-character names | Stock driver | Identity compatibility; read-back pending |
+| Kenwood TM-V71A/E (clone mode) | `drivers/newchirp_tmv71.py` | MCP-2A clone serial, 8N1 RTS/CTS, probed baud, `0M PROGRAM` + 256-byte `R` blocks to 0x7EFF | Yes, replay-tested | Disabled | Body settings, Sky Command removed | Experimental read-only |
+| Kenwood TM-D710/V71/TH-D72/TH-D74 (live mode) | `drivers/newchirp_kenwood_live_cache.py` | CHIRP Kenwood live CAT | Stock driver | Fresh-connection write and erase fixed | Stock driver | Write fix offline-tested |
 | Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation and transient checksum retry; offline-tested | Stock driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -1607,6 +1609,62 @@ Last updated: 2026-11-18
 - Next milestone: with a saved radio image and physical TK-270G, compare
   KPG-56D and NewChirp reads, perform an unchanged NewChirp write, then compare
   both read-backs for all channel and group metadata.
+
+### Kenwood TM-V71A/E clone mode
+
+- Maintained file: `drivers/newchirp_tmv71.py` (`Kenwood_TM-V71_CloneMode`).
+  Protocol: `docs/KENWOOD_TMV71_PROTOCOL.md`
+- Source: Kenwood MCP-2A 3.22. Archive SHA-256
+  `901596b9b52d398131408d257c54dfb0548e79f269dfe830792a6e9ebce0e678`,
+  `MCP-2A.exe` SHA-256
+  `e7a71f0e58b32ec02f41f6da5f1b6b927177c0ba5a3b7a497c19cff23421bf48`
+- Transport: 8N1, RTS/CTS, DTR+RTS asserted. Pinned CHIRP Kenwood `ID` baud
+  probe, then `0M PROGRAM\r` → `0M\r`. Blocks `R hi lo 00` →
+  `W hi lo 00` + 256 bytes, with the echo validated; host `06` → radio `06`;
+  `E` → `06`. Reads `0x0000–0x7EFF` only; `0x7F00`+ (factory adjustment)
+  and `0x8000`+ (RC-D710 head) are never requested.
+- Implemented: the 1000 memories plus scan, WX and call specials, and body
+  settings from the pinned CHIRP TM-D710 layout, which matches MCP-2A's
+  shared map. Uppercase 8-character names. A TM-D710/RC-D710 identity is
+  rejected with a pointer to the TM-D710 driver.
+- Read/write policy: read-only. `sync_out` raises before sending any bytes.
+- Evidence: E1 static trace of `Communication` (ctor, `Seq_ID/TY/0M/E`,
+  `b(int,int)`, `Sequense_MemRead/MemWrite`) and E2 replay in
+  `test/kenwood_tmv71_driver_test.py` (full, fragmented, wrong echo, short
+  block, NAK, refused `0M`, TM-D710 identity, upload disabled, channel and
+  settings decode)
+- Physical-radio validation: none
+- Next milestone: a physical TM-V71A/E read compared with MCP-2A. Then port
+  the MCP-2A pre-write password and repeater rules and write from `0x0004`
+  with a controlled edit and read-back.
+
+### Kenwood live-mode write cache (TM-D710, TM-D710G, TM-V71, TH-D72, TH-D74, TM-V7)
+
+- Maintained file: `drivers/newchirp_kenwood_live_cache.py`
+- Transport: unchanged pinned CHIRP `kenwood_live` CAT commands (`ME`/`MN`
+  for the TM-D710 family), 1 s per-command timeout, hardware flow
+- Defect: stock `KenwoodLiveRadio.set_memory` runs
+  `del self._memcache[number]`. NewChirp writes through a newly opened radio
+  instance with an empty cache, so the first channel raised `KeyError(0)`,
+  which was reported as "Reported error: 0", and nothing was written. Stock
+  `erase_memory` also returned early for uncached slots, so channels deleted
+  in NewChirp were silently left on the radio.
+- Fix: `set_memory` no longer requires a cache entry, and no placeholder is
+  left behind if spec construction fails. `erase_memory` reads an uncached
+  slot first and erases it only when the radio holds a memory there.
+- Evidence: 2026-11-18 NewChirp 1.0.57 Windows report (TM-D710, COM8). The
+  read returned 51 channels. The write ended with five baud-probe `ID`
+  timeouts, a successful `ID TM-D710` at the sixth attempt, `AI`, and then
+  error `0`. Offline reproduction against the pinned CHIRP source raises
+  `KeyError('0')` without the override.
+- Offline validation: `test/kenwood_live_write_cache_test.py` covers a
+  fresh-connection write, a failed spec that leaves no placeholder, erasing an
+  occupied uncached slot, and skipping an empty uncached slot.
+- Not covered: TH-G71, TS-590 and TS-480 override these methods themselves
+  and keep their stock behaviour. Erase verification is not added to
+  `verify_live_write` (it still receives `cleared=[]`).
+- Hardware validation: none. Next milestone: the reporter writes one edited
+  and one deleted channel on a TM-D710, then reads both back.
 
 ### Kenwood TM-D710P / TM-D710GP identity compatibility
 
