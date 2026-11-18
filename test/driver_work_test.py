@@ -100,7 +100,7 @@ class DriverWorkLedgerTest(unittest.TestCase):
                 summary="Three bounded identity attempts.",
                 source="email",
                 source_ref="INBOX:728",
-                reporter="[redacted-email]",
+                reporter="Kenwood TK-350 owner",
                 driver_path="drivers/newchirp_kenwood_kpg23.py",
             )
             database.execute(
@@ -132,6 +132,28 @@ class DriverWorkLedgerTest(unittest.TestCase):
             self.assertEqual(row["model"], "TK-350")
             self.assertEqual(row["evidence_count"], 1)
             self.assertEqual(row["hardware_test_count"], 1)
+            database.close()
+
+    def test_contact_email_addresses_are_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            database = self.ledger.connect(Path(temp) / "work.sqlite3")
+            with self.assertRaisesRegex(
+                ValueError,
+                "Reporter email addresses are not allowed",
+            ):
+                self.ledger.add_work(
+                    database,
+                    "Kenwood",
+                    "TK-350",
+                    "bug",
+                    "Email privacy guard",
+                    reporter="reporter@example.com",
+                )
+            with self.assertRaisesRegex(
+                ValueError,
+                "Tester email addresses are not allowed",
+            ):
+                self.ledger.sanitize_tester("tester@example.com")
             database.close()
 
     def test_invalid_status_and_kind_are_rejected(self):

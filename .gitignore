@@ -39,6 +39,7 @@ migrate_working_dir/
 .tool/
 /build/
 /build_support/
+/build_support
 /coverage/
 /database/*.sqlite3-journal
 /database/*.sqlite3-shm

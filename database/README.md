@@ -34,6 +34,12 @@ changes:
 python3 scripts/driver_work.py export
 ```
 
+Run the repository privacy check before committing or exporting:
+
+```sh
+python3 scripts/check_private_data.py
+```
+
 Raw SQL is supported:
 
 ```sh
@@ -56,8 +62,12 @@ python3 scripts/driver_work.py add \
   --summary "Reporter sees no response on COM3 or COM4." \
   --source email \
   --source-ref INBOX:728 \
-  --reporter [redacted-email]
+  --reporter "Kenwood TK-350 owner"
 ```
+
+Do not store a reporter's email address in `reporter`. Use the mailbox UID or
+Message-ID in `source-ref` when correspondence needs to be correlated. The
+database rejects contact addresses in both reporter and tester fields.
 
 Append an event with an external reference:
 

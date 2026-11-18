@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS work_items (
     summary TEXT NOT NULL DEFAULT '',
     source TEXT NOT NULL DEFAULT '',
     source_ref TEXT NOT NULL DEFAULT '',
-    reporter TEXT NOT NULL DEFAULT '',
+    reporter TEXT NOT NULL DEFAULT '' CHECK (reporter NOT LIKE '%@%'),
     occurred_at TEXT,
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now')),
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS evidence (
 CREATE TABLE IF NOT EXISTS hardware_tests (
     id INTEGER PRIMARY KEY,
     work_item_id INTEGER NOT NULL REFERENCES work_items(id) ON DELETE CASCADE,
-    tester TEXT NOT NULL,
+    tester TEXT NOT NULL CHECK (tester NOT LIKE '%@%'),
     tested_at TEXT NOT NULL DEFAULT (date('now')),
     result TEXT NOT NULL CHECK (
         result IN ('pass', 'fail', 'partial', 'blocked')

@@ -62,6 +62,10 @@ MANUFACTURERS = (
     "Yaesu",
 )
 
+EMAIL_ADDRESS_RE = re.compile(
+    r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+)
+
 
 def today():
     return dt.date.today().isoformat()
@@ -72,6 +76,26 @@ def display_path(path):
         return str(Path(path).relative_to(ROOT))
     except ValueError:
         return str(path)
+
+
+def sanitize_reporter(value):
+    value = value.strip()
+    if EMAIL_ADDRESS_RE.search(value):
+        raise ValueError(
+            "Reporter email addresses are not allowed in the driver ledger; "
+            "use the mailbox UID or Message-ID in source-ref instead"
+        )
+    return value
+
+
+def sanitize_tester(value):
+    value = value.strip()
+    if EMAIL_ADDRESS_RE.search(value):
+        raise ValueError(
+            "Tester email addresses are not allowed in the driver ledger; "
+            "use the mailbox UID or Message-ID in the test details instead"
+        )
+    return value
 
 
 def connect(path, create=True):
@@ -204,6 +228,7 @@ def add_work(
         raise ValueError("Unknown work status: %s" % status)
     if priority not in WORK_PRIORITIES:
         raise ValueError("Unknown priority: %s" % priority)
+    reporter = sanitize_reporter(reporter)
     radio_id = get_or_create_radio(
         database,
         manufacturer,
@@ -740,6 +765,7 @@ def main():
             return
         if args.command == "test":
             tested_at = args.tested_at or today()
+            tester = sanitize_tester(args.tester)
             database.execute(
                 """
                 INSERT INTO hardware_tests (
@@ -747,13 +773,13 @@ def main():
                 )
                 VALUES (?, ?, ?, ?, ?)
                 """,
-                (work_id, args.tester, tested_at, args.result, args.details),
+                (work_id, tester, tested_at, args.result, args.details),
             )
             add_event(
                 database,
                 work_id,
                 "hardware_test",
-                "%s hardware test: %s" % (args.tester, args.result),
+                "%s hardware test: %s" % (tester, args.result),
                 details=args.details,
                 occurred_at=tested_at,
             )

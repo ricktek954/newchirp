@@ -173,6 +173,20 @@ For the current macOS development host:
   task. A completed build, fix, or release upload is not permission to send
   email.
 
+## Privacy and local-only data
+
+- Never store a reporter or tester email address in Git, the driver-work
+  database, generated documentation, or commit data. Use the mailbox UID,
+  Message-ID, or a non-identifying role such as `reporter`.
+- `scripts/check_private_data.py` is mandatory before every commit. The
+  checked-in `.githooks/pre-commit` hook runs it automatically when
+  `core.hooksPath=.githooks` is configured.
+- `build_support` is a machine-local symlink and must remain untracked.
+- When the user says "commit everything", inspect and include every intended
+  repository change while still excluding or redacting private data and
+  machine-local artifacts. Report any intentionally excluded private material
+  explicitly.
+
 ## Automatic freshness
 
 VS Code is configured to run `Watch OKF knowledge graph` when the workspace
