@@ -52,6 +52,25 @@ release requirements.
   reports macOS `1.0.56`; and local/server DMG SHA-256 both match
   `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
   Physical FT-50 upload/read-back validation is still pending.
+- Windows `1.0.57` is live from source commit `1d94b15f`, the same 1.0.57
+  source used by macOS. It adds the experimental Baofeng K67 Pro driver,
+  TK-270G erased-bank-index upload normalization, late TK-350 identity
+  retries, corrected Australian CB frequency references, the reported-driver
+  fixes, and the private-reporter-data guard, while retaining the FT-50,
+  KG-UV8D, nicFW950, and GMRS starter work. Verification: installer metadata
+  `1.0.57.0` / `1.0.57`; release app `1.0.57+57`; bundled Python `3.13.15`;
+  a clean runtime with no `okf`/`tree_sitter`/`tqdm`/`colorama`
+  contamination; 258 CHIRP driver modules; bridge `list-models` exit 0 with
+  597 models including `Wouxun_KG-UV8D`, `Yaesu_FT-50`, and
+  `Baofeng_K67_Pro_CPS_V1.1.2`; the bundled FT-50 override sets
+  `SERIAL_STOPBITS = 2`; all four frequency-reference PDFs; matching
+  local/server/public SHA-256; public HTTP 200; and live manifest Windows
+  `1.0.57`. Installer payload extraction confirmed the embedded runtime and
+  files; the installer remains unsigned. `flutter analyze lib test` is clean.
+  The full Flutter suite ran 221 passing tests with the five known
+  Windows-only sandbox/Help failures. The full Python suite ran 456 tests:
+  451 passed, 2 fixture-dependent tests skipped, and 3 Windows
+  temporary-file-lock helper errors.
 - Windows `1.0.56` is live from source commit `361da9e9`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and carries
   the KG-UV8D reserved-DCS, nicFW950 no-tone, and GMRS starter-bandwidth work.
@@ -677,8 +696,8 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.56` artifact source commit: `361da9e9`
-- macOS `1.0.56` artifact source commit: `b037f65a`
+- Windows `1.0.57` artifact source commit: `1d94b15f`
+- macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.58` is live from source commit `dcccfd9b`
 - Open pull requests: none
 - Checked-out source version: `1.0.58+58`
@@ -696,7 +715,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.57 |
-| Windows | 1.0.56 |
+| Windows | 1.0.57 |
 | Linux | 1.0.58 |
 
 Linux `1.0.58` artifacts:
@@ -805,7 +824,31 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.56` artifact:
+Windows `1.0.57` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.57.exe`
+- Version/build: `1.0.57` / `57`
+- SHA-256:
+  `51626a0f30e588f2d7d49f265108a9537a3a9d75b7a4e111ccb8f44b1e5c70e8`
+- Size: `55,349,277` bytes
+- Built from `1d94b15f`, the same 1.0.57 source used by macOS
+- Installer metadata `1.0.57.0` / `1.0.57`; release app `1.0.57+57`
+- Bundled Python `3.13.15`, 258 CHIRP driver modules, and a successful bridge
+  `list-models` run with 597 models including `Wouxun_KG-UV8D`,
+  `Yaesu_FT-50`, and `Baofeng_K67_Pro_CPS_V1.1.2`
+- Bundled FT-50 override sets `SERIAL_STOPBITS = 2`; the bridge applies
+  driver-level serial framing overrides
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains only the normal pip files, with no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination
+- Installer payload extraction confirmed the bundled runtime, driver tree,
+  bridge, and PDFs; the extracted runtime reported Python `3.13.15`
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.57`
+- Authenticode: not signed
+
+Windows `1.0.56` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.56.exe`
 - Version/build: `1.0.56` / `56`
@@ -1381,6 +1424,23 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.57` from source commit `1d94b15f`, the same source
+  used by the macOS 1.0.57 release. It adds the experimental Baofeng K67 Pro
+  driver, TK-270G bank-sentinel normalization, late TK-350 identity retries,
+  corrected Australian CB references, reported-driver fixes, and the
+  private-reporter-data guard. Verification: installer metadata `1.0.57.0` /
+  `1.0.57`, release app `1.0.57+57`, bundled Python `3.13.15`, clean runtime,
+  258 CHIRP driver modules, bridge `list-models` exit 0 with 597 models
+  including `Wouxun_KG-UV8D`, `Yaesu_FT-50`, and
+  `Baofeng_K67_Pro_CPS_V1.1.2`, FT-50 stop-bit override present, all four
+  frequency-reference PDFs, matching local/server/public SHA-256, public HTTP
+  200, and live platform manifest Windows `1.0.57`. Installer payload
+  extraction and runtime launch succeeded. `flutter analyze lib test` is
+  clean. The full Flutter suite ran 221 passing tests with the five known
+  Windows-only sandbox/Help failures. The complete Python suite ran 456
+  tests: 451 passed, 2 fixture-dependent tests skipped, and 3 Windows
+  temporary-file-lock helper errors. The installer remains unsigned. macOS
+  was also at `1.0.57`; Linux was at `1.0.58`.
 - Published Windows `1.0.56` from source commit `361da9e9`. The release adds
   the OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and carries
   the KG-UV8D reserved-DCS, nicFW950 no-tone, and GMRS starter-bandwidth work.
