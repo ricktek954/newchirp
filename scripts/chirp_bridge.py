@@ -641,16 +641,32 @@ def bridge_error_message(exc, command=None, model=None, port=None):
         )
     ):
         selected_port = str(port or "the selected COM port")
+        radio_name = model.split("_", 1)[1]
+        cps = "KPG-32D" if model == "Kenwood_TK-359" else "KPG-23D"
+        if model == "Kenwood_TK-359":
+            # KPG-32D manual, "Connecting the equipment", step 7.
+            pc_mode = (
+                "put the radio in PC mode: switch it off, connect the cable, "
+                "hold [LMP] and [CALL] while switching it on, and wait until "
+                "\"-PC-\" appears"
+            )
+        else:
+            # The KPG-23D files document no PC-mode key combination; the
+            # radio enters PC mode when a read starts from normal power-on.
+            pc_mode = (
+                "switch the radio on normally with the cable connected, "
+                "without holding any keys"
+            )
         message = (
-            "The Kenwood did not answer its identity request on %s. Use a "
-            "KPG-8 or KPG-22 programming cable, close KPG-32D, CHIRP, and "
-            "any terminal program, then put the radio in PC mode manually: "
-            "switch it off, connect the cable, hold [LMP] and [CALL] while "
-            "switching it on, and wait until \"-PC-\" appears. Then select "
-            "the COM port created by the cable and read again. If the OEM "
-            "KPG-32D software can read the radio with the same cable and "
-            "port, report that result with the cable model."
-            % selected_port
+            "The %s did not answer its identity request on %s. Use a "
+            "KPG-8 or KPG-22 compatible programming cable, close %s, CHIRP, "
+            "and any terminal program, then %s. If the display shows "
+            "\"PROG\" (flashing), the radio is in firmware-loading mode and "
+            "will not answer programming software: switch it off and start "
+            "again. Then select the COM port created by the cable and read "
+            "again. If the OEM %s software can read the radio with the same "
+            "cable and port, report that result with the cable model."
+            % (radio_name, selected_port, cps, pc_mode, cps)
         )
     trace = RADIO_TRACE.format()
     if trace:

@@ -45,3 +45,36 @@ if not getattr(
     False,
 ):
     ft50.FT50Radio.get_features = _get_features
+
+
+# Clearing a channel must produce a real empty slot.
+#
+# The FT-50 stores every channel's flag byte twice: flag[] at 0x001A and
+# flag_repeat[] at 0x079C. In the CHIRP reference dump from a physical radio
+# (tests/images/Yaesu_FT-50.img) both tables are identical: empty channels are
+# 0x00 and the in-use channel is 0x03 (used + mask). Stock set_memory clears
+# only flag[].used and returns before its copy to flag_repeat[], so a cleared
+# channel was uploaded as flag 0x02 / repeat 0x03 and stayed on the radio.
+# (2026-11-18 user report: blanked channels survived a write.)
+_ORIGINAL_SET_MEMORY = ft50.FT50Radio.set_memory
+
+
+def _set_memory(self, mem):
+    if not mem.empty:
+        return _ORIGINAL_SET_MEMORY(self, mem)
+    for table in (self._memobj.flag, self._memobj.flag_repeat):
+        flag = table[mem.number - 1]
+        flag.used = False
+        flag.mask = False
+        flag.skip = 0
+    return None
+
+
+_set_memory.newchirp_ft50_clears_both_flag_tables = True
+
+if not getattr(
+    ft50.FT50Radio.set_memory,
+    "newchirp_ft50_clears_both_flag_tables",
+    False,
+):
+    ft50.FT50Radio.set_memory = _set_memory

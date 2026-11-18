@@ -20,6 +20,31 @@ complete transport. For every operation, establish:
 All five must have evidence before a driver implementation is considered
 ready for physical testing.
 
+## When to reverse engineer a stock driver
+
+Stock CHIRP drivers were mostly built from serial captures, not from the OEM
+application, so they can carry defects that no offline test reveals. When a
+report is traced to a defect in a stock driver, locate the OEM CPS and use it
+as the oracle. Do not assume a report is a driver defect, and do not discard
+working hardware evidence.
+
+1. **Diagnose first.** Classify the report as user setup (wrong port, mode,
+   cable, or image for another model), NewChirp application or bridge, or
+   driver. Fix setup and application problems with replies and clearer error
+   messages; do not start an REA for them.
+2. **Driver defect in a stock driver:** locate the CPS, trace the failing
+   operation with this playbook, and fix it in a NewChirp override that cites
+   the CPS evidence. Keep the stock read/write paths unless the CPS shows
+   they are unsafe. A rewrite starts at E1/E2 and must stay read-only until
+   hardware validation, so replacing a hardware-proven write path with a new
+   one would regress users.
+3. **Write a full NewChirp driver** when the radio is unsupported, the stock
+   driver keeps producing defects, or users need features the stock driver
+   cannot provide.
+4. **Community firmware** (for example F4HWN) has no OEM CPS. Use the
+   firmware source and its published CHIRP module as the oracle.
+5. Offer each confirmed stock-driver fix upstream to CHIRP as well.
+
 ## Required artifacts
 
 Record these in a protocol document such as `docs/<RADIO>_PROTOCOL.md`:

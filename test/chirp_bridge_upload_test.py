@@ -1198,6 +1198,26 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertIn('"-PC-"', message)
         self.assertIn("COM3", message)
         self.assertIn("OEM KPG-32D", message)
+        self.assertIn('"PROG"', message)
+        self.assertIn("firmware-loading mode", message)
+
+    def test_tk350_identity_timeout_names_kpg23d_and_prog_mode(self):
+        message = bridge.bridge_error_message(
+            Exception(
+                "Radio returned 0 of 8 bytes while reading the radio identity"
+            ),
+            command="download",
+            model="Kenwood_TK-350",
+            port="COM2",
+        )
+
+        self.assertIn("The TK-350 did not answer", message)
+        self.assertIn("KPG-23D", message)
+        self.assertNotIn("KPG-32D", message)
+        self.assertNotIn("[LMP] and [CALL]", message)
+        self.assertIn("without holding any keys", message)
+        self.assertIn('"PROG"', message)
+        self.assertIn("COM2", message)
 
     def test_empty_live_radio_snapshot_can_be_filled_for_upload(self):
         from chirp import chirp_common

@@ -287,6 +287,18 @@ class UVK1F4HWNDriverTest(unittest.TestCase):
             radio.sync_in()
         self.assertEqual(fake.read_requests, [])
 
+    def test_newer_f4hwn_is_not_sent_to_stock_profile(self):
+        fake = _F4HWNFakeRadio(self._image(), firmware="F4HWN v7.0.0")
+        radio = self._radio(fake)
+
+        with self.assertRaises(Exception) as caught:
+            radio.sync_in()
+        text = str(caught.exception)
+        self.assertIn("supports F4HWN v6.3.x only", text)
+        self.assertIn("Do not use the stock", text)
+        self.assertNotIn("7.03.x", text)
+        self.assertEqual(fake.read_requests, [])
+
 
 if __name__ == "__main__":
     unittest.main()

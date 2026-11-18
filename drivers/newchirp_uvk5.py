@@ -254,10 +254,20 @@ def _f4hwn_sayhello(serport):
 
 def _f4hwn_require_firmware(firmware):
     if not _f4hwn_firmware_supported(firmware):
+        reported = str(firmware or "")
+        if reported.upper().startswith("F4HWN"):
+            hint = (
+                "NewChirp supports F4HWN v6.3.x only; this F4HWN version's "
+                "memory layout is not supported yet. Do not use the stock "
+                "UV-K1 model with F4HWN firmware."
+            )
+        else:
+            hint = (
+                "Select the stock UV-K1 model for Quansheng firmware 7.03.x."
+            )
         raise errors.RadioError(
             "This profile requires F4HWN v6.3.x firmware; the radio reports "
-            "%r. Select the stock UV-K1 model for firmware 7.03.x."
-            % firmware
+            "%r. %s" % (firmware, hint)
         )
 
 
