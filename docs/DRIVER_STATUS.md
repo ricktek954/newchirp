@@ -438,6 +438,12 @@ Last updated: 2026-11-18
 - Hardware validation: Radio-Club Cyrano reported real FTM-7250D programming
   before this correction. A physical Low/Mid/High write and radio-display check
   after the fix is pending.
+- Follow-up: the 2026-11-18 report confirmed that removed channels still
+  survived an upload and that transmit-power controls disappeared after a CSV
+  replacement. The CSV path incorrectly discarded the selected radio's
+  capability set, which hid power controls on every channel. Full-image
+  uploads now also derive their clear set from every in-range location absent
+  from the active library instead of relying only on tracked removals.
 - Next milestone: the reporter verifies power labels on a harmless channel,
   then reuses the corrected image to confirm removed memory slots are erased.
 

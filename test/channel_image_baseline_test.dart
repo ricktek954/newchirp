@@ -48,6 +48,31 @@ void main() {
     );
   });
 
+  test('full upload clears every absent in-range location', () {
+    final channels = [
+      _channel(1, 'A'),
+      _channel(4, 'D'),
+      _channel(3, 'C')..cleared = true,
+    ];
+
+    expect(
+      clearedLocationsForUpload(
+        channels: channels,
+        existingCleared: const [2],
+        minimum: 1,
+        maximum: 6,
+      ),
+      {2, 3, 5, 6},
+    );
+    expect(
+      clearedLocationsForUpload(
+        channels: channels,
+        existingCleared: const [2],
+      ),
+      {2},
+    );
+  });
+
   test('match follows the stored image baseline', () {
     final channels = [_channel(1, 'A')];
     final baseline = ChannelImageBaseline(

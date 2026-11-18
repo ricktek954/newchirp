@@ -195,6 +195,11 @@ release requirements.
   a replacement channel library, hides transmit power for TX-off channels,
   and opens Save As in the imported CSV directory. Physical power-level
   validation on the reporter's radio remains pending.
+- The next FTM-7250D report showed that power controls still disappeared after
+  opening a CSV and that removed channels still survived programming. The CSV
+  replacement path now retains the selected radio capabilities, and full-image
+  uploads clear every in-range location missing from the active library rather
+  than depending on an incomplete removal history.
 - The Help menu now offers **Report a problem…** at any time. It opens the
   existing diagnostic report form even when the current page has no error;
   the form was relabeled from error report to bug report.
