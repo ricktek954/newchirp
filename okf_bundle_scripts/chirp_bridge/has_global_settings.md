@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-16T11:29:53Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: chirp_bridge/has_global_settings
 language: python
 ---
@@ -29,7 +29,7 @@ def has_global_settings(radio)
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 2420–2421 in `chirp_bridge.py`
+Lines 2436–2437 in `chirp_bridge.py`
 
 ## Relationships
 

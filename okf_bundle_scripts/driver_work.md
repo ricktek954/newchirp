@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Module"
   - "module:driver_work.py"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T08:11:58Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: driver_work
 language: python
 ---
@@ -29,6 +29,8 @@ Manufacturer/model work ledger for NewChirp radio support.
 |------|--------|
 | related | [today](/driver_work/today.md) |
 | related | [display_path](/driver_work/display_path.md) |
+| related | [sanitize_reporter](/driver_work/sanitize_reporter.md) |
+| related | [sanitize_tester](/driver_work/sanitize_tester.md) |
 | related | [connect](/driver_work/connect.md) |
 | related | [manufacturer_and_model](/driver_work/manufacturer_and_model.md) |
 | related | [get_or_create_radio](/driver_work/get_or_create_radio.md) |

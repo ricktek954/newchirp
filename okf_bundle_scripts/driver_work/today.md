@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:driver_work.py"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T08:11:58Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: driver_work/today
 language: python
 ---
@@ -23,7 +23,7 @@ def today()
 ```
 
 ## Source
-Lines 66–67 in `driver_work.py`
+Lines 70–71 in `driver_work.py`
 
 ## Relationships
 

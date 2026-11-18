@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T10:31:27Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: main/buildHelpMenu
 language: dart
 ---
@@ -23,7 +23,7 @@ Widget_buildHelpMenu(BuildContext context, {required bool iconOnly})
 ```
 
 ## Source
-Lines 7690–7690 in `main.dart`
+Lines 7695–7695 in `main.dart`
 
 ## Relationships
 

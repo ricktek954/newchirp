@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:driver_work.py"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T08:11:58Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: driver_work/add_event
 language: python
 ---
@@ -35,7 +35,7 @@ def add_event(database, work_id, event_type, summary)
 | `summary` | `—` | `—` |
 
 ## Source
-Lines 154–181 in `driver_work.py`
+Lines 178–205 in `driver_work.py`
 
 ## Relationships
 

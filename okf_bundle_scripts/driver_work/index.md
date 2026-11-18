@@ -13,6 +13,8 @@
 - [manufacturer_and_model](manufacturer_and_model.md)
 - [print_work_rows](print_work_rows.md)
 - [query_work](query_work.md)
+- [sanitize_reporter](sanitize_reporter.md)
+- [sanitize_tester](sanitize_tester.md)
 - [show_work](show_work.md)
 - [status_from_ledger](status_from_ledger.md)
 - [sync_driver_status](sync_driver_status.md)

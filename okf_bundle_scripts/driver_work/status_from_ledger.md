@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:driver_work.py"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T08:11:58Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: driver_work/status_from_ledger
 language: python
 ---
@@ -29,7 +29,7 @@ def status_from_ledger(value)
 | `value` | `—` | `—` |
 
 ## Source
-Lines 263–273 in `driver_work.py`
+Lines 288–298 in `driver_work.py`
 
 ## Relationships
 

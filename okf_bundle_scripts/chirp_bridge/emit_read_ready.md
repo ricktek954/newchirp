@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-16T11:29:53Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: chirp_bridge/emit_read_ready
 language: python
 ---
@@ -36,7 +36,7 @@ Tell the user when a manual PTT-triggered clone read can begin.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1740–1749 in `chirp_bridge.py`
+Lines 1756–1765 in `chirp_bridge.py`
 
 ## Relationships
 

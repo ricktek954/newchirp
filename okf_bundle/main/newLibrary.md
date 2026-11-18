@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T10:31:27Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: main/newLibrary
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_newLibrary_newLibrary
 ```
 
 ## Source
-Lines 2390–2390 in `main.dart`
+Lines 2389–2389 in `main.dart`
 
 ## Relationships
 

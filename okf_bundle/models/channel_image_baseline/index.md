@@ -14,5 +14,6 @@
 - [channelLibraryWriteReady](channelLibraryWriteReady.md)
 - [channelListSignature](channelListSignature.md)
 - [clearedLocationsAfterReplacement](clearedLocationsAfterReplacement.md) — Cleared slots to retain when replacing the current channel library.
+- [clearedLocationsForUpload](clearedLocationsForUpload.md) — All radio locations that must be blank for the current library to match.
 - [markDirty](markDirty.md)
 - [read](read.md)

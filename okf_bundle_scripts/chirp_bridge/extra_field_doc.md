@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-16T11:29:53Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: chirp_bridge/extra_field_doc
 language: python
 ---
@@ -36,7 +36,7 @@ Return CHIRP's documentation or a concise fallback for common terms.
 | `setting` | `—` | `—` |
 
 ## Source
-Lines 988–997 in `chirp_bridge.py`
+Lines 1004–1013 in `chirp_bridge.py`
 
 ## Relationships
 

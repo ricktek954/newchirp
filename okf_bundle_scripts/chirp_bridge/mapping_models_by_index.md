@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:chirp_bridge.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-16T11:29:53Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: chirp_bridge/mapping_models_by_index
 language: python
 ---
@@ -29,7 +29,7 @@ def _mapping_models_by_index(radio)
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1853–1857 in `chirp_bridge.py`
+Lines 1869–1873 in `chirp_bridge.py`
 
 ## Relationships
 

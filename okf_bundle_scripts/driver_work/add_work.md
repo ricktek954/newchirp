@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:driver_work.py"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T08:11:58Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: driver_work/add_work
 language: python
 ---
@@ -37,13 +37,14 @@ def add_work(database, manufacturer, model, kind, title)
 | `title` | `—` | `—` |
 
 ## Source
-Lines 184–260 in `driver_work.py`
+Lines 208–285 in `driver_work.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [driver_work](/driver_work.md) |
+| calls | [sanitize_reporter](/driver_work/sanitize_reporter.md) |
 | calls | [get_or_create_radio](/driver_work/get_or_create_radio.md) |
 | calls | [add_event](/driver_work/add_event.md) |
 | called_by | [main](/driver_work/main.md) |

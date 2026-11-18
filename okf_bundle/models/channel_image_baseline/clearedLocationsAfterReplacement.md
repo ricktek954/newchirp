@@ -11,7 +11,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T13:46:33Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: models/channel_image_baseline/clearedLocationsAfterReplacement
 language: dart
 ---

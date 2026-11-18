@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T10:31:27Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: main/TransferOverlayState
 language: dart
 ---
@@ -29,7 +29,7 @@ class _TransferOverlayState
 - `build`
 
 ## Source
-Lines 6933–7051 in `main.dart`
+Lines 6938–7056 in `main.dart`
 
 ## Relationships
 

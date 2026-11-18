@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T10:31:27Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: main/cancelTransfer
 language: dart
 ---
@@ -23,7 +23,7 @@ void_cancelTransfer()
 ```
 
 ## Source
-Lines 3767–3767 in `main.dart`
+Lines 3772–3772 in `main.dart`
 
 ## Relationships
 

@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:driver_work.py"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T08:11:58Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: driver_work/show_work
 language: python
 ---
@@ -31,7 +31,7 @@ def show_work(database, work_id)
 | `work_id` | `—` | `—` |
 
 ## Source
-Lines 419–508 in `driver_work.py`
+Lines 444–533 in `driver_work.py`
 
 ## Relationships
 

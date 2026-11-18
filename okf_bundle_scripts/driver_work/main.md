@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:driver_work.py"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T08:11:58Z"
+timestamp: "2026-11-18T20:33:29Z"
 concept_id: driver_work/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 583–792 in `driver_work.py`
+Lines 608–818 in `driver_work.py`
 
 ## Relationships
 
@@ -39,5 +39,6 @@ Lines 583–792 in `driver_work.py`
 | calls | [add_work](/driver_work/add_work.md) |
 | calls | [export_markdown](/driver_work/export_markdown.md) |
 | calls | [add_event](/driver_work/add_event.md) |
+| calls | [sanitize_tester](/driver_work/sanitize_tester.md) |
 | calls | [print_work_rows](/driver_work/print_work_rows.md) |
 | calls | [today](/driver_work/today.md) |
