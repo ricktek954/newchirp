@@ -24,6 +24,16 @@ release requirements.
   20.04; the final AppImage launched under host Wayland and XWayland; the
   package payloads omit GLVND/EGL/GLES loaders; all public downloads returned
   HTTP 200; and the Linux platform manifest reports `1.0.58`.
+- macOS `1.0.57` is live from source commit `1d94b15f` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It carries the
+  TK-270G erased-bank-index upload normalization and the sanitized driver
+  work ledger. Verification: analyzer clean; 226 Flutter tests; 456 Python
+  tests with two fixture-dependent skips; embedded version `1.0.57` / `57`;
+  arm64 and x86_64 Python `3.13.15`; 258 CHIRP driver modules; catalog
+  `list-models` returned 597 radios; strict app/DMG signatures; Apple
+  notarization and stapling; Gatekeeper acceptance; launch smoke test; and
+  matching local, server, and public SHA-256. Notarization submission:
+  `143a2885-b3ab-478b-a263-e5e02a0f5cea`.
 - Linux `1.0.57` is live from current `origin/main`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and includes
   the latest macOS release-build ownership documentation. Verification:
@@ -680,7 +690,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.56 |
+| macOS | 1.0.57 |
 | Windows | 1.0.56 |
 | Linux | 1.0.58 |
 
@@ -705,6 +715,20 @@ Linux `1.0.58` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.58`
+
+macOS `1.0.57` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.57.dmg`
+- Version/build: `1.0.57` / `57`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `6368e8216fb37764f30c5cacf82204364167d344834b7b51a461c40f12cc174b`
+- Size: `82,656,870` bytes
+- Built from `1d94b15f`
+- Notarization submission: `143a2885-b3ab-478b-a263-e5e02a0f5cea`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains the TK-270G erased-bank-index upload fix
+- Local, server, and public-download checksums matched the final stapled DMG
 
 Linux `1.0.57` artifacts:
 
