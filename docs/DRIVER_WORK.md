@@ -77,6 +77,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: UV-17-family serial through the UV-28 Plus profile, 115200 8N1. Read: UV-28 Plus profile, offline fixture round-trip. Write: Stock UV-28 Plus policy. Settings: Stock UV-28 Plus policy. Ledger status: Experimental vendor alias; hardware validation pending.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:55
 
+### UV-32
+
+- **#82 bug | awaiting_user | high:** Channels 52-54 lose stored CTCSS during decode
+  NewChirp 1.0.56 decodes channels 52-54 with no tone, while RT Systems UV-32 Programmer 5.00.29 shows CTCSS 103.5, 103.5, and 206.5. The exported CSV alone does not contain the raw tone words.
+  Source: `email` INBOX:744
+
 ### UV-5G Mini
 
 - **#32 maintenance | experimental | normal:** Current driver status
