@@ -14,6 +14,11 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.58` is being prepared from current `origin/main`. It adds the
+  experimental Baofeng K67 Pro driver, TK-270G bank-sentinel normalization,
+  late TK-350 identity retries, corrected Australian CB frequency references,
+  the latest reported-driver fixes, and the private-reporter-data guard. Build
+  and release verification will be recorded after publication.
 - Linux `1.0.57` is live from current `origin/main`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and includes
   the latest macOS release-build ownership documentation. Verification:
@@ -656,7 +661,7 @@ release requirements.
 - macOS `1.0.56` artifact source commit: `b037f65a`
 - Linux `1.0.57` is live from source commit `437441f6`
 - Open pull requests: none
-- Checked-out source version: `1.0.57+57`
+- Checked-out source version: `1.0.58+58`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
