@@ -22,9 +22,18 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2
 
+- **#84 bug | awaiting_user | high:** Upload receives one-byte response after successful read
+  NewChirp 1.0.57 read 21 channels from the radio, then the unchanged upload stopped on two 16-byte commands with incomplete one-byte responses.
+  Source: `email` INBOX:718
 - **#27 maintenance | experimental | normal:** Current driver status
   Transport: UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1. Read: 640 channels + 10 zones, offline-tested. Write: Full image, offline-tested. Settings: Basic settings and zone names. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:51
+
+### 5RX
+
+- **#89 bug | awaiting_user | normal:** No response on macOS serial adapter
+  NewChirp 1.0.56 received no response to its seven-byte identity command on a macOS usbserial adapter. Confirm the radio mode, cable voltage, adapter driver, and OEM CPS behavior.
+  Source: `email` INBOX:736
 
 ### BF-V12D
 
@@ -40,6 +49,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#24 maintenance | experimental | normal:** Current driver status
   Transport: CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS. Read: Stock CHIRP driver; receive-only airband accepted. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:48
+- **#91 release | awaiting_user | normal:** Windows SmartScreen cancels update download
+  A Windows 11 user reports that the new-version download is cancelled because the installer is not commonly downloaded. Collect the exact browser warning and downloaded filename; no radio driver defect is indicated.
+  Source: `email` INBOX:739
 
 ### GM-21
 
@@ -52,6 +64,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### GM-32
 
+- **#86 bug | awaiting_user | high:** GMRS repeater TX and RX tones decode blank
+  NewChirp 1.0.57 read 33 channels but omitted TX and RX tones on a GMRS repeater channel. Capture raw NewChirp .img and CPS source data for the same unmodified channel.
+  Source: `email` INBOX:725
 - **#23 maintenance | experimental | normal:** Current driver status
   Transport: UV-32 clone serial, 115200 8N1. Read: Yes. Write: Yes. Settings: Yes, including bank names. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:47
@@ -216,6 +231,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#75 bug | fix_committed | high:** Transient block checksum rejection
   Retry the identical block up to three times, then close programming mode.
   Source: `email triage` 2026-11-16
+- **#83 bug | fix_committed | high:** Upload rejects erased bank index sentinel
+  A downloaded image containing bank index 128 on an active channel is rejected during unchanged upload before radio I/O. Normalize erased bank metadata before rebuilding bank tables.
+  Source: `email` INBOX:723
 - **#60 maintenance | experimental | normal:** Current driver status
   Transport: Kenwood Series 60G clone serial, 9600 8E1. Read: NewChirp decode with raw-preserving invalid-index normalization. Write: NewChirp write path with bank-state validation and transient checksum retry; offline-tested. Settings: Stock driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:84
@@ -332,6 +350,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: OEM CPS v1.00.36, 57,600 8N1, DTR/RTS. Read: Dynamic five-block `0x5000` image, offline-tested. Write: Mapped 64-byte blocks, offline-tested. Settings: Stock V2 decoder. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:65
 
+### GM-30
+
+- **#88 bug | awaiting_user | normal:** Programming mode returns empty response
+  Two GM-30 radios program successfully, but the third returns an empty response to PSEARCH and programming entry on COM7. Compare the same cable and OEM CPS against the failing radio.
+  Source: `email` INBOX:734
+
 ### GS-5B 1.XX
 
 - **#45 maintenance | experimental | normal:** Current driver status
@@ -352,6 +376,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: iRadio/Iradio clone serial, 115200 8N1 + DTR. Read: 1,024 channels + 256 zones, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:33
 
+### RT-880G
+
+- **#87 bug | awaiting_user | normal:** No response from radio
+  Six five-byte read commands received no response from NewChirp 1.0.56 on COM3. Confirm the cable appears as a USB serial device, test the OEM CPS, and report the adapter driver/provider.
+  Source: `email` INBOX:733
+
 ### RT-950
 
 - **#7 maintenance | experimental | normal:** Current driver status
@@ -360,6 +390,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### RT-950 Pro
 
+- **#85 bug | awaiting_user | high:** Stock firmware image aborts on invalid packed frequency
+  The read completed and produced an image, but channel decoding stopped at a packed-frequency byte 0xFF. A raw image is required to distinguish empty records from a Pro layout mismatch.
+  Source: `email` INBOX:720
 - **#8 maintenance | experimental | normal:** Current driver status
   Transport: RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR. Read: 960 channels + Pro map, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:32
@@ -386,6 +419,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### RA89
 
+- **#90 bug | awaiting_user | normal:** No response to handshake
+  NewChirp 1.0.57 received no response to the TYT handshake on Linux /dev/ttyUSB0. Confirm the cable model and whether the OEM CPS can read the radio.
+  Source: `email` INBOX:738
 - **#64 maintenance | experimental | normal:** Current driver status
   Transport: OEM addressed blocks, 57,600 8N1, DTR/RTS on. Read: 200 channels + core settings. Write: Yes, offline-tested. Settings: Core settings and startup text. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:88
