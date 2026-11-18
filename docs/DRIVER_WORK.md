@@ -517,7 +517,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### FTM-7250D
 
-- **#92 bug | investigating | high:** Power controls disappear after CSV import and stale channels remain
+- **#92 bug | fix_committed | high:** Power controls disappear after CSV import and stale channels remain
   After a CSV library replacement, radio capabilities were discarded, hiding transmit power across every band. Full-image upload also relied on an incomplete cleared-location set, so removed channels could remain in the radio image.
   Source: `email` INBOX:746
 - **#1 maintenance | experimental | normal:** Current driver status
