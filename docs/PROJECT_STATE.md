@@ -14,11 +14,16 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
-- Linux `1.0.58` is being prepared from current `origin/main`. It adds the
+- Linux `1.0.58` is live from source commit `dcccfd9b`. It adds the
   experimental Baofeng K67 Pro driver, TK-270G bank-sentinel normalization,
   late TK-350 identity retries, corrected Australian CB frequency references,
-  the latest reported-driver fixes, and the private-reporter-data guard. Build
-  and release verification will be recorded after publication.
+  the latest reported-driver fixes, and the private-reporter-data guard.
+  Verification: analyzer clean; 226 Flutter tests; 456 Python tests with two
+  fixture-dependent skips; max glibc `2.18`; package metadata and embedded
+  version `1.0.58` / `58`; DEB and AppImage Xvfb launch tests passed on Ubuntu
+  20.04; the final AppImage launched under host Wayland and XWayland; the
+  package payloads omit GLVND/EGL/GLES loaders; all public downloads returned
+  HTTP 200; and the Linux platform manifest reports `1.0.58`.
 - Linux `1.0.57` is live from current `origin/main`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and includes
   the latest macOS release-build ownership documentation. Verification:
@@ -659,7 +664,7 @@ release requirements.
 - Branch: `main`
 - Windows `1.0.56` artifact source commit: `361da9e9`
 - macOS `1.0.56` artifact source commit: `b037f65a`
-- Linux `1.0.57` is live from source commit `437441f6`
+- Linux `1.0.58` is live from source commit `dcccfd9b`
 - Open pull requests: none
 - Checked-out source version: `1.0.58+58`
 - macOS builds are pinned to CocoaPods with
@@ -677,7 +682,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.56 |
 | Windows | 1.0.56 |
-| Linux | 1.0.57 |
+| Linux | 1.0.58 |
+
+Linux `1.0.58` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.58.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.58.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.58.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.58.pkg.tar.zst`
+- DEB: `48,524,540` bytes, SHA-256
+  `2869589c016a788a3fa17d334953812a61b1d317a5b103c2175435172e6d14ac`
+- RPM: `48,610,864` bytes, SHA-256
+  `808d58d030094d6b90befa54f3ee6d7b64b7a7d595942feebb9b467ad6ad6a17`
+- AppImage: `48,813,248` bytes, SHA-256
+  `858d3ec0ffc9395d7dc56e0abf78217c78ee4cee76d99e0f9facecfd2702cad3`
+- Pacman: `47,507,454` bytes, SHA-256
+  `30fbcdc60e84ded5f00aab6c3b68b03b6f77ce698fdb02a3ed35889fea67d19c`
+- Public HTTP checks returned `200 OK`
+- Server checksums matched the local artifacts
+- Linux platform manifest reports `1.0.58`
 
 Linux `1.0.57` artifacts:
 
