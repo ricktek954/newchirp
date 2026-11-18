@@ -14,6 +14,12 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.59` is being prepared from current `origin/main`. It adds the
+  experimental Kenwood TM-V71 clone driver, Kenwood live-write cache fixes,
+  FT-50 channel clearing in both flag tables, FTM-7250 capability retention
+  and stale-channel clearing fixes, and the latest installer/mobile package
+  ignore rules. Build and release verification will be recorded after
+  publication.
 - Linux `1.0.58` is live from source commit `dcccfd9b`. It adds the
   experimental Baofeng K67 Pro driver, TK-270G bank-sentinel normalization,
   late TK-350 identity retries, corrected Australian CB frequency references,
@@ -719,7 +725,7 @@ release requirements.
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.58` is live from source commit `dcccfd9b`
 - Open pull requests: none
-- Checked-out source version: `1.0.58+58`
+- Checked-out source version: `1.0.59+59`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`

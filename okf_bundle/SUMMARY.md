@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 635 concepts across 4 domains and 31 modules'
+description: 'Top-level OKF summary: 633 concepts across 4 domains and 31 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-18T20:33:31Z'
+timestamp: '2026-11-18T20:52:57Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 635 concepts | 4 domains | 31 modules
+> OKF v0.2 bundle | 633 concepts | 4 domains | 31 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 492 |
+| Function | 490 |
 | Class | 102 |
 | Module | 31 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 635 |
+| dart | 633 |
 
 ## Domain Map
 
@@ -33,11 +33,11 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [main](main/index.md) (231 concepts)
 
-### [models](models/index.md) — 112 concepts
+### [models](models/index.md) — 110 concepts
 
 - [models/radio_channel](models/radio_channel/index.md) (43 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
-- [models/channel_image_baseline](models/channel_image_baseline/index.md) (14 concepts)
+- [models/channel_image_baseline](models/channel_image_baseline/index.md) (12 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (12 concepts)
 - [models/frequency_reference](models/frequency_reference/index.md) (8 concepts)
 - [models/marine_channels](models/marine_channels/index.md) (7 concepts)
@@ -72,18 +72,18 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
-| [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) | Class | `models/channel_image_baseline.dart` | Remembers the last library snapshot so search and row select… |
+| [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
 | [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
 | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
+| [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
-| [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
+| [clearedLocationsForUpload](/models/channel_image_baseline/clearedLocationsForUpload.md) | Function | `models/channel_image_baseline.dart` | All radio locations that must be blank for the current libra… |
 | [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
-| [clearedLocationsForUpload](/models/channel_image_baseline/clearedLocationsForUpload.md) | Function | `models/channel_image_baseline.dart` | All radio locations that must be blank for the current libra… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
