@@ -1870,7 +1870,6 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _libraryOpen = true;
         _page = 0;
         _dirty = false;
-        _capabilities = null;
         _radioZones = [];
         _radioMappings = [];
         _selectedZone = null;
@@ -3582,13 +3581,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         },
     ];
     var changes = <Map<String, dynamic>>[];
+    final clearedForUpload = clearedLocationsForUpload(
+      channels: _activeChannels,
+      existingCleared: _clearedLocations,
+      minimum: _capabilities?.memoryStart,
+      maximum: _capabilities?.memoryEnd,
+    );
     await _transferTask('Writing radio — do not disconnect…', () async {
       final result = await _bridge.upload(
         model: _model!,
         port: _port!,
         imagePath: _radioImage!,
         channels: channelsToWrite,
-        cleared: _clearedLocations.toList(),
+        cleared: clearedForUpload.toList(),
         mappings: mappingsChanged
             ? _radioMappings
                   .map((model) => model.retainingChannels(activeLocations))

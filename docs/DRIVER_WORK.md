@@ -517,6 +517,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### FTM-7250D
 
+- **#92 bug | fix_committed | high:** Power controls disappear after CSV import and stale channels remain
+  After a CSV library replacement, radio capabilities were discarded, hiding transmit power across every band. Full-image upload also relied on an incomplete cleared-location set, so removed channels could remain in the radio image.
+  Source: `email` INBOX:746
 - **#1 maintenance | experimental | normal:** Current driver status
   Transport: CHIRP Yaesu clone serial, 38400 8N1. Read: Stock CHIRP driver. Write: Corrected Low/Mid/High encoding. Settings: Not exposed by stock driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:25

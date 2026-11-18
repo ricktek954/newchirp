@@ -68,6 +68,30 @@ Set<int> clearedLocationsAfterReplacement({
     ..addAll(previousActive.difference(replacementLocations));
 }
 
+/// All radio locations that must be blank for the current library to match.
+///
+/// Clear tracking can become incomplete after replacing a library, importing
+/// external data, or moving channels between views. For a full-image upload,
+/// any in-range location not present as an active channel is empty.
+Set<int> clearedLocationsForUpload({
+  required Iterable<RadioChannel> channels,
+  required Iterable<int> existingCleared,
+  int? minimum,
+  int? maximum,
+}) {
+  final cleared = existingCleared.toSet();
+  final active = channels
+      .where((channel) => !channel.cleared)
+      .map((channel) => channel.location)
+      .toSet();
+  if (minimum != null && maximum != null && maximum >= minimum) {
+    for (var location = minimum; location <= maximum; location++) {
+      if (!active.contains(location)) cleared.add(location);
+    }
+  }
+  return cleared;
+}
+
 ChannelImageMatch channelImageMatch({
   required String? imagePath,
   required int? zone,
