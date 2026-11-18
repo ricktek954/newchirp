@@ -30,6 +30,20 @@ release requirements.
   20.04; the final AppImage launched under host Wayland and XWayland; the
   package payloads omit GLVND/EGL/GLES loaders; all public downloads returned
   HTTP 200; and the Linux platform manifest reports `1.0.58`.
+- macOS `1.0.58` is live from source commit `0ccff82c` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the read-only
+  Kenwood TM-V71A/E clone driver, fixes Kenwood live-mode writes, clears
+  FT-50 channels in both flag tables, preserves FTM7250 capabilities while
+  clearing removed channels, and carries the current driver diagnostics.
+  Verification: analyzer clean; 227 Flutter tests; 478 Python tests with two
+  fixture-dependent skips; 66 bridge tests; embedded version `1.0.58` / `58`;
+  arm64 and x86_64 Python `3.13.15`; 260 CHIRP driver modules; catalog
+  `list-models` returned 598 models including `Kenwood_TM-V71_CloneMode` and
+  `Yaesu_FT-50`; the website catalog and picker expose the read-only TM-V71
+  profile; strict app/DMG signatures; Apple notarization and stapling;
+  Gatekeeper acceptance; launch smoke test; and matching local, server, and
+  public SHA-256. Notarization submission:
+  `678ebc18-dd9a-442f-a351-a78e8507e2a1`.
 - macOS `1.0.57` is live from source commit `1d94b15f` as a universal,
   signed, notarized, stapled, Gatekeeper-accepted DMG. It carries the
   TK-270G erased-bank-index upload normalization and the sanitized driver
@@ -722,6 +736,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.58` artifact source commit: `0ccff82c`
+- macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.58` is live from source commit `dcccfd9b`
 - Open pull requests: none
@@ -739,7 +754,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.57 |
+| macOS | 1.0.58 |
 | Windows | 1.0.58 |
 | Linux | 1.0.58 |
 
@@ -764,6 +779,22 @@ Linux `1.0.58` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.58`
+
+macOS `1.0.58` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.58.dmg`
+- Version/build: `1.0.58` / `58`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `c0f18c21936d6c7de14df75c6cac9cf1ee56bb33f6e0117c9d75e4367b2ea742`
+- Size: `86,787,933` bytes
+- Built from `0ccff82c`
+- Notarization submission: `678ebc18-dd9a-442f-a351-a78e8507e2a1`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains TM-V71 clone-mode read support, the Kenwood live-write
+  cache fix, FT-50 clearing in both channel flag tables, and the FTM7250
+  stale-channel cleanup
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.57` artifact:
 
@@ -1491,6 +1522,19 @@ Linux 1.0.41 sizes:
   Python suite ran 478 tests: 473 passed, 2 fixture-dependent tests skipped,
   and 3 Windows temporary-file-lock helper errors. The installer remains
   unsigned. macOS was at `1.0.57`; Linux was at `1.0.58`.
+- Published macOS `1.0.58` from source commit `0ccff82c` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the
+  read-only Kenwood TM-V71A/E clone driver and Kenwood live-write fix,
+  clears FT-50 channels in both flag tables, preserves FTM7250 capabilities
+  while clearing removed channels, and carries the latest driver diagnostics.
+  Verification: analyzer clean; 227 Flutter tests; 478 Python tests with two
+  fixture-dependent skips; 66 bridge tests; embedded version `1.0.58` / `58`;
+  both Python architectures at `3.13.15`; 260 CHIRP driver modules; 598
+  catalog models including TM-V71 clone mode and FT-50; strict app and DMG
+  signatures; Apple notarization ID
+  `678ebc18-dd9a-442f-a351-a78e8507e2a1`; staple, Gatekeeper, mounted-DMG,
+  launch-smoke, public-download, and checksum checks passed. The live macOS
+  manifest reports `1.0.58`.
 - Published Windows `1.0.57` from source commit `1d94b15f`, the same source
   used by the macOS 1.0.57 release. It adds the experimental Baofeng K67 Pro
   driver, TK-270G bank-sentinel normalization, late TK-350 identity retries,
