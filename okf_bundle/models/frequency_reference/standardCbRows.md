@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:frequency_reference.dart"
-  - "git:branch:main"
+  - "git:branch:feature/driver-work-ledger"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:29:07Z"
+timestamp: "2026-11-17T12:40:24Z"
 concept_id: models/frequency_reference/standardCbRows
 language: dart
 ---
@@ -24,7 +24,7 @@ List_standardCbRows_standardCbRows
 ```
 
 ## Source
-Lines 62–62 in `models/frequency_reference.dart`
+Lines 96–96 in `models/frequency_reference.dart`
 
 ## Relationships
 

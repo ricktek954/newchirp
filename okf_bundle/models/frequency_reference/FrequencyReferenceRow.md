@@ -8,9 +8,9 @@ tags:
   - "type:Class"
   - "module:models"
   - "domain:frequency_reference.dart"
-  - "git:branch:main"
+  - "git:branch:feature/driver-work-ledger"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:29:07Z"
+timestamp: "2026-11-17T12:40:24Z"
 concept_id: models/frequency_reference/FrequencyReferenceRow
 language: dart
 ---

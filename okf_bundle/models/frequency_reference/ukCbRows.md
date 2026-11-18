@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:frequency_reference.dart"
-  - "git:branch:main"
+  - "git:branch:feature/driver-work-ledger"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:29:07Z"
+timestamp: "2026-11-17T12:40:24Z"
 concept_id: models/frequency_reference/ukCbRows
 language: dart
 ---
@@ -24,7 +24,7 @@ List_ukCbRows_ukCbRows
 ```
 
 ## Source
-Lines 119–119 in `models/frequency_reference.dart`
+Lines 155–155 in `models/frequency_reference.dart`
 
 ## Relationships
 

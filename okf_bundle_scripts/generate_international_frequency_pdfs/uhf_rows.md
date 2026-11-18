@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:generate_international_frequency_pdfs.py"
-  - "git:branch:main"
+  - "git:branch:feature/driver-work-ledger"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:28:20Z"
+timestamp: "2026-11-17T12:40:24Z"
 concept_id: generate_international_frequency_pdfs/uhf_rows
 language: python
 ---
@@ -23,7 +23,7 @@ def uhf_rows()
 ```
 
 ## Source
-Lines 95–110 in `generate_international_frequency_pdfs.py`
+Lines 95–141 in `generate_international_frequency_pdfs.py`
 
 ## Relationships
 

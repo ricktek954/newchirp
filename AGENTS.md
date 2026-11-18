@@ -18,6 +18,32 @@ Check `git status` and fetch the latest `origin/main` so the handoff is compared
 with the actual repository state. Keep any local user assets and unrelated
 changes out of commits.
 
+## Driver work ledger
+
+Before debugging or extending a radio driver, query the manufacturer/model
+history in `database/driver_work.sqlite3`:
+
+```sh
+python3 scripts/driver_work.py list --manufacturer Kenwood --model TK-350
+```
+
+Record each actionable bug, new driver, enhancement, validation request, and
+release as a work item. After meaningful analysis, commits, tests, emails, CPS
+recovery, or hardware reports, add an event with the commit SHA, Message-ID,
+artifact hash, or relative evidence path. Use:
+
+```sh
+python3 scripts/driver_work.py show <work-id>
+python3 scripts/driver_work.py event <work-id> --type fix \
+  --summary "..." --ref desktop:<commit>
+```
+
+Use `database/README.md` for the full command and status conventions. Run
+`python3 scripts/driver_work.py export` after changes so
+`docs/DRIVER_WORK.md` remains readable. Keep `docs/DRIVER_STATUS.md` as the
+concise current-state ledger and the SQLite history as the complete timeline.
+Never infer physical validation from offline tests.
+
 When adding or changing a NewChirp-maintained radio driver, update
 `docs/DRIVER_STATUS.md`. Record transport details, implemented fields,
 read/write policy, evidence hashes, physical-radio validation, and the next

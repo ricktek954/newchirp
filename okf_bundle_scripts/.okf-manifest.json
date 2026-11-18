@@ -136,18 +136,6 @@
         "generate_gmrs_frs_pdf"
       ]
     },
-    "generate_international_frequency_pdfs.py": {
-      "path": "generate_international_frequency_pdfs.py",
-      "mtime_ns": 1794829483072693454,
-      "hash": "989f32e2f47eb789a437f0c5e0af17a331a9e65e11cf81b1e573d2878314a143",
-      "concept_ids": [
-        "generate_international_frequency_pdfs/draw_table",
-        "generate_international_frequency_pdfs/main",
-        "generate_international_frequency_pdfs/make_pdf",
-        "generate_international_frequency_pdfs/uhf_rows",
-        "generate_international_frequency_pdfs"
-      ]
-    },
     "generate_repeater_counties.py": {
       "path": "generate_repeater_counties.py",
       "mtime_ns": 1794829483072793412,
@@ -159,6 +147,36 @@
         "generate_repeater_counties/main",
         "generate_repeater_counties/read_source",
         "generate_repeater_counties"
+      ]
+    },
+    "newchirp_mass_storage.py": {
+      "path": "newchirp_mass_storage.py",
+      "mtime_ns": 1794831384435145676,
+      "hash": "6f449f1034003a5e5a5584c1f96a5fc7759fb7f2fc5d19b2c82afb700f2f57cc",
+      "concept_ids": [
+        "newchirp_mass_storage/CS750Profile",
+        "newchirp_mass_storage/LinuxScsiPassthrough",
+        "newchirp_mass_storage/MacScsiPassthrough",
+        "newchirp_mass_storage/MassStorageError",
+        "newchirp_mass_storage/RapMassStorageRadio",
+        "newchirp_mass_storage/ScsiPassthrough",
+        "newchirp_mass_storage/WindowsScsiPassthrough",
+        "newchirp_mass_storage/close",
+        "newchirp_mass_storage/command",
+        "newchirp_mass_storage/helper_path",
+        "newchirp_mass_storage/init",
+        "newchirp_mass_storage/list_devices",
+        "newchirp_mass_storage/parse_rap_packet",
+        "newchirp_mass_storage/rap_packet",
+        "newchirp_mass_storage/read_codeplug",
+        "newchirp_mass_storage/read_exact",
+        "newchirp_mass_storage/receive",
+        "newchirp_mass_storage/send",
+        "newchirp_mass_storage/transfer",
+        "newchirp_mass_storage/windows_io_error",
+        "newchirp_mass_storage/windows_open_access",
+        "newchirp_mass_storage/windows_open_error",
+        "newchirp_mass_storage"
       ]
     },
     "newchirp_usb_dfu.py": {
@@ -194,34 +212,39 @@
         "newchirp_usb_dfu"
       ]
     },
-    "newchirp_mass_storage.py": {
-      "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1794831384435145676,
-      "hash": "6f449f1034003a5e5a5584c1f96a5fc7759fb7f2fc5d19b2c82afb700f2f57cc",
+    "driver_work.py": {
+      "path": "driver_work.py",
+      "mtime_ns": 1794989518733417359,
+      "hash": "65e0eb173201c930088acfebc4e50df7044dc88867d3607409e8812d92362885",
       "concept_ids": [
-        "newchirp_mass_storage",
-        "newchirp_mass_storage/windows_open_access",
-        "newchirp_mass_storage/windows_open_error",
-        "newchirp_mass_storage/windows_io_error",
-        "newchirp_mass_storage/helper_path",
-        "newchirp_mass_storage/init",
-        "newchirp_mass_storage/read_exact",
-        "newchirp_mass_storage/transfer",
-        "newchirp_mass_storage/close",
-        "newchirp_mass_storage/list_devices",
-        "newchirp_mass_storage/rap_packet",
-        "newchirp_mass_storage/parse_rap_packet",
-        "newchirp_mass_storage/send",
-        "newchirp_mass_storage/receive",
-        "newchirp_mass_storage/command",
-        "newchirp_mass_storage/read_codeplug",
-        "newchirp_mass_storage/MassStorageError",
-        "newchirp_mass_storage/MacScsiPassthrough",
-        "newchirp_mass_storage/WindowsScsiPassthrough",
-        "newchirp_mass_storage/LinuxScsiPassthrough",
-        "newchirp_mass_storage/ScsiPassthrough",
-        "newchirp_mass_storage/RapMassStorageRadio",
-        "newchirp_mass_storage/CS750Profile"
+        "driver_work",
+        "driver_work/today",
+        "driver_work/display_path",
+        "driver_work/connect",
+        "driver_work/manufacturer_and_model",
+        "driver_work/get_or_create_radio",
+        "driver_work/add_event",
+        "driver_work/add_work",
+        "driver_work/status_from_ledger",
+        "driver_work/sync_driver_status",
+        "driver_work/print_work_rows",
+        "driver_work/query_work",
+        "driver_work/show_work",
+        "driver_work/export_markdown",
+        "driver_work/find_work_id",
+        "driver_work/main"
+      ]
+    },
+    "generate_international_frequency_pdfs.py": {
+      "path": "generate_international_frequency_pdfs.py",
+      "mtime_ns": 1794919224166724219,
+      "hash": "47ce7afa7b78c1e932a1200c0747b0589563118002fbb365dd3a2ef3222113b4",
+      "concept_ids": [
+        "generate_international_frequency_pdfs",
+        "generate_international_frequency_pdfs/uhf_rows",
+        "generate_international_frequency_pdfs/draw_table",
+        "generate_international_frequency_pdfs/make_pdf",
+        "generate_international_frequency_pdfs/main"
       ]
     }
   },
@@ -1527,7 +1550,7 @@
       "type": "Function",
       "resource": "check_linux_release_abi.py",
       "render_hash": "stale",
-      "edge_hash": "d2ed03cee45b437ce841485944a68d02df38809887fb343c4c42d539dfc2e36c",
+      "edge_hash": "80cb035374cca3ac7a5f3eab413e8bf3b64d1a78c9c4878f59f9afdb730c99d3",
       "enriched": false
     },
     "check_linux_release_abi/main": {
@@ -1561,7 +1584,135 @@
       "render_hash": "stale",
       "edge_hash": "7b54cbf7a325d0fbf8f4ae383bd355e95be9529647064865f122394e871ef1ba",
       "enriched": false
+    },
+    "driver_work": {
+      "concept_id": "driver_work",
+      "type": "Module",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "6f1abb24563d91eacbe63f0abe5ae8f474da769bf599f40320fcb738f16fd35c",
+      "enriched": false
+    },
+    "driver_work/today": {
+      "concept_id": "driver_work/today",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "14a6cc727d88931d5b37899f4375c98df99b33d42d708808add85d13cf3658d6",
+      "enriched": false
+    },
+    "driver_work/display_path": {
+      "concept_id": "driver_work/display_path",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "5aa86411a70d181cdcfc55b7b96fc7a93a5811a970cb5f6973174cb5887de89a",
+      "enriched": false
+    },
+    "driver_work/connect": {
+      "concept_id": "driver_work/connect",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "enriched": false
+    },
+    "driver_work/manufacturer_and_model": {
+      "concept_id": "driver_work/manufacturer_and_model",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "5aa86411a70d181cdcfc55b7b96fc7a93a5811a970cb5f6973174cb5887de89a",
+      "enriched": false
+    },
+    "driver_work/get_or_create_radio": {
+      "concept_id": "driver_work/get_or_create_radio",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "c8642a6ab38bba2dd9f060f6eaf50a2cf8a2f2b1e2157ef64250c5f749c81f9e",
+      "enriched": false
+    },
+    "driver_work/add_event": {
+      "concept_id": "driver_work/add_event",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "b52b0e99cc1cf899a9ff6b63b69f6d17633d2fc541522af4cf3093a8773fa1e4",
+      "enriched": false
+    },
+    "driver_work/add_work": {
+      "concept_id": "driver_work/add_work",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "d73306739dfaaf23b27938514f9f6028e08a98ee0b3c3cf09f11a4f227a24ae8",
+      "enriched": false
+    },
+    "driver_work/status_from_ledger": {
+      "concept_id": "driver_work/status_from_ledger",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "5aa86411a70d181cdcfc55b7b96fc7a93a5811a970cb5f6973174cb5887de89a",
+      "enriched": false
+    },
+    "driver_work/sync_driver_status": {
+      "concept_id": "driver_work/sync_driver_status",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "0e99334ed207793644fca54486b2be5ad49af041528f1fad774daceb575aedb0",
+      "enriched": false
+    },
+    "driver_work/print_work_rows": {
+      "concept_id": "driver_work/print_work_rows",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "enriched": false
+    },
+    "driver_work/query_work": {
+      "concept_id": "driver_work/query_work",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "enriched": false
+    },
+    "driver_work/show_work": {
+      "concept_id": "driver_work/show_work",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "enriched": false
+    },
+    "driver_work/export_markdown": {
+      "concept_id": "driver_work/export_markdown",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "2f832d069c5cb9a108bc680a543d39c2fe6bcc62509bd3d4ba4555f5876b4b01",
+      "enriched": false
+    },
+    "driver_work/find_work_id": {
+      "concept_id": "driver_work/find_work_id",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "enriched": false
+    },
+    "driver_work/main": {
+      "concept_id": "driver_work/main",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "f616bc2aaaabff23f431ffed544edc49ba494c2e06d8283a83eceb23d0d015da",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-16T12:16:33Z"
+  "generated_at": "2026-11-18T08:12:58Z"
 }

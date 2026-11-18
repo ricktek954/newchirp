@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-16
+Last updated: 2026-11-18
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,12 @@ release requirements.
 
 ## Resume here
 
+- The manufacturer/model driver work ledger now lives in
+  `database/driver_work.sqlite3`. Use `scripts/driver_work.py` to list/search
+  work, add bugs or enhancements, append commit/email/evidence/hardware-test
+  events, and export `docs/DRIVER_WORK.md`. The initial database contains all
+  67 current driver inventory rows plus recent CPS-derived drivers and email
+  bug-fix history. `database/README.md` documents statuses and commands.
 - Linux `1.0.57` is live from current `origin/main`. It adds the
   OEM-verified Yaesu FT-50 serial framing override at 9600 8N2 and includes
   the latest macOS release-build ownership documentation. Verification:
