@@ -63,3 +63,17 @@ okf_bundle_scripts/.okf_lookup_cache.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Installers and mobile packages are published by upload only, never to GitHub.
+*.apk
+*.aab
+*.ipa
+*.msi
+*.msix
+*.dmg
+*.deb
+*.rpm
+*.AppImage
+*.pkg.tar.zst
+NewChirp-Installer-*.exe
+newchirp-setup*.exe
