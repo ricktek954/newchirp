@@ -14,12 +14,17 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
-- Linux `1.0.59` is being prepared from current `origin/main`. It adds the
+- Linux `1.0.59` is live from source commit `0614c316`. It adds the
   experimental Kenwood TM-V71 clone driver, Kenwood live-write cache fixes,
   FT-50 channel clearing in both flag tables, FTM-7250 capability retention
   and stale-channel clearing fixes, and the latest installer/mobile package
-  ignore rules. Build and release verification will be recorded after
-  publication.
+  ignore rules. Verification: analyzer clean; 227 Flutter tests; 478 Python
+  tests with two fixture-dependent skips; max glibc `2.18`; DEB, RPM, and
+  Pacman metadata plus embedded version `1.0.59` / `59`; DEB and AppImage
+  Xvfb launch tests passed on Ubuntu 20.04; the final AppImage launched under
+  host Wayland and XWayland; all package payloads include the TM-V71 driver
+  and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200;
+  and the Linux platform manifest reports `1.0.59`.
 - Linux `1.0.58` is live from source commit `dcccfd9b`. It adds the
   experimental Baofeng K67 Pro driver, TK-270G bank-sentinel normalization,
   late TK-350 identity retries, corrected Australian CB frequency references,
@@ -738,7 +743,7 @@ release requirements.
 - Windows `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.58` is live from source commit `dcccfd9b`
+- Linux `1.0.59` is live from source commit `0614c316`
 - Open pull requests: none
 - Checked-out source version: `1.0.59+59`
 - macOS builds are pinned to CocoaPods with
@@ -756,7 +761,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.58 |
 | Windows | 1.0.58 |
-| Linux | 1.0.58 |
+| Linux | 1.0.59 |
+
+Linux `1.0.59` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.59.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.59.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.59.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.59.pkg.tar.zst`
+- DEB: `48,529,134` bytes, SHA-256
+  `866e5efa60f4bf1e49e3c854bc871a27e9054403430b8f1afafe049e730b03df`
+- RPM: `48,622,908` bytes, SHA-256
+  `22da4352375bb49800d65c0b2d18c15ccb7a4e223aacef69f9f3264b5e9c8a7c`
+- AppImage: `48,817,344` bytes, SHA-256
+  `bf0144b2d517f405b79d2005be0e488075f9583c1aa127426649d1148ca369ff`
+- Pacman: `47,499,651` bytes, SHA-256
+  `c1db4b456333036052a95ccf2d44db2683ffb70d261a9983bc75884a8adc507c`
+- Public HTTP checks returned `200 OK`
+- Server checksums and sizes matched the local artifacts
+- Linux platform manifest reports `1.0.59`
 
 Linux `1.0.58` artifacts:
 
