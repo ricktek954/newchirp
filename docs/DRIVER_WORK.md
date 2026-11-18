@@ -462,6 +462,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ## Wouxun
 
+### KG-689
+
+- **#93 new_driver | awaiting_user | normal:** Legacy KG-689E programming support
+  Forum requester has a 2m KG-689 absent from CHIRP and NewChirp. Wouxun Download Center groups KG-689E and KG-699E under a 2010 programming package. Need exact label, cable/port details, and a saved OEM codeplug or radio image.
+  Source: `forum` TOPIC:93
+
 ### KG-905G Plus
 
 - **#49 maintenance | experimental | normal:** Current driver status
