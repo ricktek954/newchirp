@@ -14,13 +14,19 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
-- Linux `1.0.60` is being prepared from current `origin/main`. It adds the
+- Linux `1.0.60` is live from source commit `66383721`. It adds the
   OEM CPS-derived Alinco DR-735 driver, official manufacturer model names in
   radio lists, CSV encoding detection and channel select-all, UV-17ProGPS
   fractional CTCSS preservation, RT-950 decode/upload error fixes, the rebuilt
   RT-950 Pro driver with enabled writes, and the latest read-only safety and
-  reporter-triage updates. Build and release verification will be recorded
-  after publication.
+  reporter-triage updates. Verification: analyzer clean; 235 Flutter tests;
+  506 Python tests with two fixture-dependent skips; max glibc `2.18`; DEB,
+  RPM, and Pacman metadata plus embedded version `1.0.60` / `60`; DEB and
+  AppImage Xvfb launch tests passed on Ubuntu 20.04; the final AppImage
+  launched under host Wayland and XWayland; all package payloads include the
+  Alinco DR-735 and rebuilt RT-950 Pro drivers and omit GLVND/EGL/GLES
+  loaders; all public downloads returned HTTP 200; and the Linux platform
+  manifest reports `1.0.60`.
 - Linux `1.0.59` is live from source commit `0614c316`. It adds the
   experimental Kenwood TM-V71 clone driver, Kenwood live-write cache fixes,
   FT-50 channel clearing in both flag tables, FTM-7250 capability retention
@@ -767,7 +773,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.59` is live from source commit `0614c316`
+- Linux `1.0.60` is live from source commit `66383721`
 - Open pull requests: none
 - Checked-out source version: `1.0.60+60`
 - macOS builds are pinned to CocoaPods with
@@ -785,7 +791,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.59 |
 | Windows | 1.0.58 |
-| Linux | 1.0.59 |
+| Linux | 1.0.60 |
+
+Linux `1.0.60` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.60.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.60.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.60.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.60.pkg.tar.zst`
+- DEB: `48,546,800` bytes, SHA-256
+  `b9477b552f5036bf28bc7f9a41eb3408913cb5a152528b19c6846c36fe4cbe01`
+- RPM: `48,635,951` bytes, SHA-256
+  `4bedd1db0d82994079d50d58fe098da337d386ec39d2bb43ad92371e0cd3b642`
+- AppImage: `48,837,824` bytes, SHA-256
+  `7eff0a199ad059a45ba52c1809f1d0d7f8cb48fa59ab1689a4ce72544827e855`
+- Pacman: `47,499,778` bytes, SHA-256
+  `775a415bfbbd088dbb6e9c4e1d82735b7d0ed2bcb486e56a6dce5f15051fd13d`
+- Public HTTP checks returned `200 OK`
+- Server checksums and sizes matched the local artifacts
+- Linux platform manifest reports `1.0.60`
 
 Linux `1.0.59` artifacts:
 
