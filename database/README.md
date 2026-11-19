@@ -139,6 +139,9 @@ python3 scripts/driver_work.py export
 - `pending_validation`: a fix exists and requires physical or release testing.
 - `experimental`: supported in source with incomplete real-radio validation.
 - `hardware_tested`: a complete named operation succeeded on physical hardware.
+  When both read and power-cycled write read-back are confirmed, the radio
+  graduates out of Experimental (see "Graduating a radio out of
+  Experimental" in `AGENTS.md`).
 - `released`: users can obtain the supporting build.
 - `blocked`: no safe progress is possible without a specific external change.
 - `closed`: intentionally complete with no follow-up.
