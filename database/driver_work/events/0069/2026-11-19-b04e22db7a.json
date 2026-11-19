@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 15:13:12",
+  "details": "Channel-clear fix (both flag tables) confirmed: cleared channels written, read back, and verified gone on the radio. Odd-split field write still pending.",
+  "event_type": "hardware_test",
+  "external_ref": "",
+  "item": "69",
+  "occurred_at": "2026-11-19",
+  "summary": "reporter hardware test: partial"
+}

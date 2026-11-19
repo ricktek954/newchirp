@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 15:13:12",
+  "details": "",
+  "event_type": "hardware",
+  "external_ref": "email:INBOX:805",
+  "item": "69",
+  "occurred_at": "2026-11-19",
+  "summary": "Reporter confirmed cleared FT-50 channels are gone after write and read-back"
+}

@@ -28,7 +28,7 @@ Last updated: 2026-11-18
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
-| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables (offline); odd-split field write pending | Stock FT-50 settings | Experimental; partial hardware validation |
+| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables (hardware-confirmed 2026-11-19); odd-split field write pending | Stock FT-50 settings | Experimental; partial hardware validation |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950 Pro CPS 1.3.3 clone serial, 115200 8N1 + RTS/DTR | 990 channels + full CPS map (272 blocks); old-map read hardware-confirmed | Yes, CPS write path, offline-tested | Hidden | Experimental; write hardware pending |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
@@ -236,6 +236,8 @@ Last updated: 2026-11-18
   `mask`, and `skip` in both tables. Upstream CHIRP master has the same code.
   ADMS-1E references neither table by literal offset; its delete path is not
   yet traced (E1 pending). Evidence: E2 (`test/ft50_erase_test.py`).
+  Hardware (2026-11-19): the reporter cleared the stale channels, wrote,
+  read back, and confirmed they are gone (mailbox INBOX:805).
 - Driver SHA-256:
   `68457dacb8d164c1eff28a51b605a4baeb3651fa894cfe4deacd3184a80db73a`
 - Offline validation: all active channels decode, editing a split channel
