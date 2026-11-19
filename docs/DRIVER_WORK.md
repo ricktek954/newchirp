@@ -55,6 +55,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   NewChirp 1.0.56 received no response to its seven-byte identity command on a macOS usbserial adapter. Confirm the radio mode, cable voltage, adapter driver, and OEM CPS behavior.
   Source: `email` INBOX:736
 
+### BF-F8HP-PRO
+
+- **#100 bug | fix_committed | normal:** Zones not shown; radio scans all channels as one zone
+  Forum topic 95 (1.0.58): zones (fixed 100-channel blocks) could not be seen or chosen, and the radio scanned every channel together. Stock CHIRP StaticBankModel sized banks with '/', raising TypeError, so the bridge dropped the zone model for 13 fixed-zone radios. Scanning across zones is controlled by the radio's Scan Zone Linking / Scan Link Zone 1-10 settings, which NewChirp exposes.
+  Source: `forum` newchirp.net forum topic 95
+
 ### BF-V12D
 
 - **#25 maintenance | experimental | normal:** Current driver status
