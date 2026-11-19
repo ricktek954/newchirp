@@ -66,29 +66,37 @@ Both website steps are required even when the browser transport is read-only.
 
 ### Graduating a radio out of Experimental
 
-A radio leaves the experimental list once a reporter or tester has confirmed
-on physical hardware both a full read and a write that was read back after a
-power cycle. Offline, replay, and OEM-capture tests never count. When that
-confirmation is recorded in the ledger:
+A radio leaves Experimental once its core operations are confirmed on a
+physical radio: a full read, and a channel write that reads back correctly
+after a power cycle. Any owner's confirmation counts, not only the original
+reporter's. Offline, replay, and OEM-capture tests never count. Individual
+features that are still untested (for example one channel field or a
+settings page) do not hold a radio back. List them as known limitations in
+`docs/DRIVER_STATUS.md` and keep their ledger items open.
 
-1. Ledger: record `driver_work.py test <id> --result pass` citing the
-   mailbox UID or Message-ID, then `driver_work.py status <id>
-   hardware_tested` (or `released` once a build containing the fix is out).
-2. Desktop: remove the driver's `experimental` prompt (the warning shown
-   before a read) and change its `docs/DRIVER_STATUS.md` row to
-   `Supported; read and write hardware-confirmed <date>`.
-3. Website: remove the model from `newChirpExperimentalModels` in
-   `scripts/sync-chirp-radios.mjs`. Add it to `newChirpSupportedModels` only
-   if upstream CHIRP's catalog does not already list it. Run
-   `npm run sync:radios` and check that it is gone from **New Experimental
-   Radio Support** and appears under its manufacturer without the
-   `(experimental)` suffix. Keep the Web Programmer profile unchanged.
-4. Deploy the website, and record the graduation as a ledger event.
+When the core confirmation is recorded:
 
-A partial confirmation (read only, or only some fields written) keeps the
-radio experimental. Note which operations remain untested in
-`docs/DRIVER_STATUS.md`. A radio that is read-only (`NEWCHIRP_WRITE_DISABLED`)
-stays experimental until its write path is built and confirmed.
+1. Ledger: record `driver_work.py test <id> --result pass` on the radio's
+   status item, citing the mailbox UID or Message-ID, then
+   `driver_work.py status <id> hardware_tested` (or `released` once a build
+   containing the fix is out).
+2. Desktop: remove the driver's `experimental` prompt if it has one, and
+   change its `docs/DRIVER_STATUS.md` row to `Supported; core read/write
+   hardware-confirmed <date>`, followed by the known limitations.
+3. Website: if the model is in `newChirpExperimentalModels` in
+   `scripts/sync-chirp-radios.mjs`, remove it. Add it to
+   `newChirpSupportedModels` only if upstream CHIRP's catalog does not
+   already list it. Run `npm run sync:radios` and check that it is gone from
+   **New Experimental Radio Support** and appears under its manufacturer
+   without the `(experimental)` suffix. Keep the Web Programmer profile.
+4. Deploy the website if step 3 changed it, and record the graduation as a
+   ledger event.
+
+If the core operations are still unconfirmed two weeks after a fix ships,
+send the reporter one reminder and post a short request for owners of that
+model on the forum. Never graduate a radio on elapsed time alone. A
+read-only radio (`NEWCHIRP_WRITE_DISABLED`) stays experimental until its
+write path is built and confirmed.
 
 Show radios by the manufacturer's official model name wherever people read
 it (desktop picker, website catalog, Web Programmer, messages and replies),

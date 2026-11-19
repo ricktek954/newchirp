@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 15:21:26",
+  "details": "Core operations confirmed on the radio: full read, name write and restore (1.0.56), channel clear written and read back (INBOX:805). Odd-split field write untested; tracked in item 69.",
+  "event_type": "hardware_test",
+  "external_ref": "",
+  "item": "6",
+  "occurred_at": "2026-11-19",
+  "summary": "reporter hardware test: pass"
+}

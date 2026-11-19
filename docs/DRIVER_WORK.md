@@ -563,7 +563,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#69 bug | pending_validation | high:** Two-stop-bit transport and odd-split write
   The OEM ADMS-1E uses 9600 8N2. A 1.0.56 name-only write and restore committed correctly and preserved all other channels.
   Source: `email` INBOX:722
-- **#6 maintenance | experimental | normal:** Current driver status
+- **#6 maintenance | hardware_tested | normal:** Current driver status
   Transport: Yaesu clone serial, 9600 8N2. Read: Odd-split channels decode; reporter image verified. Write: Hardware-tested name write and restore; odd-split field write pending. Settings: Stock FT-50 settings. Ledger status: Experimental; partial hardware validation.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:30
 

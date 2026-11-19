@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 15:21:27",
+  "details": "",
+  "event_type": "status",
+  "external_ref": "email:INBOX:805",
+  "item": "6",
+  "occurred_at": "2026-11-19",
+  "summary": "Graduated out of Experimental under the core read/write rule; odd-split write is a known limitation (item 69)"
+}
