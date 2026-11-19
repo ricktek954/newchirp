@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "bug",
+  "manufacturer": "Connect Systems",
+  "model": "CS750",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email triage",
+  "source_ref": "2026-11-16",
+  "status": "fix_committed",
+  "summary": "Use a read-only Windows physical-drive handle and explain the Administrator requirement on error 5.",
+  "title": "Windows raw-disk access denied",
+  "uid": "76"
+}

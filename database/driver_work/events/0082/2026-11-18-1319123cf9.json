@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:37:01",
+  "details": "Installer statically unpacked with innoextract; never executed.",
+  "event_type": "evidence",
+  "external_ref": "https://baofeng.s3.amazonaws.com/Baofeng_UV-32_CPS_v1.4.7.zip",
+  "item": "82",
+  "occurred_at": "2026-11-18",
+  "summary": "Evidence recorded: Baofeng BF-UVs Pro CPS v1.4.7"
+}

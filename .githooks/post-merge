@@ -1,0 +1,9 @@
+#!/bin/sh
+# Rebuild the driver ledger cache and docs/DRIVER_WORK.md from the merged
+# JSON store (database/driver_work/). Never fails the git operation.
+cd "$(git rev-parse --show-toplevel)" || exit 0
+if [ -d database/driver_work ]; then
+  python3 scripts/driver_work.py rebuild >/dev/null 2>&1 || \
+    echo "driver_work: rebuild failed; run python3 scripts/driver_work.py rebuild" >&2
+fi
+exit 0

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: Yaesu CAT serial, 4800-38400 auto-baud. Read: 117 live memories. Write: Known channel fields, offline-tested. Settings: Hidden. Ledger status: Experimental.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:25",
+  "item": "4",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 10:00:12",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "5RX",
+  "occurred_at": "2026-11-17",
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:736",
+  "status": "awaiting_user",
+  "summary": "NewChirp 1.0.56 received no response to its seven-byte identity command on a macOS usbserial adapter. Confirm the radio mode, cable voltage, adapter driver, and OEM CPS behavior.",
+  "title": "No response on macOS serial adapter",
+  "uid": "89"
+}

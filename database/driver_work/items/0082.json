@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:33:33",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-32",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:744",
+  "status": "awaiting_user",
+  "summary": "NewChirp 1.0.56 decodes channels 52-54 with no tone, while RT Systems UV-32 Programmer 5.00.29 shows CTCSS 103.5, 103.5, and 206.5. The exported CSV alone does not contain the raw tone words.",
+  "title": "Channels 52-54 lose stored CTCSS during decode",
+  "uid": "82"
+}

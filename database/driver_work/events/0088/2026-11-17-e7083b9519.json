@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:09",
+  "details": "Two GM-30 radios program successfully, but the third returns an empty response to PSEARCH and programming entry on COM7. Compare the same cable and OEM CPS against the failing radio.",
+  "event_type": "created",
+  "external_ref": "INBOX:734",
+  "item": "88",
+  "occurred_at": "2026-11-17",
+  "summary": "Programming mode returns empty response"
+}

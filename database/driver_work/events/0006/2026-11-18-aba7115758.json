@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: Yaesu clone serial, 9600 8N2. Read: Odd-split channels decode; reporter image verified. Write: Hardware-tested name write and restore; odd-split field write pending. Settings: Stock FT-50 settings. Ledger status: Experimental; partial hardware validation.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:27",
+  "item": "6",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

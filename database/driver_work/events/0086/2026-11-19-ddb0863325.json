@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:57",
+  "details": "",
+  "event_type": "evidence",
+  "external_ref": "file drop 8; INBOX:784",
+  "item": "86",
+  "occurred_at": "2026-11-19",
+  "summary": "Reporter uploaded Archive.zip (file drop 8, sha256 86ad24d3...): GM-32 CPS and NewChirp read files; tones missing on the last 3 channels; CPS shows TX tones only."
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: OEM clone serial, 115200 8N1. Read: 80 channels + settings. Write: Disabled pending hardware validation. Settings: Basic radio settings. Ledger status: Experimental.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:64",
+  "item": "43",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

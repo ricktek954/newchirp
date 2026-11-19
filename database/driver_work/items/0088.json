@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 10:00:09",
+  "kind": "bug",
+  "manufacturer": "Radioddity",
+  "model": "GM-30",
+  "occurred_at": "2026-11-17",
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:734",
+  "status": "awaiting_user",
+  "summary": "Two GM-30 radios program successfully, but the third returns an empty response to PSEARCH and programming entry on COM7. Compare the same cable and OEM CPS against the failing radio.",
+  "title": "Programming mode returns empty response",
+  "uid": "88"
+}

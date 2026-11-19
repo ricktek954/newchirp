@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "kind": "maintenance",
+  "manufacturer": "Baofeng",
+  "model": "UV-9R",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "docs/DRIVER_STATUS.md",
+  "source_ref": "docs/DRIVER_STATUS.md:62",
+  "status": "experimental",
+  "summary": "Transport: CHIRP WP970I clone serial, 9600 8N1. Read: Stock CHIRP driver. Write: Retry for missing write ACK. Settings: Stock CHIRP driver. Ledger status: Experimental.",
+  "title": "Current driver status",
+  "uid": "38"
+}

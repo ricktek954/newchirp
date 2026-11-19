@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: CHIRP WP970I clone serial, 9600 8N1. Read: Stock CHIRP driver. Write: Stock CHIRP driver. Settings: Invalid service calibration values are read-only and preserved. Ledger status: Experimental compatibility override.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:58",
+  "item": "37",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

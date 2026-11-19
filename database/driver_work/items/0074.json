@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "hardware_validation",
+  "manufacturer": "Radioddity",
+  "model": "DB35-G",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email triage",
+  "source_ref": "2026-11-16",
+  "status": "awaiting_user",
+  "summary": "Writes remain disabled until an OEM backup, physical read, and controlled inactive-channel write/read-back are supplied.",
+  "title": "Physical write validation",
+  "uid": "74"
+}

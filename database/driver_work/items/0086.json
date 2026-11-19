@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 10:00:00",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "GM-32",
+  "occurred_at": "2026-11-17",
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:725",
+  "status": "fix_committed",
+  "summary": "NewChirp 1.0.57 read 33 channels but omitted TX and RX tones on a GMRS repeater channel. Capture raw NewChirp .img and CPS source data for the same unmodified channel.",
+  "title": "GMRS repeater TX and RX tones decode blank",
+  "uid": "86"
+}

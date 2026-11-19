@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: nicFW serial, 38400 → 460800 8N1. Read: Yes. Write: Changed blocks. Settings: Global settings and group names. Ledger status: Hardware-tested on one 6.00.16c unit; other versions/aliases experimental.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:31",
+  "item": "10",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

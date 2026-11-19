@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "kind": "maintenance",
+  "manufacturer": "Kenwood",
+  "model": "TH-D75",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "docs/DRIVER_STATUS.md",
+  "source_ref": "docs/DRIVER_STATUS.md:37",
+  "status": "experimental",
+  "summary": "Transport: Kenwood clone CAT serial, 9600-57,600 baud. Read: Yes, echo-tolerant. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.",
+  "title": "Current driver status",
+  "uid": "13"
+}

@@ -21,7 +21,11 @@ changes out of commits.
 ## Driver work ledger
 
 Before debugging or extending a radio driver, query the manufacturer/model
-history in `database/driver_work.sqlite3`:
+history in the driver ledger. Its source of truth is one JSON file per record
+under `database/driver_work/` (merges cleanly when several machines record
+work at once); `database/driver_work.sqlite3` is a git-ignored cache that
+`scripts/driver_work.py` rebuilds on every run. Never edit or commit the
+cache, and never hand-edit the JSON except to resolve a merge conflict:
 
 ```sh
 python3 scripts/driver_work.py list --manufacturer Kenwood --model TK-350

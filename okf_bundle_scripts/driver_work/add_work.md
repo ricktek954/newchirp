@@ -9,7 +9,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work/add_work
 language: python
 ---
@@ -37,7 +37,7 @@ def add_work(database, manufacturer, model, kind, title)
 | `title` | `—` | `—` |
 
 ## Source
-Lines 208–285 in `driver_work.py`
+Lines 219–297 in `driver_work.py`
 
 ## Relationships
 
@@ -47,5 +47,6 @@ Lines 208–285 in `driver_work.py`
 | calls | [sanitize_reporter](/driver_work/sanitize_reporter.md) |
 | calls | [get_or_create_radio](/driver_work/get_or_create_radio.md) |
 | calls | [add_event](/driver_work/add_event.md) |
-| called_by | [main](/driver_work/main.md) |
+| calls | [new_uid](/driver_work/new_uid.md) |
+| called_by | [_execute](/driver_work/execute.md) |
 | called_by | [sync_driver_status](/driver_work/sync_driver_status.md) |

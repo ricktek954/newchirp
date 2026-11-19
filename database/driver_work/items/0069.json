@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "bug",
+  "manufacturer": "Yaesu",
+  "model": "FT-50",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:722",
+  "status": "pending_validation",
+  "summary": "The OEM ADMS-1E uses 9600 8N2. A 1.0.56 name-only write and restore committed correctly and preserved all other channels.",
+  "title": "Two-stop-bit transport and odd-split write",
+  "uid": "69"
+}

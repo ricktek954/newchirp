@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "bug",
+  "manufacturer": "Kenwood",
+  "model": "TK-270G",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email triage",
+  "source_ref": "2026-11-16",
+  "status": "fix_committed",
+  "summary": "Retry the identical block up to three times, then close programming mode.",
+  "title": "Transient block checksum rejection",
+  "uid": "75"
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "kind": "maintenance",
+  "manufacturer": "Radioddity",
+  "model": "DB25-G",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "docs/DRIVER_STATUS.md",
+  "source_ref": "docs/DRIVER_STATUS.md:66",
+  "status": "experimental",
+  "summary": "Transport: OEM DB25-G CPS clone serial, 9600 8N1, no DTR/RTS. Read: CPS retry handshake; block framing. Write: 16-byte blocks through 0x30FF; hardware pending. Settings: Stock decoder cross-check. Ledger status: Experimental.",
+  "title": "Current driver status",
+  "uid": "42"
+}

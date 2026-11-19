@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:04:48",
+  "details": "Explained that TH-9000D 220 must use its own TH-9000D profile rather than TH-9800.",
+  "event_type": "contact",
+  "external_ref": "email Sent:492; SMTP:EEB617F889",
+  "item": "65",
+  "occurred_at": "2026-11-18",
+  "summary": "Sent exact-model selection guidance"
+}

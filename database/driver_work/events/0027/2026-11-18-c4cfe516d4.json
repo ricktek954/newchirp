@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:39",
+  "details": "The reporter describes a UV-K5[8] but diagnostics show attempts under UV-5G Pro, UV-5R Mini, and UV-5RM Plus v2, all on COM1. Request the USB cable device name and exact radio identity before any driver change.",
+  "event_type": "analysis",
+  "external_ref": "INBOX:726",
+  "item": "27",
+  "occurred_at": "2026-11-18",
+  "summary": "COM1 report used a built-in port and three unrelated UV-family profiles"
+}

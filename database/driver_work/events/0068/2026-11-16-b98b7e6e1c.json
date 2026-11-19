@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "details": "Read-only until a physical read and controlled write/read-back exist.",
+  "event_type": "fix",
+  "external_ref": "desktop:c15b04ab; website:0bdb763",
+  "item": "68",
+  "occurred_at": "2026-11-16",
+  "summary": "Committed the desktop driver and Web Programmer profile"
+}

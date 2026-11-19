@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:57",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/upload_invalid_extras_test.py",
+  "item": "95",
+  "occurred_at": "2026-11-19",
+  "summary": "Bridge repair_uninitialized_extras resets extras that failed to load to their first valid option before set_memory (PTT-ID becomes Off). Generic for every driver. Reproduced with the CHIRP 5RM test image."
+}

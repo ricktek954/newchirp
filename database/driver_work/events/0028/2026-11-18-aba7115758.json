@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: UV-17-family serial, 115200 8N1 + DTR/RTS. Read: OEM-style handshake retry; stock channel decode. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:49",
+  "item": "28",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

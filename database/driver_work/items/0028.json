@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "kind": "maintenance",
+  "manufacturer": "Baofeng",
+  "model": "UV-5RM Plus",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "docs/DRIVER_STATUS.md",
+  "source_ref": "docs/DRIVER_STATUS.md:52",
+  "status": "experimental",
+  "summary": "Transport: UV-17-family serial, 115200 8N1 + DTR/RTS. Read: OEM-style handshake retry; stock channel decode. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.",
+  "title": "Current driver status",
+  "uid": "28"
+}

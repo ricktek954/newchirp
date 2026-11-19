@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 09:59:53",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2",
+  "occurred_at": "2026-11-16",
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:718",
+  "status": "awaiting_user",
+  "summary": "NewChirp 1.0.57 read 21 channels from the radio, then the unchanged upload stopped on two 16-byte commands with incomplete one-byte responses.",
+  "title": "Upload receives one-byte response after successful read",
+  "uid": "84"
+}

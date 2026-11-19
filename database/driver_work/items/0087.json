@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 10:00:05",
+  "kind": "bug",
+  "manufacturer": "Radtel",
+  "model": "RT-880G",
+  "occurred_at": "2026-11-17",
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:733",
+  "status": "awaiting_user",
+  "summary": "Six five-byte read commands received no response from NewChirp 1.0.56 on COM3. Confirm the cable appears as a USB serial device, test the OEM CPS, and report the adapter driver/provider.",
+  "title": "No response from radio",
+  "uid": "87"
+}

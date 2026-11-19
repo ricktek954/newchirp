@@ -10,7 +10,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work
 language: python
 ---
@@ -42,5 +42,18 @@ Manufacturer/model work ledger for NewChirp radio support.
 | related | [query_work](/driver_work/query_work.md) |
 | related | [show_work](/driver_work/show_work.md) |
 | related | [export_markdown](/driver_work/export_markdown.md) |
+| related | [work_ref](/driver_work/work_ref.md) |
 | related | [find_work_id](/driver_work/find_work_id.md) |
+| related | [StoreError](/driver_work/StoreError.md) |
+| related | [new_uid](/driver_work/new_uid.md) |
+| related | [_slug](/driver_work/slug.md) |
+| related | [_digest](/driver_work/digest.md) |
+| related | [_item_file_key](/driver_work/item_file_key.md) |
+| related | [_dump](/driver_work/dump.md) |
+| related | [_read_store](/driver_work/read_store.md) |
+| related | [rebuild_cache](/driver_work/rebuild_cache.md) |
+| related | [_store_records](/driver_work/store_records.md) |
+| related | [persist](/driver_work/persist.md) |
+| related | [migrate_from_sqlite](/driver_work/migrate_from_sqlite.md) |
 | related | [main](/driver_work/main.md) |
+| related | [_execute](/driver_work/execute.md) |

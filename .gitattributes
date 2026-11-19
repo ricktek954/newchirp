@@ -1,1 +1,7 @@
 *.pdf binary
+
+# Generated from database/driver_work/ by scripts/driver_work.py; the
+# post-merge and post-rewrite hooks regenerate it, so concatenating both
+# sides during a merge is safe and never stops a pull.
+docs/DRIVER_WORK.md merge=union
+database/driver_work/**/*.json text eol=lf

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: UV-17-family serial, 115200 8N1. Read: Fixed GMRS frequencies; channels 15-22 retain stored duplex. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:53",
+  "item": "32",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: iRadio/Iradio clone serial, 115200 8N1 + DTR. Read: 1,024 channels + 256 zones, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:30",
+  "item": "9",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

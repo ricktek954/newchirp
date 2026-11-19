@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 11:09:32",
+  "details": "CSV replacement no longer discards FTM-7250D valid power levels, so transmit-power controls remain available. Full-image upload now derives cleared locations from all in-range slots missing from the active library.",
+  "event_type": "fix",
+  "external_ref": "desktop:406a098a",
+  "item": "92",
+  "occurred_at": "2026-11-18",
+  "summary": "Preserve radio capabilities after CSV replacement and clear every absent in-range channel"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 11:18:14",
+  "details": "Forum topic 95 (1.0.58): zones (fixed 100-channel blocks) could not be seen or chosen, and the radio scanned every channel together. Stock CHIRP StaticBankModel sized banks with '/', raising TypeError, so the bridge dropped the zone model for 13 fixed-zone radios. Scanning across zones is controlled by the radio's Scan Zone Linking / Scan Link Zone 1-10 settings, which NewChirp exposes.",
+  "event_type": "created",
+  "external_ref": "newchirp.net forum topic 95",
+  "item": "100",
+  "occurred_at": "2026-11-19",
+  "summary": "Zones not shown; radio scans all channels as one zone"
+}

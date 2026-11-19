@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:41:55",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email Sent:505",
+  "item": "95",
+  "occurred_at": "2026-11-19",
+  "summary": "Replied: explained the invalid PTT-ID bug and fix; workaround is read, delete channels 7 and 9, write, then load the CSV and write."
+}

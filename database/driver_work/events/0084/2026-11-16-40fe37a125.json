@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 09:59:53",
+  "details": "NewChirp 1.0.57 read 21 channels from the radio, then the unchanged upload stopped on two 16-byte commands with incomplete one-byte responses.",
+  "event_type": "created",
+  "external_ref": "INBOX:718",
+  "item": "84",
+  "occurred_at": "2026-11-16",
+  "summary": "Upload receives one-byte response after successful read"
+}

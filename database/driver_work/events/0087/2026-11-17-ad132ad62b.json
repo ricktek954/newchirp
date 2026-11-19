@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:05",
+  "details": "Six five-byte read commands received no response from NewChirp 1.0.56 on COM3. Confirm the cable appears as a USB serial device, test the OEM CPS, and report the adapter driver/provider.",
+  "event_type": "created",
+  "external_ref": "INBOX:733",
+  "item": "87",
+  "occurred_at": "2026-11-17",
+  "summary": "No response from radio"
+}

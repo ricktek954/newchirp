@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 10:00:21",
+  "kind": "release",
+  "manufacturer": "Baofeng",
+  "model": "DM-32UV",
+  "occurred_at": "2026-11-17",
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:739",
+  "status": "awaiting_user",
+  "summary": "A Windows 11 user reports that the new-version download is cancelled because the installer is not commonly downloaded. Collect the exact browser warning and downloaded filename; no radio driver defect is indicated.",
+  "title": "Windows SmartScreen cancels update download",
+  "uid": "91"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:57",
+  "details": "NewChirp 1.0.54 on macOS 12.7.6: model-info (instructions) failed in ~50 ms with message '1' for read, write and settings. Not reproducible with the 1.0.54 bridge here; bundled Python minos is 10.15/11. Error text was an exception argument only.",
+  "event_type": "created",
+  "external_ref": "INBOX:785",
+  "item": "96",
+  "occurred_at": "2026-11-19",
+  "summary": "Every action fails instantly with 'Reported error: 1' on macOS 12"
+}

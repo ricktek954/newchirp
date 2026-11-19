@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: USB/AT probe, baud auto-detect. Read: Read-only transport probe; no channel decoder. Write: Disabled. Settings: Hidden. Ledger status: Experimental probe.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:88",
+  "item": "67",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

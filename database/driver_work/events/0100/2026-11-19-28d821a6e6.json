@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 11:21:15",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email Sent (Re: Scan function)",
+  "item": "100",
+  "occurred_at": "2026-11-19",
+  "summary": "Emailed the forum reporter: zones are fixed by channel number; turn off Scan Zone Linking (or untick Scan Link Zone 1-10) and write settings to scan one zone; zone column fix in next update."
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:33:55",
+  "evidence_type": "email-attachment",
+  "item": "82",
+  "label": "RT Systems and NewChirp channel 51-54 comparison screenshot",
+  "notes": "Shows Tone/103.5 on RT Systems channels 52-53 and blanks in NewChirp.",
+  "sha256": "0e680206d6461d9b76af7107779273084ba76965a46aac20f951b02a88ca4887",
+  "uri": "email:INBOX:744"
+}

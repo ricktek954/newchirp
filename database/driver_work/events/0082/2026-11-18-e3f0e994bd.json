@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 09:54:05",
+  "details": "Direct IMAP verified Walter attachments: NewChirp CSV plus two screenshots, with no raw .img or .UV32 file. Replied directly from rick@newchirp.net asking for both files captured before changing channels 51-54.",
+  "event_type": "contact",
+  "external_ref": "email SMTP:B3F097F884",
+  "item": "82",
+  "occurred_at": "2026-11-18",
+  "summary": "Requested raw UV-32 image and RT Systems source file"
+}

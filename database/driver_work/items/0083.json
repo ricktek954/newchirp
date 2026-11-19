@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 09:59:48",
+  "kind": "bug",
+  "manufacturer": "Kenwood",
+  "model": "TK-270G",
+  "occurred_at": "2026-11-16",
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:723",
+  "status": "fix_committed",
+  "summary": "A downloaded image containing bank index 128 on an active channel is rejected during unchanged upload before radio I/O. Normalize erased bank metadata before rebuilding bank tables.",
+  "title": "Upload rejects erased bank index sentinel",
+  "uid": "83"
+}

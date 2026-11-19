@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:01:38",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "desktop bug report email 2026-11-18T22:34Z",
+  "item": "94",
+  "occurred_at": "2026-11-19",
+  "summary": "Desktop bug report from the forum reporter (NewChirp 1.0.54, MX Linux liquorix kernel, /dev/ttyUSB0): three reads, each 'No response from radio'; trace 'AL~WHO | response complete | 0.01s'. The 10 ms reply was the single-wire cable echo, so the port opened and the cable echoes, but the radio never answered (stock driver sends no AL~ wake). Trace now distinguishes echo-only from a radio reply and labels EEPDL addresses correctly."
+}

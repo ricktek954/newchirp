@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:01:19",
+  "details": "The upload path now replaces an out-of-range bank index with the channel position and an invalid bank with bank 1 before rebuilding the Kenwood bank tables. Added an offline unchanged-upload regression for the erased 128 sentinel.",
+  "event_type": "fix",
+  "external_ref": "desktop:8d9b476f",
+  "item": "83",
+  "occurred_at": "2026-11-18",
+  "summary": "Normalize erased bank metadata before validation and bank-table generation"
+}

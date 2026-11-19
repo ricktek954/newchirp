@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "bug",
+  "manufacturer": "Kenwood",
+  "model": "TK-350",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:727-728",
+  "status": "fix_committed",
+  "summary": "Zero identity bytes were observed on COM3 and COM4. The driver now retries the bounded 0x02 identity request three times for late PC mode.",
+  "title": "Identity request receives zero bytes",
+  "uid": "71"
+}

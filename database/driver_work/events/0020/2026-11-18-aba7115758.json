@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: UV-K5 framed serial, 38400 8N1. Read: Stock UV-K5-family profile. Write: Stock UV-K5-family policy. Settings: Stock UV-K5-family policy. Ledger status: Experimental.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:41",
+  "item": "20",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

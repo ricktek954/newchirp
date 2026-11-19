@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "kind": "maintenance",
+  "manufacturer": "TYT",
+  "model": "TH-9800",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "docs/DRIVER_STATUS.md",
+  "source_ref": "docs/DRIVER_STATUS.md:89",
+  "status": "experimental",
+  "summary": "Transport: TYT clone serial, 38400 8N1. Read: Reserved tone values no longer abort the read. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.",
+  "title": "Current driver status",
+  "uid": "65"
+}

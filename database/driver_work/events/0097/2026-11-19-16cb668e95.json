@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:57",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/widget_test.dart",
+  "item": "97",
+  "occurred_at": "2026-11-19",
+  "summary": "Added Ctrl/Cmd+A select-all for visible channel rows (text fields keep their own select-all)."
+}

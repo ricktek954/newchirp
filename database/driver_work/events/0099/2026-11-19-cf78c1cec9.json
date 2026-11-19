@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:35:49",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "file drops 9-11",
+  "item": "99",
+  "occurred_at": "2026-11-19",
+  "summary": "OEM evidence: installer RT97L_setup250421.exe (zip sha256 78dd810c...; Setup Factory 8, files LZMA-alone, CRCs verified) contains RT97L.exe sha256 d382a9af... (native MFC/VC++, own BuildCommDCB serial wrapper plus MSCOMM32.OCX), Msflxgrd.ocx, and config.ini variants (one with [FREQ_BAND] BAND=2). OEM save file RT97L-GMRS.txt (2048 bytes, sha256 7e1d7299...): 16 x 16-byte channels at 0x000, model string CX-525 at 0x7F0. Frequencies are little-endian BCD (00 50 75 46 = 467.5500 MHz) and CTCSS are 2-byte little-endian tone*10 words (02 03 = 77.0 Hz, 55 05 = 136.5 Hz). The current driver decodes BCD big-endian with 1-byte tones, so all 16 OEM channels read as empty. Next: disassemble RT97L.exe handshake/read path to confirm serial settings and that the save file equals radio memory, then fix decode."
+}

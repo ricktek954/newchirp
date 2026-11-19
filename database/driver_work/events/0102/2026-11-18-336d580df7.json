@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 12:32:00",
+  "details": "Forum report (Chromebook/Chrome): AR-5RM works but two UV-5R8W radios fail with 'expected 1 bytes, received 0' under both the UV-5R and UV-5R8W (BF-F8HP) profiles. The web identity loop tried the next magic immediately; CHIRP waits 2 s after a failed magic, and the BF-F8HP magic is tried second.",
+  "event_type": "created",
+  "external_ref": "newchirp.net forum: Web programmer from Chromebook/Chrome works for AR-5RM but not UV-5R8W",
+  "item": "102",
+  "occurred_at": "2026-11-18",
+  "summary": "Web Programmer read times out on UV-5R8W (BF-F8HP magic)"
+}

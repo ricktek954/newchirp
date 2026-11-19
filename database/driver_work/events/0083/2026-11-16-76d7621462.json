@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 09:59:48",
+  "details": "A downloaded image containing bank index 128 on an active channel is rejected during unchanged upload before radio I/O. Normalize erased bank metadata before rebuilding bank tables.",
+  "event_type": "created",
+  "external_ref": "INBOX:723",
+  "item": "83",
+  "occurred_at": "2026-11-16",
+  "summary": "Upload rejects erased bank index sentinel"
+}

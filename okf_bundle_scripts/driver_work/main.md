@@ -9,7 +9,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 608–818 in `driver_work.py`
+Lines 952–1058 in `driver_work.py`
 
 ## Relationships
 
@@ -32,13 +32,9 @@ Lines 608–818 in `driver_work.py`
 | related | [driver_work](/driver_work.md) |
 | calls | [parse_args](/check_linux_release_abi/parse_args.md) |
 | calls | [connect](/driver_work/connect.md) |
-| calls | [find_work_id](/driver_work/find_work_id.md) |
-| calls | [sync_driver_status](/driver_work/sync_driver_status.md) |
-| calls | [query_work](/driver_work/query_work.md) |
-| calls | [show_work](/driver_work/show_work.md) |
-| calls | [add_work](/driver_work/add_work.md) |
+| calls | [migrate_from_sqlite](/driver_work/migrate_from_sqlite.md) |
+| calls | [rebuild_cache](/driver_work/rebuild_cache.md) |
+| calls | [_execute](/driver_work/execute.md) |
 | calls | [export_markdown](/driver_work/export_markdown.md) |
-| calls | [add_event](/driver_work/add_event.md) |
-| calls | [sanitize_tester](/driver_work/sanitize_tester.md) |
-| calls | [print_work_rows](/driver_work/print_work_rows.md) |
-| calls | [today](/driver_work/today.md) |
+| calls | [persist](/driver_work/persist.md) |
+| calls | [display_path](/driver_work/display_path.md) |

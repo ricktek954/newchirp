@@ -9,7 +9,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work/connect
 language: python
 ---
@@ -19,7 +19,7 @@ language: python
 ## Signature
 
 ```python
-def connect(path, create = True)
+def connect(path, create = True, store = None)
 ```
 
 ## Parameters
@@ -30,13 +30,17 @@ def connect(path, create = True)
 
 | `create` | `—` | `True` |
 
+| `store` | `—` | `None` |
+
 ## Source
-Lines 101–112 in `driver_work.py`
+Lines 109–123 in `driver_work.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [driver_work](/driver_work.md) |
-| called_by | [main](/check_private_data/main.md) |
+| calls | [rebuild_cache](/driver_work/rebuild_cache.md) |
 | called_by | [main](/driver_work/main.md) |
+| called_by | [migrate_from_sqlite](/driver_work/migrate_from_sqlite.md) |
+| called_by | [rebuild_cache](/driver_work/rebuild_cache.md) |

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 11:54:27",
+  "details": "Published DEB, RPM, AppImage, and Pacman packages from source commit 50f17c3c. The release restores read-only fixed-zone display for BF-F8HP-PRO and related radios; public manifest reports 1.0.61; package SHA-256 values are b32b6dc5ea2edcf1a7f6f29e0cae249357dd0ebe462b76cfbcd16757eee8ac27, 74ba479102c025ff4b3f65d7337f57467428c3bbe7b3c9cc8d0d828c1e084e41, c4306b569fc9f551b4b74f217663f16ec664f481ddf59b81ba3b1678470bac61, and e839269b1d6421b31ebc445dc21da7cb6638019dbf0d4b97315bf02edfaa10e1.",
+  "event_type": "created",
+  "external_ref": "desktop:50f17c3c",
+  "item": "101",
+  "occurred_at": "2026-11-19",
+  "summary": "Linux 1.0.61 published"
+}

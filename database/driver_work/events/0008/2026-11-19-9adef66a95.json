@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 10:24:25",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "INBOX:789",
+  "item": "8",
+  "occurred_at": "2026-11-19",
+  "summary": "Stock-firmware RT-950 Pro owner (INBOX:789, 1.0.58) read OK (2 channels), then a 5-channel write failed at 'Could not prepare channel 1 ... read-only'; asks when writes arrive. Candidate write tester. The app now learns read-only drivers from model-info (NEWCHIRP_WRITE_DISABLED on 16 drivers) and explains before any write starts."
+}

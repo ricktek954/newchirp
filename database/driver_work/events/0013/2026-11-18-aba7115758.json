@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: Kenwood clone CAT serial, 9600-57,600 baud. Read: Yes, echo-tolerant. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:34",
+  "item": "13",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

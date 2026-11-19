@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 10:47:11",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email Sent (2026-11-19 follow-up)",
+  "item": "8",
+  "occurred_at": "2026-11-19",
+  "summary": "Sent the RT-950 Pro owner (INBOX:789) test steps: CPS backup first, then Web Programmer read, save image, one small edit, write with automatic read-back, report results and firmware."
+}

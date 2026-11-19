@@ -8,8 +8,9 @@ release requirements.
 
 ## Resume here
 
-- The manufacturer/model driver work ledger now lives in
-  `database/driver_work.sqlite3`. Use `scripts/driver_work.py` to list/search
+- The manufacturer/model driver work ledger lives in `database/driver_work/`
+  (one JSON file per record since 2026-11-19; `database/driver_work.sqlite3`
+  is a git-ignored cache). Use `scripts/driver_work.py` to list/search
   work, add bugs or enhancements, append commit/email/evidence/hardware-test
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email

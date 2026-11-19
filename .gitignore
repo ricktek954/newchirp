@@ -41,6 +41,10 @@ migrate_working_dir/
 /build_support/
 /build_support
 /coverage/
+# The ledger's source of truth is database/driver_work/ (JSON); the SQLite
+# file is a cache rebuilt from it by scripts/driver_work.py.
+/database/driver_work.sqlite3
+/database/.driver_work-*.sqlite3
 /database/*.sqlite3-journal
 /database/*.sqlite3-shm
 /database/*.sqlite3-wal

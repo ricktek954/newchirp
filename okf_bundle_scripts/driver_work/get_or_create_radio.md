@@ -9,7 +9,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work/get_or_create_radio
 language: python
 ---
@@ -33,7 +33,7 @@ def get_or_create_radio(database, manufacturer, model)
 | `model` | `—` | `—` |
 
 ## Source
-Lines 125–175 in `driver_work.py`
+Lines 136–186 in `driver_work.py`
 
 ## Relationships
 

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:30",
+  "details": "The supplied message is the current bounded PC-mode diagnostic rather than evidence of a new transport signature. Ask the reporter to confirm -PC- mode, the physical cable type, and whether OEM software reads on the same port.",
+  "event_type": "report",
+  "external_ref": "INBOX:731",
+  "item": "71",
+  "occurred_at": "2026-11-18",
+  "summary": "New 1.0.56 report repeats zero identity response on COM3"
+}

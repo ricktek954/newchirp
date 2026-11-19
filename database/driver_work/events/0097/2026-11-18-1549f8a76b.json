@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:57",
+  "details": "Windows 1.0.57 COM7: PROGRAMBFNOR no response on radio 2 and then on the previously working radio 1, so the cable/port path rather than either radio. Reporter also asked how to select all channels (no Ctrl+A).",
+  "event_type": "created",
+  "external_ref": "INBOX:773,774",
+  "item": "97",
+  "occurred_at": "2026-11-18",
+  "summary": "No response on both radios after writing a copied channel list"
+}

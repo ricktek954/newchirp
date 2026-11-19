@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: Wouxun clone serial, 19200 8N1, 64-byte blocks. Read: Reserved DCS words no longer abort channel decode; raw bytes preserved. Write: Stock CHIRP driver, offline round-trip. Settings: Stock CHIRP settings. Ledger status: Experimental compatibility override.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:69",
+  "item": "48",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

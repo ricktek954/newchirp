@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:21",
+  "details": "A Windows 11 user reports that the new-version download is cancelled because the installer is not commonly downloaded. Collect the exact browser warning and downloaded filename; no radio driver defect is indicated.",
+  "event_type": "created",
+  "external_ref": "INBOX:739",
+  "item": "91",
+  "occurred_at": "2026-11-17",
+  "summary": "Windows SmartScreen cancels update download"
+}

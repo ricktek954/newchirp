@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS schema_metadata (
 );
 
 INSERT INTO schema_metadata (key, value)
-VALUES ('schema_version', '1')
+VALUES ('schema_version', '2')
 ON CONFLICT(key) DO UPDATE SET value = excluded.value;
 
 CREATE TABLE IF NOT EXISTS manufacturers (
@@ -32,6 +32,10 @@ CREATE TABLE IF NOT EXISTS radios (
 
 CREATE TABLE IF NOT EXISTS work_items (
     id INTEGER PRIMARY KEY,
+    -- Stable key shared across machines: the legacy number for items created
+    -- before schema 2 ("94"), otherwise "w-YYYYMMDD-xxxx". The integer id is
+    -- a per-cache row number and is not stable for new items.
+    uid TEXT UNIQUE,
     radio_id INTEGER NOT NULL REFERENCES radios(id),
     kind TEXT NOT NULL CHECK (
         kind IN (
@@ -109,6 +113,7 @@ CREATE TABLE IF NOT EXISTS hardware_tests (
 CREATE VIEW IF NOT EXISTS work_overview AS
 SELECT
     w.id AS work_id,
+    COALESCE(w.uid, CAST(w.id AS TEXT)) AS work_ref,
     m.name AS manufacturer,
     r.model,
     w.kind,

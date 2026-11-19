@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:16",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/rt950_driver_test.py",
+  "item": "85",
+  "occurred_at": "2026-11-19",
+  "summary": "Second report (INBOX:778, 1.0.58, same error). Decoder now tolerates it: an undecodable all-0x00/0xFF TX field shows as TX off and a bad RX record marks only that channel empty, so one record no longer aborts the image (read-only driver, no write risk). Meaning of the 0xFF TX field still unconfirmed; raw image still needed. Web Programmer RT-950 decoder also read frequencies big-endian (CPS is little-endian, docs/RT950_PROTOCOL.md); fixed with the desktop reference vector."
+}

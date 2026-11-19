@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:57",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/chirp_bridge_upload_test.py",
+  "item": "96",
+  "occurred_at": "2026-11-19",
+  "summary": "bridge_error_message now prefixes the exception type when the message is only a number or quoted key (e.g. 'KeyError: 1'). Reporter should update to the current release and resend if it persists."
+}

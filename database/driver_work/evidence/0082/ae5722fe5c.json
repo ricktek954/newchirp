@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:37:01",
+  "evidence_type": "cps",
+  "item": "82",
+  "label": "Baofeng BF-UVs Pro CPS v1.4.7",
+  "notes": "Installer statically unpacked with innoextract; never executed.",
+  "sha256": "d2635bde922a66a182efd00a9c6aae9e79c057648429d3f937fc28051f73fbb2",
+  "uri": "https://baofeng.s3.amazonaws.com/Baofeng_UV-32_CPS_v1.4.7.zip"
+}

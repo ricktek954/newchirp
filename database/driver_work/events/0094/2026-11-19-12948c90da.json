@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 08:29:21",
+  "details": "Forum report: NewChirp sees the USB serial port but Read from radio fails after ~1 s. Stock CHIRP alinco_dr735t driver skips the OEM AL~ wake, accepts only DR735TN/TE, uses the bridge's 0.25 s timeout (OEM 500 ms) and calls exit(1) on a short block. Reverse engineering DR-735 Memory Editor 0.06 for a full override.",
+  "event_type": "created",
+  "external_ref": "newchirp.net forum topic 56 post 194",
+  "item": "94",
+  "occurred_at": "2026-11-19",
+  "summary": "DR-735T read fails after about one second on MX Linux"
+}

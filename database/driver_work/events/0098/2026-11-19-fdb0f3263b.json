@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:41:55",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email Sent:510",
+  "item": "98",
+  "occurred_at": "2026-11-19",
+  "summary": "Replied: next update reads common CSV encodings; workaround is Excel Save As CSV UTF-8; asked for the file if it is not CHIRP layout."
+}

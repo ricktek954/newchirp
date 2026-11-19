@@ -1,0 +1,8 @@
+{
+  "aliases": "DR735T,DR735E,DR-735T,DR-735E,DR735TN,DR735TE",
+  "created_at": "2026-11-19 08:29:21",
+  "driver_path": "drivers/newchirp_alinco_dr735.py",
+  "manufacturer": "Alinco",
+  "model": "DR-735",
+  "notes": ""
+}

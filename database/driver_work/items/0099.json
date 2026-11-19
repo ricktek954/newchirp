@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-19 09:16:57",
+  "kind": "new_driver",
+  "manufacturer": "Retevis",
+  "model": "RT97L GMRS",
+  "occurred_at": "2026-11-19",
+  "priority": "high",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:786; file drops 9-11",
+  "status": "investigating",
+  "summary": "Windows 1.0.58: RT97L driver gets no ACK even after STX wake-up. Reporter says the GMRS RT97L uses different OEM software and the standard RT97L Custom software cannot connect either. Reporter uploaded the GMRS programming software and a 2048-byte data file through the site file drop.",
+  "title": "RT97L GMRS needs its own programming protocol",
+  "uid": "99"
+}

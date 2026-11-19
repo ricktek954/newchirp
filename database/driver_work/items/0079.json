@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "bug",
+  "manufacturer": "Kenwood",
+  "model": "TK-359",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:699-700",
+  "status": "awaiting_user",
+  "summary": "Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.",
+  "title": "No identity response in PC mode",
+  "uid": "79"
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 09:59:56",
+  "kind": "bug",
+  "manufacturer": "Radtel",
+  "model": "RT-950 Pro",
+  "occurred_at": "2026-11-16",
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:720",
+  "status": "awaiting_user",
+  "summary": "The read completed and produced an image, but channel decoding stopped at a packed-frequency byte 0xFF. A raw image is required to distinguish empty records from a Pro layout mismatch.",
+  "title": "Stock firmware image aborts on invalid packed frequency",
+  "uid": "85"
+}

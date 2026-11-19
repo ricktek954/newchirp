@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: KPG-23D clone serial, 9600 8N1, 0xF000 addressed blocks. Read: Yes, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental read-only.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:36",
+  "item": "15",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

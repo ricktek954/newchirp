@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "details": "The OEM ADMS-1E uses 9600 8N2. A 1.0.56 name-only write and restore committed correctly and preserved all other channels.",
+  "event_type": "created",
+  "external_ref": "INBOX:722",
+  "item": "69",
+  "occurred_at": "2026-11-18",
+  "summary": "Two-stop-bit transport and odd-split write"
+}

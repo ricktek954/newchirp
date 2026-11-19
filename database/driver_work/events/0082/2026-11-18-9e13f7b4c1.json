@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:36:52",
+  "details": "CPS confirms CTCSS values are stored as decimal tenths in the little-endian TX/RX tone words: 103.5 = 0x040B (bytes 0B 04), 206.5 = 0x0811 (bytes 11 08). The normal 32-byte channel record map matches NewChirp. A raw radio image is still required to determine why channels 52-54 decode as no tone.",
+  "event_type": "analysis",
+  "external_ref": "cps:BF-UVs Pro En CPS v1.4.7(1)/setup.exe",
+  "item": "82",
+  "occurred_at": "2026-11-18",
+  "summary": "Recovered UV-32 CPS 1.4.7 tone serialization"
+}

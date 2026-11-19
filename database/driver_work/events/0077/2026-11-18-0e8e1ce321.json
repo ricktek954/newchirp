@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:25",
+  "details": "All UV-5R identity and wake-up commands received no response on COM1. This matches the existing cable/port diagnostic; request a USB serial device name and OEM CPS comparison.",
+  "event_type": "report",
+  "external_ref": "INBOX:721",
+  "item": "77",
+  "occurred_at": "2026-11-18",
+  "summary": "New 1.0.46 Windows report uses built-in COM1 with no responses"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:33:48",
+  "evidence_type": "email-attachment",
+  "item": "82",
+  "label": "NewChirp 1.0.56 UV-32 exported CSV",
+  "notes": "Do not publish; contains customer channel names and locations.",
+  "sha256": "603a048b3c5659f12f994b361d887923e4effae6a63920f279ccc209d9fe60f4",
+  "uri": "email:INBOX:744"
+}

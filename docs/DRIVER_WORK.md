@@ -1,6 +1,6 @@
 # NewChirp driver work ledger
 
-Generated from `database/driver_work.sqlite3` on 2026-11-19.
+Generated from `database/driver_work/` by `python3 scripts/driver_work.py export`.
 
 Use `python3 scripts/driver_work.py show <id>` for event history.
 

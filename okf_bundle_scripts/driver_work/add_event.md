@@ -9,7 +9,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work/add_event
 language: python
 ---
@@ -35,7 +35,7 @@ def add_event(database, work_id, event_type, summary)
 | `summary` | `—` | `—` |
 
 ## Source
-Lines 178–205 in `driver_work.py`
+Lines 189–216 in `driver_work.py`
 
 ## Relationships
 
@@ -44,5 +44,5 @@ Lines 178–205 in `driver_work.py`
 | related | [driver_work](/driver_work.md) |
 | calls | [today](/driver_work/today.md) |
 | called_by | [add_work](/driver_work/add_work.md) |
-| called_by | [main](/driver_work/main.md) |
+| called_by | [_execute](/driver_work/execute.md) |
 | called_by | [sync_driver_status](/driver_work/sync_driver_status.md) |

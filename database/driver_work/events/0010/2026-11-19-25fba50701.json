@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:16:58",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/nicfw950_driver_test.py",
+  "item": "10",
+  "occurred_at": "2026-11-19",
+  "summary": "Stock-firmware RT-950 Pro answered the nicFW950 baud handshake with 05 04 (INBOX:781, user expected NewChirp to install nicFW). First handshake now explains the radio is not running nicFW950, to use the stock RT-950 Pro model, and that NewChirp does not flash firmware."
+}

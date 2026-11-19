@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: Icom CI-V serial, auto-baud. Read: Opaque mode bytes decode read-only. Write: Disabled for opaque channels. Settings: Stock IC-7100 settings. Ledger status: Experimental compatibility override.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:74",
+  "item": "53",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

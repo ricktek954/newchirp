@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "evidence_type": "cps",
+  "item": "68",
+  "label": "K6/K63 CPS 1.1.2 ZIP",
+  "notes": "Unpacked statically; executable was not run.",
+  "sha256": "3f9c52ece3a8b6726fba4135b5a0f458b5d81f47d2e83af75045e82d8931b917",
+  "uri": "https://baofeng.s3.amazonaws.com/BAOFENG_K6_CPS_1.1.2_20240913.zip"
+}

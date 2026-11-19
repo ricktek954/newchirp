@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:34",
+  "details": "TK-359 remains in awaiting_user status. Ask whether the radio reaches -PC- mode and whether KPG-32D can read it with the same cable and port.",
+  "event_type": "report",
+  "external_ref": "INBOX:732",
+  "item": "79",
+  "occurred_at": "2026-11-18",
+  "summary": "New 1.0.56 report repeats identity failure on COM3"
+}

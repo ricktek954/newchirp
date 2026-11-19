@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 09:59:56",
+  "details": "The read completed and produced an image, but channel decoding stopped at a packed-frequency byte 0xFF. A raw image is required to distinguish empty records from a Pro layout mismatch.",
+  "event_type": "created",
+  "external_ref": "INBOX:720",
+  "item": "85",
+  "occurred_at": "2026-11-16",
+  "summary": "Stock firmware image aborts on invalid packed frequency"
+}

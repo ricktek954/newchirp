@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "bug",
+  "manufacturer": "Icom",
+  "model": "IC-7100",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email triage",
+  "source_ref": "2026-11-16",
+  "status": "fix_committed",
+  "summary": "Display reserved modes as read-only and block upload before I/O.",
+  "title": "Unknown CI-V mode aborts download",
+  "uid": "73"
+}

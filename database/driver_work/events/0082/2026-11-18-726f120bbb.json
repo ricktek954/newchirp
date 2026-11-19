@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:33:33",
+  "details": "NewChirp 1.0.56 decodes channels 52-54 with no tone, while RT Systems UV-32 Programmer 5.00.29 shows CTCSS 103.5, 103.5, and 206.5. The exported CSV alone does not contain the raw tone words.",
+  "event_type": "created",
+  "external_ref": "INBOX:744",
+  "item": "82",
+  "occurred_at": "2026-11-18",
+  "summary": "Channels 52-54 lose stored CTCSS during decode"
+}

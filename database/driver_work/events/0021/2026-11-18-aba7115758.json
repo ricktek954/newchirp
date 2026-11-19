@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:14",
+  "details": "Transport: MH-580 clone serial, 38400 8N1. Read: Sparse `0x2A00` image, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental read-only.",
+  "event_type": "created",
+  "external_ref": "docs/DRIVER_STATUS.md:42",
+  "item": "21",
+  "occurred_at": "2026-11-18",
+  "summary": "Current driver status"
+}

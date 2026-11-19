@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:47",
+  "details": "The radio is a TH-9000D 220, but NewChirp selected TYT_TH-9800 on COM4. The correct family is TYT TH-9000D Plus 220. This is a model-selection error, not a TH-9800 protocol failure.",
+  "event_type": "analysis",
+  "external_ref": "INBOX:742",
+  "item": "65",
+  "occurred_at": "2026-11-18",
+  "summary": "TH-9000D 220 report selected the TH-9800 profile"
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 12:55:15",
+  "kind": "new_driver",
+  "manufacturer": "Wouxun",
+  "model": "KG-689",
+  "occurred_at": "2026-11-17",
+  "priority": "normal",
+  "reporter": "Tony",
+  "source": "forum",
+  "source_ref": "TOPIC:93",
+  "status": "awaiting_user",
+  "summary": "Forum requester has a 2m KG-689 absent from CHIRP and NewChirp. Wouxun Download Center groups KG-689E and KG-699E under a 2010 programming package. Need exact label, cable/port details, and a saved OEM codeplug or radio image.",
+  "title": "Legacy KG-689E programming support",
+  "uid": "93"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:37:11",
+  "details": "Static IL analysis of CaculateCtsDcs, GetChannelInfos, and channel records.",
+  "event_type": "evidence",
+  "external_ref": "/tmp/uv32-cps-unpacked/app/BF-UVs CPS.exe",
+  "item": "82",
+  "occurred_at": "2026-11-18",
+  "summary": "Evidence recorded: BF-UVs CPS.exe 1.4.7"
+}

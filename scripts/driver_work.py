@@ -5,14 +5,22 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
+import os
 from pathlib import Path
 import re
+import secrets
 import sqlite3
 import sys
+import tempfile
 
 
 ROOT = Path(__file__).resolve().parent.parent
+# The ledger's source of truth is one JSON file per record under
+# DEFAULT_STORE, so concurrent edits on different machines merge in git.
+# DEFAULT_DB is a git-ignored cache rebuilt from the store on every run.
+DEFAULT_STORE = ROOT / "database" / "driver_work"
 DEFAULT_DB = ROOT / "database" / "driver_work.sqlite3"
 SCHEMA = ROOT / "database" / "schema.sql"
 DEFAULT_STATUS = ROOT / "docs" / "DRIVER_STATUS.md"
@@ -98,8 +106,11 @@ def sanitize_tester(value):
     return value
 
 
-def connect(path, create=True):
+def connect(path, create=True, store=None):
     path = Path(path)
+    if store is not None:
+        rebuild_cache(store, path)
+        create = True
     if not create and not path.is_file():
         raise SystemExit("Driver work database does not exist: %s" % path)
     if create:
@@ -239,10 +250,10 @@ def add_work(
     database.execute(
         """
         INSERT INTO work_items (
-            radio_id, kind, title, status, priority, summary,
+            uid, radio_id, kind, title, status, priority, summary,
             source, source_ref, reporter, occurred_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(radio_id, kind, title) DO UPDATE SET
             status = excluded.status,
             priority = excluded.priority,
@@ -254,6 +265,7 @@ def add_work(
             updated_at = datetime('now')
         """,
         (
+            new_uid(),
             radio_id,
             kind,
             title,
@@ -391,7 +403,7 @@ def print_work_rows(rows):
         return
     for row in rows:
         print(
-            "%(work_id)i\t%(manufacturer)s\t%(model)s\t"
+            "%(work_ref)s\t%(manufacturer)s\t%(model)s\t"
             "%(kind)s\t%(status)s\t%(priority)s\t%(title)s"
             % row
         )
@@ -430,7 +442,7 @@ def query_work(
     values.append(limit)
     return database.execute(
         """
-        SELECT work_id, manufacturer, model, kind, title, status,
+        SELECT work_id, work_ref, manufacturer, model, kind, title, status,
                priority, summary, updated_at
         FROM work_overview
         """
@@ -455,9 +467,9 @@ def show_work(database, work_id):
     if row is None:
         raise SystemExit("Work item %s was not found." % work_id)
     print(
-        "#%i %s %s | %s | %s"
+        "#%s %s %s | %s | %s"
         % (
-            row["work_id"],
+            row["work_ref"],
             row["manufacturer"],
             row["model"],
             row["kind"],
@@ -536,7 +548,7 @@ def show_work(database, work_id):
 def export_markdown(database, output):
     rows = database.execute(
         """
-        SELECT work_id, manufacturer, model, kind, title, status,
+        SELECT work_id, work_ref, manufacturer, model, kind, title, status,
                priority, summary, source, source_ref, reporter, updated_at
         FROM work_overview
         ORDER BY manufacturer COLLATE NOCASE, model COLLATE NOCASE,
@@ -551,7 +563,10 @@ def export_markdown(database, output):
     lines = [
         "# NewChirp driver work ledger",
         "",
-        "Generated from `database/driver_work.sqlite3` on %s." % today(),
+        # No date: identical data must produce identical text on every
+        # machine, so regenerating this file never creates a merge conflict.
+        "Generated from `database/driver_work/` by "
+        "`python3 scripts/driver_work.py export`.",
         "",
         "Use `python3 scripts/driver_work.py show <id>` for event history.",
         "",
@@ -562,9 +577,9 @@ def export_markdown(database, output):
             lines.extend(["### " + model, ""])
             for item in items:
                 lines.append(
-                    "- **#%i %s | %s | %s:** %s"
+                    "- **#%s %s | %s | %s:** %s"
                     % (
-                        item["work_id"],
+                        item["work_ref"],
                         item["kind"],
                         item["status"],
                         item["priority"],
@@ -589,8 +604,24 @@ def export_markdown(database, output):
         print(path)
 
 
+def work_ref(database, work_id):
+    row = database.execute(
+        "SELECT COALESCE(uid, CAST(id AS TEXT)) AS ref FROM work_items"
+        " WHERE id = ?", (work_id,)).fetchone()
+    return row["ref"] if row else str(work_id)
+
+
 def find_work_id(database, selector):
-    if selector.isdigit():
+    selector = selector.lstrip("#")
+    row = database.execute(
+        "SELECT id FROM work_items WHERE uid = ?", (selector,)
+    ).fetchone()
+    if row is not None:
+        return row["id"]
+    if selector.isdigit() and database.execute(
+        "SELECT 1 FROM work_items WHERE id = ? AND uid IS NULL",
+        (int(selector),),
+    ).fetchone():
         return int(selector)
     row = database.execute(
         """
@@ -605,9 +636,326 @@ def find_work_id(database, selector):
     return row["work_id"]
 
 
+# --- Text store -------------------------------------------------------------
+#
+# Layout under the store directory (all JSON, sorted keys, one record each):
+#   manufacturers/<slug>.json
+#   radios/<manufacturer-slug>/<model-slug>-<hash>.json
+#   items/<key>.json                 key: legacy number ("0094") or uid
+#   events/<key>/<occurred>-<hash>.json
+#   tests/<key>/<tested>-<hash>.json
+#   evidence/<key>/<hash>.json
+# Mutable timestamps (updated_at) are derived, not stored, so recording an
+# event never rewrites its item's file. Records added on different machines
+# are different files and merge without conflicts.
+
+STORE_KINDS = ("manufacturers", "radios", "items", "events", "tests",
+               "evidence")
+
+
+class StoreError(SystemExit):
+    pass
+
+
+def new_uid():
+    return "w-%s-%s" % (dt.date.today().strftime("%Y%m%d"),
+                        secrets.token_hex(2))
+
+
+def _slug(text):
+    slug = re.sub(r"[^a-z0-9]+", "-", text.casefold()).strip("-")
+    return slug or "x"
+
+
+def _digest(*parts, length=10):
+    joined = "\x00".join("" if part is None else str(part) for part in parts)
+    return hashlib.sha256(joined.encode("utf-8")).hexdigest()[:length]
+
+
+def _item_file_key(uid):
+    return uid.zfill(4) if uid.isdigit() else uid
+
+
+def _dump(record):
+    return json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
+
+
+def _read_store(store):
+    """Load every record, refusing files that are not clean JSON."""
+    store = Path(store)
+    records = {kind: [] for kind in STORE_KINDS}
+    for kind in STORE_KINDS:
+        base = store / kind
+        if not base.is_dir():
+            continue
+        for path in sorted(base.rglob("*.json")):
+            text = path.read_text(encoding="utf-8")
+            if "<<<<<<<" in text or ">>>>>>>" in text:
+                raise StoreError(
+                    "Merge conflict markers in %s. Keep the correct values, "
+                    "then run the command again." % display_path(path))
+            try:
+                records[kind].append((path, json.loads(text)))
+            except json.JSONDecodeError as exc:
+                raise StoreError("Invalid JSON in %s: %s"
+                                 % (display_path(path), exc))
+    return records
+
+
+def rebuild_cache(store, cache_path):
+    """Build a fresh SQLite cache from the text store (atomic replace)."""
+    records = _read_store(store)
+    cache_path = Path(cache_path)
+    cache_path.parent.mkdir(parents=True, exist_ok=True)
+    handle, temp_name = tempfile.mkstemp(
+        prefix=".driver_work-", suffix=".sqlite3", dir=cache_path.parent)
+    os.close(handle)
+    database = sqlite3.connect(temp_name)
+    database.row_factory = sqlite3.Row
+    try:
+        database.executescript(SCHEMA.read_text(encoding="utf-8"))
+        for _path, row in records["manufacturers"]:
+            database.execute(
+                "INSERT INTO manufacturers (name, aliases, notes, created_at,"
+                " updated_at) VALUES (?, ?, ?, ?, ?)",
+                (row["name"], row.get("aliases", ""), row.get("notes", ""),
+                 row["created_at"], row["created_at"]))
+        manufacturer_ids = {
+            r["name"].casefold(): r["id"]
+            for r in database.execute("SELECT id, name FROM manufacturers")}
+
+        def manufacturer_id(name):
+            key = name.casefold()
+            if key not in manufacturer_ids:
+                cursor = database.execute(
+                    "INSERT INTO manufacturers (name) VALUES (?)", (name,))
+                manufacturer_ids[key] = cursor.lastrowid
+            return manufacturer_ids[key]
+
+        for _path, row in records["radios"]:
+            database.execute(
+                "INSERT INTO radios (manufacturer_id, model, aliases,"
+                " driver_path, notes, created_at, updated_at)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (manufacturer_id(row["manufacturer"]), row["model"],
+                 row.get("aliases", ""), row.get("driver_path", ""),
+                 row.get("notes", ""), row["created_at"], row["created_at"]))
+
+        def radio_id(manufacturer, model):
+            mid = manufacturer_id(manufacturer)
+            found = database.execute(
+                "SELECT id FROM radios WHERE manufacturer_id = ?"
+                " AND model = ? COLLATE NOCASE", (mid, model)).fetchone()
+            if found:
+                return found["id"]
+            return database.execute(
+                "INSERT INTO radios (manufacturer_id, model) VALUES (?, ?)",
+                (mid, model)).lastrowid
+
+        # Legacy items keep their numbers; newer items follow in creation
+        # order. A natural-key duplicate (the same item added on two
+        # machines) folds into the earliest key.
+        items = sorted(
+            (row for _path, row in records["items"]),
+            key=lambda row: (0, int(row["uid"]), "") if row["uid"].isdigit()
+            else (1, row["created_at"], row["uid"]))
+        next_id = max([int(r["uid"]) for r in items if r["uid"].isdigit()]
+                      + [0]) + 1
+        key_to_id = {}
+        natural = {}
+        for row in items:
+            rid = radio_id(row["manufacturer"], row["model"])
+            nkey = (rid, row["kind"], row["title"])
+            if nkey in natural:
+                key_to_id[row["uid"]] = natural[nkey]
+                continue
+            if row["uid"].isdigit():
+                item_id = int(row["uid"])
+            else:
+                item_id = next_id
+                next_id += 1
+            database.execute(
+                "INSERT INTO work_items (id, uid, radio_id, kind, title,"
+                " status, priority, summary, source, source_ref, reporter,"
+                " occurred_at, created_at, updated_at)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (item_id, row["uid"], rid, row["kind"], row["title"],
+                 row["status"], row.get("priority", "normal"),
+                 row.get("summary", ""), row.get("source", ""),
+                 row.get("source_ref", ""), row.get("reporter", ""),
+                 row.get("occurred_at"), row["created_at"],
+                 row["created_at"]))
+            natural[nkey] = item_id
+            key_to_id[row["uid"]] = item_id
+
+        def owner(row, path):
+            item = key_to_id.get(row["item"])
+            if item is None:
+                raise StoreError("%s refers to unknown work item %r"
+                                 % (display_path(path), row["item"]))
+            return item
+
+        for path, row in sorted(records["events"],
+                                key=lambda pair: (pair[1]["occurred_at"],
+                                                  pair[1]["created_at"],
+                                                  pair[1]["summary"])):
+            database.execute(
+                "INSERT INTO work_events (work_item_id, event_type, summary,"
+                " details, external_ref, occurred_at, created_at)"
+                " VALUES (?, ?, ?, ?, ?, ?, ?)"
+                " ON CONFLICT(work_item_id, event_type, occurred_at, summary)"
+                " DO NOTHING",
+                (owner(row, path), row["event_type"], row["summary"],
+                 row.get("details", ""), row.get("external_ref", ""),
+                 row["occurred_at"], row["created_at"]))
+        for path, row in sorted(records["tests"],
+                                key=lambda pair: (pair[1]["tested_at"],
+                                                  pair[1]["created_at"])):
+            database.execute(
+                "INSERT INTO hardware_tests (work_item_id, tester, tested_at,"
+                " result, details, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+                (owner(row, path), row["tester"], row["tested_at"],
+                 row["result"], row.get("details", ""), row["created_at"]))
+        for path, row in sorted(records["evidence"],
+                                key=lambda pair: (pair[1]["created_at"],
+                                                  pair[1]["label"])):
+            database.execute(
+                "INSERT INTO evidence (work_item_id, evidence_type, label,"
+                " uri, sha256, notes, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (owner(row, path), row["evidence_type"], row["label"],
+                 row.get("uri", ""), row.get("sha256", ""),
+                 row.get("notes", ""), row["created_at"]))
+        # updated_at is derived from the newest event.
+        database.execute(
+            "UPDATE work_items SET updated_at = COALESCE((SELECT"
+            " MAX(created_at) FROM work_events e WHERE e.work_item_id ="
+            " work_items.id), created_at)")
+        database.commit()
+    except BaseException:
+        database.close()
+        os.unlink(temp_name)
+        raise
+    database.close()
+    os.replace(temp_name, cache_path)
+
+
+def _store_records(database):
+    """Yield (relative path, record) for every row in the cache."""
+    for row in database.execute(
+            "SELECT name, aliases, notes, created_at FROM manufacturers"):
+        yield ("manufacturers/%s.json" % _slug(row["name"]), {
+            "name": row["name"], "aliases": row["aliases"],
+            "notes": row["notes"], "created_at": row["created_at"]})
+    for row in database.execute(
+            "SELECT m.name AS manufacturer, r.model, r.aliases,"
+            " r.driver_path, r.notes, r.created_at FROM radios r"
+            " JOIN manufacturers m ON m.id = r.manufacturer_id"):
+        yield ("radios/%s/%s-%s.json" % (
+            _slug(row["manufacturer"]), _slug(row["model"]),
+            _digest(row["model"].casefold(), length=6)), dict(row))
+    keys = {}
+    for row in database.execute(
+            "SELECT w.id, w.uid, m.name AS manufacturer, r.model, w.kind,"
+            " w.title, w.status, w.priority, w.summary, w.source,"
+            " w.source_ref, w.reporter, w.occurred_at, w.created_at"
+            " FROM work_items w JOIN radios r ON r.id = w.radio_id"
+            " JOIN manufacturers m ON m.id = r.manufacturer_id"):
+        record = dict(row)
+        item_id = record.pop("id")
+        uid = record["uid"] or str(item_id)
+        record["uid"] = uid
+        keys[item_id] = uid
+        yield ("items/%s.json" % _item_file_key(uid), record)
+    for row in database.execute(
+            "SELECT work_item_id, event_type, summary, details, external_ref,"
+            " occurred_at, created_at FROM work_events"):
+        record = dict(row)
+        item = keys[record.pop("work_item_id")]
+        record["item"] = item
+        yield ("events/%s/%s-%s.json" % (
+            _item_file_key(item), record["occurred_at"],
+            _digest(record["event_type"], record["summary"])), record)
+    for row in database.execute(
+            "SELECT work_item_id, tester, tested_at, result, details,"
+            " created_at FROM hardware_tests"):
+        record = dict(row)
+        item = keys[record.pop("work_item_id")]
+        record["item"] = item
+        yield ("tests/%s/%s-%s.json" % (
+            _item_file_key(item), record["tested_at"],
+            _digest(record["tester"], record["result"], record["details"])),
+            record)
+    for row in database.execute(
+            "SELECT work_item_id, evidence_type, label, uri, sha256, notes,"
+            " created_at FROM evidence"):
+        record = dict(row)
+        item = keys[record.pop("work_item_id")]
+        record["item"] = item
+        yield ("evidence/%s/%s.json" % (
+            _item_file_key(item), _digest(
+                record["evidence_type"], record["label"], record["uri"],
+                record["sha256"], record["notes"])), record)
+
+
+def persist(database, store, remove_missing=True):
+    """Write the cache back to the store, touching only changed files."""
+    store = Path(store)
+    wanted = {}
+    for relative, record in _store_records(database):
+        wanted[store / relative] = _dump(record)
+    written = 0
+    for path, text in wanted.items():
+        if not path.is_file() or path.read_text(encoding="utf-8") != text:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text, encoding="utf-8")
+            written += 1
+    # Remove records the cache no longer has (for example a duplicate item
+    # folded into its earlier copy). The cache was built from this store, so
+    # nothing here is lost. Imports (migrate) never remove anything.
+    if not remove_missing:
+        return written
+    for kind in STORE_KINDS:
+        base = store / kind
+        if not base.is_dir():
+            continue
+        for path in base.rglob("*.json"):
+            if path not in wanted:
+                path.unlink()
+                written += 1
+        for directory in sorted(base.rglob("*"), reverse=True):
+            if directory.is_dir() and not any(directory.iterdir()):
+                directory.rmdir()
+    return written
+
+
+def migrate_from_sqlite(legacy_path, store):
+    """One-time import of a schema-1 database into the text store."""
+    legacy = sqlite3.connect("file:%s?mode=ro" % legacy_path, uri=True)
+    legacy.row_factory = sqlite3.Row
+    columns = {row["name"] for row in
+               legacy.execute("PRAGMA table_info(work_items)")}
+    memory = sqlite3.connect(":memory:")
+    legacy.backup(memory)
+    legacy.close()
+    memory.row_factory = sqlite3.Row
+    if "uid" not in columns:
+        memory.execute("ALTER TABLE work_items ADD COLUMN uid TEXT")
+    memory.execute("UPDATE work_items SET uid = CAST(id AS TEXT)"
+                   " WHERE uid IS NULL")
+    # Add and update only: other machines' records already in the store
+    # must survive importing an older local database.
+    written = persist(memory, store, remove_missing=False)
+    memory.close()
+    return written
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--db", default=str(DEFAULT_DB))
+    parser.add_argument("--store", default=str(DEFAULT_STORE),
+                        help="Text store (source of truth)")
+    parser.add_argument("--no-store", action="store_true",
+                        help="Use --db directly without the text store")
     commands = parser.add_subparsers(dest="command", required=True)
 
     init = commands.add_parser("init")
@@ -674,148 +1022,185 @@ def main():
     export = commands.add_parser("export")
     export.add_argument("--output", default=str(DEFAULT_EXPORT))
 
-    args = parser.parse_args()
-    database = connect(args.db, create=args.command in {"init", "sync-status"})
+    rebuild = commands.add_parser(
+        "rebuild", help="Rebuild the SQLite cache and docs from the store")
+    rebuild.add_argument("--output", default=str(DEFAULT_EXPORT))
 
+    migrate = commands.add_parser(
+        "migrate", help="Import a schema-1 SQLite ledger into the store")
+    migrate.add_argument("--from", dest="source", required=True)
+
+    args = parser.parse_args()
+    store = None if args.no_store else Path(args.store)
+    if args.command == "migrate":
+        written = migrate_from_sqlite(args.source, store)
+        rebuild_cache(store, args.db)
+        print("Wrote %i store files to %s." % (written, display_path(store)))
+        return
+    if store is not None and args.command == "init":
+        store.mkdir(parents=True, exist_ok=True)
+    # The store directory existing is what switches the ledger to text mode;
+    # without it (an unmigrated checkout) --db is used directly.
+    store_mode = store is not None and store.is_dir()
+    database = connect(
+        args.db,
+        create=args.command in {"init", "sync-status", "rebuild"},
+        store=store if store_mode else None,
+    )
     try:
-        if args.command == "init":
-            if not args.no_status:
-                count = sync_driver_status(database, args.status_file)
-                print("Initialized %s and imported %i status rows." % (args.db, count))
-            else:
-                print("Initialized %s." % args.db)
-            return
-        if args.command == "sync-status":
-            count = sync_driver_status(database, args.status_file)
-            print("Imported %i driver status rows." % count)
-            return
-        if args.command == "list":
-            rows = query_work(
-                database,
-                manufacturer=args.manufacturer,
-                model=args.model,
-                status=args.status,
-                kind=args.kind,
-                text=args.text,
-                limit=args.limit,
-            )
-            if args.json:
-                print(json.dumps([dict(row) for row in rows], indent=2))
-            else:
-                print_work_rows(rows)
-            return
-        if args.command == "show":
-            show_work(database, find_work_id(database, args.work))
-            return
-        if args.command == "add":
-            work_id = add_work(
-                database,
-                args.manufacturer,
-                args.model,
-                args.kind,
-                args.title,
-                status=args.status,
-                priority=args.priority,
-                summary=args.summary,
-                source=args.source,
-                source_ref=args.source_ref,
-                reporter=args.reporter,
-                occurred_at=args.occurred_at,
-                aliases=args.aliases,
-                driver_path=args.driver_path,
-            )
-            database.commit()
-            print(work_id)
-            return
-        if args.command == "export":
+        if args.command == "rebuild":
             export_markdown(database, args.output)
             return
-        work_id = find_work_id(database, args.work)
-        if args.command == "event":
-            inserted = add_event(
-                database,
-                work_id,
-                args.type,
-                args.summary,
-                details=args.details,
-                external_ref=args.ref,
-                occurred_at=args.occurred_at,
-            )
-            database.commit()
-            print("recorded" if inserted else "already recorded")
-            return
-        if args.command == "status":
-            previous = database.execute(
-                "SELECT status FROM work_items WHERE id = ?", (work_id,)
-            ).fetchone()["status"]
-            database.execute(
-                "UPDATE work_items SET status = ?, updated_at = datetime('now') "
-                "WHERE id = ?",
-                (args.value, work_id),
-            )
-            if previous != args.value:
-                add_event(
-                    database,
-                    work_id,
-                    "status_change",
-                    "Status changed from %s to %s" % (previous, args.value),
-                )
-            database.commit()
-            print("%i: %s -> %s" % (work_id, previous, args.value))
-            return
-        if args.command == "test":
-            tested_at = args.tested_at or today()
-            tester = sanitize_tester(args.tester)
-            database.execute(
-                """
-                INSERT INTO hardware_tests (
-                    work_item_id, tester, tested_at, result, details
-                )
-                VALUES (?, ?, ?, ?, ?)
-                """,
-                (work_id, tester, tested_at, args.result, args.details),
-            )
-            add_event(
-                database,
-                work_id,
-                "hardware_test",
-                "%s hardware test: %s" % (tester, args.result),
-                details=args.details,
-                occurred_at=tested_at,
-            )
-            database.commit()
-            print("recorded")
-            return
-        if args.command == "evidence":
-            database.execute(
-                """
-                INSERT INTO evidence (
-                    work_item_id, evidence_type, label, uri, sha256, notes
-                )
-                VALUES (?, ?, ?, ?, ?, ?)
-                """,
-                (
-                    work_id,
-                    args.type,
-                    args.label,
-                    args.uri,
-                    args.sha256,
-                    args.notes,
-                ),
-            )
-            add_event(
-                database,
-                work_id,
-                "evidence",
-                "Evidence recorded: %s" % args.label,
-                details=args.notes,
-                external_ref=args.uri,
-            )
-            database.commit()
-            print("recorded")
-            return
+        _execute(args, database)
+        if store_mode and args.command in MUTATING_COMMANDS:
+            persist(database, store)
     finally:
         database.close()
+
+
+MUTATING_COMMANDS = {
+    "init", "sync-status", "add", "event", "status", "test", "evidence",
+}
+
+
+def _execute(args, database):
+    if args.command == "init":
+        if not args.no_status:
+            count = sync_driver_status(database, args.status_file)
+            print("Initialized %s and imported %i status rows." % (args.db, count))
+        else:
+            print("Initialized %s." % args.db)
+        return
+    if args.command == "sync-status":
+        count = sync_driver_status(database, args.status_file)
+        print("Imported %i driver status rows." % count)
+        return
+    if args.command == "list":
+        rows = query_work(
+            database,
+            manufacturer=args.manufacturer,
+            model=args.model,
+            status=args.status,
+            kind=args.kind,
+            text=args.text,
+            limit=args.limit,
+        )
+        if args.json:
+            print(json.dumps([dict(row) for row in rows], indent=2))
+        else:
+            print_work_rows(rows)
+        return
+    if args.command == "show":
+        show_work(database, find_work_id(database, args.work))
+        return
+    if args.command == "add":
+        work_id = add_work(
+            database,
+            args.manufacturer,
+            args.model,
+            args.kind,
+            args.title,
+            status=args.status,
+            priority=args.priority,
+            summary=args.summary,
+            source=args.source,
+            source_ref=args.source_ref,
+            reporter=args.reporter,
+            occurred_at=args.occurred_at,
+            aliases=args.aliases,
+            driver_path=args.driver_path,
+        )
+        database.commit()
+        print(work_ref(database, work_id))
+        return
+    if args.command == "export":
+        export_markdown(database, args.output)
+        return
+    work_id = find_work_id(database, args.work)
+    if args.command == "event":
+        inserted = add_event(
+            database,
+            work_id,
+            args.type,
+            args.summary,
+            details=args.details,
+            external_ref=args.ref,
+            occurred_at=args.occurred_at,
+        )
+        database.commit()
+        print("recorded" if inserted else "already recorded")
+        return
+    if args.command == "status":
+        previous = database.execute(
+            "SELECT status FROM work_items WHERE id = ?", (work_id,)
+        ).fetchone()["status"]
+        database.execute(
+            "UPDATE work_items SET status = ?, updated_at = datetime('now') "
+            "WHERE id = ?",
+            (args.value, work_id),
+        )
+        if previous != args.value:
+            add_event(
+                database,
+                work_id,
+                "status_change",
+                "Status changed from %s to %s" % (previous, args.value),
+            )
+        database.commit()
+        print("%s: %s -> %s" % (work_ref(database, work_id), previous,
+                                args.value))
+        return
+    if args.command == "test":
+        tested_at = args.tested_at or today()
+        tester = sanitize_tester(args.tester)
+        database.execute(
+            """
+            INSERT INTO hardware_tests (
+                work_item_id, tester, tested_at, result, details
+            )
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (work_id, tester, tested_at, args.result, args.details),
+        )
+        add_event(
+            database,
+            work_id,
+            "hardware_test",
+            "%s hardware test: %s" % (tester, args.result),
+            details=args.details,
+            occurred_at=tested_at,
+        )
+        database.commit()
+        print("recorded")
+        return
+    if args.command == "evidence":
+        database.execute(
+            """
+            INSERT INTO evidence (
+                work_item_id, evidence_type, label, uri, sha256, notes
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                work_id,
+                args.type,
+                args.label,
+                args.uri,
+                args.sha256,
+                args.notes,
+            ),
+        )
+        add_event(
+            database,
+            work_id,
+            "evidence",
+            "Evidence recorded: %s" % args.label,
+            details=args.notes,
+            external_ref=args.uri,
+        )
+        database.commit()
+        print("recorded")
+        return
 
 
 if __name__ == "__main__":

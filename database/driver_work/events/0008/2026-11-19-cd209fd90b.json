@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 10:37:17",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/rt950pro_driver_test.py; docs/RT950PRO_PROTOCOL.md",
+  "item": "8",
+  "occurred_at": "2026-11-19",
+  "summary": "Rebuilt from Radtel RT-950PRO CPS V1.3.3 (archive sha256 96bf4f13..., BT-RT950PRO_CPS.exe sha256 1a20aa53...). 990 channels (not 960), zone names at 0xC000, CPS 272-block read/write order, APRS 0x54/0x58 kept at image 0xD300. Writes enabled as experimental per WriteRadioData (0x57/0x58, ACK per block, 3 resends at 1 s, E), refused unless the model code is exactly RT-950 (base radio is BT-9000) and for legacy 0xD300 images. CPS encoder ported; FHSS code byte order corrected (CPS reads byte 18 first); 6.25/12.5 kHz steps accepted. App round trip of 580 random channels writes back byte-identical. Physical write not yet validated."
+}

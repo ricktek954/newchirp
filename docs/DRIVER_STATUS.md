@@ -4,7 +4,8 @@ This is the authoritative local ledger for radios whose support is maintained
 by NewChirp rather than upstream CHIRP. Update it whenever a driver is added,
 changes transport, gains or loses write support, or completes hardware testing.
 For bugs, commits, evidence, email follow-ups, and dated work history by
-manufacturer/model, use `database/driver_work.sqlite3` as described in
+manufacturer/model, use the driver ledger (`database/driver_work/`, queried
+through `scripts/driver_work.py`) as described in
 `database/README.md`. The generated readable timeline is `docs/DRIVER_WORK.md`.
 
 Last updated: 2026-11-18

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 08:39:41",
+  "details": "",
+  "event_type": "test",
+  "external_ref": "test/alinco_dr735_driver_test.py",
+  "item": "94",
+  "occurred_at": "2026-11-19",
+  "summary": "Desktop override drivers/newchirp_alinco_dr735.py plus test/alinco_dr735_driver_test.py (16 replay tests). Full suite 494 OK. Web profile lib/alinco-dr735t-web.ts rewritten to match and wired into the Web Programmer; web tests and build pass. No physical-radio validation."
+}

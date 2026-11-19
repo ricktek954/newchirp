@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:34:03",
+  "evidence_type": "email-attachment",
+  "item": "82",
+  "label": "UV-32 TX CTCSS menu screenshot",
+  "notes": "Confirms the radio offers the reported CTCSS values.",
+  "sha256": "38eecd2411d97131ed26219d184f3def3717e088c4be3f22112599bbdac35abc",
+  "uri": "email:INBOX:744"
+}

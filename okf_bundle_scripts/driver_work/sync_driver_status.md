@@ -9,7 +9,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work/sync_driver_status
 language: python
 ---
@@ -31,7 +31,7 @@ def sync_driver_status(database, status_file)
 | `status_file` | `—` | `—` |
 
 ## Source
-Lines 301–385 in `driver_work.py`
+Lines 313–397 in `driver_work.py`
 
 ## Relationships
 
@@ -44,4 +44,4 @@ Lines 301–385 in `driver_work.py`
 | calls | [add_work](/driver_work/add_work.md) |
 | calls | [add_event](/driver_work/add_event.md) |
 | calls | [display_path](/driver_work/display_path.md) |
-| called_by | [main](/driver_work/main.md) |
+| called_by | [_execute](/driver_work/execute.md) |

@@ -42,29 +42,89 @@
         "check_private_data"
       ]
     },
-    "driver_work.py": {
-      "path": "driver_work.py",
-      "mtime_ns": 1795034009326291784,
-      "hash": "638baa0cbc4f46bf533ea1c374355614e598b1aa0dd3acbf6cb7df383c2f558b",
+    "chirp_bridge.py": {
+      "path": "chirp_bridge.py",
+      "mtime_ns": 1795083626421225160,
+      "hash": "9ea34275f400196b6a53982a82dcb08de81e58826a2d1a4a4755dfbeb87a4fe9",
       "concept_ids": [
-        "driver_work/add_event",
-        "driver_work/add_work",
-        "driver_work/connect",
-        "driver_work/display_path",
-        "driver_work/export_markdown",
-        "driver_work/find_work_id",
-        "driver_work/get_or_create_radio",
-        "driver_work/main",
-        "driver_work/manufacturer_and_model",
-        "driver_work/print_work_rows",
-        "driver_work/query_work",
-        "driver_work/sanitize_reporter",
-        "driver_work/sanitize_tester",
-        "driver_work/show_work",
-        "driver_work/status_from_ledger",
-        "driver_work/sync_driver_status",
-        "driver_work/today",
-        "driver_work"
+        "chirp_bridge/RadioCommunicationTrace",
+        "chirp_bridge/TracedSerial",
+        "chirp_bridge/alinco_result",
+        "chirp_bridge/allow_driver_specific_modes",
+        "chirp_bridge/apply_json",
+        "chirp_bridge/apply_mapping_payload",
+        "chirp_bridge/apply_setting_changes",
+        "chirp_bridge/begin",
+        "chirp_bridge/bridge_error_message",
+        "chirp_bridge/channel_context",
+        "chirp_bridge/channel_radio_for",
+        "chirp_bridge/channel_validation_message",
+        "chirp_bridge/close",
+        "chirp_bridge/coerce_setting_value",
+        "chirp_bridge/command_summary",
+        "chirp_bridge/display_mapping_name",
+        "chirp_bridge/download_decode_error_message",
+        "chirp_bridge/emit_progress",
+        "chirp_bridge/emit_read_ready",
+        "chirp_bridge/enter",
+        "chirp_bridge/erase_memory_with_extras",
+        "chirp_bridge/exit",
+        "chirp_bridge/external_memory_owner",
+        "chirp_bridge/extra_field_doc",
+        "chirp_bridge/extra_fields_json",
+        "chirp_bridge/features_json",
+        "chirp_bridge/fetch_repeaterbook_data",
+        "chirp_bridge/finish_pending",
+        "chirp_bridge/format",
+        "chirp_bridge/getattr",
+        "chirp_bridge/has_global_settings",
+        "chirp_bridge/headless_live_adapter",
+        "chirp_bridge/init",
+        "chirp_bridge/live_channel_context",
+        "chirp_bridge/live_memory_matches",
+        "chirp_bridge/live_models_by_vendor",
+        "chirp_bridge/load_chirp",
+        "chirp_bridge/load_module",
+        "chirp_bridge/main",
+        "chirp_bridge/mapping_entries_by_index",
+        "chirp_bridge/mapping_index_key",
+        "chirp_bridge/mapping_models_by_index",
+        "chirp_bridge/mapping_payload",
+        "chirp_bridge/memory_json",
+        "chirp_bridge/memory_with_extras",
+        "chirp_bridge/nearest_programmable_frequency",
+        "chirp_bridge/normalize_repeaterbook_query",
+        "chirp_bridge/normalize_upload_memory",
+        "chirp_bridge/open_serial",
+        "chirp_bridge/prepare_upload_channels",
+        "chirp_bridge/radio_firmware",
+        "chirp_bridge/radio_for",
+        "chirp_bridge/radio_from_image",
+        "chirp_bridge/read",
+        "chirp_bridge/readline",
+        "chirp_bridge/readlines",
+        "chirp_bridge/received",
+        "chirp_bridge/repair_uninitialized_extras",
+        "chirp_bridge/repeaterbook_cache_path",
+        "chirp_bridge/repeaterbook_item_to_channel",
+        "chirp_bridge/repeaterbook_resource_name",
+        "chirp_bridge/repeaterbook_tone",
+        "chirp_bridge/resolve_us_zip_code",
+        "chirp_bridge/search_repeaterbook",
+        "chirp_bridge/serial_read_timeout",
+        "chirp_bridge/set_memory_with_extras",
+        "chirp_bridge/set_radio_class",
+        "chirp_bridge/setattr",
+        "chirp_bridge/setting_doc",
+        "chirp_bridge/setting_value_json",
+        "chirp_bridge/settings_payload",
+        "chirp_bridge/settings_tree_json",
+        "chirp_bridge/status_progress",
+        "chirp_bridge/uvk5_firmware_from_hello",
+        "chirp_bridge/verify_live_write",
+        "chirp_bridge/write",
+        "chirp_bridge/zip_lookup_cache_path",
+        "chirp_bridge"
       ]
     },
     "generate_gmrs_frs_pdf.py": {
@@ -177,89 +237,42 @@
         "newchirp_usb_dfu"
       ]
     },
-    "chirp_bridge.py": {
-      "path": "chirp_bridge.py",
-      "mtime_ns": 1795083626421225160,
-      "hash": "9ea34275f400196b6a53982a82dcb08de81e58826a2d1a4a4755dfbeb87a4fe9",
+    "driver_work.py": {
+      "path": "driver_work.py",
+      "mtime_ns": 1795091964860120714,
+      "hash": "90da3fcb9cff28d4522db928995449ed4bb1a72d52d3d1f079ddfc8ae52bfc8c",
       "concept_ids": [
-        "chirp_bridge",
-        "chirp_bridge/uvk5_firmware_from_hello",
-        "chirp_bridge/radio_firmware",
-        "chirp_bridge/init",
-        "chirp_bridge/set_radio_class",
-        "chirp_bridge/command_summary",
-        "chirp_bridge/begin",
-        "chirp_bridge/received",
-        "chirp_bridge/alinco_result",
-        "chirp_bridge/finish_pending",
-        "chirp_bridge/format",
-        "chirp_bridge/getattr",
-        "chirp_bridge/setattr",
-        "chirp_bridge/write",
-        "chirp_bridge/read",
-        "chirp_bridge/readline",
-        "chirp_bridge/readlines",
-        "chirp_bridge/close",
-        "chirp_bridge/enter",
-        "chirp_bridge/exit",
-        "chirp_bridge/emit_progress",
-        "chirp_bridge/bridge_error_message",
-        "chirp_bridge/status_progress",
-        "chirp_bridge/load_module",
-        "chirp_bridge/allow_driver_specific_modes",
-        "chirp_bridge/load_chirp",
-        "chirp_bridge/live_models_by_vendor",
-        "chirp_bridge/memory_json",
-        "chirp_bridge/external_memory_owner",
-        "chirp_bridge/memory_with_extras",
-        "chirp_bridge/repair_uninitialized_extras",
-        "chirp_bridge/set_memory_with_extras",
-        "chirp_bridge/erase_memory_with_extras",
-        "chirp_bridge/extra_fields_json",
-        "chirp_bridge/extra_field_doc",
-        "chirp_bridge/features_json",
-        "chirp_bridge/setting_doc",
-        "chirp_bridge/setting_value_json",
-        "chirp_bridge/settings_tree_json",
-        "chirp_bridge/coerce_setting_value",
-        "chirp_bridge/apply_setting_changes",
-        "chirp_bridge/apply_json",
-        "chirp_bridge/nearest_programmable_frequency",
-        "chirp_bridge/channel_validation_message",
-        "chirp_bridge/normalize_upload_memory",
-        "chirp_bridge/prepare_upload_channels",
-        "chirp_bridge/serial_read_timeout",
-        "chirp_bridge/open_serial",
-        "chirp_bridge/headless_live_adapter",
-        "chirp_bridge/live_memory_matches",
-        "chirp_bridge/verify_live_write",
-        "chirp_bridge/live_channel_context",
-        "chirp_bridge/radio_for",
-        "chirp_bridge/download_decode_error_message",
-        "chirp_bridge/emit_read_ready",
-        "chirp_bridge/radio_from_image",
-        "chirp_bridge/channel_context",
-        "chirp_bridge/channel_radio_for",
-        "chirp_bridge/mapping_index_key",
-        "chirp_bridge/display_mapping_name",
-        "chirp_bridge/mapping_payload",
-        "chirp_bridge/mapping_models_by_index",
-        "chirp_bridge/mapping_entries_by_index",
-        "chirp_bridge/apply_mapping_payload",
-        "chirp_bridge/repeaterbook_resource_name",
-        "chirp_bridge/repeaterbook_cache_path",
-        "chirp_bridge/fetch_repeaterbook_data",
-        "chirp_bridge/repeaterbook_tone",
-        "chirp_bridge/repeaterbook_item_to_channel",
-        "chirp_bridge/zip_lookup_cache_path",
-        "chirp_bridge/resolve_us_zip_code",
-        "chirp_bridge/normalize_repeaterbook_query",
-        "chirp_bridge/search_repeaterbook",
-        "chirp_bridge/has_global_settings",
-        "chirp_bridge/settings_payload",
-        "chirp_bridge/main",
-        "chirp_bridge/RadioCommunicationTrace",
-        "chirp_bridge/TracedSerial"
+        "driver_work",
+        "driver_work/today",
+        "driver_work/display_path",
+        "driver_work/sanitize_reporter",
+        "driver_work/sanitize_tester",
+        "driver_work/connect",
+        "driver_work/manufacturer_and_model",
+        "driver_work/get_or_create_radio",
+        "driver_work/add_event",
+        "driver_work/add_work",
+        "driver_work/status_from_ledger",
+        "driver_work/sync_driver_status",
+        "driver_work/print_work_rows",
+        "driver_work/query_work",
+        "driver_work/show_work",
+        "driver_work/export_markdown",
+        "driver_work/work_ref",
+        "driver_work/find_work_id",
+        "driver_work/new_uid",
+        "driver_work/slug",
+        "driver_work/digest",
+        "driver_work/item_file_key",
+        "driver_work/dump",
+        "driver_work/read_store",
+        "driver_work/rebuild_cache",
+        "driver_work/store_records",
+        "driver_work/persist",
+        "driver_work/migrate_from_sqlite",
+        "driver_work/main",
+        "driver_work/execute",
+        "driver_work/StoreError"
       ]
     }
   },
@@ -1565,7 +1578,7 @@
       "type": "Function",
       "resource": "check_linux_release_abi.py",
       "render_hash": "stale",
-      "edge_hash": "d2ed03cee45b437ce841485944a68d02df38809887fb343c4c42d539dfc2e36c",
+      "edge_hash": "80cb035374cca3ac7a5f3eab413e8bf3b64d1a78c9c4878f59f9afdb730c99d3",
       "enriched": false
     },
     "check_linux_release_abi/main": {
@@ -1605,7 +1618,7 @@
       "type": "Module",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "6272dfeab294c6060dc1abeb6419a7168f258d1be9180c5d428ef74bf371c75e",
+      "edge_hash": "bcdceb96eca601d04647d2294cae6a3f4148865ffe5903e6be4bece87514882f",
       "enriched": false
     },
     "driver_work/today": {
@@ -1613,7 +1626,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "14a6cc727d88931d5b37899f4375c98df99b33d42d708808add85d13cf3658d6",
+      "edge_hash": "8487df2a1367afc0c55de06128a66e326f05bb9e4021219eec49951870adb533",
       "enriched": false
     },
     "driver_work/display_path": {
@@ -1621,7 +1634,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "5aa86411a70d181cdcfc55b7b96fc7a93a5811a970cb5f6973174cb5887de89a",
+      "edge_hash": "9a211c9ea15f888d5ba12b0e200ec8a6724ff23b8df0bd9c532b0cb8f69f0c1d",
       "enriched": false
     },
     "driver_work/connect": {
@@ -1629,7 +1642,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "06eac5d6b89bdcd750f53a186e49b44e72b2294d592d2bb4bb0c2295e442194b",
+      "edge_hash": "f52ecd8f531c2c7eff64c06bdaecbc89ef5e5258f08a36f483eb16d643d4e588",
       "enriched": false
     },
     "driver_work/manufacturer_and_model": {
@@ -1653,7 +1666,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "b52b0e99cc1cf899a9ff6b63b69f6d17633d2fc541522af4cf3093a8773fa1e4",
+      "edge_hash": "b51861c137e371a72603c12730be34bbae35780112f4f3ae510810fa805e08fc",
       "enriched": false
     },
     "driver_work/add_work": {
@@ -1661,7 +1674,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "473c4243745a4a5649fbbf1f1ded8fc150abd1e9ed74232e4c1d98337a39ab54",
+      "edge_hash": "6c41eee8a0861d15b75902a2e0829a99e52d411ccae72671c97ff7ddf66f60a9",
       "enriched": false
     },
     "driver_work/status_from_ledger": {
@@ -1677,7 +1690,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "0e99334ed207793644fca54486b2be5ad49af041528f1fad774daceb575aedb0",
+      "edge_hash": "cbf35242358373e74d018e7c7702f59b4d86961f85c3ed9ac45e6cad9a3a2034",
       "enriched": false
     },
     "driver_work/print_work_rows": {
@@ -1685,7 +1698,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "edge_hash": "20cadec75c4862e005e6df3a796054f0ef55d6069a7fcc973511afb32c6cb501",
       "enriched": false
     },
     "driver_work/query_work": {
@@ -1693,7 +1706,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "edge_hash": "20cadec75c4862e005e6df3a796054f0ef55d6069a7fcc973511afb32c6cb501",
       "enriched": false
     },
     "driver_work/show_work": {
@@ -1701,7 +1714,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "edge_hash": "20cadec75c4862e005e6df3a796054f0ef55d6069a7fcc973511afb32c6cb501",
       "enriched": false
     },
     "driver_work/export_markdown": {
@@ -1709,7 +1722,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "2f832d069c5cb9a108bc680a543d39c2fe6bcc62509bd3d4ba4555f5876b4b01",
+      "edge_hash": "272afc6c0fe490d40d516cd817da369effbf5485cca5458a520e9bcbc44cbabb",
       "enriched": false
     },
     "driver_work/find_work_id": {
@@ -1717,7 +1730,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "edge_hash": "20cadec75c4862e005e6df3a796054f0ef55d6069a7fcc973511afb32c6cb501",
       "enriched": false
     },
     "driver_work/main": {
@@ -1725,7 +1738,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "ce0b778feba8fdf3a0f07f22914acc14863c8b06a44f5194e24e12612a9bef85",
+      "edge_hash": "2897608199dcd699cc5a3f69c5353c8ae30ea7a13b3744fb3c82fe0cb7d77979",
       "enriched": false
     },
     "check_private_data": {
@@ -1773,7 +1786,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
+      "edge_hash": "20cadec75c4862e005e6df3a796054f0ef55d6069a7fcc973511afb32c6cb501",
       "enriched": false
     },
     "chirp_bridge/alinco_result": {
@@ -1791,7 +1804,111 @@
       "render_hash": "stale",
       "edge_hash": "727e84cc5c3f508f7df734684376e9369b2186b8e81e025f792e91f7fb98be27",
       "enriched": false
+    },
+    "driver_work/new_uid": {
+      "concept_id": "driver_work/new_uid",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "da17fcbf20d103cd39cd23acefe5460b0a516be25e51e89756839af7258724ec",
+      "enriched": false
+    },
+    "driver_work/slug": {
+      "concept_id": "driver_work/slug",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "2441215137d1583b960c8f1ca994ff83bb1ac058b83bed96e864c22c263760c4",
+      "enriched": false
+    },
+    "driver_work/digest": {
+      "concept_id": "driver_work/digest",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "2441215137d1583b960c8f1ca994ff83bb1ac058b83bed96e864c22c263760c4",
+      "enriched": false
+    },
+    "driver_work/item_file_key": {
+      "concept_id": "driver_work/item_file_key",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "2441215137d1583b960c8f1ca994ff83bb1ac058b83bed96e864c22c263760c4",
+      "enriched": false
+    },
+    "driver_work/dump": {
+      "concept_id": "driver_work/dump",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "c86f0356980ae8be547df76dcb78ff4f0d7d799f62faafae7aefdd52f63546ab",
+      "enriched": false
+    },
+    "driver_work/read_store": {
+      "concept_id": "driver_work/read_store",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "769f3207933faa4090e48d74d7d46afc8a79ca4c588e95e9e60ed890ee89b8fa",
+      "enriched": false
+    },
+    "driver_work/rebuild_cache": {
+      "concept_id": "driver_work/rebuild_cache",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "1ce8a14ccaf9d3d7d0bc15e7c4e035f765ce12ce8b9b4ceac071e25240c54952",
+      "enriched": false
+    },
+    "driver_work/store_records": {
+      "concept_id": "driver_work/store_records",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "1ddebefa1fcd9bac667a79821db715b5e1b0bd5b7ac5722ee2851becc76fd089",
+      "enriched": false
+    },
+    "driver_work/persist": {
+      "concept_id": "driver_work/persist",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "1ff03184c39029fb856935736ade37af8a2c9d6ae63f3a87294158d9d9b6fde5",
+      "enriched": false
+    },
+    "driver_work/migrate_from_sqlite": {
+      "concept_id": "driver_work/migrate_from_sqlite",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "d5662d88350323188d381f092c831fe9f304d0f70c9ef8f969e102655f15ff99",
+      "enriched": false
+    },
+    "driver_work/StoreError": {
+      "concept_id": "driver_work/StoreError",
+      "type": "Class",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "d85b2c749c27e77de9243468a765a5f317f2752c6ba12f99b69cab1452de8db0",
+      "enriched": false
+    },
+    "driver_work/execute": {
+      "concept_id": "driver_work/execute",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "0b4c465c29c85aa17db0bb740abd86a93a025ed6535b419309a44354d6cfe1c5",
+      "enriched": false
+    },
+    "driver_work/work_ref": {
+      "concept_id": "driver_work/work_ref",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "20cadec75c4862e005e6df3a796054f0ef55d6069a7fcc973511afb32c6cb501",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-19T10:20:27Z"
+  "generated_at": "2026-11-19T12:39:25Z"
 }

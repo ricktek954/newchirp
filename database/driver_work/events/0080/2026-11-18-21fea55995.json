@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "details": "Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.",
+  "event_type": "created",
+  "external_ref": "INBOX:701",
+  "item": "80",
+  "occurred_at": "2026-11-18",
+  "summary": "No response to known handshakes"
+}

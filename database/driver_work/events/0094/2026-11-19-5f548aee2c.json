@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 08:39:37",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "docs/ALINCO_DR735_PROTOCOL.md",
+  "item": "94",
+  "occurred_at": "2026-11-19",
+  "summary": "REA of Alinco DR-735 Memory Editor 0.06 (zip sha256 3931cfc1..., assembly sha256 a7e5ce73...). Recovered AL~ wake, 9 model IDs with band limits, EEPEL/EEPDL address spaces, 64-byte record codec, write sequence. Found 11 stock defects incl. TSQL wrong-tone write and exit(1) on short block."
+}

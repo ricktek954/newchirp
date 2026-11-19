@@ -1,0 +1,8 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "details": "Rear PC port read and short-name write succeeded on TM-D710A; power-cycle read-back remains.",
+  "item": "70",
+  "result": "partial",
+  "tested_at": "2026-11-17",
+  "tester": "reporter"
+}

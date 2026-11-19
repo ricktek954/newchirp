@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:33:41",
+  "details": "Channels 52 and 53 return blank Tone fields although RT Systems shows 103.5 Hz; channel 54 also loses 206.5 Hz. The attached NewChirp CSV and screenshots do not include the raw channel bytes or RT Systems source file.",
+  "event_type": "analysis",
+  "external_ref": "INBOX:744",
+  "item": "82",
+  "occurred_at": "2026-11-18",
+  "summary": "Confirmed the failure is in image tone decoding, not CSV export"
+}

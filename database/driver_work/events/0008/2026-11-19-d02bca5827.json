@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 11:09:05",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "newchirpweb:6aba169; INBOX:795",
+  "item": "8",
+  "occurred_at": "2026-11-19",
+  "summary": "Physical test (INBOX:795): Web Programmer read timed out on the first handshake byte; same radio reads in Radtel CPS and desktop NewChirp. Cause: web RT-950 profiles requested RTS/CTS flow control (CPS and desktop use none). Fixed in newchirpweb 6aba169 and deployed; reporter asked to retry."
+}

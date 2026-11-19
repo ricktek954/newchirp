@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:44",
+  "details": "The loaded image reports TM-D60W V2.31S while the connected radio reports V2.39S. The existing model/firmware guard correctly stopped the write. Instruct the reporter to read the current radio and edit that fresh image.",
+  "event_type": "analysis",
+  "external_ref": "INBOX:741",
+  "item": "62",
+  "occurred_at": "2026-11-18",
+  "summary": "Firmware mismatch safely blocked an older backup upload"
+}

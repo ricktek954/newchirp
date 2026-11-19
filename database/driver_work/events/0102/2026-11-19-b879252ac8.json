@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 12:32:00",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "newchirpweb:aecc301",
+  "item": "102",
+  "occurred_at": "2026-11-19",
+  "summary": "newchirpweb aecc301: 2 s pause between identity magics (matches CHIRP uv5r._ident_radio); deployed as index-HUPtWbNo.js. Reporter asked (forum) to retry and, if it still fails, to name the cable chip and confirm the cable reads in OldChirp."
+}

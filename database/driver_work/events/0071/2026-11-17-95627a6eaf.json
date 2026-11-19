@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "details": "Memory reads and writes are not retried by this change.",
+  "event_type": "fix",
+  "external_ref": "desktop:eb6d2239",
+  "item": "71",
+  "occurred_at": "2026-11-17",
+  "summary": "Added three bounded identity startup attempts"
+}

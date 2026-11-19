@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:04:48",
+  "details": "Requested -PC- confirmation and KPG-32D behavior on the same cable and port.",
+  "event_type": "contact",
+  "external_ref": "email Sent:484; SMTP:BFEBB7F88A",
+  "item": "71",
+  "occurred_at": "2026-11-18",
+  "summary": "Sent PC-mode and OEM CPS diagnostic"
+}

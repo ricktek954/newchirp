@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 09:33:14",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/email_triage_compat_test.py",
+  "item": "86",
+  "occurred_at": "2026-11-19",
+  "summary": "Root cause: NewChirp's own drivers/newchirp_uv17progps_compat.py malformed-tone guard used int(value) not in TONES, so every fractional CTCSS (88.5, 103.5, 141.3, ...) decoded as no tone on all UV17ProGPS subclasses: GM-21, GM-32, UV-17ProGPS, UV-21ProGPS, UV-28Plus, UV-29Pro, UV-32, GM-30 Plus, GM-30 Pro. CPS evidence (CPS_Test.dat): Danbury/Alvin/Santa Fe carry 141.3/103.5/141.3 RX and TX; CPS encodes CTCSS as little-endian tone*10, same as stock. Fixed to compare the decoded tone value; regression test with the reporter's values on three models."
+}

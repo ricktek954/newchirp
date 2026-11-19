@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-5R",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:691",
+  "status": "awaiting_user",
+  "summary": "Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.",
+  "title": "No response from radio",
+  "uid": "77"
+}

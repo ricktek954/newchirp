@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 11:18:14",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/static_bank_zones_test.py",
+  "item": "100",
+  "occurred_at": "2026-11-19",
+  "summary": "drivers/newchirp_static_bank_compat.py: integer zone spans, labels Zone 1-10 and model name Zones; zones stay read-only (a channel's zone is its channel number). Affects BF-F8HP-PRO, GM-21, GM-32, UV-17ProGPS, UV-21ProGPS, UV-28Plus, UV-29Pro, UV-32, GM-30 Plus/Pro, RT-910, RT-910 BT, Bajeton BJ7800."
+}

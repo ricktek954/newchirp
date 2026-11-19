@@ -1,8 +1,39 @@
 # NewChirp driver work ledger
 
-`driver_work.sqlite3` is the queryable history of NewChirp-maintained radio
+The driver ledger is the queryable history of NewChirp-maintained radio
 drivers, bugs, enhancements, evidence, and hardware validation. It complements
 `docs/DRIVER_STATUS.md`, which remains the concise current-state report.
+
+## Storage (since 2026-11-19)
+
+The source of truth is `database/driver_work/`, one JSON file per record:
+
+| Path | Record |
+| --- | --- |
+| `manufacturers/<slug>.json` | manufacturer |
+| `radios/<manufacturer>/<model>-<hash>.json` | radio model |
+| `items/<id>.json` | work item (`0094` = legacy #94; new items use `w-YYYYMMDD-xxxx`) |
+| `events/<id>/<date>-<hash>.json` | event (status changes are events too) |
+| `tests/<id>/<date>-<hash>.json` | hardware test |
+| `evidence/<id>/<hash>.json` | evidence |
+
+`database/driver_work.sqlite3` is a git-ignored cache. `scripts/driver_work.py`
+rebuilds it from the JSON on every command and writes back only the records
+that changed, so all commands and raw SQL below work as before. Records added
+on different machines are different files and merge without conflicts; the
+same event recorded twice is the same file. `updated_at` is derived from the
+newest event rather than stored, so adding an event never rewrites its item.
+
+- Item IDs: legacy items keep their numbers (`show 94`). New items get a
+  collision-proof ID (`show w-20261119-a3f2`); `add` prints it.
+- `docs/DRIVER_WORK.md` is deterministic (no date) and uses `merge=union`;
+  the `.githooks` post-merge, post-rewrite and post-checkout hooks run
+  `python3 scripts/driver_work.py rebuild` to regenerate it and the cache.
+- If a pull ever leaves conflict markers in a JSON file (two machines editing
+  the same item's status or summary at once), keep the correct values and
+  rerun any ledger command; it refuses to run on a damaged file.
+- `python3 scripts/driver_work.py migrate --from <schema-1.sqlite3>` imports
+  an old database (used once for the 2026-11-19 migration).
 
 Use the database when you need to know what was attempted, which commits and
 emails belong to a radio, what evidence exists, or what remains blocked. Do not
@@ -40,7 +71,8 @@ Run the repository privacy check before committing or exporting:
 python3 scripts/check_private_data.py
 ```
 
-Raw SQL is supported:
+Raw SQL is supported against the cache (run any ledger command first so it
+is current):
 
 ```sh
 sqlite3 database/driver_work.sqlite3 \

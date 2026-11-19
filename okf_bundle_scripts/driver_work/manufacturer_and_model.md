@@ -9,7 +9,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T12:39:24Z"
 concept_id: driver_work/manufacturer_and_model
 language: python
 ---
@@ -29,7 +29,7 @@ def manufacturer_and_model(label)
 | `label` | `—` | `—` |
 
 ## Source
-Lines 115–122 in `driver_work.py`
+Lines 126–133 in `driver_work.py`
 
 ## Relationships
 

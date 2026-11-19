@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 08:11:50",
+  "details": "Rear PC port reads on a TM-D710A; a RepeaterBook HMK file with names within the eight-character limit wrote successfully. Longer names are blocked before radio I/O.",
+  "event_type": "created",
+  "external_ref": "INBOX:717",
+  "item": "70",
+  "occurred_at": "2026-11-18",
+  "summary": "D710P identity compatibility and eight-character names"
+}

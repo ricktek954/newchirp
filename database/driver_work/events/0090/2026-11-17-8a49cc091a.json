@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:00:16",
+  "details": "NewChirp 1.0.57 received no response to the TYT handshake on Linux /dev/ttyUSB0. Confirm the cable model and whether the OEM CPS can read the radio.",
+  "event_type": "created",
+  "external_ref": "INBOX:738",
+  "item": "90",
+  "occurred_at": "2026-11-17",
+  "summary": "No response to handshake"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-18 10:04:48",
+  "details": "Instructed the reporter to enable Slots, select the superfluous rows, clear the selected locations, save, write, and verify with a powered-cycle read-back.",
+  "event_type": "contact",
+  "external_ref": "email Sent:493; SMTP:20261118100218.0208F7F88D",
+  "item": "69",
+  "occurred_at": "2026-11-18",
+  "summary": "Sent instructions for clearing stale FT-50 channels"
+}
