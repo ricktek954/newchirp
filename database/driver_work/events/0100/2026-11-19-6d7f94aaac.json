@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:51:03",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:819",
+  "item": "100",
+  "occurred_at": "2026-11-19",
+  "summary": "GM-32 on 1.0.62: adding a channel then writing stops with 'Zones are fixed'. 1.0.62 (89b4876e) predates the fix e258b1e6; verified GM-32 uses StaticBankModel and the fix ignores its membership list"
+}
