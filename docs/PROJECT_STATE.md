@@ -14,6 +14,16 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.61` is live from source commit `50f17c3c`. It restores the
+  read-only zone display for fixed-zone radios such as the BF-F8HP-PRO,
+  UV-17ProGPS family, GM-32, GM-30 Plus/Pro, RT-910, and BJ7800. Verification:
+  analyzer clean; 235 Flutter tests; 508 Python tests with two
+  fixture-dependent skips; max glibc `2.18`; DEB, RPM, and Pacman metadata
+  plus embedded version `1.0.61` / `61`; DEB and AppImage Xvfb launch tests
+  passed on Ubuntu 20.04; the final AppImage launched under host Wayland and
+  XWayland; all package payloads include the fixed-zone compatibility driver
+  and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200;
+  and the Linux platform manifest reports `1.0.61`.
 - Linux `1.0.60` is live from source commit `66383721`. It adds the
   OEM CPS-derived Alinco DR-735 driver, official manufacturer model names in
   radio lists, CSV encoding detection and channel select-all, UV-17ProGPS
@@ -828,7 +838,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.60` is live from source commit `66383721`
+- Linux `1.0.61` is live from source commit `50f17c3c`
 - Open pull requests: none
 - Checked-out source version: `1.0.61+61`
 - macOS builds are pinned to CocoaPods with
@@ -846,7 +856,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.60 |
 | Windows | 1.0.60 |
-| Linux | 1.0.60 |
+| Linux | 1.0.61 |
+
+Linux `1.0.61` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.61.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.61.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.61.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.61.pkg.tar.zst`
+- DEB: `48,551,858` bytes, SHA-256
+  `b32b6dc5ea2edcf1a7f6f29e0cae249357dd0ebe462b76cfbcd16757eee8ac27`
+- RPM: `48,637,203` bytes, SHA-256
+  `74ba479102c025ff4b3f65d7337f57467428c3bbe7b3c9cc8d0d828c1e084e41`
+- AppImage: `48,837,824` bytes, SHA-256
+  `c4306b569fc9f551b4b74f217663f16ec664f481ddf59b81ba3b1678470bac61`
+- Pacman: `47,497,916` bytes, SHA-256
+  `e839269b1d6421b31ebc445dc21da7cb6638019dbf0d4b97315bf02edfaa10e1`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.61`
 
 Linux `1.0.60` artifacts:
 
