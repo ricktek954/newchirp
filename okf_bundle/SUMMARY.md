@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 644 concepts across 4 domains and 31 module
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-19T21:21:37Z'
+timestamp: '2026-11-19T21:55:46Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
@@ -83,8 +83,8 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
 | [clearedLocationsForUpload](/models/channel_image_baseline/clearedLocationsForUpload.md) | Function | `models/channel_image_baseline.dart` | All radio locations that must be blank for the current libra… |
 | [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
-| [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
 | [radioMappingsSignature](/models/radio_mapping/radioMappingsSignature.md) | Function | `models/radio_mapping.dart` | Fixed (non-editable) zone models are derived from channel nu… |
+| [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
