@@ -145,6 +145,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.
   Source: `email` INBOX:691
 
+### UV-5R8W
+
+- **#102 bug | pending_validation | normal:** Web Programmer read times out on UV-5R8W (BF-F8HP magic)
+  Forum report (Chromebook/Chrome): AR-5RM works but two UV-5R8W radios fail with 'expected 1 bytes, received 0' under both the UV-5R and UV-5R8W (BF-F8HP) profiles. The web identity loop tried the next magic immediately; CHIRP waits 2 s after a failed magic, and the BF-F8HP magic is tried second.
+  Source: `forum` newchirp.net forum: Web programmer from Chromebook/Chrome works for AR-5RM but not UV-5R8W
+
 ### UV-5RH
 
 - **#29 maintenance | experimental | normal:** Current driver status
