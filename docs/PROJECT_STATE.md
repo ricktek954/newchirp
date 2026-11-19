@@ -25,6 +25,19 @@ release requirements.
   XWayland; all package payloads include the fixed-zone compatibility driver
   and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200;
   and the Linux platform manifest reports `1.0.61`.
+- macOS `1.0.61` is live from source commit `0e701b16` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the
+  CPS-derived Wouxun KG-689E/KG-699E driver, tolerates unset Icom CI-V tones,
+  promotes FT-50 to supported status after hardware confirmation, and includes
+  the latest TK-270G, 5RH Pro zone-flag, reporter, and documentation updates.
+  Verification: analyzer clean; 235 Flutter tests; 536 Python tests with two
+  fixture-dependent skips; 68 bridge tests; embedded version `1.0.61` / `61`;
+  arm64 and x86_64 Python `3.13.15`; 264 CHIRP driver modules; catalog
+  `list-models` returned 600 models including `Wouxun_KG-689E`,
+  `Wouxun_KG-699E`, `Icom_IC-910`, and `Yaesu_FT-50`; strict app/DMG
+  signatures; Apple notarization and stapling; Gatekeeper acceptance; launch
+  smoke test; and matching local, server, and public SHA-256. Notarization
+  submission: `6c290229-c679-465a-9d0b-0ab077ba1799`.
 - Linux `1.0.60` is live from source commit `66383721`. It adds the
   OEM CPS-derived Alinco DR-735 driver, official manufacturer model names in
   radio lists, CSV encoding detection and channel select-all, UV-17ProGPS
@@ -835,6 +848,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.61` artifact source commit: `0e701b16`
 - macOS `1.0.60` artifact source commit: `488564b4`
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
@@ -855,7 +869,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.60 |
+| macOS | 1.0.61 |
 | Windows | 1.0.60 |
 | Linux | 1.0.61 |
 
@@ -902,6 +916,22 @@ Linux `1.0.60` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums and sizes matched the local artifacts
 - Linux platform manifest reports `1.0.60`
+
+macOS `1.0.61` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.61.dmg`
+- Version/build: `1.0.61` / `61`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `7ae5be6ac211dd4bc221032e2a8b0fa10c05eb969280f45a9f10624a411b941a`
+- Size: `86,853,247` bytes
+- Built from `0e701b16`
+- Notarization submission: `6c290229-c679-465a-9d0b-0ab077ba1799`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains Wouxun KG-689E/KG-699E support, the Icom CI-V unset-tone
+  compatibility fix, promoted FT-50 support, and the latest TK-270G and 5RH
+  Pro zone-flag fixes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.60` artifact:
 
@@ -1756,6 +1786,19 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.61` from source commit `0e701b16` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the
+  OEM-CPS-derived Wouxun KG-689E/KG-699E driver, the Icom CI-V unset-tone
+  compatibility fix, promoted FT-50 support after hardware confirmation, and
+  the latest TK-270G and 5RH Pro zone-flag fixes.
+  Verification: analyzer clean; 235 Flutter tests; 536 Python tests with two
+  fixture-dependent skips; 68 bridge tests; embedded version `1.0.61` / `61`;
+  both Python architectures at `3.13.15`; 264 CHIRP driver modules; 600
+  catalog models including KG-689E, KG-699E, IC-910, and FT-50; strict app
+  and DMG signatures; Apple notarization ID
+  `6c290229-c679-465a-9d0b-0ab077ba1799`; staple, Gatekeeper, mounted-DMG,
+  launch-smoke, server/public-download, and checksum checks passed. The live
+  macOS manifest reports `1.0.61`.
 - Published Windows `1.0.60` from source commit `488564b4`. The release adds
   read-only zone display for fixed-zone radios including the BF-F8HP-PRO and
   carries the RT-950 Pro web flow-control fix plus the current DR-735,
