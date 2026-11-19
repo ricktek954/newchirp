@@ -370,6 +370,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#101 release | released | normal:** Linux 1.0.61 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 50f17c3c. The release restores read-only fixed-zone display for BF-F8HP-PRO and related radios; public manifest reports 1.0.61; package SHA-256 values are b32b6dc5ea2edcf1a7f6f29e0cae249357dd0ebe462b76cfbcd16757eee8ac27, 74ba479102c025ff4b3f65d7337f57467428c3bbe7b3c9cc8d0d828c1e084e41, c4306b569fc9f551b4b74f217663f16ec664f481ddf59b81ba3b1678470bac61, and e839269b1d6421b31ebc445dc21da7cb6638019dbf0d4b97315bf02edfaa10e1.
   Source: `release` desktop:50f17c3c
+- **#w-20261119-3094 release | released | normal:** Linux 1.0.62 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 0d09b292. The release adds the Wouxun KG-689E/KG-699E driver, Icom CI-V no-tone recovery, TK-270G and 5RH Pro fixes, UV-5RM Plus v2 reply handling, and F4HWN module image support. Public manifest reports 1.0.62. Package SHA-256 values: 34dfca976a39e621ae7797bdb4148f1e1ae2c753df18feb2046320d72206e7aa, 9e8a8be6dc45c6342d7a9c9cfd89b3d88193acbd736edd7d7885bffa0aebd240, 8d313037c55f62f07455d2a996fae07fb06fbcdf45399895465b6177fd87502e, and 44c1585e5113f0300681dd19c1e564dbbe09bc0a7a912cb323a46d1a609a273f.
+  Source: `release` desktop:0d09b292
 
 ## Quansheng
 

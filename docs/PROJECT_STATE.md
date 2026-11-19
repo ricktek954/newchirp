@@ -15,6 +15,18 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.62` is live from source commit `0d09b292`. It adds the
+  CPS-derived Wouxun KG-689E/KG-699E driver, keeps Icom CI-V reads working
+  when a channel has no tone set, fixes TK-270G editing and the 5RH Pro zone
+  flag, handles UV-5RM Plus v2 replies, imports F4HWN module images, and
+  carries the JSON-backed driver-work ledger. Verification: analyzer clean;
+  235 Flutter tests; 536 Python tests with two fixture-dependent skips; max
+  glibc `2.18`; DEB, RPM, and Pacman metadata plus embedded version `1.0.62`
+  / `62`; DEB and AppImage Xvfb launch tests passed on Ubuntu 20.04; the final
+  AppImage launched under host Wayland and XWayland; all package payloads
+  include the KG-689E and Icom tone compatibility drivers and omit
+  GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the
+  Linux platform manifest reports `1.0.62`.
 - Linux `1.0.61` is live from source commit `50f17c3c`. It restores the
   read-only zone display for fixed-zone radios such as the BF-F8HP-PRO,
   UV-17ProGPS family, GM-32, GM-30 Plus/Pro, RT-910, and BJ7800. Verification:
@@ -853,9 +865,9 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.61` is live from source commit `50f17c3c`
+- Linux `1.0.62` is live from source commit `0d09b292`
 - Open pull requests: none
-- Checked-out source version: `1.0.61+61`
+- Checked-out source version: `1.0.62+62`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -871,7 +883,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.61 |
 | Windows | 1.0.60 |
-| Linux | 1.0.61 |
+| Linux | 1.0.62 |
+
+Linux `1.0.62` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.62.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.62.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.62.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.62.pkg.tar.zst`
+- DEB: `48,560,022` bytes, SHA-256
+  `34dfca976a39e621ae7797bdb4148f1e1ae2c753df18feb2046320d72206e7aa`
+- RPM: `48,649,543` bytes, SHA-256
+  `9e8a8be6dc45c6342d7a9c9cfd89b3d88193acbd736edd7d7885bffa0aebd240`
+- AppImage: `48,846,016` bytes, SHA-256
+  `8d313037c55f62f07455d2a996fae07fb06fbcdf45399895465b6177fd87502e`
+- Pacman: `47,524,746` bytes, SHA-256
+  `44c1585e5113f0300681dd19c1e564dbbe09bc0a7a912cb323a46d1a609a273f`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.62`
 
 Linux `1.0.61` artifacts:
 
