@@ -324,6 +324,36 @@ class AlincoDR735DriverTest(unittest.TestCase):
         radio.set_memory(mem)
         self.assertEqual(radio.get_mmap().get_packed(), before)
 
+    def test_forum_report_echo_only_trace_and_message(self):
+        """Reporter trace: 'AL~WHO | response complete | 0.01s', then
+        'No response from radio'. The 10 ms reply was the cable echo."""
+        from chirp import errors
+        trace = self.bridge.RadioCommunicationTrace()
+        fake = FakeDR735(answer=False)
+        radio = self._radio(self.bridge.TracedSerial(fake, trace))
+        with self.assertRaises(errors.RadioNoResponse) as caught:
+            radio.sync_in()
+        self.assertIn("LEFT speaker jack", str(caught.exception))
+        self.assertIn("Clone mode", str(caught.exception))
+        message = self.bridge.bridge_error_message(
+            caught.exception, command="download", model="Alinco_DR735T")
+        self.assertIn("LEFT speaker jack", message)
+        rendered = trace.format()
+        self.assertIn("cable echo only; radio did not answer", rendered)
+        self.assertNotIn("response complete", rendered)
+
+    def test_trace_shows_identity_and_blocks(self):
+        trace = self.bridge.RadioCommunicationTrace(max_entries=2000)
+        fake = FakeDR735(eepdl=False)
+        radio = self._radio(self.bridge.TracedSerial(fake, trace))
+        radio.sync_in()
+        trace.format()   # the bridge finishes the pending entry here
+        entries = [(e["command"], e["result"]) for e in trace._entries]
+        self.assertIn(("AL~WHO", "radio id=DR735TN"), entries)
+        self.assertIn(("AL~EEPEL F9C0 R", "block (64 bytes)"), entries)
+        self.assertEqual(entries[-1], ("AL~EEPDL C000 R",
+                                       "cable echo only; radio did not answer"))
+
     def test_oem_tables_match_chirp_constants(self):
         from chirp import chirp_common
         from chirp.drivers.alinco import ALINCO_TONES

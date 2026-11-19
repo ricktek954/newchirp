@@ -205,24 +205,66 @@ class RadioCommunicationTrace:
             return "%s memory=%s" % (memory.group(1), memory.group(3))
         token = re.match(r"^[A-Z~]+", upper)
         command = token.group(0) if token else ""
-        if command.startswith("AL~EEPEL"):
-            return "AL~EEPEL"
+        alinco_block = re.match(r"^AL~(EEP[ED]L)([0-9A-F]{4})([RW])", upper)
+        if alinco_block:
+            # The hex address can start with a letter (C000), so label it
+            # explicitly instead of taking the leading letters.
+            return "AL~%s %s %s" % alinco_block.groups()
+        if command.startswith("AL~EEP"):
+            return command[:8]
         return command[:12] or "<text command>"
 
     def begin(self, data):
         self._finish_pending()
+        try:
+            raw = bytes(data)
+        except (TypeError, ValueError):
+            raw = b""
         self._pending = {
             "command": self._command_summary(data),
             "started": time.monotonic(),
             "response": bytearray(),
+            "alinco": raw if raw.startswith(b"AL~") else None,
         }
 
     def received(self, data):
         if self._pending is None or not data:
             return
         self._pending["response"].extend(data)
+        alinco = self._pending["alinco"]
+        if alinco is not None:
+            # The single-wire Alinco ERW-7 echoes each command before the
+            # radio's reply line, so the echo alone is not a response.
+            response = bytes(self._pending["response"])
+            lines = response.count(b"\r\n")
+            if lines >= 2 or (lines == 1 and not response.startswith(alinco)):
+                self._finish_pending()
+            return
         if any(delimiter in data for delimiter in (b";", b"\r", b"\n")):
             self._finish_pending()
+
+    @staticmethod
+    def _alinco_result(command_bytes, command, response):
+        echo = command_bytes.rstrip(b"\r\n")
+        if not response:
+            return "no response (no cable echo)"
+        if response.startswith(echo + b"\r\n"):
+            rest = response[len(echo) + 2:]
+            if not rest:
+                return "cable echo only; radio did not answer"
+        else:
+            rest = response
+        reply, separator, _ = rest.partition(b"\r\n")
+        if not separator:
+            return "incomplete reply (%i bytes after echo)" % len(rest)
+        text = reply.decode("ascii", errors="replace")
+        if command == "AL~WHO":
+            return "radio id=%s" % text[:20]
+        if text == "OK":
+            return "OK"
+        if re.fullmatch(r"[0-9A-Fa-f]{128}", text):
+            return "block (64 bytes)"
+        return "reply=%s" % text[:40]
 
     def _finish_pending(self):
         pending = self._pending
@@ -230,7 +272,11 @@ class RadioCommunicationTrace:
             return
         self._pending = None
         response = bytes(pending["response"])
-        if pending["command"] == "ID":
+        if pending.get("alinco") is not None:
+            result = self._alinco_result(
+                pending["alinco"], pending["command"], response,
+            )
+        elif pending["command"] == "ID":
             text = response.decode("ascii", errors="replace").strip()
             identifier = re.search(
                 r"ID\s*([A-Z0-9_-]+)",

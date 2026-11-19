@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-19T08:59:55Z"
 concept_id: chirp_bridge/apply_mapping_payload
 language: python
 ---
@@ -45,7 +45,7 @@ one-bank-per-channel models when a channel moves between banks.
 | `active_locations` | `—` | `—` |
 
 ## Source
-Lines 1883–2044 in `chirp_bridge.py`
+Lines 1929–2090 in `chirp_bridge.py`
 
 ## Relationships
 

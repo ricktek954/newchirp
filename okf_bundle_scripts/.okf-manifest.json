@@ -31,6 +31,42 @@
         "check_linux_release_abi"
       ]
     },
+    "check_private_data.py": {
+      "path": "check_private_data.py",
+      "mtime_ns": 1795034009325250997,
+      "hash": "db09f722486206a9fc07a537b7e254276292433191a74d026143052efe0f6c01",
+      "concept_ids": [
+        "check_private_data/allowed_email",
+        "check_private_data/main",
+        "check_private_data/tracked_files",
+        "check_private_data"
+      ]
+    },
+    "driver_work.py": {
+      "path": "driver_work.py",
+      "mtime_ns": 1795034009326291784,
+      "hash": "638baa0cbc4f46bf533ea1c374355614e598b1aa0dd3acbf6cb7df383c2f558b",
+      "concept_ids": [
+        "driver_work/add_event",
+        "driver_work/add_work",
+        "driver_work/connect",
+        "driver_work/display_path",
+        "driver_work/export_markdown",
+        "driver_work/find_work_id",
+        "driver_work/get_or_create_radio",
+        "driver_work/main",
+        "driver_work/manufacturer_and_model",
+        "driver_work/print_work_rows",
+        "driver_work/query_work",
+        "driver_work/sanitize_reporter",
+        "driver_work/sanitize_tester",
+        "driver_work/show_work",
+        "driver_work/status_from_ledger",
+        "driver_work/sync_driver_status",
+        "driver_work/today",
+        "driver_work"
+      ]
+    },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
       "mtime_ns": 1787526889873622751,
@@ -141,21 +177,10 @@
         "newchirp_usb_dfu"
       ]
     },
-    "check_private_data.py": {
-      "path": "check_private_data.py",
-      "mtime_ns": 1795034009325250997,
-      "hash": "db09f722486206a9fc07a537b7e254276292433191a74d026143052efe0f6c01",
-      "concept_ids": [
-        "check_private_data",
-        "check_private_data/allowed_email",
-        "check_private_data/tracked_files",
-        "check_private_data/main"
-      ]
-    },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795034009326126868,
-      "hash": "fd6bca0c409b6c1847bbb60739316f173054b1929c90598b98d8d30dbaae18d5",
+      "mtime_ns": 1795078795046975812,
+      "hash": "2ec814e6f4f2ab3576d1990ae9ce6543fa21b9e18b79dab8e331311eee4acc81",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -165,6 +190,7 @@
         "chirp_bridge/command_summary",
         "chirp_bridge/begin",
         "chirp_bridge/received",
+        "chirp_bridge/alinco_result",
         "chirp_bridge/finish_pending",
         "chirp_bridge/format",
         "chirp_bridge/getattr",
@@ -233,31 +259,6 @@
         "chirp_bridge/main",
         "chirp_bridge/RadioCommunicationTrace",
         "chirp_bridge/TracedSerial"
-      ]
-    },
-    "driver_work.py": {
-      "path": "driver_work.py",
-      "mtime_ns": 1795034009326291784,
-      "hash": "638baa0cbc4f46bf533ea1c374355614e598b1aa0dd3acbf6cb7df383c2f558b",
-      "concept_ids": [
-        "driver_work",
-        "driver_work/today",
-        "driver_work/display_path",
-        "driver_work/sanitize_reporter",
-        "driver_work/sanitize_tester",
-        "driver_work/connect",
-        "driver_work/manufacturer_and_model",
-        "driver_work/get_or_create_radio",
-        "driver_work/add_event",
-        "driver_work/add_work",
-        "driver_work/status_from_ledger",
-        "driver_work/sync_driver_status",
-        "driver_work/print_work_rows",
-        "driver_work/query_work",
-        "driver_work/show_work",
-        "driver_work/export_markdown",
-        "driver_work/find_work_id",
-        "driver_work/main"
       ]
     }
   },
@@ -867,7 +868,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "508726b2620939b8d1c5904b2849d9076a833f9895e352c834b8f5149f0b2303",
+      "edge_hash": "51da641ed02cee3ec4cbfbbf5adf36988a6d6fd9540309693cd4ff78b133944a",
       "enriched": false
     },
     "chirp_bridge/format": {
@@ -939,7 +940,7 @@
       "type": "Class",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "ebae7310de1206f7b3f1d47335b32a492e6c63361c6487ed9e49687da42e43f6",
+      "edge_hash": "5e1bf5c8185741684bafd2e132d54ddd22c939e986c4cf9faafcd43e05704a32",
       "enriched": false
     },
     "chirp_bridge/TracedSerial": {
@@ -1563,7 +1564,7 @@
       "type": "Function",
       "resource": "check_linux_release_abi.py",
       "render_hash": "stale",
-      "edge_hash": "7090400a60de4dc65acca286d679c3d645d0b0a6d1e10b70e2ec8c27aa2c9d10",
+      "edge_hash": "d2ed03cee45b437ce841485944a68d02df38809887fb343c4c42d539dfc2e36c",
       "enriched": false
     },
     "check_linux_release_abi/main": {
@@ -1773,7 +1774,15 @@
       "render_hash": "stale",
       "edge_hash": "8abb74e1b8656f047cd67540f50e7e5d0557d83fefb884aeaec5a0f8ec14614e",
       "enriched": false
+    },
+    "chirp_bridge/alinco_result": {
+      "concept_id": "chirp_bridge/alinco_result",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "fb061f6ac17cb655eacee23d61278e74942c878727b8c32feeb123fc2672d2d0",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-18T20:33:30Z"
+  "generated_at": "2026-11-19T08:59:55Z"
 }
