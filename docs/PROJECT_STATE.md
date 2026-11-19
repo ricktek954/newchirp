@@ -27,6 +27,21 @@ release requirements.
   Alinco DR-735 and rebuilt RT-950 Pro drivers and omit GLVND/EGL/GLES
   loaders; all public downloads returned HTTP 200; and the Linux platform
   manifest reports `1.0.60`.
+- macOS `1.0.60` is live from source commit `488564b4` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds the rebuilt
+  Alinco DR-735 driver, RT-950 Pro CPS 1.3.3 read/write support, fixed-zone
+  display for radios such as the BF-F8HP-PRO, the RT-950 Pro web flow-control
+  fix, official manufacturer model names, encoding-tolerant CSV import and
+  channel select-all, fractional UV-17ProGPS CTCSS preservation, and the
+  latest read-only safety and bug-report fixes.
+  Verification: analyzer clean; 235 Flutter tests; 508 Python tests with two
+  fixture-dependent skips; 68 bridge tests; embedded version `1.0.60` / `60`;
+  arm64 and x86_64 Python `3.13.15`; 262 CHIRP driver modules; catalog
+  `list-models` returned 598 models including `Baofeng_BF-F8HP-PRO`,
+  `Alinco_DR735T`, and `Radtel_RT-950_Pro`; strict app/DMG signatures; Apple
+  notarization and stapling; Gatekeeper acceptance; launch smoke test; and
+  matching local, server, and public SHA-256. Notarization submission:
+  `87136c3e-df9d-43bf-8a77-07a1246e1f66`.
 - Linux `1.0.59` is live from source commit `0614c316`. It adds the
   experimental Kenwood TM-V71 clone driver, Kenwood live-write cache fixes,
   FT-50 channel clearing in both flag tables, FTM-7250 capability retention
@@ -789,6 +804,7 @@ release requirements.
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
 - Windows `1.0.59` artifact source commit: `170c63f3`
+- macOS `1.0.60` artifact source commit: `488564b4`
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
@@ -808,7 +824,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.59 |
+| macOS | 1.0.60 |
 | Windows | 1.0.59 |
 | Linux | 1.0.60 |
 
@@ -833,6 +849,22 @@ Linux `1.0.60` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums and sizes matched the local artifacts
 - Linux platform manifest reports `1.0.60`
+
+macOS `1.0.60` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.60.dmg`
+- Version/build: `1.0.60` / `60`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `2f85468d79a6b359ed7e77ed9b3c63a15f5e6a215fbfddc51b2a1719eeac39d7`
+- Size: `86,823,835` bytes
+- Built from `488564b4`
+- Notarization submission: `87136c3e-df9d-43bf-8a77-07a1246e1f66`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains BF-F8HP-PRO fixed-zone support, the Alinco DR-735 rebuild,
+  RT-950 Pro CPS 1.3.3 read/write transport, official model display names,
+  CSV encoding detection, and channel select-all
+- Local, server, and public-download checksums matched the final stapled DMG
 
 Linux `1.0.59` artifacts:
 
@@ -1644,6 +1676,19 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published macOS `1.0.60` from source commit `488564b4` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds fixed-zone
+  display for radios such as the BF-F8HP-PRO, the Alinco DR-735 rebuild,
+  RT-950 Pro CPS 1.3.3 support, and the current official-name, CSV import,
+  select-all, CTCSS, safety, and bug-report fixes.
+  Verification: analyzer clean; 235 Flutter tests; 508 Python tests with two
+  fixture-dependent skips; 68 bridge tests; embedded version `1.0.60` / `60`;
+  both Python architectures at `3.13.15`; 262 CHIRP driver modules; 598
+  catalog models including BF-F8HP-PRO, RT-950 Pro, and DR-735; strict app
+  and DMG signatures; Apple notarization ID
+  `87136c3e-df9d-43bf-8a77-07a1246e1f66`; staple, Gatekeeper, mounted-DMG,
+  launch-smoke, server/public-download, and checksum checks passed. The live
+  macOS manifest reports `1.0.60`.
 - Published Windows `1.0.59` from source commit `170c63f3`. The release adds
   the OEM-rebuilt Alinco DR-735 driver, RT-950 Pro writes from Radtel Pro CPS
   1.3.3, read-only warnings before writes, official manufacturer model names,
