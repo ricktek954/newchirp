@@ -159,7 +159,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-5RM Plus
 
-- **#w-20261119-70d8 bug | fix_committed | normal:** v2-firmware radio selected as UV-5RM Plus reports only No response
+- **#w-20261119-70d8 bug | awaiting_user | normal:** v2-firmware radio selected as UV-5RM Plus reports only No response
   Linux 1.0.61 /dev/ttyUSB0: PROGRAMBFNORMALU answered 41, 03, 41, 03 then nothing. 0x41 ('A') is the v2 firmware announce reply (docs/BAOFENG_5RH_PRO_PROTOCOL.md), so the radio needs the UV-5RM Plus v2 model.
   Source: `email` INBOX:801
 - **#28 maintenance | experimental | normal:** Current driver status

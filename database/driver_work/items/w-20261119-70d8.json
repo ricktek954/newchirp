@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:801",
-  "status": "fix_committed",
+  "status": "awaiting_user",
   "summary": "Linux 1.0.61 /dev/ttyUSB0: PROGRAMBFNORMALU answered 41, 03, 41, 03 then nothing. 0x41 ('A') is the v2 firmware announce reply (docs/BAOFENG_5RH_PRO_PROTOCOL.md), so the radio needs the UV-5RM Plus v2 model.",
   "title": "v2-firmware radio selected as UV-5RM Plus reports only No response",
   "uid": "w-20261119-70d8"
