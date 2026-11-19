@@ -87,6 +87,31 @@ class EmailTriageCompatibilityTest(unittest.TestCase):
         self.assertEqual(int(raw.txtone), 0x4312)
         self.assertEqual(int(raw.rxtone), 0x4312)
 
+    def test_uv17progps_family_keeps_valid_fractional_ctcss(self):
+        """GM-32 report (work item 86): CPS channels with 141.3 / 103.5 Hz
+        read back with no tone. The malformed-tone guard used int(value)
+        and rejected every fractional CTCSS tone."""
+        from chirp import memmap
+
+        cases = {"Danbury RPT": 141.3, "Alvin RPT": 103.5, "LOCAL": 88.5,
+                 "ROUND": 100.0}
+        for model in ("Baofeng_UV-17ProGPS", "Baofeng_GM-32",
+                      "Baofeng_UV-32"):
+            cls = self.directory.get_radio(model)
+            raw = bytearray(b"\xff" * cls.MEM_TOTAL)
+            for index, (name, tone) in enumerate(cases.items()):
+                word = int(round(tone * 10)).to_bytes(2, "little")
+                # CPS CaculateFreq_StrToHex: 462.625 MHz as little-endian BCD
+                record = bytes.fromhex("50622546") * 2 + word + word
+                record += bytes([0, 0, 0, 0x08]) + b"\x00" * 4
+                record += name.encode().ljust(12, b"\xff")
+                raw[index * 32:(index + 1) * 32] = record
+            radio = cls(memmap.MemoryMapBytes(bytes(raw)))
+            for index, (name, tone) in enumerate(cases.items()):
+                memory = radio.get_memory(index + 1)
+                self.assertEqual(memory.tmode, "TSQL", (model, name))
+                self.assertEqual(memory.ctone, tone, (model, name))
+
     def test_vx6_unprogrammable_slot_does_not_abort_radio_read(self):
         radio = self.directory.get_radio_by_image(
             str(IMAGES / "Yaesu_VX-6.img")

@@ -84,7 +84,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### GM-32
 
-- **#86 bug | awaiting_user | high:** GMRS repeater TX and RX tones decode blank
+- **#86 bug | fix_committed | high:** GMRS repeater TX and RX tones decode blank
   NewChirp 1.0.57 read 33 channels but omitted TX and RX tones on a GMRS repeater channel. Capture raw NewChirp .img and CPS source data for the same unmodified channel.
   Source: `email` INBOX:725
 - **#23 maintenance | experimental | normal:** Current driver status

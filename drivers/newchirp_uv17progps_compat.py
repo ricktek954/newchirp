@@ -34,9 +34,16 @@ _TONE_FIELDS = ("tmode", "rtone", "ctone", "dtcs", "rx_dtcs",
                 "cross_mode", "dtcs_polarity")
 
 
+_VALID_CTCSS = frozenset(round(tone, 1) for tone in chirp_common.TONES)
+
+
 def _invalid_ctcss(value):
+    # Compare the decoded tone itself. This used int(value), which turned
+    # every fractional tone (88.5, 103.5, 141.3, ...) into a non-tone and
+    # hid the CTCSS on UV-32 / GM-32 / UV-17ProGPS-family channels
+    # (2026-11-17 and 2026-11-19 GM-32 reports, work item 86).
     try:
-        return int(value) not in chirp_common.TONES
+        return round(float(value), 1) not in _VALID_CTCSS
     except (TypeError, ValueError):
         return True
 
