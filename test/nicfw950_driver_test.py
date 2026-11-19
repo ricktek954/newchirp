@@ -471,7 +471,10 @@ class NicFW950DriverTest(unittest.TestCase):
         serial.reject_command = 0x70
         with (
             mock.patch.object(self.driver.time, "sleep") as sleep,
-            self.assertRaisesRegex(errors.RadioError, "Unexpected ACK"),
+            self.assertRaisesRegex(
+                errors.RadioError,
+                "not as nicFW950.*stock Radtel firmware.*does not install",
+            ),
         ):
             self.driver._negotiate(serial)
         sleep.assert_not_called()

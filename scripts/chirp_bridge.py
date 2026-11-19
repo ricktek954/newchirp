@@ -423,6 +423,10 @@ def emit_progress(label, fraction=None):
 def bridge_error_message(exc, command=None, model=None, port=None):
     """Add safe, command-specific recovery guidance to bridge failures."""
     message = str(exc).strip() or exc.__class__.__name__
+    if re.fullmatch(r"-?\d+|'[^']*'|\"[^\"]*\"", message):
+        # KeyError(1) and similar print only their argument ("1"), which
+        # tells the reporter and the maintainer nothing.
+        message = "%s: %s" % (exc.__class__.__name__, message)
     lowered_message = message.lower()
     if (
         "cannot configure port" in lowered_message
@@ -932,8 +936,62 @@ def memory_with_extras(radio, number):
     return memory
 
 
+def repair_uninitialized_extras(memory):
+    """Give extras that failed to load a valid default before writing.
+
+    A slot written by other software can hold a byte outside a driver's
+    option table (for example Baofeng 5RM PTT-ID 0xFF). CHIRP then logs
+    "Failed to load ... out of range", leaves the value unset, and the
+    driver's set_memory fails with "x not in list", blocking the whole
+    upload. The stored byte was invalid, so the first valid option is the
+    safe replacement. Returns the names of repaired settings.
+    """
+    from chirp.settings import (
+        RadioSetting,
+        RadioSettingValueBoolean,
+        RadioSettingValueFloat,
+        RadioSettingValueInteger,
+        RadioSettingValueList,
+        RadioSettingValueString,
+    )
+
+    repaired = []
+    extra = getattr(memory, "extra", None)
+    if not extra:
+        return repaired
+    for setting in extra.walk() if hasattr(extra, "walk") else extra:
+        if not isinstance(setting, RadioSetting):
+            continue
+        for value in setting.values():
+            if value.initialized:
+                continue
+            try:
+                if isinstance(value, RadioSettingValueList):
+                    value.set_value(value.get_options()[0])
+                elif isinstance(value, RadioSettingValueBoolean):
+                    value.set_value(False)
+                elif isinstance(value, (RadioSettingValueInteger,
+                                        RadioSettingValueFloat)):
+                    value.set_value(value.get_min())
+                elif isinstance(value, RadioSettingValueString):
+                    value.set_value("")
+                else:
+                    continue
+            except Exception:
+                continue
+            repaired.append(setting.get_name())
+    if repaired:
+        logging.getLogger("newchirp.bridge").warning(
+            "Channel %s: reset invalid stored value(s) for %s",
+            getattr(memory, "number", "?"),
+            ", ".join(repaired),
+        )
+    return repaired
+
+
 def set_memory_with_extras(radio, memory):
     """Write a channel and persist fields CHIRP stores outside radio memory."""
+    repair_uninitialized_extras(memory)
     radio.set_memory(memory)
     owner = external_memory_owner(radio)
     if owner is not None:

@@ -179,8 +179,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795078795046975812,
-      "hash": "2ec814e6f4f2ab3576d1990ae9ce6543fa21b9e18b79dab8e331311eee4acc81",
+      "mtime_ns": 1795079219775983565,
+      "hash": "438535b5fb69db2bcc7996c1f56da9fe4790def832144de752b2e23cf1fa9414",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -212,6 +212,7 @@
         "chirp_bridge/memory_json",
         "chirp_bridge/external_memory_owner",
         "chirp_bridge/memory_with_extras",
+        "chirp_bridge/repair_uninitialized_extras",
         "chirp_bridge/set_memory_with_extras",
         "chirp_bridge/erase_memory_with_extras",
         "chirp_bridge/extra_fields_json",
@@ -268,7 +269,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "fcaf9b049dd2056be05a0434b6fb6071711e210ed05af0e44e994d3c72533034",
+      "edge_hash": "bae723d1c247e15beac9ef40b777bfaaa0f9c6447b75860bea6163af4ad3098a",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -972,7 +973,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "14d749e4850f899ade38cc34aa2ff09011361be33286fb53945a71414808287e",
+      "edge_hash": "a77d1d3957d65587b64350154299509bf5b60b9a9a22d8c6bce0cd1a11f4674f",
       "enriched": false
     },
     "chirp_bridge/erase_memory_with_extras": {
@@ -1782,7 +1783,15 @@
       "render_hash": "stale",
       "edge_hash": "fb061f6ac17cb655eacee23d61278e74942c878727b8c32feeb123fc2672d2d0",
       "enriched": false
+    },
+    "chirp_bridge/repair_uninitialized_extras": {
+      "concept_id": "chirp_bridge/repair_uninitialized_extras",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "727e84cc5c3f508f7df734684376e9369b2186b8e81e025f792e91f7fb98be27",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-19T08:59:55Z"
+  "generated_at": "2026-11-19T09:07:00Z"
 }

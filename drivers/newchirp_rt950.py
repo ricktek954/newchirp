@@ -221,7 +221,7 @@ class RT950Radio(chirp_common.CloneModeRadio,
         rf.memory_bounds = (1, CHANNEL_COUNT)
         rf.valid_bands = [(18000000, 1000000000)]
         rf.valid_modes = ["FM", "NFM", "AM", "NAM"]
-        rf.valid_duplexes = ["", "+", "-", "split"]
+        rf.valid_duplexes = ["", "+", "-", "split", "off"]
         rf.valid_tmodes = ["", "Tone", "TSQL", "DTCS", "Cross"]
         rf.valid_cross_modes = list(chirp_common.CROSS_MODES)
         rf.valid_tuning_steps = [5.0]
@@ -368,10 +368,32 @@ class RT950Radio(chirp_common.CloneModeRadio,
         signalling_group = ptt_id = scramble = encryption = 0
         fhss_code = ""
         if not mem.empty:
-            mem.freq = _decode_frequency(raw[0:4])
-            tx_freq = _decode_frequency(raw[4:8])
-            offset_hz = tx_freq - mem.freq
-            if offset_hz == 0:
+            try:
+                mem.freq = _decode_frequency(raw[0:4])
+            except errors.InvalidDataError as exc:
+                # One damaged record must not hide the other channels.
+                LOG.warning("RT-950 channel %i RX frequency unreadable: %s",
+                            number, exc)
+                mem.empty = True
+        if not mem.empty:
+            tx_raw = bytes(raw[4:8])
+            tx_freq = None
+            if tx_raw not in (b"\x00" * 4, b"\xff" * 4):
+                try:
+                    tx_freq = _decode_frequency(tx_raw)
+                except errors.InvalidDataError as exc:
+                    LOG.warning("RT-950 channel %i TX frequency unreadable: "
+                                "%s", number, exc)
+            # 2026-11-16/18 RT-950 Pro reports (work item 85): an all-0xFF
+            # TX field aborted the whole decode with "Invalid packed
+            # frequency 0xff". Show it as TX off rather than failing. Whether
+            # it means receive-only or unread data is unconfirmed until a raw
+            # image arrives; the documented TX-disable is byte 15 bit 1.
+            offset_hz = None if tx_freq is None else tx_freq - mem.freq
+            if offset_hz is None:
+                mem.duplex = "off"
+                mem.offset = 0
+            elif offset_hz == 0:
                 mem.duplex = ""
                 mem.offset = 0
             elif abs(offset_hz) < 10_000_000:

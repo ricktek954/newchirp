@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 188 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 189 concepts across 10 domains and 10 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-19T08:59:55Z'
+timestamp: '2026-11-19T09:07:00Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 188 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 189 concepts | 10 domains | 10 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 165 |
+| Function | 166 |
 | Class | 13 |
 | Module | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 188 |
+| python | 189 |
 
 ## Domain Map
 
@@ -40,9 +40,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [check_private_data](check_private_data/index.md) (4 concepts) — Fail when private email addresses or local build paths are tracked.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 77 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 78 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (77 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (78 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [driver_work.py](driver_work.py/index.md) — 18 concepts
 
@@ -93,7 +93,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
 | [live_channel_context](/chirp_bridge/live_channel_context.md) | Function | `chirp_bridge.py` | Choose a live-radio subdevice without probing every memory s… |
 | [mapping_payload](/chirp_bridge/mapping_payload.md) | Function | `chirp_bridge.py` | Describe CHIRP's bank/zone models for an image or channel ow… |
-| [nearest_programmable_frequency](/chirp_bridge/nearest_programmable_frequency.md) | Function | `chirp_bridge.py` | Return the closest frequency representable by one of the ste… |
+| [repair_uninitialized_extras](/chirp_bridge/repair_uninitialized_extras.md) | Function | `chirp_bridge.py` | Give extras that failed to load a valid default before writi… |
 
 ## Usage with OpenCode
 

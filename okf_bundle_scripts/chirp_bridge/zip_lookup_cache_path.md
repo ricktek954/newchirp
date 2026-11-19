@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:59:55Z"
+timestamp: "2026-11-19T09:06:59Z"
 concept_id: chirp_bridge/zip_lookup_cache_path
 language: python
 ---
@@ -29,7 +29,7 @@ def zip_lookup_cache_path(zip_code)
 | `zip_code` | `—` | `—` |
 
 ## Source
-Lines 2227–2230 in `chirp_bridge.py`
+Lines 2285–2288 in `chirp_bridge.py`
 
 ## Relationships
 

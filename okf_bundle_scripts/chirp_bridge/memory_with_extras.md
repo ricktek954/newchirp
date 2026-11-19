@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:59:55Z"
+timestamp: "2026-11-19T09:06:59Z"
 concept_id: chirp_bridge/memory_with_extras
 language: python
 ---
@@ -38,7 +38,7 @@ Load a channel plus CHIRP's metadata-backed fields such as comments.
 | `number` | `—` | `—` |
 
 ## Source
-Lines 926–932 in `chirp_bridge.py`
+Lines 930–936 in `chirp_bridge.py`
 
 ## Relationships
 

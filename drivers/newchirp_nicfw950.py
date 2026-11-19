@@ -467,6 +467,18 @@ def _negotiate(pipe):
             # Only the initial, read-only baud handshake may be retried.
             LOG.info("Waiting for nicFW950 serial idle reset before retry")
             time.sleep(3.0)
+            continue
+        except errors.RadioError as exc:
+            # 2026-11-18 report: stock RT-950 Pro firmware answered 05 04.
+            # The user expected this profile to install nicFW.
+            raise errors.RadioError(
+                "This radio answered, but not as nicFW950 (%s). It is most "
+                "likely still running the stock Radtel firmware. Choose the "
+                "\"Radtel RT-950 Pro\" model to read it as it is. NewChirp "
+                "does not install firmware: flash nicFW950 with its own "
+                "flasher first, then use this nicFW950 profile."
+                % str(exc).replace("Unexpected ACK for 0x70: ", "reply ")
+            ) from exc
     pipe.baudrate = FAST_BAUD
     if _read_exact(pipe, 2) != b"\xaa\x70":
         raise errors.RadioError("No high-speed baud ACK")

@@ -63,6 +63,7 @@
 - [readline](readline.md)
 - [readlines](readlines.md)
 - [received](received.md)
+- [repair_uninitialized_extras](repair_uninitialized_extras.md) — Give extras that failed to load a valid default before writing.
 - [repeaterbook_cache_path](repeaterbook_cache_path.md)
 - [repeaterbook_item_to_channel](repeaterbook_item_to_channel.md)
 - [repeaterbook_resource_name](repeaterbook_resource_name.md)

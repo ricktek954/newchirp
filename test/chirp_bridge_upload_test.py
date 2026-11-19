@@ -553,6 +553,21 @@ class UploadHandshakeTest(unittest.TestCase):
 
         self.assertEqual(setting.value.get_value(), 3)
 
+    def test_bare_exception_messages_name_their_type(self):
+        """2026-11-19 5RM report showed only "Reported error: 1"."""
+        self.assertEqual(
+            bridge.bridge_error_message(KeyError(1), command="model-info"),
+            "KeyError: 1",
+        )
+        self.assertEqual(
+            bridge.bridge_error_message(KeyError("pttid")),
+            "KeyError: 'pttid'",
+        )
+        self.assertEqual(
+            bridge.bridge_error_message(ValueError("bad value")),
+            "bad value",
+        )
+
     def test_trace_records_readline_data(self):
         trace = bridge.RadioCommunicationTrace()
         serial = bridge.TracedSerial(FakeLineSerial(b"\xff"), trace)

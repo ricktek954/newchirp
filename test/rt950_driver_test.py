@@ -291,6 +291,28 @@ class RT950DriverTest(unittest.TestCase):
         self.assertEqual(third.name, "AIR")
         self.assertTrue(radio.get_memory(960).empty)
 
+    def test_receive_only_and_damaged_records_do_not_abort_decode(self):
+        """2026-11-18 RT-950 Pro report: "Invalid packed frequency 0xff"
+        rejected the whole image because one channel's TX field was 0xFF."""
+        memory = bytearray(b"\xff" * 0xC100)
+        memory[0:32] = _record(462_562_500, 462_562_500, name=b"GMRS1")
+        rx_only = bytearray(_record(162_550_000, 162_550_000, name=b"WX"))
+        rx_only[4:8] = b"\xff" * 4
+        memory[32:64] = rx_only
+        damaged = bytearray(_record(146_520_000, 146_520_000, name=b"BAD"))
+        damaged[0:4] = bytes.fromhex("aa752546")
+        memory[64:96] = damaged
+        memory[96:128] = _record(147_000_000, 147_600_000, name=b"RPT")
+
+        radio = self._radio_from_memory(memory)
+        self.assertIn("off", radio.get_features().valid_duplexes)
+        self.assertEqual(radio.get_memory(1).name, "GMRS1")
+        weather = radio.get_memory(2)
+        self.assertEqual((weather.freq, weather.duplex), (162_550_000, "off"))
+        self.assertTrue(radio.get_memory(3).empty)
+        repeater = radio.get_memory(4)
+        self.assertEqual((repeater.duplex, repeater.offset), ("+", 600_000))
+
     def test_frequency_uses_the_cps_little_endian_byte_order(self):
         memory = bytearray(b"\xff" * 0xC100)
         memory[0:8] = bytes.fromhex("0075254600757546")
