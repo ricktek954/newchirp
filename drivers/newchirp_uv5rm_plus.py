@@ -39,8 +39,9 @@ def _v2_firmware_error(radio):
     return errors.RadioError(
         "The radio answered the programming request with \"A\" (0x41), "
         "which is how Baofeng's v2 firmware replies. This radio needs the "
-        "\"%s\" model. Select it and read again; the radio was not "
-        "changed." % V2_MODELS.get(radio.MODEL, "v2"))
+        "\"%s\" model. Turn the radio off and on, select that model, and "
+        "read again; the radio was not changed." %
+        V2_MODELS.get(radio.MODEL, "v2"))
 
 
 def _do_ident(radio):

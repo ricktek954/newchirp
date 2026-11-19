@@ -182,6 +182,32 @@ class Baofeng5RHProDriverTest(unittest.TestCase):
         )
         self.assertEqual(serial.writes[5], bytes([seed ^ 0x52]))
 
+    def test_stray_announce_reply_advises_a_power_cycle(self):
+        """2026-11-19 report: after failed attempts with the older profile
+        the radio sent a stray byte until it was power-cycled."""
+        from chirp import errors
+
+        class Stray(FakeSessionSerial):
+            def write(self, data):
+                if bytes(data) == self.module.T_INFO:
+                    self.writes.append(bytes(data))
+                    if self.baudrate == 19200:
+                        self.responses.append(b"\x03")
+                    return
+                return super().write(data)
+
+        radio = self.radio_class(Stray(announce_baud=None))
+        with self.assertRaisesRegex(errors.RadioError,
+                                    r"0x03.*turn the radio off and on"):
+            self.driver._handshake(radio, seed=0x5A)
+
+    def test_silent_radio_points_to_cable_and_port(self):
+        from chirp import errors
+        radio = self.radio_class(FakeSessionSerial(announce_baud=None))
+        with self.assertRaisesRegex(errors.RadioNoResponse,
+                                    "cable is fully inserted"):
+            self.driver._handshake(radio, seed=0x5A)
+
     def test_read_uses_twelve_encrypted_4096_byte_blocks(self):
         serial = FakeSessionSerial(announce_baud=115200)
         radio = self.radio_class(serial)

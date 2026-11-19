@@ -115,7 +115,11 @@ Last updated: 2026-11-18
   firmware fields without established semantics
 - Evidence: official CPS V1.17 CIL/PDB analysis plus public CHIRP PR 1625
   hardware testing on firmware `v2_0_09`
-- NewChirp hardware validation: none. Offline protocol and image tests pass.
+- NewChirp hardware validation: full read confirmed on a physical UV-5RM
+  Plus v2 (Linux, NewChirp 1.0.61, 2026-11-19) after the radio was
+  power-cycled; it first answered with a stray byte following failed
+  attempts with the older UV-5RM Plus profile. Writes are not yet
+  hardware-tested.
 - Next milestone: the 2026-11-06 UV-5RH Pro reporter completes a read,
   compares channels with the radio, edits one unused channel, uploads it,
   reads it back, and verifies it on the radio.

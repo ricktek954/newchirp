@@ -226,6 +226,7 @@ def _announce(radio):
     """
     port = radio.pipe
     timeout = port.timeout
+    stray = []
 
     try:
         # The reply takes about 110ms, so a short timeout here keeps the
@@ -239,12 +240,25 @@ def _announce(radio):
             if resp == b'A':
                 LOG.info('Radio answered the announce at %i baud', baudrate)
                 return
+            if resp:
+                stray.append(resp[0])
             LOG.info('No announce reply at %i baud (got %s)', baudrate,
                      resp and '0x%02X' % resp[0] or 'nothing')
     finally:
         port.timeout = timeout
 
-    raise errors.RadioNoResponse('Radio did not respond')
+    if stray:
+        # 2026-11-19 Linux report: after failed attempts with the older
+        # UV-5RM Plus profile the radio answered with a stray byte until it
+        # was power-cycled; the next read worked.
+        raise errors.RadioError(
+            'The radio answered, but not with the expected reply (%s). This '
+            'usually means it is still busy from an earlier attempt: turn '
+            'the radio off and on again, then read.'
+            % ', '.join('0x%02X' % value for value in stray))
+    raise errors.RadioNoResponse(
+        'Radio did not respond. Check the cable is fully inserted, the radio '
+        'is on, and the correct port is selected, then try again.')
 
 
 def _handshake(radio, is_write=False, seed=None):

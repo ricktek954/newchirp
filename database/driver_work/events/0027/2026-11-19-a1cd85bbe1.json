@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 14:46:00",
+  "details": "Full read with the Baofeng UV-5RM Plus v2 profile on NewChirp 1.0.61 after a power cycle (INBOX:803). The first v2 attempt (INBOX:802) got a stray byte at 19200 until the radio was rebooted. Write not tested.",
+  "event_type": "hardware_test",
+  "external_ref": "",
+  "item": "27",
+  "occurred_at": "2026-11-19",
+  "summary": "UV-5RM Plus v2 owner (Linux report) hardware test: partial"
+}

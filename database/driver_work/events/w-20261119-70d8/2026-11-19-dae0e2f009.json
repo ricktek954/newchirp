@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 14:46:01",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "INBOX:802,803",
+  "item": "w-20261119-70d8",
+  "occurred_at": "2026-11-19",
+  "summary": "Reporter confirmed the read works with the v2 profile after a clean reboot of the radio (INBOX:803). v2 announce now reports a stray reply with power-cycle advice instead of 'Radio did not respond'."
+}
