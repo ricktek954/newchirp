@@ -121,6 +121,26 @@ release requirements.
   reports macOS `1.0.56`; and local/server DMG SHA-256 both match
   `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
   Physical FT-50 upload/read-back validation is still pending.
+- Windows `1.0.60` is live from source commit `488564b4`. It adds read-only
+  zone display for fixed-zone radios including the BF-F8HP-PRO and carries
+  the RT-950 Pro web flow-control fix plus the Alinco DR-735 rebuild, RT-950
+  Pro CPS 1.3.3 read/write support, official manufacturer model names,
+  encoding-tolerant CSV import, channel select-all, fractional UV-17ProGPS
+  CTCSS preservation, read-only warnings, and bug-report fixes. Verification:
+  installer metadata `1.0.60.0` / `1.0.60`; release app `1.0.60+60`; bundled
+  Python `3.13.15`; a clean runtime with no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination; 262 CHIRP driver
+  modules; bridge `list-models` exit 0 with 598 models including
+  `Baofeng_BF-F8HP-PRO`, `Alinco_DR735T`, and `Radtel_RT-950_Pro`; the
+  BF-F8HP-PRO image reports ten read-only zones spanning channels 1-100,
+  101-200, and onward; all four frequency-reference PDFs; extracted payload
+  launch succeeded; matching local/server/public SHA-256; public HTTP 200;
+  and live manifest Windows `1.0.60`. `flutter analyze lib test` is clean.
+  The full Flutter suite ran 230 passing tests with the five known
+  Windows-only sandbox/Help failures. The complete Python suite ran 508
+  tests: 503 passed, 2 fixture-dependent tests skipped, and 3 Windows
+  temporary-file-lock helper errors. The installer remains unsigned. At
+  verification time, macOS was `1.0.60` and Linux was `1.0.60`.
 - Windows `1.0.59` is live from source commit `170c63f3`. It adds the
   OEM-rebuilt Alinco DR-735 driver, RT-950 Pro writes from Radtel Pro CPS
   1.3.3, read-only warnings before writes, official manufacturer model names,
@@ -803,14 +823,14 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
-- Windows `1.0.59` artifact source commit: `170c63f3`
+- Windows `1.0.60` artifact source commit: `488564b4`
 - macOS `1.0.60` artifact source commit: `488564b4`
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.60` is live from source commit `66383721`
 - Open pull requests: none
-- Checked-out source version: `1.0.60+60`
+- Checked-out source version: `1.0.61+61`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -825,7 +845,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.60 |
-| Windows | 1.0.59 |
+| Windows | 1.0.60 |
 | Linux | 1.0.60 |
 
 Linux `1.0.60` artifacts:
@@ -1026,7 +1046,34 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.59` artifact:
+Windows `1.0.60` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.60.exe`
+- Version/build: `1.0.60` / `60`
+- SHA-256:
+  `27f75d3a76c78048029fd6d431751c5a569eedc78205742ab30ff52cbb0af421`
+- Size: `55,397,644` bytes
+- Built from `488564b4`
+- Installer metadata `1.0.60.0` / `1.0.60`; release app `1.0.60+60`
+- Bundled Python `3.13.15`, 262 CHIRP driver modules, and a successful bridge
+  `list-models` run with 598 models including `Baofeng_BF-F8HP-PRO`,
+  `Alinco_DR735T`, `Radtel_RT-950_Pro`, `Wouxun_KG-UV8D`, `Yaesu_FT-50`,
+  `Baofeng_K67_Pro_CPS_V1.1.2`, and `Kenwood_TM-V71`
+- The extracted BF-F8HP-PRO bridge payload reports ten read-only zones,
+  including channels 1-100 and 101-200
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains only the normal pip files, with no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination
+- Installer payload extraction confirmed the bundled runtime, driver tree,
+  bridge, fixed-zone compatibility driver, and PDFs; the extracted runtime
+  reported Python `3.13.15`, and the extracted application launched
+  successfully
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.60`
+- Authenticode: not signed
+
+Windows `1.0.59` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.59.exe`
 - Version/build: `1.0.59` / `59`
@@ -1676,6 +1723,23 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.60` from source commit `488564b4`. The release adds
+  read-only zone display for fixed-zone radios including the BF-F8HP-PRO and
+  carries the RT-950 Pro web flow-control fix plus the current DR-735,
+  RT-950 Pro, official-name, CSV import, select-all, CTCSS, safety, and
+  bug-report work. Verification: installer metadata `1.0.60.0` / `1.0.60`,
+  release app `1.0.60+60`, bundled Python `3.13.15`, clean runtime, 262 CHIRP
+  driver modules, bridge `list-models` exit 0 with 598 models including
+  `Baofeng_BF-F8HP-PRO`, `Alinco_DR735T`, and `Radtel_RT-950_Pro`, ten
+  read-only BF-F8HP-PRO zones spanning channels 1-100 and onward, all four
+  frequency-reference PDFs, matching local/server/public SHA-256, public HTTP
+  200, and live manifest Windows `1.0.60`. Installer payload extraction and
+  runtime launch succeeded. `flutter analyze lib test` is clean. The full
+  Flutter suite ran 230 passing tests with the five known Windows-only
+  sandbox/Help failures. The complete Python suite ran 508 tests: 503 passed,
+  2 fixture-dependent tests skipped, and 3 Windows temporary-file-lock helper
+  errors. The installer remains unsigned. macOS was at `1.0.60`; Linux was at
+  `1.0.60`.
 - Published macOS `1.0.60` from source commit `488564b4` as a universal,
   signed, notarized, stapled, Gatekeeper-accepted DMG. It adds fixed-zone
   display for radios such as the BF-F8HP-PRO, the Alinco DR-735 rebuild,
