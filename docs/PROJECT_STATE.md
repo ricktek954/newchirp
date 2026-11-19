@@ -15,6 +15,17 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.63` is live from source commit `5c2c607f`. It adds the read-only
+  Icom IC-F50V/F60V memory-capture profile, prevents fixed-zone metadata from
+  blocking writes after channels move, and preserves radio-mapping
+  memberships when channel locations are remapped. Verification: analyzer
+  clean; 237 Flutter tests; 540 Python tests with two fixture-dependent skips;
+  max glibc `2.18`; DEB, RPM, and Pacman metadata plus embedded version
+  `1.0.63` / `63`; DEB and AppImage Xvfb launch tests passed on Ubuntu 20.04;
+  the final AppImage launched under host Wayland and XWayland; all package
+  payloads include the IC-F50V/F60V capture driver and omit GLVND/EGL/GLES
+  loaders; all public downloads returned HTTP 200; and the Linux platform
+  manifest reports `1.0.63`.
 - Linux `1.0.62` is live from source commit `0d09b292`. It adds the
   CPS-derived Wouxun KG-689E/KG-699E driver, keeps Icom CI-V reads working
   when a channel has no tone set, fixes TK-270G editing and the 5RH Pro zone
@@ -885,9 +896,9 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.62` is live from source commit `0d09b292`
+- Linux `1.0.63` is live from source commit `5c2c607f`
 - Open pull requests: none
-- Checked-out source version: `1.0.62+62`
+- Checked-out source version: `1.0.63+63`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -903,7 +914,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.61 |
 | Windows | 1.0.61 |
-| Linux | 1.0.62 |
+| Linux | 1.0.63 |
+
+Linux `1.0.63` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.63.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.63.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.63.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.63.pkg.tar.zst`
+- DEB: `48,564,024` bytes, SHA-256
+  `01b9ab23a869829a58024cb1c086e753f1a39cf870b546a1cc4f6c309aa78898`
+- RPM: `48,651,203` bytes, SHA-256
+  `70a5f484b2ac85112e50c1468b3bd3d10cbd063e79300868ddf9de117909dc0b`
+- AppImage: `48,846,016` bytes, SHA-256
+  `99b578e21654e28859f5cdd15f270d1be5f3c9e46e5a9463c694f3f8507dc15b`
+- Pacman: `47,531,477` bytes, SHA-256
+  `8ed7d2c954dfd349affa9f8aae3a22cc27c32573e05eb17da35904dc58c7779a`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.63`
 
 Linux `1.0.62` artifacts:
 

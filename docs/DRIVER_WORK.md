@@ -379,6 +379,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261119-3094 release | released | normal:** Linux 1.0.62 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 0d09b292. The release adds the Wouxun KG-689E/KG-699E driver, Icom CI-V no-tone recovery, TK-270G and 5RH Pro fixes, UV-5RM Plus v2 reply handling, and F4HWN module image support. Public manifest reports 1.0.62. Package SHA-256 values: 34dfca976a39e621ae7797bdb4148f1e1ae2c753df18feb2046320d72206e7aa, 9e8a8be6dc45c6342d7a9c9cfd89b3d88193acbd736edd7d7885bffa0aebd240, 8d313037c55f62f07455d2a996fae07fb06fbcdf45399895465b6177fd87502e, and 44c1585e5113f0300681dd19c1e564dbbe09bc0a7a912cb323a46d1a609a273f.
   Source: `release` desktop:0d09b292
+- **#w-20261119-250d release | released | normal:** Linux 1.0.63 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 5c2c607f. The release adds the read-only Icom IC-F50V/F60V memory-capture profile, fixes fixed-zone write blocking after channel moves, and preserves radio-mapping memberships across location remaps. Public manifest reports 1.0.63. Package SHA-256 values: 01b9ab23a869829a58024cb1c086e753f1a39cf870b546a1cc4f6c309aa78898, 70a5f484b2ac85112e50c1468b3bd3d10cbd063e79300868ddf9de117909dc0b, 99b578e21654e28859f5cdd15f270d1be5f3c9e46e5a9463c694f3f8507dc15b, and 8ed7d2c954dfd349affa9f8aae3a22cc27c32573e05eb17da35904dc58c7779a.
+  Source: `release` desktop:5c2c607f
 
 ## Quansheng
 

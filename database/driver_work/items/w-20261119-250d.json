@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-19 22:05:44",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "Linux desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:5c2c607f",
+  "status": "released",
+  "summary": "Published DEB, RPM, AppImage, and Pacman packages from source commit 5c2c607f. The release adds the read-only Icom IC-F50V/F60V memory-capture profile, fixes fixed-zone write blocking after channel moves, and preserves radio-mapping memberships across location remaps. Public manifest reports 1.0.63. Package SHA-256 values: 01b9ab23a869829a58024cb1c086e753f1a39cf870b546a1cc4f6c309aa78898, 70a5f484b2ac85112e50c1468b3bd3d10cbd063e79300868ddf9de117909dc0b, 99b578e21654e28859f5cdd15f270d1be5f3c9e46e5a9463c694f3f8507dc15b, and 8ed7d2c954dfd349affa9f8aae3a22cc27c32573e05eb17da35904dc58c7779a.",
+  "title": "Linux 1.0.63 published",
+  "uid": "w-20261119-250d"
+}
