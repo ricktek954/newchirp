@@ -12,16 +12,43 @@ const Map<String, String> _modelPickerHints = {
   'Baofeng_UV-29Pro': "Uses Baofeng's UV-28 Plus compatibility profile",
 };
 
-String displayRadioModelName(String model) => model.replaceAll('_', ' ');
+/// Manufacturer model names for CHIRP driver IDs whose model part differs.
+///
+/// CHIRP IDs (for example `Alinco_DR735T`) stay the internal key: image files
+/// and the bridge depend on them. Only what people read uses these names.
+/// Add an entry only when the manufacturer's own name is verified.
+const Map<String, String> officialRadioModelNames = {
+  'Alinco_DJ175': 'Alinco DJ-175',
+  'Alinco_DJ596': 'Alinco DJ-596',
+  'Alinco_DR03T': 'Alinco DR-03T',
+  'Alinco_DR06T': 'Alinco DR-06T',
+  'Alinco_DR135T': 'Alinco DR-135T',
+  'Alinco_DR235T': 'Alinco DR-235T',
+  'Alinco_DR435T': 'Alinco DR-435T',
+  'Alinco_DR735T': 'Alinco DR-735T',
+};
+
+String displayRadioModelName(String model) =>
+    officialRadioModelNames[model] ?? model.replaceAll('_', ' ');
 
 String _modelSearchText(String model, String vendor) {
   final hint = _modelPickerHints[model];
-  return [displayRadioModelName(model), vendor, ?hint].join(' ');
+  // Keep the CHIRP spelling searchable alongside the official name.
+  return [
+    displayRadioModelName(model),
+    model.replaceAll('_', ' '),
+    vendor,
+    ?hint,
+  ].join(' ');
 }
 
 String _vendorSlug(String vendor) => vendor.replaceAll(' ', '_');
 
 String _modelNameWithinVendor(String model, String vendor) {
+  final official = officialRadioModelNames[model];
+  if (official != null && official.startsWith('$vendor ')) {
+    return official.substring(vendor.length + 1);
+  }
   final prefix = '${_vendorSlug(vendor)}_';
   return model.startsWith(prefix)
       ? displayRadioModelName(model.substring(prefix.length))

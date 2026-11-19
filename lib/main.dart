@@ -1210,7 +1210,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _radioZones = imported.zones;
       _radioMappings = imported.mappings;
       _selectedZone = imported.zone;
-      _libraryName = '${model.replaceAll('_', ' ')} — ${zone.name}';
+      _libraryName = '${displayRadioModelName(model)} — ${zone.name}';
       _libraryPath = null;
       _libraryOpen = true;
       _dirty = false;
@@ -1230,7 +1230,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       builder: (context) => RadioMappingDialog(
         models: _radioMappings,
         channels: _activeChannels,
-        radioName: _model?.replaceAll('_', ' ') ?? 'this radio',
+        radioName: (_model == null ? 'this radio' : displayRadioModelName(_model!)),
       ),
     );
     if (!mounted || edited == null) return;
@@ -3339,7 +3339,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           _radioZones = result.zones;
           _radioMappings = result.mappings;
           _selectedZone = result.zone;
-          _libraryName = _model!.replaceAll('_', ' ');
+          _libraryName = displayRadioModelName(_model!);
           _libraryOpen = true;
           _dirty = false;
           _page = 0;
@@ -3390,7 +3390,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ),
         title: Text(
           'Before ${writing ? 'writing' : 'reading'} '
-          '${_model!.replaceAll('_', ' ')}',
+          '${displayRadioModelName(_model!)}',
         ),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 520),
@@ -4911,7 +4911,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     Expanded(
                       child: Text(
                         storedImageReady
-                            ? 'Stored image ready for ${_model!.replaceAll('_', ' ')}. '
+                            ? 'Stored image ready for ${displayRadioModelName(_model!)}. '
                                   'You can write without reading again.'
                             : 'A radio image is loaded from this session. '
                                   'Review all changes before writing.',
@@ -6194,7 +6194,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               child: Text(
                                 model == null
                                     ? 'No radio model selected. Open Radio connection first.'
-                                    : '${model.replaceAll('_', ' ')}  |  '
+                                    : '${displayRadioModelName(model)}  |  '
                                           '${_port ?? 'No programming cable selected'}'
                                           '${_settingsLoadedFromRadio
                                               ? '  |  read from radio'
@@ -6710,7 +6710,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   _radioImage == null
                                       ? 'No image for this model yet. Read once to enable writing.'
                                       : storedImageReady
-                                      ? 'Stored image for ${_model!.replaceAll('_', ' ')} is ready. '
+                                      ? 'Stored image for ${displayRadioModelName(_model!)} is ready. '
                                             'You can write without reading again.'
                                       : 'A radio image was read this session. '
                                             'Review all changes before writing.',

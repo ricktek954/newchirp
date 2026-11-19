@@ -60,6 +60,15 @@ Every new radio driver must also be exposed on the website before handoff:
 
 Both website steps are required even when the browser transport is read-only.
 
+Show radios by the manufacturer's official model name wherever people read
+it (desktop picker, website catalog, Web Programmer, messages and replies),
+for example "DR-735T", not CHIRP's "DR735T". CHIRP driver IDs, catalog model
+strings and Web Programmer profile `model` values stay unchanged because
+images and matching depend on them. Add verified names to both
+`officialRadioModelNames` (`lib/widgets/radio_model_picker.dart`) and
+`lib/radio-display-names.ts` in the website, and keep both spellings
+searchable.
+
 For any driver derived from an OEM programming application, follow
 `docs/REA_PLAYBOOK.md`. Trace both the UI-to-serial and serial-to-decoder call
 paths, document the wire encoding and response-length rules for every

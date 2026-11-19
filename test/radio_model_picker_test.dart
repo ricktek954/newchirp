@@ -99,6 +99,66 @@ void main() {
     );
   });
 
+  test('official manufacturer names are shown for CHIRP driver IDs', () {
+    expect(displayRadioModelName('Alinco_DR735T'), 'Alinco DR-735T');
+    expect(displayRadioModelName('Alinco_DJ596'), 'Alinco DJ-596');
+    expect(displayRadioModelName('Baofeng_UV-5R_Mini'), 'Baofeng UV-5R Mini');
+  });
+
+  testWidgets('DR-735T shows its official name and either spelling finds it', (
+    tester,
+  ) async {
+    const vendors = {
+      'Alinco': ['Alinco_DR135T', 'Alinco_DR735T'],
+      'Yaesu': ['Yaesu_FT-60'],
+    };
+    String? selectedModel = 'Yaesu_FT-60';
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) => RadioModelPicker(
+              models: vendors.values.expand((models) => models).toList(),
+              vendorModels: vendors,
+              selectedModel: selectedModel,
+              onSelected: (model) {
+                setState(() => selectedModel = model);
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('radio-model-picker-field')));
+    await tester.pumpAndSettle();
+    for (final query in ['DR-735T', 'dr735t', 'alinco 735']) {
+      await tester.enterText(
+        find.byKey(const ValueKey('radio-model-search')),
+        query,
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('radio-model-option-Alinco_DR735T')),
+        findsOneWidget,
+        reason: query,
+      );
+      expect(
+        find.byKey(const ValueKey('radio-model-option-Alinco_DR135T')),
+        findsNothing,
+        reason: query,
+      );
+    }
+    await tester.tap(
+      find.byKey(const ValueKey('radio-model-option-Alinco_DR735T')),
+    );
+    await tester.pumpAndSettle();
+
+    expect(selectedModel, 'Alinco_DR735T');
+    expect(find.text('Alinco DR-735T'), findsOneWidget);
+    expect(find.text('Alinco DR735T'), findsNothing);
+  });
+
   testWidgets('search selects across manufacturer and model', (tester) async {
     String? selectedModel = 'Yaesu_FTM-150R';
     await tester.pumpWidget(
