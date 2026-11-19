@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 16:57:30",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:808",
+  "item": "83",
+  "occurred_at": "2026-11-19",
+  "summary": "1.0.60 report: editing channel 1 stopped with invalid bank metadata for channel 24 (index 128) before radio I/O"
+}

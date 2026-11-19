@@ -287,5 +287,40 @@ class Baofeng5RHProDriverTest(unittest.TestCase):
         self.assertEqual(radio.get_sub_devices()[0].VARIANT, "Zone 1")
 
 
+    def test_zone_feature_bit_limits_zones_like_the_cps(self):
+        from chirp import memmap
+
+        radio = self._empty_radio()
+        self.assertTrue(radio.zones_enabled())
+        self.assertEqual(len(radio.get_sub_devices()), 10)
+
+        data = bytearray(radio._mmap.get_packed())
+        data[self.driver.DEVICE_FEATURES_OFFSET] &= ~0x04
+        radio = self.radio_class(memmap.MemoryMapBytes(bytes(data)))
+        self.assertFalse(radio.zones_enabled())
+        zones = radio.get_sub_devices()
+        self.assertEqual(len(zones), 1)
+        self.assertEqual(zones[0].get_features().memory_bounds, (1, 64))
+
+    def test_zone_two_edit_lands_in_zone_two(self):
+        # 2026-11-19 report: writes made in zone 2 or 3 appeared in zone 1.
+        from chirp import chirp_common
+
+        radio = self._empty_radio()
+        zone2 = radio.get_sub_devices()[1]
+        channel = chirp_common.Memory()
+        channel.number = 1
+        channel.freq = 146_520_000
+        channel.name = "ZONE2"
+        zone2.set_memory(channel)
+        radio._rebuild_zones()
+
+        self.assertTrue(radio.get_memory(1).empty)
+        self.assertEqual(radio.get_memory(65).name, "ZONE2")
+        self.assertEqual(int(radio._memobj.zones[0].count), 0)
+        self.assertEqual(int(radio._memobj.zones[1].count), 1)
+        self.assertEqual(int(radio._memobj.zones[1].channels[0]), 64)
+        self.assertEqual(int(radio._memobj.zones_used), 1)
+
 if __name__ == "__main__":
     unittest.main()

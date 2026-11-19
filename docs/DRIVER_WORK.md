@@ -166,6 +166,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: UV-17-family serial, 115200 8N1 + DTR/RTS. Read: OEM-style handshake retry; stock channel decode. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:52
 
+### UV-5RM Plus v2
+
+- **#w-20261119-d555 bug | awaiting_user | high:** Writes to zones 2-3 reported in zone 1
+  Reporter (first v2 hardware read) says frequencies written in zone 2 or 3 land in zone 1, and edits cannot span zones before a write. Offline bridge replay places a zone 2 edit at channel 65 and CPS V1.17 uses the same zone*64+slot IDs. Added EnZone (0x73 bit 2) handling; need the reporter's image and what the radio shows.
+  Source: `email` INBOX:807
+
 ### UV-82WP
 
 - **#78 bug | awaiting_user | normal:** COM port unavailable

@@ -71,6 +71,7 @@ Last updated: 2026-11-18
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Wouxun KG-UV8D | Pinned CHIRP `kguv8d.py` with `drivers/newchirp_kg_uv8d_compat.py` | Wouxun clone serial, 19200 8N1, 64-byte blocks | Reserved DCS words no longer abort channel decode; raw bytes preserved | Stock CHIRP driver, offline round-trip | Stock CHIRP settings | Experimental compatibility override |
+| Wouxun KG-689E / KG-699E | `drivers/newchirp_wouxun_kg689e.py` | Wouxun KG669V clone serial, 9600 8N1, DTR on (OEM CPS) | 128 channels + names, CPS block plan, replay-tested | CPS write spans with radio-limit check, replay-tested | Preserved, not decoded | Experimental; no hardware |
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -105,7 +106,7 @@ Last updated: 2026-11-18
 - Extracted CPS executable SHA-256:
   `0a455577b791204c42f538b04e23bfd83fef4d509f8826d753a5379d92981300`
 - Driver SHA-256:
-  `b9e74ca2e6d367ca205bae3dbac83f641745185157ff32b5efe413307198e10d`
+  `681e9c20e66ecde764321a3c04d1655b2721ac551877cca4526fe42584074f6d`
 - Transport: 115200 then 19200 baud, 8N1, DTR and RTS asserted
 - Implemented: `A` announce, seeded `PROGRAM` handshake,
   `INFORMATION` model stage, read/write direction, twelve encrypted
@@ -120,6 +121,15 @@ Last updated: 2026-11-18
   power-cycled; it first answered with a stray byte following failed
   attempts with the older UV-5RM Plus profile. Writes are not yet
   hardware-tested.
+- Zones (2026-11-19 CPS V1.17 trace): zone channel IDs are big-endian
+  `zone * 64 + slot` (`Frm_ZoneChn` line 583, `DataProtocol.ZoneConvert`),
+  exactly what `_rebuild_zones()` writes. The device feature byte `0x73`
+  bit 2 is `EnZone`; with it clear the CPS offers only zone 1, so the driver
+  now exposes only zone 1 then. A reporter saw zone 2/3 edits appear in
+  zone 1 after a write (mailbox INBOX:807); an offline bridge replay puts a
+  zone 2 edit at channel 65 correctly, so the radio's image and what it
+  shows are needed to find the cause. The desktop app still discards edits
+  when switching zones before a write.
 - Next milestone: the 2026-11-06 UV-5RH Pro reporter completes a read,
   compares channels with the radio, edits one unused channel, uploads it,
   reads it back, and verifies it on the radio.
@@ -1593,7 +1603,7 @@ Last updated: 2026-11-18
 - Maintained driver: `drivers/newchirp_kenwood_tk270g.py`; the
   `NewChirpTK270G` class supersedes CHIRP's `Kenwood_TK-270G` registration.
 - Driver SHA-256:
-  `e4c4abd6c2f0e25af029eaff59694e78bc6fd0c40cc3ce976e1ab0418e8d74ac`
+  `ddba576676266f818c8889e8d2fb4a56bf5192548274c069652a67affdcab852`
 - Transport: pinned CHIRP Kenwood Series 60G clone serial at 9600 with even
   parity and one stop bit. KPG-56D statically configures `9600,N,8,2`; the
   live serial setting remains unchanged pending an OEM capture or physical
@@ -1618,6 +1628,13 @@ Last updated: 2026-11-18
   the active channel records. Before rebuilding those tables, upload now
   replaces erased bank and bank-index sentinels with safe defaults: bank 1
   and the channel's zero-based memory position.
+- 2026-11-19 correction: `set_memory()` validated every channel's bank
+  metadata but normalized only during `sync_out()`, so editing channel 1 on
+  a radio whose channel 24 held index 128 stopped with "invalid bank
+  metadata" before radio I/O (1.0.60 report, mailbox INBOX:808). Each
+  channel write now normalizes all erased sentinels before rebuilding the
+  bank tables, matching what `get_memory()` already shows. Regression test:
+  `test_editing_one_channel_tolerates_erased_index_elsewhere`.
 - Write recovery: if the radio rejects a data block with checksum status
   `0x15`, NewChirp resends the identical block up to three times. A persistent
   rejection closes programming mode and reports the block and attempt count.
@@ -2125,6 +2142,38 @@ Last updated: 2026-11-18
 - Next milestone: reporter confirms the complete channel map opens, sends the
   saved image, and verifies the affected channel's tone and frequency before
   any upload.
+
+### Wouxun KG-689E / KG-699E
+
+- Maintained driver: `drivers/newchirp_wouxun_kg689e.py` (new 2026-11-19,
+  forum topic 93). Protocol and evidence: `docs/WOUXUN_KG689E_PROTOCOL.md`.
+- Source: static analysis of Wouxun's `KG-699E 689E.exe` (MFC), unpacked
+  from the official Setup Factory 6 installer. Package SHA-256
+  `9a7b56650b30b9eac691f7b638cf0d87b84051d63c1d51add239ae4fb3876c4b`;
+  programmer SHA-256
+  `21620918dc196e04631bc88e761fd7ff17add76156f3c57ca0bd2a55bd77f554`.
+- Transport: 9600 8N1, DTR on. `HiWOUXUN\x02` → `06`; `02` →
+  `06 KG669V F8`; `06` → `06`. Reads `R hi lo 40` → `W hi lo 40` + 64 bytes
+  then `06`/`06`; writes `W hi lo 10` + 16 bytes → `06`.
+- Read: 67 blocks (channels `0x0010-0x080F`, names `0x1010-0x180F`,
+  settings `0x0810`, `0x0E20`, `0x1810`) plus the radio-limits block
+  `0x0970`, which the CPS reads before every write.
+- Write: exactly the CPS spans (full channel and name pages, 32 bytes of
+  `0x0810`, 64 of `0x0E20`, 32 of `0x1810`). It first re-reads `0x0970` and
+  refuses any channel outside the radio's own RX/TX limits (+0.995 MHz on
+  the upper edge, as the CPS does), or a radio that reports no limits.
+- Fields: RX/TX, CTCSS/DCS both directions, wide/narrow, high/low, scan add,
+  6-character name; extras for busy lock, DTMF optional signal and mute
+  mode. Unknown bits and bytes 14-15 are preserved.
+- Driver SHA-256: `ebdd6c93f255ac9063d2d80f120787eab45b143ace2bd3f3e48c0f63a689d08f`
+- Hardware validation: none. Replay evidence:
+  `test/wouxun_kg689e_driver_test.py` (10 tests).
+- Website: the Web Programmer profiles (Nov 18) read the DTMF bit as
+  bandwidth and the bandwidth bit as scan skip, invented a bit-0 split
+  flag, wrote the second halves of `0x0810`/`0x1810`, and had no limit
+  check. They were corrected on 2026-11-19 to match this driver.
+- Next milestone: a reporter reads the radio, saves the image, writes one
+  channel name change, power-cycles and reads back.
 
 ### Wouxun KG-905G Plus
 

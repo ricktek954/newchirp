@@ -195,6 +195,10 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
                 not bool(setting.value),
             )
 
+        # Other channels may still hold erased bank sentinels (bnumb 0x80 or
+        # 0xFF) from the radio; get_memory already shows them normalized, so
+        # normalize them here too before the bank tables are rebuilt.
+        self._normalize_invalid_bank_metadata()
         self._prep_data()
         self._validate_bank_state()
         return mem

@@ -259,6 +259,39 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
             )
             self.assertEqual(serial.writes[-1], b"E")
 
+    def test_editing_one_channel_tolerates_erased_index_elsewhere(self):
+        # 2026-11-19 report: channel 24 read back with bnumb=128, and editing
+        # channel 1 stopped with "invalid bank metadata" before radio I/O.
+        with tempfile.TemporaryDirectory() as temp:
+            image = Path(temp) / "Kenwood_TK-270G.img"
+            data = bytearray(
+                (SOURCE / "tests/images/Kenwood_TK-272G.img").read_bytes()
+            )
+            data[0xA7:0xAE] = b"P2700\x05\xff"
+            image.write_bytes(data)
+
+            radio = self.radio_class(None)
+            radio.load_mmap(str(image))
+            programmed = [
+                index
+                for index, memory in enumerate(radio._memobj.memory, start=1)
+                if memory.rxfreq[0].get_raw(asbytes=True) != b"\xff"
+            ]
+            self.assertGreaterEqual(len(programmed), 2)
+            edited, other = programmed[0], programmed[-1]
+            radio._memobj.memory[other - 1].bank = 1
+            radio._memobj.memory[other - 1].bnumb = 128
+
+            memory = radio.get_memory(edited)
+            memory.name = "EDITED"
+            radio.set_memory(memory)
+
+            self.assertEqual(int(radio._memobj.memory[other - 1].bank), 1)
+            self.assertEqual(
+                int(radio._memobj.memory[other - 1].bnumb), other - 1
+            )
+            self.assertEqual(radio.get_memory(edited).name.strip(), "EDITED")
+
     def test_transient_block_checksum_rejection_is_retried(self):
         with tempfile.TemporaryDirectory() as temp:
             image = Path(temp) / "Kenwood_TK-270G.img"

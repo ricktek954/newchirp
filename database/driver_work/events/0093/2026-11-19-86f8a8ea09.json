@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 16:57:29",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "docs/WOUXUN_KG689E_PROTOCOL.md",
+  "item": "93",
+  "occurred_at": "2026-11-19",
+  "summary": "Unpacked Wouxun KG-699E/689E CPS (Setup Factory 6, XOR 0x07 + PKWARE DCL) and traced serial setup, KG669V handshake, 67-block read plan, CPS write spans, 0x0970 radio-limit check, channel flag word, tones and name codec"
+}

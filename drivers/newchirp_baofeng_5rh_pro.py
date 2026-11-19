@@ -65,6 +65,11 @@ ZONE_MAX = 10
 # the IDs look like three more empty slots, but there is no way to fill them
 # to find out, so treat 64 as the limit.
 ZONE_CHN_MAX = 64
+# Device block feature byte (CPS DataProtocol.ConvertDevice, offset 112+3).
+# Bit 2 is EnZone. With it clear the CPS offers only zone 1, so the radio
+# reaches only its first 64 channels (Frm_ZoneChn / FormMain.RefreshZoneNode).
+DEVICE_FEATURES_OFFSET = 0x73
+DEVICE_FEATURE_ZONES = 0x04
 
 TONES = chirp_common.TONES
 DTCS = chirp_common.ALL_DTCS_CODES
@@ -773,13 +778,24 @@ class Baofeng5RHPro(chirp_common.CloneModeRadio):
                     zone.name = _encode_name("Zone %d" % (z + 1))
         self._memobj.zones_used = zones_used
 
+    def zones_enabled(self):
+        """Return whether the radio's EnZone feature bit is set."""
+        if self._mmap is None:
+            return True
+        data = self._mmap.get_packed()
+        if len(data) <= DEVICE_FEATURES_OFFSET:
+            return True
+        return bool(data[DEVICE_FEATURES_OFFSET] & DEVICE_FEATURE_ZONES)
+
     def get_sub_devices(self):
         # A subdevice has to inherit from a registered class, and the base
         # class here is not one, so build a class per zone off whichever
-        # model subclass we actually are.
+        # model subclass we actually are. A radio with zones disabled only
+        # reaches zone 1, so offer only that one, as the CPS does.
+        count = ZONE_MAX if self.zones_enabled() else 1
         return [type('%sZone%i' % (self.__class__.__name__, z + 1),
                      (Baofeng5RHProZone, self.__class__), {})(self, z)
-                for z in range(ZONE_MAX)]
+                for z in range(count)]
 
     def upload_boot_image(self, path):
         upload_boot_image(self, path)

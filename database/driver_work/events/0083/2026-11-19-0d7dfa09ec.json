@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 16:57:30",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "drivers/newchirp_kenwood_tk270g.py",
+  "item": "83",
+  "occurred_at": "2026-11-19",
+  "summary": "set_memory now normalizes erased bank sentinels on every channel before rebuilding bank tables; regression test added"
+}

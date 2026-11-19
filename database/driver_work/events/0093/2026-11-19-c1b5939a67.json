@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 16:57:29",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "drivers/newchirp_wouxun_kg689e.py",
+  "item": "93",
+  "occurred_at": "2026-11-19",
+  "summary": "New desktop driver drivers/newchirp_wouxun_kg689e.py (KG-689E and KG-699E) following the CPS transport and write spans; 10 replay tests"
+}
