@@ -2897,7 +2897,7 @@ void main() {
       () => RadioBridge(
         sourcePath: source,
         newDriversPath: '${Directory.current.path}/drivers',
-      ).instructions('Radtel_RT-950_Pro'),
+      ).instructions('Radtel_RT-950'),
     );
     expect(readOnly?.writeDisabled, isTrue);
 

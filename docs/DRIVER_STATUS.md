@@ -29,7 +29,7 @@ Last updated: 2026-11-18
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables (offline); odd-split field write pending | Stock FT-50 settings | Experimental; partial hardware validation |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
-| Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR | 960 channels + Pro map, offline-tested | Disabled | Hidden | Experimental |
+| Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950 Pro CPS 1.3.3 clone serial, 115200 8N1 + RTS/DTR | 990 channels + full CPS map (272 blocks); old-map read hardware-confirmed | Yes, CPS write path, offline-tested | Hidden | Experimental; write hardware pending |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
@@ -547,21 +547,37 @@ Last updated: 2026-11-18
 
 - Maintained driver: `drivers/newchirp_rt950pro.py`
 - Protocol notes: `docs/RT950PRO_PROTOCOL.md`
-- Separation: distinct `Radtel_RT-950_Pro` model; the base RT-950 driver is
-  unchanged
-- Evidence: OEM RT-950/BT-9000 CPS plus the MIT-licensed RT-950 Pro community
-  reference driver SHA-256
-  `359e673eeafa8ccee20d222276cc4d57194f2a826a443a4cb4b710a81297f2e5`
-- Transport: shared RT-950/BT-9000 clone handshake at 115200 8N1, with a
-  3.0-second initial ACK window
-- Read map: 259 blocks covering channels, VFO, function settings, DTMF,
-  modulation parameters and names, and the `0x54/0x55` APRS block
-- Implemented: complete read transport and inherited 960-channel decoding
-- Read/write policy: read-only; every write entry point is disabled
-- Hardware validation: none; a macOS Pro reached Program mode but returned no
-  bytes before the previous shorter timeout
-- Next milestone: physical Pro read, model-code confirmation, settings-image
-  comparison, then a controlled one-channel write/read-back
+- Separation: distinct `Radtel_RT-950_Pro` model; the base RT-950 stays
+  read-only
+- Evidence: Radtel RT-950PRO CPS V1.3.3 (2026-06-22) from radtels.com.
+  Archive SHA-256
+  `96bf4f13089dd401e74f91d7a7c32d56d98300c1fb03daf2798b40d43fd5191f`;
+  `BT-RT950PRO_CPS.exe` SHA-256
+  `1a20aa5390345f879f64cfe8d3a299671ca0fb975c38bb191958840e9fa6441d`;
+  traced `KDH.RWDataOperation` (`HandShake`, `ReadRadioData`,
+  `WriteRadioData`, `Set/GetCHInfo_Parameter`) and `ChannelData`
+- Transport: shared RT-950/BT-9000 handshake at 115200 8N1 with a 3.0-second
+  initial ACK window; writes require model code exactly `RT-950` (the base
+  radio reports `BT-9000`)
+- Map: 272 blocks in CPS order: `0x52/0x57` 0x0000-0x7FFF (990 channels),
+  0x8000, 0x9000, 0xA000-0xA17F, 0xB000-0xB0FF, 0xC000-0xC0FF (zone names),
+  0xD000-0xD2FF, then APRS `0x54/0x58` 0x0000. Image 0xD380 with APRS at
+  0xD300; legacy 0xD300 images open read-only
+- Implemented: 990-channel decode and CPS encoder (frequency, tones, power,
+  scramble, encryption, BCL, scan, AM, bandwidth, FHSS code in CPS byte
+  order, PTT ID BOT/EOT/BOTH, signalling group 1-15, GB2312 names);
+  6.25/12.5 kHz steps accepted
+- Read/write policy: writes enabled as experimental. Every block is written
+  with one `0x06` ACK, up to three resends after 1 s, then `E`; blocks not
+  edited are written back byte-for-byte. Refused for a non-`RT-950` model or
+  a legacy image before any write byte is sent
+- Evidence levels: E1 static CPS trace; E2 replay in
+  `test/rt950pro_driver_test.py` (CPS block order, ACK retry/stop, encoder,
+  app round trip of 580 random channels byte-identical); physical read on
+  the old map confirmed by a reporter (INBOX:789, 1.0.58, stock firmware)
+- Physical write validation: none
+- Next milestone: one physical read on the new map, a one-channel write and
+  read-back, then compare with the CPS
 
 ### Radtel RT-860
 

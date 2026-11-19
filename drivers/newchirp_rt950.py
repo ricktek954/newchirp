@@ -178,6 +178,7 @@ class RT950Radio(chirp_common.CloneModeRadio,
 
     VENDOR = "Radtel"
     MODEL = "RT-950"
+    _channel_count = CHANNEL_COUNT
     # Read-only until a physical write/read-back is validated; the app
     # explains this before a write starts (see chirp_bridge model-info).
     NEWCHIRP_WRITE_DISABLED = True
@@ -221,7 +222,7 @@ class RT950Radio(chirp_common.CloneModeRadio,
         rf.has_tuning_step = False
         rf.has_cross = True
         rf.can_odd_split = True
-        rf.memory_bounds = (1, CHANNEL_COUNT)
+        rf.memory_bounds = (1, self._channel_count)
         rf.valid_bands = [(18000000, 1000000000)]
         rf.valid_modes = ["FM", "NFM", "AM", "NAM"]
         rf.valid_duplexes = ["", "+", "-", "split", "off"]
@@ -356,9 +357,10 @@ class RT950Radio(chirp_common.CloneModeRadio,
         return raw.decode("gb2312", errors="replace").strip()
 
     def get_memory(self, number):
-        if not 1 <= number <= CHANNEL_COUNT:
+        if not 1 <= number <= self._channel_count:
             raise errors.InvalidMemoryLocation(
-                "Channel number must be between 1 and %i" % CHANNEL_COUNT
+                "Channel number must be between 1 and %i"
+                % self._channel_count
             )
 
         offset = (number - 1) * CHANNEL_RECORD_SIZE
@@ -429,13 +431,15 @@ class RT950Radio(chirp_common.CloneModeRadio,
             signalling_group = raw[12] & 0x0F
             ptt_id = min(raw[13] & 0x03, 3)
             if raw[19] == 0xA0:
+                # GetFHSSCode_HexToStr reads byte 18 first and masks its
+                # high nibble to three bits.
                 nibbles = (
-                    (raw[16] >> 4) & 0x0F,
-                    raw[16] & 0x0F,
+                    (raw[18] >> 4) & 0x07,
+                    raw[18] & 0x0F,
                     (raw[17] >> 4) & 0x0F,
                     raw[17] & 0x0F,
-                    (raw[18] >> 4) & 0x0F,
-                    raw[18] & 0x0F,
+                    (raw[16] >> 4) & 0x0F,
+                    raw[16] & 0x0F,
                 )
                 fhss_code = "".join("0123456789ABCDEF"[value]
                                     for value in nibbles)

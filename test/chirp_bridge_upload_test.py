@@ -567,12 +567,12 @@ class UploadHandshakeTest(unittest.TestCase):
             "KSUN_UV-K60-Plus", "Kenwood_TK-3401D", "Kenwood_TK-350",
             "Kenwood_TK-359", "Kenwood_TK-863G", "Kenwood_TM-V71_CloneMode",
             "Radioddity_DB35-G", "Radtel_RT-860", "Radtel_RT-950",
-            "Radtel_RT-950_Pro", "Retevis_RT97L",
+            "Retevis_RT97L",
         ]))
-        # The writable nicFW950 build must not inherit the flag.
-        self.assertFalse(getattr(
-            directory.get_radio("Radtel_RT-950_Pro_nicFW950"),
-            "NEWCHIRP_WRITE_DISABLED", False))
+        # Writable subclasses must not inherit the flag.
+        for model in ("Radtel_RT-950_Pro_nicFW950", "Radtel_RT-950_Pro"):
+            self.assertFalse(getattr(
+                directory.get_radio(model), "NEWCHIRP_WRITE_DISABLED", False))
 
     def test_bare_exception_messages_name_their_type(self):
         """2026-11-19 5RM report showed only "Reported error: 1"."""

@@ -1,6 +1,6 @@
 # Radtel RT-950 Pro protocol notes
 
-Last updated: 2026-11-09
+Last updated: 2026-11-19
 
 The RT-950 Pro is a separate NewChirp model. It shares the RT-950/BT-9000
 handshake and 32-byte channel encoding, but its CPS layout contains larger
@@ -8,7 +8,42 @@ settings segments and an additional `0x54/0x55` block.
 
 ## Evidence
 
-### OEM CPS
+### RT-950 Pro CPS (authoritative since 2026-11-19)
+
+- Package: `RT-950PRO_CPS_Setup_v1.3.3.rar` (radtels.com, 2026-06-22),
+  SHA-256 `96bf4f13089dd401e74f91d7a7c32d56d98300c1fb03daf2798b40d43fd5191f`
+- Executable: `BT-RT950PRO_CPS.exe` (.NET), SHA-256
+  `1a20aa5390345f879f64cfe8d3a299671ca0fb975c38bb191958840e9fa6441d`
+- Traced: `KDH.RWDataOperation` (`HandShake`, `ReadRadioData`,
+  `WriteRadioData`, channel encoders/decoders), `KDH.ChannelData`,
+  `KDH.View.FormCHInfo` (option labels), `QtTables.DcsTable`
+
+Findings that override the earlier community-derived map:
+
+- 990 channels (`new Channel[990]`). The CPS channel bound 0x7BC0 is not a
+  multiple of 128, so its address switch never fires and it reads and writes
+  0x0000-0x7FFF in full.
+- One block each at 0x8000 (VFO A/B/C) and 0x9000 (function settings parts
+  1-3); DTMF 0xA000-0xA17F; modulation 0xB000-0xB0FF; zone names
+  0xC000-0xC0FF; modulation names 0xD000-0xD2FF; APRS via `0x54` (read) /
+  `0x58` (write) at 0x0000.
+- The handshake requires model code exactly `RT-950`; the base RT-950
+  reports `BT-9000`.
+- Write frame `57 | addr:u16be | 80 | 128 bytes` (scrambled with the session
+  symbol), radio answers `06`; on a 1000 ms timeout the CPS resends the same
+  frame, up to 3 times. After the last block the CPS sends `E`.
+- Channel record (`SetCHInfo_Parameter`): all `FF` when empty; RX/TX
+  frequency as four little-endian BCD pairs in 10 Hz units, TX `FF` means TX
+  off; RX tone at 8-9 and TX tone at 10-11 (CTCSS little-endian tone*10, DCS
+  table index + 1 with high byte 0, off `00 00`); byte 12 signalling group
+  0-14; byte 13 PTT ID (OFF/BOT/EOT/BOTH); byte 14 scramble<<4 | power
+  (High/Middle/Low); byte 15 hopping<<7 | narrow<<6 | encryption<<4 |
+  BCL<<3 | scan<<2 | AM; FHSS code bytes 16-18 read 18 first (first digit
+  3 bits) with marker `A0` at 19; GB2312 name at 20-31 padded `FF`.
+- There is no per-channel TX-enable bit: the CPS masks byte 15 bits 0-1
+  with `% 2`.
+
+### Earlier base RT-950 CPS
 
 - Package: `RT-950_EnCPS_Setup_v1.3.0.rar`
 - Executable: `BT-9000_CPS.exe`
@@ -52,7 +87,7 @@ The first ACK timeout was increased from the base driver's 1.5 seconds because
 the physical Pro reaches Program mode but returned no bytes within the shorter
 window.
 
-## Pro read map
+## Superseded Pro read map (before CPS 1.3.3)
 
 | Command | Radio address | Length | Image address | Content |
 | --- | ---: | ---: | ---: | --- |
