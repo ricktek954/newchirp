@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 14:50:17",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email reply to INBOX:803",
+  "item": "27",
+  "occurred_at": "2026-11-19",
+  "summary": "Asked the UV-5RM Plus v2 owner (INBOX:803) for a write test: save a backup image, change one unused channel, write, read back and check on the radio."
+}
