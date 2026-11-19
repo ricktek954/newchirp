@@ -238,6 +238,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: Icom CI-V serial, 9600 8N1. Read: Stock IC-746 family logic. Write: Stock IC-746 family logic. Settings: Stock IC-746 family logic. Ledger status: Experimental model profile.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:79
 
+### IC-910
+
+- **#w-20261119-c2a9 bug | fix_committed | high:** Read stops on unset CTCSS tone (rtone 0.0)
+  Live CI-V read aborted with '0.0' is not a valid value for 'rtone' (1.0.60, IC-910H; reporter also has an IC-740). CHIRP's GUI isolates the bad channel; NewChirp's single-pass read stopped. drivers/newchirp_icomciv_tone_compat.py makes non-standard tone values read as 88.5 Hz for every CI-V memory frame.
+  Source: `email` INBOX:810
+
 ### IC-9700
 
 - **#51 maintenance | experimental | normal:** Current driver status
@@ -366,6 +372,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Source: `release` desktop:50f17c3c
 
 ## Quansheng
+
+### UV-K1 & UV-K5 V3 (F4HWN)
+
+- **#w-20261119-7381 enhancement | open | normal:** F4HWN 7.0.0 firmware profile
+  F4HWN 7.0.0 released 2026-11-19. Built-in profile supports v6.3.x only and refuses other F4HWN versions before I/O. Needs analysis of the 7.0 CHIRP module memory map.
+  Source: `email` INBOX:809
 
 ### UV-K1 (F4HWN 6.3)
 

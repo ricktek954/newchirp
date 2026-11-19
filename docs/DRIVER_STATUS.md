@@ -75,6 +75,7 @@ Last updated: 2026-11-18
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
+| Icom CI-V live radios (IC-910 and others) | Pinned CHIRP `icomciv.py` with `drivers/newchirp_icomciv_tone_compat.py` | Icom CI-V serial | Unset CTCSS tones read as 88.5 Hz instead of stopping the read | Stock CHIRP driver | Stock CHIRP driver | Compatibility override; offline-tested |
 | Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Icom IC-7100 | `drivers/newchirp_icom_ic7100.py` | Icom CI-V serial, auto-baud | Opaque mode bytes decode read-only | Disabled for opaque channels | Stock IC-7100 settings | Experimental compatibility override |
 | Icom IC-E90 / IC-T90A | `drivers/newchirp_icx90.py` | NewChirp ICF clone transport, 9600 8N1 | Four identity attempts; checksum-validated contiguous full image; invisible-slot guard | NewChirp clone-in boundary, 362 32-byte blocks, required `E6 00` | Stock ICX90 decoder | Experimental |
@@ -1906,6 +1907,22 @@ Last updated: 2026-11-18
 - Next milestone: Tony retests the next build from an unrepaired radio state,
   confirms the display changes to `CL IN`, and verifies the edited channel by
   read-back.
+
+### Icom CI-V unset tone compatibility
+
+- Override: `drivers/newchirp_icomciv_tone_compat.py` (2026-11-19, IC-910H
+  report on 1.0.60, mailbox INBOX:810).
+- Issue: `icomciv` decodes `mem.rtone = value / 10`. A channel that never had
+  a tone set reports 0, which raises `'0.0' is not a valid value for
+  'rtone'`. CHIRP's GUI marks only that channel bad; NewChirp's single-pass
+  live read stopped after about four seconds.
+- Correction: every CI-V memory frame's parsed object (including NewChirp's
+  IC-7200 and IC-9700 frames) reads a non-standard `rtone`, `ctone`,
+  `rtone_tx` or `ctone_tx` as 88.5 Hz, CHIRP's default. The tone is unused on
+  such a channel. A later write stores 88.5 Hz in that unused field.
+- Driver SHA-256: `fa9fb3d71c02bb70b27290e6e281cf4448e96fe31ae62a3929b94d7df1f146a5`
+- Evidence: `test/icomciv_tone_compat_test.py` reproduces the reported error
+  without the override and passes with it. Hardware validation: none.
 
 ### Icom IC-7200 memory grammar compatibility
 
