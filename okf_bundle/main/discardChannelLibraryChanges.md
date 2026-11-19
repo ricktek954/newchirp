@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T09:13:45Z"
+timestamp: "2026-11-19T10:20:53Z"
 concept_id: main/discardChannelLibraryChanges
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_discardChannelLibraryChanges_discardChannelLibraryChanges
 ```
 
 ## Source
-Lines 3464–3464 in `main.dart`
+Lines 3465–3465 in `main.dart`
 
 ## Relationships
 

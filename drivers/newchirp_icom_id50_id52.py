@@ -494,6 +494,9 @@ class IcomId50Radio(_IcomId50Id52Base):
     """Icom ID-50 experimental clone-mode driver."""
 
     MODEL = "ID-50"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
 
 
 @directory.register
@@ -501,3 +504,6 @@ class IcomId52Radio(_IcomId50Id52Base):
     """Icom ID-52 experimental clone-mode driver."""
 
     MODEL = "ID-52"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True

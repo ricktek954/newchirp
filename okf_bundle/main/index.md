@@ -202,6 +202,7 @@
 - [_useSavedRadioSnapshot](useSavedRadioSnapshot.md)
 - [_windowDisplayArea](windowDisplayArea.md)
 - [_WindowStateManager](WindowStateManager.md)
+- [_writeBlockedByDriver](writeBlockedByDriver.md) — Explains, before any write work starts, that this radio is read-only.
 - [_writeRadioSettings](writeRadioSettings.md)
 - [adaptRadioPromptButton](adaptRadioPromptButton.md)
 - [build](build.md)

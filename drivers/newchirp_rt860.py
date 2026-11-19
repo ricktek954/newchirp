@@ -76,6 +76,9 @@ class RT860Radio(RT880G, chirp_common.ExperimentalRadio):
 
     VENDOR = "Radtel"
     MODEL = "RT-860"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 115200
     WANTS_DTR = True
     WANTS_RTS = False

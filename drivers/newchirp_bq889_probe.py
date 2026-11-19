@@ -79,6 +79,9 @@ class BQ889AnalogProbeRadio(
 
     VENDOR = "Binqi"
     MODEL = "BQ-889 Analog Probe"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 115200
     HARDWARE_FLOW = False
     XON_XOFF = False

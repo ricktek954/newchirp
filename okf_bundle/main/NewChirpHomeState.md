@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T09:13:45Z"
+timestamp: "2026-11-19T10:20:53Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -125,6 +125,7 @@ class _NewChirpHomeState
 - `_confirmRadioInstructions`
 - `_loadRadioInstructions`
 - `_discardChannelLibraryChanges`
+- `_writeBlockedByDriver`
 - `_uploadRadio`
 - `_transferTask`
 - `_reportTransferProgress`
@@ -163,7 +164,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 379–6784 in `main.dart`
+Lines 379–6820 in `main.dart`
 
 ## Relationships
 

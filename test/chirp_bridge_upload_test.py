@@ -553,6 +553,27 @@ class UploadHandshakeTest(unittest.TestCase):
 
         self.assertEqual(setting.value.get_value(), 3)
 
+    def test_read_only_drivers_are_declared_for_the_app(self):
+        """RT-950 Pro report: a write was refused only at channel 1."""
+        directory = bridge.load_chirp(
+            str(SOURCE), str(VENDOR), str(ROOT / "drivers"))
+        flagged = sorted(
+            ident for ident, cls in directory.DRV_TO_RADIO.items()
+            if getattr(cls, "NEWCHIRP_WRITE_DISABLED", False)
+        )
+        self.assertEqual(flagged, sorted([
+            "Baofeng_K67_Pro_CPS_V1.1.2", "Binqi_BQ-889_Analog_Probe",
+            "Connect_Systems_CS750", "Icom_ID-50", "Icom_ID-52",
+            "KSUN_UV-K60-Plus", "Kenwood_TK-3401D", "Kenwood_TK-350",
+            "Kenwood_TK-359", "Kenwood_TK-863G", "Kenwood_TM-V71_CloneMode",
+            "Radioddity_DB35-G", "Radtel_RT-860", "Radtel_RT-950",
+            "Radtel_RT-950_Pro", "Retevis_RT97L",
+        ]))
+        # The writable nicFW950 build must not inherit the flag.
+        self.assertFalse(getattr(
+            directory.get_radio("Radtel_RT-950_Pro_nicFW950"),
+            "NEWCHIRP_WRITE_DISABLED", False))
+
     def test_bare_exception_messages_name_their_type(self):
         """2026-11-19 5RM report showed only "Reported error: 1"."""
         self.assertEqual(

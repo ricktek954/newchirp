@@ -234,6 +234,9 @@ class RadioddityDB35G(chirp_common.CloneModeRadio):
 
     VENDOR = "Radioddity"
     MODEL = "DB35-G"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 115200
     _memsize = MEM_SIZE
 

@@ -159,6 +159,9 @@ class KenwoodTMV71CloneRadio(
 
     VENDOR = "Kenwood"
     MODEL = "TM-V71_CloneMode"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     SHORT = ""
     BAUD_RATE = 9600
     HARDWARE_FLOW = True

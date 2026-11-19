@@ -405,6 +405,9 @@ class KenwoodTK350Radio(_KenwoodKPG23Base):
     """Kenwood TK-350 stored by the Kenwood KPG-23D programmer."""
 
     MODEL = "TK-350"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
 
 
 @directory.register
@@ -412,6 +415,9 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
     """Kenwood TK-359 stored by the Kenwood KPG-32D programmer."""
 
     MODEL = "TK-359"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     _memsize = 0x53FF
     _channel_count = 250
     _image_name = "KPG-32D"

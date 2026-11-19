@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T09:13:45Z"
+timestamp: "2026-11-19T10:20:53Z"
 concept_id: main/exitForUpdate
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_exitForUpdate_exitForUpdate
 ```
 
 ## Source
-Lines 4303–4303 in `main.dart`
+Lines 4339–4339 in `main.dart`
 
 ## Relationships
 

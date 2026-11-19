@@ -112,6 +112,9 @@ class RT97LRadio(chirp_common.CloneModeRadio,
 
     VENDOR = "Retevis"
     MODEL = "RT97L"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 9600
     WANTS_DTR = True
     WANTS_RTS = True

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T09:13:45Z"
+timestamp: "2026-11-19T10:20:53Z"
 concept_id: main/savePreferencesNow
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_savePreferencesNow_savePreferencesNow
 ```
 
 ## Source
-Lines 8386–8386 in `main.dart`
+Lines 8422–8422 in `main.dart`
 
 ## Relationships
 

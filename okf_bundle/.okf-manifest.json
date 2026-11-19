@@ -354,8 +354,8 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1794578509624785352,
-      "hash": "d369580ee048f01b0aade2d65ecfd6183c12ab5a8f047aa56320313af05ee09f",
+      "mtime_ns": 1795083626422172865,
+      "hash": "342b4c26d9af0d1cb1c3d94979cde35fb5a5dc963ae4df34ce4099be5c18d70b",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
         "services/radio_bridge/RadioBridgeException",
@@ -622,8 +622,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795079625849714250,
-      "hash": "5b1dc7746825f8280d48940d09adcefa820e3e5764612288b9a91acaea30cac1",
+      "mtime_ns": 1795083653179836058,
+      "hash": "22a909e70847776fe0ee6b655357ffc3f4a903da0f7787ca6daf5f6fd2e6b6b3",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -804,6 +804,7 @@
         "main/confirmRadioInstructions",
         "main/loadRadioInstructions",
         "main/discardChannelLibraryChanges",
+        "main/writeBlockedByDriver",
         "main/uploadRadio",
         "main/transferTask",
         "main/reportTransferProgress",
@@ -1510,7 +1511,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "d5742a843e39e5e15f6d427c53dd437a1ba7aa900437f280f310d26a7bef743e",
+      "edge_hash": "ed7558eaef148475aa6790bbae48aaf2b705e1e49ce38c954fc134b21357d3d8",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -6424,7 +6425,15 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "main/writeBlockedByDriver": {
+      "concept_id": "main/writeBlockedByDriver",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-19T09:13:47Z"
+  "generated_at": "2026-11-19T10:20:54Z"
 }

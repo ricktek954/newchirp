@@ -346,6 +346,9 @@ class KenwoodTK863GRadio(
 
     VENDOR = "Kenwood"
     MODEL = "TK-863G"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 9600
     _memsize = MEM_SIZE
     _session_baud = 9600

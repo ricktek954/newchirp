@@ -2648,12 +2648,19 @@ def main():
             print(json.dumps({"interfaces": interfaces}))
             return
         if args.command == "model-info":
-            prompts = directory.get_radio(args.model).get_prompts()
+            radio_class = directory.get_radio(args.model)
+            prompts = radio_class.get_prompts()
             print(json.dumps({
                 "info": prompts.info,
                 "experimental": prompts.experimental,
                 "preDownload": prompts.pre_download,
                 "preUpload": prompts.pre_upload,
+                # Drivers that always refuse uploads declare it so the app
+                # can say so before a write starts (RT-950 Pro report,
+                # 2026-11-19: the refusal surfaced only on channel 1).
+                "writeDisabled": bool(
+                    getattr(radio_class, "NEWCHIRP_WRITE_DISABLED", False)
+                ),
             }))
             return
         if args.command == "repeaterbook-search":

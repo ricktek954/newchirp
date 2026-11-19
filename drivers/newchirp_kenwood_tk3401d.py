@@ -299,6 +299,9 @@ class KenwoodTK3401DRadio(
 
     VENDOR = "Kenwood"
     MODEL = "TK-3401D"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     VALID_BANDS = [(PMR446_MIN, PMR446_MAX)]
     _model = MODEL_ID
     _memsize = MEM_SIZE

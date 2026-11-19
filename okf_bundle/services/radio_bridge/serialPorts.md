@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-13T14:01:49Z"
+timestamp: "2026-11-19T10:20:26Z"
 concept_id: services/radio_bridge/serialPorts
 language: dart
 ---
@@ -24,7 +24,7 @@ FutureserialPortsserialPorts
 ```
 
 ## Source
-Lines 505–505 in `services/radio_bridge.dart`
+Lines 509–509 in `services/radio_bridge.dart`
 
 ## Relationships
 

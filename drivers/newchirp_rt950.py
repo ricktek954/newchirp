@@ -178,6 +178,9 @@ class RT950Radio(chirp_common.CloneModeRadio,
 
     VENDOR = "Radtel"
     MODEL = "RT-950"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 115200
     READ_TIMEOUT = READ_TIMEOUT
     HARDWARE_FLOW = False

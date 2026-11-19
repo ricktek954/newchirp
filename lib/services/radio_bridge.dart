@@ -197,12 +197,16 @@ class RadioInstructions {
     required this.experimental,
     required this.preDownload,
     required this.preUpload,
+    this.writeDisabled = false,
   });
 
   final String? info;
   final String? experimental;
   final String? preDownload;
   final String? preUpload;
+
+  /// The driver reads this radio but never writes it yet.
+  final bool writeDisabled;
 
   Iterable<String> get readMessages => [?experimental, ?info, ?preDownload];
   Iterable<String> get writeMessages => [?experimental, ?info, ?preUpload];
@@ -648,6 +652,7 @@ class RadioBridge {
       experimental: data['experimental'] as String?,
       preDownload: data['preDownload'] as String?,
       preUpload: data['preUpload'] as String?,
+      writeDisabled: data['writeDisabled'] == true,
     );
   }
 

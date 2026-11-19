@@ -2694,6 +2694,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _writeRadioSettings() async {
+    if (await _writeBlockedByDriver() || !mounted) return;
     final model = _model;
     final port = _port;
     final image = _radioImage;
@@ -3490,12 +3491,47 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Explains, before any write work starts, that this radio is read-only.
+  /// Returns true when the write must not continue.
+  Future<bool> _writeBlockedByDriver() async {
+    final instructions = await _loadRadioInstructions();
+    if (instructions == null || !mounted) return true;
+    if (!instructions.writeDisabled) return false;
+    final model = displayRadioModelName(_model ?? 'this radio');
+    _diagnosticLog.record(
+      'radio',
+      'Write blocked: driver is read-only',
+      context: {'model': _model ?? ''},
+    );
+    await showDialog<void>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Writing to the $model isn\'t available yet'),
+        content: const Text(
+          'NewChirp can read this radio, but writing stays off until a write '
+          'has been tested and checked on a real radio. That keeps an '
+          'untested write from damaging your radio\'s setup.\n\n'
+          'You can still read the radio, edit channels, and save or export '
+          'them. If you can help test writing, send a bug report and say so.',
+        ),
+        actions: [
+          FilledButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+    return true;
+  }
+
   Future<void> _uploadRadio() async {
     if (_port == null ||
         !_radioModelSelectedForTransfer ||
         _radioImage == null) {
       return;
     }
+    if (await _writeBlockedByDriver() || !mounted) return;
     final mappingSignature = radioMappingsSignature(_radioMappings);
     final mappingsChanged =
         _radioMappings.isNotEmpty &&

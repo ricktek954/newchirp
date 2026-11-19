@@ -128,6 +128,9 @@ class BaofengK67ProRadio(chirp_common.CloneModeRadio,
 
     VENDOR = "Baofeng"
     MODEL = "K67 Pro"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     VARIANT = "CPS V1.1.2"
     BAUD_RATE = 115200
     WANTS_DTR = True

@@ -50,6 +50,9 @@ class CS750Radio(chirp_common.CloneModeRadio,
 
     VENDOR = "Connect Systems"
     MODEL = "CS750"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     FILE_EXTENSION = "rdb"
     FORMATS = [
         directory.register_format("Connect Systems CS750 CPS", "*.rdb"),

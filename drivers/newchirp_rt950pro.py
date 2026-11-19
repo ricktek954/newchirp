@@ -63,6 +63,9 @@ class RT950ProRadio(_BASE.RT950Radio):
 
     VENDOR = "Radtel"
     MODEL = "RT-950 Pro"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 115200
     INITIAL_ACK_TIMEOUT = PRO_INITIAL_ACK_TIMEOUT
     _memsize = PRO_MEM_SIZE

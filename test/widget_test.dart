@@ -2891,6 +2891,15 @@ void main() {
     expect(models, contains('Yaesu_FT-60'));
     expect(instructions?.experimental, contains('beta version'));
     expect(instructions?.preDownload, contains('Turn off your radio'));
+    expect(instructions?.writeDisabled, isFalse);
+    // Read-only drivers say so before a write starts (RT-950 Pro report).
+    final readOnly = await tester.runAsync(
+      () => RadioBridge(
+        sourcePath: source,
+        newDriversPath: '${Directory.current.path}/drivers',
+      ).instructions('Radtel_RT-950_Pro'),
+    );
+    expect(readOnly?.writeDisabled, isTrue);
 
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();

@@ -134,6 +134,9 @@ class KSUNUVK60Plus(chirp_common.CloneModeRadio):
 
     VENDOR = "KSUN"
     MODEL = "UV-K60-Plus"
+    # Read-only until a physical write/read-back is validated; the app
+    # explains this before a write starts (see chirp_bridge model-info).
+    NEWCHIRP_WRITE_DISABLED = True
     BAUD_RATE = 38400
     HARDWARE_FLOW = False
     WANTS_RTS = False
