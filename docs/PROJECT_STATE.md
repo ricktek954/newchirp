@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-18
+Last updated: 2026-11-19
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -14,6 +14,13 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.60` is being prepared from current `origin/main`. It adds the
+  OEM CPS-derived Alinco DR-735 driver, official manufacturer model names in
+  radio lists, CSV encoding detection and channel select-all, UV-17ProGPS
+  fractional CTCSS preservation, RT-950 decode/upload error fixes, the rebuilt
+  RT-950 Pro driver with enabled writes, and the latest read-only safety and
+  reporter-triage updates. Build and release verification will be recorded
+  after publication.
 - Linux `1.0.59` is live from source commit `0614c316`. It adds the
   experimental Kenwood TM-V71 clone driver, Kenwood live-write cache fixes,
   FT-50 channel clearing in both flag tables, FTM-7250 capability retention
@@ -745,7 +752,7 @@ release requirements.
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.59` is live from source commit `0614c316`
 - Open pull requests: none
-- Checked-out source version: `1.0.59+59`
+- Checked-out source version: `1.0.60+60`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`

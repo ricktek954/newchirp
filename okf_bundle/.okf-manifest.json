@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
+  "source_root": "/home/rlopez/newchirp.net/lib",
   "files": {
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1795034009261444468,
+      "mtime_ns": 1795035070655805220,
       "hash": "eaf93a5a8730685ec02600db23b818f585e10eea00dd8c64554d2adf78b7f0ad",
       "concept_ids": [
         "models/channel_image_baseline/ChannelImageBaseline",
@@ -24,7 +24,7 @@
     },
     "models/frequency_reference.dart": {
       "path": "models/frequency_reference.dart",
-      "mtime_ns": 1795034009261799425,
+      "mtime_ns": 1794997713624042571,
       "hash": "d07e43482dc6e94d17a512669643eac2c95381bd26cbab3e8fb42ffb906f353e",
       "concept_ids": [
         "models/frequency_reference/FrequencyReferenceGroup",
@@ -39,7 +39,7 @@
     },
     "models/gm32_channel.dart": {
       "path": "models/gm32_channel.dart",
-      "mtime_ns": 1793017335031773185,
+      "mtime_ns": 1793018006929487856,
       "hash": "930587b2146e7df167512e071e8c2a52387e0aca8a87d54116de682213854a61",
       "concept_ids": [
         "models/gm32_channel/applyGm32Rules",
@@ -61,7 +61,7 @@
     },
     "models/marine_channels.dart": {
       "path": "models/marine_channels.dart",
-      "mtime_ns": 1794220301599184985,
+      "mtime_ns": 1794227692786598019,
       "hash": "6fe7afca765e6a7e7319910ca4aac1c7d616951e174d608dd7e63715e4f80389",
       "concept_ids": [
         "models/marine_channels/MarineChannelDefinition",
@@ -75,7 +75,7 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1794748425185114575,
+      "mtime_ns": 1794826397571904379,
       "hash": "49a2254c2832bc71745554f74719c3528f777aa55f4d1c720424cc24022e2a93",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
@@ -125,7 +125,7 @@
     },
     "models/radio_mapping.dart": {
       "path": "models/radio_mapping.dart",
-      "mtime_ns": 1794738410128006051,
+      "mtime_ns": 1794747587678763892,
       "hash": "599905f06d0578a9dbe834cb3fd67790eebf3abcadbbdef239c3110fe5acc224",
       "concept_ids": [
         "models/radio_mapping/RadioMappingEntry",
@@ -144,7 +144,7 @@
     },
     "models/repeater_counties.dart": {
       "path": "models/repeater_counties.dart",
-      "mtime_ns": 1793615170588884989,
+      "mtime_ns": 1793443811322177379,
       "hash": "f92810c9a3f2cdb8667a1dd56766b62592b03bb80615b8d12c1f8abc8c756b0b",
       "concept_ids": [
         "models/repeater_counties"
@@ -152,7 +152,7 @@
     },
     "models/repeater_regions.dart": {
       "path": "models/repeater_regions.dart",
-      "mtime_ns": 1793439228906217312,
+      "mtime_ns": 1793443811322177379,
       "hash": "a142415518e9cbd2ac6ae88672a3827b0e37776fbe00112fe93e6ef123e448c6",
       "concept_ids": [
         "models/repeater_regions/normalizeRepeaterCounty",
@@ -164,7 +164,7 @@
     },
     "models/repeater_search.dart": {
       "path": "models/repeater_search.dart",
-      "mtime_ns": 1793463645017905451,
+      "mtime_ns": 1793464076655657436,
       "hash": "39452b3cc44dc30581c212251a0374201bae351b52707b5378ea8ae262bf9369",
       "concept_ids": [
         "models/repeater_search/RepeaterSearchResult",
@@ -178,7 +178,7 @@
     },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
-      "mtime_ns": 1795079130960815541,
+      "mtime_ns": 1795085309312667970,
       "hash": "0d0bd385cd53f7972fc3c0e52349e3a260352ed621d63453d4a6f067f5dd38f0",
       "concept_ids": [
         "services/chirp_csv/ChirpCsv",
@@ -201,7 +201,7 @@
     },
     "services/column_layout_store.dart": {
       "path": "services/column_layout_store.dart",
-      "mtime_ns": 1793096501033485563,
+      "mtime_ns": 1793109703288279614,
       "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
       "concept_ids": [
         "services/column_layout_store/ColumnLayout",
@@ -214,7 +214,7 @@
     },
     "services/diagnostic_log.dart": {
       "path": "services/diagnostic_log.dart",
-      "mtime_ns": 1794143533122102970,
+      "mtime_ns": 1794143895927283992,
       "hash": "41eb61d1613eeca0e3345d314f8787997095648725d64b71f6dc88d21bb71bc0",
       "concept_ids": [
         "services/diagnostic_log/DiagnosticEntry",
@@ -235,7 +235,7 @@
     },
     "services/file_save_warning_store.dart": {
       "path": "services/file_save_warning_store.dart",
-      "mtime_ns": 1793017335032074140,
+      "mtime_ns": 1793018006929487856,
       "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
       "concept_ids": [
         "services/file_save_warning_store/FileSaveWarningStore",
@@ -247,7 +247,7 @@
     },
     "services/local_file_opener.dart": {
       "path": "services/local_file_opener.dart",
-      "mtime_ns": 1793272362273777794,
+      "mtime_ns": 1793355746085706779,
       "hash": "64762d56067019bad41ed7ab786cad3b638a9646245a57e9c88f2f3c984fdea5",
       "concept_ids": [
         "services/local_file_opener/LocalFilePlatform",
@@ -258,7 +258,7 @@
     },
     "services/module_sandbox.dart": {
       "path": "services/module_sandbox.dart",
-      "mtime_ns": 1794748425185339740,
+      "mtime_ns": 1794684549188277338,
       "hash": "3e654377596c0acdc5ffe89e9b935c6be23530c887d0a5cb51a7e666c959b7ca",
       "concept_ids": [
         "services/module_sandbox/ModuleSandbox",
@@ -301,7 +301,7 @@
     },
     "services/mototrbo_cps2_xml.dart": {
       "path": "services/mototrbo_cps2_xml.dart",
-      "mtime_ns": 1793094681555739212,
+      "mtime_ns": 1793109703288279614,
       "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
       "concept_ids": [
         "services/mototrbo_cps2_xml/CpsTone",
@@ -325,7 +325,7 @@
     },
     "services/mygmrs_client.dart": {
       "path": "services/mygmrs_client.dart",
-      "mtime_ns": 1793978410253437864,
+      "mtime_ns": 1793978671702776958,
       "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
       "concept_ids": [
         "services/mygmrs_client/JsonResponse",
@@ -354,7 +354,7 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1795083626422172865,
+      "mtime_ns": 1795085309312667970,
       "hash": "342b4c26d9af0d1cb1c3d94979cde35fb5a5dc963ae4df34ce4099be5c18d70b",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
@@ -416,7 +416,7 @@
     },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
-      "mtime_ns": 1793187642181438904,
+      "mtime_ns": 1793355746085706779,
       "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
       "concept_ids": [
         "services/radio_image_store/RadioImageStore",
@@ -431,7 +431,7 @@
     },
     "services/radio_selection_store.dart": {
       "path": "services/radio_selection_store.dart",
-      "mtime_ns": 1787526889854243083,
+      "mtime_ns": 1791109641575292000,
       "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
       "concept_ids": [
         "services/radio_selection_store/RadioSelection",
@@ -444,7 +444,7 @@
     },
     "services/repeater_search_preferences_store.dart": {
       "path": "services/repeater_search_preferences_store.dart",
-      "mtime_ns": 1794065847464720490,
+      "mtime_ns": 1794086445114217730,
       "hash": "36b1360b1c97955db3fd4130e6d09c79586dc0982c591c6f993f0244fe4ed300",
       "concept_ids": [
         "services/repeater_search_preferences_store/RepeaterSearchPreferences",
@@ -458,7 +458,7 @@
     },
     "services/update_checker.dart": {
       "path": "services/update_checker.dart",
-      "mtime_ns": 1794662632996144606,
+      "mtime_ns": 1794684530212383504,
       "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
       "concept_ids": [
         "services/update_checker/PlatformRelease",
@@ -482,7 +482,7 @@
     },
     "services/update_installer.dart": {
       "path": "services/update_installer.dart",
-      "mtime_ns": 1793108770906624056,
+      "mtime_ns": 1793109703288928523,
       "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
       "concept_ids": [
         "services/update_installer/DownloadedUpdate",
@@ -500,7 +500,7 @@
     },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
-      "mtime_ns": 1794514612328193301,
+      "mtime_ns": 1794661579163291342,
       "hash": "970f41d7e6aa528d25df4bb3e4aa192055e8a9c60a276c09b7a383b6fedb2754",
       "concept_ids": [
         "services/window_state_store/WindowDisplayArea",
@@ -516,7 +516,7 @@
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1793569318276516403,
+      "mtime_ns": 1793569934904800892,
       "hash": "57cd150df865177f067ed9a3d2454c0d48731c63ccb2311322c24a63f0aaf9b4",
       "concept_ids": [
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
@@ -526,7 +526,7 @@
     },
     "widgets/error_report_dialog.dart": {
       "path": "widgets/error_report_dialog.dart",
-      "mtime_ns": 1794514582362673718,
+      "mtime_ns": 1794661579163291342,
       "hash": "a99b2b244e4d052be2b3830a80b6b0f51b3cf7f518fa5f4832a9bbba92277892",
       "concept_ids": [
         "widgets/error_report_dialog/ErrorReportDialog",
@@ -540,7 +540,7 @@
     },
     "widgets/file_save_warning_dialog.dart": {
       "path": "widgets/file_save_warning_dialog.dart",
-      "mtime_ns": 1793017335032590801,
+      "mtime_ns": 1793018006929487856,
       "hash": "b6627d11b8cd15e4712b3b3cc786602d60504246f5bc4ce890afbe2c33c6f729",
       "concept_ids": [
         "widgets/file_save_warning_dialog/FileSaveWarningDialog",
@@ -552,7 +552,7 @@
     },
     "widgets/marine_template_dialog.dart": {
       "path": "widgets/marine_template_dialog.dart",
-      "mtime_ns": 1794220301609716786,
+      "mtime_ns": 1794227692786598019,
       "hash": "be4bc3c44bda1585ad0da39fb2b50f57d264be08db84bd83ab3f9f4650632c3f",
       "concept_ids": [
         "widgets/marine_template_dialog/MarineTemplateDialog",
@@ -564,7 +564,7 @@
     },
     "widgets/radio_mapping_dialog.dart": {
       "path": "widgets/radio_mapping_dialog.dart",
-      "mtime_ns": 1793404724723066129,
+      "mtime_ns": 1793443811322767449,
       "hash": "800eee7b3d1ceb1ad70a88e539ac6aa3d31b8319b60c67523e679118345cd6b7",
       "concept_ids": [
         "widgets/radio_mapping_dialog/RadioMappingDialog",
@@ -586,7 +586,7 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1795078044081809797,
+      "mtime_ns": 1795085309312667970,
       "hash": "7befd5fb4fb05a9ac7a8186aeaab084d2de71ebf9335473ce96a0c6a0fefc33c",
       "concept_ids": [
         "widgets/radio_model_picker/ModelChoice",
@@ -622,8 +622,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795083653179836058,
-      "hash": "22a909e70847776fe0ee6b655357ffc3f4a903da0f7787ca6daf5f6fd2e6b6b3",
+      "mtime_ns": 1795085390477005104,
+      "hash": "db9e7d1854546f774c407a09e02a8d49c95f69b1c10682ec88f5ca3a7ead6ddf",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -6435,5 +6435,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-19T10:20:54Z"
+  "generated_at": "2026-11-19T10:49:54Z"
 }
