@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 14:22:27",
+  "details": "Linux 1.0.61: the F4HWN module (imports wx) cannot load, and an image saved by it ('UV-K1 & UV-K5 V3 (F4HWN)', 0xB190 bytes, f4hwn.chirp.v6.3.0.py sha256 a307886d...) was rejected as 'Unsupported model'. Same layout as the built-in profile, which was built from that module.",
+  "event_type": "created",
+  "external_ref": "INBOX:798",
+  "item": "w-20261119-8c78",
+  "occurred_at": "2026-11-19",
+  "summary": "Image from F4HWN's CHIRP module refused as unsupported model"
+}

@@ -111,6 +111,28 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
 
         self.assertEqual(serial.writes, [b"PROGRAMBFNORMALU"])
 
+    def test_v2_firmware_reply_names_the_v2_model(self):
+        """2026-11-19 Linux report: replies 41, 03, 41, 03 then silence."""
+        from chirp import errors
+        serial = _SequenceSerial([b"\x41", b"\x03", b"\x41", b"\x03"])
+        radio = self.radio_module.BaofengUV5RMPlus(serial)
+
+        with mock.patch.object(self.compat.time, "sleep"):
+            with self.assertRaisesRegex(errors.RadioError,
+                                        "UV-5RM Plus v2"):
+                self.radio_module._do_ident(radio)
+        # The recording hook is removed again.
+        self.assertNotEqual(self.radio_module._sendmagic.__name__,
+                            "recording_sendmagic")
+
+    def test_v2_hint_for_uv5rh(self):
+        from chirp import errors
+        serial = _SequenceSerial([b"\x41"])
+        radio = self.radio_module.UV5RH(serial)
+        with mock.patch.object(self.compat.time, "sleep"):
+            with self.assertRaisesRegex(errors.RadioError, "UV-5RH Pro"):
+                self.radio_module._do_ident(radio)
+
     def test_unprogrammed_pttid_is_exposed_as_off(self):
         radio = self.bridge.radio_from_image(
             self.directory,

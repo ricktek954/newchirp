@@ -396,12 +396,26 @@ def _f4hwn_upload(radio):
     return True
 
 
+class F4HWNModuleImageAlias(chirp_common.Alias):
+    """Images saved by F4HWN's own CHIRP module (f4hwn.chirp.v6.3.0.py).
+
+    That module names the radio "UV-K1 & UV-K5 V3 (F4HWN)" and uses the same
+    0xB190-byte layout this profile was built from, but it imports wx and
+    cannot load in NewChirp. Its images were refused as "Unsupported model"
+    (2026-11-19 Linux report).
+    """
+
+    VENDOR = "Quansheng"
+    MODEL = "UV-K1 & UV-K5 V3 (F4HWN)"
+
+
 @directory.register
 class QuanshengUVK1F4HWN63(uvk5.UVK5RadioBase):
     """Quansheng UV-K1 / UV-K5 V3 running F4HWN 6.3 firmware."""
 
     VENDOR = "Quansheng"
     MODEL = "UV-K1 (F4HWN 6.3)"
+    ALIASES = [F4HWNModuleImageAlias]
     BAUD_RATE = 38400
 
     @classmethod
@@ -463,6 +477,13 @@ class QuanshengUVK1F4HWN63(uvk5.UVK5RadioBase):
         _f4hwn_upload(self)
 
     def process_mmap(self):
+        size = len(self._mmap.get_packed())
+        if size != F4HWN_MEM_SIZE:
+            # Other F4HWN releases use different layouts; never guess.
+            raise errors.RadioError(
+                "This image is %i bytes, not the %i-byte F4HWN 6.3 layout. "
+                "Read the radio with this profile instead." %
+                (size, F4HWN_MEM_SIZE))
         self._memobj = bitwise.parse(F4HWN_MEM_FORMAT, self._mmap)
 
     def get_settings(self):

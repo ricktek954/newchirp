@@ -159,6 +159,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-5RM Plus
 
+- **#w-20261119-70d8 bug | fix_committed | normal:** v2-firmware radio selected as UV-5RM Plus reports only No response
+  Linux 1.0.61 /dev/ttyUSB0: PROGRAMBFNORMALU answered 41, 03, 41, 03 then nothing. 0x41 ('A') is the v2 firmware announce reply (docs/BAOFENG_5RH_PRO_PROTOCOL.md), so the radio needs the UV-5RM Plus v2 model.
+  Source: `email` INBOX:801
 - **#28 maintenance | experimental | normal:** Current driver status
   Transport: UV-17-family serial, 115200 8N1 + DTR/RTS. Read: OEM-style handshake retry; stock channel decode. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:52
@@ -357,6 +360,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Source: `release` desktop:50f17c3c
 
 ## Quansheng
+
+### UV-K1 (F4HWN 6.3)
+
+- **#w-20261119-8c78 bug | fix_committed | normal:** Image from F4HWN's CHIRP module refused as unsupported model
+  Linux 1.0.61: the F4HWN module (imports wx) cannot load, and an image saved by it ('UV-K1 & UV-K5 V3 (F4HWN)', 0xB190 bytes, f4hwn.chirp.v6.3.0.py sha256 a307886d...) was rejected as 'Unsupported model'. Same layout as the built-in profile, which was built from that module.
+  Source: `email` INBOX:798
 
 ### UV-K1 / UV-K5 V3 (F4HWN 6.3)
 

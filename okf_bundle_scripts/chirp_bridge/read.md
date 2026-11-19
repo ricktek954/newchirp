@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T10:20:26Z"
+timestamp: "2026-11-19T14:20:25Z"
 concept_id: chirp_bridge/read
 language: python
 ---
@@ -40,3 +40,4 @@ Lines 383–386 in `chirp_bridge.py`
 | related | [TracedSerial](/chirp_bridge/TracedSerial.md) |
 | calls | [received](/chirp_bridge/received.md) |
 | called_by | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
+| called_by | [_load_module](/chirp_bridge/load_module.md) |

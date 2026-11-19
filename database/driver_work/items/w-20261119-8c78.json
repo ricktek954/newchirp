@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-19 14:22:27",
+  "kind": "bug",
+  "manufacturer": "Quansheng",
+  "model": "UV-K1 (F4HWN 6.3)",
+  "occurred_at": "2026-11-19",
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:798",
+  "status": "fix_committed",
+  "summary": "Linux 1.0.61: the F4HWN module (imports wx) cannot load, and an image saved by it ('UV-K1 & UV-K5 V3 (F4HWN)', 0xB190 bytes, f4hwn.chirp.v6.3.0.py sha256 a307886d...) was rejected as 'Unsupported model'. Same layout as the built-in profile, which was built from that module.",
+  "title": "Image from F4HWN's CHIRP module refused as unsupported model",
+  "uid": "w-20261119-8c78"
+}

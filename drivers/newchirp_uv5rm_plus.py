@@ -28,20 +28,58 @@ _ORIGINAL_DO_IDENT = baofeng_uv17Pro._do_ident
 _ORIGINAL_GET_MEMORY = baofeng_uv17Pro.BaofengUV5RMPlus.get_memory
 
 
+V2_ANNOUNCE = 0x41   # "A": how v2 firmware answers (BAOFENG_5RH_PRO_PROTOCOL)
+V2_MODELS = {
+    "UV-5RM Plus": "Baofeng UV-5RM Plus v2",
+    "UV-5RH": "Baofeng UV-5RH Pro or UV-5RH Plus",
+}
+
+
+def _v2_firmware_error(radio):
+    return errors.RadioError(
+        "The radio answered the programming request with \"A\" (0x41), "
+        "which is how Baofeng's v2 firmware replies. This radio needs the "
+        "\"%s\" model. Select it and read again; the radio was not "
+        "changed." % V2_MODELS.get(radio.MODEL, "v2"))
+
+
 def _do_ident(radio):
     if getattr(radio, "MODEL", "") not in RETRY_MODELS:
         return _ORIGINAL_DO_IDENT(radio)
 
+    # Record the radio's replies so a v2-firmware radio can be recognised.
+    # 2026-11-19 Linux report: PROGRAMBFNORMALU answered 41, 03, 41, 03 and
+    # the user only saw "No response from radio".
+    replies = []
+    original_sendmagic = baofeng_uv17Pro._sendmagic
+
+    def recording_sendmagic(radio_, magic, response_len):
+        reply = original_sendmagic(radio_, magic, response_len)
+        replies.append(bytes(reply or b""))
+        return reply
+
+    baofeng_uv17Pro._sendmagic = recording_sendmagic
     last_error = None
-    for attempt in range(HANDSHAKE_RETRIES):
-        try:
-            return _ORIGINAL_DO_IDENT(radio)
-        except errors.RadioError as exc:
-            if str(exc) != UNEXPECTED_RESPONSE:
-                raise
-            last_error = exc
-            if attempt < HANDSHAKE_RETRIES - 1:
-                time.sleep(RETRY_DELAY)
+    try:
+        for attempt in range(HANDSHAKE_RETRIES):
+            try:
+                return _ORIGINAL_DO_IDENT(radio)
+            except errors.RadioNoResponse as exc:
+                last_error = exc
+                if not any(reply[:1] == bytes((V2_ANNOUNCE,))
+                           for reply in replies):
+                    raise
+                break
+            except errors.RadioError as exc:
+                if str(exc) != UNEXPECTED_RESPONSE:
+                    raise
+                last_error = exc
+                if attempt < HANDSHAKE_RETRIES - 1:
+                    time.sleep(RETRY_DELAY)
+    finally:
+        baofeng_uv17Pro._sendmagic = original_sendmagic
+    if any(reply[:1] == bytes((V2_ANNOUNCE,)) for reply in replies):
+        raise _v2_firmware_error(radio)
     raise last_error
 
 

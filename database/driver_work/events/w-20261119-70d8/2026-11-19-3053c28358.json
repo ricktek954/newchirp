@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 14:22:27",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "test/uv5rm_plus_handshake_test.py",
+  "item": "w-20261119-70d8",
+  "occurred_at": "2026-11-19",
+  "summary": "Handshake retry records the radio's replies; a 0x41 reply now raises an error naming Baofeng UV-5RM Plus v2 (UV-5RH: UV-5RH Pro or Plus) instead of No response."
+}

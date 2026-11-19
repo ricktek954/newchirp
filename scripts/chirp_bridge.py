@@ -768,6 +768,23 @@ def _load_module(module_path, directory):
     except Exception as exc:
         sys.modules.pop(module_name, None)
         if isinstance(exc, ModuleNotFoundError) and exc.name == "wx":
+            try:
+                with open(module_path, encoding="utf-8",
+                          errors="replace") as handle:
+                    is_f4hwn = "F4HWN" in handle.read()
+            except OSError:
+                is_f4hwn = False
+            if is_f4hwn:
+                # F4HWN's module needs wx; NewChirp has the same v6.3 map
+                # built in and opens that module's saved images.
+                raise RuntimeError(
+                    "Could not load %s: F4HWN's CHIRP module needs the wx "
+                    "GUI toolkit, which NewChirp does not include. You do "
+                    "not need it: choose the built-in \"Quansheng UV-K1 "
+                    "(F4HWN 6.3)\" radio to read the radio, or open an image "
+                    "saved by F4HWN's module directly."
+                    % os.path.basename(module_path)
+                ) from exc
             raise RuntimeError(
                 "Could not load CHIRP module %s: this module depends on the "
                 "wx GUI toolkit, which is not available in NewChirp's "
