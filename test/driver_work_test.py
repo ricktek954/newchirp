@@ -201,7 +201,8 @@ class DriverWorkTextStoreTest(unittest.TestCase):
 
     def _seed(self, repo):
         repo.mkdir()
-        self._git(repo, "init", "-q", "-b", "main")
+        self._git(repo, "init", "-q")
+        self._git(repo, "symbolic-ref", "HEAD", "refs/heads/main")
         self._git(repo, "config", "user.email", "ledger@example.com")
         self._git(repo, "config", "user.name", "ledger test")
         (repo / ".gitignore").write_text("cache.sqlite3\n")
