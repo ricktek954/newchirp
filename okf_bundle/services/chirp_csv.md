@@ -10,7 +10,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T10:41:56Z"
+timestamp: "2026-11-19T09:05:30Z"
 concept_id: services/chirp_csv
 language: dart
 ---
@@ -28,6 +28,10 @@ language: dart
 | related | [integer](/services/chirp_csv/integer.md) |
 | related | [dtcsPolarity](/services/chirp_csv/dtcsPolarity.md) |
 | related | [encode](/services/chirp_csv/encode.md) |
+| related | [decodeBytes](/services/chirp_csv/decodeBytes.md) |
+| related | [decodeText](/services/chirp_csv/decodeText.md) |
+| related | [_utf16](/services/chirp_csv/utf16.md) |
+| related | [_windows1252](/services/chirp_csv/windows1252.md) |
 | related | [decode](/services/chirp_csv/decode.md) |
 | related | [col](/services/chirp_csv/col.md) |
 | related | [value](/services/chirp_csv/value.md) |
@@ -35,4 +39,5 @@ language: dart
 | related | [integer](/services/chirp_csv/integer.md) |
 | related | [dtcsPolarity](/services/chirp_csv/dtcsPolarity.md) |
 | related | [_escape](/services/chirp_csv/escape.md) |
+| related | [_delimiter](/services/chirp_csv/delimiter.md) |
 | related | [_parse](/services/chirp_csv/parse.md) |

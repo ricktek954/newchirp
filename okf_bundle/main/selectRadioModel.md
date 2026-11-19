@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:47:24Z"
+timestamp: "2026-11-19T09:13:45Z"
 concept_id: main/selectRadioModel
 language: dart
 ---
@@ -23,7 +23,7 @@ void_selectRadioModel(String model)
 ```
 
 ## Source
-Lines 1354–1354 in `main.dart`
+Lines 1386–1386 in `main.dart`
 
 ## Relationships
 

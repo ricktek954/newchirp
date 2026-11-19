@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:47:24Z"
+timestamp: "2026-11-19T09:13:45Z"
 concept_id: main/ErrorReportDialog
 language: dart
 ---
@@ -27,7 +27,7 @@ class _ErrorReportDialog
 - `createState`
 
 ## Source
-Lines 7781–7800 in `main.dart`
+Lines 7832–7851 in `main.dart`
 
 ## Relationships
 

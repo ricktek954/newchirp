@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:47:24Z"
+timestamp: "2026-11-19T09:13:45Z"
 concept_id: main/ChannelSelectionMode
 language: dart
 ---
@@ -32,7 +32,7 @@ enum _ChannelSelectionMode
 - `range`
 
 ## Source
-Lines 9855–9855 in `main.dart`
+Lines 9906–9906 in `main.dart`
 
 ## Relationships
 

@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 633 concepts across 4 domains and 31 modules'
+description: 'Top-level OKF summary: 643 concepts across 4 domains and 31 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-19T08:47:25Z'
+timestamp: '2026-11-19T09:13:47Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 633 concepts | 4 domains | 31 modules
+> OKF v0.2 bundle | 643 concepts | 4 domains | 31 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 490 |
-| Class | 102 |
+| Function | 499 |
+| Class | 103 |
 | Module | 31 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 633 |
+| dart | 643 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 231 concepts
+### [main.dart](main.dart/index.md) — 236 concepts
 
-- [main](main/index.md) (231 concepts)
+- [main](main/index.md) (236 concepts)
 
 ### [models](models/index.md) — 110 concepts
 
@@ -45,15 +45,15 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - *…and 1 more modules*
 
-### [services](services/index.md) — 228 concepts
+### [services](services/index.md) — 233 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (55 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/mygmrs_client](services/mygmrs_client/index.md) (22 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/update_checker](services/update_checker/index.md) (17 concepts)
+- [services/chirp_csv](services/chirp_csv/index.md) (16 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
-- [services/chirp_csv](services/chirp_csv/index.md) (11 concepts)
 - [services/update_installer](services/update_installer/index.md) (11 concepts)
 - *…and 7 more modules*
 

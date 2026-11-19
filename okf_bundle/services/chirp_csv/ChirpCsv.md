@@ -10,7 +10,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T10:41:56Z"
+timestamp: "2026-11-19T09:05:30Z"
 concept_id: services/chirp_csv/ChirpCsv
 language: dart
 ---
@@ -26,6 +26,10 @@ class ChirpCsv
 ## Methods
 
 - `encode`
+- `decodeBytes`
+- `decodeText`
+- `_utf16`
+- `_windows1252`
 - `decode`
 - `col`
 - `value`
@@ -33,10 +37,11 @@ class ChirpCsv
 - `integer`
 - `dtcsPolarity`
 - `_escape`
+- `_delimiter`
 - `_parse`
 
 ## Source
-Lines 3–143 in `services/chirp_csv.dart`
+Lines 5–216 in `services/chirp_csv.dart`
 
 ## Relationships
 

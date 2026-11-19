@@ -633,6 +633,36 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     };
   }
 
+  /// Whether Ctrl/Cmd+A should select every visible channel row.
+  ///
+  /// Only on the channel library, and never while a text field has focus,
+  /// so the shortcut still selects text inside search and edit fields.
+  bool get _canSelectAllChannels {
+    if (_page != 0 || !_libraryOpen || _busy) return false;
+    final focusContext = FocusManager.instance.primaryFocus?.context;
+    if (focusContext == null) return true;
+    if (focusContext.widget is EditableText) return false;
+    return focusContext.findAncestorWidgetOfExactType<EditableText>() == null;
+  }
+
+  void _selectAllChannels() {
+    final locations = [
+      for (final row in _channelTableRows())
+        if (!row.value.cleared) row.key,
+    ];
+    if (locations.isEmpty) return;
+    final first = locations.first;
+    final index = _channels.indexWhere((channel) => channel.location == first);
+    if (index < 0) return;
+    setState(() {
+      _selected = index;
+      _extraSelectedLocations
+        ..clear()
+        ..addAll(locations.skip(1));
+      _selectionAnchorLocation = first;
+    });
+  }
+
   void _selectChannelAtLocation(int location, _ChannelSelectionMode mode) {
     final index = _channels.indexWhere(
       (channel) => channel.location == location,
@@ -1230,7 +1260,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       builder: (context) => RadioMappingDialog(
         models: _radioMappings,
         channels: _activeChannels,
-        radioName: (_model == null ? 'this radio' : displayRadioModelName(_model!)),
+        radioName: (_model == null
+            ? 'this radio'
+            : displayRadioModelName(_model!)),
       ),
     );
     if (!mounted || edited == null) return;
@@ -1614,10 +1646,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
     late final List<RadioChannel> channels;
     try {
-      final source = await file.readAsString();
+      final bytes = await file.readAsBytes();
       channels = isXml
-          ? MototrboCps2Xml.decode(source)
-          : ChirpCsv.decode(source);
+          ? MototrboCps2Xml.decode(ChirpCsv.decodeText(bytes))
+          : ChirpCsv.decodeBytes(bytes);
     } catch (error) {
       if (mounted) await _showActionError(error);
       return;
@@ -2458,7 +2490,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
     late final List<RadioChannel> channels;
     try {
-      channels = ChirpCsv.decode(await stockFile.readAsString());
+      channels = ChirpCsv.decodeBytes(await stockFile.readAsBytes());
     } catch (error) {
       if (mounted) await _showActionError(error);
       return;
@@ -3780,110 +3812,129 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      autofocus: true,
-      child: CallbackShortcuts(
-        bindings: {
-          const SingleActivator(LogicalKeyboardKey.keyZ, meta: true): _undo,
-          const SingleActivator(
-            LogicalKeyboardKey.keyZ,
-            meta: true,
-            shift: true,
-          ): _redo,
-          const SingleActivator(LogicalKeyboardKey.keyY, meta: true): _redo,
-          const SingleActivator(LogicalKeyboardKey.keyZ, control: true): _undo,
-          const SingleActivator(
-            LogicalKeyboardKey.keyZ,
-            control: true,
-            shift: true,
-          ): _redo,
-          const SingleActivator(LogicalKeyboardKey.keyY, control: true): _redo,
+    return Shortcuts(
+      shortcuts: const {
+        SingleActivator(LogicalKeyboardKey.keyA, meta: true):
+            _SelectAllChannelsIntent(),
+        SingleActivator(LogicalKeyboardKey.keyA, control: true):
+            _SelectAllChannelsIntent(),
+      },
+      child: Actions(
+        actions: {
+          _SelectAllChannelsIntent: _SelectAllChannelsAction(
+            enabled: () => _canSelectAllChannels,
+            onInvoke: _selectAllChannels,
+          ),
         },
-        child: Scaffold(
-          body: Stack(
-            children: [
-              SafeArea(
-                child: Row(
-                  children: [
-                    _Sidebar(
-                      page: _page,
-                      onPage: _selectPage,
-                      onFindRepeaters: _findRepeaters,
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          _TopBar(
-                            libraryName: _libraryName,
-                            dirty: _dirty,
-                            busy: _busy,
-                            status: _status,
-                            chirpModuleName: _chirpModuleName,
-                            moduleLoadingAvailable: canLoadChirpModules(
-                              currentSandboxPlatform(),
-                            ),
-                            checkingForUpdates: _checkingForUpdates,
-                            onCheckForUpdates: () => _checkForUpdates(),
-                            onReportProblem: () => _showErrorReport(
-                              summary: 'General problem report',
-                            ),
-                            onLoadChirpModule: _loadChirpModule,
-                            onUnloadChirpModule: _unloadChirpModule,
-                            onNew: _newLibrary,
-                            onGmrsStarter: _useGmrsStarter,
-                            onMarineTemplate: _useMarineTemplate,
-                            onRestoreStock: _restoreStockChannels,
-                            onOpen: _openLibraryFile,
-                            onSave: () => _saveCsv(),
-                            onSaveAs: () => _saveCsv(saveAs: true),
-                            canSave: _libraryOpen,
-                            minimalMode: _page == 2 || _page == 3 || _page == 4,
-                            minimalTitle: switch (_page) {
-                              2 => 'About & licenses',
-                              3 => 'Frequency Reference',
-                              _ => 'Radio settings',
-                            },
-                            minimalSubtitle: switch (_page) {
-                              2 =>
-                                'Application information and open-source licenses',
-                              3 =>
-                                _frequencyReferenceIndex < 0
-                                    ? 'United States Part 95 FRS/GMRS channel plan'
-                                    : internationalFrequencyReferencePlans[_frequencyReferenceIndex]
-                                          .subtitle,
-                              _ =>
-                                'Radio-wide options exposed by the selected driver',
-                            },
-                            showPrint: _page == 3,
-                            onPrint: _printFrequencyReference,
+        child: CallbackShortcuts(
+          bindings: {
+            const SingleActivator(LogicalKeyboardKey.keyZ, meta: true): _undo,
+            const SingleActivator(
+              LogicalKeyboardKey.keyZ,
+              meta: true,
+              shift: true,
+            ): _redo,
+            const SingleActivator(LogicalKeyboardKey.keyY, meta: true): _redo,
+            const SingleActivator(LogicalKeyboardKey.keyZ, control: true):
+                _undo,
+            const SingleActivator(
+              LogicalKeyboardKey.keyZ,
+              control: true,
+              shift: true,
+            ): _redo,
+            const SingleActivator(LogicalKeyboardKey.keyY, control: true):
+                _redo,
+          },
+          child: Focus(
+            autofocus: true,
+            child: Scaffold(
+              body: Stack(
+                children: [
+                  SafeArea(
+                    child: Row(
+                      children: [
+                        _Sidebar(
+                          page: _page,
+                          onPage: _selectPage,
+                          onFindRepeaters: _findRepeaters,
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              _TopBar(
+                                libraryName: _libraryName,
+                                dirty: _dirty,
+                                busy: _busy,
+                                status: _status,
+                                chirpModuleName: _chirpModuleName,
+                                moduleLoadingAvailable: canLoadChirpModules(
+                                  currentSandboxPlatform(),
+                                ),
+                                checkingForUpdates: _checkingForUpdates,
+                                onCheckForUpdates: () => _checkForUpdates(),
+                                onReportProblem: () => _showErrorReport(
+                                  summary: 'General problem report',
+                                ),
+                                onLoadChirpModule: _loadChirpModule,
+                                onUnloadChirpModule: _unloadChirpModule,
+                                onNew: _newLibrary,
+                                onGmrsStarter: _useGmrsStarter,
+                                onMarineTemplate: _useMarineTemplate,
+                                onRestoreStock: _restoreStockChannels,
+                                onOpen: _openLibraryFile,
+                                onSave: () => _saveCsv(),
+                                onSaveAs: () => _saveCsv(saveAs: true),
+                                canSave: _libraryOpen,
+                                minimalMode:
+                                    _page == 2 || _page == 3 || _page == 4,
+                                minimalTitle: switch (_page) {
+                                  2 => 'About & licenses',
+                                  3 => 'Frequency Reference',
+                                  _ => 'Radio settings',
+                                },
+                                minimalSubtitle: switch (_page) {
+                                  2 =>
+                                    'Application information and open-source licenses',
+                                  3 =>
+                                    _frequencyReferenceIndex < 0
+                                        ? 'United States Part 95 FRS/GMRS channel plan'
+                                        : internationalFrequencyReferencePlans[_frequencyReferenceIndex]
+                                              .subtitle,
+                                  _ =>
+                                    'Radio-wide options exposed by the selected driver',
+                                },
+                                showPrint: _page == 3,
+                                onPrint: _printFrequencyReference,
+                              ),
+                              Expanded(
+                                child: switch (_page) {
+                                  0 =>
+                                    _libraryOpen
+                                        ? _buildLibrary()
+                                        : _buildWelcome(),
+                                  1 => _buildRadio(),
+                                  2 => _buildAbout(),
+                                  4 => _buildRadioSettings(),
+                                  _ => _buildFrequencyReference(),
+                                },
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: switch (_page) {
-                              0 =>
-                                _libraryOpen
-                                    ? _buildLibrary()
-                                    : _buildWelcome(),
-                              1 => _buildRadio(),
-                              2 => _buildAbout(),
-                              4 => _buildRadioSettings(),
-                              _ => _buildFrequencyReference(),
-                            },
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  if (_transferActive)
+                    _TransferOverlay(
+                      label: _transferLabel,
+                      detail: _transferDetail,
+                      fraction: _transferFraction,
+                      cancelling: _transferCancelling,
+                      onCancel: _cancelTransfer,
+                    ),
+                ],
               ),
-              if (_transferActive)
-                _TransferOverlay(
-                  label: _transferLabel,
-                  detail: _transferDetail,
-                  fraction: _transferFraction,
-                  cancelling: _transferCancelling,
-                  onCancel: _cancelTransfer,
-                ),
-            ],
+            ),
           ),
         ),
       ),
@@ -9853,6 +9904,28 @@ class _Metric extends StatelessWidget {
 }
 
 enum _ChannelSelectionMode { replace, toggle, range }
+
+class _SelectAllChannelsIntent extends Intent {
+  const _SelectAllChannelsIntent();
+}
+
+/// Disabled (so the key falls through to text select-all) unless the
+/// channel table can take the selection.
+class _SelectAllChannelsAction extends Action<_SelectAllChannelsIntent> {
+  _SelectAllChannelsAction({required this.enabled, required this.onInvoke});
+
+  final bool Function() enabled;
+  final VoidCallback onInvoke;
+
+  @override
+  bool isEnabled(_SelectAllChannelsIntent intent) => enabled();
+
+  @override
+  Object? invoke(_SelectAllChannelsIntent intent) {
+    onInvoke();
+    return null;
+  }
+}
 
 class _ChannelColumn {
   _ChannelColumn(this.label, this.width, this.value, {String? id, this.help})

@@ -1542,6 +1542,53 @@ void main() {
     );
   });
 
+  // 2026-11-18 5RM report: "how to select all the channels (cntl-A didn't
+  // work)".
+  testWidgets('Ctrl and Cmd+A select every visible channel, not field text', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+
+    await tester.tap(find.text('GMRS 1').first);
+    await tester.pump();
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.pump();
+    expect(find.text('Edit 22 selected'), findsOneWidget);
+
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.pump();
+    expect(find.text('Edit 22 selected'), findsNothing);
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.metaLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.metaLeft);
+    await tester.pump();
+    expect(find.text('Edit 22 selected'), findsOneWidget);
+
+    // Inside a text field the shortcut stays text select-all.
+    await tester.tap(find.text('GMRS 3').first);
+    await tester.pump();
+    final search = find.byKey(const ValueKey('channel-search-field'));
+    await tester.enterText(search, 'GMRS');
+    await tester.pumpAndSettle();
+    await tester.sendKeyDownEvent(LogicalKeyboardKey.controlLeft);
+    await tester.sendKeyEvent(LogicalKeyboardKey.keyA);
+    await tester.sendKeyUpEvent(LogicalKeyboardKey.controlLeft);
+    await tester.pump();
+    expect(find.text('Edit 22 selected'), findsNothing);
+    final controller = tester.widget<TextField>(search).controller!;
+    expect(controller.selection.start, 0);
+    expect(controller.selection.end, 'GMRS'.length);
+  });
+
   testWidgets('opens the GMRS starter only when selected', (tester) async {
     tester.view.physicalSize = const Size(1440, 900);
     tester.view.devicePixelRatio = 1;

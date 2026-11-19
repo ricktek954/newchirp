@@ -178,19 +178,24 @@
     },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
-      "mtime_ns": 1794134516967344558,
-      "hash": "780157a79620c34ea613d360cdc7c9d655aa1ae9d6c4fa6609a701a9b14d5fd2",
+      "mtime_ns": 1795079130960815541,
+      "hash": "0d0bd385cd53f7972fc3c0e52349e3a260352ed621d63453d4a6f067f5dd38f0",
       "concept_ids": [
         "services/chirp_csv/ChirpCsv",
         "services/chirp_csv/col",
         "services/chirp_csv/decode",
+        "services/chirp_csv/decodeBytes",
+        "services/chirp_csv/decodeText",
+        "services/chirp_csv/delimiter",
         "services/chirp_csv/dtcsPolarity",
         "services/chirp_csv/encode",
         "services/chirp_csv/escape",
         "services/chirp_csv/integer",
         "services/chirp_csv/number",
         "services/chirp_csv/parse",
+        "services/chirp_csv/utf16",
         "services/chirp_csv/value",
+        "services/chirp_csv/windows1252",
         "services/chirp_csv"
       ]
     },
@@ -584,41 +589,41 @@
       "mtime_ns": 1795078044081809797,
       "hash": "7befd5fb4fb05a9ac7a8186aeaab084d2de71ebf9335473ce96a0c6a0fefc33c",
       "concept_ids": [
-        "widgets/radio_model_picker",
-        "widgets/radio_model_picker/VendorModels",
-        "widgets/radio_model_picker/RadioModelPicker",
-        "widgets/radio_model_picker/RadioModelPickerState",
-        "widgets/radio_model_picker/RadioModelDialog",
-        "widgets/radio_model_picker/RadioModelDialogState",
-        "widgets/radio_model_picker/VendorChoice",
+        "widgets/radio_model_picker/ModelChoice",
+        "widgets/radio_model_picker/ModelEntry",
         "widgets/radio_model_picker/ModelResultsList",
         "widgets/radio_model_picker/ModelResultsListState",
-        "widgets/radio_model_picker/VendorHeading",
-        "widgets/radio_model_picker/ModelEntry",
+        "widgets/radio_model_picker/RadioModelDialog",
+        "widgets/radio_model_picker/RadioModelDialogState",
+        "widgets/radio_model_picker/RadioModelPicker",
+        "widgets/radio_model_picker/RadioModelPickerState",
         "widgets/radio_model_picker/SectionHeader",
-        "widgets/radio_model_picker/ModelChoice",
-        "widgets/radio_model_picker/displayRadioModelName",
-        "widgets/radio_model_picker/modelSearchText",
-        "widgets/radio_model_picker/vendorSlug",
-        "widgets/radio_model_picker/modelNameWithinVendor",
-        "widgets/radio_model_picker/groupModels",
-        "widgets/radio_model_picker/createState",
-        "widgets/radio_model_picker/initState",
-        "widgets/radio_model_picker/didUpdateWidget",
-        "widgets/radio_model_picker/remember",
-        "widgets/radio_model_picker/openPicker",
+        "widgets/radio_model_picker/VendorChoice",
+        "widgets/radio_model_picker/VendorHeading",
+        "widgets/radio_model_picker/VendorModels",
         "widgets/radio_model_picker/build",
-        "widgets/radio_model_picker/dispose",
-        "widgets/radio_model_picker/matchingGroups",
         "widgets/radio_model_picker/cacheGroups",
+        "widgets/radio_model_picker/createState",
+        "widgets/radio_model_picker/didUpdateWidget",
+        "widgets/radio_model_picker/displayRadioModelName",
+        "widgets/radio_model_picker/dispose",
+        "widgets/radio_model_picker/groupModels",
+        "widgets/radio_model_picker/initState",
+        "widgets/radio_model_picker/matchingGroups",
+        "widgets/radio_model_picker/modelNameWithinVendor",
+        "widgets/radio_model_picker/modelSearchText",
+        "widgets/radio_model_picker/openPicker",
+        "widgets/radio_model_picker/remember",
         "widgets/radio_model_picker/selectVendor",
-        "widgets/radio_model_picker/submitSearch"
+        "widgets/radio_model_picker/submitSearch",
+        "widgets/radio_model_picker/vendorSlug",
+        "widgets/radio_model_picker"
       ]
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795078044084900495,
-      "hash": "0222fd486149527ee6e7932095d09b377e6a3cc3e7ea6c8d5d9e08be2427fca2",
+      "mtime_ns": 1795079625849714250,
+      "hash": "5b1dc7746825f8280d48940d09adcefa820e3e5764612288b9a91acaea30cac1",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -653,6 +658,8 @@
         "main/WelcomeAction",
         "main/Metric",
         "main/ChannelSelectionMode",
+        "main/SelectAllChannelsIntent",
+        "main/SelectAllChannelsAction",
         "main/ChannelColumn",
         "main/ChannelTable",
         "main/ChannelTableState",
@@ -704,6 +711,7 @@
         "main/numericColumnFilter",
         "main/channelColumnFilterValue",
         "main/bankLabelsByLocation",
+        "main/selectAllChannels",
         "main/selectChannelAtLocation",
         "main/showBulkChannelEditor",
         "main/bulkChannelDraftChanged",
@@ -844,6 +852,8 @@
         "main/channelDetail",
         "main/setResultSelected",
         "main/buildResultsMap",
+        "main/isEnabled",
+        "main/invoke",
         "main/revealSelectedChannel",
         "main/showRowMenu",
         "main/columns",
@@ -1196,7 +1206,7 @@
       "type": "Module",
       "resource": "services/chirp_csv.dart",
       "render_hash": "stale",
-      "edge_hash": "d1c29a134dab3a904d38a3f27128a785b0ddb21f4200296ccb4718a7424fb1f3",
+      "edge_hash": "ee0de8361c4c90fd9e32cbab19f17bf41d2c76c00b1a37ab0e4cb71b81331172",
       "enriched": false
     },
     "services/chirp_csv/ChirpCsv": {
@@ -1500,7 +1510,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "6873cce375d23492c99170a76e0bb56e8d41da8f7304bae463927fb6968874b1",
+      "edge_hash": "d5742a843e39e5e15f6d427c53dd437a1ba7aa900437f280f310d26a7bef743e",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -6334,7 +6344,87 @@
       "render_hash": "stale",
       "edge_hash": "7e5196f48d46402f056a557ad53e7ebed49ef606e32e7e414cf925d3703d172b",
       "enriched": false
+    },
+    "services/chirp_csv/decodeBytes": {
+      "concept_id": "services/chirp_csv/decodeBytes",
+      "type": "Function",
+      "resource": "services/chirp_csv.dart",
+      "render_hash": "stale",
+      "edge_hash": "91996c7428dc0e80bb72b1cf6627125ff715fbf328835988265ab79a772e5452",
+      "enriched": false
+    },
+    "services/chirp_csv/decodeText": {
+      "concept_id": "services/chirp_csv/decodeText",
+      "type": "Function",
+      "resource": "services/chirp_csv.dart",
+      "render_hash": "stale",
+      "edge_hash": "91996c7428dc0e80bb72b1cf6627125ff715fbf328835988265ab79a772e5452",
+      "enriched": false
+    },
+    "services/chirp_csv/utf16": {
+      "concept_id": "services/chirp_csv/utf16",
+      "type": "Function",
+      "resource": "services/chirp_csv.dart",
+      "render_hash": "stale",
+      "edge_hash": "91996c7428dc0e80bb72b1cf6627125ff715fbf328835988265ab79a772e5452",
+      "enriched": false
+    },
+    "services/chirp_csv/windows1252": {
+      "concept_id": "services/chirp_csv/windows1252",
+      "type": "Function",
+      "resource": "services/chirp_csv.dart",
+      "render_hash": "stale",
+      "edge_hash": "91996c7428dc0e80bb72b1cf6627125ff715fbf328835988265ab79a772e5452",
+      "enriched": false
+    },
+    "services/chirp_csv/delimiter": {
+      "concept_id": "services/chirp_csv/delimiter",
+      "type": "Function",
+      "resource": "services/chirp_csv.dart",
+      "render_hash": "stale",
+      "edge_hash": "91996c7428dc0e80bb72b1cf6627125ff715fbf328835988265ab79a772e5452",
+      "enriched": false
+    },
+    "main/SelectAllChannelsIntent": {
+      "concept_id": "main/SelectAllChannelsIntent",
+      "type": "Class",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/SelectAllChannelsAction": {
+      "concept_id": "main/SelectAllChannelsAction",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/selectAllChannels": {
+      "concept_id": "main/selectAllChannels",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/isEnabled": {
+      "concept_id": "main/isEnabled",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/invoke": {
+      "concept_id": "main/invoke",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-19T08:47:25Z"
+  "generated_at": "2026-11-19T09:13:47Z"
 }

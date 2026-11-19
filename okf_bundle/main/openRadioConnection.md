@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:47:24Z"
+timestamp: "2026-11-19T09:13:45Z"
 concept_id: main/openRadioConnection
 language: dart
 ---
@@ -23,7 +23,7 @@ void_openRadioConnection()
 ```
 
 ## Source
-Lines 2486–2486 in `main.dart`
+Lines 2518–2518 in `main.dart`
 
 ## Relationships
 

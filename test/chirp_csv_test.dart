@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/services/chirp_csv.dart';
@@ -34,6 +36,67 @@ Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPola
 
     expect(decoded, hasLength(1));
     expect(decoded.single.dtcsPolarity, 'NN');
+  });
+
+  group('CSV files from spreadsheets and OEM programs', () {
+    const header =
+        'Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,'
+        'DtcsCode,DtcsPolarity,RxDtcsCode,CrossMode,Mode,TStep,Skip,Power,'
+        'Comment';
+    const row = '1,CAFE,462.562500,,0.000000,,88.5,88.5,023,NN,023,'
+        'Tone->Tone,FM,12.5,,High,Café 5°';
+
+    // 2026-11-19 UV-32 report: "Failed to decode data using encoding
+    // 'utf-8'" for a CSV saved by Windows software.
+    test('Windows-1252 bytes decode instead of failing', () {
+      final bytes = [
+        for (final unit in '$header\r\n$row\r\n'.codeUnits) unit,
+      ];
+      expect(() => utf8.decode(bytes), throwsFormatException);
+      final decoded = ChirpCsv.decodeBytes(bytes);
+      expect(decoded.single.frequency, 462.5625);
+      expect(decoded.single.comment, 'Café 5°');
+    });
+
+    test('UTF-8 with BOM keeps the Location column', () {
+      final bytes = [0xEF, 0xBB, 0xBF, ...utf8.encode('$header\n$row\n')];
+      final decoded = ChirpCsv.decodeBytes(bytes);
+      expect(decoded.single.location, 1);
+      expect(decoded.single.comment, 'Café 5°');
+    });
+
+    test('UTF-16 LE with BOM decodes', () {
+      final text = '$header\r\n$row\r\n';
+      final bytes = <int>[0xFF, 0xFE];
+      for (final unit in text.codeUnits) {
+        bytes
+          ..add(unit & 0xFF)
+          ..add(unit >> 8);
+      }
+      expect(ChirpCsv.decodeBytes(bytes).single.name, 'CAFE');
+    });
+
+    test('semicolon-separated spreadsheet export decodes', () {
+      final source =
+          '${header.replaceAll(',', ';')}\n${row.replaceAll(',', ';')}\n';
+      final decoded = ChirpCsv.decode(source);
+      expect(decoded.single.frequency, 462.5625);
+      expect(decoded.single.mode, 'FM');
+    });
+
+    test('a non-CHIRP CSV is rejected instead of importing 0 MHz rows', () {
+      const source = 'CH,RX Freq,TX Freq,Name\n1,462.5625,462.5625,GMRS1\n';
+      expect(
+        () => ChirpCsv.decode(source),
+        throwsA(
+          isA<FormatException>().having(
+            (e) => e.message,
+            'message',
+            allOf(contains('not in CHIRP format'), contains('RX Freq')),
+          ),
+        ),
+      );
+    });
   });
 
   test('GMRS starter library contains all 22 channels', () {

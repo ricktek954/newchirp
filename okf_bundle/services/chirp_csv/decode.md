@@ -10,7 +10,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T10:41:56Z"
+timestamp: "2026-11-19T09:05:30Z"
 concept_id: services/chirp_csv/decode
 language: dart
 ---
@@ -24,7 +24,7 @@ Listdecodedecode
 ```
 
 ## Source
-Lines 60–60 in `services/chirp_csv.dart`
+Lines 112–112 in `services/chirp_csv.dart`
 
 ## Relationships
 

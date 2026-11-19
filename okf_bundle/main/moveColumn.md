@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:47:24Z"
+timestamp: "2026-11-19T09:13:45Z"
 concept_id: main/moveColumn
 language: dart
 ---
@@ -27,7 +27,7 @@ void_moveColumn(
 ```
 
 ## Source
-Lines 10315–10319 in `main.dart`
+Lines 10388–10392 in `main.dart`
 
 ## Relationships
 

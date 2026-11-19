@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:47:24Z"
+timestamp: "2026-11-19T09:13:45Z"
 concept_id: main/loadImageCapabilities
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_loadImageCapabilities_loadImageCapabilities
 ```
 
 ## Source
-Lines 1153–1153 in `main.dart`
+Lines 1183–1183 in `main.dart`
 
 ## Relationships
 

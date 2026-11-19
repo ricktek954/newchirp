@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T08:47:24Z"
+timestamp: "2026-11-19T09:13:45Z"
 concept_id: main/importChirpImage
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_importChirpImage_importChirpImage
 ```
 
 ## Source
-Lines 1769–1769 in `main.dart`
+Lines 1801–1801 in `main.dart`
 
 ## Relationships
 

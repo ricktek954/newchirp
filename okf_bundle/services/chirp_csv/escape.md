@@ -10,7 +10,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T10:41:56Z"
+timestamp: "2026-11-19T09:05:30Z"
 concept_id: services/chirp_csv/escape
 language: dart
 ---
@@ -24,7 +24,7 @@ String_escape(Object? value)
 ```
 
 ## Source
-Lines 104–104 in `services/chirp_csv.dart`
+Lines 166–166 in `services/chirp_csv.dart`
 
 ## Relationships
 
