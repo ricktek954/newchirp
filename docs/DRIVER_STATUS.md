@@ -74,6 +74,7 @@ Last updated: 2026-11-18
 | Wouxun KG-689E / KG-699E | `drivers/newchirp_wouxun_kg689e.py` | Wouxun KG669V clone serial, 9600 8N1, DTR on (OEM CPS) | 128 channels + names, CPS block plan, replay-tested | CPS write spans with radio-limit check, replay-tested | Preserved, not decoded | Experimental; no hardware |
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
+| Icom IC-F50V / IC-F60V (capture) | `drivers/newchirp_icom_f50v_capture.py` | Icom clone serial, 9600, model ID learned from the radio | Raw memory capture only, no channels decoded | Never | None | Experimental capture tool; no hardware |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom CI-V live radios (IC-910 and others) | Pinned CHIRP `icomciv.py` with `drivers/newchirp_icomciv_tone_compat.py` | Icom CI-V serial | Unset CTCSS tones read as 88.5 Hz instead of stopping the read | Stock CHIRP driver | Stock CHIRP driver | Compatibility override; offline-tested |
 | Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -1926,6 +1927,27 @@ Last updated: 2026-11-18
 - Next milestone: Tony retests the next build from an unrepaired radio state,
   confirms the display changes to `CL IN`, and verifies the edited channel by
   read-back.
+
+### Icom IC-F50V / IC-F60V capture
+
+- Profile: `drivers/newchirp_icom_f50v_capture.py` (2026-11-19, request
+  mailbox INBOX:816). Web Programmer: `icom-ic-f50v-f60v-capture`.
+- Why: no public memory map, protocol notes or shared files exist, CHIRP
+  has no driver, and Icom's CS-F50V is dealer software that NewChirp has
+  not obtained.
+- Basis: CHIRP's `icf520.py` (IC-F621-2, same land-mobile line) uses
+  Icom's standard clone protocol: CLONE_ID `E0` → 4-byte model ID,
+  CLONE_OUT `E2` with that ID → 16-byte legacy hex data frames → `Icom Inc.`
+  end frame. The profile learns the model ID from the radio, clones out up
+  to 64 KiB with 2-byte addresses, truncates to what the radio sends, and
+  stores the model ID in the image metadata.
+- Policy: read-only (`NEWCHIRP_WRITE_DISABLED`, `sync_out` refuses). Shows
+  no channels. Decodes nothing.
+- Driver SHA-256: `a00c14061e82ad8e578891466ff7f581a952ecf3809361660080a73e42d28465`
+- Evidence: `test/icom_f50v_capture_test.py` (CHIRP's Icom clone simulator
+  with an unknown model ID and size). Hardware: none.
+- Next milestone: two or three owner captures with known channels, or
+  CS-F50V `.icf` files, to map channel records; then a write-limited driver.
 
 ### Icom CI-V unset tone compatibility
 

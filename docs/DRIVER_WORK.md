@@ -258,7 +258,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### IC-F60V
 
-- **#w-20261119-dada new_driver | open | normal:** IC-F60V commercial VHF handheld support
+- **#w-20261119-dada new_driver | awaiting_user | normal:** IC-F60V commercial VHF handheld support
   Feature request from a 1.0.61 user. Not in CHIRP. Needs the Icom CS-F60 programming software and a radio image or capture.
   Source: `email` INBOX:816
 

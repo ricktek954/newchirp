@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:41:02",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "drivers/newchirp_icom_f50v_capture.py",
+  "item": "w-20261119-dada",
+  "occurred_at": "2026-11-19",
+  "summary": "Read-only capture profile (desktop and Web Programmer) that learns the model ID and saves the full image for layout work"
+}

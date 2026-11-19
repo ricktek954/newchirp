@@ -563,7 +563,8 @@ class UploadHandshakeTest(unittest.TestCase):
         )
         self.assertEqual(flagged, sorted([
             "Baofeng_K67_Pro_CPS_V1.1.2", "Binqi_BQ-889_Analog_Probe",
-            "Connect_Systems_CS750", "Icom_ID-50", "Icom_ID-52",
+            "Connect_Systems_CS750", "Icom_IC-F50V_F60V_Capture",
+            "Icom_ID-50", "Icom_ID-52",
             "KSUN_UV-K60-Plus", "Kenwood_TK-3401D", "Kenwood_TK-350",
             "Kenwood_TK-359", "Kenwood_TK-863G", "Kenwood_TM-V71_CloneMode",
             "Radioddity_DB35-G", "Radtel_RT-860", "Radtel_RT-950",

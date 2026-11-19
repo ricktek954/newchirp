@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:41:02",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "docs/DRIVER_STATUS.md",
+  "item": "w-20261119-dada",
+  "occurred_at": "2026-11-19",
+  "summary": "Searched for CS-F50V, memory maps, .icf files and CHIRP tickets: none public; CS-F50V is dealer software. Related IC-F621-2 (icf520.py) uses standard Icom clone framing."
+}
