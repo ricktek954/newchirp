@@ -82,6 +82,7 @@ Last updated: 2026-11-18
 | Icom IC-41S | `drivers/newchirp_ic41s.py` | Legacy Icom clone serial, 9600 8N1 | Yes, hardware pending | Yes, experimental | Hidden | Experimental |
 | Kenwood TM-D710P / TM-D710GP | `drivers/newchirp_tmd710.py` | CHIRP TM-D710/TM-D710G clone serial | Hardware-read via rear PC port on one TM-D710A | Hardware write succeeded with 8-character names | Stock driver | Identity compatibility; read-back pending |
 | Kenwood TM-V71A/E (clone mode) | `drivers/newchirp_tmv71.py` | MCP-2A clone serial, 8N1 RTS/CTS, probed baud, `0M PROGRAM` + 256-byte `R` blocks to 0x7EFF | Yes, replay-tested | Disabled | Body settings, Sky Command removed | Experimental read-only |
+| Alinco DR-735 (T/E/R/J) | Pinned CHIRP `alinco_dr735t.py` with `drivers/newchirp_alinco_dr735.py` | DR-735 Memory Editor serial, 38400 8N1, echoed `AL~` lines on the rear LEFT speaker jack | 1000 common + 414 extended channels, VFO/settings/DTMF blocks kept; replay-tested | 1000 common channels with per-model band check; extended channels read-only | Not exposed yet | Experimental; hardware pending |
 | Kenwood TM-D710/V71/TH-D72/TH-D74 (live mode) | `drivers/newchirp_kenwood_live_cache.py` | CHIRP Kenwood live CAT | Stock driver | Fresh-connection write and erase fixed | Stock driver | Write fix offline-tested |
 | Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation and transient checksum retry; offline-tested | Stock driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
@@ -1619,6 +1620,53 @@ Last updated: 2026-11-18
 - Next milestone: with a saved radio image and physical TK-270G, compare
   KPG-56D and NewChirp reads, perform an unchanged NewChirp write, then compare
   both read-backs for all channel and group metadata.
+
+### Alinco DR-735T/E/R/J
+
+- Maintained file: `drivers/newchirp_alinco_dr735.py`. It replaces the stock
+  `AlincoDR735T` methods in place, so the `Alinco_DR735T` ID and existing
+  64,000-byte images keep working. Protocol: `docs/ALINCO_DR735_PROTOCOL.md`
+- Source: Alinco DR-735 Memory Editor 0.06. Download SHA-256
+  `3931cfc1cab4b977d4f433582850995ed323cd7dc3c1f62e247281c0c7992924`,
+  assembly SHA-256
+  `a7e5ce73a821bb2469b546edfe943c8c7cac6cea39314b4a2599c7aa71f80eaa`
+- Transport: 38400 8N1. Every command is CRLF-terminated, and its echo from
+  the single-wire ERW-7 is validated; cables that don't echo are accepted.
+  Read: `AL~` → `OK`, `AL~WHO` (9 OEM identities), `AL~EEPEL` for common
+  channels and `AL~EEPDL` for extended channels and trailer blocks, with
+  500 ms per block. Write: `AL~DR735J` → `OK`, 1000 `AL~EEPEL W` → `OK`,
+  `AL~RESET` → `OK`.
+- Implemented:
+  - Channel fields: OEM tone semantics (TSQL encodes and decodes the same
+    tone; Cross Tone->Tone for split tones), both DCS bytes, and the
+    48-character name set.
+  - Records: delete writes 0xFF (`can_delete` on), 10 banks, and the pch
+    link, fav, bell, BCL, heterodyne, dcsOff and colors as extras.
+  - Bands: per-model ranges (EN and RN narrow, no airband).
+  - Extended channels: rows 1000–1413 use the OEM numbering (L, R, P, APL,
+    APH, CAV, CAU, d00–d99 L/R) and are read-only.
+  - Reads: if the extended part of a read fails, the 1000 common channels
+    are still kept.
+- Read/write policy: the read covers everything the OEM reads. The write
+  sends only the 1000 common channels, the same EEPEL path stock CHIRP
+  uses. Before entering write mode, it rejects any channel outside the
+  connected model's bands, and an image read from a different model ID.
+  Extended channels, VFOs, colors, settings and DTMF are never written.
+- Evidence:
+  - E1: static trace of `sio`, `btRead_Click`, `btWrite_Click`, `ExpandMem`
+    and `Memory.btnOK_Click`.
+  - E2: replay in `test/alinco_dr735_driver_test.py` (identities, OEM
+    addresses, echo/no-echo, missing-echo and missing-reply diagnostics,
+    short block, stock image decode and round trip, tone/DCS/name encode,
+    delete, banks, upload sequence, band and model refusals, extended
+    channels not written).
+  - Web mirror: `lib/alinco-dr735t-web.ts` in the web repo, covered by
+    `scripts/test-experimental-web-programmer.mjs`.
+- Physical-radio validation: none
+- Next milestone: a physical DR-735T read (common and extended) compared
+  with the OEM editor, then one controlled common-channel write and
+  read-back. After that, decode settings and enable extended-channel writes
+  through `EEPDL` with the OEM's settings read-modify-write.
 
 ### Kenwood TM-V71A/E clone mode
 

@@ -1,8 +1,16 @@
 # NewChirp driver work ledger
 
-Generated from `database/driver_work.sqlite3` on 2026-11-18.
+Generated from `database/driver_work.sqlite3` on 2026-11-19.
 
 Use `python3 scripts/driver_work.py show <id>` for event history.
+
+## Alinco
+
+### DR-735
+
+- **#94 bug | pending_validation | high:** DR-735T read fails after about one second on MX Linux
+  Forum report: NewChirp sees the USB serial port but Read from radio fails after ~1 s. Stock CHIRP alinco_dr735t driver skips the OEM AL~ wake, accepts only DR735TN/TE, uses the bridge's 0.25 s timeout (OEM 500 ms) and calls exit(1) on a short block. Reverse engineering DR-735 Memory Editor 0.06 for a full override.
+  Source: `forum` newchirp.net forum topic 56 post 194
 
 ## AnyTone
 
