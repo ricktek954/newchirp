@@ -988,25 +988,28 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final membershipSet = memberships.toSet();
     _radioMappings = [
       for (var modelIndex = 0; modelIndex < _radioMappings.length; modelIndex++)
-        _radioMappings[modelIndex].copyWith(
-          mappings: [
-            for (final mapping in _radioMappings[modelIndex].mappings)
-              mapping.copyWith(
-                channelLocations: () {
-                  final locations = mapping.channelLocations
-                      .where((value) => value != location)
-                      .toList();
-                  if (membershipSet.contains((
-                    modelIndex: modelIndex,
-                    mappingIndex: mapping.index,
-                  ))) {
-                    locations.add(location);
-                  }
-                  return locations;
-                }(),
-              ),
-          ],
-        ),
+        if (!_radioMappings[modelIndex].editable)
+          _radioMappings[modelIndex]
+        else
+          _radioMappings[modelIndex].copyWith(
+            mappings: [
+              for (final mapping in _radioMappings[modelIndex].mappings)
+                mapping.copyWith(
+                  channelLocations: () {
+                    final locations = mapping.channelLocations
+                        .where((value) => value != location)
+                        .toList();
+                    if (membershipSet.contains((
+                      modelIndex: modelIndex,
+                      mappingIndex: mapping.index,
+                    ))) {
+                      locations.add(location);
+                    }
+                    return locations;
+                  }(),
+                ),
+            ],
+          ),
     ];
   }
 

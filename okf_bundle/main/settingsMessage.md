@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/settingsMessage
 language: dart
 ---
@@ -28,7 +28,7 @@ Widget_settingsMessage({
 ```
 
 ## Source
-Lines 6196–6201 in `main.dart`
+Lines 6199–6204 in `main.dart`
 
 ## Relationships
 

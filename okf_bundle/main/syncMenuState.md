@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/syncMenuState
 language: dart
 ---
@@ -23,7 +23,7 @@ void_syncMenuState()
 ```
 
 ## Source
-Lines 1148–1148 in `main.dart`
+Lines 1151–1151 in `main.dart`
 
 ## Relationships
 

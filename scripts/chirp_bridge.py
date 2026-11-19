@@ -2051,10 +2051,13 @@ def apply_mapping_payload(radio, requested_models, active_locations):
         if not changed:
             continue
         if not current_state["editable"]:
-            raise RuntimeError(
-                "%s are fixed by this radio and cannot be changed."
-                % current_state["name"]
+            # Fixed zones follow channel numbers and cannot be edited, so a
+            # different membership list only reflects channels the user
+            # added, moved or removed. The radio derives the real zones.
+            logging.getLogger("newchirp.bridge").info(
+                "Ignoring membership changes to fixed %s", current_state["name"]
             )
+            continue
 
         desired = {}
         for key, entry in requested_by_index.items():

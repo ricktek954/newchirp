@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/moveChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ void_moveChannel(int fromIndex, int toIndex)
 ```
 
 ## Source
-Lines 1972–1972 in `main.dart`
+Lines 1975–1975 in `main.dart`
 
 ## Relationships
 

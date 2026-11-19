@@ -110,6 +110,51 @@ void main() {
     expect(remapped.single.mappings.single.channelLocations, [2, 4]);
   });
 
+  test('fixed zones keep their memberships when channels move', () {
+    const fixed = RadioMappingModel(
+      index: 0,
+      name: 'Zones',
+      editable: false,
+      multiple: false,
+      mappings: [
+        RadioMappingEntry(
+          index: '1',
+          name: 'Zone 1',
+          channelLocations: [1, 2, 3],
+          nameEditable: false,
+        ),
+      ],
+    );
+
+    final remapped = remapRadioMappingLocations([fixed], {1: 2, 2: 3, 3: 4});
+
+    expect(remapped.single.mappings.single.channelLocations, [1, 2, 3]);
+  });
+
+  test('fixed zones never count as a mapping change', () {
+    const fixed = RadioMappingModel(
+      index: 0,
+      name: 'Zones',
+      editable: false,
+      multiple: false,
+      mappings: [
+        RadioMappingEntry(
+          index: '1',
+          name: 'Zone 1',
+          channelLocations: [1, 2, 3],
+          nameEditable: false,
+        ),
+      ],
+    );
+    final moved = fixed.copyWith(
+      mappings: [
+        fixed.mappings.single.copyWith(channelLocations: [2, 3, 4]),
+      ],
+    );
+
+    expect(radioMappingsSignature([fixed]), radioMappingsSignature([moved]));
+  });
+
   test('finds the narrowest contiguous bank range for insertion', () {
     const models = [
       RadioMappingModel(

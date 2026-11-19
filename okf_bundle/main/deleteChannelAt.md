@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/deleteChannelAt
 language: dart
 ---
@@ -23,7 +23,7 @@ void_deleteChannelAt(int index)
 ```
 
 ## Source
-Lines 3171–3171 in `main.dart`
+Lines 3174–3174 in `main.dart`
 
 ## Relationships
 

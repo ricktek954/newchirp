@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-19 21:25:13",
+  "kind": "new_driver",
+  "manufacturer": "Icom",
+  "model": "IC-F60V",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:816",
+  "status": "open",
+  "summary": "Feature request from a 1.0.61 user. Not in CHIRP. Needs the Icom CS-F60 programming software and a radio image or capture.",
+  "title": "IC-F60V commercial VHF handheld support",
+  "uid": "w-20261119-dada"
+}

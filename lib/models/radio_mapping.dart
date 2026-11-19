@@ -107,8 +107,10 @@ List<Map<String, Object?>> radioMappingsToJson(
   Iterable<RadioMappingModel> models,
 ) => models.map((model) => model.toJson()).toList();
 
+/// Fixed (non-editable) zone models are derived from channel numbers by the
+/// radio, so they never count as a user change.
 String radioMappingsSignature(Iterable<RadioMappingModel> models) =>
-    jsonEncode(radioMappingsToJson(models));
+    jsonEncode(radioMappingsToJson(models.where((model) => model.editable)));
 
 ({int start, int end})? mappingRangeAt(
   Iterable<RadioMappingModel> models,
@@ -138,17 +140,21 @@ List<RadioMappingModel> remapRadioMappingLocations(
 ) {
   return models
       .map(
-        (model) => model.copyWith(
-          mappings: [
-            for (final mapping in model.mappings)
-              mapping.copyWith(
-                channelLocations: _remapLocations(
-                  mapping.channelLocations,
-                  locations,
-                ),
+        // A fixed zone follows the channel number, not the channel, so moving
+        // a channel must not move its zone membership.
+        (model) => !model.editable
+            ? model
+            : model.copyWith(
+                mappings: [
+                  for (final mapping in model.mappings)
+                    mapping.copyWith(
+                      channelLocations: _remapLocations(
+                        mapping.channelLocations,
+                        locations,
+                      ),
+                    ),
+                ],
               ),
-          ],
-        ),
       )
       .toList();
 }

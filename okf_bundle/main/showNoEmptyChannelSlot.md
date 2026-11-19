@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/showNoEmptyChannelSlot
 language: dart
 ---
@@ -23,7 +23,7 @@ void_showNoEmptyChannelSlot()
 ```
 
 ## Source
-Lines 2243–2243 in `main.dart`
+Lines 2246–2246 in `main.dart`
 
 ## Relationships
 

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:25:12",
+  "details": "Odd-split channel programmed, written and read back correctly (INBOX:815). With the earlier name write/restore and channel clear, every FT-50 write path NewChirp changed is hardware-confirmed.",
+  "event_type": "hardware_test",
+  "external_ref": "",
+  "item": "69",
+  "occurred_at": "2026-11-19",
+  "summary": "reporter hardware test: pass"
+}

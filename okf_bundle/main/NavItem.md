@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/NavItem
 language: dart
 ---
@@ -27,7 +27,7 @@ class _NavItem
 - `build`
 
 ## Source
-Lines 6961–7004 in `main.dart`
+Lines 6964–7007 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/RadioSettingsSourceActions
 language: dart
 ---
@@ -27,7 +27,7 @@ class RadioSettingsSourceActions
 - `build`
 
 ## Source
-Lines 7145–7183 in `main.dart`
+Lines 7148–7186 in `main.dart`
 
 ## Relationships
 

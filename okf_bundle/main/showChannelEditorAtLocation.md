@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/showChannelEditorAtLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_showChannelEditorAtLocation_showChannelEditorAtLocation
 ```
 
 ## Source
-Lines 4550–4550 in `main.dart`
+Lines 4553–4553 in `main.dart`
 
 ## Relationships
 

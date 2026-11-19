@@ -28,7 +28,7 @@ Last updated: 2026-11-18
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
-| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables (hardware-confirmed 2026-11-19). Known limitation: odd-split field write untested on hardware | Stock FT-50 settings | Supported; core read/write hardware-confirmed 2026-11-19 |
+| Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables; odd-split channel write (all hardware-confirmed 2026-11-19) | Stock FT-50 settings | Supported; read and write hardware-confirmed 2026-11-19 |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950 Pro CPS 1.3.3 clone serial, 115200 8N1 + RTS/DTR | 990 channels + full CPS map (272 blocks); old-map read hardware-confirmed | Yes, CPS write path, offline-tested | Hidden | Experimental; write hardware pending |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
@@ -227,6 +227,8 @@ Last updated: 2026-11-18
   CHIRP's `split` duplex with the stored offset as the transmit frequency.
 - Write policy: the stock FT-50 encoder now accepts `split`; channel fields
   continue to use the established 16-byte record layout
+- Hardware (2026-11-19): the reporter programmed an odd-split channel,
+  wrote it, and read it back correctly (mailbox INBOX:815).
 - Evidence: email UID 672 from `[redacted-email]` supplied NewChirp image
   `newchirp-1tmrlsdr.img`, SHA-256
   `db87e5dd14f0333f1f7fe72e35cfb984054d96c30c543c33c7ef092cfbccca32`
@@ -895,6 +897,21 @@ Last updated: 2026-11-18
   complete physical image and official CPS export, then correct the channel
   flags and settings byte map
 
+### Fixed-zone radios (StaticBankModel)
+
+- Override: `drivers/newchirp_static_bank_compat.py` reports the fixed zones
+  of 13 radios (BF-F8HP-PRO, UV-17ProGPS family, GM-32, RT-910 and others)
+  as read-only "Zone N" blocks of channels.
+- 2026-11-19 write fix (mailbox INBOX:812, BF-F8HP-PRO on 1.0.60): after
+  channels were inserted or moved, the app shifted fixed-zone memberships
+  with them and the write stopped with "Zones are fixed by this radio and
+  cannot be changed." The app now leaves fixed zones alone
+  (`remapRadioMappingLocations`, `_restoreMappingMembershipsAt`), never
+  counts them as a mapping change (`radioMappingsSignature`), and the
+  bridge ignores a fixed zone's membership list instead of refusing the
+  write. Tests: `test_write_ignores_shifted_fixed_zone_memberships`,
+  `test/radio_mapping_test.dart`.
+
 ### Baofeng GM-32
 
 - Maintained driver: `drivers/newchirp_gm32.py`
@@ -932,7 +949,9 @@ Last updated: 2026-11-18
   upstream UV-32 leaves them deasserted in NewChirp
 - Hardware validation: a read and a write were tested successfully on
   2026-10-25. The driver stays experimental. These captures show the
-  UV-32 programming link.
+  UV-32 programming link. On 2026-11-19 a reporter confirmed NewChirp
+  1.0.61 reads the radio's fractional CTCSS tones (141.3, 103.5 Hz)
+  correctly after the `uv17progps_compat` tone fix (mailbox INBOX:813).
 - Website catalog: listed as experimental in both the Baofeng section and
   New Experimental Radio Support
 - Next milestone: on later writes, confirm channels 8-14 stay simplex

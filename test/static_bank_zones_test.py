@@ -58,6 +58,20 @@ class StaticZoneTest(unittest.TestCase):
             [b.get_name() for b in model.get_memory_mappings(
                 radio.get_memory(115))], ["Zone 2"])
 
+    def test_write_ignores_shifted_fixed_zone_memberships(self):
+        # 2026-11-19 report (INBOX:812): after inserting channels the app
+        # shifted fixed-zone memberships and the write stopped with "Zones
+        # are fixed by this radio and cannot be changed."
+        radio = self._radio("Baofeng_BF-F8HP-PRO", "Baofeng_BF-F8HP-PRO.img")
+        before = self.bridge.mapping_payload(radio)
+        requested = [dict(before[0], mappings=[
+            dict(entry, channelLocations=[
+                location + 1 for location in entry["channelLocations"]])
+            for entry in before[0]["mappings"]
+        ])]
+        self.bridge.apply_mapping_payload(radio, requested, {1, 2, 3})
+        self.assertEqual(self.bridge.mapping_payload(radio), before)
+
     def test_every_fixed_zone_radio_produces_its_zones(self):
         from chirp import chirp_common
         checked = 0

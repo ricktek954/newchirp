@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: radioMappingsSignature
+description: Fixed (non-editable) zone models are derived from channel numbers by the
 resource: models/radio_mapping.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:26:50Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: models/radio_mapping/radioMappingsSignature
 language: dart
 ---
 
 # radioMappingsSignature
+
+Fixed (non-editable) zone models are derived from channel numbers by the
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 StringradioMappingsSignature(Iterable<RadioMappingModel> models)
 ```
 
+## Docstring
+
+Fixed (non-editable) zone models are derived from channel numbers by the
+radio, so they never count as a user change.
+
 ## Source
-Lines 110–110 in `models/radio_mapping.dart`
+Lines 112–112 in `models/radio_mapping.dart`
 
 ## Relationships
 

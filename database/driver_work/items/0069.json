@@ -8,7 +8,7 @@
   "reporter": "",
   "source": "email",
   "source_ref": "INBOX:722",
-  "status": "pending_validation",
+  "status": "hardware_tested",
   "summary": "The OEM ADMS-1E uses 9600 8N2. A 1.0.56 name-only write and restore committed correctly and preserved all other channels.",
   "title": "Two-stop-bit transport and odd-split write",
   "uid": "69"

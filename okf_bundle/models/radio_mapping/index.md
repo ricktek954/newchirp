@@ -11,7 +11,7 @@
 - [copyWith](copyWith.md)
 - [mappingRangeAt](mappingRangeAt.md)
 - [radioMappingsFromJson](radioMappingsFromJson.md)
-- [radioMappingsSignature](radioMappingsSignature.md)
+- [radioMappingsSignature](radioMappingsSignature.md) — Fixed (non-editable) zone models are derived from channel numbers by the
 - [radioMappingsToJson](radioMappingsToJson.md)
 - [remapRadioMappingLocations](remapRadioMappingLocations.md)
 - [retainingChannels](retainingChannels.md)

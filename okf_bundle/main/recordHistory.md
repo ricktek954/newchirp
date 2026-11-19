@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/recordHistory
 language: dart
 ---
@@ -23,7 +23,7 @@ void_recordHistory({bool preserveMultiSelection = false})
 ```
 
 ## Source
-Lines 1124–1124 in `main.dart`
+Lines 1127–1127 in `main.dart`
 
 ## Relationships
 

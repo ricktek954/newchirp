@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/rememberChannelImageBaseline
 language: dart
 ---
@@ -23,7 +23,7 @@ void_rememberChannelImageBaseline({required bool fromRadio})
 ```
 
 ## Source
-Lines 1013–1013 in `main.dart`
+Lines 1016–1016 in `main.dart`
 
 ## Relationships
 

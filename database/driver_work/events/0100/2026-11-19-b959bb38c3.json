@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:25:13",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "scripts/chirp_bridge.py",
+  "item": "100",
+  "occurred_at": "2026-11-19",
+  "summary": "App no longer shifts fixed-zone memberships when channels move, fixed zones never count as a mapping change, and the bridge ignores fixed-zone membership lists"
+}

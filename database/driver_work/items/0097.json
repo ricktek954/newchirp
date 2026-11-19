@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:773,774",
-  "status": "awaiting_user",
+  "status": "closed",
   "summary": "Windows 1.0.57 COM7: PROGRAMBFNOR no response on radio 2 and then on the previously working radio 1, so the cable/port path rather than either radio. Reporter also asked how to select all channels (no Ctrl+A).",
   "title": "No response on both radios after writing a copied channel list",
   "uid": "97"

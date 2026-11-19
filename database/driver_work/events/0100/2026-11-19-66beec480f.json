@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:25:13",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:812",
+  "item": "100",
+  "occurred_at": "2026-11-19",
+  "summary": "Write after adding channels stopped with 'Zones are fixed by this radio and cannot be changed' (1.0.60)"
+}

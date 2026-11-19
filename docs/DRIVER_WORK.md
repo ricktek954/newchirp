@@ -45,7 +45,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#96 bug | awaiting_user | normal:** Every action fails instantly with 'Reported error: 1' on macOS 12
   NewChirp 1.0.54 on macOS 12.7.6: model-info (instructions) failed in ~50 ms with message '1' for read, write and settings. Not reproducible with the 1.0.54 bridge here; bundled Python minos is 10.15/11. Error text was an exception argument only.
   Source: `email` INBOX:785
-- **#97 bug | awaiting_user | normal:** No response on both radios after writing a copied channel list
+- **#97 bug | closed | normal:** No response on both radios after writing a copied channel list
   Windows 1.0.57 COM7: PROGRAMBFNOR no response on radio 2 and then on the previously working radio 1, so the cable/port path rather than either radio. Reporter also asked how to select all channels (no Ctrl+A).
   Source: `email` INBOX:773,774
 
@@ -90,7 +90,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### GM-32
 
-- **#86 bug | fix_committed | high:** GMRS repeater TX and RX tones decode blank
+- **#86 bug | hardware_tested | high:** GMRS repeater TX and RX tones decode blank
   NewChirp 1.0.57 read 33 channels but omitted TX and RX tones on a GMRS repeater channel. Capture raw NewChirp .img and CPS source data for the same unmodified channel.
   Source: `email` INBOX:725
 - **#23 maintenance | experimental | normal:** Current driver status
@@ -255,6 +255,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#54 maintenance | experimental | normal:** Current driver status
   Transport: NewChirp ICF clone transport, 9600 8N1. Read: Four identity attempts; checksum-validated contiguous full image; invisible-slot guard. Write: NewChirp clone-in boundary, 362 32-byte blocks, required `E6 00`. Settings: Stock ICX90 decoder. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:78
+
+### IC-F60V
+
+- **#w-20261119-dada new_driver | open | normal:** IC-F60V commercial VHF handheld support
+  Feature request from a 1.0.61 user. Not in CHIRP. Needs the Icom CS-F60 programming software and a radio image or capture.
+  Source: `email` INBOX:816
 
 ### ID-50
 
@@ -581,7 +587,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### FT-50
 
-- **#69 bug | pending_validation | high:** Two-stop-bit transport and odd-split write
+- **#69 bug | hardware_tested | high:** Two-stop-bit transport and odd-split write
   The OEM ADMS-1E uses 9600 8N2. A 1.0.56 name-only write and restore committed correctly and preserved all other channels.
   Source: `email` INBOX:722
 - **#6 maintenance | hardware_tested | normal:** Current driver status

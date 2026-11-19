@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/revealSelectedChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ voidrevealSelectedChannel()
 ```
 
 ## Source
-Lines 10062–10062 in `main.dart`
+Lines 10065–10065 in `main.dart`
 
 ## Relationships
 

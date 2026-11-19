@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T14:20:25Z"
+timestamp: "2026-11-19T21:20:42Z"
 concept_id: chirp_bridge/mapping_models_by_index
 language: python
 ---

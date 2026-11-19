@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T10:26:50Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: models/radio_mapping/remapLocations
 language: dart
 ---
@@ -24,7 +24,7 @@ List_remapLocations_remapLocations
 ```
 
 ## Source
-Lines 156–156 in `models/radio_mapping.dart`
+Lines 162–162 in `models/radio_mapping.dart`
 
 ## Relationships
 

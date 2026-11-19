@@ -8,7 +8,7 @@
   "reporter": "",
   "source": "email",
   "source_ref": "INBOX:725",
-  "status": "fix_committed",
+  "status": "hardware_tested",
   "summary": "NewChirp 1.0.57 read 33 channels but omitted TX and RX tones on a GMRS repeater channel. Capture raw NewChirp .img and CPS source data for the same unmodified channel.",
   "title": "GMRS repeater TX and RX tones decode blank",
   "uid": "86"

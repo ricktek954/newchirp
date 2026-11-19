@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:25:13",
+  "details": "",
+  "event_type": "hardware",
+  "external_ref": "email:INBOX:814",
+  "item": "97",
+  "occurred_at": "2026-11-19",
+  "summary": "Reporter: after a reboot and the current version both radios read and wrote perfectly; host/port issue, not a driver defect"
+}

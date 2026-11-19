@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/keepMidlandRepeater
 language: dart
 ---
@@ -23,7 +23,7 @@ void_keepMidlandRepeater(RadioChannel channel)
 ```
 
 ## Source
-Lines 3287–3287 in `main.dart`
+Lines 3290–3290 in `main.dart`
 
 ## Relationships
 

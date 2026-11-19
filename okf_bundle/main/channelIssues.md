@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T18:22:05Z"
+timestamp: "2026-11-19T21:21:35Z"
 concept_id: main/channelIssues
 language: dart
 ---
@@ -23,7 +23,7 @@ List_channelIssues_channelIssues
 ```
 
 ## Source
-Lines 1944–1944 in `main.dart`
+Lines 1947–1947 in `main.dart`
 
 ## Relationships
 

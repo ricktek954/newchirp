@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-19 21:25:13",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:811",
+  "item": "84",
+  "occurred_at": "2026-11-19",
+  "summary": "Two more 5RH Pro reads failed: 1.0.60 got one announce byte then no PROGRAM reply (INBOX:811); 1.0.61 silent on both announce speeds, reporter describes a 'Baofeng 5R' (INBOX:817, likely wrong model)"
+}
