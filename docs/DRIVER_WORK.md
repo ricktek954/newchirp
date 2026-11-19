@@ -37,6 +37,18 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1. Read: 640 channels + 10 zones, offline-tested. Write: Full image, offline-tested. Settings: Basic settings and zone names. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:51
 
+### 5RM
+
+- **#95 bug | investigating | high:** Upload fails on a slot with an out-of-range extra (PTT-ID 0xFF)
+  macOS 1.0.58 CSV write: 'Failed to load pttid value 0: Value for 255 is out of range' then 'Could not prepare channel 7 (GMRS-21): None is not in list'. A programmed slot held PTT-ID 0xFF; the uninitialized extra made stock set_memory fail and blocked the whole upload.
+  Source: `email` INBOX:783
+- **#96 bug | awaiting_user | normal:** Every action fails instantly with 'Reported error: 1' on macOS 12
+  NewChirp 1.0.54 on macOS 12.7.6: model-info (instructions) failed in ~50 ms with message '1' for read, write and settings. Not reproducible with the 1.0.54 bridge here; bundled Python minos is 10.15/11. Error text was an exception argument only.
+  Source: `email` INBOX:785
+- **#97 bug | awaiting_user | normal:** No response on both radios after writing a copied channel list
+  Windows 1.0.57 COM7: PROGRAMBFNOR no response on radio 2 and then on the previously working radio 1, so the cable/port path rather than either radio. Reporter also asked how to select all channels (no Ctrl+A).
+  Source: `email` INBOX:773,774
+
 ### 5RX
 
 - **#89 bug | awaiting_user | normal:** No response on macOS serial adapter
@@ -105,6 +117,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#82 bug | awaiting_user | high:** Channels 52-54 lose stored CTCSS during decode
   NewChirp 1.0.56 decodes channels 52-54 with no tone, while RT Systems UV-32 Programmer 5.00.29 shows CTCSS 103.5, 103.5, and 206.5. The exported CSV alone does not contain the raw tone words.
   Source: `email` INBOX:744
+- **#98 bug | investigating | normal:** CSV import fails: 'Failed to decode data using encoding utf-8'
+  Windows 1.0.58: opening a CSV saved by other software failed before parsing; reporter concluded CSV import is impossible. App read CSV strictly as UTF-8.
+  Source: `email` INBOX:787
 
 ### UV-5G Mini
 
@@ -439,6 +454,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#11 maintenance | experimental | normal:** Current driver status
   Transport: Stock USB serial, 9600 8N1 + DTR/RTS. Read: Yes, hardware pending. Write: Disabled. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:35
+
+### RT97L GMRS
+
+- **#99 new_driver | investigating | high:** RT97L GMRS needs its own programming protocol
+  Windows 1.0.58: RT97L driver gets no ACK even after STX wake-up. Reporter says the GMRS RT97L uses different OEM software and the standard RT97L Custom software cannot connect either. Reporter uploaded the GMRS programming software and a 2048-byte data file through the site file drop.
+  Source: `email` INBOX:786; file drops 9-11
 
 ## TIDRADIO
 
