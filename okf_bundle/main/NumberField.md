@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T09:28:59Z"
+timestamp: "2026-11-20T09:44:07Z"
 concept_id: main/NumberField
 language: dart
 ---
@@ -27,7 +27,7 @@ class _NumberField
 - `createState`
 
 ## Source
-Lines 11645–11663 in `main.dart`
+Lines 11642–11660 in `main.dart`
 
 ## Relationships
 

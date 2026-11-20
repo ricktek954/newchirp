@@ -7719,23 +7719,20 @@ class _TopBar extends StatelessWidget {
                           ),
                       ],
                     ),
-                    Text(
-                      busy
-                          ? status
-                          : chirpModuleName == null
-                          ? 'CHIRP-compatible channel library'
-                          : 'Experimental CHIRP module: $chirpModuleName',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: busy
-                            ? const Color(0xFF1F7455)
-                            : chirpModuleName != null
-                            ? const Color(0xFF9B5B18)
-                            : Colors.black45,
-                        fontSize: 12,
+                    if (busy || chirpModuleName != null)
+                      Text(
+                        busy
+                            ? status
+                            : 'Experimental CHIRP module: $chirpModuleName',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: busy
+                              ? const Color(0xFF1F7455)
+                              : const Color(0xFF9B5B18),
+                          fontSize: 12,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),

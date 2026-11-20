@@ -1280,6 +1280,7 @@ void main() {
 
     expect(find.text('NewChirp'), findsWidgets);
     expect(find.text('What would you like to do?'), findsOneWidget);
+    expect(find.text('CHIRP-compatible channel library'), findsNothing);
     expect(find.text('Start new'), findsNothing);
     expect(find.text('Open channel file'), findsWidgets);
     expect(find.text('Use GMRS template'), findsNothing);
