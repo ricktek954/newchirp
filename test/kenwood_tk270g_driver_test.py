@@ -156,6 +156,11 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
                     asbytes=True
                 ) != b"\xff"
             ]
+            original_table = {
+                data[offset + 3]: data[offset + 1]
+                for offset in range(0x300, 0x500, 4)
+                if data[offset] != 0xFF
+            }
             expected_bank_metadata = {
                 number: (
                     int(radio._memobj.memory[number - 1].bank),
@@ -180,18 +185,24 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
                     int(input_bank.value),
                     expected_bank_metadata[number][0],
                 )
-                self.assertEqual(
-                    int(input_bnumb.value),
-                    expected_bank_metadata[number][1],
-                )
+                self.assertTrue(0 <= int(input_bnumb.value) <= 127)
                 radio.set_memory(memory)
 
+            # Banks are kept. Positions become 1..n per bank in the order
+            # of the original 0x300 table (slot order in this CHIRP-written
+            # sample, whose record positions hold duplicates and zeros).
+            by_bank = {}
             for number in active_numbers:
-                channel = radio._memobj.memory[number - 1]
-                self.assertEqual(
-                    (int(channel.bank), int(channel.bnumb)),
-                    expected_bank_metadata[number],
-                )
+                bank, _old = expected_bank_metadata[number]
+                table_position = original_table.get(number - 1, 999)
+                by_bank.setdefault(bank, []).append((table_position, number))
+            for bank, members in by_bank.items():
+                for position, (_t, number) in enumerate(sorted(members), 1):
+                    channel = radio._memobj.memory[number - 1]
+                    self.assertEqual(
+                        (int(channel.bank), int(channel.bnumb)),
+                        (bank, position),
+                    )
             self.assertEqual(
                 int(radio._memobj.settings.banks),
                 len({bank for bank, _index in expected_bank_metadata.values()}),
@@ -253,9 +264,9 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
                 radio.sync_out()
 
             self.assertEqual(int(radio._memobj.memory[number - 1].bank), 1)
-            self.assertEqual(
-                int(radio._memobj.memory[number - 1].bnumb),
-                number - 1,
+            # The erased sentinel is replaced by a real 1-based position.
+            self.assertTrue(
+                1 <= int(radio._memobj.memory[number - 1].bnumb) <= 128
             )
             self.assertEqual(serial.writes[-1], b"E")
 
@@ -287,10 +298,96 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
             radio.set_memory(memory)
 
             self.assertEqual(int(radio._memobj.memory[other - 1].bank), 1)
-            self.assertEqual(
-                int(radio._memobj.memory[other - 1].bnumb), other - 1
+            self.assertTrue(
+                1 <= int(radio._memobj.memory[other - 1].bnumb) <= 128
             )
             self.assertEqual(radio.get_memory(edited).name.strip(), "EDITED")
+
+    def _radio_from_sample(self, name):
+        data = bytearray((SOURCE / "tests/images" / name).read_bytes())
+        data[0xA7:0xAE] = b"P2700\x05\xff"
+        radio = self.radio_class(None)
+        with tempfile.TemporaryDirectory() as temp:
+            image = Path(temp) / "Kenwood_TK-270G.img"
+            image.write_bytes(data)
+            radio.load_mmap(str(image))
+        return radio, bytes(data)
+
+    @staticmethod
+    def _table(radio):
+        data = radio.get_mmap().get_packed()
+        entries = []
+        for offset in range(0x300, 0x500, 4):
+            entry = tuple(data[offset:offset + 4])
+            if entry[0] == 0xFF:
+                break
+            entries.append(entry)
+        return entries
+
+    def test_kpg_programmed_bank_table_is_rebuilt_unchanged(self):
+        # CHIRP's TK-760G sample keeps 1-based record positions that match
+        # the 0x300 table, out of slot order (slot 41 is bank 1 position
+        # 16). Rebuilding must reproduce it byte for byte.
+        radio, original = self._radio_from_sample("Kenwood_TK-760G.img")
+        radio._prep_data()
+        rebuilt = radio.get_mmap().get_packed()
+        self.assertEqual(rebuilt[0x300:0x300 + 51 * 4], original[0x300:0x300 + 51 * 4])
+        self.assertEqual(rebuilt[0x1000:0x1040], original[0x1000:0x1040])
+        for slot in range(51):
+            self.assertEqual(rebuilt[0x2000 + slot * 48], original[0x2000 + slot * 48])
+        radio._validate_bank_state()
+
+    def test_added_last_channel_gets_the_next_position(self):
+        # 2026-11-20 report (ledger w-20261120-8af9): a KPG-programmed radio
+        # had channels 1-24 at positions 1-24 (channel 24 holding the 0x80
+        # sentinel); NewChirp gave channel 24 position 23 and a new channel
+        # 25 position 24, so position 25 was empty and the radio dropped
+        # the last channel.
+        from chirp.settings import RadioSettingGroup
+        radio, _original = self._radio_from_sample("Kenwood_TK-760G.img")
+        template = radio.get_memory(1)
+        for slot in range(128):
+            radio._memobj.memory[slot].set_raw(b"\xFF" * 48)
+        for number in range(1, 25):
+            memory = template.dupe()
+            memory.number = number
+            memory.name = "CH%02d" % number
+            memory.extra = RadioSettingGroup("extra", "Extra")
+            radio.set_memory(memory)
+            radio._memobj.memory[number - 1].bank = 1
+            radio._memobj.memory[number - 1].bnumb = number   # KPG 1-based
+        radio._memobj.memory[23].bnumb = 0x80                 # sentinel
+        added = template.dupe()
+        added.number = 25
+        added.name = "CH25"
+        added.extra = RadioSettingGroup("extra", "Extra")
+        radio.set_memory(added)
+
+        positions = [int(radio._memobj.memory[s].bnumb) for s in range(25)]
+        self.assertEqual(positions, list(range(1, 26)))
+        table = self._table(radio)
+        self.assertEqual(len(table), 25)
+        self.assertEqual(table[-1], (1, 25, 0, 24))
+        self.assertEqual(int(radio._memobj.settings.channels), 25)
+        packed = radio.get_mmap().get_packed()
+        self.assertEqual(tuple(packed[0x1000:0x1002]), (1, 25))
+        radio._validate_bank_state()
+
+    def test_deleting_channels_compacts_positions_without_stale_entries(self):
+        radio, _original = self._radio_from_sample("Kenwood_TK-760G.img")
+        before = len(self._table(radio))
+        for number in (2, 3, 42):    # two from bank 1's start, one (slot 41)
+            empty = radio.get_memory(number)
+            empty.empty = True
+            radio.set_memory(empty)
+        radio._prep_data()   # as sync_out does before writing
+        table = self._table(radio)
+        self.assertEqual(len(table), before - 3)
+        bank1 = [entry for entry in table if entry[0] == 1]
+        self.assertEqual([entry[1] for entry in bank1], list(range(1, 14)))
+        packed = radio.get_mmap().get_packed()
+        self.assertEqual(packed[0x300 + len(table) * 4:0x500], b"\xFF" * (0x200 - len(table) * 4))
+        radio._validate_bank_state()
 
     def test_transient_block_checksum_rejection_is_retried(self):
         with tempfile.TemporaryDirectory() as temp:

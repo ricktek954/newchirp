@@ -104,6 +104,23 @@ The regression fixture contains 36 active channels across four bank numbers.
 A complete decode/write round trip verifies that every active channel retains
 its original bank and bank index and that the generated counts remain nonzero.
 
+## Bank positions (2026-11-20)
+
+- Each channel record's first byte (`bnumb`) is its 1-based position within
+  its bank; byte 2 is the bank. In CHIRP's `Kenwood_TK-760G.img` sample every
+  record matches its 0x300 entry `(bank, position, bank-1, slot)`, and the
+  table is ordered by position, not slot (slot 41 is bank 1 position 16).
+- 0x1000 holds `(bank, count)` pairs, 16 bytes each.
+- Stock CHIRP treats `bnumb` as 0-127 and defaults it to `slot - 1`. On a
+  KPG-programmed radio that duplicates a position and leaves the last one
+  empty; a reporter's radio then ignored the last channel (ledger
+  `w-20261120-8af9`). NewChirp renumbers positions 1..n per bank before
+  every write, keeping the current table order.
+- Evidence level: E1 (OEM-style sample image) plus field symptom. Not yet
+  confirmed against a KPG-56D trace or a post-fix physical write.
+- Open: whether the 0x7000 per-channel ID area is indexed by slot or by
+  programmed-channel count.
+
 ## Evidence level and remaining work
 
 - Artifact identity: E1.

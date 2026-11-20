@@ -1707,6 +1707,21 @@ Last updated: 2026-11-20
   channel 24 with bank index 128. NewChirp 1.0.56 then rejected the unchanged
   upload before radio I/O because validation ran against the unnormalized
   image.
+- 2026-11-20 correction (ledger `w-20261120-8af9`, INBOX:855): 1.0.63 wrote
+  without error but the last channel in the list was unusable on the radio.
+  CHIRP's OEM-style `Kenwood_TK-760G.img` sample stores each record's
+  `bnumb` as the 1-based position within its bank, matching the 0x300 table
+  `(bank, position, bank-1, slot)`. Stock CHIRP, and so NewChirp, gave new
+  channels and the 0x80 sentinel `slot - 1` (0-based), duplicating a KPG
+  position and leaving the last one empty; `_prep_data` rebuilt 0x300 by
+  slot order without touching record positions. NewChirp's `_prep_data`
+  now renumbers every bank 1..n in the order of the current 0x300 table
+  (new or moved channels after, by slot), writes the same positions to the
+  records and the table, clears stale table entries through 0x4FF, and
+  validation requires positions 1..n per bank. The TK-760G sample's table,
+  bank counts and record positions rebuild byte for byte. The 0x7000
+  per-channel ID area is still filled by count as in stock CHIRP; whether
+  the radio indexes it by slot is unconfirmed.
 - Hardware validation: none. No controlled NewChirp write/read-back has been
   performed on a TK-270G, and the OEM serial setting has not been compared on
   the wire.

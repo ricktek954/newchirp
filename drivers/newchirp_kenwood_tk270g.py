@@ -276,6 +276,75 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
 
         tk760g._close_radio(self)
 
+    def _prep_data(self):
+        """Rebuild the bank tables with 1-based positions, as KPG-56D does.
+
+        Each channel record's ``bnumb`` is its 1-based position within its
+        bank, and the 0x300 table lists (bank, position, bank - 1, slot) in
+        that order (CHIRP's OEM-style TK-760G sample image). Stock CHIRP
+        rebuilt 0x300 by slot order and gave new channels ``slot - 1``, a
+        0-based value that duplicates a KPG position and leaves the last one
+        empty, so the radio dropped the last channel (2026-11-20 report,
+        ledger w-20261120-8af9). Renumber every bank 1..n and write the same
+        positions to the records and the table.
+
+        The existing order comes from the current 0x300 table, which is what
+        the radio holds: record positions in CHIRP-written images can be
+        duplicated or zero, while the table is consistent. Channels not in
+        the table for their bank (new or moved) follow, in slot order.
+        """
+        packed = self.get_mmap().get_packed()
+        if isinstance(packed, str):
+            packed = packed.encode("latin-1")
+        current = {}
+        for offset in range(0x300, 0x500, 4):
+            bank, position, _bank0, slot = packed[offset:offset + 4]
+            if bank == 0xFF:
+                break
+            current.setdefault(slot, (bank, position))
+
+        banks = {}
+        for slot in range(self._upper):
+            channel = self._memobj.memory[slot]
+            if channel.rxfreq[0].get_raw(asbytes=True) == b"\xFF":
+                continue
+            bank = int(channel.bank)
+            if not 1 <= bank <= 128:
+                continue
+            table_bank, position = current.get(slot, (None, 0))
+            placed = table_bank == bank
+            banks.setdefault(bank, []).append(
+                (0 if placed else 1, position if placed else 0, slot)
+            )
+
+        table = b""
+        counts = b""
+        channel_total = 0
+        for bank in sorted(banks):
+            members = sorted(banks[bank])
+            for position, (_unplaced, _old, slot) in enumerate(members, 1):
+                self._memobj.memory[slot].bnumb = position
+                table += bytes((bank, position, bank - 1, slot))
+            counts += bytes((bank, len(members))) + b"\xFF" * 14
+            channel_total += len(members)
+
+        self._memobj.settings.channels = channel_total
+        self._chs_progs = channel_total
+        self._memobj.settings.banks = len(banks)
+
+        # 128 entries of 4 bytes span 0x300-0x4FF; clear the rest so a
+        # shorter table never leaves stale entries from a longer one.
+        self._fill(0x300, table + b"\xFF" * (0x200 - len(table)))
+        self._fill(0x1000, counts + b"\xFF" * (0x1000 - len(counts)))
+
+        # Per-channel DTMF/2-tone ID area, unchanged from stock CHIRP: filled
+        # by count. Whether the radio indexes it by slot is unconfirmed.
+        self._fill(
+            0x7000,
+            b"\x00\xf0\xff\xff\xff" * channel_total
+            + b"\xff" * (5 * (self._upper - channel_total)),
+        )
+
     def _normalize_invalid_bank_metadata(self):
         """Replace erased bank sentinels before rebuilding the bank tables."""
         for number, channel in enumerate(self._memobj.memory, start=1):
@@ -287,18 +356,28 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
 
     def _validate_bank_state(self):
         active = []
+        positions = {}
         for number, channel in enumerate(self._memobj.memory, start=1):
             if channel.rxfreq[0].get_raw(asbytes=True) == b"\xFF":
                 continue
             bank = int(channel.bank)
             bank_index = int(channel.bnumb)
-            if not 1 <= bank <= 128 or not 0 <= bank_index <= 127:
+            if not 1 <= bank <= 128 or not 1 <= bank_index <= 128:
                 raise errors.InvalidValueError(
                     "TK-270G channel %i has invalid bank metadata "
                     "(bank=%i, index=%i); upload stopped before radio I/O"
                     % (number, bank, bank_index)
                 )
             active.append((number, bank))
+            positions.setdefault(bank, []).append(bank_index)
+
+        for bank, used in positions.items():
+            if sorted(used) != list(range(1, len(used) + 1)):
+                raise errors.InvalidValueError(
+                    "TK-270G bank %i positions are not 1..%i (%s); upload "
+                    "stopped before radio I/O"
+                    % (bank, len(used), sorted(used))
+                )
 
         expected_channels = len(active)
         expected_banks = len({bank for _number, bank in active})
