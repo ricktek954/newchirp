@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 20:58:07",
+  "kind": "bug",
+  "manufacturer": "Radtel",
+  "model": "RT-950 Pro, Bajeton BJ-9000 with nicFW950",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:854",
+  "status": "awaiting_user",
+  "summary": "Android app, nicFW950 profile over BLE (FFE1, MTU 23, write-without-response session). Driver sends nicFW read aa 30 00 02 05 00 00 (block 0x50200); radio returns 0 of 135 bytes after 15 s; unchanged-block probe fails the same way. BLE link itself is healthy. Most likely the radio runs stock Radtel firmware (nicFW-only command; same pattern as INBOX:781). The mobile app offers Bluetooth only for nicFW950; stock RT-950 Pro is USB cable only. Over BLE the first exchange is the block read, so the friendly 'not running nicFW950' message from the serial baud handshake never appears.",
+  "title": "Android Bluetooth read: no reply to nicFW950 block read",
+  "uid": "w-20261120-0a9e"
+}
