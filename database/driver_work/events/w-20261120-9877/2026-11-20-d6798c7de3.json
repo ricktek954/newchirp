@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 19:17:16",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:851",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "Owner: programmed with the NewChirp desktop app; channels are mainly VHF marine (156-162 MHz); radio beeps on PTT on every programmed channel; pre-write backup was deleted, so no before/after comparison is possible. Leading hypothesis: the radio's TX lockout outside the amateur bands, not a corrupted write. Not yet tested: whether a 2 m/70 cm amateur frequency in VFO mode transmits."
+}
