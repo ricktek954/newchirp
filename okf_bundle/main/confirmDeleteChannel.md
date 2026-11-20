@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:55:41Z"
+timestamp: "2026-11-20T09:04:00Z"
 concept_id: main/confirmDeleteChannel
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_confirmDeleteChannel_confirmDeleteChannel
 ```
 
 ## Source
-Lines 4805–4805 in `main.dart`
+Lines 4844–4844 in `main.dart`
 
 ## Relationships
 

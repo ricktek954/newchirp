@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:55:41Z"
+timestamp: "2026-11-20T09:04:00Z"
 concept_id: main/enumByName
 language: dart
 ---
@@ -23,7 +23,7 @@ T_enumByName<T extends Enum>
 ```
 
 ## Source
-Lines 8401–8401 in `main.dart`
+Lines 8483–8483 in `main.dart`
 
 ## Relationships
 

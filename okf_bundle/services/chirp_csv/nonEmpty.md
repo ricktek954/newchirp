@@ -1,0 +1,33 @@
+---
+okf_version: "0.2"
+type: Function
+title: nonEmpty
+resource: services/chirp_csv.dart
+tags:
+  - "lang:dart"
+  - "type:Function"
+  - "module:services"
+  - "domain:chirp_csv.dart"
+  - "git:branch:main"
+  - "git:repo:newchirp"
+timestamp: "2026-11-20T08:53:43Z"
+concept_id: services/chirp_csv/nonEmpty
+language: dart
+---
+
+# nonEmpty
+
+## Signature
+
+```dart
+StringnonEmpty(String text, String fallback)
+```
+
+## Source
+Lines 136–136 in `services/chirp_csv.dart`
+
+## Relationships
+
+| Type | Target |
+|------|--------|
+| related | [chirp_csv](/services/chirp_csv.md) |

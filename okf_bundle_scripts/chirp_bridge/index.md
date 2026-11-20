@@ -56,6 +56,7 @@
 - [normalize_upload_memory](normalize_upload_memory.md) — Apply safe coercions advertised by CHIRP validation warnings.
 - [open_serial](open_serial.md)
 - [prepare_upload_channels](prepare_upload_channels.md) — Validate and apply imported channels without touching invalid slots.
+- [preserve_unloadable_settings](preserve_unloadable_settings.md) — Write back settings CHIRP could not load exactly as the radio had them.
 - [radio_firmware](radio_firmware.md) — Return the best available firmware identity from a radio or image.
 - [radio_for](radio_for.md)
 - [radio_from_image](radio_from_image.md) — Build a driver instance backed only by a saved radio image.

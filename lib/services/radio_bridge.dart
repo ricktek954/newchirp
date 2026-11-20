@@ -198,6 +198,7 @@ class RadioInstructions {
     required this.preDownload,
     required this.preUpload,
     this.writeDisabled = false,
+    this.liveRadio = false,
   });
 
   final String? info;
@@ -207,6 +208,10 @@ class RadioInstructions {
 
   /// The driver reads this radio but never writes it yet.
   final bool writeDisabled;
+
+  /// A live radio (for example Icom CI-V) keeps no clone image: its saved
+  /// snapshot holds only the zone or band that was read.
+  final bool liveRadio;
 
   Iterable<String> get readMessages => [?experimental, ?info, ?preDownload];
   Iterable<String> get writeMessages => [?experimental, ?info, ?preUpload];
@@ -653,6 +658,7 @@ class RadioBridge {
       preDownload: data['preDownload'] as String?,
       preUpload: data['preUpload'] as String?,
       writeDisabled: data['writeDisabled'] == true,
+      liveRadio: data['liveRadio'] == true,
     );
   }
 

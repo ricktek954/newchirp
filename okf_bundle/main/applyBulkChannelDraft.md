@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:55:41Z"
+timestamp: "2026-11-20T09:04:00Z"
 concept_id: main/applyBulkChannelDraft
 language: dart
 ---
@@ -27,7 +27,7 @@ void_applyBulkChannelDraft(
 ```
 
 ## Source
-Lines 891–895 in `main.dart`
+Lines 900–904 in `main.dart`
 
 ## Relationships
 

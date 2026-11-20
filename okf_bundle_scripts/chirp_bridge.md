@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:20:42Z"
+timestamp: "2026-11-20T08:57:34Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -51,6 +51,7 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [setting_value_json](/chirp_bridge/setting_value_json.md) |
 | related | [settings_tree_json](/chirp_bridge/settings_tree_json.md) |
 | related | [coerce_setting_value](/chirp_bridge/coerce_setting_value.md) |
+| related | [preserve_unloadable_settings](/chirp_bridge/preserve_unloadable_settings.md) |
 | related | [apply_setting_changes](/chirp_bridge/apply_setting_changes.md) |
 | related | [apply_json](/chirp_bridge/apply_json.md) |
 | related | [nearest_programmable_frequency](/chirp_bridge/nearest_programmable_frequency.md) |

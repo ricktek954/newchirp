@@ -1872,8 +1872,17 @@ Last updated: 2026-11-18
   responses on COM13
 - Driver SHA-256:
   `ab65a5b0699585d042257b727dc18003d0d5c41f649ed83dfdff659973d5a4d0`
-- Hardware validation: none. The field report did not complete a read.
-- Next milestone: luc retests after confirming CI-V address `A2h`, USB baud
+- Band switching (2026-11-20, mailbox INBOX:825): a live radio keeps no
+  clone image, so its saved snapshot holds only the band that was read.
+  Choosing the 430 band from the Radio section list fed that snapshot to the
+  image reader, which stopped with `Unknown file format`. `model-info` now
+  reports `liveRadio`, and the app reads the chosen band from the radio.
+  Tests: `test/chirp_bridge_catalog_test.py` (`ModelInfoTest`).
+- Hardware validation: 2026-11-19 NewChirp 1.0.61 read 28 channels from a
+  physical IC-9700 on COM7 (mailbox INBOX:825). Read only; no write and no
+  second-band read confirmed yet.
+- Next milestone: the 430 band read after the band-switch fix, then a channel
+  write that reads back after a power cycle. Earlier: luc retests after confirming CI-V address `A2h`, USB baud
   rate 115200, `Unlink from [REMOTE]`, and `CI-V Transceive off`; then record
   a successful multi-band read and separate read/write validation
 
@@ -2332,6 +2341,33 @@ Last updated: 2026-11-18
 - Next milestone: import a redacted R7 CPS 2.0 Zone XML sample, compare every
   field with CPS2, then research direct programming only if a physical R7,
   entitled CPS installation, and compatible cable are available
+
+### Settings the driver cannot load (all clone radios)
+
+- Bridge: `preserve_unloadable_settings` in `scripts/chirp_bridge.py`
+  (2026-11-20, UV-5R report on 1.0.61, mailbox INBOX:833).
+- Issue: a radio can store a value outside a driver's range, for example a
+  UV-5R factory squelch calibration of 124 against `uv5r.py`'s 0-123. CHIRP
+  logs `Failed to load ...` and leaves the value unset. The driver's
+  `set_settings` then raised `int() argument must be ... not 'NoneType'`, so no
+  setting could be written.
+- Correction: before `set_settings`, each unloaded value gets the radio's own
+  stored value back, without validation, and is marked read-only. The app
+  already shows these values as unsupported, and the radio's bytes are
+  written back unchanged. Clamping into range was rejected because it would
+  overwrite factory calibration.
+- Evidence: `UnloadableSettingTest` in `test/chirp_bridge_upload_test.py`
+  (uv5r.py image with the service block). Hardware validation: none.
+
+### Blank CSV cross mode
+
+- Bridge `apply_json` and `lib/services/chirp_csv.dart` (2026-11-20, UV-32
+  report on 1.0.54, mailbox INBOX:828).
+- A CSV with an empty `CrossMode` cell gave every channel the cross mode
+  `''`. CHIRP rejects that value, so the write stopped on the first such
+  channel, even one that was not a Cross channel. Blank now imports as
+  `Tone->Tone`, and the bridge ignores an invalid cross mode on channels that
+  are not Cross. Tests: `chirp_csv_test.dart`, `chirp_bridge_upload_test.py`.
 
 ## Reusable NewChirp transport work
 

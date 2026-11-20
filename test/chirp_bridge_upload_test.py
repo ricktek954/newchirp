@@ -1500,6 +1500,35 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(coordinates["GMRS1"], (26.1224, -80.1373))
 
 
+class UnloadableSettingTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.directory = bridge.load_chirp(str(SOURCE), str(VENDOR))
+
+    def test_out_of_range_calibration_is_written_back_unchanged(self):
+        radio = bridge.radio_from_image(
+            # Same uv5r.py service-settings code as the UV-5R, on a
+            # non-original firmware image that has the service block.
+            self.directory, "Baofeng_F-11",
+            str(SOURCE / "tests/images/Baofeng_F-11.img"),
+        )
+        self.assertEqual(type(radio).__module__.rsplit(".", 1)[-1], "uv5r")
+        squelch = radio._memobj.squelch_new.vhf
+        squelch.sql9 = 124  # factory value above CHIRP's 0-123 range
+        settings = radio.get_settings()
+        self.assertTrue(any(
+            setting.get_name() == "squelch_new.vhf.sql9"
+            and not setting.value.initialized
+            for group in settings for setting in group.walk()
+        ))
+
+        preserved = bridge.preserve_unloadable_settings(settings)
+        self.assertIn("squelch_new.vhf.sql9", preserved)
+        radio.set_settings(settings)
+
+        self.assertEqual(int(radio._memobj.squelch_new.vhf.sql9), 124)
+
+
 class FrequencyPrecisionTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -1517,6 +1546,20 @@ class FrequencyPrecisionTest(unittest.TestCase):
 
         self.assertEqual(memory.freq, 131325000)
         self.assertEqual(radio.validate_memory(memory), [])
+
+    def test_blank_cross_mode_does_not_stop_a_non_cross_channel(self):
+        radio = bridge.radio_from_image(
+            self.directory, "Talkpod_A36plus", str(A36PLUS_IMAGE)
+        )
+        memory = radio.get_memory(83)
+        item = bridge.memory_json(memory)
+        item.update({"tone": "Tone", "txTone": 136.5, "crossMode": ""})
+
+        bridge.apply_json(radio, memory, item)
+
+        self.assertEqual(memory.tmode, "Tone")
+        self.assertEqual(memory.rtone, 136.5)
+        self.assertIn(memory.cross_mode, ("Tone->Tone", "Tone->"))
 
     def test_unsupported_frequency_error_names_nearest_programmable_value(self):
         message = bridge.channel_validation_message(

@@ -11,6 +11,7 @@ import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/models/repeater_search.dart';
 import 'package:newchirp/services/column_layout_store.dart';
 import 'package:newchirp/services/file_save_warning_store.dart';
+import 'package:newchirp/services/library_metrics_store.dart';
 import 'package:newchirp/services/mygmrs_client.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 import 'package:newchirp/services/repeater_search_preferences_store.dart';
@@ -35,6 +36,10 @@ NewChirpApp testApp({
     fileSaveWarningStore: FileSaveWarningStore(
       path:
           '${Directory.systemTemp.path}/newchirp-widget-save-warning-$pid-$id.json',
+    ),
+    libraryMetricsStore: LibraryMetricsStore(
+      path:
+          '${Directory.systemTemp.path}/newchirp-widget-metrics-$pid-$id.json',
     ),
     updateChecker: updateChecker,
     updateInstaller: updateInstaller,
@@ -318,6 +323,29 @@ void main() {
       'says "Listening for the radio", then hold the [PTT] switch for one '
       'second to send the image.',
     );
+  });
+
+  testWidgets('channel summary cards collapse to show more channels', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+    expect(find.text('Scan enabled'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('library-metrics-collapse')));
+    await tester.pumpAndSettle();
+    expect(find.text('Scan enabled'), findsNothing);
+    expect(find.byKey(const Key('library-metrics-collapsed')), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('library-metrics-expand')));
+    await tester.pumpAndSettle();
+    expect(find.text('Scan enabled'), findsOneWidget);
   });
 
   testWidgets('radio extras only toggle through the switch', (tester) async {

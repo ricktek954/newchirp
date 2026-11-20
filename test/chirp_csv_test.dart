@@ -115,4 +115,15 @@ Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPola
       everyElement('FM'),
     );
   });
+
+  test('a blank CrossMode cell imports as the default cross mode', () {
+    final channels = ChirpCsv.decode(
+      'Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,'
+      'DtcsCode,DtcsPolarity,CrossMode,Mode\n'
+      '111,NCTC,147.0400,+,0.600000,Tone,136.5,88.5,023,NN,,FM\n',
+    );
+    expect(channels.single.tone, 'Tone');
+    expect(channels.single.txTone, 136.5);
+    expect(channels.single.crossMode, 'Tone->Tone');
+  });
 }

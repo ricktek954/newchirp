@@ -61,5 +61,28 @@ class ColocatedDriverCatalogTest(unittest.TestCase):
             self.assertIn("Baofeng_UV-5G_Mini", models)
 
 
+
+class ModelInfoTest(unittest.TestCase):
+    def _info(self, model):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(ROOT / "scripts/chirp_bridge.py"),
+                "--source", str(SOURCE),
+                "--vendor", str(VENDOR),
+                "--newchirp-driver-dir", str(ROOT / "drivers"),
+                "model-info", "--model", model,
+            ],
+            cwd=ROOT, check=False, capture_output=True, text=True, timeout=60,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+        return json.loads(result.stdout)
+
+    def test_live_radios_are_flagged_for_band_switching(self):
+        # The IC-9700 snapshot holds one band; the app must re-read the
+        # radio to switch bands (2026-11-19 report).
+        self.assertTrue(self._info("Icom_IC-9700")["liveRadio"])
+        self.assertFalse(self._info("Baofeng_UV-5R")["liveRadio"])
+
 if __name__ == "__main__":
     unittest.main()

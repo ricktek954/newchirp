@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:55:41Z"
+timestamp: "2026-11-20T09:04:00Z"
 concept_id: main
 language: dart
 ---
@@ -227,6 +227,8 @@ language: dart
 | related | [_chooseChannelLocationConflictAction](/main/chooseChannelLocationConflictAction.md) |
 | related | [_saveEditedChannel](/main/saveEditedChannel.md) |
 | related | [_confirmDeleteChannel](/main/confirmDeleteChannel.md) |
+| related | [_loadLibraryMetricsCollapsed](/main/loadLibraryMetricsCollapsed.md) |
+| related | [_setLibraryMetricsCollapsed](/main/setLibraryMetricsCollapsed.md) |
 | related | [_buildLibrary](/main/buildLibrary.md) |
 | related | [_printFrequencyReference](/main/printFrequencyReference.md) |
 | related | [openInPdfViewer](/main/openInPdfViewer.md) |

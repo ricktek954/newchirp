@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 202 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 203 concepts across 10 domains and 10 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-19T21:20:43Z'
+timestamp: '2026-11-20T08:57:34Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 202 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 203 concepts | 10 domains | 10 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 178 |
+| Function | 179 |
 | Class | 14 |
 | Module | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 202 |
+| python | 203 |
 
 ## Domain Map
 
@@ -40,9 +40,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [check_private_data](check_private_data/index.md) (4 concepts) — Fail when private email addresses or local build paths are tracked.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 78 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 79 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (78 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (79 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [driver_work.py](driver_work.py/index.md) — 31 concepts
 
@@ -74,6 +74,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
+| [preserve_unloadable_settings](/chirp_bridge/preserve_unloadable_settings.md) | Function | `chirp_bridge.py` | Write back settings CHIRP could not load exactly as the radi… |
 | [live_models_by_vendor](/chirp_bridge/live_models_by_vendor.md) | Function | `chirp_bridge.py` | Return selectable serial/transport radios, excluding file-on… |
 | [external_memory_owner](/chirp_bridge/external_memory_owner.md) | Function | `chirp_bridge.py` | Return the object that owns metadata for a radio or channel … |
 | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) | Function | `chirp_bridge.py` | Write a channel and persist fields CHIRP stores outside radi… |
@@ -93,7 +94,6 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [rebuild_cache](/driver_work/rebuild_cache.md) | Function | `driver_work.py` | Build a fresh SQLite cache from the text store (atomic repla… |
 | [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
 | [live_channel_context](/chirp_bridge/live_channel_context.md) | Function | `chirp_bridge.py` | Choose a live-radio subdevice without probing every memory s… |
-| [mapping_payload](/chirp_bridge/mapping_payload.md) | Function | `chirp_bridge.py` | Describe CHIRP's bank/zone models for an image or channel ow… |
 
 ## Usage with OpenCode
 

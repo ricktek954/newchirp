@@ -31,6 +31,7 @@ import 'services/radio_selection_store.dart';
 import 'services/module_sandbox.dart';
 import 'services/mototrbo_cps2_xml.dart';
 import 'services/mygmrs_client.dart';
+import 'services/library_metrics_store.dart';
 import 'services/radio_bridge.dart';
 import 'services/update_checker.dart';
 import 'services/update_installer.dart';
@@ -268,6 +269,7 @@ class NewChirpApp extends StatelessWidget {
     this.columnLayoutStore,
     this.radioSelectionStore,
     this.fileSaveWarningStore,
+    this.libraryMetricsStore,
     this.repeaterSearchPreferencesStore,
     this.myGmrsService,
     this.updateChecker,
@@ -280,6 +282,7 @@ class NewChirpApp extends StatelessWidget {
   final ColumnLayoutStore? columnLayoutStore;
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
+  final LibraryMetricsStore? libraryMetricsStore;
   final RepeaterSearchPreferencesStore? repeaterSearchPreferencesStore;
   final MyGmrsService? myGmrsService;
   final UpdateChecker? updateChecker;
@@ -332,6 +335,7 @@ class NewChirpApp extends StatelessWidget {
         columnLayoutStore: columnLayoutStore,
         radioSelectionStore: radioSelectionStore,
         fileSaveWarningStore: fileSaveWarningStore,
+        libraryMetricsStore: libraryMetricsStore,
         repeaterSearchPreferencesStore: repeaterSearchPreferencesStore,
         myGmrsService: myGmrsService,
         updateChecker: updateChecker,
@@ -350,6 +354,7 @@ class NewChirpHome extends StatefulWidget {
     this.columnLayoutStore,
     this.radioSelectionStore,
     this.fileSaveWarningStore,
+    this.libraryMetricsStore,
     this.repeaterSearchPreferencesStore,
     this.myGmrsService,
     this.updateChecker,
@@ -362,6 +367,7 @@ class NewChirpHome extends StatefulWidget {
   final ColumnLayoutStore? columnLayoutStore;
   final RadioSelectionStore? radioSelectionStore;
   final FileSaveWarningStore? fileSaveWarningStore;
+  final LibraryMetricsStore? libraryMetricsStore;
   final RepeaterSearchPreferencesStore? repeaterSearchPreferencesStore;
   final MyGmrsService? myGmrsService;
   final UpdateChecker? updateChecker;
@@ -384,6 +390,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       widget.radioSelectionStore ?? RadioSelectionStore();
   late final _fileSaveWarningStore =
       widget.fileSaveWarningStore ?? FileSaveWarningStore();
+  late final _libraryMetricsStore =
+      widget.libraryMetricsStore ?? LibraryMetricsStore();
+  bool _libraryMetricsCollapsed = false;
   late final _repeaterSearchPreferencesStore =
       widget.repeaterSearchPreferencesStore ?? RepeaterSearchPreferencesStore();
   late final MyGmrsService _myGmrsService =
@@ -1055,6 +1064,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _loadColumnLayout();
     _fileSaveWarningLoad = _loadFileSaveWarning();
     _radioSelectionLoad = _loadRadioSelection();
+    unawaited(_loadLibraryMetricsCollapsed());
     unawaited(_prepareRestoredRadio());
     if (widget.checkForUpdatesOnStartup) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1213,6 +1223,34 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         destination: 'zone ${zone.name}',
       );
       if (!proceed) return;
+    }
+    // A live radio's snapshot holds only the band that was read, so the
+    // other band has to come from the radio (IC-9700 430 band report,
+    // 2026-11-19: the snapshot failed with "Unknown file format").
+    final RadioInstructions info;
+    try {
+      info = await _bridge.instructions(model);
+    } catch (error) {
+      if (mounted) await _showActionError(error);
+      return;
+    }
+    if (!mounted) return;
+    if (info.liveRadio) {
+      if (_port == null) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(
+                'Connect the ${displayRadioModelName(model)} and choose its '
+                'port to read ${zone.name}.',
+              ),
+            ),
+          );
+        return;
+      }
+      await _downloadRadio(liveZone: zoneIndex);
+      return;
     }
     late final ({
       List<RadioChannel> channels,
@@ -3308,9 +3346,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
   }
 
-  Future<void> _downloadRadio() async {
+  Future<void> _downloadRadio({int? liveZone}) async {
     if (_port == null || !_radioModelSelectedForTransfer) return;
-    if (_libraryOpen && _channels.isNotEmpty) {
+    // A live-radio zone switch has already confirmed replacing the list.
+    if (liveZone == null && _libraryOpen && _channels.isNotEmpty) {
       final replace = await showDialog<bool>(
         context: context,
         barrierDismissible: false,
@@ -3344,7 +3383,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       context: {
         'model': _model!,
         'port': _port!,
-        'zone': _selectedZone ?? '',
+        'zone': liveZone ?? _selectedZone ?? '',
         'firmware': _radioFirmware ?? '',
       },
     );
@@ -3357,7 +3396,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         final result = await _bridge.download(
           model: _model!,
           port: _port!,
-          zone: _selectedZone,
+          zone: liveZone ?? _selectedZone,
           onProgress: _reportTransferProgress,
         );
         final storedImage = await _imageStore.saveForModel(
@@ -4843,6 +4882,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return confirmed == true;
   }
 
+  Future<void> _loadLibraryMetricsCollapsed() async {
+    final collapsed = await _libraryMetricsStore.isCollapsed();
+    if (mounted && collapsed != _libraryMetricsCollapsed) {
+      setState(() => _libraryMetricsCollapsed = collapsed);
+    }
+  }
+
+  void _setLibraryMetricsCollapsed(bool collapsed) {
+    setState(() => _libraryMetricsCollapsed = collapsed);
+    unawaited(_libraryMetricsStore.setCollapsed(collapsed));
+  }
+
   Widget _buildLibrary() {
     final visible = _channelTableRows();
     final selectedChannelCount = _selectedChannelLocations.length;
@@ -4868,29 +4919,60 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       padding: const EdgeInsets.all(22),
       child: Column(
         children: [
-          Row(
-            children: [
-              _Metric(
-                label: 'Channels',
-                value: '${libraryStats.activeCount}',
-                icon: Icons.radio,
-              ),
-              const SizedBox(width: 12),
-              _Metric(
-                label: 'Scan enabled',
-                value: '${libraryStats.scanEnabledCount}',
-                icon: Icons.radar,
-              ),
-              const SizedBox(width: 12),
-              _Metric(
-                label: 'Needs attention',
-                value: '$invalid',
-                icon: invalid == 0
-                    ? Icons.check_circle_outline
-                    : Icons.error_outline,
-              ),
-            ],
-          ),
+          if (_libraryMetricsCollapsed)
+            Row(
+              key: const Key('library-metrics-collapsed'),
+              children: [
+                Expanded(
+                  child: Text(
+                    '${libraryStats.activeCount} channels · '
+                    '${libraryStats.scanEnabledCount} scan enabled · '
+                    '$invalid need attention',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(color: Colors.black54, fontSize: 12),
+                  ),
+                ),
+                IconButton(
+                  key: const Key('library-metrics-expand'),
+                  tooltip: 'Show channel summary',
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(Icons.expand_more),
+                  onPressed: () => _setLibraryMetricsCollapsed(false),
+                ),
+              ],
+            )
+          else
+            Row(
+              children: [
+                _Metric(
+                  label: 'Channels',
+                  value: '${libraryStats.activeCount}',
+                  icon: Icons.radio,
+                ),
+                const SizedBox(width: 12),
+                _Metric(
+                  label: 'Scan enabled',
+                  value: '${libraryStats.scanEnabledCount}',
+                  icon: Icons.radar,
+                ),
+                const SizedBox(width: 12),
+                _Metric(
+                  label: 'Needs attention',
+                  value: '$invalid',
+                  icon: invalid == 0
+                      ? Icons.check_circle_outline
+                      : Icons.error_outline,
+                ),
+                IconButton(
+                  key: const Key('library-metrics-collapse'),
+                  tooltip: 'Hide channel summary to show more channels',
+                  visualDensity: VisualDensity.compact,
+                  icon: const Icon(Icons.expand_less),
+                  onPressed: () => _setLibraryMetricsCollapsed(true),
+                ),
+              ],
+            ),
           if (invalid > 0) ...[
             const SizedBox(height: 12),
             DecoratedBox(

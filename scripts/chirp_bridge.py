@@ -1308,6 +1308,45 @@ def coerce_setting_value(element, value):
     return value
 
 
+def preserve_unloadable_settings(settings):
+    """Write back settings CHIRP could not load exactly as the radio had them.
+
+    A driver's range can be narrower than what a radio really stores, for
+    example a UV-5R factory squelch calibration of 124 against CHIRP's 0-123.
+    CHIRP logs "Failed to load ...", leaves the value unset, and the driver's
+    set_settings then fails on int(None), so no setting can be written
+    (2026-11-20 UV-5R report, mailbox INBOX:833). The app shows such a value
+    as unsupported and never changes it. Restore the radio's own stored value
+    without validation and mark it read-only so drivers that honour
+    mutability skip it; either way the radio's bytes stay unchanged.
+    Returns the names of preserved settings.
+    """
+    from chirp.settings import RadioSetting
+
+    preserved = []
+    if not settings:
+        return preserved
+    for group in settings:
+        for setting in group.walk() if hasattr(group, "walk") else [group]:
+            if not isinstance(setting, RadioSetting):
+                continue
+            for value in setting.values():
+                if value.initialized:
+                    continue
+                raw = getattr(value, "_preinit_current", None)
+                if raw is None or isinstance(raw, Exception):
+                    continue
+                value._current = raw
+                value._preinit_current = None
+                value.set_mutable(False)
+                preserved.append(setting.get_name())
+    if preserved:
+        logging.getLogger("newchirp.bridge").info(
+            "Preserving radio values CHIRP could not load: %s",
+            ", ".join(preserved))
+    return preserved
+
+
 def apply_setting_changes(settings, changes):
     from chirp.settings import RadioSetting, RadioSettingValueList
 
@@ -1341,6 +1380,8 @@ def apply_setting_changes(settings, changes):
 
 
 def apply_json(radio, mem, item):
+    from chirp import chirp_common
+
     fields = {
         "name": "name", "duplex": "duplex", "tone": "tmode",
         "txTone": "rtone", "rxTone": "ctone", "dtcs": "dtcs",
@@ -1361,7 +1402,14 @@ def apply_json(radio, mem, item):
     set_mem("freq", int(round(float(item["frequency"]) * 1_000_000)))
     set_mem("offset", int(round(float(item["offset"]) * 1_000_000)))
     for source, target in fields.items():
-        set_mem(target, item[source])
+        value = item[source]
+        if (target == "cross_mode" and item.get("tone") != "Cross"
+                and value not in chirp_common.CROSS_MODES):
+            # Only Cross channels use the cross mode. A CSV with a blank
+            # CrossMode cell must not stop the write of an ordinary channel
+            # (2026-11-20 UV-32 report, mailbox INBOX:828).
+            continue
+        set_mem(target, value)
     if item.get("power"):
         for level in radio.get_features().valid_power_levels:
             if str(level) == item["power"]:
@@ -2668,6 +2716,8 @@ def main():
             print(json.dumps({"interfaces": interfaces}))
             return
         if args.command == "model-info":
+            from chirp import chirp_common
+
             radio_class = directory.get_radio(args.model)
             prompts = radio_class.get_prompts()
             print(json.dumps({
@@ -2681,6 +2731,11 @@ def main():
                 "writeDisabled": bool(
                     getattr(radio_class, "NEWCHIRP_WRITE_DISABLED", False)
                 ),
+                # Live (CI-V style) radios keep no clone image. Their saved
+                # snapshot holds only the band that was read, so switching
+                # bands must read that band from the radio (2026-11-19
+                # IC-9700 report, mailbox INBOX:825).
+                "liveRadio": issubclass(radio_class, chirp_common.LiveRadio),
             }))
             return
         if args.command == "repeaterbook-search":
@@ -2908,6 +2963,7 @@ def main():
                 with open(args.settings, encoding="utf-8") as handle:
                     payload = json.load(handle)
                 settings = radio.get_settings()
+                preserve_unloadable_settings(settings)
                 changes = payload.get("changes", [])
                 apply_setting_changes(settings, changes)
                 emit_progress("Applying settings...", 0.10)
