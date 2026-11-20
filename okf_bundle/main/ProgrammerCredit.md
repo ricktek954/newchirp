@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:42:51Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: main/ProgrammerCredit
 language: dart
 ---
@@ -27,7 +27,7 @@ class _ProgrammerCredit
 - `build`
 
 ## Source
-Lines 7008–7030 in `main.dart`
+Lines 7025–7047 in `main.dart`
 
 ## Relationships
 

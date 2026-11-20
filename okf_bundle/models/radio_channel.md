@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:fix/triage-2026-11-15"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T13:11:31Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: models/radio_channel
 language: dart
 ---
@@ -51,6 +51,9 @@ language: dart
 | related | [midlandDuplexChoices](/models/radio_channel/midlandDuplexChoices.md) |
 | related | [midlandDuplexIsLocked](/models/radio_channel/midlandDuplexIsLocked.md) |
 | related | [midlandCanSelectOffset](/models/radio_channel/midlandCanSelectOffset.md) |
+| related | [transmitFrequencyMhz](/models/radio_channel/transmitFrequencyMhz.md) |
+| related | [_bandMhzLabel](/models/radio_channel/bandMhzLabel.md) |
+| related | [transmitBandNotice](/models/radio_channel/transmitBandNotice.md) |
 | related | [midlandGmrsIssues](/models/radio_channel/midlandGmrsIssues.md) |
 | related | [_frequencyFitsStep](/models/radio_channel/frequencyFitsStep.md) |
 | related | [_nearestFrequencyForSteps](/models/radio_channel/nearestFrequencyForSteps.md) |

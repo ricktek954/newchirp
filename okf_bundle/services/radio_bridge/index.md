@@ -32,6 +32,7 @@
 - [_runWithRuntime](runWithRuntime.md)
 - [_windowsSerialPortDetails](windowsSerialPortDetails.md)
 - [_windowsSerialPortNames](windowsSerialPortNames.md) — Windows: read the live COM ports from the SERIALCOMM registry key, then
+- [bands](bands.md)
 - [cancelActive](cancelActive.md)
 - [download](download.md)
 - [imageCapabilities](imageCapabilities.md)

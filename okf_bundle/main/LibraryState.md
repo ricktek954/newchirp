@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:42:51Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: main/LibraryState
 language: dart
 ---
@@ -23,7 +23,7 @@ class _LibraryState
 ```
 
 ## Source
-Lines 7922–7948 in `main.dart`
+Lines 7939–7965 in `main.dart`
 
 ## Relationships
 

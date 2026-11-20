@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:23:03Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: chirp_bridge/nearest_programmable_frequency
 language: python
 ---
@@ -38,7 +38,7 @@ Return the closest frequency representable by one of the steps.
 | `steps_khz` | `—` | `—` |
 
 ## Source
-Lines 1429–1444 in `chirp_bridge.py`
+Lines 1439–1454 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:28Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: services/radio_bridge/RadioZone
 language: dart
 ---
@@ -24,7 +24,7 @@ class RadioZone
 ```
 
 ## Source
-Lines 297–313 in `services/radio_bridge.dart`
+Lines 305–321 in `services/radio_bridge.dart`
 
 ## Relationships
 

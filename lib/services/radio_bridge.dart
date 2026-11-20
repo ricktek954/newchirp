@@ -234,6 +234,7 @@ class RadioCapabilities {
     required this.validCharacters,
     required this.validBands,
     required this.hasTuningStep,
+    this.txBands = const [],
   });
 
   final List<String> duplexes;
@@ -252,6 +253,10 @@ class RadioCapabilities {
   final List<({double startMhz, double endMhz})> validBands;
   final bool hasTuningStep;
 
+  /// Bands the radio transmits in, when narrower than [validBands]. Empty
+  /// means no known limit. Used for warnings only, never to block a write.
+  final List<({double startMhz, double endMhz})> txBands;
+
   bool get uppercaseNames =>
       validCharacters.isNotEmpty &&
       validCharacters == validCharacters.toUpperCase();
@@ -260,6 +265,16 @@ class RadioCapabilities {
     List<String> strings(String key) => (json[key] as List? ?? const [])
         .map((item) => item.toString())
         .toList();
+    List<({double startMhz, double endMhz})> bands(String key) =>
+        (json[key] as List? ?? const [])
+            .whereType<Map>()
+            .map(
+              (band) => (
+                startMhz: (band['startMhz'] as num).toDouble(),
+                endMhz: (band['endMhz'] as num).toDouble(),
+              ),
+            )
+            .toList();
     return RadioCapabilities(
       duplexes: strings('duplexes'),
       toneModes: strings('toneModes'),
@@ -280,16 +295,9 @@ class RadioCapabilities {
       memoryEnd: (json['memoryEnd'] as num?)?.toInt(),
       nameLength: (json['nameLength'] as num?)?.toInt() ?? 16,
       validCharacters: '${json['validCharacters'] ?? ''}',
-      validBands: (json['validBands'] as List? ?? const [])
-          .whereType<Map>()
-          .map(
-            (band) => (
-              startMhz: (band['startMhz'] as num).toDouble(),
-              endMhz: (band['endMhz'] as num).toDouble(),
-            ),
-          )
-          .toList(),
+      validBands: bands('validBands'),
       hasTuningStep: json['hasTuningStep'] as bool? ?? true,
+      txBands: bands('txBands'),
     );
   }
 }

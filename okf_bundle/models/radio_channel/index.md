@@ -2,6 +2,7 @@
 
 ## Functions
 
+- [_bandMhzLabel](bandMhzLabel.md)
 - [_frequencyFitsStep](frequencyFitsStep.md)
 - [_isPlusFiveMhz](isPlusFiveMhz.md)
 - [_isZeroMhz](isZeroMhz.md)
@@ -27,7 +28,7 @@
 - [midlandDuplexChoices](midlandDuplexChoices.md) — Duplex choices for one MXT295 slot.
 - [midlandDuplexIsLocked](midlandDuplexIsLocked.md) — Channels 1-14, a GMRS 1-14 receive channel, and the repeater rows
 - [midlandFixedRxHz](midlandFixedRxHz.md) — Official receive frequency in Hz for MXT295 channels 1 through 22.
-- [midlandGmrsIssues](midlandGmrsIssues.md) — Why this MXT295 channel is not legal. Empty for every other radio.
+- [midlandGmrsIssues](midlandGmrsIssues.md)
 - [midlandReceiveChannelChoices](midlandReceiveChannelChoices.md) — Dropdown rows for Receive channel. Fixed rows have one choice.
 - [midlandReceiveChannelIsLocked](midlandReceiveChannelIsLocked.md) — Channels 1 through 22 already have a receive channel, so the list
 - [midlandReceiveChannelIsUnset](midlandReceiveChannelIsUnset.md) — A new row has no receive channel yet. 146.52 MHz is the old placeholder.
@@ -42,5 +43,7 @@
 - [shouldShowTransmitPower](shouldShowTransmitPower.md) — Power is irrelevant when the channel has transmit disabled.
 - [showsMidlandChannelNumbers](showsMidlandChannelNumbers.md) — This radio's list uses Midland's channel numbers instead of raw slots.
 - [toJson](toJson.md)
+- [transmitBandNotice](transmitBandNotice.md) — Advisory note for a channel the radio stores and receives but will not
+- [transmitFrequencyMhz](transmitFrequencyMhz.md) — Why this MXT295 channel is not legal. Empty for every other radio.
 - [useGmrsReceiveChannel](useGmrsReceiveChannel.md) — Sets this row to one of the 22 GMRS receive channels.
 - [validate](validate.md)

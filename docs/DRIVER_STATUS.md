@@ -575,6 +575,16 @@ Last updated: 2026-11-18
   outside the radio's TX range, busy lock, or a settings block changed by
   the full-image write. Re-enable only after comparing the owner's pre- and
   post-write images.
+  Update (INBOX:851): the owner wrote with the desktop app, and every
+  channel was VHF marine (156-162 MHz); the pre-write backup is lost. The
+  leading explanation is the radio's amateur-band TX lock, not the write.
+  Pending: whether 146.520 MHz in VFO mode transmits. If it does, writes
+  can be re-enabled.
+- Transmit-band warning: `NEWCHIRP_TX_BANDS` (144-148 and 420-450 MHz)
+  reaches the app as `txBands`. The channel editor and write confirmation
+  say when a channel will receive but not transmit; nothing is blocked.
+  The bands follow the radio's amateur-only TX behaviour and have not been
+  read from the Pro CPS.
 - Maintained driver: `drivers/newchirp_rt950pro.py`
 - Protocol notes: `docs/RT950PRO_PROTOCOL.md`
 - Separation: distinct `Radtel_RT-950_Pro` model; the base RT-950 stays

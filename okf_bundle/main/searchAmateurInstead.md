@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:42:51Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: main/searchAmateurInstead
 language: dart
 ---
@@ -23,7 +23,7 @@ void_searchAmateurInstead()
 ```
 
 ## Source
-Lines 8908–8908 in `main.dart`
+Lines 8925–8925 in `main.dart`
 
 ## Relationships
 

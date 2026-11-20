@@ -1157,6 +1157,16 @@ def features_json(radio):
             for start, end in features.valid_bands
         ],
         "hasTuningStep": features.has_tuning_step,
+        # Bands the radio will transmit in, when narrower than valid_bands.
+        # Advisory only: the app warns, it never blocks (RT-950 Pro marine
+        # VHF report, 2026-11-20).
+        "txBands": [
+            {
+                "startMhz": start / 1_000_000,
+                "endMhz": end / 1_000_000,
+            }
+            for start, end in getattr(radio, "NEWCHIRP_TX_BANDS", ())
+        ],
     }
 
 

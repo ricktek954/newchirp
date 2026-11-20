@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:42:51Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: main/submit
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_submit_submit
 ```
 
 ## Source
-Lines 7985–7985 in `main.dart`
+Lines 8002–8002 in `main.dart`
 
 ## Relationships
 

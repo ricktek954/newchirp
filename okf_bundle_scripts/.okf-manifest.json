@@ -192,8 +192,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795191783970287999,
-      "hash": "2e684d91656929a6f6050230786a8242f34debc2cfc8e5e804b5c3b8d89d4a15",
+      "mtime_ns": 1795202485111467886,
+      "hash": "7608aa1b636ff705b90877535f346a5290b1e36d5517382551908ec4bbb34c2c",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -1943,5 +1943,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-20T16:23:04Z"
+  "generated_at": "2026-11-20T19:21:25Z"
 }

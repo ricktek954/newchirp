@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Enum"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:42:51Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: main/ChannelLocationConflictAction
 language: dart
 ---
@@ -32,7 +32,7 @@ enum _ChannelLocationConflictAction
 - `replace`
 
 ## Source
-Lines 8280–8280 in `main.dart`
+Lines 8297–8297 in `main.dart`
 
 ## Relationships
 

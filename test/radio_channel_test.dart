@@ -5,6 +5,48 @@ RadioChannel channelAt(int location) =>
     RadioChannel(location: location, name: 'CH $location', frequency: 146.52);
 
 void main() {
+  group('transmitBandNotice', () {
+    const bands = [
+      (startMhz: 144.0, endMhz: 148.0),
+      (startMhz: 420.0, endMhz: 450.0),
+    ];
+    RadioChannel at(double mhz, {String duplex = '', double offset = 0}) =>
+        RadioChannel(
+          location: 1,
+          name: 'CH',
+          frequency: mhz,
+          duplex: duplex,
+          offset: offset,
+        );
+
+    test('warns about marine VHF on an amateur-only radio', () {
+      final notice = transmitBandNotice(at(156.8), bands);
+      expect(notice, contains('144–148 and 420–450 MHz'));
+      expect(notice, contains('156.8000 MHz'));
+    });
+
+    test('stays quiet in band, for receive-only, and without limits', () {
+      expect(transmitBandNotice(at(146.52), bands), isNull);
+      expect(
+        transmitBandNotice(at(447.0, duplex: '-', offset: 5), bands),
+        isNull,
+      );
+      expect(transmitBandNotice(at(156.8, duplex: 'off'), bands), isNull);
+      expect(transmitBandNotice(at(156.8), const []), isNull);
+      expect(
+        transmitBandNotice(at(162.55, duplex: 'split', offset: 146.52), bands),
+        isNull,
+      );
+    });
+
+    test('uses the transmit side of a repeater pair', () {
+      expect(
+        transmitBandNotice(at(147.9, duplex: '+', offset: 0.6), bands),
+        contains('148.5000 MHz'),
+      );
+    });
+  });
+
   test('upload filtering removes channels outside radio bounds', () {
     final channels = [channelAt(1), channelAt(200), channelAt(542)];
 

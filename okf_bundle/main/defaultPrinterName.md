@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:42:51Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: main/defaultPrinterName
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_defaultPrinterName_defaultPrinterName
 ```
 
 ## Source
-Lines 5669–5669 in `main.dart`
+Lines 5686–5686 in `main.dart`
 
 ## Relationships
 

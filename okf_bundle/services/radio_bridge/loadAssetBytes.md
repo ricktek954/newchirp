@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:28Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: services/radio_bridge/loadAssetBytes
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_loadAssetBytes_loadAssetBytes
 ```
 
 ## Source
-Lines 1129–1129 in `services/radio_bridge.dart`
+Lines 1137–1137 in `services/radio_bridge.dart`
 
 ## Relationships
 

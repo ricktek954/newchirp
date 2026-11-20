@@ -1,41 +1,41 @@
 ---
-description: 'Top-level OKF summary: 653 concepts across 4 domains and 32 modules'
-git_branch: HEAD
+description: 'Top-level OKF summary: 656 concepts across 4 domains and 32 modules'
+git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-20T16:42:53Z'
+timestamp: '2026-11-20T19:21:26Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 653 concepts | 4 domains | 32 modules
+> OKF v0.2 bundle | 656 concepts | 4 domains | 32 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 508 |
+| Function | 511 |
 | Class | 103 |
 | Module | 32 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 653 |
+| dart | 656 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 240 concepts
+### [main.dart](main.dart/index.md) — 239 concepts
 
-- [main](main/index.md) (240 concepts)
+- [main](main/index.md) (239 concepts)
 
-### [models](models/index.md) — 110 concepts
+### [models](models/index.md) — 113 concepts
 
-- [models/radio_channel](models/radio_channel/index.md) (43 concepts)
+- [models/radio_channel](models/radio_channel/index.md) (46 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (12 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (12 concepts)
@@ -45,9 +45,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - *…and 1 more modules*
 
-### [services](services/index.md) — 239 concepts
+### [services](services/index.md) — 240 concepts
 
-- [services/radio_bridge](services/radio_bridge/index.md) (55 concepts)
+- [services/radio_bridge](services/radio_bridge/index.md) (56 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/mygmrs_client](services/mygmrs_client/index.md) (22 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (17 concepts)
@@ -79,18 +79,18 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
 | [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
-| [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
+| [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [clearedLocationsForUpload](/models/channel_image_baseline/clearedLocationsForUpload.md) | Function | `models/channel_image_baseline.dart` | All radio locations that must be blank for the current libra… |
-| [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
 | [radioMappingsSignature](/models/radio_mapping/radioMappingsSignature.md) | Function | `models/radio_mapping.dart` | Fixed (non-editable) zone models are derived from channel nu… |
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
-| [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
+| [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
-| [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
-| [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
+| [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
-| [restorePlainMidlandRepeater](/models/radio_channel/restorePlainMidlandRepeater.md) | Function | `models/radio_channel.dart` | Puts the standard GMRS repeater back in this row and clears … |
+| [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
+| [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
+| [transmitBandNotice](/models/radio_channel/transmitBandNotice.md) | Function | `models/radio_channel.dart` | Advisory note for a channel the radio stores and receives bu… |
 | [isHidden](/services/file_save_warning_store/isHidden.md) | Function | `services/file_save_warning_store.dart` | True only when the person checked "Do not show me this messa… |
 
 ## Usage with OpenCode

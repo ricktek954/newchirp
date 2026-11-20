@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:42:51Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: main/SelectAllChannelsAction
 language: dart
 ---
@@ -23,7 +23,7 @@ _SelectAllChannelsAction({required this.enabled, required this.onInvoke})
 ```
 
 ## Source
-Lines 9988–9988 in `main.dart`
+Lines 10005–10005 in `main.dart`
 
 ## Relationships
 

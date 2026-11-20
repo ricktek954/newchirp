@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:fix/triage-2026-11-15"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T13:11:31Z"
+timestamp: "2026-11-20T19:21:25Z"
 concept_id: models/radio_channel/useGmrsReceiveChannel
 language: dart
 ---
@@ -34,7 +34,7 @@ The row starts simplex with no offset. Choosing duplex + later
 sets the offset to 5 MHz. Fixed rows 1 through 22 do not move.
 
 ## Source
-Lines 604–604 in `models/radio_channel.dart`
+Lines 650–650 in `models/radio_channel.dart`
 
 ## Relationships
 
