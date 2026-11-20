@@ -605,12 +605,11 @@ class UploadHandshakeTest(unittest.TestCase):
             "Icom_ID-50", "Icom_ID-52",
             "KSUN_UV-K60-Plus", "Kenwood_TK-3401D", "Kenwood_TK-350",
             "Kenwood_TK-359", "Kenwood_TK-863G", "Kenwood_TM-V71_CloneMode",
-            "Radioddity_DB35-G", "Radtel_RT-860", "Radtel_RT-950", "Radtel_RT-950_Pro",
+            "Radioddity_DB35-G", "Radtel_RT-860", "Radtel_RT-950",
             "Retevis_RT97L",
         ]))
-        # Writable subclasses must not inherit the flag. Stock RT-950 Pro
-        # writes are suspended (ledger w-20261120-9877); nicFW950 is separate.
-        for model in ("Radtel_RT-950_Pro_nicFW950",):
+        # Writable subclasses must not inherit the flag.
+        for model in ("Radtel_RT-950_Pro_nicFW950", "Radtel_RT-950_Pro"):
             self.assertFalse(getattr(
                 directory.get_radio(model), "NEWCHIRP_WRITE_DISABLED", False))
 
