@@ -1,6 +1,6 @@
 # NewChirp Software Roadmap
 
-Last updated: August 22, 2026
+Last updated: November 20, 2026
 
 This document is the durable project handoff for NewChirp. It records what has
 already been built, the decisions behind it, how the application works, and the
@@ -39,6 +39,9 @@ The intended workflow is:
 - Do not require users to install packages with `pip`. pySerial is bundled.
 - Credit **Rick Lopez · Lead Programmer · rick@newchirp.net** in the interface
   and native macOS About panel.
+- Continue shipping Intel macOS builds for every macOS release that still
+  supports Intel hardware. Apple Silicon builds for macOS 28 and later must
+  contain no x86_64 app, Python, helper, or library components.
 
 ## Current status
 
@@ -392,6 +395,36 @@ flutter run -d macos
 - [ ] Notarize and staple the application.
 - [ ] Build a DMG or installer and verify on a clean supported macOS machine.
 - [ ] Define minimum macOS and CPU support, including Apple Silicon and Intel.
+
+### Deferred — macOS 28 dual-architecture packaging
+
+Do not begin this work until Apple releases macOS 28 and Flutter/Xcode provide
+a supported way to target it. Current universal builds should continue serving
+both Intel and Apple Silicon because the warning does not affect supported
+current macOS releases.
+
+- [ ] Build separate Apple Silicon and Intel release artifacts:
+  `NewChirp-<version>-arm64.dmg` and
+  `NewChirp-<version>-x86_64.dmg`.
+- [ ] Make the macOS runtime bundler accept an architecture and include only
+  the matching Python runtime. Thin libusb and every other Mach-O component to
+  the selected architecture.
+- [ ] Build the raw-SCSI helper for both architectures. It is currently
+  arm64-only.
+- [ ] Add an architecture-aware update-manifest contract. Existing clients
+  request only `platform=macos`; a transitional release must teach the updater
+  to send `arch=arm64` or `arch=x86_64` before split artifacts become the
+  default.
+- [ ] Update the website release discovery and download page to expose separate
+  Apple Silicon and Intel downloads without relying on filename sort order.
+- [ ] Keep one universal package available as the fallback for older installed
+  clients during the transition.
+- [ ] Verify the arm64 app contains no executable x86_64 slices and the Intel
+  app contains no arm64 slices.
+- [ ] Sign, notarize, staple, Gatekeeper-test, install, launch, and perform
+  hardware radio transfers for both artifacts on their native CPUs.
+- [ ] Continue publishing feature-equivalent Intel builds for as long as Intel
+  macOS and the Flutter/Xcode toolchain remain supportable.
 
 ### P1 — Complete editing fidelity
 
