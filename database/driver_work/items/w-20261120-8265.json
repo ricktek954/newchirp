@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 16:29:04",
+  "kind": "bug",
+  "manufacturer": "Radtel",
+  "model": "RT-950 Pro",
+  "occurred_at": "2026-11-20",
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:846",
+  "status": "investigating",
+  "summary": "1.0.62 on macOS 26.6.2, /dev/cu.usbserial-1420 and /dev/tty.usbserial-1420. EINVAL before any radio traffic (no trace), so pyserial open/termios/RTS-DTR ioctl was rejected by the adapter driver at 115200. Same owner's IC-F60V capture worked in the Web Programmer, possibly with a different cable. App shows the raw errno instead of a cable/driver explanation.",
+  "title": "macOS read fails at port open with (22, 'Invalid argument')",
+  "uid": "w-20261120-8265"
+}
