@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 16:14:30",
+  "kind": "bug",
+  "manufacturer": "Radtel",
+  "model": "RT-950 Pro",
+  "occurred_at": "2026-11-20",
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:845",
+  "status": "awaiting_user",
+  "summary": "1.0.62 Windows COM6, model Radtel_RT-950, three PROGRAMBT tries silent. Notes say 'radtel rt 950 pro', so the RT-950 model was likely the wrong choice.",
+  "title": "RT-950 Pro owner selected RT-950; PROGRAMBT got no response",
+  "uid": "w-20261120-43e0"
+}

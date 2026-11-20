@@ -499,6 +499,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#85 bug | awaiting_user | high:** Stock firmware image aborts on invalid packed frequency
   The read completed and produced an image, but channel decoding stopped at a packed-frequency byte 0xFF. A raw image is required to distinguish empty records from a Pro layout mismatch.
   Source: `email` INBOX:720
+- **#w-20261120-43e0 bug | awaiting_user | normal:** RT-950 Pro owner selected RT-950; PROGRAMBT got no response
+  1.0.62 Windows COM6, model Radtel_RT-950, three PROGRAMBT tries silent. Notes say 'radtel rt 950 pro', so the RT-950 model was likely the wrong choice.
+  Source: `email` INBOX:845
 - **#8 maintenance | experimental | normal:** Current driver status
   Transport: RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR. Read: 960 channels + Pro map, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:32

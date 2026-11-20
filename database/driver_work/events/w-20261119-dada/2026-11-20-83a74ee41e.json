@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 16:14:30",
+  "details": "Image sha256 f94c00f3a034df39836a2eeb12066a27090e975e5ff337acd3db4c27d18eff3b (kept out of git). 'ICOM Inc' at 0x100; channels start at 0x180, 34-byte records: 8-char name, RX u32 BE Hz, TX u32 BE Hz, tone bytes, flags. 7 of 8 reported channels match; DECK 2 decodes 460.500 vs reported 460.550. All channels UHF (F60V).",
+  "event_type": "evidence",
+  "external_ref": "email:INBOX:842",
+  "item": "w-20261119-dada",
+  "occurred_at": "2026-11-20",
+  "summary": "Requester sent IC-F50V/F60V capture (3538-byte image + metadata) and 8 channel names/frequencies"
+}

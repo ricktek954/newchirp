@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 16:14:30",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "desktop:drivers/newchirp_wouxun_kg689e.py",
+  "item": "93",
+  "occurred_at": "2026-11-20",
+  "summary": "Driver has no echo handling: _exchange reads 1 byte after the 9-byte wake and treats the echoed 'H' as a bad ack. Need a Wouxun 2-pin non-echo cable, normal power-on, and optional echo stripping in _wake_and_identify"
+}

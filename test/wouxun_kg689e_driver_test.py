@@ -89,6 +89,34 @@ class FakeKG689E:
         return chunk
 
 
+class EchoCable:
+    """A cable that returns every host byte before the radio's reply.
+
+    With radio=None it models an echoing cable on a radio that never
+    answers (for example an Icom cable on a Wouxun).
+    """
+
+    def __init__(self, radio):
+        self.radio = radio
+        self.pending = b""
+
+    def reset_input_buffer(self):
+        self.pending = b""
+        if self.radio:
+            self.radio.reset_input_buffer()
+
+    def write(self, data):
+        self.pending += bytes(data)
+        if self.radio:
+            self.radio.write(data)
+
+    def read(self, length):
+        chunk, self.pending = self.pending[:length], self.pending[length:]
+        if self.radio and len(chunk) < length:
+            chunk += self.radio.read(length - len(chunk))
+        return chunk
+
+
 class WouxunKG689EDriverTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -244,6 +272,22 @@ class WouxunKG689EDriverTest(unittest.TestCase):
         with self.assertRaisesRegex(Exception, "KG669V"):
             self._read(fake)
         self.assertEqual(fake.reads, [])
+
+    def test_echo_cable_is_stripped_for_read_and_write(self):
+        fake = EchoCable(FakeKG689E(self._radio_memory()))
+        radio = self._read(fake)
+        self.assertEqual(len(fake.radio.reads), 68)
+        self.assertEqual(radio.get_memory(1).freq, 146_520_000)
+        writer = EchoCable(FakeKG689E(self._radio_memory()))
+        radio.pipe = writer
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_out()
+        self.assertTrue(writer.radio.writes)
+
+    def test_echo_without_radio_reports_cable_type(self):
+        fake = EchoCable(None)
+        with self.assertRaisesRegex(Exception, "Wouxun 2-pin"):
+            self._read(fake)
 
     def test_tone_codec_matches_cps_encoder(self):
         self.assertEqual(self.driver._encode_tone("Tone", 88.5, None), 885)

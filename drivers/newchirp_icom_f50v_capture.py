@@ -132,3 +132,155 @@ class IcomF50VCapture(icf.IcomCloneModeRadio, chirp_common.ExperimentalRadio):
         raise errors.RadioError(
             "The IC-F50V/F60V capture profile is read-only."
         )
+
+
+# --- Read-only channel decode -------------------------------------------
+#
+# Layout learned from an owner's IC-F60V capture (request INBOX:816, image
+# INBOX:842; sha256 f94c00f3...eff3b, kept out of the repository). The image
+# ends with a section directory of 10-byte big-endian entries
+# (id, record size, count, offset, 0) whose sections tile the image without
+# gaps from 0x180 up to the directory itself. Section 2 holds the channels.
+# Seven of the owner's eight listed channels matched name and frequency.
+#
+# Channel record (0x22 bytes), confirmed fields only:
+#   0x00  8  name, ASCII, space padded
+#   0x08  4  RX frequency, Hz, big-endian (0 = empty)
+#   0x0C  4  TX frequency, Hz, big-endian
+#   0x10  4  two tone words; 0x8000 = none. Encoding unconfirmed, not shown.
+#   0x14 14  flags and options, not decoded.
+
+CHANNEL_SECTION = 2
+CHANNEL_RECORD = 0x22
+DIRECTORY_ENTRY = 10
+MAX_CHANNELS = 512
+
+
+def _u16(data, offset):
+    return data[offset] << 8 | data[offset + 1]
+
+
+def _u32(data, offset):
+    return int.from_bytes(data[offset:offset + 4], "big")
+
+
+def find_sections(data):
+    """Return {section id: (record size, count, offset)} or None.
+
+    The directory is located by requiring a run of at least three entries
+    whose sections are contiguous, so random bytes cannot pass for it.
+    """
+    data = bytes(data)
+    for start in range(0, len(data) - 3 * DIRECTORY_ENTRY + 1, 2):
+        sections = {}
+        position = start
+        expected = None
+        while position + DIRECTORY_ENTRY <= len(data):
+            ident, size, count, offset, pad = (
+                _u16(data, position + index)
+                for index in range(0, DIRECTORY_ENTRY, 2))
+            if pad or not size or not count or ident in sections:
+                break
+            if expected is not None and offset != expected:
+                break
+            end = offset + size * count
+            if end > len(data):
+                break
+            sections[ident] = (size, count, offset)
+            expected = end
+            position += DIRECTORY_ENTRY
+        if len(sections) >= 3 and expected == start:
+            return sections
+    return None
+
+
+@directory.register
+class IcomF60V(IcomF50VCapture):
+    """Icom IC-F50V / IC-F60V, read-only channel view."""
+
+    VARIANT = ""
+
+    @classmethod
+    def get_prompts(cls):
+        prompts = super().get_prompts()
+        prompts.experimental = (
+            "IC-F50V/F60V support is read-only and new. NewChirp shows each "
+            "channel's name and frequencies; tones and other options are "
+            "not shown yet, and nothing is ever written to the radio. If a "
+            "channel looks wrong, save the image and send it to the "
+            "NewChirp team."
+        )
+        return prompts
+
+    def process_mmap(self):
+        super().process_mmap()
+        data = self._mmap.get_packed() if self._mmap else b""
+        self._sections = find_sections(data)
+        channel = (self._sections or {}).get(CHANNEL_SECTION)
+        if not channel or channel[0] != CHANNEL_RECORD:
+            raise errors.RadioError(
+                "NewChirp could not find the channel table in this "
+                "IC-F50V/F60V image. Read it with the \"IC-F50V/F60V "
+                "Capture\" profile, save it, and send it to the NewChirp "
+                "team so this layout can be added."
+            )
+        self._channel_count = min(channel[1], MAX_CHANNELS)
+        self._channel_offset = channel[2]
+
+    def get_features(self):
+        rf = super().get_features()
+        rf.memory_bounds = (1, getattr(self, "_channel_count", 16))
+        rf.has_name = True
+        rf.valid_name_length = 8
+        rf.valid_characters = chirp_common.CHARSET_ASCII
+        rf.valid_duplexes = ["", "+", "-", "split"]
+        rf.can_odd_split = True
+        rf.valid_bands = [(136000000, 174000000), (400000000, 520000000)]
+        return rf
+
+    def get_raw_memory(self, number):
+        offset = self._channel_offset + (number - 1) * CHANNEL_RECORD
+        return util.hexprint(
+            self._mmap.get_packed()[offset:offset + CHANNEL_RECORD])
+
+    def get_memory(self, number):
+        mem = chirp_common.Memory()
+        mem.number = number
+        data = self._mmap.get_packed()
+        offset = self._channel_offset + (number - 1) * CHANNEL_RECORD
+        record = data[offset:offset + CHANNEL_RECORD]
+        rx = _u32(record, 0x08)
+        tx = _u32(record, 0x0C)
+        if not rx:
+            mem.empty = True
+            mem.immutable = ["empty"]
+            return mem
+        mem.freq = rx
+        mem.name = record[0:8].decode("ascii", "replace").rstrip()
+        if not tx or tx == rx:
+            mem.duplex = ""
+            mem.offset = 0
+        elif abs(tx - rx) < 70000000:
+            mem.duplex = "+" if tx > rx else "-"
+            mem.offset = abs(tx - rx)
+        else:
+            mem.duplex = "split"
+            mem.offset = tx
+        mem.mode = "FM"
+        mem.immutable = ["empty", "name", "freq", "duplex", "offset",
+                         "tmode", "mode", "power", "skip"]
+        return mem
+
+    def set_memory(self, mem):
+        raise errors.RadioError("IC-F50V/F60V support is read-only.")
+
+    def sync_out(self):
+        raise errors.RadioError("IC-F50V/F60V support is read-only.")
+
+    @classmethod
+    def match_model(cls, filedata, filename):
+        # Saved capture images carry this or the capture profile's metadata;
+        # raw images are only accepted when the section directory is present.
+        return (filename.lower().endswith(".img")
+                and b"ICOM Inc" in filedata[:0x200]
+                and find_sections(filedata[:CAPTURE_LIMIT]) is not None)

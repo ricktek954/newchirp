@@ -74,7 +74,8 @@ Last updated: 2026-11-18
 | Wouxun KG-689E / KG-699E | `drivers/newchirp_wouxun_kg689e.py` | Wouxun KG669V clone serial, 9600 8N1, DTR on (OEM CPS) | 128 channels + names, CPS block plan, replay-tested | CPS write spans with radio-limit check, replay-tested | Preserved, not decoded | Experimental; no hardware |
 | Wouxun KG-905G Plus | `drivers/newchirp_kg905g.py` | Wouxun clone serial, 19200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
 | Wouxun KG-Q10H | `drivers/newchirp_kgq10h.py` | Wouxun encrypted clone serial, 115200 8N1, DTR on, RTS on | Yes, offline-tested | Yes, offline-tested | Hidden | Experimental |
-| Icom IC-F50V / IC-F60V (capture) | `drivers/newchirp_icom_f50v_capture.py` | Icom clone serial, 9600, model ID learned from the radio | Raw memory capture only, no channels decoded | Never | None | Experimental capture tool; no hardware |
+| Icom IC-F50V / IC-F60V | `drivers/newchirp_icom_f50v_capture.py` | Icom clone serial, 9600, model ID learned from the radio | Channel names and RX/TX from the image's section directory; tones and options not shown | Never | None | Experimental; read-only; one owner capture (Web Programmer) |
+| Icom IC-F50V / IC-F60V (capture) | `drivers/newchirp_icom_f50v_capture.py` | Icom clone serial, 9600, model ID learned from the radio | Raw memory capture only, no channels decoded | Never | None | Experimental capture tool |
 | Icom IC-9700 | `drivers/newchirp_icom9700.py` | Icom CI-V serial, auto-baud from 4800 to 115200 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Icom CI-V live radios (IC-910 and others) | Pinned CHIRP `icomciv.py` with `drivers/newchirp_icomciv_tone_compat.py` | Icom CI-V serial | Unset CTCSS tones read as 88.5 Hz instead of stopping the read | Stock CHIRP driver | Stock CHIRP driver | Compatibility override; offline-tested |
 | Icom IC-7200 | `drivers/newchirp_icom_ic7200.py` | Icom CI-V serial, 19200 8N1 | Corrected memory grammar | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -1958,6 +1959,36 @@ Last updated: 2026-11-18
 - Next milestone: two or three owner captures with known channels, or
   CS-F50V `.icf` files, to map channel records; then a write-limited driver.
 
+### Icom IC-F50V / IC-F60V (read-only channels)
+
+- Driver: class `IcomF60V` in `drivers/newchirp_icom_f50v_capture.py`
+  (2026-11-20), CHIRP ID `Icom_IC-F50V_F60V`. Same transport as the
+  capture profile.
+- Evidence: one owner's IC-F60V capture read in the Web Programmer
+  (INBOX:842, image SHA-256
+  `f94c00f3a034df39836a2eeb12066a27090e975e5ff337acd3db4c27d18eff3b`, kept
+  out of Git) and the owner's list of eight channels (INBOX:843). This is
+  a physical read through the browser transport, not through the desktop.
+- Layout: 3538-byte image. `ICOM Inc` at `0x100`; the big-endian u16 at
+  `0x110` is the data length minus 8. A section directory of 10-byte
+  big-endian entries (id, record size, count, offset, 0) sits at the end
+  and its 18 sections tile `0x180` up to the directory with no gaps. The
+  driver locates the directory by that contiguity, not by a fixed offset.
+  Section 2 is the channels: 16 records of `0x22` bytes. Record: name
+  (8 ASCII, space padded), RX Hz u32 BE, TX Hz u32 BE (RX 0 = empty), two
+  tone words at `0x10` (`0x8000` = none; values 0-50 seen, encoding
+  unconfirmed), then flags/options.
+- Check: 7 of 8 listed channels match name and frequency. DECK 2 decodes
+  460.500 MHz; the owner listed 460.550. Asked the owner to confirm.
+- Policy: read-only (`NEWCHIRP_WRITE_DISABLED`, `set_memory` and
+  `sync_out` refuse). Every field is immutable. Images without a valid
+  directory are refused with a pointer to the capture profile.
+- Known limitations: tones, power, bandwidth, scan and zones are not shown.
+- Driver SHA-256: `2178d6c8219b156808b8b4ba268729528343f630061515454b50ab9a3b75768b`
+- Tests: `test/icom_f60v_driver_test.py` (5, synthetic image only).
+- Next milestone: owner confirms DECK 2 and sends tone settings for two
+  or three channels to decode the tone words; a desktop read on hardware.
+
 ### Icom CI-V unset tone compatibility
 
 - Override: `drivers/newchirp_icomciv_tone_compat.py` (2026-11-19, IC-910H
@@ -2232,9 +2263,14 @@ Last updated: 2026-11-18
 - Fields: RX/TX, CTCSS/DCS both directions, wide/narrow, high/low, scan add,
   6-character name; extras for busy lock, DTMF optional signal and mute
   mode. Unknown bits and bytes 14-15 are preserved.
-- Driver SHA-256: `ebdd6c93f255ac9063d2d80f120787eab45b143ace2bd3f3e48c0f63a689d08f`
+- Cable echo (2026-11-20, INBOX:840): the first owner read got `48` ('H',
+  the first wake byte) back on every wake because his cable echoes host
+  bytes. The driver now detects an echoed wake, strips the echo from every
+  later exchange (and refuses on an echo mismatch), and when only the echo
+  comes back says the cable is the wrong type instead of "answered 48".
+- Driver SHA-256: `d5f639986326fedb3c5d9852268d3a484372f3ed7e05ee5f028e053183cfd826`
 - Hardware validation: none. Replay evidence:
-  `test/wouxun_kg689e_driver_test.py` (10 tests).
+  `test/wouxun_kg689e_driver_test.py` (12 tests, including echo cables).
 - Website: the Web Programmer profiles (Nov 18) read the DTMF bit as
   bandwidth and the bandwidth bit as scan skip, invented a bit-0 split
   flag, wrote the second halves of `0x0810`/`0x1810`, and had no limit

@@ -112,14 +112,55 @@ struct {
 """
 
 
+ECHO_CABLE_MESSAGE = (
+    "The programming cable is sending NewChirp's own commands back, but "
+    "the radio did not answer. This happens with single-wire cables made "
+    "for Icom and some Yaesu radios. Use a Wouxun 2-pin programming cable "
+    "(the Kenwood K1 type), turn the radio on normally without holding "
+    "any key, and try again."
+)
+
+
+def _discard_echo(radio, data):
+    """Consume the cable's copy of data. Only called once echo is known."""
+    echo = radio.pipe.read(len(data))
+    if echo != data:
+        raise errors.RadioError(
+            "The cable echo did not match what NewChirp sent (%s). Check the "
+            "cable connection and try again." % (echo.hex() or "no echo")
+        )
+
+
 def _exchange(radio, data, length):
     radio.pipe.write(data)
+    if getattr(radio, "_cable_echo", False):
+        _discard_echo(radio, data)
     reply = radio.pipe.read(length)
     return reply
 
 
+def _wake(radio):
+    """Send the wake string; return the reply, detecting a local echo.
+
+    Some cables (Icom-style single-wire, or adapters with TX tied to RX)
+    return every byte the host sends before the radio's answer. The CPS
+    assumes a clean cable; NewChirp strips the echo so these cables work
+    when the radio itself is answering.
+    """
+    radio.pipe.write(WAKE)
+    reply = radio.pipe.read(1)
+    if reply == WAKE[:1]:
+        rest = radio.pipe.read(len(WAKE) - 1)
+        if rest == WAKE[1:]:
+            radio._cable_echo = True
+            return radio.pipe.read(1), True
+    return reply, False
+
+
 def _wake_and_identify(radio):
+    radio._cable_echo = False
     reply = b""
+    echoed = False
     for attempt in range(WAKE_ATTEMPTS):
         if attempt:
             time.sleep(0.2)
@@ -127,10 +168,16 @@ def _wake_and_identify(radio):
             radio.pipe.reset_input_buffer()
         except Exception:
             pass
-        reply = _exchange(radio, WAKE, 1)
+        reply, echo = _wake(radio)
+        echoed = echoed or echo
         if reply == ACK:
+            if echo:
+                LOG.info("KG-689E: cable echoes host bytes; stripping echo")
             break
+        radio._cable_echo = False
     else:
+        if echoed:
+            raise errors.RadioNoResponse(ECHO_CABLE_MESSAGE)
         if not reply:
             raise errors.RadioNoResponse(
                 "The radio did not answer. Check that the programming cable "

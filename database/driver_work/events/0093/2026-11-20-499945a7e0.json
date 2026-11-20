@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 16:14:30",
+  "details": "0x48 is the echo of HiWOUXUN, so the cable loops TX back to RX. Reporter is using the cable from his Icom HT and powered on holding MONI, which starts radio-to-radio clone ('Coping'), not PC mode.",
+  "event_type": "report",
+  "external_ref": "email:INBOX:840",
+  "item": "93",
+  "occurred_at": "2026-11-20",
+  "summary": "First KG-689E desktop read on 1.0.64 (Linux, /dev/ttyUSB0): one run silent, next run got 0x48 ('H', first wake byte) on all 20 wakes"
+}
