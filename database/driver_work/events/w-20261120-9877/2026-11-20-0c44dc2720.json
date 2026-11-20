@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 17:43:41",
+  "details": "Owner of two RT-950 Pros: the one programmed today (likely Web Programmer; desktop failed at port open, w-20261120-8265) beeps on PTT and does not transmit; the unprogrammed one is fine. Experimental write sends the full CPS block set, settings included. Candidates: TX off on the channel, TX outside the radio's TX range (owner's IC-F60V channels are 450-469 MHz commercial), busy lock, or a settings block changed by the write. Need: tool used, channel/frequency, whether any channel transmits, the pre-write backup and a fresh read.",
+  "event_type": "created",
+  "external_ref": "INBOX:849",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "After a write, radio beeps on PTT and will not transmit"
+}
