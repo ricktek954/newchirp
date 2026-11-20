@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 19:25:45",
+  "details": "",
+  "event_type": "note",
+  "external_ref": "desktop:8a815371",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "Release plan (maintainer, 2026-11-20): hold desktop 1.0.64 for the owner's 146.520 MHz VFO test. Transmits -> re-enable RT-950 Pro writes and ship with the TX-band warning; beeps -> ship 1.0.64 with writes paused; no reply in ~2 days -> ship with writes paused. 1.0.63 still has RT-950 Pro writes enabled."
+}
