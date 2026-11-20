@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 20:54:14",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "macOS desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:2fc54348",
+  "status": "released",
+  "summary": "Published a universal signed, notarized, stapled DMG from source commit 2fc54348. It includes the RT-950 Pro write/transmit correction, approved RepeaterBook API search through the server relay, IC-F50V/F60V capture support, KG-689E/699E fixes, and cumulative driver/UI/bridge compatibility changes. Artifact SHA-256: 05ccb46548ff27de481610d6b41c0a5cc0515504eb9617c5c9763e1bf2c0a8cb. Notarization: dbd06c9d-66de-4d3f-a19b-5e2c1117dca5. Live manifest reports macOS 1.0.64.",
+  "title": "macOS 1.0.64 published",
+  "uid": "w-20261120-2135"
+}
