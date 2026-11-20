@@ -403,6 +403,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261119-250d release | released | normal:** Linux 1.0.63 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 5c2c607f. The release adds the read-only Icom IC-F50V/F60V memory-capture profile, fixes fixed-zone write blocking after channel moves, and preserves radio-mapping memberships across location remaps. Public manifest reports 1.0.63. Package SHA-256 values: 01b9ab23a869829a58024cb1c086e753f1a39cf870b546a1cc4f6c309aa78898, 70a5f484b2ac85112e50c1468b3bd3d10cbd063e79300868ddf9de117909dc0b, 99b578e21654e28859f5cdd15f270d1be5f3c9e46e5a9463c694f3f8507dc15b, and 8ed7d2c954dfd349affa9f8aae3a22cc27c32573e05eb17da35904dc58c7779a.
   Source: `release` desktop:5c2c607f
+- **#w-20261120-4857 release | released | normal:** Linux 1.0.64 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 12c4633d. The release fixes blank cross modes, preserves unloadable CHIRP settings, restores live band switching, adds collapsible channel-summary metrics, and carries CSV and bridge compatibility fixes. Public manifest reports 1.0.64. Package SHA-256 values: c58f4ef279e260f131eb700d651d4063e289999cf4bc7083cfde2a6529bcd0be, d4e13e4a0cacf24cc90cd428cd4633544588a7d8b4e69be75888d493211720c4, 26048b9b36e63eefe3016811d5232f6b6acf399f0a39a603e93ea5092127132e, and 05e0c9c23db86200c80924bdbdf86804126365d817e5f655dfa27f3e1073cf9f.
+  Source: `release` desktop:12c4633d
 
 ## Quansheng
 

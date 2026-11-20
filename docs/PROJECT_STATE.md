@@ -15,6 +15,16 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.64` is live from source commit `12c4633d`. It fixes blank cross
+  modes, preserves radio settings that the current CHIRP build cannot load,
+  restores live band switching, adds collapsible channel-summary metrics, and
+  carries the latest CSV and bridge compatibility fixes. Verification:
+  analyzer clean; 239 Flutter tests; 543 Python tests with two
+  fixture-dependent skips; max glibc `2.18`; DEB, RPM, and Pacman metadata
+  plus embedded version `1.0.64` / `64`; DEB and AppImage Xvfb launch tests
+  passed on Ubuntu 20.04; the final AppImage launched under host Wayland and
+  XWayland; package payloads omit GLVND/EGL/GLES loaders; all public downloads
+  returned HTTP 200; and the Linux platform manifest reports `1.0.64`.
 - Linux `1.0.63` is live from source commit `5c2c607f`. It adds the read-only
   Icom IC-F50V/F60V memory-capture profile, prevents fixed-zone metadata from
   blocking writes after channels move, and preserves radio-mapping
@@ -896,9 +906,9 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.63` is live from source commit `5c2c607f`
+- Linux `1.0.64` is live from source commit `12c4633d`
 - Open pull requests: none
-- Checked-out source version: `1.0.63+63`
+- Checked-out source version: `1.0.64+64`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -914,7 +924,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.61 |
 | Windows | 1.0.61 |
-| Linux | 1.0.63 |
+| Linux | 1.0.64 |
+
+Linux `1.0.64` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.64.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.64.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.64.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.64.pkg.tar.zst`
+- DEB: `48,566,694` bytes, SHA-256
+  `c58f4ef279e260f131eb700d651d4063e289999cf4bc7083cfde2a6529bcd0be`
+- RPM: `48,653,747` bytes, SHA-256
+  `d4e13e4a0cacf24cc90cd428cd4633544588a7d8b4e69be75888d493211720c4`
+- AppImage: `48,846,016` bytes, SHA-256
+  `26048b9b36e63eefe3016811d5232f6b6acf399f0a39a603e93ea5092127132e`
+- Pacman: `47,544,695` bytes, SHA-256
+  `05e0c9c23db86200c80924bdbdf86804126365d817e5f655dfa27f3e1073cf9f`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.64`
 
 Linux `1.0.63` artifacts:
 
