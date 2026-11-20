@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 21:37:41",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:db43ef2b",
+  "item": "w-20261120-8af9",
+  "occurred_at": "2026-11-20",
+  "summary": "Driver _prep_data renumbers each bank's positions 1..n (current 0x300 order, then new/moved channels by slot), writes them to records and the 0x300 table, clears stale entries to 0x4FF; validation requires 1..n per bank. TK-760G sample table/counts/positions rebuild byte for byte; regression for the reporter's 24+1 scenario; 556 Python tests pass. Not hardware-validated; 0x7000 slot-vs-count indexing still open."
+}
