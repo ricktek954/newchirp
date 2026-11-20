@@ -48,6 +48,20 @@ release requirements.
   include the KG-689E and Icom tone compatibility drivers and omit
   GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the
   Linux platform manifest reports `1.0.62`.
+- macOS `1.0.62` is live from source commit `89b4876e` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. Its application payload
+  is runtime-identical to the final 1.0.62 release boundary `0d09b292`; that
+  later commit changes only an Ubuntu ledger test. It carries the
+  CPS-derived Wouxun KG-689E/KG-699E driver, Icom CI-V unset-tone handling,
+  promoted FT-50 support, and the latest TK-270G and 5RH Pro fixes.
+  Verification: analyzer clean; 235 Flutter tests; 536 Python tests with two
+  fixture-dependent skips; 68 bridge tests; embedded version `1.0.62` / `62`;
+  arm64 and x86_64 Python `3.13.15`; 264 CHIRP driver modules; catalog
+  `list-models` returned 600 models including `Wouxun_KG-689E`,
+  `Wouxun_KG-699E`, `Icom_IC-910`, and `Yaesu_FT-50`; strict app/DMG
+  signatures; Apple notarization and stapling; Gatekeeper acceptance; launch
+  smoke test; and matching local, server, and public SHA-256. Notarization
+  submission: `8fed5c04-70ea-4d77-b69c-b36b9340ea38`.
 - Linux `1.0.61` is live from source commit `50f17c3c`. It restores the
   read-only zone display for fixed-zone radios such as the BF-F8HP-PRO,
   UV-17ProGPS family, GM-32, GM-30 Plus/Pro, RT-910, and BJ7800. Verification:
@@ -923,6 +937,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.62` artifact source commit: `89b4876e`
 - macOS `1.0.61` artifact source commit: `0e701b16`
 - macOS `1.0.60` artifact source commit: `488564b4`
 - macOS `1.0.59` artifact source commit: `170c63f3`
@@ -947,9 +962,6 @@ Latest public artifacts reported by
 | macOS | 1.0.62 |
 | Windows | 1.0.62 |
 | Linux | 1.0.64 |
-
-macOS `1.0.62` is live per the platform manifest; this checkout does not yet
-contain its artifact record.
 
 Linux `1.0.64` artifacts:
 
@@ -1060,6 +1072,24 @@ Linux `1.0.60` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums and sizes matched the local artifacts
 - Linux platform manifest reports `1.0.60`
+
+macOS `1.0.62` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.62.dmg`
+- Version/build: `1.0.62` / `62`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `76221b2015baf52d7b50e912ef40261c5a101a89b2f3fd99ab75d074fc711a90`
+- Size: `86,852,737` bytes
+- Built from `89b4876e`
+- Notarization submission: `8fed5c04-70ea-4d77-b69c-b36b9340ea38`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Application payload is runtime-identical to the final 1.0.62 release
+  boundary `0d09b292`, which only changes an Ubuntu ledger test
+- Bundle contains Wouxun KG-689E/KG-699E support, the Icom CI-V unset-tone
+  compatibility fix, promoted FT-50 support, and the latest TK-270G and 5RH
+  Pro zone-flag fixes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.61` artifact:
 
@@ -1993,6 +2023,20 @@ Linux 1.0.41 sizes:
   The complete Python suite ran 540 tests: 534 passed, 2 skipped, 3 known
   Windows temporary-file-lock helper errors, and 1 Windows-only
   path-separator assertion. The installer remains unsigned.
+- Published macOS `1.0.62` from source commit `89b4876e` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. Its application payload
+  is runtime-identical to the final 1.0.62 boundary `0d09b292`, whose only
+  later change is an Ubuntu ledger-test adjustment. It carries the
+  KG-689E/KG-699E driver, Icom CI-V unset-tone handling, promoted FT-50
+  support, and current TK-270G and 5RH Pro fixes.
+  Verification: analyzer clean; 235 Flutter tests; 536 Python tests with two
+  fixture-dependent skips; 68 bridge tests; embedded version `1.0.62` / `62`;
+  both Python architectures at `3.13.15`; 264 CHIRP driver modules; 600
+  catalog models including KG-689E, KG-699E, IC-910, and FT-50; strict app
+  and DMG signatures; Apple notarization ID
+  `8fed5c04-70ea-4d77-b69c-b36b9340ea38`; staple, Gatekeeper, mounted-DMG,
+  launch-smoke, server/public-download, and checksum checks passed. The live
+  macOS manifest reports `1.0.62`.
 - Published Windows `1.0.61` from source commit `0e701b16`. The release adds
   the OEM-CPS-derived Wouxun KG-689E/KG-699E driver, the Icom CI-V unset-tone
   compatibility fix, promoted FT-50 support after hardware confirmation, and
