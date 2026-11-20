@@ -409,6 +409,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-f0fb release | released | normal:** Linux 1.0.65 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 014df59b. The release integrates the approved RepeaterBook API relay, expands read-only Icom IC-F50V/F60V channel support, handles echoing cables on the Wouxun KG-689E, and carries related UI and error-reporting fixes. Public manifest reports 1.0.65. Package SHA-256 values: f3cf598266edcd1c75944703cbb3e4699afb82cf6282c8054e797922d3e1df9e, fd1af91bc3a84bbcb267fb0a3e19ec35c8d3a7b92b5407e1fb6415c14102210e, c0849973a05f21de913201ff4c3de253b9020e52af0f55a8dc162253a9349f20, and f1aca0d1b313ce5db5145407ff811cfb3f4979dadb611d9382e1cec3f4ae9958.
   Source: `release` desktop:014df59b
+- **#w-20261120-0fa6 release | released | normal:** Linux 1.0.66 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 268f70cd. The release re-enables Radtel RT-950 Pro writes after physical read/write validation and adds receive-only channel handling and UI safeguards for marine and protected channels. Public manifest reports 1.0.66. Package SHA-256 values: d7135ce5062bff886b418a42b8e8c6fe5f06ce00f85bea4fd1acd7235ef9948f, 8c409604d642e68a1c764062699008d936990c523f7e3ea53f10f3998419b200, 1d8a92db199f83e240203ce9f6dbbd14e1b0e730474961b0ddefc0d9c0f0b8d9, and 3a6c8d357568ccc7873efe7974cd6ed335a10d3edfad066a910eb13f8a7feb47.
+  Source: `release` desktop:268f70cd
 
 ### macOS desktop
 

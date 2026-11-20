@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 20:59:55",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "Linux desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:268f70cd",
+  "status": "released",
+  "summary": "Published DEB, RPM, AppImage, and Pacman packages from source commit 268f70cd. The release re-enables Radtel RT-950 Pro writes after physical read/write validation and adds receive-only channel handling and UI safeguards for marine and protected channels. Public manifest reports 1.0.66. Package SHA-256 values: d7135ce5062bff886b418a42b8e8c6fe5f06ce00f85bea4fd1acd7235ef9948f, 8c409604d642e68a1c764062699008d936990c523f7e3ea53f10f3998419b200, 1d8a92db199f83e240203ce9f6dbbd14e1b0e730474961b0ddefc0d9c0f0b8d9, and 3a6c8d357568ccc7873efe7974cd6ed335a10d3edfad066a910eb13f8a7feb47.",
+  "title": "Linux 1.0.66 published",
+  "uid": "w-20261120-0fa6"
+}

@@ -27,6 +27,16 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.66` is live from source commit `268f70cd`. It re-enables
+  Radtel RT-950 Pro writes after physical read/write validation and adds
+  receive-only channel handling and UI safeguards for marine and protected
+  channels. Verification: analyzer clean; 242 Flutter tests; 550 Python tests
+  with two fixture-dependent skips; max glibc `2.18`; DEB, RPM, and Pacman
+  metadata plus embedded version `1.0.66` / `66`; DEB and AppImage Xvfb launch
+  tests passed on Ubuntu 20.04; the final AppImage launched under host Wayland
+  and XWayland; package payloads include the rebuilt RT-950 Pro driver and
+  omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
+  the Linux platform manifest reports `1.0.66`.
 - Linux `1.0.65` is live from source commit `014df59b`. It integrates the
   approved RepeaterBook API relay, expands the read-only Icom IC-F50V/F60V
   channel support, handles echoing programming cables on the Wouxun KG-689E,
@@ -1043,7 +1053,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.65` is live from source commit `014df59b`
+- Linux `1.0.66` is live from source commit `268f70cd`
 - Open pull requests: none
 - Checked-out source version: `1.0.66+66`
 - macOS builds are pinned to CocoaPods with
@@ -1061,7 +1071,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.64 |
 | Windows | 1.0.64 |
-| Linux | 1.0.65 |
+| Linux | 1.0.66 |
+
+Linux `1.0.66` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.66.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.66.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.66.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.66.pkg.tar.zst`
+- DEB: `48,558,974` bytes, SHA-256
+  `d7135ce5062bff886b418a42b8e8c6fe5f06ce00f85bea4fd1acd7235ef9948f`
+- RPM: `48,651,431` bytes, SHA-256
+  `8c409604d642e68a1c764062699008d936990c523f7e3ea53f10f3998419b200`
+- AppImage: `48,850,112` bytes, SHA-256
+  `1d8a92db199f83e240203ce9f6dbbd14e1b0e730474961b0ddefc0d9c0f0b8d9`
+- Pacman: `47,525,864` bytes, SHA-256
+  `3a6c8d357568ccc7873efe7974cd6ed335a10d3edfad066a910eb13f8a7feb47`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.66`
 
 Linux `1.0.65` artifacts:
 
