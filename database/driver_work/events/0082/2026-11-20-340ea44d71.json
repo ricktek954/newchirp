@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 09:07:16",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:834",
+  "item": "82",
+  "occurred_at": "2026-11-20",
+  "summary": "Reporter: 1.0.61 reads the channels with all tones correct; sent the RT Systems source file (UV32, 366,569 bytes) and a 1.0.56 CSV"
+}

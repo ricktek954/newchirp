@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 09:07:03",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-32",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:828",
+  "status": "fix_committed",
+  "summary": "NewChirp 1.0.54 write of a CSV stopped at channel 111: cross_mode '' not in CHIRP's valid list. A blank CrossMode cell imported as '' and the bridge set it on every channel. Same report shows the 136.5/151.4/156.7 'malformed' tone warnings fixed in 27e3bf07.",
+  "title": "Write stops on blank CSV CrossMode",
+  "uid": "w-20261120-abf7"
+}

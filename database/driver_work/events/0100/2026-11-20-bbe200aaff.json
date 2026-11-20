@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 09:07:16",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:823",
+  "item": "100",
+  "occurred_at": "2026-11-20",
+  "summary": "Two more 1.0.61 writes stopped with 'Zones are fixed' (BF-F8HP-PRO INBOX:823, UV-29Pro INBOX:827); both predate the fix shipped in 1.0.63"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 09:07:16",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:825",
+  "item": "w-20261120-8a28",
+  "occurred_at": "2026-11-20",
+  "summary": "Same report: physical IC-9700 read of 28 channels on 1.0.61 (COM7) succeeded"
+}

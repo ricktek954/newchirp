@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 09:07:15",
+  "kind": "bug",
+  "manufacturer": "AnyTone",
+  "model": "778UV VOX",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:829",
+  "status": "awaiting_user",
+  "summary": "1.0.63 Linux: reply to PROGRAM was 'T^@^@^@^@^@^@^_^ST^PROGRAM' (26 bytes) instead of QX 06. Caret notation is a Linux terminal echo, so ttyACM0 is not answering as the radio (wrong device, a getty/ModemManager on the port, or an echoing cable).",
+  "title": "PROGRAM comes back echoed in terminal caret notation on /dev/ttyACM0",
+  "uid": "w-20261120-9d64"
+}

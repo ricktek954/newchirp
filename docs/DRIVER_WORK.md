@@ -20,6 +20,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: Stock AnyTone clone serial. Read: Stock CHIRP driver. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:58
 
+### 778UV VOX
+
+- **#w-20261120-9d64 bug | awaiting_user | normal:** PROGRAM comes back echoed in terminal caret notation on /dev/ttyACM0
+  1.0.63 Linux: reply to PROGRAM was 'T^@^@^@^@^@^@^_^ST^PROGRAM' (26 bytes) instead of QX 06. Caret notation is a Linux terminal echo, so ttyACM0 is not answering as the radio (wrong device, a getty/ModemManager on the port, or an echoing cable).
+  Source: `email` INBOX:829
+
 ### AT-D578UVIII Plus
 
 - **#35 maintenance | experimental | normal:** Current driver status
@@ -120,12 +126,15 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-32
 
-- **#82 bug | awaiting_user | high:** Channels 52-54 lose stored CTCSS during decode
+- **#82 bug | hardware_tested | high:** Channels 52-54 lose stored CTCSS during decode
   NewChirp 1.0.56 decodes channels 52-54 with no tone, while RT Systems UV-32 Programmer 5.00.29 shows CTCSS 103.5, 103.5, and 206.5. The exported CSV alone does not contain the raw tone words.
   Source: `email` INBOX:744
 - **#98 bug | investigating | normal:** CSV import fails: 'Failed to decode data using encoding utf-8'
   Windows 1.0.58: opening a CSV saved by other software failed before parsing; reporter concluded CSV import is impossible. App read CSV strictly as UTF-8.
   Source: `email` INBOX:787
+- **#w-20261120-abf7 bug | fix_committed | normal:** Write stops on blank CSV CrossMode
+  NewChirp 1.0.54 write of a CSV stopped at channel 111: cross_mode '' not in CHIRP's valid list. A blank CrossMode cell imported as '' and the bridge set it on every channel. Same report shows the 136.5/151.4/156.7 'malformed' tone warnings fixed in 27e3bf07.
+  Source: `email` INBOX:828
 
 ### UV-5G Mini
 
@@ -144,6 +153,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#77 bug | awaiting_user | normal:** No response from radio
   Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.
   Source: `email` INBOX:691
+- **#w-20261120-a8df bug | fix_committed | normal:** Settings write fails on out-of-range factory squelch calibration
+  1.0.61: squelch_new.vhf.sql9 = 124 is outside uv5r.py's 0-123, CHIRP leaves it unset and set_settings raises int(None), so no setting can be written. Radio is labelled UV-5RH Pro GPS but reads 45 channels with the UV-5R profile.
+  Source: `email` INBOX:833
 
 ### UV-5R8W
 
@@ -246,6 +258,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### IC-9700
 
+- **#w-20261120-8a28 bug | fix_committed | normal:** Switching to the 430 band fails with Unknown file format
+  1.0.61 read 28 channels from the radio, then choosing '430 band (99 channels)' re-read the one-band live CSV snapshot as a clone image and failed.
+  Source: `email` INBOX:825
 - **#51 maintenance | experimental | normal:** Current driver status
   Transport: Icom CI-V serial, auto-baud from 4800 to 115200. Read: Stock CHIRP driver. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:75
@@ -370,6 +385,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:85
 
 ## NewChirp
+
+### Desktop
+
+- **#w-20261120-393e enhancement | fix_committed | normal:** Collapsible Channel Library summary cards
+  UV-32 owner asked to collapse the Channels / Scan enabled / Needs attention cards to see more channels.
+  Source: `email` INBOX:834
 
 ### Linux desktop
 

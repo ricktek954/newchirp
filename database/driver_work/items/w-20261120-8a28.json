@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 09:07:03",
+  "kind": "bug",
+  "manufacturer": "Icom",
+  "model": "IC-9700",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:825",
+  "status": "fix_committed",
+  "summary": "1.0.61 read 28 channels from the radio, then choosing '430 band (99 channels)' re-read the one-band live CSV snapshot as a clone image and failed.",
+  "title": "Switching to the 430 band fails with Unknown file format",
+  "uid": "w-20261120-8a28"
+}

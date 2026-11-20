@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 09:07:17",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:830",
+  "item": "40",
+  "occurred_at": "2026-11-20",
+  "summary": "1.0.37 report: ident TDH84GEN unsupported; that identity is accepted since 74b64690 (2026-11-05), so the reporter needs a current build"
+}

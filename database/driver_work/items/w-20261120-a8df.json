@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 09:07:03",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-5R",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:833",
+  "status": "fix_committed",
+  "summary": "1.0.61: squelch_new.vhf.sql9 = 124 is outside uv5r.py's 0-123, CHIRP leaves it unset and set_settings raises int(None), so no setting can be written. Radio is labelled UV-5RH Pro GPS but reads 45 channels with the UV-5R profile.",
+  "title": "Settings write fails on out-of-range factory squelch calibration",
+  "uid": "w-20261120-a8df"
+}

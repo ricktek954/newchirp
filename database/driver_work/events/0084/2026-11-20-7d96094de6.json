@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 09:07:16",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:821",
+  "item": "84",
+  "occurred_at": "2026-11-20",
+  "summary": "Device Manager shows USB-SERIAL CH340 on COM3 with every cable tried (INBOX:821/822). Separate reporters: 1.0.52 no response to either announce (INBOX:826); 1.0.61 UV-5RH Pro GPS one-byte reply to the 5RH Pro handshake (INBOX:832), while the UV-5R profile read 45 channels from the same radio (INBOX:833)"
+}
