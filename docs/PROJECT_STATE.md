@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-19
+Last updated: 2026-11-20
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -178,6 +178,27 @@ release requirements.
   reports macOS `1.0.56`; and local/server DMG SHA-256 both match
   `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
   Physical FT-50 upload/read-back validation is still pending.
+- Windows `1.0.62` is live from source commit `d9b31864`. It adds the
+  CPS-derived Wouxun KG-689E/KG-699E driver, keeps Icom CI-V reads working
+  when a channel has no tone set, fixes TK-270G editing and the 5RH Pro zone
+  flag, handles UV-5RM Plus v2 replies, imports F4HWN module images, and
+  carries the JSON-backed driver-work ledger. It also adds the read-only
+  Icom IC-F50V/F60V memory-capture profile and prevents fixed-zone metadata
+  from blocking writes after channels move. Verification: installer metadata
+  `1.0.62.0` / `1.0.62`; release app `1.0.62+62`; bundled Python `3.13.15`;
+  a clean runtime with no `okf`/`tree_sitter`/`tqdm`/`colorama`
+  contamination; 265 CHIRP driver modules; bridge `list-models` exit 0 with
+  empty stderr and 601 models including `Wouxun_KG-689E`,
+  `Wouxun_KG-699E`, `Icom_IC-910`, `Icom_IC-F50V_F60V_Capture`, and
+  `Yaesu_FT-50`; all four frequency-reference PDFs; extracted payload launch
+  succeeded; matching local/server/public SHA-256; public HTTP 200; and live
+  manifest Windows `1.0.62`. `flutter analyze lib test` is clean. The full
+  Flutter suite ran 232 passing tests with the five known Windows-only
+  sandbox/Help failures. The complete Python suite ran 540 tests: 534 passed,
+  2 fixture-dependent tests skipped, 3 known Windows temporary-file-lock
+  helper errors, and 1 Windows-only path-separator assertion in
+  `driver_work_test.py`. The installer remains unsigned. At verification
+  time, macOS was `1.0.62` and Linux was `1.0.64`.
 - Windows `1.0.61` is live from source commit `0e701b16`. It adds the
   CPS-derived Wouxun KG-689E/KG-699E driver, tolerates unset Icom CI-V tones,
   promotes FT-50 to supported status after hardware confirmation, and includes
@@ -899,6 +920,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
+- Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
 - macOS `1.0.61` artifact source commit: `0e701b16`
@@ -922,9 +944,12 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.61 |
-| Windows | 1.0.61 |
+| macOS | 1.0.62 |
+| Windows | 1.0.62 |
 | Linux | 1.0.64 |
+
+macOS `1.0.62` is live per the platform manifest; this checkout does not yet
+contain its artifact record.
 
 Linux `1.0.64` artifacts:
 
@@ -1228,7 +1253,31 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.61` artifact:
+Windows `1.0.62` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.62.exe`
+- Version/build: `1.0.62` / `62`
+- SHA-256:
+  `a8c430b555d4e3b5de139eda955360ffdaef7ea9171c87443600985b92b84c1b`
+- Size: `55,410,889` bytes
+- Built from `d9b31864`
+- Installer metadata `1.0.62.0` / `1.0.62`; release app `1.0.62+62`
+- Bundled Python `3.13.15`, 265 CHIRP driver modules, and a bridge
+  `list-models` run with exit 0, empty stderr, and 601 models including
+  `Wouxun_KG-689E`, `Wouxun_KG-699E`, `Icom_IC-910`,
+  `Icom_IC-F50V_F60V_Capture`, and `Yaesu_FT-50`
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains only the normal pip files, with no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination
+- Installer payload extraction confirmed the bundled runtime, driver tree,
+  bridge, and PDFs; the extracted runtime reported Python `3.13.15`, and the
+  extracted application launched successfully
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.62`
+- Authenticode: not signed
+
+Windows `1.0.61` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.61.exe`
 - Version/build: `1.0.61` / `61`
@@ -1928,6 +1977,22 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.62` from source commit `d9b31864`. The release adds
+  the OEM-CPS-derived Wouxun KG-689E/KG-699E driver, the Icom CI-V unset-tone
+  compatibility fix, TK-270G and 5RH Pro fixes, UV-5RM Plus v2 and F4HWN
+  image handling, the read-only Icom IC-F50V/F60V capture profile, and
+  fixed-zone write handling after channel moves.
+  Verification: installer metadata `1.0.62.0` / `1.0.62`, release app
+  `1.0.62+62`, bundled Python `3.13.15`, clean runtime, 265 CHIRP driver
+  modules, bridge `list-models` exit 0 with 601 models including KG-689E,
+  KG-699E, IC-910, IC-F50V/F60V, and FT-50, all four frequency-reference
+  PDFs, matching local/server/public SHA-256, public HTTP 200, and live
+  manifest Windows `1.0.62`. Installer payload extraction and runtime launch
+  succeeded. `flutter analyze lib test` is clean. The full Flutter suite ran
+  232 passing tests with the five known Windows-only sandbox/Help failures.
+  The complete Python suite ran 540 tests: 534 passed, 2 skipped, 3 known
+  Windows temporary-file-lock helper errors, and 1 Windows-only
+  path-separator assertion. The installer remains unsigned.
 - Published Windows `1.0.61` from source commit `0e701b16`. The release adds
   the OEM-CPS-derived Wouxun KG-689E/KG-699E driver, the Icom CI-V unset-tone
   compatibility fix, promoted FT-50 support after hardware confirmation, and
