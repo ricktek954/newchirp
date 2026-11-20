@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 20:15:41",
+  "details": "",
+  "event_type": "note",
+  "external_ref": "desktop:7014d58d",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "Release plan updated (maintainer, 2026-11-20): hold desktop 1.0.64 for the owner's answer. Confirms marine template / Duplex off -> re-enable RT-950 Pro writes (desktop + Web Programmer) and ship 1.0.64 with the receive-only notice (7014d58d). No reply in ~2 days -> ship 1.0.64; maintainer decides whether writes are re-enabled. Supersedes the earlier VFO-test plan."
+}
