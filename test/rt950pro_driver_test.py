@@ -408,6 +408,46 @@ class RT950ProDriverTest(unittest.TestCase):
             [write for write in serial.writes if write == b"F"]
         )
 
+    def test_ble_read_uses_the_stock_raw_block_frame(self):
+        serial = FakeRT950ProSerial(self._radio_memory())
+        serial.ble_transport = True
+        radio = self._radio(serial)
+        radio._encryption_symbol = b"BHT "
+        serial.encryption_symbol = b"BHT "
+        with mock.patch.object(
+            radio,
+            "_read_exact",
+            return_value=b"W\x80\x00\x80" + b"\x00" * 128,
+        ):
+            radio._read_pro_block(0x52, 0x8000)
+        self.assertEqual(serial.writes, [b"\x52\x80\x00\x80"])
+
+    def test_silent_ble_handshake_explains_the_setup(self):
+        serial = FakeRT950ProSerial()
+        serial.ble_transport = True
+        radio = self._radio(serial)
+        from chirp import errors
+
+        timeout = errors.RadioNoResponse(
+            "Expected 1 bytes from the RT-950, received 0")
+        with (
+            mock.patch.object(radio, "_read_exact", side_effect=timeout),
+            mock.patch.object(self.pro.time, "sleep"),
+        ):
+            with self.assertRaisesRegex(errors.RadioNoResponse, "BT Write"):
+                radio._handshake()
+        self.assertEqual(serial.writes.count(b"PROGRAMBT9000U"), 3)
+
+    def test_ble_write_is_refused_before_any_bytes_are_sent(self):
+        serial = FakeRT950ProSerial(self._radio_memory())
+        serial.ble_transport = True
+        radio = self._radio(serial)
+        from chirp import errors
+
+        with self.assertRaisesRegex(errors.RadioError, "Bluetooth upload"):
+            radio.sync_out()
+        self.assertEqual(serial.writes, [])
+
 
 if __name__ == "__main__":
     unittest.main()

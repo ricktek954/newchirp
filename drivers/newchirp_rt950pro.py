@@ -53,6 +53,28 @@ PRO_INITIAL_ACK_TIMEOUT = 3.0
 WRITE_ACK_TIMEOUT = 1.0        # TimerInit: 1000 ms
 WRITE_RETRIES = 3              # timesRetry
 
+BLE_NO_REPLY_MESSAGE = (
+    "The RT-950 Pro did not answer over Bluetooth. Turn on Bluetooth and "
+    "BT Write in the radio's function-settings menu, then try the read again. "
+    "For the radio's stock firmware, choose \"Radtel RT-950 Pro\". If the "
+    "startup screen shows nicFW and a version, choose the RT-950 Pro "
+    "nicFW950 profile instead. Keep Radtel's phone app and other Bluetooth "
+    "programmers disconnected while NewChirp is using the radio."
+)
+
+BLE_WRITE_MESSAGE = (
+    "Bluetooth upload is disabled for the Radtel RT-950 Pro. A dropped "
+    "Bluetooth link could leave a radio write incomplete. Read over "
+    "Bluetooth if needed, then use a USB programming cable to write. The "
+    "radio was not changed."
+)
+
+
+def _is_zero_byte_timeout(exc):
+    message = str(exc)
+    return "(0 of " in message or "received 0" in message
+
+
 # Image layout. The radio's 0x52/0x57 address space is mirrored 1:1; the
 # APRS block read with 0x54 (written with 0x58) is kept after it at 0xD300.
 PRO_MEM_SIZE = 0xD380
@@ -215,19 +237,24 @@ class RT950ProRadio(_BASE.RT950Radio):
             "the CPS protocol but not yet confirmed on a physical radio. "
             "Read the radio and save the image as a backup before your "
             "first write. Channels with Duplex set to \"off\" (TX off) are "
-            "receive-only: the radio beeps and will not transmit on them."
+            "receive-only: the radio beeps and will not transmit on them. "
+            "Bluetooth is experimental and read-only; uploads over Bluetooth "
+            "are disabled."
         )
         prompts.info = (
-            "Use the RT-950 Pro programming cable, power the radio on "
-            "normally, and close Radtel CPS before connecting. The interface "
-            "uses 115200 baud, 8N1, with RTS and DTR asserted and no hardware "
-            "or XON/XOFF flow control."
+            "Power the radio on normally and close Radtel CPS or its phone "
+            "app before connecting. USB uses the RT-950 Pro programming cable "
+            "at 115200 baud, 8N1, with RTS and DTR asserted and no hardware "
+            "or XON/XOFF flow control. For Bluetooth, first turn on BT Write "
+            "in the radio's function-settings menu."
         )
         prompts.pre_download = (
             "1. Close Radtel CPS and any other serial software.\n"
             "2. Connect the cable directly and start the read while the "
             "radio is powered on.\n"
-            "3. Save the image after the first successful read as a backup."
+            "3. For Bluetooth, turn on BT Write in the radio's "
+            "function-settings menu and use the RT-950 Pro stock profile.\n"
+            "4. Save the image after the first successful read as a backup."
         )
         prompts.pre_upload = (
             "Write only an image that NewChirp read from this radio, and "
@@ -322,6 +349,9 @@ class RT950ProRadio(_BASE.RT950Radio):
 
     # -- transport --------------------------------------------------------
 
+    def _is_ble(self):
+        return bool(getattr(self.pipe, "ble_transport", False))
+
     def _handshake_once(self):
         if hasattr(self.pipe, "reset_input_buffer"):
             self.pipe.reset_input_buffer()
@@ -359,6 +389,22 @@ class RT950ProRadio(_BASE.RT950Radio):
                 "The RT-950 Pro did not acknowledge data encryption."
             )
 
+    def _handshake(self):
+        last_error = None
+        for _attempt in range(3):
+            try:
+                self._handshake_once()
+                return
+            except errors.RadioNoResponse as exc:
+                last_error = exc
+        if (
+            self._is_ble()
+            and last_error is not None
+            and _is_zero_byte_timeout(last_error)
+        ):
+            raise errors.RadioNoResponse(BLE_NO_REPLY_MESSAGE) from last_error
+        raise last_error
+
     def _read_pro_block(self, command, address):
         request = bytes(
             (command, address >> 8, address & 0xFF, _BASE.BLOCK_SIZE)
@@ -371,6 +417,15 @@ class RT950ProRadio(_BASE.RT950Radio):
                 % (address, reply[1:3])
             )
         return _BASE._decode_payload(reply[4:], self._encryption_symbol)
+
+    def _read_first_pro_block(self, command, address):
+        """Read the first block, explaining a silent Bluetooth session."""
+        try:
+            return self._read_pro_block(command, address)
+        except errors.RadioNoResponse as exc:
+            if self._is_ble() and _is_zero_byte_timeout(exc):
+                raise errors.RadioNoResponse(BLE_NO_REPLY_MESSAGE) from exc
+            raise
 
     def _write_pro_block(self, command, address, data):
         # The symbol substitution is its own inverse (WriteStep1 applies the
@@ -413,7 +468,9 @@ class RT950ProRadio(_BASE.RT950Radio):
                     else "Reading RT-950 Pro settings"
                 )
                 self.status_fn(status)
-                memory.set(target, self._read_pro_block(command, address))
+                read = self._read_first_pro_block if current == 1 else (
+                    self._read_pro_block)
+                memory.set(target, read(command, address))
         except errors.RadioError:
             raise
         except Exception as exc:
@@ -431,6 +488,8 @@ class RT950ProRadio(_BASE.RT950Radio):
         self.process_mmap()
 
     def sync_out(self):
+        if self._is_ble():
+            raise errors.RadioError(BLE_WRITE_MESSAGE)
         if not self._writable_image:
             raise errors.RadioError(
                 "This RT-950 Pro image is incomplete (saved by an older "

@@ -1,10 +1,10 @@
 # Radtel RT-950 Pro protocol notes
 
-Last updated: 2026-11-19
+Last updated: 2026-11-20
 
 The RT-950 Pro is a separate NewChirp model. It shares the RT-950/BT-9000
 handshake and 32-byte channel encoding, but its CPS layout contains larger
-settings segments and an additional `0x54/0x55` block.
+settings segments and an additional `0x54/0x58` block.
 
 ## Evidence
 
@@ -48,6 +48,32 @@ Findings that override the earlier community-derived map:
   no TX-inhibit or TX-band setting. A blank `TxFreq` is written as
   `FF FF FF FF` by `SetFreq_StrToHex` and decoded back to blank by
   `GetFreq_HexToStr`; that is the only per-channel transmit-off encoding.
+
+- Bluetooth setting: `CbB_BTWriteSwitch` is function-settings part 1 byte
+  `29`, decoded as `(dat[29] & 0xF) % 2` and encoded back to that byte. The
+  CPS labels it "Bluetooth write frequency switch".
+
+### Radtel phone app (static, 2026-11-20)
+
+- Radtel's official RT-950 PRO product page explicitly advertises Bluetooth
+  programming with a dedicated iOS/Android app.
+- Google Play package: `com.uniapp.kdh.uniplugin_kdh`, app name
+  `walkie-talkie tool`, developer `泉州科缔恒电子科技有限公司`, version
+  `1.4.7` / version code `147`.
+- Research download: APKPure XAPK SHA-256
+  `d6af5ef1dec73133c11825e2d99c61a93b5c56d4622ca132e335208c45cfee69`;
+  base APK SHA-256
+  `5ec56b149e653f28019373a0898373521f991418eee21f3201285c34e62733cf`;
+  armv7 `libapp.so` SHA-256
+  `1c5b25e05445bf84144296b745c89431cec0d46e279f68e270d058cbcd80d94c`.
+- APK signing certificate SHA-256:
+  `229e7fed1797c84d16a331133d581288eb12347885440c5314da2b363e36c5a8`.
+- Static Dart AOT strings show `flutter_blue_plus`, the FFE1 read/write path,
+  `write_without_response`, `handleBluetoothData`, KDH secret-key generation,
+  and the radio-family marker `K950`.
+- This is application identity and static path evidence only. No OEM BLE byte
+  capture or complete decompiled call path is available yet. The app does not
+  prove that the stock serial frame is unchanged over BLE.
 
 ### Earlier base RT-950 CPS
 
@@ -93,6 +119,25 @@ The first ACK timeout was increased from the base driver's 1.5 seconds because
 the physical Pro reaches Program mode but returned no bytes within the shorter
 window.
 
+### Android Bluetooth
+
+- Service/characteristic observed from the reporter: `FFE0` / `FFE1`, MTU 23,
+  notification plus write-with/without-response support.
+- The stock radio requires its BT Write menu setting. The current hypothesis
+  is that the radio ignores programming traffic when that switch is off.
+- NewChirp sends the same stock raw frames over BLE: four-byte `0x52/0x54`
+  read requests and fixed 132-byte responses. BLE has no physical baud or
+  modem-control transition, so the Android bridge does not perform USB setup.
+- No BLE-specific terminator or checksum change is implemented. The OEM app
+  confirms a BLE programming path, but its exact on-wire frame has not been
+  recovered; keeping the stock frame is an E1 implementation hypothesis
+  pending a physical comparison.
+- Bluetooth read is experimental and unvalidated on hardware. A zero-byte
+  handshake or first-block response tells the owner to enable BT Write and
+  choose the stock or nicFW950 profile according to the startup screen.
+- Bluetooth write is not implemented. The Android UI and driver both refuse an
+  upload before sending a radio command.
+
 ## Superseded Pro read map (before CPS 1.3.3)
 
 | Command | Radio address | Length | Image address | Content |
@@ -119,10 +164,15 @@ The Pro retains the RT-950's 960 fixed 32-byte records:
 
 ## Read/write policy
 
-The Pro driver is read-only. A complete physical Pro read has not yet been
-validated. The community reference includes a write path, but its warning and
-lack of a NewChirp physical read-back require treating writes as unproven.
+- USB: the CPS-derived read/write path remains enabled as experimental. Writes
+  require an image read from the current radio and send the CPS block map.
+- Android Bluetooth: read-only. Uploads are refused by the Android controller
+  and by the driver before a radio command is sent.
+- Physical Bluetooth read validation: none.
+- Physical Bluetooth write validation: none, and the operation is deliberately
+  unavailable.
 
-Next milestone: Christophe performs a successful NewChirp read and confirms
-the reported model code, all 960 channel records, and the Pro settings blocks.
-Only then should a controlled one-channel write/read-back path be considered.
+Next milestone: a stock-firmware owner enables BT Write, selects
+`Radtel RT-950 Pro`, completes a full Android Bluetooth read, and sends the
+Bluetooth diagnostics. Bluetooth writes require a complete physical read and a
+separate dropped-link recovery design review.

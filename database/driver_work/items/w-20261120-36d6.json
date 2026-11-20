@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-20 21:12:08",
+  "kind": "enhancement",
+  "manufacturer": "Radtel",
+  "model": "RT-950 Pro",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "RT-950 Pro owner",
+  "source": "email",
+  "source_ref": "INBOX:854",
+  "status": "investigating",
+  "summary": "Add experimental read-only Android Bluetooth support for the stock RT-950 Pro. The stock CPS 1.3.3 exposes a BT Write switch at function-settings byte 29; iOS/Android programming is advertised but the exact BLE wire behavior still requires app or hardware evidence. Bluetooth writes remain disabled.",
+  "title": "Stock-firmware RT-950 Pro over Bluetooth",
+  "uid": "w-20261120-36d6"
+}

@@ -8,7 +8,7 @@ manufacturer/model, use the driver ledger (`database/driver_work/`, queried
 through `scripts/driver_work.py`) as described in
 `database/README.md`. The generated readable timeline is `docs/DRIVER_WORK.md`.
 
-Last updated: 2026-11-18
+Last updated: 2026-11-20
 
 ## Status definitions
 
@@ -30,7 +30,7 @@ Last updated: 2026-11-18
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables; odd-split channel write (all hardware-confirmed 2026-11-19) | Stock FT-50 settings | Supported; read and write hardware-confirmed 2026-11-19 |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
-| Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | RT-950 Pro CPS 1.3.3 clone serial, 115200 8N1 + RTS/DTR | 990 channels + full CPS map (272 blocks); old-map read hardware-confirmed | Yes, CPS write path; an owner's NewChirp write programmed his channels (2026-11-20), read-back after power cycle not yet confirmed | Hidden | Experimental; write pause lifted 2026-11-20 (cause was TX-off channels) |
+| Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | USB: RT-950 Pro CPS 1.3.3 clone serial, 115200 8N1 + RTS/DTR; Bluetooth: experimental raw FFE1 stream | 990 channels + full CPS map (272 blocks); USB old-map read hardware-confirmed; Bluetooth read unvalidated | USB: CPS write path, owner write confirmed; Bluetooth: refused | Hidden | Experimental; stock-firmware Bluetooth read pending hardware validation; Bluetooth write not implemented |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
@@ -612,8 +612,25 @@ Last updated: 2026-11-18
   app round trip of 580 random channels byte-identical); physical read on
   the old map confirmed by a reporter (INBOX:789, 1.0.58, stock firmware)
 - Physical write validation: none
-- Next milestone: one physical read on the new map, a one-channel write and
-  read-back, then compare with the CPS
+- Android Bluetooth (2026-11-20, ledger `w-20261120-36d6`): experimental
+  read-only support for stock `Radtel_RT-950_Pro` over FFE0/FFE1. The setup
+  tells the owner to enable BT Write; a zero-byte BLE handshake or first block
+  explains BT Write and the stock-versus-nicFW950 profile choice. Bluetooth
+  upload is refused in both the model/controller and the Python driver before
+  a radio command is sent.
+- Bluetooth evidence: Radtel's official product page advertises phone
+  programming; Play package `com.uniapp.kdh.uniplugin_kdh` version 1.4.7
+  statically shows `flutter_blue_plus`, `write_without_response`,
+  `handleBluetoothData`, and KDH secret-key generation; the CPS stores the BT
+  Write switch at function-settings part 1 byte 29. No OEM BLE capture or
+  complete app call path has been recovered. Reusing the raw stock frame over
+  BLE remains a hypothesis.
+- Bluetooth write: not implemented. Uploading over BLE is blocked until a
+  complete physical Bluetooth read is confirmed and a separate write design
+  review covers dropped-link recovery.
+- Next milestone: a stock-firmware owner enables BT Write, selects
+  `Radtel RT-950 Pro`, completes a full Android Bluetooth read, and sends the
+  Bluetooth diagnostics. A one-channel USB write/read-back remains separate.
 
 ### Radtel RT-860
 
