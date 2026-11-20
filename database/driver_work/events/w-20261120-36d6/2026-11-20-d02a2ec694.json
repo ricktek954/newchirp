@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 21:26:35",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "mobile:a9942e7",
+  "item": "w-20261120-36d6",
+  "occurred_at": "2026-11-20",
+  "summary": "Android 1.0.24 (versionCode 23) is live at https://newchirp.net/downloads/NewChirp-Mobile-1.0.24+23.apk. Artifact SHA-256 308b7532eda90ecabdc926735cf5ff86b5ab5086b9d187a225b6c0384c831f4e. The release includes experimental read-only stock RT-950 Pro Bluetooth support; Bluetooth writes remain disabled and physical Bluetooth read validation is still pending."
+}

@@ -523,7 +523,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-9877 bug | fix_committed | high:** After a write, radio beeps on PTT and will not transmit
   Owner of two RT-950 Pros: the one programmed today (likely Web Programmer; desktop failed at port open, w-20261120-8265) beeps on PTT and does not transmit; the unprogrammed one is fine. Experimental write sends the full CPS block set, settings included. Candidates: TX off on the channel, TX outside the radio's TX range (owner's IC-F60V channels are 450-469 MHz commercial), busy lock, or a settings block changed by the write. Need: tool used, channel/frequency, whether any channel transmits, the pre-write backup and a fresh read.
   Source: `email` INBOX:849
-- **#w-20261120-36d6 enhancement | fix_committed | normal:** Stock-firmware RT-950 Pro over Bluetooth
+- **#w-20261120-36d6 enhancement | released | normal:** Stock-firmware RT-950 Pro over Bluetooth
   Add experimental read-only Android Bluetooth support for the stock RT-950 Pro. The stock CPS 1.3.3 exposes a BT Write switch at function-settings byte 29; iOS/Android programming is advertised but the exact BLE wire behavior still requires app or hardware evidence. Bluetooth writes remain disabled.
   Source: `email` INBOX:854
 - **#8 maintenance | experimental | normal:** Current driver status
