@@ -514,7 +514,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-8265 bug | awaiting_user | normal:** macOS read fails at port open with (22, 'Invalid argument')
   1.0.62 on macOS 26.6.2, /dev/cu.usbserial-1420 and /dev/tty.usbserial-1420. EINVAL before any radio traffic (no trace), so pyserial open/termios/RTS-DTR ioctl was rejected by the adapter driver at 115200. Same owner's IC-F60V capture worked in the Web Programmer, possibly with a different cable. App shows the raw errno instead of a cable/driver explanation.
   Source: `email` INBOX:846
-- **#w-20261120-9877 bug | investigating | high:** After a write, radio beeps on PTT and will not transmit
+- **#w-20261120-9877 bug | fix_committed | high:** After a write, radio beeps on PTT and will not transmit
   Owner of two RT-950 Pros: the one programmed today (likely Web Programmer; desktop failed at port open, w-20261120-8265) beeps on PTT and does not transmit; the unprogrammed one is fine. Experimental write sends the full CPS block set, settings included. Candidates: TX off on the channel, TX outside the radio's TX range (owner's IC-F60V channels are 450-469 MHz commercial), busy lock, or a settings block changed by the write. Need: tool used, channel/frequency, whether any channel transmits, the pre-write backup and a fresh read.
   Source: `email` INBOX:849
 - **#8 maintenance | experimental | normal:** Current driver status
