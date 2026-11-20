@@ -197,8 +197,17 @@ class RT950ProRadio(_BASE.RT950Radio):
 
     VENDOR = "Radtel"
     MODEL = "RT-950 Pro"
-    # Writes follow the Pro CPS; the base RT-950 stays read-only.
-    NEWCHIRP_WRITE_DISABLED = False
+    # Writes follow the Pro CPS but are suspended: on 2026-11-20 an owner's
+    # RT-950 Pro stopped transmitting (beeps on PTT) after its first write
+    # (ledger w-20261120-9877, INBOX:849). Keep both flags until the pre-
+    # and post-write images are compared and the cause is known.
+    NEWCHIRP_WRITE_DISABLED = True
+    WRITES_SUSPENDED = True
+    WRITES_SUSPENDED_MESSAGE = (
+        "RT-950 Pro writing is paused while a report of a radio that stopped "
+        "transmitting after a write is investigated. Reading and saving "
+        "still work. The radio was not changed."
+    )
     BAUD_RATE = 115200
     INITIAL_ACK_TIMEOUT = PRO_INITIAL_ACK_TIMEOUT
     _memsize = PRO_MEM_SIZE
@@ -209,10 +218,9 @@ class RT950ProRadio(_BASE.RT950Radio):
         prompts = chirp_common.RadioPrompts()
         prompts.experimental = (
             "NewChirp RT-950 Pro support follows Radtel's RT-950 Pro CPS "
-            "1.3.3 for reading and writing. Writing has been tested against "
-            "the CPS protocol but not yet confirmed on a physical radio. "
-            "Read the radio and save the image as a backup before your "
-            "first write."
+            "1.3.3. Reading works; writing is paused while a report of a "
+            "radio that stopped transmitting after a write is investigated. "
+            "Read the radio and save the image as a backup."
         )
         prompts.info = (
             "Use the RT-950 Pro programming cable, power the radio on "
@@ -428,6 +436,8 @@ class RT950ProRadio(_BASE.RT950Radio):
         self.process_mmap()
 
     def sync_out(self):
+        if self.WRITES_SUSPENDED:
+            raise errors.RadioError(self.WRITES_SUSPENDED_MESSAGE)
         if not self._writable_image:
             raise errors.RadioError(
                 "This RT-950 Pro image is incomplete (saved by an older "

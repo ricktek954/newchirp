@@ -142,6 +142,8 @@ class RT950ProDriverTest(unittest.TestCase):
     def _radio(self, serial):
         radio = self.radio_class(serial)
         radio.status_fn = lambda _status: None
+        # Protocol tests exercise the (suspended) write path directly.
+        radio.WRITES_SUSPENDED = False
         return radio
 
     def _radio_memory(self):
@@ -164,8 +166,20 @@ class RT950ProDriverTest(unittest.TestCase):
         self.assertEqual(self.radio_class.INITIAL_ACK_TIMEOUT, 3.0)
         radio = self.radio_class(None)
         self.assertEqual(radio.get_features().memory_bounds, (1, 990))
-        self.assertFalse(self.radio_class.NEWCHIRP_WRITE_DISABLED)
         self.assertTrue(self.base_class.NEWCHIRP_WRITE_DISABLED)
+
+    def test_writes_are_suspended_before_any_radio_traffic(self):
+        # 2026-11-20 no-TX report (ledger w-20261120-9877).
+        self.assertTrue(self.radio_class.NEWCHIRP_WRITE_DISABLED)
+        self.assertTrue(self.radio_class.WRITES_SUSPENDED)
+
+        class Untouchable:
+            def __getattr__(self, name):
+                raise AssertionError("serial used: %s" % name)
+
+        radio = self.radio_class(Untouchable())
+        with self.assertRaisesRegex(Exception, "paused"):
+            radio.sync_out()
 
     def test_read_follows_the_cps_block_order(self):
         serial = FakeRT950ProSerial(self._radio_memory(), b"APRS" + b"\xff" * 124)
