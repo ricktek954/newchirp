@@ -502,7 +502,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-43e0 bug | awaiting_user | normal:** RT-950 Pro owner selected RT-950; PROGRAMBT got no response
   1.0.62 Windows COM6, model Radtel_RT-950, three PROGRAMBT tries silent. Notes say 'radtel rt 950 pro', so the RT-950 model was likely the wrong choice.
   Source: `email` INBOX:845
-- **#w-20261120-8265 bug | investigating | normal:** macOS read fails at port open with (22, 'Invalid argument')
+- **#w-20261120-8265 bug | awaiting_user | normal:** macOS read fails at port open with (22, 'Invalid argument')
   1.0.62 on macOS 26.6.2, /dev/cu.usbserial-1420 and /dev/tty.usbserial-1420. EINVAL before any radio traffic (no trace), so pyserial open/termios/RTS-DTR ioctl was rejected by the adapter driver at 115200. Same owner's IC-F60V capture worked in the Web Programmer, possibly with a different cable. App shows the raw errno instead of a cable/driver explanation.
   Source: `email` INBOX:846
 - **#8 maintenance | experimental | normal:** Current driver status

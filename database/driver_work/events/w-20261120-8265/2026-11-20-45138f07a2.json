@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 16:29:52",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179519217465.11562.17833660475095396860@newchirp.net>",
+  "item": "w-20261120-8265",
+  "occurred_at": "2026-11-20",
+  "summary": "Asked which cable (Icom OPC-966 won't fit the RT-950 Pro), to replug and use /dev/cu.*, to cross-check in the Web Programmer, and for the adapter chip if it still fails"
+}
