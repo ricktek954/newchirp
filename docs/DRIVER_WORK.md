@@ -406,6 +406,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-4857 release | released | normal:** Linux 1.0.64 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 12c4633d. The release fixes blank cross modes, preserves unloadable CHIRP settings, restores live band switching, adds collapsible channel-summary metrics, and carries CSV and bridge compatibility fixes. Public manifest reports 1.0.64. Package SHA-256 values: c58f4ef279e260f131eb700d651d4063e289999cf4bc7083cfde2a6529bcd0be, d4e13e4a0cacf24cc90cd428cd4633544588a7d8b4e69be75888d493211720c4, 26048b9b36e63eefe3016811d5232f6b6acf399f0a39a603e93ea5092127132e, and 05e0c9c23db86200c80924bdbdf86804126365d817e5f655dfa27f3e1073cf9f.
   Source: `release` desktop:12c4633d
+- **#w-20261120-f0fb release | released | normal:** Linux 1.0.65 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 014df59b. The release integrates the approved RepeaterBook API relay, expands read-only Icom IC-F50V/F60V channel support, handles echoing cables on the Wouxun KG-689E, and carries related UI and error-reporting fixes. Public manifest reports 1.0.65. Package SHA-256 values: f3cf598266edcd1c75944703cbb3e4699afb82cf6282c8054e797922d3e1df9e, fd1af91bc3a84bbcb267fb0a3e19ec35c8d3a7b92b5407e1fb6415c14102210e, c0849973a05f21de913201ff4c3de253b9020e52af0f55a8dc162253a9349f20, and f1aca0d1b313ce5db5145407ff811cfb3f4979dadb611d9382e1cec3f4ae9958.
+  Source: `release` desktop:014df59b
 
 ## Quansheng
 

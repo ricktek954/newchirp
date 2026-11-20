@@ -27,6 +27,17 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.65` is live from source commit `014df59b`. It integrates the
+  approved RepeaterBook API relay, expands the read-only Icom IC-F50V/F60V
+  channel support, handles echoing programming cables on the Wouxun KG-689E,
+  and carries the related UI and error-reporting fixes. Verification:
+  analyzer clean; 239 Flutter tests; 550 Python tests with two
+  fixture-dependent skips; max glibc `2.18`; DEB, RPM, and Pacman metadata
+  plus embedded version `1.0.65` / `65`; DEB and AppImage Xvfb launch tests
+  passed on Ubuntu 20.04; the final AppImage launched under host Wayland and
+  XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
+  omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
+  the Linux platform manifest reports `1.0.65`.
 - Linux `1.0.64` is live from source commit `12c4633d`. It fixes blank cross
   modes, preserves radio settings that the current CHIRP build cannot load,
   restores live band switching, adds collapsible channel-summary metrics, and
@@ -978,9 +989,9 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.64` is live from source commit `12c4633d`
+- Linux `1.0.65` is live from source commit `014df59b`
 - Open pull requests: none
-- Checked-out source version: `1.0.63+63`
+- Checked-out source version: `1.0.65+65`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -996,7 +1007,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.62 |
 | Windows | 1.0.63 |
-| Linux | 1.0.64 |
+| Linux | 1.0.65 |
+
+Linux `1.0.65` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.65.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.65.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.65.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.65.pkg.tar.zst`
+- DEB: `48,563,176` bytes, SHA-256
+  `f3cf598266edcd1c75944703cbb3e4699afb82cf6282c8054e797922d3e1df9e`
+- RPM: `48,652,761` bytes, SHA-256
+  `fd1af91bc3a84bbcb267fb0a3e19ec35c8d3a7b92b5407e1fb6415c14102210e`
+- AppImage: `48,850,112` bytes, SHA-256
+  `c0849973a05f21de913201ff4c3de253b9020e52af0f55a8dc162253a9349f20`
+- Pacman: `47,524,945` bytes, SHA-256
+  `f1aca0d1b313ce5db5145407ff811cfb3f4979dadb611d9382e1cec3f4ae9958`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.65`
 
 Linux `1.0.64` artifacts:
 
