@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 20:40:21",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:853",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "Confirmed cause: channel transmit was off. Owner did not use the marine template; he found channel 16 with transmit set OFF, turned it ON, re-wrote, and the radio now transmits on 156.800 MHz. Radio and write path are fine. Open: where the TX-off came from (NewChirp shows Duplex 'off' as 'TX off'; source of his channels unknown). The receive-only write note (7014d58d) covers every source."
+}
