@@ -107,6 +107,12 @@ images and matching depend on them. Add verified names to both
 `lib/radio-display-names.ts` in the website, and keep both spellings
 searchable.
 
+When a ledger item closes with a user-side cause (cable, port, model
+choice, setup) or a fix users must update for, update the website FAQ
+(`app/faq/page.tsx` in `/Volumes/RICKEXT/web/newchirpweb`, with its source in
+`docs/FAQ_DRAFT.md`). In support replies, link the matching answer as
+`https://newchirp.net/faq#<id>`.
+
 For any driver derived from an OEM programming application, follow
 `docs/REA_PLAYBOOK.md`. Trace both the UI-to-serial and serial-to-decoder call
 paths, document the wire encoding and response-length rules for every
