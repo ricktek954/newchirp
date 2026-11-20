@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 652 concepts across 4 domains and 32 modules'
-git_branch: main
+description: 'Top-level OKF summary: 653 concepts across 4 domains and 32 modules'
+git_branch: HEAD
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-20T16:41:18Z'
+timestamp: '2026-11-20T16:42:53Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 652 concepts | 4 domains | 32 modules
+> OKF v0.2 bundle | 653 concepts | 4 domains | 32 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 507 |
+| Function | 508 |
 | Class | 103 |
 | Module | 32 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 652 |
+| dart | 653 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 239 concepts
+### [main.dart](main.dart/index.md) — 240 concepts
 
-- [main](main/index.md) (239 concepts)
+- [main](main/index.md) (240 concepts)
 
 ### [models](models/index.md) — 110 concepts
 
