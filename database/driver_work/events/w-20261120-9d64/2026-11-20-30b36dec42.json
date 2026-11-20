@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 09:13:38",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179516599070.10257.8314043553740464535@newchirp.net>",
+  "item": "w-20261120-9d64",
+  "occurred_at": "2026-11-20",
+  "summary": "Asked for /dev/serial/by-id, fuser output (ModemManager) and cable model"
+}
