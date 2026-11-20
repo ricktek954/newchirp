@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:34Z"
+timestamp: "2026-11-20T16:23:03Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -76,11 +76,11 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [_mapping_models_by_index](/chirp_bridge/mapping_models_by_index.md) |
 | related | [_mapping_entries_by_index](/chirp_bridge/mapping_entries_by_index.md) |
 | related | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) |
-| related | [repeaterbook_resource_name](/chirp_bridge/repeaterbook_resource_name.md) |
-| related | [repeaterbook_cache_path](/chirp_bridge/repeaterbook_cache_path.md) |
-| related | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
+| related | [fetch_repeaterbook_search](/chirp_bridge/fetch_repeaterbook_search.md) |
 | related | [repeaterbook_tone](/chirp_bridge/repeaterbook_tone.md) |
 | related | [repeaterbook_item_to_channel](/chirp_bridge/repeaterbook_item_to_channel.md) |
+| related | [repeaterbook_api_tone](/chirp_bridge/repeaterbook_api_tone.md) |
+| related | [repeaterbook_api_result_to_channel](/chirp_bridge/repeaterbook_api_result_to_channel.md) |
 | related | [zip_lookup_cache_path](/chirp_bridge/zip_lookup_cache_path.md) |
 | related | [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) |
 | related | [normalize_repeaterbook_query](/chirp_bridge/normalize_repeaterbook_query.md) |

@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:34Z"
+timestamp: "2026-11-20T16:23:03Z"
 concept_id: chirp_bridge/begin
 language: python
 ---
@@ -31,7 +31,7 @@ def begin(self, data)
 | `data` | `—` | `—` |
 
 ## Source
-Lines 217–228 in `chirp_bridge.py`
+Lines 215–226 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -39,7 +39,7 @@
 - [extra_field_doc](extra_field_doc.md) — Return CHIRP's documentation or a concise fallback for common terms.
 - [extra_fields_json](extra_fields_json.md)
 - [features_json](features_json.md)
-- [fetch_repeaterbook_data](fetch_repeaterbook_data.md) — Fetch RepeaterBook's CHIRP-compatible compressed database.
+- [fetch_repeaterbook_search](fetch_repeaterbook_search.md) — Query NewChirp's relay without exposing RepeaterBook credentials.
 - [format](format.md)
 - [has_global_settings](has_global_settings.md)
 - [headless_live_adapter](headless_live_adapter.md) — Give a live radio the file-backed interfaces NewChirp requires.
@@ -65,9 +65,9 @@
 - [readlines](readlines.md)
 - [received](received.md)
 - [repair_uninitialized_extras](repair_uninitialized_extras.md) — Give extras that failed to load a valid default before writing.
-- [repeaterbook_cache_path](repeaterbook_cache_path.md)
+- [repeaterbook_api_result_to_channel](repeaterbook_api_result_to_channel.md)
+- [repeaterbook_api_tone](repeaterbook_api_tone.md)
 - [repeaterbook_item_to_channel](repeaterbook_item_to_channel.md)
-- [repeaterbook_resource_name](repeaterbook_resource_name.md)
 - [repeaterbook_tone](repeaterbook_tone.md)
 - [resolve_us_zip_code](resolve_us_zip_code.md) — Resolve a US ZIP code to a representative latitude and longitude.
 - [search_repeaterbook](search_repeaterbook.md)

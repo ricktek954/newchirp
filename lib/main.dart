@@ -8378,12 +8378,6 @@ class RepeaterBookDialog extends StatefulWidget {
 }
 
 class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
-  static const _repeaterBookPendingMessage =
-      'RepeaterBook API access is pending. We have applied for access and are '
-      'awaiting credentials and approval (request #295). RepeaterBook’s legacy '
-      'bulk-data endpoint is currently blocking NewChirp, so searches may fail '
-      'until approved API access is available.';
-
   final _filterController = TextEditingController();
   final _latitudeController = TextEditingController();
   final _longitudeController = TextEditingController();
@@ -8618,16 +8612,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       }
     } catch (error) {
       if (mounted) {
-        final detail = '$error';
-        setState(() {
-          _error =
-              _provider == _RepeaterProvider.repeaterBook &&
-                  (detail.contains('403') ||
-                      detail.contains('Forbidden') ||
-                      detail.contains('Could not download RepeaterBook'))
-              ? _repeaterBookPendingMessage
-              : detail;
-        });
+        setState(() => _error = '$error');
       }
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -8690,7 +8675,6 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() => _error = 'Sign in to myGMRS before searching.');
       return;
     }
-    final coarseRegion = latitude != null && longitude != null ? 'All' : _state;
     _preferencesSaveTimer?.cancel();
     _preferencesTouched = true;
     await _savePreferencesNow();
@@ -8708,7 +8692,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     try {
       final results = _provider == _RepeaterProvider.myGmrs
           ? await _myGmrs.searchRepeaters(
-              state: coarseRegion,
+              state: _state,
               query: filter,
               latitude: latitude,
               longitude: longitude,
@@ -8717,7 +8701,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
             )
           : await widget.bridge.searchRepeaters(
               country: _country,
-              state: coarseRegion,
+              state: _state,
               service: _service,
               filter: _filterController.text.trim(),
               latitude: latitude,
@@ -8776,8 +8760,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                 'enter a 5-digit ZIP code for a nearby repeater search.'
           : 'RepeaterBook may not have a GMRS listing for this area yet.';
       final scopeHint = hasCoordinates
-          ? 'State or province is ignored for coordinate searches; country '
-                'still scopes the directory.'
+          ? 'Coordinates are searched within the selected region.'
           : 'Check that Country and Region are correct.';
       return 'No matching GMRS repeaters were found$range. $sourceHint '
           '$scopeHint';
@@ -8792,9 +8775,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
           '50 km; increase the radius or turn off active filters.$filterHint';
     }
     if (hasCoordinates) {
-      return 'No matching repeaters were found$range. State or province is '
-          'ignored for coordinate searches; country still scopes the '
-          'directory. Increase the radius or turn off active filters.'
+      return 'No matching repeaters were found$range. Coordinates are '
+          'searched within the selected region. Increase the radius or turn '
+          'off active filters.'
           '$filterHint';
     }
     return 'No matching repeaters were found$range. Check the selected region '
@@ -9155,46 +9138,6 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             'before transmitting.',
                             style: TextStyle(color: Colors.black54),
                           ),
-                          if (_provider == _RepeaterProvider.repeaterBook) ...[
-                            const SizedBox(height: 12),
-                            DecoratedBox(
-                              key: const ValueKey(
-                                'repeaterbook-api-pending-notice',
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFF7EC),
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: const Color(0xFFE7C9A5),
-                                ),
-                              ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 10,
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Icon(
-                                      Icons.schedule_outlined,
-                                      color: Color(0xFF9B5B18),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Expanded(
-                                      child: Text(
-                                        _repeaterBookPendingMessage,
-                                        style: TextStyle(
-                                          color: Color(0xFF7B4A16),
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
                           const SizedBox(height: 14),
                           if (_enableMyGmrsDirectory) ...[
                             Row(
@@ -9688,6 +9631,18 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                               ],
                             ],
                           ),
+                          if (results != null &&
+                              results.source == 'RepeaterBook')
+                            const Padding(
+                              padding: EdgeInsets.only(top: 2),
+                              child: Text(
+                                'Data courtesy of RepeaterBook.com.',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ),
                           SizedBox(
                             key: const Key('repeater-results-area'),
                             height: resultsHeight,

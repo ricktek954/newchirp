@@ -37,6 +37,44 @@ sys.modules[spec.name] = bridge
 spec.loader.exec_module(bridge)
 
 
+def repeaterbook_api_row(
+    callsign,
+    frequency,
+    input_frequency=None,
+    *,
+    service="Amateur",
+    city="Buffalo",
+    county="Erie",
+    state="New York",
+    use="OPEN",
+    mode="FM",
+    latitude=None,
+    longitude=None,
+    distance_km=None,
+    tx_tone=None,
+    rx_tone=None,
+):
+    return {
+        "name": callsign,
+        "callsign": callsign,
+        "city": city,
+        "county": county,
+        "state": state,
+        "use": use,
+        "service": service,
+        "latitude": latitude,
+        "longitude": longitude,
+        "distanceKm": distance_km,
+        "rxFrequency": frequency,
+        "txFrequency": input_frequency,
+        "txTone": tx_tone,
+        "rxTone": rx_tone,
+        "mode": mode,
+        "notes": "Test repeater",
+        "source": "RepeaterBook",
+    }
+
+
 class FakeTDH3Serial:
     def __init__(
         self,
@@ -924,81 +962,55 @@ class UploadHandshakeTest(unittest.TestCase):
             bands,
         )
 
-    def test_repeaterbook_search_filters_closed_results(self):
-        items = [
-            {
-                "Frequency": "146.865000",
-                "Input Freq": "146.265000",
-                "PL": "",
-                "TSQ": "",
-                "Callsign": "OPEN1",
-                "Landmark": "Open repeater",
-                "Nearest City": "Buffalo",
-                "County": "Erie",
-                "State": "New York",
-                "Use": "OPEN",
-                "Operational Status": "On-air",
-                "FM Analog": "Yes",
-                "DMR": "No",
-                "D-Star": "No",
-                "System Fusion": "No",
-            },
-            {
-                "Frequency": "147.000000",
-                "Input Freq": "147.600000",
-                "PL": "",
-                "TSQ": "",
-                "Callsign": "CLOSED1",
-                "Landmark": "Closed repeater",
-                "Nearest City": "Buffalo",
-                "County": "Erie",
-                "State": "New York",
-                "Use": "CLOSED",
-                "Operational Status": "On-air",
-                "FM Analog": "Yes",
-                "DMR": "No",
-                "D-Star": "No",
-                "System Fusion": "No",
-            },
-        ]
+    def test_repeaterbook_search_forwards_filters_to_server_relay(self):
+        row = repeaterbook_api_row(
+            "OPEN1",
+            146_865_000,
+            146_265_000,
+            tx_tone={"mode": "ctcss", "value": 151.4},
+        )
         with mock.patch.object(
             bridge,
-            "fetch_repeaterbook_data",
-            return_value={"results": items},
-        ):
+            "fetch_repeaterbook_search",
+            return_value={"totalMatches": 1, "results": [row]},
+        ) as fetch:
             results = bridge.search_repeaterbook(
                 "United States",
                 "New York",
-                query="Buffalo",
+                query="Buffalo County",
                 open_only=True,
                 fm_only=True,
             )
 
+        fetch.assert_called_once_with(
+            country="United States",
+            state="New York",
+            service="amateur",
+            query="buffalo",
+            latitude=None,
+            longitude=None,
+            distance=None,
+            fm_only=True,
+            open_only=True,
+            limit=200,
+        )
         self.assertEqual(results["totalMatches"], 1)
         self.assertEqual(results["results"][0]["callsign"], "OPEN1")
+        self.assertEqual(results["results"][0]["channel"]["tone"], "Tone")
 
-    def test_repeaterbook_radius_excludes_missing_coordinates(self):
-        item = {
-            "Frequency": "146.865000",
-            "Input Freq": "146.265000",
-            "PL": "",
-            "TSQ": "",
-            "Callsign": "NOCOORD",
-            "Landmark": "No coordinates",
-            "County": "Erie",
-            "State": "New York",
-            "Use": "OPEN",
-            "Operational Status": "On-air",
-            "FM Analog": "Yes",
-            "DMR": "No",
-            "D-Star": "No",
-            "System Fusion": "No",
-        }
+    def test_repeaterbook_radius_is_forwarded(self):
+        row = repeaterbook_api_row(
+            "NOCOORD",
+            146_865_000,
+            146_265_000,
+            latitude=None,
+            longitude=None,
+        )
         with mock.patch.object(
             bridge,
-            "fetch_repeaterbook_data",
-            return_value={"results": [item]},
-        ):
+            "fetch_repeaterbook_search",
+            return_value={"totalMatches": 0, "results": [row]},
+        ) as fetch:
             results = bridge.search_repeaterbook(
                 "United States",
                 "New York",
@@ -1007,29 +1019,21 @@ class UploadHandshakeTest(unittest.TestCase):
                 distance=50,
             )
 
+        fetch.assert_called_once_with(
+            country="United States",
+            state="New York",
+            service="amateur",
+            query="",
+            latitude=42.8864,
+            longitude=-78.8784,
+            distance=50,
+            fm_only=False,
+            open_only=False,
+            limit=200,
+        )
         self.assertEqual(results["totalMatches"], 0)
 
     def test_repeaterbook_zip_search_uses_default_radius(self):
-        def item(callsign, frequency, latitude, longitude):
-            return {
-                "Frequency": frequency,
-                "Input Freq": "0",
-                "PL": "",
-                "TSQ": "",
-                "Callsign": callsign,
-                "Landmark": callsign,
-                "County": "Broward",
-                "State": "Florida",
-                "Use": "OPEN",
-                "Operational Status": "On-air",
-                "FM Analog": "Yes",
-                "DMR": "No",
-                "D-Star": "No",
-                "System Fusion": "No",
-                "Lat": latitude,
-                "Long": longitude,
-            }
-
         zip_location = {
             "zip": "33004",
             "city": "Dania",
@@ -1037,12 +1041,19 @@ class UploadHandshakeTest(unittest.TestCase):
             "latitude": 26.0476,
             "longitude": -80.1447,
         }
-        repeaters = {
-            "results": [
-                item("NEARBY", "146.865000", "26.1224", "-80.1373"),
-                item("TOOFAR", "147.000000", "28.5383", "-81.3792"),
-            ]
-        }
+        repeaters = {"totalMatches": 1, "results": [
+            repeaterbook_api_row(
+                "NEARBY",
+                146_865_000,
+                146_265_000,
+                city="Dania",
+                county="Broward",
+                state="Florida",
+                latitude=26.1224,
+                longitude=-80.1373,
+                distance_km=12.3,
+            )
+        ]}
         with (
             mock.patch.object(
                 bridge,
@@ -1051,9 +1062,9 @@ class UploadHandshakeTest(unittest.TestCase):
             ) as resolve_zip,
             mock.patch.object(
                 bridge,
-                "fetch_repeaterbook_data",
+                "fetch_repeaterbook_search",
                 return_value=repeaters,
-            ),
+            ) as fetch,
         ):
             results = bridge.search_repeaterbook(
                 "United States",
@@ -1062,6 +1073,10 @@ class UploadHandshakeTest(unittest.TestCase):
             )
 
         resolve_zip.assert_called_once_with("33004")
+        self.assertEqual(fetch.call_args.kwargs["latitude"], 26.0476)
+        self.assertEqual(fetch.call_args.kwargs["longitude"], -80.1447)
+        self.assertEqual(fetch.call_args.kwargs["distance"], 50.0)
+        self.assertEqual(fetch.call_args.kwargs["query"], "")
         self.assertEqual(results["totalMatches"], 1)
         self.assertEqual(results["results"][0]["callsign"], "NEARBY")
         self.assertLessEqual(results["results"][0]["distanceKm"], 50)
@@ -1403,34 +1418,54 @@ class UploadHandshakeTest(unittest.TestCase):
         stored[1] = expected.dupe()
         bridge.verify_live_write(live_radio, [expected], [])
 
-    def test_repeaterbook_country_resources_use_supported_region_rules(self):
-        self.assertEqual(
-            bridge.repeaterbook_resource_name(
-                "amateur",
-                "Canada",
-                "Ontario",
+    def test_repeaterbook_broker_request_is_bounded_and_credential_free(self):
+        payload = {
+            "totalMatches": 0,
+            "results": [],
+        }
+        with (
+            mock.patch.dict(
+                bridge.os.environ,
+                {"REPEATERBOOK_BROKER_BASE": "https://newchirp.test"},
             ),
-            "rb-canada-ontario.json",
-        )
+            mock.patch.object(
+                bridge.urllib.request,
+                "urlopen",
+                return_value=io.BytesIO(json.dumps(payload).encode("utf-8")),
+            ) as urlopen,
+        ):
+            result = bridge.fetch_repeaterbook_search(
+                "United States",
+                "New York",
+                "all",
+                query="Buffalo",
+                open_only=True,
+                limit=200,
+            )
+
+        request = urlopen.call_args.args[0]
         self.assertEqual(
-            bridge.repeaterbook_resource_name(
-                "gmrs",
-                "Germany",
-                "Bavaria",
-            ),
-            "rb-germany-all.json",
+            request.full_url,
+            "https://newchirp.test/api/repeaters/repeaterbook/search",
         )
+        self.assertEqual(result, payload)
+        self.assertNotIn("X-RB-App-Token", request.headers)
+        self.assertNotIn("Authorization", request.headers)
+        body = json.loads(request.data)
+        self.assertEqual(body["service"], "all")
+        self.assertEqual(body["limit"], 200)
+        self.assertTrue(body["openOnly"])
 
     def test_non_us_repeaterbook_search_uses_amateur_service(self):
         calls = []
 
-        def fetch(service, country, state):
-            calls.append((service, country, state))
-            return {"results": []}
+        def fetch(**kwargs):
+            calls.append(kwargs)
+            return {"totalMatches": 0, "results": []}
 
         with mock.patch.object(
             bridge,
-            "fetch_repeaterbook_data",
+            "fetch_repeaterbook_search",
             side_effect=fetch,
         ):
             bridge.search_repeaterbook(
@@ -1439,46 +1474,38 @@ class UploadHandshakeTest(unittest.TestCase):
                 service="all",
             )
 
-        self.assertEqual(calls, [("amateur", "Canada", "Ontario")])
+        self.assertEqual(calls[0]["service"], "amateur")
+        self.assertEqual(calls[0]["country"], "Canada")
+        self.assertEqual(calls[0]["state"], "Ontario")
 
     def test_repeaterbook_all_services_combines_results(self):
-        def item(callsign, frequency, latitude, longitude):
-            return {
-                "Frequency": frequency,
-                "Input Freq": "0",
-                "PL": "",
-                "TSQ": "",
-                "Callsign": callsign,
-                "Landmark": callsign,
-                "County": "Broward",
-                "State": "Florida",
-                "Use": "OPEN",
-                "Operational Status": "On-air",
-                "FM Analog": "Yes",
-                "DMR": "No",
-                "D-Star": "No",
-                "System Fusion": "No",
-                "Lat": latitude,
-                "Long": longitude,
-            }
-
-        def fetch(service, country, state):
-            if service == "gmrs":
-                return {
-                    "results": [
-                        item("GMRS1", "462.550000", "26.1224", "-80.1373")
-                    ]
-                }
-            return {
-                "results": [
-                    item("HAM1", "146.865000", "42.8864", "-78.8784")
-                ]
-            }
-
+        response = {
+            "totalMatches": 2,
+            "results": [
+                repeaterbook_api_row(
+                    "GMRS1",
+                    462_550_000,
+                    467_550_000,
+                    service="GMRS",
+                    city="Dania",
+                    county="Broward",
+                    state="Florida",
+                    latitude=26.1224,
+                    longitude=-80.1373,
+                ),
+                repeaterbook_api_row(
+                    "HAM1",
+                    146_865_000,
+                    146_265_000,
+                    latitude=42.8864,
+                    longitude=-78.8784,
+                ),
+            ],
+        }
         with mock.patch.object(
             bridge,
-            "fetch_repeaterbook_data",
-            side_effect=fetch,
+            "fetch_repeaterbook_search",
+            return_value=response,
         ):
             results = bridge.search_repeaterbook(
                 "United States",

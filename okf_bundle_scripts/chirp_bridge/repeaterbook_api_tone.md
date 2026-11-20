@@ -1,7 +1,7 @@
 ---
 okf_version: "0.2"
 type: Function
-title: repeaterbook_cache_path
+title: repeaterbook_api_tone
 resource: chirp_bridge.py
 tags:
   - "lang:python"
@@ -9,31 +9,31 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:34Z"
-concept_id: chirp_bridge/repeaterbook_cache_path
+timestamp: "2026-11-20T16:23:03Z"
+concept_id: chirp_bridge/repeaterbook_api_tone
 language: python
 ---
 
-# repeaterbook_cache_path
+# repeaterbook_api_tone
 
 ## Signature
 
 ```python
-def repeaterbook_cache_path(resource)
+def repeaterbook_api_tone(tone)
 ```
 
 ## Parameters
 
 | Name | Type | Default |
 |------|------|---------|
-| `resource` | `—` | `—` |
+| `tone` | `—` | `—` |
 
 ## Source
-Lines 2234–2237 in `chirp_bridge.py`
+Lines 2357–2370 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
-| called_by | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
+| called_by | [repeaterbook_api_result_to_channel](/chirp_bridge/repeaterbook_api_result_to_channel.md) |

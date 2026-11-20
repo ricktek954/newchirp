@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:34Z"
+timestamp: "2026-11-20T16:23:03Z"
 concept_id: chirp_bridge/write
 language: python
 ---
@@ -31,7 +31,7 @@ def write(self, data)
 | `data` | `—` | `—` |
 
 ## Source
-Lines 379–381 in `chirp_bridge.py`
+Lines 377–379 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -40,4 +40,3 @@ Lines 379–381 in `chirp_bridge.py`
 | related | [TracedSerial](/chirp_bridge/TracedSerial.md) |
 | calls | [begin](/chirp_bridge/begin.md) |
 | called_by | [emit_progress](/chirp_bridge/emit_progress.md) |
-| called_by | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |

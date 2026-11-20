@@ -8,6 +8,18 @@ release requirements.
 
 ## Resume here
 
+- RepeaterBook approved NewChirp's centralized-server API application on
+  2026-11-20 for `api.export` and `api.export_row`. The shared `app_` token is
+  configured only on `newchirp.net`; desktop and browser searches use the
+  server relay at `/api/repeaters/repeaterbook/search`. The old CHIRP bulk
+  dataset path and the pending-approval notice are removed. Credential
+  custody, request routing, mapping, and verification are documented in
+  `docs/REPEATERBOOK_API.md`. Verification: 12 focused website relay tests,
+  the production web build, all 550 Python tests with two fixture-dependent
+  skips, all 239 Flutter tests, and `flutter analyze lib test` pass. The live
+  relay returned 9 filtered Buffalo matches and an Ontario-only Canadian
+  result set; the desktop bridge converted the Buffalo results into CHIRP
+  channels. A desktop release containing this source is still pending.
 - The manufacturer/model driver work ledger lives in `database/driver_work/`
   (one JSON file per record since 2026-11-19; `database/driver_work.sqlite3`
   is a git-ignored cache). Use `scripts/driver_work.py` to list/search

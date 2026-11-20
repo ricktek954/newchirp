@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:34Z"
+timestamp: "2026-11-20T16:23:03Z"
 concept_id: chirp_bridge/uvk5_firmware_from_hello
 language: python
 ---
@@ -36,7 +36,7 @@ Decode the UV-K5 hello reply without trusting non-printable bytes.
 | `reply` | `—` | `—` |
 
 ## Source
-Lines 38–62 in `chirp_bridge.py`
+Lines 36–60 in `chirp_bridge.py`
 
 ## Relationships
 

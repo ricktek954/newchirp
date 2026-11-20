@@ -7,8 +7,6 @@ import importlib.machinery
 import importlib.util
 import json
 import logging
-import lzma
-import math
 import os
 import re
 import sys
@@ -2216,67 +2214,78 @@ def apply_mapping_payload(radio, requested_models, active_locations):
     return mapping_payload(radio)
 
 
-def repeaterbook_resource_name(service, country, state):
-    country = str(country).strip()
-    state = str(state).strip()
-    if country not in ("United States", "Canada", "Mexico"):
-        state = "all"
-    service = (
-        "gmrs"
-        if country == "United States" and str(service).lower() == "gmrs"
-        else ""
-    )
-    country_key = str(country).strip().lower().replace(" ", "_")
-    state_key = str(state).strip().lower().replace(" ", "_")
-    return "rb%s-%s-%s.json" % (service, country_key, state_key)
+REPEATERBOOK_BROKER_MAX_RESPONSE_BYTES = 4 * 1024 * 1024
 
 
-def repeaterbook_cache_path(resource):
-    cache_dir = os.path.join(tempfile.gettempdir(), "newchirp-repeaterbook")
-    os.makedirs(cache_dir, exist_ok=True)
-    return os.path.join(cache_dir, resource)
-
-
-def fetch_repeaterbook_data(service, country, state):
-    """Fetch RepeaterBook's CHIRP-compatible compressed database."""
-    resource = repeaterbook_resource_name(service, country, state)
-    cache_path = repeaterbook_cache_path(resource)
-    cache_age = (
-        time.time() - os.path.getmtime(cache_path)
-        if os.path.exists(cache_path)
-        else None
-    )
-    if cache_age is not None and cache_age < 30 * 86400:
-        with open(cache_path, encoding="utf-8") as handle:
-            return json.load(handle)
-
-    emit_progress("Downloading RepeaterBook data...", 0.08)
-    url = "https://data.chirpmyradio.com/rb/%s.xz" % resource
+def fetch_repeaterbook_search(
+    country,
+    state,
+    service,
+    query="",
+    latitude=None,
+    longitude=None,
+    distance=None,
+    fm_only=False,
+    open_only=False,
+    limit=200,
+):
+    """Query NewChirp's relay without exposing RepeaterBook credentials."""
+    base = os.environ.get(
+        "REPEATERBOOK_BROKER_BASE",
+        "https://newchirp.net",
+    ).rstrip("/")
+    payload = json.dumps({
+        "country": country,
+        "state": state,
+        "service": service,
+        "query": query,
+        "latitude": latitude,
+        "longitude": longitude,
+        "distance": distance,
+        "fmOnly": bool(fm_only),
+        "openOnly": bool(open_only),
+        "limit": int(limit),
+    }).encode("utf-8")
     request = urllib.request.Request(
-        url,
+        base + "/api/repeaters/repeaterbook/search",
+        data=payload,
+        method="POST",
         headers={
-            "User-Agent": "CHIRP/py3dev Python %s %s"
-            % (".".join(str(part) for part in sys.version_info[:3]), sys.platform)
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "User-Agent": "NewChirp repeater relay client",
         },
     )
     try:
         with urllib.request.urlopen(request, timeout=45) as response:
-            compressed = response.read()
-        payload = lzma.decompress(compressed)
-        data = json.loads(payload)
-        with open(cache_path + ".tmp", "wb") as handle:
-            handle.write(json.dumps(data).encode("utf-8"))
-        os.replace(cache_path + ".tmp", cache_path)
-        return data
+            body = response.read(REPEATERBOOK_BROKER_MAX_RESPONSE_BYTES + 1)
+    except urllib.error.HTTPError as exc:
+        detail = ""
+        try:
+            error_body = exc.read(4096)
+            parsed = json.loads(error_body.decode("utf-8"))
+            detail = str(parsed.get("error") or "").strip()
+        except Exception:
+            pass
+        message = "RepeaterBook search service returned HTTP %s" % exc.code
+        if detail:
+            message += ": " + detail[:300]
+        raise RuntimeError(message) from exc
     except Exception as exc:
-        if os.path.exists(cache_path):
-            emit_progress("Using cached RepeaterBook data.", 0.12)
-            with open(cache_path, encoding="utf-8") as handle:
-                return json.load(handle)
         raise RuntimeError(
-            "Could not download RepeaterBook data for %s, %s: %s"
-            % (state, country, exc)
+            "Could not reach NewChirp's RepeaterBook search service: %s" % exc
         ) from exc
+    if len(body) > REPEATERBOOK_BROKER_MAX_RESPONSE_BYTES:
+        raise RuntimeError(
+            "RepeaterBook search returned an unexpectedly large response."
+        )
+    try:
+        data = json.loads(body)
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError("RepeaterBook search returned invalid JSON.") from exc
+    if not isinstance(data, dict) or not isinstance(data.get("results"), list):
+        raise RuntimeError("RepeaterBook search returned an unexpected response.")
+    return data
 
 
 def repeaterbook_tone(value):
@@ -2341,6 +2350,82 @@ def repeaterbook_item_to_channel(item, number):
         comment += " - %s" % item.get("Use")
     if item.get("Notes"):
         comment += " - %s" % item.get("Notes")
+    memory.comment = comment
+    return memory_json(memory)
+
+
+def repeaterbook_api_tone(tone):
+    if not isinstance(tone, dict):
+        return "", None, "N"
+    mode = str(tone.get("mode") or "").lower()
+    try:
+        value = int(tone["value"]) if mode == "dtcs" else float(tone["value"])
+    except (KeyError, TypeError, ValueError):
+        return "", None, "N"
+    if mode == "dtcs":
+        polarity = "R" if str(tone.get("polarity")).upper() == "R" else "N"
+        return "DTCS", value, polarity
+    if mode == "ctcss":
+        return "Tone", value, "N"
+    return "", None, "N"
+
+
+def repeaterbook_api_result_to_channel(result, number):
+    from chirp import chirp_common, errors
+
+    memory = chirp_common.Memory()
+    memory.number = number
+    memory.empty = False
+    memory.freq = int(result["rxFrequency"])
+    try:
+        memory.tuning_step = chirp_common.required_step(memory.freq)
+    except errors.InvalidDataError:
+        memory.tuning_step = 5.0
+    tx_frequency = (
+        int(result["txFrequency"])
+        if result.get("txFrequency") not in (None, "")
+        else None
+    )
+    if tx_frequency:
+        chirp_common.split_to_offset(memory, memory.freq, tx_frequency)
+    else:
+        memory.duplex = "off"
+        memory.offset = 0
+    chirp_common.split_tone_decode(
+        memory,
+        repeaterbook_api_tone(result.get("txTone")),
+        repeaterbook_api_tone(result.get("rxTone")),
+    )
+    memory.mode = "NFM" if result.get("mode") == "NFM" else "FM"
+    memory.name = str(
+        result.get("name") or result.get("callsign") or ""
+    ).strip()
+    location = ", ".join(
+        part
+        for part in (
+            str(result.get("city") or "").strip(),
+            (
+                "%s County" % str(result.get("county")).strip()
+                if str(result.get("county") or "").strip()
+                else ""
+            ),
+            str(result.get("state") or "").strip(),
+        )
+        if part
+    )
+    service = str(result.get("service") or "Amateur").strip()
+    comment = "RepeaterBook %s: %s" % (
+        service,
+        str(result.get("callsign") or "Unknown callsign").strip(),
+    )
+    if location:
+        comment += " - %s" % location
+    use = str(result.get("use") or "").strip()
+    if use:
+        comment += " - %s" % use
+    notes = str(result.get("notes") or "").strip()
+    if notes:
+        comment += " - %s" % notes
     memory.comment = comment
     return memory_json(memory)
 
@@ -2507,100 +2592,45 @@ def search_repeaterbook(
         query = ""
     else:
         query = normalize_repeaterbook_query(query_text)
-    has_origin = latitude is not None and longitude is not None
-    matches = []
-    requested_services = (
-        ("amateur", "gmrs") if service == "all" else (service,)
+    data = fetch_repeaterbook_search(
+        country=country,
+        state=state,
+        service=service,
+        query=query,
+        latitude=latitude,
+        longitude=longitude,
+        distance=distance,
+        fm_only=fm_only,
+        open_only=open_only,
+        limit=limit,
     )
-    for service_name in requested_services:
-        data = fetch_repeaterbook_data(service_name, country, state)
-        for item in data.get("results", []):
-            if not item or item.get("Operational Status") != "On-air":
-                continue
-            if open_only and item.get("Use") != "OPEN":
-                continue
-            if query:
-                fields = (
-                    "County",
-                    "State",
-                    "Landmark",
-                    "Nearest City",
-                    "Callsign",
-                    "Region",
-                    "Notes",
-                )
-                haystack = " ".join(
-                    str(item.get(key) or "") for key in fields
-                )
-                if query not in haystack.lower():
-                    continue
-            if fm_only and item.get("FM Analog") != "Yes":
-                continue
-            item_lat = item.get("Lat")
-            item_lon = item.get("Long")
-            distance_km = None
-            if has_origin and item_lat and item_lon:
-                lat1, lon1 = math.radians(latitude), math.radians(longitude)
-                lat2, lon2 = math.radians(float(item_lat)), math.radians(
-                    float(item_lon)
-                )
-                value = (
-                    math.sin((lat2 - lat1) / 2) ** 2
-                    + math.cos(lat1)
-                    * math.cos(lat2)
-                    * math.sin((lon2 - lon1) / 2) ** 2
-                )
-                distance_km = 6371 * 2 * math.atan2(
-                    math.sqrt(value), math.sqrt(1 - value)
-                )
-            if distance is not None and distance_km is not None:
-                if distance_km > distance:
-                    continue
-            elif distance is not None:
-                continue
-            matches.append((distance_km, item, service_name))
-    if has_origin:
-        matches.sort(
-            key=lambda match: (
-                match[0] is None,
-                match[0] if match[0] is not None else float("inf"),
-            )
-        )
     results = []
-    for index, (distance_km, item, service_name) in enumerate(matches[:limit]):
+    for index, item in enumerate(data.get("results", [])[:limit]):
         try:
-            channel = repeaterbook_item_to_channel(item, index + 1)
+            channel = repeaterbook_api_result_to_channel(item, index + 1)
         except Exception:
             continue
-        item_lat = item.get("Lat")
-        item_lon = item.get("Long")
-        channel["comment"] = channel["comment"].replace(
-            "RepeaterBook:",
-            "RepeaterBook %s:" % service_name.title(),
-            1,
-        )
         results.append({
             "channel": channel,
-            "callsign": item.get("Callsign") or "",
-            "city": item.get("Nearest City") or "",
-            "county": item.get("County") or "",
-            "state": item.get("State") or item.get("Region") or "",
-            "use": item.get("Use") or "",
-            "service": "GMRS" if service_name == "gmrs" else "Amateur",
-            "latitude": (
-                float(item_lat) if item_lat not in (None, "") else None
-            ),
-            "longitude": (
-                float(item_lon) if item_lon not in (None, "") else None
-            ),
-            "distanceKm": (
-                round(distance_km, 1) if distance_km is not None else None
-            ),
+            "callsign": item.get("callsign") or "",
+            "city": item.get("city") or "",
+            "county": item.get("county") or "",
+            "state": item.get("state") or "",
+            "use": item.get("use") or "",
+            "service": item.get("service") or "Amateur",
+            "latitude": item.get("latitude"),
+            "longitude": item.get("longitude"),
+            "distanceKm": item.get("distanceKm"),
         })
+    total_matches = data.get("totalMatches")
     return {
         "source": "RepeaterBook",
         "sourceUrl": "https://repeaterbook.com",
-        "totalMatches": len(matches),
+        "totalMatches": (
+            int(total_matches)
+            if total_matches is not None
+            else len(results)
+        ),
         "results": results,
     }
 

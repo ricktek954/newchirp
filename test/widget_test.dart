@@ -418,9 +418,9 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.byKey(const ValueKey('repeaterbook-api-pending-notice')),
-      findsOneWidget,
+      findsNothing,
     );
-    expect(find.textContaining('We have applied for access'), findsOneWidget);
+    expect(find.textContaining('We have applied for access'), findsNothing);
     final searchFilter = find.byKey(const ValueKey('repeater-search-filter'));
     await tester.enterText(searchFilter, 'Buffalo');
     await tester.pump(const Duration(milliseconds: 300));
@@ -445,6 +445,10 @@ void main() {
     expect(preferencesStore.preferences.fmOnly, isFalse);
     expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
     expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
+    expect(
+      find.text('Data courtesy of RepeaterBook.com.'),
+      findsOneWidget,
+    );
     await tester.ensureVisible(
       find.byKey(const ValueKey('repeater-sort-source')),
     );
@@ -671,7 +675,7 @@ void main() {
     );
   });
 
-  testWidgets('RepeaterBook denial explains the pending API application', (
+  testWidgets('RepeaterBook service failure is shown to the user', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(1200, 720);
@@ -709,7 +713,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(
-      find.textContaining('awaiting credentials and approval (request #295)'),
+      find.textContaining('HTTP Error 403: Forbidden'),
       findsWidgets,
     );
   });
@@ -874,7 +878,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(bridge.lastCountry, 'Canada');
-    expect(bridge.lastState, 'All');
+    expect(bridge.lastState, 'Ontario');
     expect(bridge.lastService, 'amateur');
     expect(bridge.lastFilter, 'Toronto');
     expect(bridge.lastLatitude, 43.6532);
@@ -891,7 +895,7 @@ void main() {
   });
 
   testWidgets(
-    'state field supports typing and coordinate searches ignore the region',
+    'state field supports typing and coordinates stay within the region',
     (tester) async {
       tester.view.physicalSize = const Size(1200, 720);
       tester.view.devicePixelRatio = 1;
@@ -946,7 +950,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(bridge.lastCountry, 'United States');
-      expect(bridge.lastState, 'All');
+      expect(bridge.lastState, 'California');
       expect(bridge.lastLatitude, 34.0522);
       expect(bridge.lastLongitude, -118.2437);
       expect(bridge.lastDistance, 50);

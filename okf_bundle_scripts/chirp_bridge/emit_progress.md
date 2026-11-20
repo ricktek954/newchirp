@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:57:34Z"
+timestamp: "2026-11-20T16:23:03Z"
 concept_id: chirp_bridge/emit_progress
 language: python
 ---
@@ -38,7 +38,7 @@ Send structured transfer progress without touching the JSON stdout.
 | `fraction` | `—` | `None` |
 
 ## Source
-Lines 408–420 in `chirp_bridge.py`
+Lines 406–418 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -47,7 +47,6 @@ Lines 408–420 in `chirp_bridge.py`
 | related | [chirp_bridge](/chirp_bridge.md) |
 | calls | [write](/chirp_bridge/write.md) |
 | called_by | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
-| called_by | [fetch_repeaterbook_data](/chirp_bridge/fetch_repeaterbook_data.md) |
 | called_by | [main](/chirp_bridge/main.md) |
 | called_by | [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) |
 | called_by | [status_progress](/chirp_bridge/status_progress.md) |
