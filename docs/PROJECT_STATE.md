@@ -19,7 +19,7 @@ release requirements.
   skips, all 239 Flutter tests, and `flutter analyze lib test` pass. The live
   relay returned 9 filtered Buffalo matches and an Ontario-only Canadian
   result set; the desktop bridge converted the Buffalo results into CHIRP
-  channels. A desktop release containing this source is still pending.
+  channels. macOS `1.0.63` now contains this integration.
 - The manufacturer/model driver work ledger lives in `database/driver_work/`
   (one JSON file per record since 2026-11-19; `database/driver_work.sqlite3`
   is a git-ignored cache). Use `scripts/driver_work.py` to list/search
@@ -38,6 +38,21 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.63` is live from source commit `847db298` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It adds RepeaterBook
+  API search through the server relay, the read-only Icom IC-F50V/F60V
+  capture profile, KG-689E/699E fixes, and the cumulative mapping,
+  cross-mode, live-band, CSV, and bridge compatibility fixes. Verification:
+  analyzer clean; 239 Flutter tests; 550 Python tests with two
+  fixture-dependent skips; embedded version `1.0.63` / `63`; arm64 and
+  x86_64 Python `3.13.15`; CHIRP `21e42e4518c167548af90ed7f9edf75e516c491a`;
+  265 driver modules; catalog `list-models` returned 602 models including
+  `Icom_IC-F50V_F60V_Capture`, `Wouxun_KG-689E`, and
+  `Radtel_RT-950_Pro`; strict app/DMG signatures; Apple notarization and
+  stapling; Gatekeeper acceptance of the DMG and mounted app; mounted-app
+  launch smoke test; and matching local, server, and public SHA-256.
+  Notarization submission:
+  `baac68f6-92f7-4154-b680-3b3a6c57adc1`.
 - Linux `1.0.64` is live from source commit `12c4633d`. It fixes blank cross
   modes, preserves radio settings that the current CHIRP build cannot load,
   restores live band switching, adds collapsible channel-summary metrics, and
@@ -983,6 +998,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.63` artifact source commit: `847db298`
 - macOS `1.0.62` artifact source commit: `89b4876e`
 - macOS `1.0.61` artifact source commit: `0e701b16`
 - macOS `1.0.60` artifact source commit: `488564b4`
@@ -991,7 +1007,7 @@ release requirements.
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.65` is live from source commit `014df59b`
 - Open pull requests: none
-- Checked-out source version: `1.0.65+65`
+- Checked-out source version: `1.0.63+63`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1005,7 +1021,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.62 |
+| macOS | 1.0.63 |
 | Windows | 1.0.63 |
 | Linux | 1.0.65 |
 
@@ -1030,6 +1046,23 @@ Linux `1.0.65` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums, sizes, and permissions matched the local artifacts
 - Linux platform manifest reports `1.0.65`
+
+macOS `1.0.63` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.63.dmg`
+- Version/build: `1.0.63` / `63`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `0496ad47204d606a09555d4c27fcc5fc88f1bd6a101b14d6865cbe00f692477a`
+- Size: `74,692,293` bytes
+- Built from `847db298`
+- Notarization submission:
+  `baac68f6-92f7-4154-b680-3b3a6c57adc1`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains the approved RepeaterBook relay integration, Icom
+  IC-F50V/F60V read-only capture profile, KG-689E/699E compatibility fixes,
+  and cumulative 1.0.63 through 1.0.65 fixes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 Linux `1.0.64` artifacts:
 

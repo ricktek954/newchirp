@@ -410,6 +410,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Published DEB, RPM, AppImage, and Pacman packages from source commit 014df59b. The release integrates the approved RepeaterBook API relay, expands read-only Icom IC-F50V/F60V channel support, handles echoing cables on the Wouxun KG-689E, and carries related UI and error-reporting fixes. Public manifest reports 1.0.65. Package SHA-256 values: f3cf598266edcd1c75944703cbb3e4699afb82cf6282c8054e797922d3e1df9e, fd1af91bc3a84bbcb267fb0a3e19ec35c8d3a7b92b5407e1fb6415c14102210e, c0849973a05f21de913201ff4c3de253b9020e52af0f55a8dc162253a9349f20, and f1aca0d1b313ce5db5145407ff811cfb3f4979dadb611d9382e1cec3f4ae9958.
   Source: `release` desktop:014df59b
 
+### macOS desktop
+
+- **#w-20261120-696e release | released | normal:** macOS 1.0.63 published
+  Published a universal signed, notarized, stapled DMG from source commit 847db298. It adds approved RepeaterBook API search through the server relay, IC-F50V/F60V capture support, KG-689E/699E fixes, and cumulative 1.0.63/1.0.64/1.0.65 compatibility changes. Artifact SHA-256: 0496ad47204d606a09555d4c27fcc5fc88f1bd6a101b14d6865cbe00f692477a. Notarization: baac68f6-92f7-4154-b680-3b3a6c57adc1. Live manifest reports macOS 1.0.63.
+  Source: `release` desktop:847db298
+
 ## Quansheng
 
 ### UV-K1 & UV-K5 V3 (F4HWN)
