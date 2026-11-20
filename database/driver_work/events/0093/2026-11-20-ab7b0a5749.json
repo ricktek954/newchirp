@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 16:25:06",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:7bcc0e8e",
+  "item": "93",
+  "occurred_at": "2026-11-20",
+  "summary": "Driver detects an echoing cable, strips the echo, and names the cable type when only the echo returns; 12 replay tests"
+}
