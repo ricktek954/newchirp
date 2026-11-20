@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 21:27:33",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179521003976.60949.1367525978528631929@newchirp.net>",
+  "item": "w-20261120-36d6",
+  "occurred_at": "2026-11-20",
+  "summary": "Android 1.0.24+23 (APK sha256 308b7532...) is live with experimental stock RT-950 Pro Bluetooth reads; asked the owner to enable Bluetooth and BT Write, close Radtel's app, choose 'Radtel RT-950 Pro', read over Bluetooth, and send the Bluetooth diagnostics screenshot. Bluetooth writes stay disabled."
+}
