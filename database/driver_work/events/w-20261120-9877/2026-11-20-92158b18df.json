@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 20:44:21",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:4c74cdc0",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "RT-950 Pro writes re-enabled on desktop (4c74cdc0, write prompt now explains TX-off channels) and in the Web Programmer (web b21ca49, deployed as index-CDl5KXrZ.js). Version bumped to 1.0.66 (66506c1b); maintainer is building releases."
+}
