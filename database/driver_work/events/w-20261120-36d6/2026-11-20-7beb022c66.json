@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 21:20:11",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:ec2638c7",
+  "item": "w-20261120-36d6",
+  "occurred_at": "2026-11-20",
+  "summary": "Desktop shared RT-950 Pro driver now supports the tested read-only Bluetooth policy and zero-byte guidance without changing the USB protocol. Protocol/status docs record static app evidence, BT Write byte 29, unvalidated hardware status, and disabled Bluetooth writes."
+}

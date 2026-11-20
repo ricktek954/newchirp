@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 21:20:05",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "mobile:a9942e7",
+  "item": "w-20261120-36d6",
+  "occurred_at": "2026-11-20",
+  "summary": "Android stock RT-950 Pro uses FFE0/FFE1 for read-only Bluetooth, explains BT Write and stock-versus-nicFW950 profile selection on zero-byte handshake or first block, rejects Bluetooth upload before sending a command, and adds Python/Dart tests. Bluetooth read remains unvalidated on hardware; Bluetooth write is absent."
+}
