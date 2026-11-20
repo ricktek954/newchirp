@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T19:21:25Z"
+timestamp: "2026-11-20T20:10:28Z"
 concept_id: main/resizeBy
 language: dart
 ---
@@ -23,7 +23,7 @@ voidresizeBy(double dx, double dy)
 ```
 
 ## Source
-Lines 9115–9115 in `main.dart`
+Lines 9103–9103 in `main.dart`
 
 ## Relationships
 

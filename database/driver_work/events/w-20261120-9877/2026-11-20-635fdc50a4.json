@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 20:06:44",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:852",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "Owner is outside FCC jurisdiction; his SAR group has used marine VHF on these radios for years, so the amateur-band-lock hypothesis is likely wrong (many RT-950 Pro units transmit 136-174/400-520 MHz). Cause reopened: a NewChirp write effect is plausible. The 144-148/420-450 NEWCHIRP_TX_BANDS warning (8a815371) is unverified and must be checked against the Pro CPS or corrected before 1.0.64. Owner plans to reprogram with Radtel CPS: asked for a NewChirp read before and after as a comparison pair."
+}

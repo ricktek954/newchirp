@@ -42,6 +42,12 @@ Findings that override the earlier community-derived map:
   3 bits) with marker `A0` at 19; GB2312 name at 20-31 padded `FF`.
 - There is no per-channel TX-enable bit: the CPS masks byte 15 bits 0-1
   with `% 2`.
+- Transmit range (2026-11-20 trace): `FreqHelper.minFreq = 18`,
+  `maxFreq = 1000`; `FormCHInfo` and `ChirpCsvHelper` accept RX and TX in
+  18-1000 MHz with no amateur-band check. `FunConfigData`/`VFOData` expose
+  no TX-inhibit or TX-band setting. A blank `TxFreq` is written as
+  `FF FF FF FF` by `SetFreq_StrToHex` and decoded back to blank by
+  `GetFreq_HexToStr`; that is the only per-channel transmit-off encoding.
 
 ### Earlier base RT-950 CPS
 

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-20 20:11:49",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "docs/RT950PRO_PROTOCOL.md",
+  "item": "w-20261120-9877",
+  "occurred_at": "2026-11-20",
+  "summary": "REA of Pro CPS 1.3.3 (exe sha256 1a20aa53...): NewChirp encoder matches SetCHInfo_Parameter byte for byte; CPS TX range 18-1000 MHz with no amateur-band limit; no radio-wide TX-inhibit setting; blank TX (FF x4) is the only per-channel TX-off. NewChirp's marine template defaults to receive-only (Duplex off -> TX FF), matching 'beeps on every channel' for an all-marine load. Leading cause: template default, not a write defect. Reverted the incorrect 144-148/420-450 TX-band warning."
+}

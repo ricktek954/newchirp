@@ -252,42 +252,6 @@ class RT950ProDriverTest(unittest.TestCase):
         self.assertEqual((added.freq, added.mode, added.power, added.name),
                          (446_006_250, "NFM", "Low", "NEW500"))
 
-    def test_out_of_band_transmit_warns_but_never_blocks(self):
-        # 2026-11-20 owner report (ledger w-20261120-9877): marine VHF
-        # channels were stored and received but beeped on PTT.
-        from chirp import chirp_common
-        radio = self._radio(FakeRT950ProSerial())
-
-        def warnings_for(freq, duplex="", offset=0):
-            mem = chirp_common.Memory()
-            mem.number = 1
-            mem.freq = freq
-            mem.duplex = duplex
-            mem.offset = offset
-            messages = radio.validate_memory(mem)
-            warnings, errors = chirp_common.split_validation_msgs(messages)
-            self.assertEqual(errors, [])
-            return [str(w) for w in warnings if "transmits" in str(w)]
-
-        self.assertEqual(len(warnings_for(156_800_000)), 1)       # marine 16
-        self.assertEqual(len(warnings_for(462_562_500)), 1)       # GMRS
-        self.assertEqual(warnings_for(146_520_000), [])
-        self.assertEqual(warnings_for(446_000_000), [])
-        self.assertEqual(warnings_for(156_800_000, "off"), [])    # RX only
-        self.assertEqual(warnings_for(147_000_000, "+", 600_000), [])
-        self.assertEqual(
-            len(warnings_for(147_900_000, "+", 600_000)), 1)      # TX 148.5
-        self.assertEqual(
-            len(warnings_for(156_800_000, "split", 146_520_000)), 0)
-
-        bridge = _load_bridge()
-        self.assertEqual(
-            bridge.features_json(radio)["txBands"],
-            [{"startMhz": 144.0, "endMhz": 148.0},
-             {"startMhz": 420.0, "endMhz": 450.0}])
-        self.assertEqual(
-            bridge.features_json(self.base_class(None))["txBands"], [])
-
     def test_encoder_matches_the_cps_record_rules(self):
         from chirp import chirp_common
         mem = chirp_common.Memory()

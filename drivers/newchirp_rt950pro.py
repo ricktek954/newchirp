@@ -123,22 +123,6 @@ def _option_index(value, options, default=0):
     return options.index(text) if text in options else default
 
 
-def transmit_frequency(memory):
-    """TX frequency in Hz, or None for an empty or receive-only channel."""
-    if memory.empty:
-        return None
-    duplex = memory.duplex or ""
-    if duplex == "off":
-        return None
-    if duplex == "+":
-        return int(memory.freq) + int(memory.offset)
-    if duplex == "-":
-        return int(memory.freq) - int(memory.offset)
-    if duplex == "split":
-        return int(memory.offset)
-    return int(memory.freq)
-
-
 def encode_channel(memory):
     """KDH.RWDataOperation.SetCHInfo_Parameter for one 32-byte record."""
     record = bytearray(b"\xFF" * 32)
@@ -224,12 +208,6 @@ class RT950ProRadio(_BASE.RT950Radio):
         "transmitting after a write is investigated. Reading and saving "
         "still work. The radio was not changed."
     )
-    # The radio stores and receives any channel in valid_bands but only
-    # transmits in the amateur bands; elsewhere it beeps on PTT (2026-11-20
-    # owner report, ledger w-20261120-9877: marine VHF channels). NewChirp
-    # warns about such channels; it never blocks or changes them.
-    NEWCHIRP_TX_BANDS = ((144_000_000, 148_000_000),
-                         (420_000_000, 450_000_000))
     BAUD_RATE = 115200
     INITIAL_ACK_TIMEOUT = PRO_INITIAL_ACK_TIMEOUT
     _memsize = PRO_MEM_SIZE
@@ -333,15 +311,6 @@ class RT950ProRadio(_BASE.RT950Radio):
             rebuilt.append(setting)
         mem.extra = rebuilt
         return mem
-
-    def validate_memory(self, mem):
-        messages = super().validate_memory(mem)
-        tx = transmit_frequency(mem)
-        if tx and not any(lo <= tx < hi for lo, hi in self.NEWCHIRP_TX_BANDS):
-            messages.append(chirp_common.ValidationWarning(
-                "The RT-950 Pro only transmits on 144-148 and 420-450 MHz. "
-                "It will receive this channel but beep on PTT."))
-        return messages
 
     def set_memory(self, memory):
         if not 1 <= memory.number <= self._channel_count:

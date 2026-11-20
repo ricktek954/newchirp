@@ -2,7 +2,6 @@
 
 ## Functions
 
-- [_bandMhzLabel](bandMhzLabel.md)
 - [_frequencyFitsStep](frequencyFitsStep.md)
 - [_isPlusFiveMhz](isPlusFiveMhz.md)
 - [_isZeroMhz](isZeroMhz.md)
@@ -23,6 +22,7 @@
 - [hasSharedCtcssTone](hasSharedCtcssTone.md) — TSQL stores one CTCSS value that CHIRP applies in both directions.
 - [isGmrsRepeaterOutputMhz](isGmrsRepeaterOutputMhz.md) — GMRS repeater outputs from 462.550 through 462.725 MHz.
 - [isMidlandRepeaterRow](isMidlandRepeaterRow.md) — Whether [location] is one of the eight repeater rows on this radio.
+- [isReceiveOnlyChannel](isReceiveOnlyChannel.md) — Why this MXT295 channel is not legal. Empty for every other radio.
 - [mhzLabelFromHz](mhzLabelFromHz.md)
 - [midlandCanSelectOffset](midlandCanSelectOffset.md) — Offset can be chosen only for GMRS channels 15 through 22.
 - [midlandDuplexChoices](midlandDuplexChoices.md) — Duplex choices for one MXT295 slot.
@@ -37,13 +37,12 @@
 - [nextAvailableLocation](nextAvailableLocation.md)
 - [prepareMxt295Editor](prepareMxt295Editor.md) — Snaps locked MXT295 fields to the legal GMRS values.
 - [RadioChannel](RadioChannel.md)
+- [receiveOnlyWriteNote](receiveOnlyWriteNote.md) — Write-confirmation note naming the receive-only channels, or '' if none.
 - [restorePlainMidlandRepeater](restorePlainMidlandRepeater.md) — Puts the standard GMRS repeater back in this row and clears the name.
 - [scanChoices](scanChoices.md) — Edit-screen choices for the scan codes this radio allows.
 - [scanLabel](scanLabel.md) — Word shown for a stored scan code. Unknown codes stay visible.
 - [shouldShowTransmitPower](shouldShowTransmitPower.md) — Power is irrelevant when the channel has transmit disabled.
 - [showsMidlandChannelNumbers](showsMidlandChannelNumbers.md) — This radio's list uses Midland's channel numbers instead of raw slots.
 - [toJson](toJson.md)
-- [transmitBandNotice](transmitBandNotice.md) — Advisory note for a channel the radio stores and receives but will not
-- [transmitFrequencyMhz](transmitFrequencyMhz.md) — Why this MXT295 channel is not legal. Empty for every other radio.
 - [useGmrsReceiveChannel](useGmrsReceiveChannel.md) — Sets this row to one of the 22 GMRS receive channels.
 - [validate](validate.md)

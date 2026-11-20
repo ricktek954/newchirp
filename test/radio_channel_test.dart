@@ -5,45 +5,40 @@ RadioChannel channelAt(int location) =>
     RadioChannel(location: location, name: 'CH $location', frequency: 146.52);
 
 void main() {
-  group('transmitBandNotice', () {
-    const bands = [
-      (startMhz: 144.0, endMhz: 148.0),
-      (startMhz: 420.0, endMhz: 450.0),
-    ];
-    RadioChannel at(double mhz, {String duplex = '', double offset = 0}) =>
-        RadioChannel(
-          location: 1,
-          name: 'CH',
-          frequency: mhz,
-          duplex: duplex,
-          offset: offset,
-        );
+  group('receive-only write note', () {
+    RadioChannel at(int location, double mhz, String duplex) => RadioChannel(
+      location: location,
+      name: 'CH $location',
+      frequency: mhz,
+      duplex: duplex,
+    );
 
-    test('warns about marine VHF on an amateur-only radio', () {
-      final notice = transmitBandNotice(at(156.8), bands);
-      expect(notice, contains('144–148 and 420–450 MHz'));
-      expect(notice, contains('156.8000 MHz'));
+    test('names receive-only channels so a PTT beep is expected', () {
+      final note = receiveOnlyWriteNote([
+        at(1, 156.8, 'off'),
+        at(2, 156.45, 'off'),
+        at(3, 146.52, ''),
+      ], (location) => '$location');
+      expect(note, startsWith('2 channels are receive-only'));
+      expect(note, contains(': 1, 2.'));
+      expect(note, contains('beep and not transmit'));
     });
 
-    test('stays quiet in band, for receive-only, and without limits', () {
-      expect(transmitBandNotice(at(146.52), bands), isNull);
+    test('is empty when every channel can transmit', () {
       expect(
-        transmitBandNotice(at(447.0, duplex: '-', offset: 5), bands),
-        isNull,
-      );
-      expect(transmitBandNotice(at(156.8, duplex: 'off'), bands), isNull);
-      expect(transmitBandNotice(at(156.8), const []), isNull);
-      expect(
-        transmitBandNotice(at(162.55, duplex: 'split', offset: 146.52), bands),
-        isNull,
+        receiveOnlyWriteNote([
+          at(1, 156.8, ''),
+          at(2, 147.0, '+'),
+        ], (location) => '$location'),
+        isEmpty,
       );
     });
 
-    test('uses the transmit side of a repeater pair', () {
-      expect(
-        transmitBandNotice(at(147.9, duplex: '+', offset: 0.6), bands),
-        contains('148.5000 MHz'),
-      );
+    test('summarises long lists', () {
+      final note = receiveOnlyWriteNote([
+        for (var i = 1; i <= 7; i++) at(i, 156.8, 'off'),
+      ], (location) => '$location');
+      expect(note, contains('1, 2, 3, 4, 5 and 2 more'));
     });
   });
 

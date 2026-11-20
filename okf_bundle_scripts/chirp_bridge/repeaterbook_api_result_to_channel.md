@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T19:21:25Z"
+timestamp: "2026-11-20T16:23:03Z"
 concept_id: chirp_bridge/repeaterbook_api_result_to_channel
 language: python
 ---
@@ -31,7 +31,7 @@ def repeaterbook_api_result_to_channel(result, number)
 | `number` | `—` | `—` |
 
 ## Source
-Lines 2383–2440 in `chirp_bridge.py`
+Lines 2373–2430 in `chirp_bridge.py`
 
 ## Relationships
 

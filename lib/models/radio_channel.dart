@@ -465,50 +465,31 @@ bool midlandCanSelectOffset(int location, double frequencyMhz) {
 /// Why this MXT295 channel is not legal. Empty for every other radio.
 ///
 /// The driver enforces the same rules in drivers/newchirp_mxt295.py.
-/// Transmit frequency in MHz, or null when the channel cannot transmit.
-double? transmitFrequencyMhz(RadioChannel channel) {
-  if (channel.cleared || channel.frequency <= 0) return null;
-  return switch (channel.duplex) {
-    'off' => null,
-    '+' => channel.frequency + channel.offset,
-    '-' => channel.frequency - channel.offset,
-    'split' => channel.offset > 0 ? channel.offset : null,
-    _ => channel.frequency,
-  };
-}
+/// True when the channel has no transmit frequency (duplex "off"). Radios
+/// store such channels without a TX frequency and refuse PTT on them, which
+/// owners can mistake for a failed write (RT-950 Pro report, 2026-11-20:
+/// marine template channels added receive-only beeped on PTT).
+bool isReceiveOnlyChannel(RadioChannel channel) =>
+    !channel.cleared && channel.frequency > 0 && channel.duplex == 'off';
 
-String _bandMhzLabel(double mhz) {
-  final text = mhz.toStringAsFixed(3);
-  return text.replaceFirst(RegExp(r'\.?0+$'), '');
-}
-
-/// Advisory note for a channel the radio stores and receives but will not
-/// transmit on, because its firmware limits transmit to [txBands]. It never
-/// blocks saving or writing (RT-950 Pro report, 2026-11-20: marine VHF
-/// channels beeped on PTT after a successful write).
-String? transmitBandNotice(
-  RadioChannel channel,
-  List<({double startMhz, double endMhz})> txBands,
+/// Write-confirmation note naming the receive-only channels, or '' if none.
+String receiveOnlyWriteNote(
+  List<RadioChannel> channels,
+  String Function(int location) label,
 ) {
-  if (txBands.isEmpty) return null;
-  final tx = transmitFrequencyMhz(channel);
-  if (tx == null) return null;
-  // Compare in Hz to avoid floating-point edge errors at band limits.
-  final txHz = (tx * 1000000).round();
-  final inBand = txBands.any(
-    (band) =>
-        (band.startMhz * 1000000).round() <= txHz &&
-        txHz < (band.endMhz * 1000000).round(),
-  );
-  if (inBand) return null;
-  final ranges = txBands
-      .map(
-        (band) =>
-            '${_bandMhzLabel(band.startMhz)}–${_bandMhzLabel(band.endMhz)}',
-      )
-      .join(' and ');
-  return 'This radio only transmits on $ranges MHz. It will receive '
-      '${tx.toStringAsFixed(4)} MHz but beep and refuse to transmit.';
+  final receiveOnly = channels.where(isReceiveOnlyChannel).toList();
+  if (receiveOnly.isEmpty) return '';
+  final count = receiveOnly.length;
+  final names = receiveOnly
+      .take(5)
+      .map((channel) => label(channel.location))
+      .join(', ');
+  final more = count > 5 ? ' and ${count - 5} more' : '';
+  return '$count ${count == 1 ? 'channel is' : 'channels are'} receive-only '
+      '(Duplex "off", no transmit frequency): $names$more. The radio will '
+      'beep and not transmit if you press PTT on '
+      '${count == 1 ? 'it' : 'them'}. To transmit, set Duplex to simplex or '
+      'an offset before writing.';
 }
 
 List<String> midlandGmrsIssues(String? model, RadioChannel channel) {

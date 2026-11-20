@@ -135,7 +135,9 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
                 const Padding(
                   padding: EdgeInsets.only(top: 4),
                   child: Text(
-                    'All rows will be added with transmit disabled.',
+                    'All rows will be added receive-only (Duplex "off"). '
+                    'The radio will beep and not transmit on them. Check '
+                    'the box above to program transmit frequencies.',
                     style: TextStyle(color: Colors.black54, fontSize: 12),
                   ),
                 ),

@@ -3645,22 +3645,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         channelsToWrite.any(
           (channel) => channel.name != channel.name.toUpperCase(),
         );
-    final receiveOnlyChannels = channelsToWrite
-        .where(
-          (channel) =>
-              transmitBandNotice(channel, _capabilities?.txBands ?? const []) !=
-              null,
-        )
-        .toList();
-    final receiveOnlyNote = receiveOnlyChannels.isEmpty
-        ? ''
-        : '\n\n${receiveOnlyChannels.length} '
-              '${receiveOnlyChannels.length == 1 ? 'channel transmits' : 'channels transmit'} '
-              'outside the bands this radio transmits on. The radio will '
-              'receive ${receiveOnlyChannels.length == 1 ? 'it' : 'them'} '
-              'but beep and refuse to transmit: '
-              '${receiveOnlyChannels.take(5).map((channel) => channelNumberLabel(_model, channel.location)).join(', ')}'
-              '${receiveOnlyChannels.length > 5 ? ' and ${receiveOnlyChannels.length - 5} more' : ''}.';
+    final receiveOnlyNote = receiveOnlyWriteNote(
+      channelsToWrite,
+      (location) => channelNumberLabel(_model, location),
+    );
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -3680,7 +3668,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           '${mappingsChanged ? '\n\nBank and zone changes will be written too.' : ''}'
           '${invalidChannels.isNotEmpty ? '\n\n${invalidChannels.length} incompatible channels will be left unchanged and listed after the write.' : ''}'
           '${uppercasesNames ? '\n\nLowercase channel names will be converted to uppercase because this radio only supports uppercase names.' : ''}'
-          '$receiveOnlyNote',
+          '${receiveOnlyNote.isEmpty ? '' : '\n\n$receiveOnlyNote'}',
         ),
         actions: [
           TextButton(
@@ -11427,41 +11415,6 @@ class _ChannelEditor extends StatelessWidget {
                     ),
                     const SizedBox(height: 12),
                   ],
-                ],
-                if (transmitBandNotice(
-                      channel,
-                      capabilities?.txBands ?? const [],
-                    )
-                    case final txNotice?) ...[
-                  const SizedBox(height: 12),
-                  Container(
-                    key: const ValueKey('channel-tx-band-notice'),
-                    padding: const EdgeInsets.all(11),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEAF2FB),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Icon(
-                          Icons.info_outline,
-                          size: 16,
-                          color: Color(0xFF1F4E79),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            txNotice,
-                            style: const TextStyle(
-                              color: Color(0xFF1F4E79),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
                 if (issues.isNotEmpty) ...[
                   const SizedBox(height: 12),

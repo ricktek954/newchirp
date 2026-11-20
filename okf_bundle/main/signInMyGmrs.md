@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T19:21:25Z"
+timestamp: "2026-11-20T20:10:28Z"
 concept_id: main/signInMyGmrs
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_signInMyGmrs_signInMyGmrs
 ```
 
 ## Source
-Lines 8574–8574 in `main.dart`
+Lines 8562–8562 in `main.dart`
 
 ## Relationships
 
