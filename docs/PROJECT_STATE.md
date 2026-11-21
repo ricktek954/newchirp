@@ -281,6 +281,28 @@ release requirements.
   reports macOS `1.0.56`; and local/server DMG SHA-256 both match
   `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
   Physical FT-50 upload/read-back validation is still pending.
+- Windows `1.0.65` is live from source commit `014df59b`. It integrates the
+  approved RepeaterBook API relay, expands read-only Icom IC-F50V/F60V
+  channel support alongside the capture profile, handles echoing programming
+  cables on the Wouxun KG-689E, and carries the related UI and error-reporting
+  fixes. Verification: installer metadata `1.0.65.0` / `1.0.65`; release app
+  `1.0.65+65`; bundled Python `3.13.15`; a clean runtime with no
+  `__pycache__`/`.pyc` files and no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination; 265 CHIRP driver
+  modules pinned to `21e42e4518c167548af90ed7f9edf75e516c491a`; bridge
+  `list-models` exit 0 with empty stderr and 602 models including
+  `Icom_IC-F50V_F60V`, `Icom_IC-F50V_F60V_Capture`, `Wouxun_KG-689E`,
+  `Wouxun_KG-699E`, `Icom_IC-910`, and `Yaesu_FT-50`; all four
+  frequency-reference PDFs; extracted payload launch succeeded; matching
+  local/server/public SHA-256; public HTTP 200; and live manifest Windows
+  `1.0.65`. `flutter analyze lib test` is clean. The full Flutter suite ran
+  233 passing tests in the parallel run with the five known Windows-only
+  sandbox/Help failures plus one diagnostic-log temp-lock failure that passed
+  in isolation. The complete Python suite ran 550 tests: 544 passed, 2
+  fixture-dependent tests skipped, 3 known Windows temporary-file-lock helper
+  errors, and 1 Windows-only path-separator assertion in
+  `driver_work_test.py`. The installer remains unsigned. At verification
+  time, macOS was `1.0.65` and Linux was `1.0.67`.
 - Windows `1.0.64` is live from source commit `83a592ae`. It integrates the
   approved RepeaterBook API relay, adds read-only Icom IC-F50V/F60V channel
   support alongside the capture profile, handles echoing programming cables
@@ -1066,6 +1088,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
+- Windows `1.0.65` artifact source commit: `014df59b`
 - Windows `1.0.64` artifact source commit: `83a592ae`
 - Windows `1.0.63` artifact source commit: `f550ae84`
 - Windows `1.0.62` artifact source commit: `d9b31864`
@@ -1082,7 +1105,7 @@ release requirements.
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.67` is live from source commit `99175783`
 - Open pull requests: none
-- Checked-out source version: `1.0.67+67`
+- Checked-out source version: `1.0.65+65`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1097,7 +1120,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.65 |
-| Windows | 1.0.64 |
+| Windows | 1.0.65 |
 | Linux | 1.0.67 |
 
 Linux `1.0.67` artifacts:
@@ -1537,7 +1560,32 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.64` artifact:
+Windows `1.0.65` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.65.exe`
+- Version/build: `1.0.65` / `65`
+- SHA-256:
+  `6aa267b209a53877b8ef82eb9b3fecaa9d08761ec5e10b2cbd5f2fd901362151`
+- Size: `53,527,982` bytes
+- Built from `014df59b`
+- Installer metadata `1.0.65.0` / `1.0.65`; release app `1.0.65+65`
+- Bundled Python `3.13.15`, 265 CHIRP driver modules pinned to
+  `21e42e4518c167548af90ed7f9edf75e516c491a`, and a bridge `list-models`
+  run with exit 0, empty stderr, and 602 models including
+  `Icom_IC-F50V_F60V`, `Icom_IC-F50V_F60V_Capture`, `Wouxun_KG-689E`,
+  `Wouxun_KG-699E`, `Icom_IC-910`, and `Yaesu_FT-50`
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains no `__pycache__` or `.pyc` files and no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination
+- Installer payload extraction confirmed the bundled runtime, driver tree,
+  bridge, and PDFs; the extracted runtime reported Python `3.13.15`, and the
+  extracted application launched successfully
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.65`
+- Authenticode: not signed
+
+Windows `1.0.64` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.64.exe`
 - Version/build: `1.0.64` / `64`
@@ -2309,6 +2357,25 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.65` from source commit `014df59b`. The release
+  integrates the approved RepeaterBook API relay, expands read-only Icom
+  IC-F50V/F60V channel support, handles echoing programming cables on the
+  Wouxun KG-689E, and carries the related UI and error-reporting fixes.
+  Verification: installer metadata `1.0.65.0` / `1.0.65`, release app
+  `1.0.65+65`, bundled Python `3.13.15`, zero bytecode caches, 265 CHIRP
+  driver modules pinned to `21e42e4518c167548af90ed7f9edf75e516c491a`,
+  bridge `list-models` exit 0 with 602 models including IC-F50V/F60V,
+  KG-689E/KG-699E, IC-910, and FT-50, all four frequency-reference PDFs,
+  matching local/server/public SHA-256
+  `6aa267b209a53877b8ef82eb9b3fecaa9d08761ec5e10b2cbd5f2fd901362151`,
+  size `53,527,982` bytes, public HTTP 200, and live manifest Windows
+  `1.0.65`. Installer payload extraction and runtime launch succeeded.
+  `flutter analyze lib test` is clean. The full Flutter suite ran 233 passing
+  tests in the parallel run with the five known Windows-only sandbox/Help
+  failures plus one diagnostic-log temp-lock failure that passed in
+  isolation. The complete Python suite ran 550 tests: 544 passed, 2 skipped,
+  3 known Windows temporary-file-lock helper errors, and 1 Windows-only
+  path-separator assertion. The installer remains unsigned.
 - Published Windows `1.0.64` from source commit `83a592ae`. The release
   integrates the approved RepeaterBook API relay, adds read-only Icom
   IC-F50V/F60V channel support, handles echoing programming cables on the
