@@ -2,15 +2,15 @@
 okf_version: "0.2"
 type: Function
 title: read
-resource: models/channel_image_baseline.dart
+resource: models\channel_image_baseline.dart
 tags:
   - "lang:dart"
   - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-21T12:45:31Z"
 concept_id: models/channel_image_baseline/read
 language: dart
 ---
@@ -41,7 +41,7 @@ ChannelLibrarySnapshotread({
 ```
 
 ## Source
-Lines 265–282 in `models/channel_image_baseline.dart`
+Lines 268–285 in `models\channel_image_baseline.dart`
 
 ## Relationships
 

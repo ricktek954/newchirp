@@ -3,15 +3,15 @@ okf_version: "0.2"
 type: Class
 title: ChannelLibraryStatsCache
 description: Remembers the last library snapshot so search and row selection can skip it.
-resource: models/channel_image_baseline.dart
+resource: models\channel_image_baseline.dart
 tags:
   - "lang:dart"
   - "type:Class"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-18T20:33:29Z"
+timestamp: "2026-11-21T12:45:31Z"
 concept_id: models/channel_image_baseline/ChannelLibraryStatsCache
 language: dart
 ---
@@ -40,7 +40,7 @@ limits, channel list, or cleared-slot count changes.
 - `read`
 
 ## Source
-Lines 240–353 in `models/channel_image_baseline.dart`
+Lines 243–356 in `models\channel_image_baseline.dart`
 
 ## Relationships
 

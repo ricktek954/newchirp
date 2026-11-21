@@ -1,14 +1,13 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
+  "source_root": "lib",
   "files": {
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795254483194699377,
-      "hash": "561f69503fed75c44e04d4e3da01e824dc4e4084b37abc5df9fb8743727717a5",
+      "mtime_ns": 1795265127411722900,
+      "hash": "6bc88f61beaf5e33886f273e3432391a462319dc6316e65a049565dace02d57a",
       "concept_ids": [
-        "main/dbe33cb7",
         "main",
         "main/WindowStateManager",
         "main/NewChirpApp",
@@ -142,6 +141,7 @@
         "main/nextChannelLocation",
         "main/channelIssues",
         "main/reviewChannelIssues",
+        "main/reviewAllChannelIssues",
         "main/sortChannelsByLocation",
         "main/moveChannel",
         "main/moveChannelToLocation",
@@ -237,6 +237,7 @@
         "main/chooseCounties",
         "main/searchAmateurInstead",
         "main/channelDetail",
+        "main/resultIssues",
         "main/setResultSelected",
         "main/buildResultsMap",
         "main/isEnabled",
@@ -252,21 +253,23 @@
     },
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1795034009261444468,
-      "hash": "eaf93a5a8730685ec02600db23b818f585e10eea00dd8c64554d2adf78b7f0ad",
+      "mtime_ns": 1795265131872858900,
+      "hash": "7a0dced8f7b495083ff787b6d6735d19d53e96d2d01e8b13640deb126b4c297b",
       "concept_ids": [
+        "models/channel_image_baseline",
         "models/channel_image_baseline/ChannelImageBaseline",
         "models/channel_image_baseline/ChannelImageMatch",
         "models/channel_image_baseline/ChannelLibrarySnapshot",
         "models/channel_image_baseline/ChannelLibraryStatsCache",
-        "models/channel_image_baseline/channelImageStatusText",
-        "models/channel_image_baseline/channelLibraryWriteReady",
         "models/channel_image_baseline/channelListSignature",
         "models/channel_image_baseline/clearedLocationsAfterReplacement",
         "models/channel_image_baseline/clearedLocationsForUpload",
+        "models/channel_image_baseline/channelImageMatch",
+        "models/channel_image_baseline/channelImageStatusText",
+        "models/channel_image_baseline/channelLibraryWriteReady",
+        "models/channel_image_baseline/channelLibrarySnapshot",
         "models/channel_image_baseline/markDirty",
-        "models/channel_image_baseline/read",
-        "models/channel_image_baseline"
+        "models/channel_image_baseline/read"
       ]
     },
     "models/frequency_reference.dart": {
@@ -274,11 +277,11 @@
       "mtime_ns": 1795034009261799425,
       "hash": "d07e43482dc6e94d17a512669643eac2c95381bd26cbab3e8fb42ffb906f353e",
       "concept_ids": [
+        "models/frequency_reference/australianUhfNote",
+        "models/frequency_reference/australianUhfRows",
         "models/frequency_reference/FrequencyReferenceGroup",
         "models/frequency_reference/FrequencyReferencePlan",
         "models/frequency_reference/FrequencyReferenceRow",
-        "models/frequency_reference/australianUhfNote",
-        "models/frequency_reference/australianUhfRows",
         "models/frequency_reference/standardCbRows",
         "models/frequency_reference/ukCbRows",
         "models/frequency_reference"
@@ -311,12 +314,12 @@
       "mtime_ns": 1794220301599184985,
       "hash": "6fe7afca765e6a7e7319910ca4aac1c7d616951e174d608dd7e63715e4f80389",
       "concept_ids": [
-        "models/marine_channels/MarineChannelDefinition",
-        "models/marine_channels/MarineChannelPlan",
-        "models/marine_channels/MarineTemplateSelection",
         "models/marine_channels/channelFromDefinition",
+        "models/marine_channels/MarineChannelDefinition",
         "models/marine_channels/marineChannelDefinitionsFor",
+        "models/marine_channels/MarineChannelPlan",
         "models/marine_channels/marineTemplateChannels",
+        "models/marine_channels/MarineTemplateSelection",
         "models/marine_channels"
       ]
     },
@@ -326,7 +329,6 @@
       "hash": "a8d7e9aef976edf6335dcba11aace91aec82fabd5745f9d88b11324e9dc66570",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
-        "models/radio_channel/RadioChannel",
         "models/radio_channel/channelNumberLabel",
         "models/radio_channel/clear",
         "models/radio_channel/clearedLocationsAfterEmptySlotRemoval",
@@ -360,6 +362,7 @@
         "models/radio_channel/nearestFrequencyForSteps",
         "models/radio_channel/nextAvailableLocation",
         "models/radio_channel/prepareMxt295Editor",
+        "models/radio_channel/RadioChannel",
         "models/radio_channel/receiveOnlyWriteNote",
         "models/radio_channel/restorePlainMidlandRepeater",
         "models/radio_channel/scanChoices",
@@ -377,10 +380,10 @@
       "mtime_ns": 1795123564359989360,
       "hash": "db152cf62c4ee2ff9f6fc4ce960a890410304f4ba9efd61891f2aeccc5cdf8d5",
       "concept_ids": [
-        "models/radio_mapping/RadioMappingEntry",
-        "models/radio_mapping/RadioMappingModel",
         "models/radio_mapping/copyWith",
         "models/radio_mapping/mappingRangeAt",
+        "models/radio_mapping/RadioMappingEntry",
+        "models/radio_mapping/RadioMappingModel",
         "models/radio_mapping/radioMappingsFromJson",
         "models/radio_mapping/radioMappingsSignature",
         "models/radio_mapping/radioMappingsToJson",
@@ -416,11 +419,11 @@
       "mtime_ns": 1793463645017905451,
       "hash": "39452b3cc44dc30581c212251a0374201bae351b52707b5378ea8ae262bf9369",
       "concept_ids": [
+        "models/repeater_search/by",
+        "models/repeater_search/filterRepeaterResults",
         "models/repeater_search/RepeaterSearchResult",
         "models/repeater_search/RepeaterSearchResults",
         "models/repeater_search/RepeaterSortOrder",
-        "models/repeater_search/by",
-        "models/repeater_search/filterRepeaterResults",
         "models/repeater_search/sortRepeaterResults",
         "models/repeater_search"
       ]
@@ -467,10 +470,10 @@
       "mtime_ns": 1794143533122102970,
       "hash": "41eb61d1613eeca0e3345d314f8787997095648725d64b71f6dc88d21bb71bc0",
       "concept_ids": [
+        "services/diagnostic_log/buildReport",
         "services/diagnostic_log/DiagnosticEntry",
         "services/diagnostic_log/DiagnosticLog",
         "services/diagnostic_log/DiagnosticReportException",
-        "services/diagnostic_log/buildReport",
         "services/diagnostic_log/flush",
         "services/diagnostic_log/initialize",
         "services/diagnostic_log/logDirectory",
@@ -488,8 +491,8 @@
       "mtime_ns": 1793017335032074140,
       "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
       "concept_ids": [
-        "services/file_save_warning_store/FileSaveWarningStore",
         "services/file_save_warning_store/defaultPath",
+        "services/file_save_warning_store/FileSaveWarningStore",
         "services/file_save_warning_store/hide",
         "services/file_save_warning_store/isHidden",
         "services/file_save_warning_store"
@@ -500,9 +503,9 @@
       "mtime_ns": 1795165440046058218,
       "hash": "19f562a27a64783b23ba2dd5f6622d57addf4d796652e70608cb7e6acfdaedad",
       "concept_ids": [
-        "services/library_metrics_store/LibraryMetricsStore",
         "services/library_metrics_store/defaultPath",
         "services/library_metrics_store/isCollapsed",
+        "services/library_metrics_store/LibraryMetricsStore",
         "services/library_metrics_store/setCollapsed",
         "services/library_metrics_store"
       ]
@@ -512,8 +515,8 @@
       "mtime_ns": 1793272362273777794,
       "hash": "64762d56067019bad41ed7ab786cad3b638a9646245a57e9c88f2f3c984fdea5",
       "concept_ids": [
-        "services/local_file_opener/LocalFilePlatform",
         "services/local_file_opener/localFileOpenCommand",
+        "services/local_file_opener/LocalFilePlatform",
         "services/local_file_opener/openLocalFile",
         "services/local_file_opener"
       ]
@@ -523,11 +526,6 @@
       "mtime_ns": 1794748425185339740,
       "hash": "3e654377596c0acdc5ffe89e9b935c6be23530c887d0a5cb51a7e666c959b7ca",
       "concept_ids": [
-        "services/module_sandbox/ModuleSandbox",
-        "services/module_sandbox/ModuleSandboxException",
-        "services/module_sandbox/SandboxFiles",
-        "services/module_sandbox/SandboxLaunch",
-        "services/module_sandbox/SandboxPlatform",
         "services/module_sandbox/acceptedRoots",
         "services/module_sandbox/add",
         "services/module_sandbox/addRoot",
@@ -544,8 +542,10 @@
         "services/module_sandbox/isSafeSerialPort",
         "services/module_sandbox/linuxBubblewrapArguments",
         "services/module_sandbox/macosSeatbeltProfile",
+        "services/module_sandbox/ModuleSandbox",
         "services/module_sandbox/moduleSandboxBlocker",
         "services/module_sandbox/moduleSandboxEnvironment",
+        "services/module_sandbox/ModuleSandboxException",
         "services/module_sandbox/moduleSandboxRefusal",
         "services/module_sandbox/mount",
         "services/module_sandbox/prepare",
@@ -555,7 +555,10 @@
         "services/module_sandbox/requireFile",
         "services/module_sandbox/requireRoot",
         "services/module_sandbox/resolvePython",
+        "services/module_sandbox/SandboxFiles",
         "services/module_sandbox/sandboxFilesIn",
+        "services/module_sandbox/SandboxLaunch",
+        "services/module_sandbox/SandboxPlatform",
         "services/module_sandbox/serialPort",
         "services/module_sandbox/toString",
         "services/module_sandbox"
@@ -566,21 +569,21 @@
       "mtime_ns": 1793094681555739212,
       "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
       "concept_ids": [
-        "services/mototrbo_cps2_xml/CpsTone",
-        "services/mototrbo_cps2_xml/MototrboCps2Xml",
-        "services/mototrbo_cps2_xml/ToneKind",
         "services/mototrbo_cps2_xml/addExtra",
         "services/mototrbo_cps2_xml/applyAnalogTones",
         "services/mototrbo_cps2_xml/boolean",
         "services/mototrbo_cps2_xml/channel",
         "services/mototrbo_cps2_xml/child",
+        "services/mototrbo_cps2_xml/CpsTone",
         "services/mototrbo_cps2_xml/decode",
         "services/mototrbo_cps2_xml/display",
         "services/mototrbo_cps2_xml/fields",
+        "services/mototrbo_cps2_xml/MototrboCps2Xml",
         "services/mototrbo_cps2_xml/number",
         "services/mototrbo_cps2_xml/numberOrNull",
         "services/mototrbo_cps2_xml/text",
         "services/mototrbo_cps2_xml/tone",
+        "services/mototrbo_cps2_xml/ToneKind",
         "services/mototrbo_cps2_xml/value",
         "services/mototrbo_cps2_xml"
       ]
@@ -590,10 +593,6 @@
       "mtime_ns": 1793978410253437864,
       "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
       "concept_ids": [
-        "services/mygmrs_client/JsonResponse",
-        "services/mygmrs_client/MyGmrsClient",
-        "services/mygmrs_client/MyGmrsException",
-        "services/mygmrs_client/MyGmrsService",
         "services/mygmrs_client/apiError",
         "services/mygmrs_client/applyTones",
         "services/mygmrs_client/cancelSignIn",
@@ -602,6 +601,10 @@
         "services/mygmrs_client/ensureSignedIn",
         "services/mygmrs_client/gmrsRepeaterOutput",
         "services/mygmrs_client/jsonRequest",
+        "services/mygmrs_client/JsonResponse",
+        "services/mygmrs_client/MyGmrsClient",
+        "services/mygmrs_client/MyGmrsException",
+        "services/mygmrs_client/MyGmrsService",
         "services/mygmrs_client/openSystemBrowser",
         "services/mygmrs_client/postJson",
         "services/mygmrs_client/searchRepeaters",
@@ -619,17 +622,6 @@
       "mtime_ns": 1795205412470893010,
       "hash": "38e782541809deb758c81c906d8cbfcf39aabab230a1e20a9405ec6e72ebb195",
       "concept_ids": [
-        "services/radio_bridge/RadioBridge",
-        "services/radio_bridge/RadioBridgeException",
-        "services/radio_bridge/RadioCapabilities",
-        "services/radio_bridge/RadioInstructions",
-        "services/radio_bridge/RadioModelCatalog",
-        "services/radio_bridge/RadioModelGroup",
-        "services/radio_bridge/RadioProgress",
-        "services/radio_bridge/RadioSettingNode",
-        "services/radio_bridge/RadioSettings",
-        "services/radio_bridge/RadioZone",
-        "services/radio_bridge/SerialPortInfo",
         "services/radio_bridge/bundledAssetCandidates",
         "services/radio_bridge/bundledResourcesDirectory",
         "services/radio_bridge/cancelActive",
@@ -655,7 +647,17 @@
         "services/radio_bridge/models",
         "services/radio_bridge/parseComPorts",
         "services/radio_bridge/parseWindowsSerialPortDetails",
+        "services/radio_bridge/RadioBridge",
+        "services/radio_bridge/RadioBridgeException",
         "services/radio_bridge/radioBridgeFailureMessage",
+        "services/radio_bridge/RadioCapabilities",
+        "services/radio_bridge/RadioInstructions",
+        "services/radio_bridge/RadioModelCatalog",
+        "services/radio_bridge/RadioModelGroup",
+        "services/radio_bridge/RadioProgress",
+        "services/radio_bridge/RadioSettingNode",
+        "services/radio_bridge/RadioSettings",
+        "services/radio_bridge/RadioZone",
         "services/radio_bridge/readImage",
         "services/radio_bridge/readSettings",
         "services/radio_bridge/resolvePython",
@@ -664,6 +666,7 @@
         "services/radio_bridge/runWithRuntime",
         "services/radio_bridge/searchRepeaters",
         "services/radio_bridge/serialPortDetails",
+        "services/radio_bridge/SerialPortInfo",
         "services/radio_bridge/serialPorts",
         "services/radio_bridge/strings",
         "services/radio_bridge/toChangeJson",
@@ -681,11 +684,11 @@
       "mtime_ns": 1793187642181438904,
       "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
       "concept_ids": [
-        "services/radio_image_store/RadioImageStore",
         "services/radio_image_store/hasForModel",
         "services/radio_image_store/imageDirectory",
         "services/radio_image_store/pathForDocument",
         "services/radio_image_store/pathForModel",
+        "services/radio_image_store/RadioImageStore",
         "services/radio_image_store/saveForDocument",
         "services/radio_image_store/saveForModel",
         "services/radio_image_store"
@@ -696,10 +699,10 @@
       "mtime_ns": 1787526889854243083,
       "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
       "concept_ids": [
-        "services/radio_selection_store/RadioSelection",
-        "services/radio_selection_store/RadioSelectionStore",
         "services/radio_selection_store/defaultPath",
         "services/radio_selection_store/load",
+        "services/radio_selection_store/RadioSelection",
+        "services/radio_selection_store/RadioSelectionStore",
         "services/radio_selection_store/save",
         "services/radio_selection_store"
       ]
@@ -709,10 +712,10 @@
       "mtime_ns": 1794065847464720490,
       "hash": "36b1360b1c97955db3fd4130e6d09c79586dc0982c591c6f993f0244fe4ed300",
       "concept_ids": [
-        "services/repeater_search_preferences_store/RepeaterSearchPreferences",
-        "services/repeater_search_preferences_store/RepeaterSearchPreferencesStore",
         "services/repeater_search_preferences_store/defaultPath",
         "services/repeater_search_preferences_store/load",
+        "services/repeater_search_preferences_store/RepeaterSearchPreferences",
+        "services/repeater_search_preferences_store/RepeaterSearchPreferencesStore",
         "services/repeater_search_preferences_store/save",
         "services/repeater_search_preferences_store/toJson",
         "services/repeater_search_preferences_store"
@@ -723,10 +726,6 @@
       "mtime_ns": 1794662632996144606,
       "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
       "concept_ids": [
-        "services/update_checker/PlatformRelease",
-        "services/update_checker/UpdateCheckException",
-        "services/update_checker/UpdateCheckResult",
-        "services/update_checker/UpdateChecker",
         "services/update_checker/check",
         "services/update_checker/compareVersions",
         "services/update_checker/currentUpdatePlatform",
@@ -734,10 +733,14 @@
         "services/update_checker/launchExternalUrl",
         "services/update_checker/openExternalUrl",
         "services/update_checker/parsePlatformRelease",
+        "services/update_checker/PlatformRelease",
         "services/update_checker/toString",
         "services/update_checker/trustedDownloadUrl",
         "services/update_checker/trustedUpdateArtifactUrl",
         "services/update_checker/updateArtifactExtension",
+        "services/update_checker/UpdateChecker",
+        "services/update_checker/UpdateCheckException",
+        "services/update_checker/UpdateCheckResult",
         "services/update_checker/versionParts",
         "services/update_checker"
       ]
@@ -747,16 +750,16 @@
       "mtime_ns": 1793108770906624056,
       "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
       "concept_ids": [
-        "services/update_installer/DownloadedUpdate",
-        "services/update_installer/UpdateDownloadProgress",
-        "services/update_installer/UpdateInstallException",
-        "services/update_installer/UpdateInstaller",
         "services/update_installer/download",
+        "services/update_installer/DownloadedUpdate",
         "services/update_installer/install",
         "services/update_installer/installLinuxUpdate",
         "services/update_installer/installMacUpdate",
         "services/update_installer/installWindowsUpdate",
         "services/update_installer/toString",
+        "services/update_installer/UpdateDownloadProgress",
+        "services/update_installer/UpdateInstaller",
+        "services/update_installer/UpdateInstallException",
         "services/update_installer"
       ]
     },
@@ -765,25 +768,25 @@
       "mtime_ns": 1794514612328193301,
       "hash": "970f41d7e6aa528d25df4bb3e4aa192055e8a9c60a276c09b7a383b6fedb2754",
       "concept_ids": [
-        "services/window_state_store/WindowDisplayArea",
-        "services/window_state_store/WindowState",
-        "services/window_state_store/WindowStateStore",
         "services/window_state_store/defaultPath",
         "services/window_state_store/load",
         "services/window_state_store/normalizeWindowStateForDisplays",
         "services/window_state_store/save",
         "services/window_state_store/toJson",
+        "services/window_state_store/WindowDisplayArea",
+        "services/window_state_store/WindowState",
+        "services/window_state_store/WindowStateStore",
         "services/window_state_store"
       ]
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1793569318276516403,
-      "hash": "57cd150df865177f067ed9a3d2454c0d48731c63ccb2311322c24a63f0aaf9b4",
+      "mtime_ns": 1795265007295486100,
+      "hash": "c56a7970fc51cfbae550ae1a10dd3e0cfc38fda117973ee878a37f4e02852498",
       "concept_ids": [
+        "widgets/channel_library_image_bar",
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
-        "widgets/channel_library_image_bar/build",
-        "widgets/channel_library_image_bar"
+        "widgets/channel_library_image_bar/build"
       ]
     },
     "widgets/error_report_dialog.dart": {
@@ -791,11 +794,11 @@
       "mtime_ns": 1794514582362673718,
       "hash": "a99b2b244e4d052be2b3830a80b6b0f51b3cf7f518fa5f4832a9bbba92277892",
       "concept_ids": [
-        "widgets/error_report_dialog/ErrorReportDialog",
-        "widgets/error_report_dialog/ErrorReportDialogState",
         "widgets/error_report_dialog/build",
         "widgets/error_report_dialog/createState",
         "widgets/error_report_dialog/dispose",
+        "widgets/error_report_dialog/ErrorReportDialog",
+        "widgets/error_report_dialog/ErrorReportDialogState",
         "widgets/error_report_dialog/submit",
         "widgets/error_report_dialog"
       ]
@@ -805,10 +808,10 @@
       "mtime_ns": 1793017335032590801,
       "hash": "b6627d11b8cd15e4712b3b3cc786602d60504246f5bc4ce890afbe2c33c6f729",
       "concept_ids": [
-        "widgets/file_save_warning_dialog/FileSaveWarningDialog",
-        "widgets/file_save_warning_dialog/FileSaveWarningDialogState",
         "widgets/file_save_warning_dialog/build",
         "widgets/file_save_warning_dialog/createState",
+        "widgets/file_save_warning_dialog/FileSaveWarningDialog",
+        "widgets/file_save_warning_dialog/FileSaveWarningDialogState",
         "widgets/file_save_warning_dialog"
       ]
     },
@@ -817,10 +820,10 @@
       "mtime_ns": 1795205428739869229,
       "hash": "eca9432c4b2938a6ff9ee98b39f0db49de8125538fa976924f0ef736b233799f",
       "concept_ids": [
-        "widgets/marine_template_dialog/MarineTemplateDialog",
-        "widgets/marine_template_dialog/MarineTemplateDialogState",
         "widgets/marine_template_dialog/build",
         "widgets/marine_template_dialog/createState",
+        "widgets/marine_template_dialog/MarineTemplateDialog",
+        "widgets/marine_template_dialog/MarineTemplateDialogState",
         "widgets/marine_template_dialog"
       ]
     },
@@ -829,13 +832,13 @@
       "mtime_ns": 1793404724723066129,
       "hash": "800eee7b3d1ceb1ad70a88e539ac6aa3d31b8319b60c67523e679118345cd6b7",
       "concept_ids": [
-        "widgets/radio_mapping_dialog/RadioMappingDialog",
-        "widgets/radio_mapping_dialog/RadioMappingDialogState",
         "widgets/radio_mapping_dialog/build",
         "widgets/radio_mapping_dialog/buildMappingEditor",
         "widgets/radio_mapping_dialog/createState",
         "widgets/radio_mapping_dialog/dispose",
         "widgets/radio_mapping_dialog/initState",
+        "widgets/radio_mapping_dialog/RadioMappingDialog",
+        "widgets/radio_mapping_dialog/RadioMappingDialogState",
         "widgets/radio_mapping_dialog/renameMapping",
         "widgets/radio_mapping_dialog/replaceMapping",
         "widgets/radio_mapping_dialog/save",
@@ -851,18 +854,6 @@
       "mtime_ns": 1795078044081809797,
       "hash": "7befd5fb4fb05a9ac7a8186aeaab084d2de71ebf9335473ce96a0c6a0fefc33c",
       "concept_ids": [
-        "widgets/radio_model_picker/ModelChoice",
-        "widgets/radio_model_picker/ModelEntry",
-        "widgets/radio_model_picker/ModelResultsList",
-        "widgets/radio_model_picker/ModelResultsListState",
-        "widgets/radio_model_picker/RadioModelDialog",
-        "widgets/radio_model_picker/RadioModelDialogState",
-        "widgets/radio_model_picker/RadioModelPicker",
-        "widgets/radio_model_picker/RadioModelPickerState",
-        "widgets/radio_model_picker/SectionHeader",
-        "widgets/radio_model_picker/VendorChoice",
-        "widgets/radio_model_picker/VendorHeading",
-        "widgets/radio_model_picker/VendorModels",
         "widgets/radio_model_picker/build",
         "widgets/radio_model_picker/cacheGroups",
         "widgets/radio_model_picker/createState",
@@ -872,12 +863,24 @@
         "widgets/radio_model_picker/groupModels",
         "widgets/radio_model_picker/initState",
         "widgets/radio_model_picker/matchingGroups",
+        "widgets/radio_model_picker/ModelChoice",
+        "widgets/radio_model_picker/ModelEntry",
         "widgets/radio_model_picker/modelNameWithinVendor",
+        "widgets/radio_model_picker/ModelResultsList",
+        "widgets/radio_model_picker/ModelResultsListState",
         "widgets/radio_model_picker/modelSearchText",
         "widgets/radio_model_picker/openPicker",
+        "widgets/radio_model_picker/RadioModelDialog",
+        "widgets/radio_model_picker/RadioModelDialogState",
+        "widgets/radio_model_picker/RadioModelPicker",
+        "widgets/radio_model_picker/RadioModelPickerState",
         "widgets/radio_model_picker/remember",
+        "widgets/radio_model_picker/SectionHeader",
         "widgets/radio_model_picker/selectVendor",
         "widgets/radio_model_picker/submitSearch",
+        "widgets/radio_model_picker/VendorChoice",
+        "widgets/radio_model_picker/VendorHeading",
+        "widgets/radio_model_picker/VendorModels",
         "widgets/radio_model_picker/vendorSlug",
         "widgets/radio_model_picker"
       ]
@@ -1529,7 +1532,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "c463c747620350abe12a2aff94d09a008ca1bc86e42c3e71c9c77b5790329743",
+      "edge_hash": "c8fceaad998a1b680d0a09bf208ac1b24bd2d8302607eb1b3767d161b0b78495",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -6547,7 +6550,23 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "main/reviewAllChannelIssues": {
+      "concept_id": "main/reviewAllChannelIssues",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/resultIssues": {
+      "concept_id": "main/resultIssues",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-21T09:48:04Z"
+  "generated_at": "2026-11-21T12:46:45Z"
 }

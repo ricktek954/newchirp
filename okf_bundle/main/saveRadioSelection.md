@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T09:48:03Z"
+timestamp: "2026-11-21T12:45:27Z"
 concept_id: main/saveRadioSelection
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_saveRadioSelection_saveRadioSelection
 ```
 
 ## Source
-Lines 1333–1333 in `main.dart`
+Lines 1343–1343 in `main.dart`
 
 ## Relationships
 

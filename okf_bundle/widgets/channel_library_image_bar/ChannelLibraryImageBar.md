@@ -3,15 +3,15 @@ okf_version: "0.2"
 type: Class
 title: ChannelLibraryImageBar
 description: "Bottom bar on the Channel Library, matching the Radio settings image bar."
-resource: widgets/channel_library_image_bar.dart
+resource: widgets\channel_library_image_bar.dart
 tags:
   - "lang:dart"
   - "type:Class"
   - "module:widgets"
   - "domain:channel_library_image_bar.dart"
-  - "git:branch:main"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T21:41:58Z"
+timestamp: "2026-11-21T12:43:27Z"
 concept_id: widgets/channel_library_image_bar/ChannelLibraryImageBar
 language: dart
 ---
@@ -35,7 +35,7 @@ Bottom bar on the Channel Library, matching the Radio settings image bar.
 - `build`
 
 ## Source
-Lines 6–69 in `widgets/channel_library_image_bar.dart`
+Lines 6–112 in `widgets\channel_library_image_bar.dart`
 
 ## Relationships
 

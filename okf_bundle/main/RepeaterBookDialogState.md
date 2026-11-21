@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Class"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T09:48:03Z"
+timestamp: "2026-11-21T12:45:27Z"
 concept_id: main/RepeaterBookDialogState
 language: dart
 ---
@@ -41,6 +41,7 @@ class _RepeaterBookDialogState
 - `_chooseCounties`
 - `_searchAmateurInstead`
 - `_channelDetail`
+- `_resultIssues`
 - `_setResultSelected`
 - `_buildResultsMap`
 - `fitAllPoints`
@@ -48,7 +49,7 @@ class _RepeaterBookDialogState
 - `resizeBy`
 
 ## Source
-Lines 8385–9832 in `main.dart`
+Lines 8487–10016 in `main.dart`
 
 ## Relationships
 

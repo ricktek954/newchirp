@@ -95,10 +95,17 @@ class _FakeUpdateInstaller extends UpdateInstaller {
 }
 
 class _FakeRepeaterBridge extends RadioBridge {
-  _FakeRepeaterBridge({this.emptyResults = false, this.error});
+  _FakeRepeaterBridge({
+    this.emptyResults = false,
+    this.error,
+    this.firstName = 'Buffalo',
+    this.secondMode = 'FM',
+  });
 
   final bool emptyResults;
   final String? error;
+  final String firstName;
+  final String secondMode;
   String? lastCountry;
   String? lastState;
   String? lastService;
@@ -142,7 +149,7 @@ class _FakeRepeaterBridge extends RadioBridge {
     }
     final channel = RadioChannel(
       location: 1,
-      name: 'Buffalo',
+      name: firstName,
       frequency: 146.865,
       duplex: '-',
       offset: 0.6,
@@ -158,6 +165,7 @@ class _FakeRepeaterBridge extends RadioBridge {
       tone: 'TSQL',
       txTone: 88.5,
       rxTone: 110.9,
+      mode: secondMode,
     );
     return RepeaterSearchResults(
       source: 'RepeaterBook',
@@ -267,6 +275,88 @@ Future<void> openGmrsStarter(WidgetTester tester) async {
 }
 
 void main() {
+  testWidgets(
+    'repeater import explains and blocks incompatible modes across list, map and select all',
+    (tester) async {
+      tester.view.physicalSize = const Size(1200, 1000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      List<RadioChannel>? selected;
+      final bridge = _FakeRepeaterBridge(
+        firstName: 'Barrio El Remanso',
+        secondMode: 'DMR',
+      );
+      final capabilities = RadioCapabilities.fromJson({
+        'modes': ['FM', 'NFM', 'AM'],
+        'nameLength': 30,
+        'hasTuningStep': false,
+      });
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () async {
+                  selected = await showDialog<List<RadioChannel>>(
+                    context: context,
+                    builder: (context) => RepeaterBookDialog(
+                      bridge: bridge,
+                      preferencesStore: _FakeRepeaterSearchPreferencesStore(),
+                      radioModel: 'Bajeton_BJ-9000_nicFW950',
+                      capabilities: capabilities,
+                    ),
+                  );
+                },
+                child: const Text('Open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Search'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Mode DMR is not supported'), findsOneWidget);
+      expect(
+        find.byKey(const Key('repeater-incompatible-summary')),
+        findsOneWidget,
+      );
+      final digital = tester.widget<CheckboxListTile>(
+        find.byKey(const ValueKey('repeater-result-W4BUG-444.0')),
+      );
+      expect(digital.onChanged, isNull);
+      final analog = tester.widget<CheckboxListTile>(
+        find.byKey(const ValueKey('repeater-result-WB2ECR-146.865')),
+      );
+      expect(
+        analog.onChanged,
+        isNotNull,
+      ); // 17-character name fits this radio's 30-character limit.
+      await tester.ensureVisible(find.text('Map'));
+      await tester.tap(find.text('Map'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 100));
+      await tester.ensureVisible(
+        find.byKey(const ValueKey('repeater-map-result-W4BUG')),
+      );
+      await tester.tap(find.byKey(const ValueKey('repeater-map-result-W4BUG')));
+      await tester.pump();
+      expect(
+        find.textContaining('Cannot add Point of Americas: Mode DMR'),
+        findsOneWidget,
+      );
+      await tester.tap(find.text('Select all'));
+      await tester.pump();
+      expect(find.text('Add 1 selected'), findsOneWidget);
+      await tester.tap(find.text('Add 1 selected'));
+      await tester.pumpAndSettle();
+      expect(selected, hasLength(1));
+      expect(selected!.single.name, 'Barrio El Remanso');
+      expect(selected!.single.mode, 'FM');
+    },
+  );
   test('persisted model does not enable transfer before catalog loads', () {
     expect(radioModelSelectionReady(const [], 'Icom_IC-E90'), isFalse);
     expect(
@@ -445,10 +535,7 @@ void main() {
     expect(preferencesStore.preferences.fmOnly, isFalse);
     expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
     expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
-    expect(
-      find.text('Data courtesy of RepeaterBook.com.'),
-      findsOneWidget,
-    );
+    expect(find.text('Data courtesy of RepeaterBook.com.'), findsOneWidget);
     await tester.ensureVisible(
       find.byKey(const ValueKey('repeater-sort-source')),
     );
@@ -712,10 +799,7 @@ void main() {
     await tester.tap(find.text('Search'));
     await tester.pumpAndSettle();
 
-    expect(
-      find.textContaining('HTTP Error 403: Forbidden'),
-      findsWidgets,
-    );
+    expect(find.textContaining('HTTP Error 403: Forbidden'), findsWidgets);
   });
 
   testWidgets('RepeaterBook restores saved optional filters', (tester) async {
@@ -1203,10 +1287,18 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Open channel file'), findsWidgets);
-    expect(find.text('Load CHIRP driver module…'), findsOneWidget);
-    final openLeft = tester.getTopLeft(find.text('Open channel file').first);
-    final loadLeft = tester.getTopLeft(find.text('Load CHIRP driver module…'));
-    expect(loadLeft.dx, greaterThan(openLeft.dx));
+    // Windows hides the module action until a sandbox backend is available.
+    expect(
+      find.text('Load CHIRP driver module…'),
+      Platform.isWindows ? findsNothing : findsOneWidget,
+    );
+    if (!Platform.isWindows) {
+      final openLeft = tester.getTopLeft(find.text('Open channel file').first);
+      final loadLeft = tester.getTopLeft(
+        find.text('Load CHIRP driver module…'),
+      );
+      expect(loadLeft.dx, greaterThan(openLeft.dx));
+    }
 
     await tester.tap(find.text('Help'));
     await tester.pumpAndSettle();
@@ -1472,7 +1564,8 @@ void main() {
   testWidgets('Shift and Ctrl click select channels for bulk editing', (
     tester,
   ) async {
-    tester.view.physicalSize = const Size(1440, 900);
+    // Keep all selected rows visible below the compatibility notice.
+    tester.view.physicalSize = const Size(1440, 1000);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.view.resetDevicePixelRatio);

@@ -7,9 +7,9 @@ tags:
   - "lang:dart"
   - "type:Function"
   - "module:main.dart"
-  - "git:branch:HEAD"
+  - "git:branch:fix/repeater-compatibility"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T09:48:03Z"
+timestamp: "2026-11-21T12:45:27Z"
 concept_id: main/reviewChannelIssues
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_reviewChannelIssues_reviewChannelIssues
 ```
 
 ## Source
-Lines 1998–1998 in `main.dart`
+Lines 2010–2010 in `main.dart`
 
 ## Relationships
 
