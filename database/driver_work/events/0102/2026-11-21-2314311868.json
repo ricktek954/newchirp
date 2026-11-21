@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 13:43:34",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "web:802657e",
+  "item": "102",
+  "occurred_at": "2026-11-21",
+  "summary": "Web Programmer UV5R_291 magic corrected to 50BBFF20120725 with byte-exact test (web 802657e); deployed as index-BudUKWHt.js. Forum reply asking reporter to reload and retry drafted for the owner to post."
+}

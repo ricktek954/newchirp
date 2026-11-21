@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 13:39:22",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "mailbox:INBOX:869",
+  "item": "102",
+  "occurred_at": "2026-11-21",
+  "summary": "Reporter retried after the 2 s delay deploy: still fails. Root cause: Web Programmer UV5R_291 magic was 50bbff20071225 (0x12/0x07 swapped) since e286da4; CHIRP UV5R_MODEL_291 is 50BBFF20120725. Every classic UV-5R/BF-F8HP profile tries it first, so radios that answer only BFB291 never replied. Fixed locally in lib/uv5r-web.ts with a byte-exact test; not yet committed or deployed."
+}
