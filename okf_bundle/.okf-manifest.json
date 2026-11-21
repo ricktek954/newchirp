@@ -1,14 +1,645 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
+  "source_root": "/home/rlopez/newchirp.net/lib",
   "files": {
+    "models/channel_image_baseline.dart": {
+      "path": "models/channel_image_baseline.dart",
+      "mtime_ns": 1795035070655805220,
+      "hash": "eaf93a5a8730685ec02600db23b818f585e10eea00dd8c64554d2adf78b7f0ad",
+      "concept_ids": [
+        "models/channel_image_baseline/ChannelImageBaseline",
+        "models/channel_image_baseline/ChannelImageMatch",
+        "models/channel_image_baseline/ChannelLibrarySnapshot",
+        "models/channel_image_baseline/ChannelLibraryStatsCache",
+        "models/channel_image_baseline/channelImageStatusText",
+        "models/channel_image_baseline/channelLibraryWriteReady",
+        "models/channel_image_baseline/channelListSignature",
+        "models/channel_image_baseline/clearedLocationsAfterReplacement",
+        "models/channel_image_baseline/clearedLocationsForUpload",
+        "models/channel_image_baseline/markDirty",
+        "models/channel_image_baseline/read",
+        "models/channel_image_baseline"
+      ]
+    },
+    "models/frequency_reference.dart": {
+      "path": "models/frequency_reference.dart",
+      "mtime_ns": 1794997713624042571,
+      "hash": "d07e43482dc6e94d17a512669643eac2c95381bd26cbab3e8fb42ffb906f353e",
+      "concept_ids": [
+        "models/frequency_reference/FrequencyReferenceGroup",
+        "models/frequency_reference/FrequencyReferencePlan",
+        "models/frequency_reference/FrequencyReferenceRow",
+        "models/frequency_reference/australianUhfNote",
+        "models/frequency_reference/australianUhfRows",
+        "models/frequency_reference/standardCbRows",
+        "models/frequency_reference/ukCbRows",
+        "models/frequency_reference"
+      ]
+    },
+    "models/gm32_channel.dart": {
+      "path": "models/gm32_channel.dart",
+      "mtime_ns": 1793018006929487856,
+      "hash": "930587b2146e7df167512e071e8c2a52387e0aca8a87d54116de682213854a61",
+      "concept_ids": [
+        "models/gm32_channel/applyGm32Rules",
+        "models/gm32_channel/gm32ChannelIssues",
+        "models/gm32_channel/gm32ChannelMenuLabel",
+        "models/gm32_channel/gm32DuplexChoices",
+        "models/gm32_channel/gm32FrequencyIsUnset",
+        "models/gm32_channel/gm32MhzLabel",
+        "models/gm32_channel/gm32NeedsFrequencyBox",
+        "models/gm32_channel/gm32ReceiveChoices",
+        "models/gm32_channel/gm32ReceiveValue",
+        "models/gm32_channel/gm32RequiresNarrowLow",
+        "models/gm32_channel/gmrsChannelNumber",
+        "models/gm32_channel/isBaofengGm32",
+        "models/gm32_channel/isGmrsRepeaterInputHz",
+        "models/gm32_channel/useGm32ReceiveChannel",
+        "models/gm32_channel"
+      ]
+    },
+    "models/marine_channels.dart": {
+      "path": "models/marine_channels.dart",
+      "mtime_ns": 1794227692786598019,
+      "hash": "6fe7afca765e6a7e7319910ca4aac1c7d616951e174d608dd7e63715e4f80389",
+      "concept_ids": [
+        "models/marine_channels/MarineChannelDefinition",
+        "models/marine_channels/MarineChannelPlan",
+        "models/marine_channels/MarineTemplateSelection",
+        "models/marine_channels/channelFromDefinition",
+        "models/marine_channels/marineChannelDefinitionsFor",
+        "models/marine_channels/marineTemplateChannels",
+        "models/marine_channels"
+      ]
+    },
+    "models/radio_channel.dart": {
+      "path": "models/radio_channel.dart",
+      "mtime_ns": 1795207517968070785,
+      "hash": "a8d7e9aef976edf6335dcba11aace91aec82fabd5745f9d88b11324e9dc66570",
+      "concept_ids": [
+        "models/radio_channel/ChannelExtraField",
+        "models/radio_channel/RadioChannel",
+        "models/radio_channel/channelNumberLabel",
+        "models/radio_channel/clear",
+        "models/radio_channel/clearedLocationsAfterEmptySlotRemoval",
+        "models/radio_channel/compatibleChannelsForUpload",
+        "models/radio_channel/copy",
+        "models/radio_channel/effectiveReceiveCtcssTone",
+        "models/radio_channel/effectiveTransmitCtcssTone",
+        "models/radio_channel/frequencyFitsStep",
+        "models/radio_channel/gmrsChannelForHz",
+        "models/radio_channel/gmrsChannelMenuLabel",
+        "models/radio_channel/gmrsStandardRxHz",
+        "models/radio_channel/gmrsStarterChannels",
+        "models/radio_channel/hasSharedCtcssTone",
+        "models/radio_channel/isGmrsRepeaterOutputMhz",
+        "models/radio_channel/isMidlandRepeaterRow",
+        "models/radio_channel/isPlusFiveMhz",
+        "models/radio_channel/isReceiveOnlyChannel",
+        "models/radio_channel/isZeroMhz",
+        "models/radio_channel/mhzLabelFromHz",
+        "models/radio_channel/midlandCanSelectOffset",
+        "models/radio_channel/midlandDuplexChoices",
+        "models/radio_channel/midlandDuplexIsLocked",
+        "models/radio_channel/midlandFixedRxHz",
+        "models/radio_channel/midlandGmrsChannel",
+        "models/radio_channel/midlandGmrsIssues",
+        "models/radio_channel/midlandReceiveChannelChoices",
+        "models/radio_channel/midlandReceiveChannelIsLocked",
+        "models/radio_channel/midlandReceiveChannelIsUnset",
+        "models/radio_channel/midlandReceiveChannelValue",
+        "models/radio_channel/midlandReceiveGmrsChannel",
+        "models/radio_channel/nearestFrequencyForSteps",
+        "models/radio_channel/nextAvailableLocation",
+        "models/radio_channel/prepareMxt295Editor",
+        "models/radio_channel/receiveOnlyWriteNote",
+        "models/radio_channel/restorePlainMidlandRepeater",
+        "models/radio_channel/scanChoices",
+        "models/radio_channel/scanLabel",
+        "models/radio_channel/shouldShowTransmitPower",
+        "models/radio_channel/showsMidlandChannelNumbers",
+        "models/radio_channel/toJson",
+        "models/radio_channel/useGmrsReceiveChannel",
+        "models/radio_channel/validate",
+        "models/radio_channel"
+      ]
+    },
+    "models/radio_mapping.dart": {
+      "path": "models/radio_mapping.dart",
+      "mtime_ns": 1795125305223842947,
+      "hash": "db152cf62c4ee2ff9f6fc4ce960a890410304f4ba9efd61891f2aeccc5cdf8d5",
+      "concept_ids": [
+        "models/radio_mapping/RadioMappingEntry",
+        "models/radio_mapping/RadioMappingModel",
+        "models/radio_mapping/copyWith",
+        "models/radio_mapping/mappingRangeAt",
+        "models/radio_mapping/radioMappingsFromJson",
+        "models/radio_mapping/radioMappingsSignature",
+        "models/radio_mapping/radioMappingsToJson",
+        "models/radio_mapping/remapLocations",
+        "models/radio_mapping/remapRadioMappingLocations",
+        "models/radio_mapping/retainingChannels",
+        "models/radio_mapping/toJson",
+        "models/radio_mapping"
+      ]
+    },
+    "models/repeater_counties.dart": {
+      "path": "models/repeater_counties.dart",
+      "mtime_ns": 1793443811322177379,
+      "hash": "f92810c9a3f2cdb8667a1dd56766b62592b03bb80615b8d12c1f8abc8c756b0b",
+      "concept_ids": [
+        "models/repeater_counties"
+      ]
+    },
+    "models/repeater_regions.dart": {
+      "path": "models/repeater_regions.dart",
+      "mtime_ns": 1793443811322177379,
+      "hash": "a142415518e9cbd2ac6ae88672a3827b0e37776fbe00112fe93e6ef123e448c6",
+      "concept_ids": [
+        "models/repeater_regions/normalizeRepeaterCounty",
+        "models/repeater_regions/repeaterCountiesForRegion",
+        "models/repeater_regions/repeaterCountrySupportsGmrs",
+        "models/repeater_regions/repeaterRegionsForCountry",
+        "models/repeater_regions"
+      ]
+    },
+    "models/repeater_search.dart": {
+      "path": "models/repeater_search.dart",
+      "mtime_ns": 1793464076655657436,
+      "hash": "39452b3cc44dc30581c212251a0374201bae351b52707b5378ea8ae262bf9369",
+      "concept_ids": [
+        "models/repeater_search/RepeaterSearchResult",
+        "models/repeater_search/RepeaterSearchResults",
+        "models/repeater_search/RepeaterSortOrder",
+        "models/repeater_search/by",
+        "models/repeater_search/filterRepeaterResults",
+        "models/repeater_search/sortRepeaterResults",
+        "models/repeater_search"
+      ]
+    },
+    "services/chirp_csv.dart": {
+      "path": "services/chirp_csv.dart",
+      "mtime_ns": 1795166904165097739,
+      "hash": "e85ec8ee10e0f0eb8984f97b3726e15319215904ebb8f0908d17ec3779690ff3",
+      "concept_ids": [
+        "services/chirp_csv/ChirpCsv",
+        "services/chirp_csv/col",
+        "services/chirp_csv/decode",
+        "services/chirp_csv/decodeBytes",
+        "services/chirp_csv/decodeText",
+        "services/chirp_csv/delimiter",
+        "services/chirp_csv/dtcsPolarity",
+        "services/chirp_csv/encode",
+        "services/chirp_csv/escape",
+        "services/chirp_csv/integer",
+        "services/chirp_csv/nonEmpty",
+        "services/chirp_csv/number",
+        "services/chirp_csv/parse",
+        "services/chirp_csv/utf16",
+        "services/chirp_csv/value",
+        "services/chirp_csv/windows1252",
+        "services/chirp_csv"
+      ]
+    },
+    "services/column_layout_store.dart": {
+      "path": "services/column_layout_store.dart",
+      "mtime_ns": 1793109703288279614,
+      "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
+      "concept_ids": [
+        "services/column_layout_store/ColumnLayout",
+        "services/column_layout_store/ColumnLayoutStore",
+        "services/column_layout_store/defaultPath",
+        "services/column_layout_store/load",
+        "services/column_layout_store/save",
+        "services/column_layout_store"
+      ]
+    },
+    "services/diagnostic_log.dart": {
+      "path": "services/diagnostic_log.dart",
+      "mtime_ns": 1794143895927283992,
+      "hash": "41eb61d1613eeca0e3345d314f8787997095648725d64b71f6dc88d21bb71bc0",
+      "concept_ids": [
+        "services/diagnostic_log/DiagnosticEntry",
+        "services/diagnostic_log/DiagnosticLog",
+        "services/diagnostic_log/DiagnosticReportException",
+        "services/diagnostic_log/buildReport",
+        "services/diagnostic_log/flush",
+        "services/diagnostic_log/initialize",
+        "services/diagnostic_log/logDirectory",
+        "services/diagnostic_log/record",
+        "services/diagnostic_log/recordError",
+        "services/diagnostic_log/redact",
+        "services/diagnostic_log/submit",
+        "services/diagnostic_log/toJson",
+        "services/diagnostic_log/toString",
+        "services/diagnostic_log"
+      ]
+    },
+    "services/file_save_warning_store.dart": {
+      "path": "services/file_save_warning_store.dart",
+      "mtime_ns": 1793018006929487856,
+      "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
+      "concept_ids": [
+        "services/file_save_warning_store/FileSaveWarningStore",
+        "services/file_save_warning_store/defaultPath",
+        "services/file_save_warning_store/hide",
+        "services/file_save_warning_store/isHidden",
+        "services/file_save_warning_store"
+      ]
+    },
+    "services/library_metrics_store.dart": {
+      "path": "services/library_metrics_store.dart",
+      "mtime_ns": 1795166904165097739,
+      "hash": "19f562a27a64783b23ba2dd5f6622d57addf4d796652e70608cb7e6acfdaedad",
+      "concept_ids": [
+        "services/library_metrics_store/LibraryMetricsStore",
+        "services/library_metrics_store/defaultPath",
+        "services/library_metrics_store/isCollapsed",
+        "services/library_metrics_store/setCollapsed",
+        "services/library_metrics_store"
+      ]
+    },
+    "services/local_file_opener.dart": {
+      "path": "services/local_file_opener.dart",
+      "mtime_ns": 1793355746085706779,
+      "hash": "64762d56067019bad41ed7ab786cad3b638a9646245a57e9c88f2f3c984fdea5",
+      "concept_ids": [
+        "services/local_file_opener/LocalFilePlatform",
+        "services/local_file_opener/localFileOpenCommand",
+        "services/local_file_opener/openLocalFile",
+        "services/local_file_opener"
+      ]
+    },
+    "services/module_sandbox.dart": {
+      "path": "services/module_sandbox.dart",
+      "mtime_ns": 1794684549188277338,
+      "hash": "3e654377596c0acdc5ffe89e9b935c6be23530c887d0a5cb51a7e666c959b7ca",
+      "concept_ids": [
+        "services/module_sandbox/ModuleSandbox",
+        "services/module_sandbox/ModuleSandboxException",
+        "services/module_sandbox/SandboxFiles",
+        "services/module_sandbox/SandboxLaunch",
+        "services/module_sandbox/SandboxPlatform",
+        "services/module_sandbox/acceptedRoots",
+        "services/module_sandbox/add",
+        "services/module_sandbox/addRoot",
+        "services/module_sandbox/bubblewrapParents",
+        "services/module_sandbox/canLoadChirpModules",
+        "services/module_sandbox/copyModule",
+        "services/module_sandbox/currentSandboxPlatform",
+        "services/module_sandbox/dispose",
+        "services/module_sandbox/ensureWork",
+        "services/module_sandbox/findBubblewrap",
+        "services/module_sandbox/isInside",
+        "services/module_sandbox/isSafeAllowRoot",
+        "services/module_sandbox/isSafeSandboxPath",
+        "services/module_sandbox/isSafeSerialPort",
+        "services/module_sandbox/linuxBubblewrapArguments",
+        "services/module_sandbox/macosSeatbeltProfile",
+        "services/module_sandbox/moduleSandboxBlocker",
+        "services/module_sandbox/moduleSandboxEnvironment",
+        "services/module_sandbox/moduleSandboxRefusal",
+        "services/module_sandbox/mount",
+        "services/module_sandbox/prepare",
+        "services/module_sandbox/pythonRoots",
+        "services/module_sandbox/quote",
+        "services/module_sandbox/replaceModuleArgument",
+        "services/module_sandbox/requireFile",
+        "services/module_sandbox/requireRoot",
+        "services/module_sandbox/resolvePython",
+        "services/module_sandbox/sandboxFilesIn",
+        "services/module_sandbox/serialPort",
+        "services/module_sandbox/toString",
+        "services/module_sandbox"
+      ]
+    },
+    "services/mototrbo_cps2_xml.dart": {
+      "path": "services/mototrbo_cps2_xml.dart",
+      "mtime_ns": 1793109703288279614,
+      "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
+      "concept_ids": [
+        "services/mototrbo_cps2_xml/CpsTone",
+        "services/mototrbo_cps2_xml/MototrboCps2Xml",
+        "services/mototrbo_cps2_xml/ToneKind",
+        "services/mototrbo_cps2_xml/addExtra",
+        "services/mototrbo_cps2_xml/applyAnalogTones",
+        "services/mototrbo_cps2_xml/boolean",
+        "services/mototrbo_cps2_xml/channel",
+        "services/mototrbo_cps2_xml/child",
+        "services/mototrbo_cps2_xml/decode",
+        "services/mototrbo_cps2_xml/display",
+        "services/mototrbo_cps2_xml/fields",
+        "services/mototrbo_cps2_xml/number",
+        "services/mototrbo_cps2_xml/numberOrNull",
+        "services/mototrbo_cps2_xml/text",
+        "services/mototrbo_cps2_xml/tone",
+        "services/mototrbo_cps2_xml/value",
+        "services/mototrbo_cps2_xml"
+      ]
+    },
+    "services/mygmrs_client.dart": {
+      "path": "services/mygmrs_client.dart",
+      "mtime_ns": 1793978671702776958,
+      "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
+      "concept_ids": [
+        "services/mygmrs_client/JsonResponse",
+        "services/mygmrs_client/MyGmrsClient",
+        "services/mygmrs_client/MyGmrsException",
+        "services/mygmrs_client/MyGmrsService",
+        "services/mygmrs_client/apiError",
+        "services/mygmrs_client/applyTones",
+        "services/mygmrs_client/cancelSignIn",
+        "services/mygmrs_client/convertRepeaterResponse",
+        "services/mygmrs_client/ctcssTone",
+        "services/mygmrs_client/ensureSignedIn",
+        "services/mygmrs_client/gmrsRepeaterOutput",
+        "services/mygmrs_client/jsonRequest",
+        "services/mygmrs_client/openSystemBrowser",
+        "services/mygmrs_client/postJson",
+        "services/mygmrs_client/searchRepeaters",
+        "services/mygmrs_client/signIn",
+        "services/mygmrs_client/signOut",
+        "services/mygmrs_client/stateCode",
+        "services/mygmrs_client/storeSession",
+        "services/mygmrs_client/throwSignInCancelled",
+        "services/mygmrs_client/toString",
+        "services/mygmrs_client"
+      ]
+    },
+    "services/radio_bridge.dart": {
+      "path": "services/radio_bridge.dart",
+      "mtime_ns": 1795166904165433340,
+      "hash": "38e782541809deb758c81c906d8cbfcf39aabab230a1e20a9405ec6e72ebb195",
+      "concept_ids": [
+        "services/radio_bridge/RadioBridge",
+        "services/radio_bridge/RadioBridgeException",
+        "services/radio_bridge/RadioCapabilities",
+        "services/radio_bridge/RadioInstructions",
+        "services/radio_bridge/RadioModelCatalog",
+        "services/radio_bridge/RadioModelGroup",
+        "services/radio_bridge/RadioProgress",
+        "services/radio_bridge/RadioSettingNode",
+        "services/radio_bridge/RadioSettings",
+        "services/radio_bridge/RadioZone",
+        "services/radio_bridge/SerialPortInfo",
+        "services/radio_bridge/bundledAssetCandidates",
+        "services/radio_bridge/bundledResourcesDirectory",
+        "services/radio_bridge/cancelActive",
+        "services/radio_bridge/deduplicatePorts",
+        "services/radio_bridge/download",
+        "services/radio_bridge/findChirpSource",
+        "services/radio_bridge/findLibusbRuntime",
+        "services/radio_bridge/findNewChirpDrivers",
+        "services/radio_bridge/findScsiHelper",
+        "services/radio_bridge/firmwareFromPayload",
+        "services/radio_bridge/imageCapabilities",
+        "services/radio_bridge/imageInfo",
+        "services/radio_bridge/instructions",
+        "services/radio_bridge/isBenignBridgeStderrLine",
+        "services/radio_bridge/loadAssetBytes",
+        "services/radio_bridge/loadBundledAsset",
+        "services/radio_bridge/loadModule",
+        "services/radio_bridge/loadRootBundleAsset",
+        "services/radio_bridge/massStoragePortDetails",
+        "services/radio_bridge/materializeBridge",
+        "services/radio_bridge/materializePythonDependencies",
+        "services/radio_bridge/modelCatalog",
+        "services/radio_bridge/models",
+        "services/radio_bridge/parseComPorts",
+        "services/radio_bridge/parseWindowsSerialPortDetails",
+        "services/radio_bridge/radioBridgeFailureMessage",
+        "services/radio_bridge/readImage",
+        "services/radio_bridge/readSettings",
+        "services/radio_bridge/resolvePython",
+        "services/radio_bridge/resolvePythonExecutable",
+        "services/radio_bridge/run",
+        "services/radio_bridge/runWithRuntime",
+        "services/radio_bridge/searchRepeaters",
+        "services/radio_bridge/serialPortDetails",
+        "services/radio_bridge/serialPorts",
+        "services/radio_bridge/strings",
+        "services/radio_bridge/toChangeJson",
+        "services/radio_bridge/toString",
+        "services/radio_bridge/unloadModule",
+        "services/radio_bridge/upload",
+        "services/radio_bridge/windowsSerialPortDetails",
+        "services/radio_bridge/windowsSerialPortNames",
+        "services/radio_bridge/writeSettings",
+        "services/radio_bridge"
+      ]
+    },
+    "services/radio_image_store.dart": {
+      "path": "services/radio_image_store.dart",
+      "mtime_ns": 1793355746085706779,
+      "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
+      "concept_ids": [
+        "services/radio_image_store/RadioImageStore",
+        "services/radio_image_store/hasForModel",
+        "services/radio_image_store/imageDirectory",
+        "services/radio_image_store/pathForDocument",
+        "services/radio_image_store/pathForModel",
+        "services/radio_image_store/saveForDocument",
+        "services/radio_image_store/saveForModel",
+        "services/radio_image_store"
+      ]
+    },
+    "services/radio_selection_store.dart": {
+      "path": "services/radio_selection_store.dart",
+      "mtime_ns": 1791109641575292000,
+      "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
+      "concept_ids": [
+        "services/radio_selection_store/RadioSelection",
+        "services/radio_selection_store/RadioSelectionStore",
+        "services/radio_selection_store/defaultPath",
+        "services/radio_selection_store/load",
+        "services/radio_selection_store/save",
+        "services/radio_selection_store"
+      ]
+    },
+    "services/repeater_search_preferences_store.dart": {
+      "path": "services/repeater_search_preferences_store.dart",
+      "mtime_ns": 1794086445114217730,
+      "hash": "36b1360b1c97955db3fd4130e6d09c79586dc0982c591c6f993f0244fe4ed300",
+      "concept_ids": [
+        "services/repeater_search_preferences_store/RepeaterSearchPreferences",
+        "services/repeater_search_preferences_store/RepeaterSearchPreferencesStore",
+        "services/repeater_search_preferences_store/defaultPath",
+        "services/repeater_search_preferences_store/load",
+        "services/repeater_search_preferences_store/save",
+        "services/repeater_search_preferences_store/toJson",
+        "services/repeater_search_preferences_store"
+      ]
+    },
+    "services/update_checker.dart": {
+      "path": "services/update_checker.dart",
+      "mtime_ns": 1794684530212383504,
+      "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
+      "concept_ids": [
+        "services/update_checker/PlatformRelease",
+        "services/update_checker/UpdateCheckException",
+        "services/update_checker/UpdateCheckResult",
+        "services/update_checker/UpdateChecker",
+        "services/update_checker/check",
+        "services/update_checker/compareVersions",
+        "services/update_checker/currentUpdatePlatform",
+        "services/update_checker/isAllowedDownloadUrl",
+        "services/update_checker/launchExternalUrl",
+        "services/update_checker/openExternalUrl",
+        "services/update_checker/parsePlatformRelease",
+        "services/update_checker/toString",
+        "services/update_checker/trustedDownloadUrl",
+        "services/update_checker/trustedUpdateArtifactUrl",
+        "services/update_checker/updateArtifactExtension",
+        "services/update_checker/versionParts",
+        "services/update_checker"
+      ]
+    },
+    "services/update_installer.dart": {
+      "path": "services/update_installer.dart",
+      "mtime_ns": 1793109703288928523,
+      "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
+      "concept_ids": [
+        "services/update_installer/DownloadedUpdate",
+        "services/update_installer/UpdateDownloadProgress",
+        "services/update_installer/UpdateInstallException",
+        "services/update_installer/UpdateInstaller",
+        "services/update_installer/download",
+        "services/update_installer/install",
+        "services/update_installer/installLinuxUpdate",
+        "services/update_installer/installMacUpdate",
+        "services/update_installer/installWindowsUpdate",
+        "services/update_installer/toString",
+        "services/update_installer"
+      ]
+    },
+    "services/window_state_store.dart": {
+      "path": "services/window_state_store.dart",
+      "mtime_ns": 1794661579163291342,
+      "hash": "970f41d7e6aa528d25df4bb3e4aa192055e8a9c60a276c09b7a383b6fedb2754",
+      "concept_ids": [
+        "services/window_state_store/WindowDisplayArea",
+        "services/window_state_store/WindowState",
+        "services/window_state_store/WindowStateStore",
+        "services/window_state_store/defaultPath",
+        "services/window_state_store/load",
+        "services/window_state_store/normalizeWindowStateForDisplays",
+        "services/window_state_store/save",
+        "services/window_state_store/toJson",
+        "services/window_state_store"
+      ]
+    },
+    "widgets/channel_library_image_bar.dart": {
+      "path": "widgets/channel_library_image_bar.dart",
+      "mtime_ns": 1793569934904800892,
+      "hash": "57cd150df865177f067ed9a3d2454c0d48731c63ccb2311322c24a63f0aaf9b4",
+      "concept_ids": [
+        "widgets/channel_library_image_bar/ChannelLibraryImageBar",
+        "widgets/channel_library_image_bar/build",
+        "widgets/channel_library_image_bar"
+      ]
+    },
+    "widgets/error_report_dialog.dart": {
+      "path": "widgets/error_report_dialog.dart",
+      "mtime_ns": 1794661579163291342,
+      "hash": "a99b2b244e4d052be2b3830a80b6b0f51b3cf7f518fa5f4832a9bbba92277892",
+      "concept_ids": [
+        "widgets/error_report_dialog/ErrorReportDialog",
+        "widgets/error_report_dialog/ErrorReportDialogState",
+        "widgets/error_report_dialog/build",
+        "widgets/error_report_dialog/createState",
+        "widgets/error_report_dialog/dispose",
+        "widgets/error_report_dialog/submit",
+        "widgets/error_report_dialog"
+      ]
+    },
+    "widgets/file_save_warning_dialog.dart": {
+      "path": "widgets/file_save_warning_dialog.dart",
+      "mtime_ns": 1793018006929487856,
+      "hash": "b6627d11b8cd15e4712b3b3cc786602d60504246f5bc4ce890afbe2c33c6f729",
+      "concept_ids": [
+        "widgets/file_save_warning_dialog/FileSaveWarningDialog",
+        "widgets/file_save_warning_dialog/FileSaveWarningDialogState",
+        "widgets/file_save_warning_dialog/build",
+        "widgets/file_save_warning_dialog/createState",
+        "widgets/file_save_warning_dialog"
+      ]
+    },
+    "widgets/marine_template_dialog.dart": {
+      "path": "widgets/marine_template_dialog.dart",
+      "mtime_ns": 1795207517968388616,
+      "hash": "eca9432c4b2938a6ff9ee98b39f0db49de8125538fa976924f0ef736b233799f",
+      "concept_ids": [
+        "widgets/marine_template_dialog/MarineTemplateDialog",
+        "widgets/marine_template_dialog/MarineTemplateDialogState",
+        "widgets/marine_template_dialog/build",
+        "widgets/marine_template_dialog/createState",
+        "widgets/marine_template_dialog"
+      ]
+    },
+    "widgets/radio_mapping_dialog.dart": {
+      "path": "widgets/radio_mapping_dialog.dart",
+      "mtime_ns": 1793443811322767449,
+      "hash": "800eee7b3d1ceb1ad70a88e539ac6aa3d31b8319b60c67523e679118345cd6b7",
+      "concept_ids": [
+        "widgets/radio_mapping_dialog/RadioMappingDialog",
+        "widgets/radio_mapping_dialog/RadioMappingDialogState",
+        "widgets/radio_mapping_dialog/build",
+        "widgets/radio_mapping_dialog/buildMappingEditor",
+        "widgets/radio_mapping_dialog/createState",
+        "widgets/radio_mapping_dialog/dispose",
+        "widgets/radio_mapping_dialog/initState",
+        "widgets/radio_mapping_dialog/renameMapping",
+        "widgets/radio_mapping_dialog/replaceMapping",
+        "widgets/radio_mapping_dialog/save",
+        "widgets/radio_mapping_dialog/selectInitialMapping",
+        "widgets/radio_mapping_dialog/selectMapping",
+        "widgets/radio_mapping_dialog/selectModel",
+        "widgets/radio_mapping_dialog/setMembership",
+        "widgets/radio_mapping_dialog"
+      ]
+    },
+    "widgets/radio_model_picker.dart": {
+      "path": "widgets/radio_model_picker.dart",
+      "mtime_ns": 1795085309312667970,
+      "hash": "7befd5fb4fb05a9ac7a8186aeaab084d2de71ebf9335473ce96a0c6a0fefc33c",
+      "concept_ids": [
+        "widgets/radio_model_picker/ModelChoice",
+        "widgets/radio_model_picker/ModelEntry",
+        "widgets/radio_model_picker/ModelResultsList",
+        "widgets/radio_model_picker/ModelResultsListState",
+        "widgets/radio_model_picker/RadioModelDialog",
+        "widgets/radio_model_picker/RadioModelDialogState",
+        "widgets/radio_model_picker/RadioModelPicker",
+        "widgets/radio_model_picker/RadioModelPickerState",
+        "widgets/radio_model_picker/SectionHeader",
+        "widgets/radio_model_picker/VendorChoice",
+        "widgets/radio_model_picker/VendorHeading",
+        "widgets/radio_model_picker/VendorModels",
+        "widgets/radio_model_picker/build",
+        "widgets/radio_model_picker/cacheGroups",
+        "widgets/radio_model_picker/createState",
+        "widgets/radio_model_picker/didUpdateWidget",
+        "widgets/radio_model_picker/displayRadioModelName",
+        "widgets/radio_model_picker/dispose",
+        "widgets/radio_model_picker/groupModels",
+        "widgets/radio_model_picker/initState",
+        "widgets/radio_model_picker/matchingGroups",
+        "widgets/radio_model_picker/modelNameWithinVendor",
+        "widgets/radio_model_picker/modelSearchText",
+        "widgets/radio_model_picker/openPicker",
+        "widgets/radio_model_picker/remember",
+        "widgets/radio_model_picker/selectVendor",
+        "widgets/radio_model_picker/submitSearch",
+        "widgets/radio_model_picker/vendorSlug",
+        "widgets/radio_model_picker"
+      ]
+    },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795254483194699377,
-      "hash": "561f69503fed75c44e04d4e3da01e824dc4e4084b37abc5df9fb8743727717a5",
+      "mtime_ns": 1795268816729486661,
+      "hash": "f0b4443f15e16b85b4fdc33ed4463b7f4a69f84738b53e56da3b67de1f7292ee",
       "concept_ids": [
-        "main/dbe33cb7",
         "main",
         "main/WindowStateManager",
         "main/NewChirpApp",
@@ -248,638 +879,6 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
-      ]
-    },
-    "models/channel_image_baseline.dart": {
-      "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1795034009261444468,
-      "hash": "eaf93a5a8730685ec02600db23b818f585e10eea00dd8c64554d2adf78b7f0ad",
-      "concept_ids": [
-        "models/channel_image_baseline/ChannelImageBaseline",
-        "models/channel_image_baseline/ChannelImageMatch",
-        "models/channel_image_baseline/ChannelLibrarySnapshot",
-        "models/channel_image_baseline/ChannelLibraryStatsCache",
-        "models/channel_image_baseline/channelImageStatusText",
-        "models/channel_image_baseline/channelLibraryWriteReady",
-        "models/channel_image_baseline/channelListSignature",
-        "models/channel_image_baseline/clearedLocationsAfterReplacement",
-        "models/channel_image_baseline/clearedLocationsForUpload",
-        "models/channel_image_baseline/markDirty",
-        "models/channel_image_baseline/read",
-        "models/channel_image_baseline"
-      ]
-    },
-    "models/frequency_reference.dart": {
-      "path": "models/frequency_reference.dart",
-      "mtime_ns": 1795034009261799425,
-      "hash": "d07e43482dc6e94d17a512669643eac2c95381bd26cbab3e8fb42ffb906f353e",
-      "concept_ids": [
-        "models/frequency_reference/FrequencyReferenceGroup",
-        "models/frequency_reference/FrequencyReferencePlan",
-        "models/frequency_reference/FrequencyReferenceRow",
-        "models/frequency_reference/australianUhfNote",
-        "models/frequency_reference/australianUhfRows",
-        "models/frequency_reference/standardCbRows",
-        "models/frequency_reference/ukCbRows",
-        "models/frequency_reference"
-      ]
-    },
-    "models/gm32_channel.dart": {
-      "path": "models/gm32_channel.dart",
-      "mtime_ns": 1793017335031773185,
-      "hash": "930587b2146e7df167512e071e8c2a52387e0aca8a87d54116de682213854a61",
-      "concept_ids": [
-        "models/gm32_channel/applyGm32Rules",
-        "models/gm32_channel/gm32ChannelIssues",
-        "models/gm32_channel/gm32ChannelMenuLabel",
-        "models/gm32_channel/gm32DuplexChoices",
-        "models/gm32_channel/gm32FrequencyIsUnset",
-        "models/gm32_channel/gm32MhzLabel",
-        "models/gm32_channel/gm32NeedsFrequencyBox",
-        "models/gm32_channel/gm32ReceiveChoices",
-        "models/gm32_channel/gm32ReceiveValue",
-        "models/gm32_channel/gm32RequiresNarrowLow",
-        "models/gm32_channel/gmrsChannelNumber",
-        "models/gm32_channel/isBaofengGm32",
-        "models/gm32_channel/isGmrsRepeaterInputHz",
-        "models/gm32_channel/useGm32ReceiveChannel",
-        "models/gm32_channel"
-      ]
-    },
-    "models/marine_channels.dart": {
-      "path": "models/marine_channels.dart",
-      "mtime_ns": 1794220301599184985,
-      "hash": "6fe7afca765e6a7e7319910ca4aac1c7d616951e174d608dd7e63715e4f80389",
-      "concept_ids": [
-        "models/marine_channels/MarineChannelDefinition",
-        "models/marine_channels/MarineChannelPlan",
-        "models/marine_channels/MarineTemplateSelection",
-        "models/marine_channels/channelFromDefinition",
-        "models/marine_channels/marineChannelDefinitionsFor",
-        "models/marine_channels/marineTemplateChannels",
-        "models/marine_channels"
-      ]
-    },
-    "models/radio_channel.dart": {
-      "path": "models/radio_channel.dart",
-      "mtime_ns": 1795205428738274652,
-      "hash": "a8d7e9aef976edf6335dcba11aace91aec82fabd5745f9d88b11324e9dc66570",
-      "concept_ids": [
-        "models/radio_channel/ChannelExtraField",
-        "models/radio_channel/RadioChannel",
-        "models/radio_channel/channelNumberLabel",
-        "models/radio_channel/clear",
-        "models/radio_channel/clearedLocationsAfterEmptySlotRemoval",
-        "models/radio_channel/compatibleChannelsForUpload",
-        "models/radio_channel/copy",
-        "models/radio_channel/effectiveReceiveCtcssTone",
-        "models/radio_channel/effectiveTransmitCtcssTone",
-        "models/radio_channel/frequencyFitsStep",
-        "models/radio_channel/gmrsChannelForHz",
-        "models/radio_channel/gmrsChannelMenuLabel",
-        "models/radio_channel/gmrsStandardRxHz",
-        "models/radio_channel/gmrsStarterChannels",
-        "models/radio_channel/hasSharedCtcssTone",
-        "models/radio_channel/isGmrsRepeaterOutputMhz",
-        "models/radio_channel/isMidlandRepeaterRow",
-        "models/radio_channel/isPlusFiveMhz",
-        "models/radio_channel/isReceiveOnlyChannel",
-        "models/radio_channel/isZeroMhz",
-        "models/radio_channel/mhzLabelFromHz",
-        "models/radio_channel/midlandCanSelectOffset",
-        "models/radio_channel/midlandDuplexChoices",
-        "models/radio_channel/midlandDuplexIsLocked",
-        "models/radio_channel/midlandFixedRxHz",
-        "models/radio_channel/midlandGmrsChannel",
-        "models/radio_channel/midlandGmrsIssues",
-        "models/radio_channel/midlandReceiveChannelChoices",
-        "models/radio_channel/midlandReceiveChannelIsLocked",
-        "models/radio_channel/midlandReceiveChannelIsUnset",
-        "models/radio_channel/midlandReceiveChannelValue",
-        "models/radio_channel/midlandReceiveGmrsChannel",
-        "models/radio_channel/nearestFrequencyForSteps",
-        "models/radio_channel/nextAvailableLocation",
-        "models/radio_channel/prepareMxt295Editor",
-        "models/radio_channel/receiveOnlyWriteNote",
-        "models/radio_channel/restorePlainMidlandRepeater",
-        "models/radio_channel/scanChoices",
-        "models/radio_channel/scanLabel",
-        "models/radio_channel/shouldShowTransmitPower",
-        "models/radio_channel/showsMidlandChannelNumbers",
-        "models/radio_channel/toJson",
-        "models/radio_channel/useGmrsReceiveChannel",
-        "models/radio_channel/validate",
-        "models/radio_channel"
-      ]
-    },
-    "models/radio_mapping.dart": {
-      "path": "models/radio_mapping.dart",
-      "mtime_ns": 1795123564359989360,
-      "hash": "db152cf62c4ee2ff9f6fc4ce960a890410304f4ba9efd61891f2aeccc5cdf8d5",
-      "concept_ids": [
-        "models/radio_mapping/RadioMappingEntry",
-        "models/radio_mapping/RadioMappingModel",
-        "models/radio_mapping/copyWith",
-        "models/radio_mapping/mappingRangeAt",
-        "models/radio_mapping/radioMappingsFromJson",
-        "models/radio_mapping/radioMappingsSignature",
-        "models/radio_mapping/radioMappingsToJson",
-        "models/radio_mapping/remapLocations",
-        "models/radio_mapping/remapRadioMappingLocations",
-        "models/radio_mapping/retainingChannels",
-        "models/radio_mapping/toJson",
-        "models/radio_mapping"
-      ]
-    },
-    "models/repeater_counties.dart": {
-      "path": "models/repeater_counties.dart",
-      "mtime_ns": 1795205497220227391,
-      "hash": "f92810c9a3f2cdb8667a1dd56766b62592b03bb80615b8d12c1f8abc8c756b0b",
-      "concept_ids": [
-        "models/repeater_counties"
-      ]
-    },
-    "models/repeater_regions.dart": {
-      "path": "models/repeater_regions.dart",
-      "mtime_ns": 1793439228906217312,
-      "hash": "a142415518e9cbd2ac6ae88672a3827b0e37776fbe00112fe93e6ef123e448c6",
-      "concept_ids": [
-        "models/repeater_regions/normalizeRepeaterCounty",
-        "models/repeater_regions/repeaterCountiesForRegion",
-        "models/repeater_regions/repeaterCountrySupportsGmrs",
-        "models/repeater_regions/repeaterRegionsForCountry",
-        "models/repeater_regions"
-      ]
-    },
-    "models/repeater_search.dart": {
-      "path": "models/repeater_search.dart",
-      "mtime_ns": 1793463645017905451,
-      "hash": "39452b3cc44dc30581c212251a0374201bae351b52707b5378ea8ae262bf9369",
-      "concept_ids": [
-        "models/repeater_search/RepeaterSearchResult",
-        "models/repeater_search/RepeaterSearchResults",
-        "models/repeater_search/RepeaterSortOrder",
-        "models/repeater_search/by",
-        "models/repeater_search/filterRepeaterResults",
-        "models/repeater_search/sortRepeaterResults",
-        "models/repeater_search"
-      ]
-    },
-    "services/chirp_csv.dart": {
-      "path": "services/chirp_csv.dart",
-      "mtime_ns": 1795164855609566210,
-      "hash": "e85ec8ee10e0f0eb8984f97b3726e15319215904ebb8f0908d17ec3779690ff3",
-      "concept_ids": [
-        "services/chirp_csv/ChirpCsv",
-        "services/chirp_csv/col",
-        "services/chirp_csv/decode",
-        "services/chirp_csv/decodeBytes",
-        "services/chirp_csv/decodeText",
-        "services/chirp_csv/delimiter",
-        "services/chirp_csv/dtcsPolarity",
-        "services/chirp_csv/encode",
-        "services/chirp_csv/escape",
-        "services/chirp_csv/integer",
-        "services/chirp_csv/nonEmpty",
-        "services/chirp_csv/number",
-        "services/chirp_csv/parse",
-        "services/chirp_csv/utf16",
-        "services/chirp_csv/value",
-        "services/chirp_csv/windows1252",
-        "services/chirp_csv"
-      ]
-    },
-    "services/column_layout_store.dart": {
-      "path": "services/column_layout_store.dart",
-      "mtime_ns": 1793096501033485563,
-      "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
-      "concept_ids": [
-        "services/column_layout_store/ColumnLayout",
-        "services/column_layout_store/ColumnLayoutStore",
-        "services/column_layout_store/defaultPath",
-        "services/column_layout_store/load",
-        "services/column_layout_store/save",
-        "services/column_layout_store"
-      ]
-    },
-    "services/diagnostic_log.dart": {
-      "path": "services/diagnostic_log.dart",
-      "mtime_ns": 1794143533122102970,
-      "hash": "41eb61d1613eeca0e3345d314f8787997095648725d64b71f6dc88d21bb71bc0",
-      "concept_ids": [
-        "services/diagnostic_log/DiagnosticEntry",
-        "services/diagnostic_log/DiagnosticLog",
-        "services/diagnostic_log/DiagnosticReportException",
-        "services/diagnostic_log/buildReport",
-        "services/diagnostic_log/flush",
-        "services/diagnostic_log/initialize",
-        "services/diagnostic_log/logDirectory",
-        "services/diagnostic_log/record",
-        "services/diagnostic_log/recordError",
-        "services/diagnostic_log/redact",
-        "services/diagnostic_log/submit",
-        "services/diagnostic_log/toJson",
-        "services/diagnostic_log/toString",
-        "services/diagnostic_log"
-      ]
-    },
-    "services/file_save_warning_store.dart": {
-      "path": "services/file_save_warning_store.dart",
-      "mtime_ns": 1793017335032074140,
-      "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
-      "concept_ids": [
-        "services/file_save_warning_store/FileSaveWarningStore",
-        "services/file_save_warning_store/defaultPath",
-        "services/file_save_warning_store/hide",
-        "services/file_save_warning_store/isHidden",
-        "services/file_save_warning_store"
-      ]
-    },
-    "services/library_metrics_store.dart": {
-      "path": "services/library_metrics_store.dart",
-      "mtime_ns": 1795165440046058218,
-      "hash": "19f562a27a64783b23ba2dd5f6622d57addf4d796652e70608cb7e6acfdaedad",
-      "concept_ids": [
-        "services/library_metrics_store/LibraryMetricsStore",
-        "services/library_metrics_store/defaultPath",
-        "services/library_metrics_store/isCollapsed",
-        "services/library_metrics_store/setCollapsed",
-        "services/library_metrics_store"
-      ]
-    },
-    "services/local_file_opener.dart": {
-      "path": "services/local_file_opener.dart",
-      "mtime_ns": 1793272362273777794,
-      "hash": "64762d56067019bad41ed7ab786cad3b638a9646245a57e9c88f2f3c984fdea5",
-      "concept_ids": [
-        "services/local_file_opener/LocalFilePlatform",
-        "services/local_file_opener/localFileOpenCommand",
-        "services/local_file_opener/openLocalFile",
-        "services/local_file_opener"
-      ]
-    },
-    "services/module_sandbox.dart": {
-      "path": "services/module_sandbox.dart",
-      "mtime_ns": 1794748425185339740,
-      "hash": "3e654377596c0acdc5ffe89e9b935c6be23530c887d0a5cb51a7e666c959b7ca",
-      "concept_ids": [
-        "services/module_sandbox/ModuleSandbox",
-        "services/module_sandbox/ModuleSandboxException",
-        "services/module_sandbox/SandboxFiles",
-        "services/module_sandbox/SandboxLaunch",
-        "services/module_sandbox/SandboxPlatform",
-        "services/module_sandbox/acceptedRoots",
-        "services/module_sandbox/add",
-        "services/module_sandbox/addRoot",
-        "services/module_sandbox/bubblewrapParents",
-        "services/module_sandbox/canLoadChirpModules",
-        "services/module_sandbox/copyModule",
-        "services/module_sandbox/currentSandboxPlatform",
-        "services/module_sandbox/dispose",
-        "services/module_sandbox/ensureWork",
-        "services/module_sandbox/findBubblewrap",
-        "services/module_sandbox/isInside",
-        "services/module_sandbox/isSafeAllowRoot",
-        "services/module_sandbox/isSafeSandboxPath",
-        "services/module_sandbox/isSafeSerialPort",
-        "services/module_sandbox/linuxBubblewrapArguments",
-        "services/module_sandbox/macosSeatbeltProfile",
-        "services/module_sandbox/moduleSandboxBlocker",
-        "services/module_sandbox/moduleSandboxEnvironment",
-        "services/module_sandbox/moduleSandboxRefusal",
-        "services/module_sandbox/mount",
-        "services/module_sandbox/prepare",
-        "services/module_sandbox/pythonRoots",
-        "services/module_sandbox/quote",
-        "services/module_sandbox/replaceModuleArgument",
-        "services/module_sandbox/requireFile",
-        "services/module_sandbox/requireRoot",
-        "services/module_sandbox/resolvePython",
-        "services/module_sandbox/sandboxFilesIn",
-        "services/module_sandbox/serialPort",
-        "services/module_sandbox/toString",
-        "services/module_sandbox"
-      ]
-    },
-    "services/mototrbo_cps2_xml.dart": {
-      "path": "services/mototrbo_cps2_xml.dart",
-      "mtime_ns": 1793094681555739212,
-      "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
-      "concept_ids": [
-        "services/mototrbo_cps2_xml/CpsTone",
-        "services/mototrbo_cps2_xml/MototrboCps2Xml",
-        "services/mototrbo_cps2_xml/ToneKind",
-        "services/mototrbo_cps2_xml/addExtra",
-        "services/mototrbo_cps2_xml/applyAnalogTones",
-        "services/mototrbo_cps2_xml/boolean",
-        "services/mototrbo_cps2_xml/channel",
-        "services/mototrbo_cps2_xml/child",
-        "services/mototrbo_cps2_xml/decode",
-        "services/mototrbo_cps2_xml/display",
-        "services/mototrbo_cps2_xml/fields",
-        "services/mototrbo_cps2_xml/number",
-        "services/mototrbo_cps2_xml/numberOrNull",
-        "services/mototrbo_cps2_xml/text",
-        "services/mototrbo_cps2_xml/tone",
-        "services/mototrbo_cps2_xml/value",
-        "services/mototrbo_cps2_xml"
-      ]
-    },
-    "services/mygmrs_client.dart": {
-      "path": "services/mygmrs_client.dart",
-      "mtime_ns": 1793978410253437864,
-      "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
-      "concept_ids": [
-        "services/mygmrs_client/JsonResponse",
-        "services/mygmrs_client/MyGmrsClient",
-        "services/mygmrs_client/MyGmrsException",
-        "services/mygmrs_client/MyGmrsService",
-        "services/mygmrs_client/apiError",
-        "services/mygmrs_client/applyTones",
-        "services/mygmrs_client/cancelSignIn",
-        "services/mygmrs_client/convertRepeaterResponse",
-        "services/mygmrs_client/ctcssTone",
-        "services/mygmrs_client/ensureSignedIn",
-        "services/mygmrs_client/gmrsRepeaterOutput",
-        "services/mygmrs_client/jsonRequest",
-        "services/mygmrs_client/openSystemBrowser",
-        "services/mygmrs_client/postJson",
-        "services/mygmrs_client/searchRepeaters",
-        "services/mygmrs_client/signIn",
-        "services/mygmrs_client/signOut",
-        "services/mygmrs_client/stateCode",
-        "services/mygmrs_client/storeSession",
-        "services/mygmrs_client/throwSignInCancelled",
-        "services/mygmrs_client/toString",
-        "services/mygmrs_client"
-      ]
-    },
-    "services/radio_bridge.dart": {
-      "path": "services/radio_bridge.dart",
-      "mtime_ns": 1795205412470893010,
-      "hash": "38e782541809deb758c81c906d8cbfcf39aabab230a1e20a9405ec6e72ebb195",
-      "concept_ids": [
-        "services/radio_bridge/RadioBridge",
-        "services/radio_bridge/RadioBridgeException",
-        "services/radio_bridge/RadioCapabilities",
-        "services/radio_bridge/RadioInstructions",
-        "services/radio_bridge/RadioModelCatalog",
-        "services/radio_bridge/RadioModelGroup",
-        "services/radio_bridge/RadioProgress",
-        "services/radio_bridge/RadioSettingNode",
-        "services/radio_bridge/RadioSettings",
-        "services/radio_bridge/RadioZone",
-        "services/radio_bridge/SerialPortInfo",
-        "services/radio_bridge/bundledAssetCandidates",
-        "services/radio_bridge/bundledResourcesDirectory",
-        "services/radio_bridge/cancelActive",
-        "services/radio_bridge/deduplicatePorts",
-        "services/radio_bridge/download",
-        "services/radio_bridge/findChirpSource",
-        "services/radio_bridge/findLibusbRuntime",
-        "services/radio_bridge/findNewChirpDrivers",
-        "services/radio_bridge/findScsiHelper",
-        "services/radio_bridge/firmwareFromPayload",
-        "services/radio_bridge/imageCapabilities",
-        "services/radio_bridge/imageInfo",
-        "services/radio_bridge/instructions",
-        "services/radio_bridge/isBenignBridgeStderrLine",
-        "services/radio_bridge/loadAssetBytes",
-        "services/radio_bridge/loadBundledAsset",
-        "services/radio_bridge/loadModule",
-        "services/radio_bridge/loadRootBundleAsset",
-        "services/radio_bridge/massStoragePortDetails",
-        "services/radio_bridge/materializeBridge",
-        "services/radio_bridge/materializePythonDependencies",
-        "services/radio_bridge/modelCatalog",
-        "services/radio_bridge/models",
-        "services/radio_bridge/parseComPorts",
-        "services/radio_bridge/parseWindowsSerialPortDetails",
-        "services/radio_bridge/radioBridgeFailureMessage",
-        "services/radio_bridge/readImage",
-        "services/radio_bridge/readSettings",
-        "services/radio_bridge/resolvePython",
-        "services/radio_bridge/resolvePythonExecutable",
-        "services/radio_bridge/run",
-        "services/radio_bridge/runWithRuntime",
-        "services/radio_bridge/searchRepeaters",
-        "services/radio_bridge/serialPortDetails",
-        "services/radio_bridge/serialPorts",
-        "services/radio_bridge/strings",
-        "services/radio_bridge/toChangeJson",
-        "services/radio_bridge/toString",
-        "services/radio_bridge/unloadModule",
-        "services/radio_bridge/upload",
-        "services/radio_bridge/windowsSerialPortDetails",
-        "services/radio_bridge/windowsSerialPortNames",
-        "services/radio_bridge/writeSettings",
-        "services/radio_bridge"
-      ]
-    },
-    "services/radio_image_store.dart": {
-      "path": "services/radio_image_store.dart",
-      "mtime_ns": 1793187642181438904,
-      "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
-      "concept_ids": [
-        "services/radio_image_store/RadioImageStore",
-        "services/radio_image_store/hasForModel",
-        "services/radio_image_store/imageDirectory",
-        "services/radio_image_store/pathForDocument",
-        "services/radio_image_store/pathForModel",
-        "services/radio_image_store/saveForDocument",
-        "services/radio_image_store/saveForModel",
-        "services/radio_image_store"
-      ]
-    },
-    "services/radio_selection_store.dart": {
-      "path": "services/radio_selection_store.dart",
-      "mtime_ns": 1787526889854243083,
-      "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
-      "concept_ids": [
-        "services/radio_selection_store/RadioSelection",
-        "services/radio_selection_store/RadioSelectionStore",
-        "services/radio_selection_store/defaultPath",
-        "services/radio_selection_store/load",
-        "services/radio_selection_store/save",
-        "services/radio_selection_store"
-      ]
-    },
-    "services/repeater_search_preferences_store.dart": {
-      "path": "services/repeater_search_preferences_store.dart",
-      "mtime_ns": 1794065847464720490,
-      "hash": "36b1360b1c97955db3fd4130e6d09c79586dc0982c591c6f993f0244fe4ed300",
-      "concept_ids": [
-        "services/repeater_search_preferences_store/RepeaterSearchPreferences",
-        "services/repeater_search_preferences_store/RepeaterSearchPreferencesStore",
-        "services/repeater_search_preferences_store/defaultPath",
-        "services/repeater_search_preferences_store/load",
-        "services/repeater_search_preferences_store/save",
-        "services/repeater_search_preferences_store/toJson",
-        "services/repeater_search_preferences_store"
-      ]
-    },
-    "services/update_checker.dart": {
-      "path": "services/update_checker.dart",
-      "mtime_ns": 1794662632996144606,
-      "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
-      "concept_ids": [
-        "services/update_checker/PlatformRelease",
-        "services/update_checker/UpdateCheckException",
-        "services/update_checker/UpdateCheckResult",
-        "services/update_checker/UpdateChecker",
-        "services/update_checker/check",
-        "services/update_checker/compareVersions",
-        "services/update_checker/currentUpdatePlatform",
-        "services/update_checker/isAllowedDownloadUrl",
-        "services/update_checker/launchExternalUrl",
-        "services/update_checker/openExternalUrl",
-        "services/update_checker/parsePlatformRelease",
-        "services/update_checker/toString",
-        "services/update_checker/trustedDownloadUrl",
-        "services/update_checker/trustedUpdateArtifactUrl",
-        "services/update_checker/updateArtifactExtension",
-        "services/update_checker/versionParts",
-        "services/update_checker"
-      ]
-    },
-    "services/update_installer.dart": {
-      "path": "services/update_installer.dart",
-      "mtime_ns": 1793108770906624056,
-      "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
-      "concept_ids": [
-        "services/update_installer/DownloadedUpdate",
-        "services/update_installer/UpdateDownloadProgress",
-        "services/update_installer/UpdateInstallException",
-        "services/update_installer/UpdateInstaller",
-        "services/update_installer/download",
-        "services/update_installer/install",
-        "services/update_installer/installLinuxUpdate",
-        "services/update_installer/installMacUpdate",
-        "services/update_installer/installWindowsUpdate",
-        "services/update_installer/toString",
-        "services/update_installer"
-      ]
-    },
-    "services/window_state_store.dart": {
-      "path": "services/window_state_store.dart",
-      "mtime_ns": 1794514612328193301,
-      "hash": "970f41d7e6aa528d25df4bb3e4aa192055e8a9c60a276c09b7a383b6fedb2754",
-      "concept_ids": [
-        "services/window_state_store/WindowDisplayArea",
-        "services/window_state_store/WindowState",
-        "services/window_state_store/WindowStateStore",
-        "services/window_state_store/defaultPath",
-        "services/window_state_store/load",
-        "services/window_state_store/normalizeWindowStateForDisplays",
-        "services/window_state_store/save",
-        "services/window_state_store/toJson",
-        "services/window_state_store"
-      ]
-    },
-    "widgets/channel_library_image_bar.dart": {
-      "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1793569318276516403,
-      "hash": "57cd150df865177f067ed9a3d2454c0d48731c63ccb2311322c24a63f0aaf9b4",
-      "concept_ids": [
-        "widgets/channel_library_image_bar/ChannelLibraryImageBar",
-        "widgets/channel_library_image_bar/build",
-        "widgets/channel_library_image_bar"
-      ]
-    },
-    "widgets/error_report_dialog.dart": {
-      "path": "widgets/error_report_dialog.dart",
-      "mtime_ns": 1794514582362673718,
-      "hash": "a99b2b244e4d052be2b3830a80b6b0f51b3cf7f518fa5f4832a9bbba92277892",
-      "concept_ids": [
-        "widgets/error_report_dialog/ErrorReportDialog",
-        "widgets/error_report_dialog/ErrorReportDialogState",
-        "widgets/error_report_dialog/build",
-        "widgets/error_report_dialog/createState",
-        "widgets/error_report_dialog/dispose",
-        "widgets/error_report_dialog/submit",
-        "widgets/error_report_dialog"
-      ]
-    },
-    "widgets/file_save_warning_dialog.dart": {
-      "path": "widgets/file_save_warning_dialog.dart",
-      "mtime_ns": 1793017335032590801,
-      "hash": "b6627d11b8cd15e4712b3b3cc786602d60504246f5bc4ce890afbe2c33c6f729",
-      "concept_ids": [
-        "widgets/file_save_warning_dialog/FileSaveWarningDialog",
-        "widgets/file_save_warning_dialog/FileSaveWarningDialogState",
-        "widgets/file_save_warning_dialog/build",
-        "widgets/file_save_warning_dialog/createState",
-        "widgets/file_save_warning_dialog"
-      ]
-    },
-    "widgets/marine_template_dialog.dart": {
-      "path": "widgets/marine_template_dialog.dart",
-      "mtime_ns": 1795205428739869229,
-      "hash": "eca9432c4b2938a6ff9ee98b39f0db49de8125538fa976924f0ef736b233799f",
-      "concept_ids": [
-        "widgets/marine_template_dialog/MarineTemplateDialog",
-        "widgets/marine_template_dialog/MarineTemplateDialogState",
-        "widgets/marine_template_dialog/build",
-        "widgets/marine_template_dialog/createState",
-        "widgets/marine_template_dialog"
-      ]
-    },
-    "widgets/radio_mapping_dialog.dart": {
-      "path": "widgets/radio_mapping_dialog.dart",
-      "mtime_ns": 1793404724723066129,
-      "hash": "800eee7b3d1ceb1ad70a88e539ac6aa3d31b8319b60c67523e679118345cd6b7",
-      "concept_ids": [
-        "widgets/radio_mapping_dialog/RadioMappingDialog",
-        "widgets/radio_mapping_dialog/RadioMappingDialogState",
-        "widgets/radio_mapping_dialog/build",
-        "widgets/radio_mapping_dialog/buildMappingEditor",
-        "widgets/radio_mapping_dialog/createState",
-        "widgets/radio_mapping_dialog/dispose",
-        "widgets/radio_mapping_dialog/initState",
-        "widgets/radio_mapping_dialog/renameMapping",
-        "widgets/radio_mapping_dialog/replaceMapping",
-        "widgets/radio_mapping_dialog/save",
-        "widgets/radio_mapping_dialog/selectInitialMapping",
-        "widgets/radio_mapping_dialog/selectMapping",
-        "widgets/radio_mapping_dialog/selectModel",
-        "widgets/radio_mapping_dialog/setMembership",
-        "widgets/radio_mapping_dialog"
-      ]
-    },
-    "widgets/radio_model_picker.dart": {
-      "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1795078044081809797,
-      "hash": "7befd5fb4fb05a9ac7a8186aeaab084d2de71ebf9335473ce96a0c6a0fefc33c",
-      "concept_ids": [
-        "widgets/radio_model_picker/ModelChoice",
-        "widgets/radio_model_picker/ModelEntry",
-        "widgets/radio_model_picker/ModelResultsList",
-        "widgets/radio_model_picker/ModelResultsListState",
-        "widgets/radio_model_picker/RadioModelDialog",
-        "widgets/radio_model_picker/RadioModelDialogState",
-        "widgets/radio_model_picker/RadioModelPicker",
-        "widgets/radio_model_picker/RadioModelPickerState",
-        "widgets/radio_model_picker/SectionHeader",
-        "widgets/radio_model_picker/VendorChoice",
-        "widgets/radio_model_picker/VendorHeading",
-        "widgets/radio_model_picker/VendorModels",
-        "widgets/radio_model_picker/build",
-        "widgets/radio_model_picker/cacheGroups",
-        "widgets/radio_model_picker/createState",
-        "widgets/radio_model_picker/didUpdateWidget",
-        "widgets/radio_model_picker/displayRadioModelName",
-        "widgets/radio_model_picker/dispose",
-        "widgets/radio_model_picker/groupModels",
-        "widgets/radio_model_picker/initState",
-        "widgets/radio_model_picker/matchingGroups",
-        "widgets/radio_model_picker/modelNameWithinVendor",
-        "widgets/radio_model_picker/modelSearchText",
-        "widgets/radio_model_picker/openPicker",
-        "widgets/radio_model_picker/remember",
-        "widgets/radio_model_picker/selectVendor",
-        "widgets/radio_model_picker/submitSearch",
-        "widgets/radio_model_picker/vendorSlug",
-        "widgets/radio_model_picker"
       ]
     }
   },
@@ -6549,5 +6548,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-21T09:48:04Z"
+  "generated_at": "2026-11-21T13:46:59Z"
 }
