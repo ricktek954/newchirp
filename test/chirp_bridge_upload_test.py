@@ -638,6 +638,26 @@ class UploadHandshakeTest(unittest.TestCase):
         rendered = trace.format()
         self.assertIn("VR | incomplete response (1 bytes)", rendered)
 
+    def test_trace_shows_short_binary_identification_reply(self):
+        """2026-11-21 RT22 report: the rejected 8-byte ID was not shown."""
+        trace = bridge.RadioCommunicationTrace()
+        trace.begin(b"\x02")
+        trace.received(b"P3207s\xf8\xff")
+
+        rendered = trace.format()
+
+        self.assertIn(
+            "<binary command, 1 bytes> | reply=50 33 32 30 37 73 f8 ff (8 bytes)",
+            rendered,
+        )
+
+    def test_trace_hides_long_binary_replies(self):
+        trace = bridge.RadioCommunicationTrace()
+        trace.begin(b"\x52\x00\x00\x40")
+        trace.received(b"\xaa" * 0x40)
+
+        self.assertIn("incomplete response (64 bytes)", trace.format())
+
     def test_trace_shows_short_program_handshake_reply_bytes(self):
         trace = bridge.RadioCommunicationTrace()
         trace.begin(b"PROGRAMBFNORMALU")

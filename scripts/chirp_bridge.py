@@ -324,6 +324,17 @@ class RadioCommunicationTrace:
                 if len(response) > 32:
                     preview += " …"
                 result = "reply=%s (%i bytes)" % (preview, len(response))
+            elif (
+                pending["command"].startswith("<binary command")
+                and len(response) <= 16
+            ):
+                # Short binary replies are usually identification strings.
+                # Showing them lets a report name an unknown model ID
+                # (2026-11-21 RT22 report: 8-byte ID rejected, bytes unseen).
+                result = "reply=%s (%i bytes)" % (
+                    response.hex(" "),
+                    len(response),
+                )
             else:
                 result = "incomplete response (%i bytes)" % len(response)
         else:
