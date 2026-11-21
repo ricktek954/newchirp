@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 10:11:28",
+  "details": "",
+  "event_type": "note",
+  "external_ref": "desktop:20380f06",
+  "item": "w-20261121-6314",
+  "occurred_at": "2026-11-21",
+  "summary": "Correction: the fix commit is desktop:20380f06. The earlier fix event cited e9bdf345, the hash before rebasing onto the Linux 1.0.67 release record. Not in Linux 1.0.67 (99175783) or macOS 1.0.65 (8f56c3da)."
+}
