@@ -222,5 +222,35 @@ class DM32UVDriverTest(unittest.TestCase):
                 channel["location"],
             )
 
+    def test_names_end_at_the_first_nul_like_the_radio(self):
+        # Forum file drop 12 (2026-11-20): channel names stored as
+        # "Channel 1\x00t Mode" showed the leftover "t Mode" text.
+        radio = self.radio_class(None)
+        radio.load_mmap(str(SOURCE / "tests/images/Baofeng_DM-32UV.img"))
+        number = next(
+            n for n in range(1, radio._count() + 1)
+            if not radio.get_memory(n).empty
+        )
+        radio._chan(number).name.set_raw(b"Channel 1\x00t Mode")
+        radio._forget()
+
+        mem = radio.get_memory(number)
+        self.assertEqual(mem.name, "Channel 1")
+        self.assertEqual(radio._channel_names()[number], "Channel 1")
+
+        radio.set_memory(mem)
+        self.assertEqual(
+            radio._chan(number).name.get_raw(),
+            b"Channel 1" + b"\x00" * 7,
+        )
+
+    def test_zone_names_end_at_the_first_nul(self):
+        radio = self.radio_class(None)
+        radio.load_mmap(str(SOURCE / "tests/images/Baofeng_DM-32UV.img"))
+        self.assertGreaterEqual(radio._zone_count(), 1)
+        radio._zone(1).name.set_raw(b"Zone A\x00old name!")
+        zone = radio.get_bank_model().get_mappings()[0]
+        self.assertEqual(zone.get_name(), "Zone A")
+
 if __name__ == "__main__":
     unittest.main()

@@ -173,6 +173,34 @@ if not getattr(
     baofeng_dm32uv._Link.query_v = _query_v_with_retry
 
 
+def _stored_name(raw):
+    """A name as the radio shows it: text up to the first NUL or 0xFF.
+
+    Names written by other software can keep old bytes after the NUL that
+    ends them, such as "Channel 1\\x00t Mode" or "RPT 15\\x00 23". The radio
+    stops at the NUL; stock CHIRP only stripped trailing padding and showed
+    the leftover text (forum file drop 12, 2026-11-20).
+    """
+    return str(raw).split("\x00")[0].split("\xff")[0].rstrip(" ")
+
+
+def _zone_get_name(self):
+    name = _stored_name(self._zone().name)
+    if self.index + 1 > self._model._radio._zone_count() and (
+            not name or not name.isprintable()):
+        return "New zone"
+    return name
+
+
+_zone_get_name.newchirp_stored_name = True
+if not getattr(
+    baofeng_dm32uv.DM32UVZone.get_name,
+    "newchirp_stored_name",
+    False,
+):
+    baofeng_dm32uv.DM32UVZone.get_name = _zone_get_name
+
+
 directory.enable_reregistrations()
 
 
@@ -184,6 +212,20 @@ class DM32UV(baofeng_dm32uv.DM32UV):
         features = super().get_features()
         features.valid_bands.insert(0, AIRBAND)
         return features
+
+    def get_memory(self, number):
+        mem = super().get_memory(number)
+        if not mem.empty:
+            mem.name = _stored_name(self._chan(number).name)
+        return mem
+
+    def _channel_names(self):
+        names = {}
+        for number in super()._channel_names():
+            names[number] = baofeng_dm32uv._shown(
+                _stored_name(self._chan(number).name)
+            )
+        return names
 
     def validate_memory(self, memory):
         messages = []
