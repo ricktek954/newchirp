@@ -430,6 +430,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261121-41b6 release | released | normal:** Linux 1.0.67 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 99175783. The release preserves moved channel extras through insertions, numbers TK-270G bank positions from 1 like KPG-56D, and adds RT-950 Pro Bluetooth read diagnostics. Public manifest reports 1.0.67. Package SHA-256 values: d8e8be645be49740dd6cec9ff6e7c14f989c542683235495b0ec9573e3116f79, c8bbf9c8ef4d3acede49c3fcd636fe0c7c6b498d2be49f3bd88ab0f19a9a2ed8, 85ef5b9c0ca708ee8590b926737328097cea642316f863525ecf724bfcf84a8b, and 4906d358a09bfbe57d3177bcc58a49686e63a8e6bc549dbfa4e7f6eb22d0780b.
   Source: `release` desktop:99175783
+- **#w-20261121-1690 release | released | normal:** Linux 1.0.68 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 360773be. The release ends DM-32UV channel and zone names at the first NUL so stale padding no longer leaks into edited names. Public manifest reports 1.0.68. Package SHA-256 values: a60af27ff15691a98a88057f2f9b6213ed026dc0c65fc410e4d2add9c18ee3e8, 0ea65c3d2163d403923df814d4276c96407275f24b589298abf824677a3c7419, 4e5c027498b788f4c1747a0fa5f06482d1e04bcac51ea9c1ddd9d8ed0a798d0f, and b56ba89d36e0f513f73b2014809e4ecff49a8e8e58d0bd809b9bad76497c625d.
+  Source: `release` desktop:360773be
 
 ### macOS desktop
 

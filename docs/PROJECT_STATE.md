@@ -27,6 +27,15 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.68` is live from source commit `360773be`. It ends DM-32UV
+  channel and zone names at the first NUL so stale padding no longer leaks
+  into edited names. Verification: analyzer clean; 242 Flutter tests; 559
+  Python tests with two fixture-dependent skips; max glibc `2.18`; DEB, RPM,
+  and Pacman metadata plus embedded version `1.0.68` / `68`; DEB and AppImage
+  Xvfb launch tests passed on Ubuntu 20.04; the final AppImage launched under
+  host Wayland and XWayland; package payloads include the DM-32UV fix and omit
+  GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the
+  Linux platform manifest reports `1.0.68`.
 - Linux `1.0.67` is live from source commit `99175783`. It preserves moved
   channel extras when an insertion shifts channels onto a different slot,
   numbers TK-270G bank positions from 1 like KPG-56D, and adds RT-950 Pro
@@ -1118,9 +1127,9 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.67` is live from source commit `99175783`
+- Linux `1.0.68` is live from source commit `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.66+66`
+- Checked-out source version: `1.0.68+68`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1136,7 +1145,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.66 |
 | Windows | 1.0.65 |
-| Linux | 1.0.67 |
+| Linux | 1.0.68 |
+
+Linux `1.0.68` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.68.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.68.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.68.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.68.pkg.tar.zst`
+- DEB: `48,567,146` bytes, SHA-256
+  `a60af27ff15691a98a88057f2f9b6213ed026dc0c65fc410e4d2add9c18ee3e8`
+- RPM: `48,650,673` bytes, SHA-256
+  `0ea65c3d2163d403923df814d4276c96407275f24b589298abf824677a3c7419`
+- AppImage: `48,854,208` bytes, SHA-256
+  `4e5c027498b788f4c1747a0fa5f06482d1e04bcac51ea9c1ddd9d8ed0a798d0f`
+- Pacman: `47,533,925` bytes, SHA-256
+  `b56ba89d36e0f513f73b2014809e4ecff49a8e8e58d0bd809b9bad76497c625d`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.68`
 
 Linux `1.0.67` artifacts:
 
