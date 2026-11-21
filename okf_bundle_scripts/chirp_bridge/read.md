@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T10:48:44Z"
+timestamp: "2026-11-21T14:09:19Z"
 concept_id: chirp_bridge/read
 language: python
 ---
@@ -31,7 +31,7 @@ def read(self, size = 1)
 | `size` | `—` | `1` |
 
 ## Source
-Lines 381–384 in `chirp_bridge.py`
+Lines 392–395 in `chirp_bridge.py`
 
 ## Relationships
 

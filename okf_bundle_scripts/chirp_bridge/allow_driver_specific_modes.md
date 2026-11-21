@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T10:48:44Z"
+timestamp: "2026-11-21T14:09:19Z"
 concept_id: chirp_bridge/allow_driver_specific_modes
 language: python
 ---
@@ -30,7 +30,7 @@ def _allow_driver_specific_modes()
 Permit declared radio modes rejected by CHIRP's shared memory map.
 
 ## Source
-Lines 801–808 in `chirp_bridge.py`
+Lines 812–819 in `chirp_bridge.py`
 
 ## Relationships
 

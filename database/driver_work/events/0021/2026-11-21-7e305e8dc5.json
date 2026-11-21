@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 14:14:40",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:872",
+  "item": "21",
+  "occurred_at": "2026-11-21",
+  "summary": "UV60D (UV-K60 Plus) owner offers to test a channel write; has 70+ channels ready. Write path not built (read-only, no hardware validation). Next: same-state NewChirp .img plus MH-580 file to validate the read, then build a single-channel write."
+}

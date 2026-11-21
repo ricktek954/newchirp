@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 14:14:40",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:scripts/chirp_bridge.py",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-21",
+  "summary": "Trace now shows short binary replies (<=16 bytes) as hex so the next report names the rejected ID; tests added (562 pass)."
+}

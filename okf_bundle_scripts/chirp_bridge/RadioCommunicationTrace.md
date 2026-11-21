@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T10:48:44Z"
+timestamp: "2026-11-21T14:09:19Z"
 concept_id: chirp_bridge/RadioCommunicationTrace
 language: python
 ---
@@ -35,7 +35,7 @@ Keep a bounded, privacy-safe view of recent serial exchanges.
 - `format`
 
 ## Source
-Lines 113–355 in `chirp_bridge.py`
+Lines 113–366 in `chirp_bridge.py`
 
 ## Relationships
 

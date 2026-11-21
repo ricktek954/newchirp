@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T10:48:44Z"
+timestamp: "2026-11-21T14:09:19Z"
 concept_id: chirp_bridge/erase_memory_with_extras
 language: python
 ---
@@ -38,7 +38,7 @@ Erase a channel and remove its metadata-backed fields.
 | `number` | `—` | `—` |
 
 ## Source
-Lines 1016–1021 in `chirp_bridge.py`
+Lines 1027–1032 in `chirp_bridge.py`
 
 ## Relationships
 

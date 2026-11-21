@@ -595,6 +595,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: OEM addressed blocks, 57,600 8N1, DTR/RTS on. Read: 200 channels + core settings. Write: Yes, offline-tested. Settings: Core settings and startup text. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:88
 
+### RT22
+
+- **#w-20261121-badb bug | awaiting_user | normal:** Newer (2025+) RT22 units fail identification
+  Older RT22s read; newer units ACK PROGRGS and return an 8-byte ID that matches none of RT22Radio._fileid (P32073, P3\0\0\03, P3207!, 00..F8FF). Trace hid the bytes. Same pattern as upstream CHIRP #6747 (open since 2019). Do not accept an unknown ID blindly: newer units may differ internally. Need the ID bytes and an OEM-software file from a newer unit.
+  Source: `mailbox` INBOX:871 <c77a8516-ea89-dc83-e8ac-f177629e63c3@newchirp.net>
+
 ### RT97L
 
 - **#11 maintenance | experimental | normal:** Current driver status
