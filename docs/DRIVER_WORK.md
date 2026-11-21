@@ -433,6 +433,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-2135 release | released | normal:** macOS 1.0.64 published
   Published a universal signed, notarized, stapled DMG from source commit 2fc54348. It includes the RT-950 Pro write/transmit correction, approved RepeaterBook API search through the server relay, IC-F50V/F60V capture support, KG-689E/699E fixes, and cumulative driver/UI/bridge compatibility changes. Artifact SHA-256: 05ccb46548ff27de481610d6b41c0a5cc0515504eb9617c5c9763e1bf2c0a8cb. Notarization: dbd06c9d-66de-4d3f-a19b-5e2c1117dca5. Live manifest reports macOS 1.0.64.
   Source: `release` desktop:2fc54348
+- **#w-20261121-e47b release | released | normal:** macOS 1.0.65 published
+  Published a universal signed, notarized, stapled DMG from source commit 8f56c3da. It includes the DM-32UV shifted-insert extras fix, TK-270G one-based bank positions, current RT-950 Pro work, approved RepeaterBook API search through the server relay, and cumulative driver/UI/bridge compatibility changes. Artifact SHA-256: 6dedceb731cc6bebfa76de76aaaea62cc8e4e4729fc9d5fe4064afce27404bd5. Notarization: b9931c3b-064a-4b8b-b22d-8508e72bdf2f. Live manifest reports macOS 1.0.65.
+  Source: `release` desktop:8f56c3da
 
 ## Quansheng
 

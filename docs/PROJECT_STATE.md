@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-20
+Last updated: 2026-11-21
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -48,6 +48,21 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.65` is live from source commit `8f56c3da` as a universal,
+  signed, notarized, stapled, Gatekeeper-accepted DMG. It includes the
+  DM-32UV shifted-insert extras fix, TK-270G one-based bank positions,
+  current RT-950 Pro work, the approved RepeaterBook API relay, and
+  cumulative driver, UI, and bridge compatibility changes. Verification:
+  analyzer clean; 242 Flutter tests; 557 Python tests with two
+  fixture-dependent skips; embedded version `1.0.65` / `65`; arm64 and
+  x86_64 Python `3.13.15`; CHIRP
+  `21e42e4518c167548af90ed7f9edf75e516c491a`; 265 driver modules; catalog
+  `list-models` returned 602 models including `Icom_IC-F50V_F60V_Capture`,
+  `Radtel_RT-950_Pro`, and `Wouxun_KG-689E`; strict app/DMG signatures;
+  Apple notarization and stapling; Gatekeeper acceptance of the DMG and
+  mounted app; mounted-app launch smoke test; and matching local, server,
+  and public SHA-256. Notarization submission:
+  `b9931c3b-064a-4b8b-b22d-8508e72bdf2f`.
 - macOS `1.0.64` is live from source commit `2fc54348` as a universal,
   signed, notarized, stapled, Gatekeeper-accepted DMG. It carries the
   RT-950 Pro transmit/write correction, the approved RepeaterBook API relay,
@@ -1045,6 +1060,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.65` artifact source commit: `8f56c3da`
 - macOS `1.0.64` artifact source commit: `2fc54348`
 - macOS `1.0.63` artifact source commit: `847db298`
 - macOS `1.0.62` artifact source commit: `89b4876e`
@@ -1055,7 +1071,7 @@ release requirements.
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.66` is live from source commit `268f70cd`
 - Open pull requests: none
-- Checked-out source version: `1.0.66+66`
+- Checked-out source version: `1.0.65+65`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1069,7 +1085,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.64 |
+| macOS | 1.0.65 |
 | Windows | 1.0.64 |
 | Linux | 1.0.66 |
 
@@ -1116,6 +1132,23 @@ Linux `1.0.65` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums, sizes, and permissions matched the local artifacts
 - Linux platform manifest reports `1.0.65`
+
+macOS `1.0.65` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.65.dmg`
+- Version/build: `1.0.65` / `65`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `6dedceb731cc6bebfa76de76aaaea62cc8e4e4729fc9d5fe4064afce27404bd5`
+- Size: `74,696,389` bytes
+- Built from `8f56c3da`
+- Notarization submission:
+  `b9931c3b-064a-4b8b-b22d-8508e72bdf2f`
+- Gatekeeper result: accepted as Notarized Developer ID
+- Bundle contains the DM-32UV shifted-insert extras fix, TK-270G one-based
+  bank positions, current RT-950 Pro work, RepeaterBook relay integration,
+  and cumulative compatibility changes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.64` artifact:
 
