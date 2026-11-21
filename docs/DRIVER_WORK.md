@@ -78,10 +78,10 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#72 bug | fix_committed | high:** Airband receive-only validation
   Accept 108-136 MHz only when duplex is Off.
   Source: `email triage` 2026-11-16
-- **#w-20261121-ab4d bug | fix_committed | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
+- **#w-20261121-ab4d bug | pending_validation | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
   Linux (Manjaro, KDE Wayland) 1.0.64: inserting a channel, or moving a channel added at the end up, then writing leaves a blank slot above the inserted channel; the write froze partway and needed a force quit; the radio rebooted and recovered. CPS cleanup restored the radio.
   Source: `email triage 2026-11-21` INBOX:863
-- **#w-20261121-6314 bug | fix_committed | normal:** Channel names show leftover text after the NUL terminator ('Channel 1<NUL>t Mode')
+- **#w-20261121-6314 bug | pending_validation | normal:** Channel names show leftover text after the NUL terminator ('Channel 1<NUL>t Mode')
   Forum file drop 12 (CSV, 43 channels) shows 9 names with a NUL followed by old bytes, e.g. 'Channel 1\x00t Mode' and 'RPT 15\x00 23'. Stock CHIRP's get_memory only strips trailing NUL/FF/space, so the leftover text shows in NewChirp and in CSV exports; zone get_name and the settings channel-name choices had the same trailing-only strip. The reporter described it as 'adds test to first channel on read'.
   Source: `forum file drop 12, 2026-11-20` forum-file-drop:12 sha256:8b526f78bb13ce4cb7a7e5a05a0dbebce6fbe42ae79b68c51caad4fffa8e40fb
 - **#24 maintenance | experimental | normal:** Current driver status
@@ -317,7 +317,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#83 bug | fix_committed | high:** Upload rejects erased bank index sentinel
   A downloaded image containing bank index 128 on an active channel is rejected during unchanged upload before radio I/O. Normalize erased bank metadata before rebuilding bank tables.
   Source: `email` INBOX:723
-- **#w-20261120-8af9 bug | fix_committed | high:** Last channel missing after write: 0-based bank positions collide with KPG 1-based positions
+- **#w-20261120-8af9 bug | pending_validation | high:** Last channel missing after write: 0-based bank positions collide with KPG 1-based positions
   1.0.63 writes without error but the last channel in the list (ch 25) is not usable on the radio (INBOX:855). Evidence: CHIRP's OEM-style TK-760G sample image stores each record's bnumb as the 1-based position within its bank, matching the 0x300 table (bank, pos, bank-1, slot). NewChirp (from stock tk760g) assigns new channels bnumb = slot-1 and normalizes the 0x80 sentinel (reporter's ch 24, INBOX:808) to slot-1, i.e. 0-based. With KPG-programmed channels at positions 1..N, the newcomer duplicates position N and position N+1 is empty, so the last channel drops. _prep_data rebuilds 0x300 by slot order and never updates record bnumb. Secondary suspect: 0x7000 per-channel flags filled by count, not slot. Plan: renumber each bank's records 1..n (existing valid order first, then new channels) and build 0x300 from that order; confirm with the reporter's image.
   Source: `email` INBOX:855
 - **#60 maintenance | experimental | normal:** Current driver status

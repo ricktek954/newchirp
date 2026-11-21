@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 14:19:20",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179527073708.63011.3039625380092828713@newchirp.net>",
+  "item": "w-20261120-8af9",
+  "occurred_at": "2026-11-21",
+  "summary": "Told owner the fix is in Windows 1.0.66; asked to rewrite, power-cycle, confirm channel 25, and send the saved .img."
+}
