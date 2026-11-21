@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-21 09:35:22",
+  "kind": "bug",
+  "manufacturer": "Yaesu",
+  "model": "FT-1900R",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email triage 2026-11-21",
+  "source_ref": "INBOX:862",
+  "status": "awaiting_user",
+  "summary": "macOS 13.7.8, NewChirp 1.0.61, FTDI cable /dev/cu.usbserial-AE9NJ8YH, Yaesu_FT-2900R_1900R driver. Two reads 14-23 s each ended with 'Failed to read header': the radio sent no clone header. That is the usual sign it was not put into clone mode or not told to send (hold MHz(PRI) at power-on, then press LOW(ACC) after clicking Read). Setup is suspected; not a confirmed driver defect.",
+  "title": "Read fails: 'Failed to read header' (macOS 1.0.61)",
+  "uid": "w-20261121-fd47"
+}

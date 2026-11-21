@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 09:43:18",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179525416877.8531.10191852952689288425@newchirp.net>",
+  "item": "w-20261121-f514",
+  "occurred_at": "2026-11-21",
+  "summary": "Asked to update from 1.0.23 (FormatException fixed), check cable/COM4 conflicts, and send a new report capturing the radio's ID reply."
+}

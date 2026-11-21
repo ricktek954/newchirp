@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 09:43:18",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179525415826.8463.15985289447369085367@newchirp.net>",
+  "item": "w-20261120-36d6",
+  "occurred_at": "2026-11-21",
+  "summary": "Asked whether Radtel's own phone app reads the radio over Bluetooth (to tell firmware v29 lack of BT programming from a NewChirp issue); suggested USB cable plus OTG meanwhile."
+}

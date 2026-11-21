@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 09:43:18",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179525417400.8593.3340533812601623118@newchirp.net>",
+  "item": "w-20261121-fd47",
+  "occurred_at": "2026-11-21",
+  "summary": "Sent clone-mode steps from the CHIRP driver prompt (hold A/N LOW at power-on, press SET MHz after OK); asked which cable."
+}

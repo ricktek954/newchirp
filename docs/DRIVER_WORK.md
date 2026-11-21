@@ -78,6 +78,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#72 bug | fix_committed | high:** Airband receive-only validation
   Accept 108-136 MHz only when duplex is Off.
   Source: `email triage` 2026-11-16
+- **#w-20261121-ab4d bug | fix_committed | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
+  Linux (Manjaro, KDE Wayland) 1.0.64: inserting a channel, or moving a channel added at the end up, then writing leaves a blank slot above the inserted channel; the write froze partway and needed a force quit; the radio rebooted and recovered. CPS cleanup restored the radio.
+  Source: `email triage 2026-11-21` INBOX:863
 - **#24 maintenance | experimental | normal:** Current driver status
   Transport: CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS. Read: Stock CHIRP driver; receive-only airband accepted. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:48
@@ -296,6 +299,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#13 maintenance | experimental | normal:** Current driver status
   Transport: Kenwood clone CAT serial, 9600-57,600 baud. Read: Yes, echo-tolerant. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:37
+
+### TH-F6
+
+- **#w-20261121-f514 bug | awaiting_user | normal:** Read fails: ID handshake answered but 'Unexpected response from radio' (1.0.23)
+  Windows 10, NewChirp 1.0.23, serial COM4. 12 CR/ID probe rounds; ID gets a reply but the driver rejects it. A second report shows 'FormatException: Missing extension byte', the non-UTF-8 radio reply crashing 1.0.23's output decoding (current releases decode with allowMalformed). Needs an update to the current release and a fresh report showing the radio's ID reply.
+  Source: `email triage 2026-11-21` INBOX:860 INBOX:861
 
 ### TK-270G
 
@@ -638,6 +647,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:71
 
 ## Yaesu
+
+### FT-1900R
+
+- **#w-20261121-fd47 bug | awaiting_user | normal:** Read fails: 'Failed to read header' (macOS 1.0.61)
+  macOS 13.7.8, NewChirp 1.0.61, FTDI cable /dev/cu.usbserial-AE9NJ8YH, Yaesu_FT-2900R_1900R driver. Two reads 14-23 s each ended with 'Failed to read header': the radio sent no clone header. That is the usual sign it was not put into clone mode or not told to send (hold MHz(PRI) at power-on, then press LOW(ACC) after clicking Read). Setup is suspected; not a confirmed driver defect.
+  Source: `email triage 2026-11-21` INBOX:862
 
 ### FT-1D/2D/3D/5D clone family
 
