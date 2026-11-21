@@ -424,6 +424,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-0fa6 release | released | normal:** Linux 1.0.66 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 268f70cd. The release re-enables Radtel RT-950 Pro writes after physical read/write validation and adds receive-only channel handling and UI safeguards for marine and protected channels. Public manifest reports 1.0.66. Package SHA-256 values: d7135ce5062bff886b418a42b8e8c6fe5f06ce00f85bea4fd1acd7235ef9948f, 8c409604d642e68a1c764062699008d936990c523f7e3ea53f10f3998419b200, 1d8a92db199f83e240203ce9f6dbbd14e1b0e730474961b0ddefc0d9c0f0b8d9, and 3a6c8d357568ccc7873efe7974cd6ed335a10d3edfad066a910eb13f8a7feb47.
   Source: `release` desktop:268f70cd
+- **#w-20261121-41b6 release | released | normal:** Linux 1.0.67 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 99175783. The release preserves moved channel extras through insertions, numbers TK-270G bank positions from 1 like KPG-56D, and adds RT-950 Pro Bluetooth read diagnostics. Public manifest reports 1.0.67. Package SHA-256 values: d8e8be645be49740dd6cec9ff6e7c14f989c542683235495b0ec9573e3116f79, c8bbf9c8ef4d3acede49c3fcd636fe0c7c6b498d2be49f3bd88ab0f19a9a2ed8, 85ef5b9c0ca708ee8590b926737328097cea642316f863525ecf724bfcf84a8b, and 4906d358a09bfbe57d3177bcc58a49686e63a8e6bc549dbfa4e7f6eb22d0780b.
+  Source: `release` desktop:99175783
 
 ### macOS desktop
 

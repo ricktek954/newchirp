@@ -27,6 +27,17 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.67` is live from source commit `99175783`. It preserves moved
+  channel extras when an insertion shifts channels onto a different slot,
+  numbers TK-270G bank positions from 1 like KPG-56D, and adds RT-950 Pro
+  Bluetooth read diagnostics. Verification: analyzer clean; 242 Flutter
+  tests; 557 Python tests with two fixture-dependent skips; max glibc `2.18`;
+  DEB, RPM, and Pacman metadata plus embedded version `1.0.67` / `67`; DEB
+  and AppImage Xvfb launch tests passed on Ubuntu 20.04; the final AppImage
+  launched under host Wayland and XWayland; package payloads include the
+  TK-270G and RT-950 Pro fixes and omit GLVND/EGL/GLES loaders; all public
+  downloads returned HTTP 200; and the Linux platform manifest reports
+  `1.0.67`.
 - Linux `1.0.66` is live from source commit `268f70cd`. It re-enables
   Radtel RT-950 Pro writes after physical read/write validation and adds
   receive-only channel handling and UI safeguards for marine and protected
@@ -1069,9 +1080,9 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.66` is live from source commit `268f70cd`
+- Linux `1.0.67` is live from source commit `99175783`
 - Open pull requests: none
-- Checked-out source version: `1.0.65+65`
+- Checked-out source version: `1.0.67+67`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1087,7 +1098,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.65 |
 | Windows | 1.0.64 |
-| Linux | 1.0.66 |
+| Linux | 1.0.67 |
+
+Linux `1.0.67` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.67.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.67.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.67.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.67.pkg.tar.zst`
+- DEB: `48,567,574` bytes, SHA-256
+  `d8e8be645be49740dd6cec9ff6e7c14f989c542683235495b0ec9573e3116f79`
+- RPM: `48,651,169` bytes, SHA-256
+  `c8bbf9c8ef4d3acede49c3fcd636fe0c7c6b498d2be49f3bd88ab0f19a9a2ed8`
+- AppImage: `48,854,208` bytes, SHA-256
+  `85ef5b9c0ca708ee8590b926737328097cea642316f863525ecf724bfcf84a8b`
+- Pacman: `47,529,844` bytes, SHA-256
+  `4906d358a09bfbe57d3177bcc58a49686e63a8e6bc549dbfa4e7f6eb22d0780b`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.67`
 
 Linux `1.0.66` artifacts:
 
