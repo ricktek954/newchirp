@@ -9,7 +9,7 @@ tags:
   - "module:generate_repeater_counties.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:36:16Z"
+timestamp: "2026-10-31T10:36:13Z"
 concept_id: generate_repeater_counties/read_source
 language: python
 ---
@@ -39,5 +39,4 @@ Lines 100–115 in `generate_repeater_counties.py`
 | Type | Target |
 |------|--------|
 | related | [generate_repeater_counties](/generate_repeater_counties.md) |
-| calls | [read](/chirp_bridge/read.md) |
 | called_by | [main](/generate_repeater_counties/main.md) |

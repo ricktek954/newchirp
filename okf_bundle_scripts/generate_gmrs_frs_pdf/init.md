@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:generate_gmrs_frs_pdf.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-08-23T13:43:31Z"
 concept_id: generate_gmrs_frs_pdf/init
 language: python
 ---
@@ -39,4 +39,3 @@ Lines 50–51 in `generate_gmrs_frs_pdf.py`
 | Type | Target |
 |------|--------|
 | related | [PdfWriter](/generate_gmrs_frs_pdf/PdfWriter.md) |
-| called_by | [headless_live_adapter](/chirp_bridge/headless_live_adapter.md) |

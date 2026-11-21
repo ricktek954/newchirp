@@ -10,7 +10,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T12:39:24Z"
+timestamp: "2026-11-21T13:51:32Z"
 concept_id: driver_work/rebuild_cache
 language: python
 ---
@@ -38,7 +38,7 @@ Build a fresh SQLite cache from the text store (atomic replace).
 | `cache_path` | `—` | `—` |
 
 ## Source
-Lines 705–839 in `driver_work.py`
+Lines 709–843 in `driver_work.py`
 
 ## Relationships
 

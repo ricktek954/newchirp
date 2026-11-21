@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:fix/email-bug-batch"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-16T12:16:24Z"
+timestamp: "2026-11-18T11:02:45Z"
 concept_id: newchirp_mass_storage/receive
 language: python
 ---

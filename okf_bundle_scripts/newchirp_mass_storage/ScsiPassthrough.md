@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Class"
   - "module:newchirp_mass_storage.py"
-  - "git:branch:fix/email-bug-batch"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-16T12:16:24Z"
+timestamp: "2026-11-18T11:02:45Z"
 concept_id: newchirp_mass_storage/ScsiPassthrough
 language: python
 ---
@@ -22,6 +22,13 @@ Reusable factory for platform-specific raw SCSI transport.
 ## Docstring
 
 Reusable factory for platform-specific raw SCSI transport.
+
+## Methods
+
+- `list_devices`
+- `__init__`
+- `transfer`
+- `close`
 
 ## Source
 Lines 320–413 in `newchirp_mass_storage.py`

@@ -10,7 +10,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T12:39:24Z"
+timestamp: "2026-11-21T13:51:32Z"
 concept_id: driver_work/store_records
 language: python
 ---
@@ -36,7 +36,7 @@ Yield (relative path, record) for every row in the cache.
 | `database` | `—` | `—` |
 
 ## Source
-Lines 842–897 in `driver_work.py`
+Lines 846–901 in `driver_work.py`
 
 ## Relationships
 
@@ -46,4 +46,5 @@ Lines 842–897 in `driver_work.py`
 | calls | [_slug](/driver_work/slug.md) |
 | calls | [_item_file_key](/driver_work/item_file_key.md) |
 | calls | [_digest](/driver_work/digest.md) |
+| calls | [_file_timestamp](/driver_work/file_timestamp.md) |
 | called_by | [persist](/driver_work/persist.md) |

@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:generate_gmrs_frs_pdf.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-08-23T13:43:31Z"
 concept_id: generate_gmrs_frs_pdf/as_pdf
 language: python
 ---
@@ -39,4 +39,5 @@ Lines 160–210 in `generate_gmrs_frs_pdf.py`
 | Type | Target |
 |------|--------|
 | related | [PdfWriter](/generate_gmrs_frs_pdf/PdfWriter.md) |
+| called_by | [main](/generate_gmrs_frs_pdf/main.md) |
 | called_by | [make_pdf](/generate_international_frequency_pdfs/make_pdf.md) |

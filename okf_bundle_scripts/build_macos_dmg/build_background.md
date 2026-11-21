@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:build_macos_dmg.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-23T10:57:07Z"
+timestamp: "2026-10-23T10:48:02Z"
 concept_id: build_macos_dmg/build_background
 language: python
 ---

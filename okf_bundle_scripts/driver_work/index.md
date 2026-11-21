@@ -9,6 +9,7 @@
 - [_digest](digest.md)
 - [_dump](dump.md)
 - [_execute](execute.md)
+- [_file_timestamp](file_timestamp.md)
 - [_item_file_key](item_file_key.md)
 - [_read_store](read_store.md) — Load every record, refusing files that are not clean JSON.
 - [_slug](slug.md)

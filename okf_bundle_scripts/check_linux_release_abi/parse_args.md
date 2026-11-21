@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:check_linux_release_abi.py"
-  - "git:branch:release/1.0.55"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T12:28:35Z"
+timestamp: "2026-11-16T10:54:43Z"
 concept_id: check_linux_release_abi/parse_args
 language: python
 ---
@@ -33,4 +33,8 @@ Lines 162–180 in `check_linux_release_abi.py`
 | Type | Target |
 |------|--------|
 | related | [check_linux_release_abi](/check_linux_release_abi.md) |
+| called_by | [main](/build_macos_dmg/main.md) |
+| called_by | [main](/check_linux_release_abi/main.md) |
 | called_by | [main](/chirp_bridge/main.md) |
+| called_by | [main](/driver_work/main.md) |
+| called_by | [main](/generate_repeater_counties/main.md) |

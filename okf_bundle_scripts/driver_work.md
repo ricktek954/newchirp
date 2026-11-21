@@ -10,7 +10,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T12:39:24Z"
+timestamp: "2026-11-21T13:51:32Z"
 concept_id: driver_work
 language: python
 ---
@@ -49,6 +49,7 @@ Manufacturer/model work ledger for NewChirp radio support.
 | related | [_slug](/driver_work/slug.md) |
 | related | [_digest](/driver_work/digest.md) |
 | related | [_item_file_key](/driver_work/item_file_key.md) |
+| related | [_file_timestamp](/driver_work/file_timestamp.md) |
 | related | [_dump](/driver_work/dump.md) |
 | related | [_read_store](/driver_work/read_store.md) |
 | related | [rebuild_cache](/driver_work/rebuild_cache.md) |

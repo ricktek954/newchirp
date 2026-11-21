@@ -10,7 +10,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:36:21Z"
+timestamp: "2026-11-01T12:13:39Z"
 concept_id: newchirp_usb_dfu/DfuTransport
 language: python
 ---
@@ -22,6 +22,25 @@ ST DfuSe control-transfer transport for the MD-UV380 family.
 ## Docstring
 
 ST DfuSe control-transfer transport for the MD-UV380 family.
+
+## Methods
+
+- `__init__`
+- `libusb_exit`
+- `_transfer`
+- `_status`
+- `_wait_idle`
+- `_download`
+- `_upload`
+- `command`
+- `program_mode`
+- `identity`
+- `set_address`
+- `erase`
+- `read`
+- `write`
+- `reboot`
+- `close`
 
 ## Source
 Lines 231–438 in `newchirp_usb_dfu.py`

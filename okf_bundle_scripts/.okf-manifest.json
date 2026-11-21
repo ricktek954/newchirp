@@ -1,199 +1,51 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/scripts",
+  "source_root": "C:\\Users\\rlopez\\newchirp\\scripts",
   "files": {
     "build_macos_dmg.py": {
       "path": "build_macos_dmg.py",
-      "mtime_ns": 1792753027569896057,
-      "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
+      "mtime_ns": 1792752482758184400,
+      "hash": "8300995012c8012c6213e93daa7501abaafda292f1094c09c0f72fa03dc5c601",
       "concept_ids": [
-        "build_macos_dmg/build_background",
-        "build_macos_dmg/main",
+        "build_macos_dmg",
         "build_macos_dmg/project_version",
-        "build_macos_dmg"
-      ]
-    },
-    "check_linux_release_abi.py": {
-      "path": "check_linux_release_abi.py",
-      "mtime_ns": 1794748425231791025,
-      "hash": "5c1e7c15252615df653bacb9d7e54d6e9017657d73d3462009e0fa63a2f3ad64",
-      "concept_ids": [
-        "check_linux_release_abi/check_roots",
-        "check_linux_release_abi/command_version",
-        "check_linux_release_abi/elf_files",
-        "check_linux_release_abi/main",
-        "check_linux_release_abi/parse_args",
-        "check_linux_release_abi/read_os_release",
-        "check_linux_release_abi/require_release_host",
-        "check_linux_release_abi/required_glibc_versions",
-        "check_linux_release_abi/version_tuple",
-        "check_linux_release_abi"
+        "build_macos_dmg/build_background",
+        "build_macos_dmg/main"
       ]
     },
     "check_private_data.py": {
       "path": "check_private_data.py",
-      "mtime_ns": 1795034009325250997,
-      "hash": "db09f722486206a9fc07a537b7e254276292433191a74d026143052efe0f6c01",
+      "mtime_ns": 1794999765781951400,
+      "hash": "0325114f9856b2963ecf868cc92ec7a93004b0083cb4f320156fd5ecebe5e4ce",
       "concept_ids": [
+        "check_private_data",
         "check_private_data/allowed_email",
-        "check_private_data/main",
         "check_private_data/tracked_files",
-        "check_private_data"
+        "check_private_data/main"
       ]
     },
-    "driver_work.py": {
-      "path": "driver_work.py",
-      "mtime_ns": 1795091964860120714,
-      "hash": "90da3fcb9cff28d4522db928995449ed4bb1a72d52d3d1f079ddfc8ae52bfc8c",
+    "check_linux_release_abi.py": {
+      "path": "check_linux_release_abi.py",
+      "mtime_ns": 1794826483234428200,
+      "hash": "e57f476eab05a1230ee5cd51ed8e4bf1352d6168dd6b776529f8b4c22642df38",
       "concept_ids": [
-        "driver_work/StoreError",
-        "driver_work/add_event",
-        "driver_work/add_work",
-        "driver_work/connect",
-        "driver_work/digest",
-        "driver_work/display_path",
-        "driver_work/dump",
-        "driver_work/execute",
-        "driver_work/export_markdown",
-        "driver_work/find_work_id",
-        "driver_work/get_or_create_radio",
-        "driver_work/item_file_key",
-        "driver_work/main",
-        "driver_work/manufacturer_and_model",
-        "driver_work/migrate_from_sqlite",
-        "driver_work/new_uid",
-        "driver_work/persist",
-        "driver_work/print_work_rows",
-        "driver_work/query_work",
-        "driver_work/read_store",
-        "driver_work/rebuild_cache",
-        "driver_work/sanitize_reporter",
-        "driver_work/sanitize_tester",
-        "driver_work/show_work",
-        "driver_work/slug",
-        "driver_work/status_from_ledger",
-        "driver_work/store_records",
-        "driver_work/sync_driver_status",
-        "driver_work/today",
-        "driver_work/work_ref",
-        "driver_work"
-      ]
-    },
-    "generate_gmrs_frs_pdf.py": {
-      "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1787526889873622751,
-      "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
-      "concept_ids": [
-        "generate_gmrs_frs_pdf/PdfWriter",
-        "generate_gmrs_frs_pdf/as_pdf",
-        "generate_gmrs_frs_pdf/esc",
-        "generate_gmrs_frs_pdf/init",
-        "generate_gmrs_frs_pdf/line",
-        "generate_gmrs_frs_pdf/main",
-        "generate_gmrs_frs_pdf/rect",
-        "generate_gmrs_frs_pdf/rgb",
-        "generate_gmrs_frs_pdf/row_color",
-        "generate_gmrs_frs_pdf/set_fill",
-        "generate_gmrs_frs_pdf/set_stroke",
-        "generate_gmrs_frs_pdf/table_cell",
-        "generate_gmrs_frs_pdf/text",
-        "generate_gmrs_frs_pdf/text_in_rect",
-        "generate_gmrs_frs_pdf"
-      ]
-    },
-    "generate_international_frequency_pdfs.py": {
-      "path": "generate_international_frequency_pdfs.py",
-      "mtime_ns": 1795034009326443867,
-      "hash": "47ce7afa7b78c1e932a1200c0747b0589563118002fbb365dd3a2ef3222113b4",
-      "concept_ids": [
-        "generate_international_frequency_pdfs/draw_table",
-        "generate_international_frequency_pdfs/main",
-        "generate_international_frequency_pdfs/make_pdf",
-        "generate_international_frequency_pdfs/uhf_rows",
-        "generate_international_frequency_pdfs"
-      ]
-    },
-    "generate_repeater_counties.py": {
-      "path": "generate_repeater_counties.py",
-      "mtime_ns": 1793439376655566408,
-      "hash": "5b41696728c60fba0706a10867eadf154b89b4d803f0ed4e9038319bc7fe3c24",
-      "concept_ids": [
-        "generate_repeater_counties/dart_string",
-        "generate_repeater_counties/display_name",
-        "generate_repeater_counties/generate",
-        "generate_repeater_counties/main",
-        "generate_repeater_counties/read_source",
-        "generate_repeater_counties"
-      ]
-    },
-    "newchirp_mass_storage.py": {
-      "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1795034009326723783,
-      "hash": "6f449f1034003a5e5a5584c1f96a5fc7759fb7f2fc5d19b2c82afb700f2f57cc",
-      "concept_ids": [
-        "newchirp_mass_storage/CS750Profile",
-        "newchirp_mass_storage/LinuxScsiPassthrough",
-        "newchirp_mass_storage/MacScsiPassthrough",
-        "newchirp_mass_storage/MassStorageError",
-        "newchirp_mass_storage/RapMassStorageRadio",
-        "newchirp_mass_storage/ScsiPassthrough",
-        "newchirp_mass_storage/WindowsScsiPassthrough",
-        "newchirp_mass_storage/close",
-        "newchirp_mass_storage/command",
-        "newchirp_mass_storage/helper_path",
-        "newchirp_mass_storage/init",
-        "newchirp_mass_storage/list_devices",
-        "newchirp_mass_storage/parse_rap_packet",
-        "newchirp_mass_storage/rap_packet",
-        "newchirp_mass_storage/read_codeplug",
-        "newchirp_mass_storage/read_exact",
-        "newchirp_mass_storage/receive",
-        "newchirp_mass_storage/send",
-        "newchirp_mass_storage/transfer",
-        "newchirp_mass_storage/windows_io_error",
-        "newchirp_mass_storage/windows_open_access",
-        "newchirp_mass_storage/windows_open_error",
-        "newchirp_mass_storage"
-      ]
-    },
-    "newchirp_usb_dfu.py": {
-      "path": "newchirp_usb_dfu.py",
-      "mtime_ns": 1793532981625641026,
-      "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
-      "concept_ids": [
-        "newchirp_usb_dfu/DeviceDescriptor",
-        "newchirp_usb_dfu/DfuError",
-        "newchirp_usb_dfu/DfuTransport",
-        "newchirp_usb_dfu/bind_library",
-        "newchirp_usb_dfu/candidate_libraries",
-        "newchirp_usb_dfu/close",
-        "newchirp_usb_dfu/command",
-        "newchirp_usb_dfu/devices",
-        "newchirp_usb_dfu/download",
-        "newchirp_usb_dfu/erase",
-        "newchirp_usb_dfu/error_text",
-        "newchirp_usb_dfu/identity",
-        "newchirp_usb_dfu/init",
-        "newchirp_usb_dfu/libusb_exit",
-        "newchirp_usb_dfu/list_devices",
-        "newchirp_usb_dfu/load_library",
-        "newchirp_usb_dfu/program_mode",
-        "newchirp_usb_dfu/read",
-        "newchirp_usb_dfu/reboot",
-        "newchirp_usb_dfu/set_address",
-        "newchirp_usb_dfu/status",
-        "newchirp_usb_dfu/transfer",
-        "newchirp_usb_dfu/upload",
-        "newchirp_usb_dfu/wait_idle",
-        "newchirp_usb_dfu/write",
-        "newchirp_usb_dfu"
+        "check_linux_release_abi",
+        "check_linux_release_abi/version_tuple",
+        "check_linux_release_abi/read_os_release",
+        "check_linux_release_abi/command_version",
+        "check_linux_release_abi/require_release_host",
+        "check_linux_release_abi/elf_files",
+        "check_linux_release_abi/required_glibc_versions",
+        "check_linux_release_abi/check_roots",
+        "check_linux_release_abi/parse_args",
+        "check_linux_release_abi/main"
       ]
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795253584530495013,
-      "hash": "bdf27dadcfeacf14e78607dc92593e7b08537c017cb549f6595720349cc92bac",
+      "mtime_ns": 1795258124386328500,
+      "hash": "587325612333b9ff9af992d407cb69f4804f6e04a9c13faa5421912c7652c357",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -275,6 +127,155 @@
         "chirp_bridge/main",
         "chirp_bridge/RadioCommunicationTrace",
         "chirp_bridge/TracedSerial"
+      ]
+    },
+    "generate_gmrs_frs_pdf.py": {
+      "path": "generate_gmrs_frs_pdf.py",
+      "mtime_ns": 1787492611838422700,
+      "hash": "a8ee810fdc0e06c1308c5d35af6f371465f049ad49b6348a0cff53526d964c48",
+      "concept_ids": [
+        "generate_gmrs_frs_pdf",
+        "generate_gmrs_frs_pdf/esc",
+        "generate_gmrs_frs_pdf/rgb",
+        "generate_gmrs_frs_pdf/init",
+        "generate_gmrs_frs_pdf/set_fill",
+        "generate_gmrs_frs_pdf/set_stroke",
+        "generate_gmrs_frs_pdf/rect",
+        "generate_gmrs_frs_pdf/line",
+        "generate_gmrs_frs_pdf/text",
+        "generate_gmrs_frs_pdf/text_in_rect",
+        "generate_gmrs_frs_pdf/table_cell",
+        "generate_gmrs_frs_pdf/as_pdf",
+        "generate_gmrs_frs_pdf/row_color",
+        "generate_gmrs_frs_pdf/main",
+        "generate_gmrs_frs_pdf/PdfWriter"
+      ]
+    },
+    "generate_repeater_counties.py": {
+      "path": "generate_repeater_counties.py",
+      "mtime_ns": 1793442973145170400,
+      "hash": "9819a2507eaaf6c90f4f64edf3af5885f1a3d0770c4bbeaead7bc2b669b03343",
+      "concept_ids": [
+        "generate_repeater_counties",
+        "generate_repeater_counties/display_name",
+        "generate_repeater_counties/dart_string",
+        "generate_repeater_counties/read_source",
+        "generate_repeater_counties/generate",
+        "generate_repeater_counties/main"
+      ]
+    },
+    "newchirp_usb_dfu.py": {
+      "path": "newchirp_usb_dfu.py",
+      "mtime_ns": 1793535219861640000,
+      "hash": "19aa7dc9bbdae6faf0a9c33d99caffda6cbf47195d1cb786da2a6dd6ab95fcea",
+      "concept_ids": [
+        "newchirp_usb_dfu",
+        "newchirp_usb_dfu/candidate_libraries",
+        "newchirp_usb_dfu/load_library",
+        "newchirp_usb_dfu/bind_library",
+        "newchirp_usb_dfu/error_text",
+        "newchirp_usb_dfu/devices",
+        "newchirp_usb_dfu/list_devices",
+        "newchirp_usb_dfu/init",
+        "newchirp_usb_dfu/libusb_exit",
+        "newchirp_usb_dfu/transfer",
+        "newchirp_usb_dfu/status",
+        "newchirp_usb_dfu/wait_idle",
+        "newchirp_usb_dfu/download",
+        "newchirp_usb_dfu/upload",
+        "newchirp_usb_dfu/command",
+        "newchirp_usb_dfu/program_mode",
+        "newchirp_usb_dfu/identity",
+        "newchirp_usb_dfu/set_address",
+        "newchirp_usb_dfu/erase",
+        "newchirp_usb_dfu/read",
+        "newchirp_usb_dfu/write",
+        "newchirp_usb_dfu/reboot",
+        "newchirp_usb_dfu/close",
+        "newchirp_usb_dfu/DfuError",
+        "newchirp_usb_dfu/DeviceDescriptor",
+        "newchirp_usb_dfu/DfuTransport"
+      ]
+    },
+    "driver_work.py": {
+      "path": "driver_work.py",
+      "mtime_ns": 1795269092259000000,
+      "hash": "d5cbeed45be6cfc0c4bd430958f7dfbd24f80e989e600f42e63f90dfb6d93c1b",
+      "concept_ids": [
+        "driver_work",
+        "driver_work/today",
+        "driver_work/display_path",
+        "driver_work/sanitize_reporter",
+        "driver_work/sanitize_tester",
+        "driver_work/connect",
+        "driver_work/manufacturer_and_model",
+        "driver_work/get_or_create_radio",
+        "driver_work/add_event",
+        "driver_work/add_work",
+        "driver_work/status_from_ledger",
+        "driver_work/sync_driver_status",
+        "driver_work/print_work_rows",
+        "driver_work/query_work",
+        "driver_work/show_work",
+        "driver_work/export_markdown",
+        "driver_work/work_ref",
+        "driver_work/find_work_id",
+        "driver_work/new_uid",
+        "driver_work/slug",
+        "driver_work/digest",
+        "driver_work/item_file_key",
+        "driver_work/file_timestamp",
+        "driver_work/dump",
+        "driver_work/read_store",
+        "driver_work/rebuild_cache",
+        "driver_work/store_records",
+        "driver_work/persist",
+        "driver_work/migrate_from_sqlite",
+        "driver_work/main",
+        "driver_work/execute",
+        "driver_work/StoreError"
+      ]
+    },
+    "generate_international_frequency_pdfs.py": {
+      "path": "generate_international_frequency_pdfs.py",
+      "mtime_ns": 1794999765785962000,
+      "hash": "4b5985570488ec58d1aef55afc95bf91b01aed3597673670eaa07c65f57b48cf",
+      "concept_ids": [
+        "generate_international_frequency_pdfs",
+        "generate_international_frequency_pdfs/uhf_rows",
+        "generate_international_frequency_pdfs/draw_table",
+        "generate_international_frequency_pdfs/make_pdf",
+        "generate_international_frequency_pdfs/main"
+      ]
+    },
+    "newchirp_mass_storage.py": {
+      "path": "newchirp_mass_storage.py",
+      "mtime_ns": 1794999765787966200,
+      "hash": "690771e4ee4d1954cbd56f6b2efcc143c3aa9aeaadc1ef318f860f724aa0f439",
+      "concept_ids": [
+        "newchirp_mass_storage",
+        "newchirp_mass_storage/windows_open_access",
+        "newchirp_mass_storage/windows_open_error",
+        "newchirp_mass_storage/windows_io_error",
+        "newchirp_mass_storage/helper_path",
+        "newchirp_mass_storage/init",
+        "newchirp_mass_storage/read_exact",
+        "newchirp_mass_storage/transfer",
+        "newchirp_mass_storage/close",
+        "newchirp_mass_storage/list_devices",
+        "newchirp_mass_storage/rap_packet",
+        "newchirp_mass_storage/parse_rap_packet",
+        "newchirp_mass_storage/send",
+        "newchirp_mass_storage/receive",
+        "newchirp_mass_storage/command",
+        "newchirp_mass_storage/read_codeplug",
+        "newchirp_mass_storage/MassStorageError",
+        "newchirp_mass_storage/MacScsiPassthrough",
+        "newchirp_mass_storage/WindowsScsiPassthrough",
+        "newchirp_mass_storage/LinuxScsiPassthrough",
+        "newchirp_mass_storage/ScsiPassthrough",
+        "newchirp_mass_storage/RapMassStorageRadio",
+        "newchirp_mass_storage/CS750Profile"
       ]
     }
   },
@@ -444,7 +445,7 @@
       "type": "Function",
       "resource": "build_macos_dmg.py",
       "render_hash": "stale",
-      "edge_hash": "e256451c36e66c77ba88dbb56e1d4b1e19efcbc3eefa96da95b6f093a05f5d34",
+      "edge_hash": "b96e8550d398efd86197237757e656cc8cb2a3247666697a23f7f6bd9b6250f9",
       "enriched": false
     },
     "generate_gmrs_frs_pdf": {
@@ -476,7 +477,7 @@
       "type": "Function",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "d7539626adf96d5bac285dd0e8fd817a800d70a64589d5e2ef6c47dd0ebecf09",
+      "edge_hash": "ad5a96287a56ed6e24a754dd8aadf312d2438657a7f182b0653a2d9d59366b5e",
       "enriched": false
     },
     "generate_gmrs_frs_pdf/set_fill": {
@@ -500,7 +501,7 @@
       "type": "Function",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "a53f021baa5b69e70db0d6e6943996359072e873e2bab876081c93e10975f249",
+      "edge_hash": "3f964706382f1b0c9c7818e407d635208d826a0a9a53a69796ec618ce45b0a31",
       "enriched": false
     },
     "generate_gmrs_frs_pdf/line": {
@@ -508,7 +509,7 @@
       "type": "Function",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "b79cb13e5be0b0c1917f56feac8e13234611d3a5b99a75ae5801be78dcb26847",
+      "edge_hash": "ea2d67aa59ec0b9048695692683f2a3ac1c3082ac609abe4f76f15e3cc42a092",
       "enriched": false
     },
     "generate_gmrs_frs_pdf/text": {
@@ -516,7 +517,7 @@
       "type": "Function",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "845e2cccca7db2c1c32df0b2b40e422fa2830d011caf06ba19d895b51210c493",
+      "edge_hash": "5b11cf8c9d8c27c39318c1a6cf1bd8123067db4a70f54f2cee825980b4898ae6",
       "enriched": false
     },
     "generate_gmrs_frs_pdf/text_in_rect": {
@@ -532,7 +533,7 @@
       "type": "Function",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "b459b5759c37e45a040206490f6c7e8dc69be2b1667b6b425e42e970eda4fc5a",
+      "edge_hash": "4745e50440cfe7c375d31298b43f4ab4f25198aa544c058a2bb92a422eab14c8",
       "enriched": false
     },
     "generate_gmrs_frs_pdf/as_pdf": {
@@ -540,7 +541,7 @@
       "type": "Function",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "291e3158e1e2621be51719a0e8ac4485a377907731560019b65ab807da3249aa",
+      "edge_hash": "9278d94d715a5245f0707e0a1ee779b3e84e8ec9761ad0c472832062ba325624",
       "enriched": false
     },
     "generate_gmrs_frs_pdf/row_color": {
@@ -564,7 +565,7 @@
       "type": "Class",
       "resource": "generate_gmrs_frs_pdf.py",
       "render_hash": "stale",
-      "edge_hash": "0fc4781faf8764b7b79ffb481ad3553e0c79557e643c153b65a930e482269631",
+      "edge_hash": "9551d00a2f71fb8e982264bdabba302d333094f7e6f78167e3bf2285a2cf825b",
       "enriched": false
     },
     "chirp_bridge/channel_radio_for": {
@@ -1156,7 +1157,7 @@
       "type": "Function",
       "resource": "generate_repeater_counties.py",
       "render_hash": "stale",
-      "edge_hash": "254fedb8f30e219597de298263e6862ac9c2df8f106755ad8baf7fc8a7140d0f",
+      "edge_hash": "c5c77c2f09d8ad4bcf14c65fc2b62ab358443fbc0b19fabe9e0c0dbe3b5ecf93",
       "enriched": false
     },
     "generate_repeater_counties/generate": {
@@ -1172,7 +1173,7 @@
       "type": "Function",
       "resource": "generate_repeater_counties.py",
       "render_hash": "stale",
-      "edge_hash": "6f1f037802efd3bc49879606dffd872041d31dd5daadbf747d135cd8cde3b854",
+      "edge_hash": "deee21e70885a393c2066a2ea0a6cff2ecd4459ecbeae14ff05d4687af3dd90a",
       "enriched": false
     },
     "chirp_bridge/download_decode_error_message": {
@@ -1580,7 +1581,7 @@
       "type": "Function",
       "resource": "check_linux_release_abi.py",
       "render_hash": "stale",
-      "edge_hash": "d2ed03cee45b437ce841485944a68d02df38809887fb343c4c42d539dfc2e36c",
+      "edge_hash": "bae7eb98f2d7b1394568f0a0978b85381a6c66be852c70d8306c6ee3283a0042",
       "enriched": false
     },
     "check_linux_release_abi/main": {
@@ -1620,7 +1621,7 @@
       "type": "Module",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "bcdceb96eca601d04647d2294cae6a3f4148865ffe5903e6be4bece87514882f",
+      "edge_hash": "f60c43bdb5320f5c7a66476dd61518e85e5d4af88c27b4185276ec8e8db17703",
       "enriched": false
     },
     "driver_work/today": {
@@ -1644,7 +1645,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "f52ecd8f531c2c7eff64c06bdaecbc89ef5e5258f08a36f483eb16d643d4e588",
+      "edge_hash": "266ba75ee23004c674e4987defdcd7db619b2f7c06666dd063f468d855222567",
       "enriched": false
     },
     "driver_work/manufacturer_and_model": {
@@ -1868,7 +1869,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "1ddebefa1fcd9bac667a79821db715b5e1b0bd5b7ac5722ee2851becc76fd089",
+      "edge_hash": "7954d84b022b48dea2520c29a336c65275d2867b425201bdf0ed344db0845118",
       "enriched": false
     },
     "driver_work/persist": {
@@ -1950,7 +1951,15 @@
       "render_hash": "stale",
       "edge_hash": "85de3175d755142b10b946e0109a08e4574f70a038d4c822f3e6746b87f0793c",
       "enriched": false
+    },
+    "driver_work/file_timestamp": {
+      "concept_id": "driver_work/file_timestamp",
+      "type": "Function",
+      "resource": "driver_work.py",
+      "render_hash": "stale",
+      "edge_hash": "2441215137d1583b960c8f1ca994ff83bb1ac058b83bed96e864c22c263760c4",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-21T09:33:05Z"
+  "generated_at": "2026-11-21T13:53:26Z"
 }

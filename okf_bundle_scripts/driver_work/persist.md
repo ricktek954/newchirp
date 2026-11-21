@@ -10,7 +10,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T12:39:24Z"
+timestamp: "2026-11-21T13:51:32Z"
 concept_id: driver_work/persist
 language: python
 ---
@@ -40,7 +40,7 @@ Write the cache back to the store, touching only changed files.
 | `remove_missing` | `—` | `True` |
 
 ## Source
-Lines 900–928 in `driver_work.py`
+Lines 904–932 in `driver_work.py`
 
 ## Relationships
 

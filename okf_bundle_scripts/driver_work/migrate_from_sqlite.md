@@ -10,7 +10,7 @@ tags:
   - "module:driver_work.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T12:39:24Z"
+timestamp: "2026-11-21T13:51:32Z"
 concept_id: driver_work/migrate_from_sqlite
 language: python
 ---
@@ -38,7 +38,7 @@ One-time import of a schema-1 database into the text store.
 | `store` | `—` | `—` |
 
 ## Source
-Lines 931–949 in `driver_work.py`
+Lines 935–953 in `driver_work.py`
 
 ## Relationships
 

@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:generate_gmrs_frs_pdf.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-08-23T13:43:31Z"
 concept_id: generate_gmrs_frs_pdf/table_cell
 language: python
 ---
@@ -42,4 +42,5 @@ Lines 129–158 in `generate_gmrs_frs_pdf.py`
 | calls | [line](/generate_gmrs_frs_pdf/line.md) |
 | calls | [text_in_rect](/generate_gmrs_frs_pdf/text_in_rect.md) |
 | calls | [rect](/generate_gmrs_frs_pdf/rect.md) |
+| called_by | [main](/generate_gmrs_frs_pdf/main.md) |
 | called_by | [draw_table](/generate_international_frequency_pdfs/draw_table.md) |

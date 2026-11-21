@@ -8,9 +8,9 @@ tags:
   - "lang:python"
   - "type:Module"
   - "module:check_linux_release_abi.py"
-  - "git:branch:release/1.0.55"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T12:28:35Z"
+timestamp: "2026-11-16T10:54:43Z"
 concept_id: check_linux_release_abi
 language: python
 ---

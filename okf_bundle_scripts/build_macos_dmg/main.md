@@ -7,9 +7,9 @@ tags:
   - "lang:python"
   - "type:Function"
   - "module:build_macos_dmg.py"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-23T10:57:07Z"
+timestamp: "2026-10-23T10:48:02Z"
 concept_id: build_macos_dmg/main
 language: python
 ---
@@ -33,5 +33,6 @@ Lines 80–147 in `build_macos_dmg.py`
 | Type | Target |
 |------|--------|
 | related | [build_macos_dmg](/build_macos_dmg.md) |
+| calls | [parse_args](/check_linux_release_abi/parse_args.md) |
 | calls | [build_background](/build_macos_dmg/build_background.md) |
 | calls | [project_version](/build_macos_dmg/project_version.md) |
