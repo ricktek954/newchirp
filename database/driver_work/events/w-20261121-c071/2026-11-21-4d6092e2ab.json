@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 13:17:02",
+  "details": "New GS-10B; five PROGRAMBT80U handshakes on COM5 (earlier COM6) got no reply. Stock CHIRP beta driver radtel_rt900.RadioddityGS10B. Likely cable/seating/port; awaiting OEM-software comparison.",
+  "event_type": "created",
+  "external_ref": "INBOX:868 <c62a9252-214b-ed41-09c3-a171cfe39eec@newchirp.net>",
+  "item": "w-20261121-c071",
+  "occurred_at": "2026-11-21",
+  "summary": "No response from radio on first read (Windows 1.0.65)"
+}

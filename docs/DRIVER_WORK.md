@@ -498,6 +498,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Two GM-30 radios program successfully, but the third returns an empty response to PSEARCH and programming entry on COM7. Compare the same cable and OEM CPS against the failing radio.
   Source: `email` INBOX:734
 
+### GS-10B
+
+- **#w-20261121-c071 bug | awaiting_user | normal:** No response from radio on first read (Windows 1.0.65)
+  New GS-10B; five PROGRAMBT80U handshakes on COM5 (earlier COM6) got no reply. Stock CHIRP beta driver radtel_rt900.RadioddityGS10B. Likely cable/seating/port; awaiting OEM-software comparison.
+  Source: `mailbox` INBOX:868 <c62a9252-214b-ed41-09c3-a171cfe39eec@newchirp.net>
+
 ### GS-5B 1.XX
 
 - **#45 maintenance | experimental | normal:** Current driver status
