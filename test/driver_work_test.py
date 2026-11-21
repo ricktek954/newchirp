@@ -267,11 +267,34 @@ class DriverWorkTextStoreTest(unittest.TestCase):
             after = {p: p.read_text() for p in store.rglob("*.json")}
             changed = [p for p in after if before.get(p) != after[p]]
             self.assertEqual(len(changed), 1)
-            self.assertIn("/events/", str(changed[0]))
+            self.assertIn("events", changed[0].parts)
             first = self._cli(repo, "export", "--output", "-")
             second = self._cli(repo, "export", "--output", "-")
             self.assertEqual(first, second)
             self.assertNotIn("on 20", first.splitlines()[2])
+
+    def test_timestamped_event_path_is_windows_safe(self):
+        with tempfile.TemporaryDirectory() as temp:
+            repo = Path(temp) / "repo"
+            shared = self._seed(repo)
+            self._cli(
+                repo,
+                "event",
+                shared,
+                "--type",
+                "fix",
+                "--summary",
+                "Timestamped change",
+                "--occurred-at",
+                "2026-11-21T09:54:11-05:00",
+            )
+            events = repo / "database/driver_work/events"
+            timestamped = [
+                path for path in events.rglob("*.json")
+                if path.name.startswith("2026-11-21T")
+            ]
+            self.assertEqual(len(timestamped), 1)
+            self.assertNotRegex(timestamped[0].name, r'[<>:"\\|?*]')
 
     def test_duplicate_item_from_two_machines_folds_into_one(self):
         with tempfile.TemporaryDirectory() as temp:

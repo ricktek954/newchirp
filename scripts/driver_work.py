@@ -676,6 +676,10 @@ def _item_file_key(uid):
     return uid.zfill(4) if uid.isdigit() else uid
 
 
+def _file_timestamp(value):
+    return re.sub(r"[^0-9A-Za-z._-]+", "-", str(value)).strip("-") or "unknown"
+
+
 def _dump(record):
     return json.dumps(record, indent=2, sort_keys=True, ensure_ascii=False) + "\n"
 
@@ -873,7 +877,7 @@ def _store_records(database):
         item = keys[record.pop("work_item_id")]
         record["item"] = item
         yield ("events/%s/%s-%s.json" % (
-            _item_file_key(item), record["occurred_at"],
+            _item_file_key(item), _file_timestamp(record["occurred_at"]),
             _digest(record["event_type"], record["summary"])), record)
     for row in database.execute(
             "SELECT work_item_id, tester, tested_at, result, details,"
@@ -882,7 +886,7 @@ def _store_records(database):
         item = keys[record.pop("work_item_id")]
         record["item"] = item
         yield ("tests/%s/%s-%s.json" % (
-            _item_file_key(item), record["tested_at"],
+            _item_file_key(item), _file_timestamp(record["tested_at"]),
             _digest(record["tester"], record["result"], record["details"])),
             record)
     for row in database.execute(
