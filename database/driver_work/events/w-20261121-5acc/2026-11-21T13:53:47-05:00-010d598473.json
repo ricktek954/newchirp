@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 13:54:06",
+  "details": "Published a universal signed, notarized, stapled DMG from source commit ee72c09e. It includes the DM-32UV channel/zone NUL-termination fix, current RT-950 Pro behavior, approved RepeaterBook API search, and cumulative driver/UI/bridge compatibility changes. Artifact SHA-256: 0087cb989e126669d63be4f5eaa94ca80dbc41ecd03b2d81b1091359723893b9. Notarization: a48065c5-5e65-488c-aa7a-0c19fe5c3755. Live manifest reports macOS 1.0.66.",
+  "event_type": "created",
+  "external_ref": "desktop:ee72c09e",
+  "item": "w-20261121-5acc",
+  "occurred_at": "2026-11-21T13:53:47-05:00",
+  "summary": "macOS 1.0.66 published"
+}
