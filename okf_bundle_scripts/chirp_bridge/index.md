@@ -51,6 +51,7 @@
 - [mapping_payload](mapping_payload.md) — Describe CHIRP's bank/zone models for an image or channel owner.
 - [memory_json](memory_json.md)
 - [memory_with_extras](memory_with_extras.md) — Load a channel plus CHIRP's metadata-backed fields such as comments.
+- [memory_with_new_extras](memory_with_new_extras.md) — Reload a slot after giving it the incoming channel's basic fields.
 - [nearest_programmable_frequency](nearest_programmable_frequency.md) — Return the closest frequency representable by one of the steps.
 - [normalize_repeaterbook_query](normalize_repeaterbook_query.md) — Treat location words like "Broward County" as a county name.
 - [normalize_upload_memory](normalize_upload_memory.md) — Apply safe coercions advertised by CHIRP validation warnings.

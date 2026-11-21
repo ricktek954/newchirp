@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:23:03Z"
+timestamp: "2026-11-21T09:33:04Z"
 concept_id: chirp_bridge/radio_from_image
 language: python
 ---
@@ -40,7 +40,7 @@ Build a driver instance backed only by a saved radio image.
 | `image` | `—` | `—` |
 
 ## Source
-Lines 1935–1939 in `chirp_bridge.py`
+Lines 1957–1961 in `chirp_bridge.py`
 
 ## Relationships
 

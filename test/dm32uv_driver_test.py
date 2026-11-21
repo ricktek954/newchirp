@@ -181,5 +181,46 @@ class DM32UVDriverTest(unittest.TestCase):
         self.assertEqual(link.commands, [b"V\x00\x00\x00\x07"] * 2)
 
 
+    def test_inserting_a_channel_shifts_analog_onto_dmr_slots(self):
+        # 2026-11-21 report (mailbox INBOX:863): inserting a channel moves
+        # each later channel one slot down, so an analog channel lands on a
+        # slot that held a DMR one and its TX admit value is not in that
+        # slot's list. The write must still keep every channel exactly.
+        image = SOURCE / "tests/images/Baofeng_DM-32UV.img"
+        source = self.radio_class(None)
+        source.load_mmap(str(image))
+        channels = [
+            self.bridge.memory_json(source.get_memory(number))
+            for number in range(1, source._count() + 1)
+            if not source.get_memory(number).empty
+        ]
+        modes = [channel["mode"] for channel in channels]
+        self.assertIn("DMR", modes)
+        self.assertNotEqual(set(modes), {"DMR"})
+
+        inserted = dict(channels[0], name="NEWCH", location=3)
+        for channel in channels:
+            if channel["location"] >= 3:
+                channel["location"] += 1
+        channels.append(inserted)
+        channels.sort(key=lambda channel: channel["location"])
+
+        radio = self.radio_class(None)
+        radio.load_mmap(str(image))
+        skipped, _adjusted, written = self.bridge.prepare_upload_channels(
+            radio,
+            channels,
+        )
+
+        self.assertEqual(skipped, [])
+        self.assertEqual(written, len(channels))
+        for channel in channels:
+            self.assertEqual(
+                self.bridge.memory_json(radio.get_memory(channel["location"])),
+                self.bridge.memory_json(radio.get_memory(channel["location"]))
+                | {key: channel[key] for key in channel},
+                channel["location"],
+            )
+
 if __name__ == "__main__":
     unittest.main()

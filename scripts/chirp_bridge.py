@@ -1499,9 +1499,27 @@ def normalize_upload_memory(radio, memory):
     return errors, warnings, sorted(set(changed_fields)), notes
 
 
+def memory_with_new_extras(radio, location, item):
+    """Reload a slot after giving it the incoming channel's basic fields.
+
+    A channel's extra fields describe the channel that was in the slot. When
+    inserting or moving shifts a channel into a slot that held a different
+    kind (an analog channel onto a DMR one, for example), some drivers offer
+    different choices for the same field, so the incoming value is rejected
+    ("Allow TX is not valid for this setting", 2026-11-21 DM-32UV report,
+    mailbox INBOX:863). Writing the basic fields first lets the driver switch
+    the slot's kind; the reloaded memory then lists the matching choices.
+    """
+    mem = radio.get_memory(location)
+    apply_json(radio, mem, dict(item, extras=[]))
+    radio.set_memory(mem)
+    return radio.get_memory(location)
+
+
 def prepare_upload_channels(radio, items, progress_callback=None):
     """Validate and apply imported channels without touching invalid slots."""
     from chirp import chirp_common
+    from chirp.settings import InvalidValueError
 
     start, end = radio.get_features().memory_bounds
     skipped = []
@@ -1559,7 +1577,11 @@ def prepare_upload_channels(radio, items, progress_callback=None):
 
         if location is not None:
             try:
-                locked_fields = apply_json(radio, mem, item)
+                try:
+                    locked_fields = apply_json(radio, mem, item)
+                except InvalidValueError:
+                    mem = memory_with_new_extras(radio, location, item)
+                    locked_fields = apply_json(radio, mem, item)
                 (
                     errors,
                     warnings,

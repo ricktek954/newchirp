@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 203 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 204 concepts across 10 domains and 10 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-20T16:23:04Z'
+timestamp: '2026-11-21T09:33:05Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 203 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 204 concepts | 10 domains | 10 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 179 |
+| Function | 180 |
 | Class | 14 |
 | Module | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 203 |
+| python | 204 |
 
 ## Domain Map
 
@@ -40,9 +40,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [check_private_data](check_private_data/index.md) (4 concepts) — Fail when private email addresses or local build paths are tracked.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 79 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 80 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (79 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (80 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [driver_work.py](driver_work.py/index.md) — 31 concepts
 
@@ -87,13 +87,13 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [radio_firmware](/chirp_bridge/radio_firmware.md) | Function | `chirp_bridge.py` | Return the best available firmware identity from a radio or … |
 | [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
 | [_allow_driver_specific_modes](/chirp_bridge/allow_driver_specific_modes.md) | Function | `chirp_bridge.py` | Permit declared radio modes rejected by CHIRP's shared memor… |
+| [memory_with_new_extras](/chirp_bridge/memory_with_new_extras.md) | Function | `chirp_bridge.py` | Reload a slot after giving it the incoming channel's basic f… |
 | [verify_live_write](/chirp_bridge/verify_live_write.md) | Function | `chirp_bridge.py` | Read back live memories so a rejected write cannot report su… |
 | [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
 | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) | Function | `chirp_bridge.py` | Apply bank/zone names and memberships to an already loaded i… |
 | [fetch_repeaterbook_search](/chirp_bridge/fetch_repeaterbook_search.md) | Function | `chirp_bridge.py` | Query NewChirp's relay without exposing RepeaterBook credent… |
 | [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) | Function | `chirp_bridge.py` | Resolve a US ZIP code to a representative latitude and longi… |
 | [rebuild_cache](/driver_work/rebuild_cache.md) | Function | `driver_work.py` | Build a fresh SQLite cache from the text store (atomic repla… |
-| [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
 
 ## Usage with OpenCode
 

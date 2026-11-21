@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:23:03Z"
+timestamp: "2026-11-21T09:33:04Z"
 concept_id: chirp_bridge/prepare_upload_channels
 language: python
 ---
@@ -40,15 +40,16 @@ Validate and apply imported channels without touching invalid slots.
 | `progress_callback` | `—` | `None` |
 
 ## Source
-Lines 1502–1629 in `chirp_bridge.py`
+Lines 1519–1651 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
-| calls | [apply_json](/chirp_bridge/apply_json.md) |
 | calls | [normalize_upload_memory](/chirp_bridge/normalize_upload_memory.md) |
+| calls | [apply_json](/chirp_bridge/apply_json.md) |
+| calls | [memory_with_new_extras](/chirp_bridge/memory_with_new_extras.md) |
 | calls | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) |
 | calls | [channel_validation_message](/chirp_bridge/channel_validation_message.md) |
 | called_by | [main](/chirp_bridge/main.md) |

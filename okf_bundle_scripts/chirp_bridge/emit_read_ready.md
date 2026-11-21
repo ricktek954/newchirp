@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:23:03Z"
+timestamp: "2026-11-21T09:33:04Z"
 concept_id: chirp_bridge/emit_read_ready
 language: python
 ---
@@ -36,7 +36,7 @@ Tell the user when a manual PTT-triggered clone read can begin.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1923–1932 in `chirp_bridge.py`
+Lines 1945–1954 in `chirp_bridge.py`
 
 ## Relationships
 

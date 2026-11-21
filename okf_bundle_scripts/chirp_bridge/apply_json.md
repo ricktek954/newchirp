@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T16:23:03Z"
+timestamp: "2026-11-21T09:33:04Z"
 concept_id: chirp_bridge/apply_json
 language: python
 ---
@@ -41,4 +41,5 @@ Lines 1380–1426 in `chirp_bridge.py`
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
 | calls | [coerce_setting_value](/chirp_bridge/coerce_setting_value.md) |
+| called_by | [memory_with_new_extras](/chirp_bridge/memory_with_new_extras.md) |
 | called_by | [prepare_upload_channels](/chirp_bridge/prepare_upload_channels.md) |
