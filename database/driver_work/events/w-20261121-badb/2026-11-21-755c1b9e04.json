@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 14:16:25",
+  "details": "",
+  "event_type": "note",
+  "external_ref": "desktop:05b09e66",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-21",
+  "summary": "Correction: the trace-hex commit is 05b09e66 on main (7507abac was the pre-rebase hash)."
+}
