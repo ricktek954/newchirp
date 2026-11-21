@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-21 10:09:52",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "test/dm32uv_driver_test.py",
+  "item": "w-20261121-6314",
+  "occurred_at": "2026-11-21",
+  "summary": "Override cuts channel names, zone names and settings channel-name choices at the first NUL or 0xFF, as the zone list already did. Writing a channel back pads with NULs, so the leftover bytes are cleared on the radio. Regression tests fail without the change; the full suite passes (559, 2 skipped). Uncommitted."
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-21 10:09:52",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "DM-32UV",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "forum file drop 12, 2026-11-20",
+  "source_ref": "forum-file-drop:12 sha256:8b526f78bb13ce4cb7a7e5a05a0dbebce6fbe42ae79b68c51caad4fffa8e40fb",
+  "status": "fix_committed",
+  "summary": "Forum file drop 12 (CSV, 43 channels) shows 9 names with a NUL followed by old bytes, e.g. 'Channel 1\\x00t Mode' and 'RPT 15\\x00 23'. Stock CHIRP's get_memory only strips trailing NUL/FF/space, so the leftover text shows in NewChirp and in CSV exports; zone get_name and the settings channel-name choices had the same trailing-only strip. The reporter described it as 'adds test to first channel on read'.",
+  "title": "Channel names show leftover text after the NUL terminator ('Channel 1<NUL>t Mode')",
+  "uid": "w-20261121-6314"
+}
