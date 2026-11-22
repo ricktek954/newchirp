@@ -50,7 +50,7 @@
 - [live_models_by_vendor](live_models_by_vendor.md) — Return selectable serial/transport radios, excluding file-only models.
 - [load_chirp](load_chirp.md)
 - [main](main.md)
-- [manual_send_key](manual_send_key.md) — Return the key a clone prompt says to press after OK, if any.
+- [manual_send_key](manual_send_key.md) — Return the control a clone prompt says to press after OK, if any.
 - [manual_send_key_for_model](manual_send_key_for_model.md) — The send key from a registered driver's read prompt, if loaded.
 - [manual_send_ready_message](manual_send_ready_message.md) — Ready cue for a radio that starts the clone from its own key.
 - [mapping_payload](mapping_payload.md) — Describe CHIRP's bank/zone models for an image or channel owner.

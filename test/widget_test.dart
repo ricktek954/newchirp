@@ -326,34 +326,52 @@ void main() {
   });
 
   test('send-key read prompts wait for the bridge ready cue', () {
-    // 2026-11-21 FT-1D report: [BAND] pressed before the port was open, so
-    // the radio's ID went unanswered and the read failed.
+    // 2026-11-21 FT-1D and 2026-11-22 FTM-300DR reports: the radio's key
+    // was pressed before the port was open, so its data was lost or arrived
+    // out of step.
+    const cue =
+        'wait until the transfer window says "Radio is ready - press...", ';
     expect(
       adaptRadioPromptButton(
         '4. <b>After clicking OK</b>, press the [BAND] key to send image.',
         'Radio is ready',
       ),
-      '4. After clicking "Radio is ready", wait until the transfer window '
-      'says "Radio is ready - press [BAND] on the radio now.", then press '
-      'the [BAND] key to send image.',
+      '4. After clicking "Radio is ready", ${cue}then press the [BAND] key '
+      'to send image.',
     );
     expect(
       adaptRadioPromptButton(
-        '6. <b>After clicking OK</b>, press the "left" [V/M] key to\n'
-        '     send image.',
+        '3. <b>After clicking OK</b>, on the radio select OK and press the '
+            'DIAL knob.\n',
         'Radio is ready',
       ),
       contains(
-        'says "Radio is ready - press [V/M] on the radio now.", then press '
-        'the "left" [V/M] key',
+        '"Radio is ready", ${cue}then on the radio select OK and '
+        'press the DIAL knob.',
       ),
     );
     expect(
       adaptRadioPromptButton(
-        '5. <b>After clicking OK</b>, press the [Send] screen button.',
+        '5. <b>After clicking OK</b>, press "SET MHz" to send image.',
         'Radio is ready',
       ),
-      contains('"Radio is ready - press Send on the radio now."'),
+      contains('${cue}then press "SET MHz"'),
+    );
+    expect(
+      adaptRadioPromptButton(
+        '5. <b>After clicking OK here in Chirp</b>, press the [Send] screen '
+            'button.',
+        'Radio is ready',
+      ),
+      contains(cue),
+    );
+    // A later numbered step that mentions a key is not the send step.
+    expect(
+      adaptRadioPromptButton(
+        '5. <b>After clicking OK</b>, wait.\n6. Press the [SET] key.',
+        'Radio is ready',
+      ),
+      isNot(contains(cue)),
     );
     // Writes start from NewChirp, so their prompts are left alone.
     expect(
@@ -485,10 +503,7 @@ void main() {
     expect(preferencesStore.preferences.fmOnly, isFalse);
     expect(find.text('WB2ECR — Buffalo'), findsOneWidget);
     expect(find.text('W4BUG — Point of Americas'), findsOneWidget);
-    expect(
-      find.text('Data courtesy of RepeaterBook.com.'),
-      findsOneWidget,
-    );
+    expect(find.text('Data courtesy of RepeaterBook.com.'), findsOneWidget);
     await tester.ensureVisible(
       find.byKey(const ValueKey('repeater-sort-source')),
     );
@@ -752,10 +767,7 @@ void main() {
     await tester.tap(find.text('Search'));
     await tester.pumpAndSettle();
 
-    expect(
-      find.textContaining('HTTP Error 403: Forbidden'),
-      findsWidgets,
-    );
+    expect(find.textContaining('HTTP Error 403: Forbidden'), findsWidgets);
   });
 
   testWidgets('RepeaterBook restores saved optional filters', (tester) async {

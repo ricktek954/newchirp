@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 671 concepts across 4 domains and 33 module
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-22T13:43:56Z'
+timestamp: '2026-11-22T14:13:34Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
@@ -90,8 +90,8 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 | [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
-| [_waitForSendKeyCue](/main/waitForSendKeyCue.md) | Function | `main.dart` | For radios that start a clone read from their own key ("Afte… |
 | [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
+| [_printPdfFile](/main/printPdfFile.md) | Function | `main.dart` | Open [pdf] in the PDF viewer (Windows, or no printers) or se… |
 
 ## Usage with OpenCode
 

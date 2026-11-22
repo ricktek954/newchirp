@@ -2,7 +2,6 @@
 okf_version: "0.2"
 type: Function
 title: _waitForSendKeyCue
-description: "For radios that start a clone read from their own key (\"After clicking"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -10,14 +9,12 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T13:43:54Z"
+timestamp: "2026-11-22T14:13:32Z"
 concept_id: main/waitForSendKeyCue
 language: dart
 ---
 
 # _waitForSendKeyCue
-
-For radios that start a clone read from their own key ("After clicking
 
 ## Signature
 
@@ -25,17 +22,8 @@ For radios that start a clone read from their own key ("After clicking
 String_waitForSendKeyCue(String message, String buttonLabel)
 ```
 
-## Docstring
-
-For radios that start a clone read from their own key ("After clicking
-OK, press the [BAND] key"), tell the user to wait for the bridge's ready
-cue. NewChirp opens the port only after the dialog closes, so an early
-press sends the image to nobody and the radio then waits (2026-11-21
-FT-1D report). The quoted text matches `manual_send_ready_message` in
-`scripts/chirp_bridge.py`.
-
 ## Source
-Lines 110–110 in `main.dart`
+Lines 113–113 in `main.dart`
 
 ## Relationships
 

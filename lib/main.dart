@@ -101,31 +101,31 @@ String adaptRadioPromptButton(String message, String buttonLabel) {
   );
 }
 
-/// For radios that start a clone read from their own key ("After clicking
-/// OK, press the [BAND] key"), tell the user to wait for the bridge's ready
-/// cue. NewChirp opens the port only after the dialog closes, so an early
-/// press sends the image to nobody and the radio then waits (2026-11-21
-/// FT-1D report). The quoted text matches `manual_send_ready_message` in
-/// `scripts/chirp_bridge.py`.
+/// For radios that start a clone read from their own control ("After
+/// clicking OK, press the [BAND] key", "press the DIAL knob", "press
+/// \"SET MHz\""), tell the user to wait for the bridge's ready cue. NewChirp
+/// opens the port only after the dialog closes, so an early press sends the
+/// image to nobody or arrives out of step (2026-11-21 FT-1D, 2026-11-22
+/// FTM-300DR reports). Every such cue from `scripts/chirp_bridge.py` starts
+/// with [_sendKeyCuePrefix].
+const _sendKeyCuePrefix = 'Radio is ready - press';
+
 String _waitForSendKeyCue(String message, String buttonLabel) {
   if (buttonLabel != 'Radio is ready') return message;
   final label = RegExp.escape(buttonLabel);
   final step = RegExp(
-    '(after\\s+clicking\\s+"$label"(?:\\s+here)?,\\s*)'
-    r'(press(?:\s+the)?(?:\s+"[^"]+")?\s+(\[[^\]]+\](?:\([^)]*\))?))',
+    '(after\\s+clicking\\s+"$label"(?:\\s+here)?(?:\\s+in\\s+chirp)?,\\s*)'
+    r'((?:(?!\n\s*\d+\.).)*?\bpress)',
     caseSensitive: false,
+    dotAll: true,
   );
   final match = step.firstMatch(message);
   if (match == null) return message;
-  final key = match.group(3)!;
-  final cue = key.toLowerCase() == '[send]'
-      ? 'Radio is ready - press Send on the radio now.'
-      : 'Radio is ready - press $key on the radio now.';
   return message.replaceRange(
     match.start,
-    match.end,
-    '${match.group(1)}wait until the transfer window says "$cue", '
-    'then ${match.group(2)}',
+    match.start + match.group(1)!.length,
+    '${match.group(1)}wait until the transfer window says '
+    '"$_sendKeyCuePrefix...", then ',
   );
 }
 

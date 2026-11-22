@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:24:24Z"
+timestamp: "2026-11-22T14:14:29Z"
 concept_id: chirp_bridge/manual_send_key_for_model
 language: python
 ---
@@ -36,7 +36,7 @@ The send key from a registered driver's read prompt, if loaded.
 | `model` | `—` | `—` |
 
 ## Source
-Lines 802–813 in `chirp_bridge.py`
+Lines 839–850 in `chirp_bridge.py`
 
 ## Relationships
 

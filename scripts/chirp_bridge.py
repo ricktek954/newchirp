@@ -779,6 +779,27 @@ def bridge_error_message(exc, command=None, model=None, port=None):
     if (
         command == "download"
         and model
+        and re.search(
+            r"block failed checksum|timed out reading from radio",
+            message,
+            re.IGNORECASE,
+        )
+    ):
+        key = manual_send_key_for_model(model)
+        if key and key.lower() != "[send]":
+            message = (
+                "%s. The radio's data arrived out of step with NewChirp, "
+                "usually because %s was pressed before NewChirp was "
+                "listening or the radio was still sending from an earlier "
+                "attempt. Turn the radio off and on, put it back in CLONE "
+                "mode, start the read again, and press %s only after "
+                "NewChirp says \"%s\"" % (
+                    message.rstrip("."), key, key,
+                    manual_send_ready_message(key))
+            )
+    if (
+        command == "download"
+        and model
         and message.strip().lower() == "no response from radio"
     ):
         key = manual_send_key_for_model(model)
@@ -790,6 +811,22 @@ def bridge_error_message(exc, command=None, model=None, port=None):
                 "before NewChirp is listening, and the radio then waits. If "
                 "it still fails, select the COM port created by the "
                 "programming cable." % (key, manual_send_ready_message(key))
+            )
+    if "firmware version is not supported by this driver" in message.lower():
+        # 2026-11-22 report: F4HWN v7.0.0 read with the stock egzumer UV-K5
+        # profile. F4HWN 5.0 and later exist only for the UV-K1 / UV-K5 V3
+        # and use NewChirp's own F4HWN profile and memory map.
+        reported = re.search(
+            r"firmware=(F4HWN v(\d+)\.[^\s|]*)", RADIO_TRACE.format()
+        )
+        if reported and int(reported.group(2)) >= 5:
+            message = (
+                "This radio runs %s, firmware for the UV-K1 / UV-K5 V3 with "
+                "its own memory layout. Select \"Quansheng UV-K1 (F4HWN "
+                "6.3)\" instead of %s. That profile reads F4HWN 6.3 now and "
+                "F4HWN 7.0 from the next NewChirp release; the stock UV-K5 "
+                "profiles cannot read it." % (
+                    reported.group(1), model or "this model")
             )
     if RADIO_TRACE.last_reply_was_echo_only():
         message = "%s\n\n%s" % (ECHO_ONLY_GUIDANCE, message)
@@ -1988,6 +2025,15 @@ def radio_for(
         handle = DfuTransport(port)
     else:
         handle = TracedSerial(open_serial(radio_class, port), RADIO_TRACE)
+        # Drop bytes left from an earlier attempt before anything is asked
+        # or the "press now" cue is shown. A radio-initiated clone that
+        # starts on stale bytes fails its first frame (2026-11-22 FTM-300DR
+        # report: three read attempts on two ports, then "Block failed
+        # checksum" on the first frame).
+        try:
+            handle.reset_input_buffer()
+        except Exception:
+            pass
     try:
         if detect_serial and transport_kind is None:
             try:
@@ -2034,20 +2080,41 @@ def download_decode_error_message(model, image, exc):
     )
 
 
-# The radio-side key in a clone prompt's "After clicking OK, press [KEY]"
-# step (FT-1D "[BAND]", FT-817 "[A]", FT-8800 "left" [V/M], ...).
-_SEND_KEY_STEP = re.compile(
-    r'after\s+clicking\s+(?:OK|"[^"]+")(?:\s+here)?,\s*'
-    r'press(?:\s+the)?(?:\s+"[^"]+")?\s+(\[[^\]]+\](?:\([^)]*\))?)',
-    re.IGNORECASE,
+# The step a clone prompt gives after "After clicking OK": the radio key or
+# control that starts the transfer (FT-1D "[BAND]", FT-8800 "left" [V/M],
+# FT-2900 "SET MHz", FTM-300 the DIAL knob, FT-2800 the MHz key, ...).
+_SEND_STEP = re.compile(
+    r'after\s+clicking\s+(?:OK|"[^"]+")(?:\s+here)?(?:\s+in\s+chirp)?,'
+    r'\s*(.+?)(?:\n\s*\d+\.|\Z)',
+    re.IGNORECASE | re.DOTALL,
+)
+_SEND_KEY = re.compile(
+    r'\b(?i:press)(?:es|ing)?\s+(?:the\s+)?(?:"(?:left|right)"\s+)?'
+    r'(?P<key>\[[^\]]+\](?:\([^)]*\))?|"[^"]+"'
+    r'|[A-Z][A-Za-z0-9()/.]*(?:\s+[A-Z][A-Za-z0-9()/.]*)?)'
+    r'(?:\s+(?P<kind>key|knob|button|switch))?',
 )
 
 
 def manual_send_key(pre_download):
-    """Return the key a clone prompt says to press after OK, if any."""
+    """Return the control a clone prompt says to press after OK, if any.
+
+    Bracketed and quoted names are returned as written; a named key or knob
+    becomes e.g. "the DIAL knob". A step that says to press an unnamed key
+    gives "the send key".
+    """
     text = re.sub(r"<[^>]+>", "", pre_download or "")
-    match = _SEND_KEY_STEP.search(text)
-    return match.group(1) if match else None
+    step = _SEND_STEP.search(text)
+    if not step or not re.search(r"\bpress", step.group(1), re.IGNORECASE):
+        return None
+    match = _SEND_KEY.search(step.group(1))
+    if not match:
+        return "the send key"
+    key = match.group("key")
+    if key.startswith(("[", '"')):
+        return key
+    kind = match.group("kind")
+    return "the %s %s" % (key, kind) if kind else key
 
 
 def manual_send_ready_message(key):

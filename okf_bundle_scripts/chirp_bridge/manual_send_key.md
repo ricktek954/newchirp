@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: manual_send_key
-description: "Return the key a clone prompt says to press after OK, if any."
+description: "Return the control a clone prompt says to press after OK, if any."
 resource: chirp_bridge.py
 tags:
   - "lang:python"
@@ -10,14 +10,14 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:24:24Z"
+timestamp: "2026-11-22T14:14:29Z"
 concept_id: chirp_bridge/manual_send_key
 language: python
 ---
 
 # manual_send_key
 
-Return the key a clone prompt says to press after OK, if any.
+Return the control a clone prompt says to press after OK, if any.
 
 ## Signature
 
@@ -27,7 +27,11 @@ def manual_send_key(pre_download)
 
 ## Docstring
 
-Return the key a clone prompt says to press after OK, if any.
+Return the control a clone prompt says to press after OK, if any.
+
+Bracketed and quoted names are returned as written; a named key or knob
+becomes e.g. "the DIAL knob". A step that says to press an unnamed key
+gives "the send key".
 
 ## Parameters
 
@@ -36,7 +40,7 @@ Return the key a clone prompt says to press after OK, if any.
 | `pre_download` | `—` | `—` |
 
 ## Source
-Lines 2046–2050 in `chirp_bridge.py`
+Lines 2099–2117 in `chirp_bridge.py`
 
 ## Relationships
 

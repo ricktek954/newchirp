@@ -658,9 +658,13 @@ class UploadHandshakeTest(unittest.TestCase):
             "Yaesu_FT-817": "[A]",
             "Yaesu_FT-8800": "[V/M]",
             "Yaesu_FT-70D": "[BAND]",
-            # FT2D/FT3D word their step differently; the existing [Send]
-            # branch of emit_read_ready covers them.
-            "Yaesu_FT2D_R": None,
+            "Yaesu_FT2D_R": "[Send]",
+            "Yaesu_FTM-300DR": "the DIAL knob",
+            "Yaesu_FT-2900R_1900R": '"SET MHz"',
+            "Yaesu_FT-2800M": "the MHz key",
+            "Yaesu_FT-8000R": "RPT",
+            "Yaesu_VX-2": "the send key",
+            "Yaesu_FT-60": None,  # [PTT] radios keep their own cue
         }
         for model, key in cases.items():
             pre = self.directory.get_radio(model).get_prompts().pre_download
@@ -674,6 +678,81 @@ class UploadHandshakeTest(unittest.TestCase):
             bridge.MANUAL_SEND_READY_MESSAGE,
         )
         self.assertIsNone(bridge.manual_send_key("Turn the radio on."))
+
+    def test_send_key_checksum_failure_explains_the_timing(self):
+        # 2026-11-22 FTM-300DR report: "Block failed checksum" on the first
+        # frame after three read attempts on two ports.
+        message = bridge.bridge_error_message(
+            self.errors.RadioError("Block failed checksum"),
+            command="download",
+            model="Yaesu_FTM-300DR",
+        )
+        self.assertTrue(message.startswith("Block failed checksum. "))
+        self.assertIn("press the DIAL knob only after NewChirp says", message)
+        self.assertIn(
+            "Radio is ready - press the DIAL knob on the radio now.", message
+        )
+
+    def test_port_input_is_flushed_when_opened(self):
+        class StaleSerial:
+            def __init__(self):
+                self.buffer = b"\x00\x80stale"
+                self.timeout = 1
+
+            def reset_input_buffer(self):
+                self.buffer = b""
+
+            def read(self, size=1):
+                data, self.buffer = self.buffer[:size], self.buffer[size:]
+                return data
+
+            def write(self, data):
+                return len(data)
+
+            def close(self):
+                pass
+
+        stale = StaleSerial()
+        with mock.patch.object(bridge, "open_serial", return_value=stale):
+            radio_class = self.directory.get_radio("Yaesu_FTM-300DR")
+            radio = bridge.radio_for(
+                self.directory, "Yaesu_FTM-300DR", "/dev/null",
+                detect_serial=False,
+            )
+        self.assertEqual(stale.buffer, b"")
+        self.assertIsInstance(radio, radio_class)
+
+    def test_f4hwn_on_a_stock_uvk5_profile_names_the_right_profile(self):
+        # 2026-11-22 report: F4HWN v7.0.0 read with Quansheng_UV-K5_egzumer.
+        bridge.RADIO_TRACE.__init__()
+        self.addCleanup(bridge.RADIO_TRACE.__init__)
+        bridge.RADIO_TRACE._entries.append({
+            "command": "UV-K5 hello",
+            "result": "firmware=F4HWN v7.0.0 | reply=ab cd (44 bytes)",
+            "elapsed": 0.02,
+        })
+        message = bridge.bridge_error_message(
+            self.errors.RadioError(
+                "Firmware version is not supported by this driver"),
+            command="download",
+            model="Quansheng_UV-K5_egzumer",
+        )
+        self.assertTrue(message.startswith("This radio runs F4HWN v7.0.0"))
+        self.assertIn('Select "Quansheng UV-K1 (F4HWN 6.3)"', message)
+
+        bridge.RADIO_TRACE.__init__()
+        bridge.RADIO_TRACE._entries.append({
+            "command": "UV-K5 hello",
+            "result": "firmware=F4HWN v4.3 | reply=ab cd (44 bytes)",
+            "elapsed": 0.02,
+        })
+        old = bridge.bridge_error_message(
+            self.errors.RadioError(
+                "Firmware version is not supported by this driver"),
+            command="download",
+            model="Quansheng_UV-K5_egzumer",
+        )
+        self.assertTrue(old.startswith("Firmware version is not supported"))
 
     def test_send_key_no_response_explains_the_timing(self):
         message = bridge.bridge_error_message(
