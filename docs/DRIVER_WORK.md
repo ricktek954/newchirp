@@ -317,7 +317,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#83 bug | fix_committed | high:** Upload rejects erased bank index sentinel
   A downloaded image containing bank index 128 on an active channel is rejected during unchanged upload before radio I/O. Normalize erased bank metadata before rebuilding bank tables.
   Source: `email` INBOX:723
-- **#w-20261120-8af9 bug | pending_validation | high:** Last channel missing after write: 0-based bank positions collide with KPG 1-based positions
+- **#w-20261120-8af9 bug | fix_committed | high:** Last channel missing after write: 0-based bank positions collide with KPG 1-based positions
   1.0.63 writes without error but the last channel in the list (ch 25) is not usable on the radio (INBOX:855). Evidence: CHIRP's OEM-style TK-760G sample image stores each record's bnumb as the 1-based position within its bank, matching the 0x300 table (bank, pos, bank-1, slot). NewChirp (from stock tk760g) assigns new channels bnumb = slot-1 and normalizes the 0x80 sentinel (reporter's ch 24, INBOX:808) to slot-1, i.e. 0-based. With KPG-programmed channels at positions 1..N, the newcomer duplicates position N and position N+1 is empty, so the last channel drops. _prep_data rebuilds 0x300 by slot order and never updates record bnumb. Secondary suspect: 0x7000 per-channel flags filled by count, not slot. Plan: renumber each bank's records 1..n (existing valid order first, then new channels) and build 0x300 from that order; confirm with the reporter's image.
   Source: `email` INBOX:855
 - **#60 maintenance | experimental | normal:** Current driver status
