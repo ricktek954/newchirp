@@ -28,6 +28,7 @@ Last updated: 2026-11-20
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu VX-170 / VX-177 | `drivers/newchirp_yaesu_vx170.py` | Stock CHIRP Yaesu clone serial (FT-7800 family) | Split-tone squelch modes decoded as Cross | Stock path; split modes encoded to raw 5-7, offline-tested | Not exposed by stock driver | Experimental compatibility override |
+| Retevis RT22 | `drivers/newchirp_retevis_rt22.py` | Stock CHIRP clone serial, 9600 | Any complete 8-byte ID accepted for the plain RT22, as Retevis's software does | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Retevis RA87 | `drivers/newchirp_retevis_ra87.py` | Stock CHIRP clone serial, 9600, echoing cable | Download identifies by model byte 0x1F05 = A5 (OEM CPS rule) instead of two fixed 8-byte fingerprints | Stock CHIRP driver (already checks 0x1F05) | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5R Mini | `drivers/newchirp_uv5r_mini.py` | Stock CHIRP UV-17Pro-family serial | Unanswered block requests resent up to five times (OEM CPS rule) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -457,6 +458,35 @@ Last updated: 2026-11-20
 - Hardware validation: none
 - Next milestone: physical identify/read/edit/write/read-back test and
   libusb-runtime validation in native platform release builds
+
+### Retevis RT22
+
+- Maintained file: `drivers/newchirp_retevis_rt22.py`; replaces
+  `retevis_rt22._rt22_enter_programming_mode` in place for the plain
+  `Retevis_RT22` model only. KD-C1, RT22FRS, RT622, BF-T20 and the other
+  RT22-family models keep CHIRP's ID list.
+- Driver SHA-256:
+  `77433ffc6919b2b81628af26f7adfb4f527407d745b5e84fad6d30eba495930c`
+- Field issue (ledger `w-20261121-badb`, INBOX:871/875): 2025 RT22 units fail
+  "Radio identification failed" in NewChirp and stock CHIRP while older units
+  read; upstream CHIRP #6747 has been open since 2019.
+- OEM evidence: Retevis "RT22-Programming-Software" (retevis.com, listed
+  2025-10-31; ZIP SHA-256
+  `acefd8d334c55ec34edd0b05de4dc74c115d5ab70073084c9bc2d52b2f08f68d`),
+  installer `RT22-DSETUP-V1.05.EXE` (SHA-256
+  `8fe80ec050b121a9cffdfd9a507a4020226b64bcab33bba9aa05d20cfbae58f1`), main
+  MFC program (SHA-256
+  `6c0c179ccf5da02d737374b10d54dc7efc4289ca86db2d890982d1df839a4ea4`).
+  Disassembly at `0x4022CC`: `PROGRGS` with up to 10 tries for `06`, then `02`
+  and an 8-byte read (500 ms); it fails only on no reply or fewer than 8
+  bytes, sends `06`, and reads memory. The ID buffer is overwritten by the
+  first `R` reply before any comparison. Writes are `W <addr> 10` up to
+  `0x3F0`, the same `0x400` bytes CHIRP reads.
+- Change: the plain RT22 accepts any complete 8-byte ID (unknown IDs are
+  logged); a short reply reports its bytes. CHIRP's extra `07`/`4E` step,
+  which the Retevis software does not send, is kept because older units
+  answer it; if a newer unit refuses it, that step is the next suspect.
+- Hardware validation: none.
 
 ### Retevis RA87
 
