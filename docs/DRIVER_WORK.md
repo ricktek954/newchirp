@@ -54,6 +54,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#97 bug | closed | normal:** No response on both radios after writing a copied channel list
   Windows 1.0.57 COM7: PROGRAMBFNOR no response on radio 2 and then on the previously working radio 1, so the cable/port path rather than either radio. Reporter also asked how to select all channels (no Ctrl+A).
   Source: `email` INBOX:773,774
+- **#w-20261122-ae46 bug | awaiting_user | normal:** First connection: PROGRAMBFNOR unanswered on COM3 (cable/port)
+  Windows 1.0.66: three reads, each PROGRAMBFNOR with no response in 1.5 s; nothing reached the driver. Same pattern as closed #97 (cable/port). The 5RM now gets the UV-5R Mini port/cable checklist instead of bare 'No response from radio'.
+  Source: `email` INBOX:891
 
 ### 5RX
 
@@ -416,6 +419,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   UV-32 owner asked to collapse the Channels / Scan enabled / Needs attention cards to see more channels.
   Source: `email` INBOX:834
 
+### Desktop app
+
+- **#w-20261122-685e enhancement | open | low:** Print the channel list
+  5RH Pro owner asked to print channels. The Print button only prints the GMRS/FRS reference; workaround: Save as... CSV and print from a spreadsheet.
+  Source: `email` INBOX:889
+
 ### Linux desktop
 
 - **#101 release | released | normal:** Linux 1.0.61 published
@@ -695,6 +704,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#48 maintenance | experimental | normal:** Current driver status
   Transport: Wouxun clone serial, 19200 8N1, 64-byte blocks. Read: Reserved DCS words no longer abort channel decode; raw bytes preserved. Write: Stock CHIRP driver, offline round-trip. Settings: Stock CHIRP settings. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:72
+
+### KG-UV9GX Plus
+
+- **#w-20261122-cac2 enhancement | fix_committed | low:** Owner could not find the KG-UV9GX Plus; it uses the KG-UV9GX profile
+  Request to add the KG-UV9GX+ (cable, not Bluetooth). Already supported: CHIRP Wouxun_KG-UV9GX on desktop and the Web Programmer KG-UV9GX serial profile; the website catalog says 'KG-UV9GX Plus (use KG-UV9GX)'. The desktop picker search 'KG-UV9GX Plus' found nothing; a search hint now covers it.
+  Source: `email` INBOX:896
 
 ### KG-UVD1P / KG-UV2D
 

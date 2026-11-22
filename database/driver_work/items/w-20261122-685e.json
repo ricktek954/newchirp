@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-22 10:28:59",
+  "kind": "enhancement",
+  "manufacturer": "NewChirp",
+  "model": "Desktop app",
+  "occurred_at": null,
+  "priority": "low",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:889",
+  "status": "open",
+  "summary": "5RH Pro owner asked to print channels. The Print button only prints the GMRS/FRS reference; workaround: Save as... CSV and print from a spreadsheet.",
+  "title": "Print the channel list",
+  "uid": "w-20261122-685e"
+}

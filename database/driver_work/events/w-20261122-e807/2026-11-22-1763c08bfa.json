@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:28:59",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:d5f01349",
+  "item": "w-20261122-e807",
+  "occurred_at": "2026-11-22",
+  "summary": "Final block error no longer embeds 'No response from radio', so the bridge's port checklist cannot replace it; regression test"
+}

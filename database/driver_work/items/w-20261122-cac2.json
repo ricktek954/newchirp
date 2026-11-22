@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-22 10:28:58",
+  "kind": "enhancement",
+  "manufacturer": "Wouxun",
+  "model": "KG-UV9GX Plus",
+  "occurred_at": null,
+  "priority": "low",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:896",
+  "status": "fix_committed",
+  "summary": "Request to add the KG-UV9GX+ (cable, not Bluetooth). Already supported: CHIRP Wouxun_KG-UV9GX on desktop and the Web Programmer KG-UV9GX serial profile; the website catalog says 'KG-UV9GX Plus (use KG-UV9GX)'. The desktop picker search 'KG-UV9GX Plus' found nothing; a search hint now covers it.",
+  "title": "Owner could not find the KG-UV9GX Plus; it uses the KG-UV9GX profile",
+  "uid": "w-20261122-cac2"
+}

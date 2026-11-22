@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:28:58",
+  "details": "Request to add the KG-UV9GX+ (cable, not Bluetooth). Already supported: CHIRP Wouxun_KG-UV9GX on desktop and the Web Programmer KG-UV9GX serial profile; the website catalog says 'KG-UV9GX Plus (use KG-UV9GX)'. The desktop picker search 'KG-UV9GX Plus' found nothing; a search hint now covers it.",
+  "event_type": "created",
+  "external_ref": "INBOX:896",
+  "item": "w-20261122-cac2",
+  "occurred_at": "2026-11-22",
+  "summary": "Owner could not find the KG-UV9GX Plus; it uses the KG-UV9GX profile"
+}

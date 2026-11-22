@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:28:58",
+  "details": "Windows 1.0.66: three reads, each PROGRAMBFNOR with no response in 1.5 s; nothing reached the driver. Same pattern as closed #97 (cable/port). The 5RM now gets the UV-5R Mini port/cable checklist instead of bare 'No response from radio'.",
+  "event_type": "created",
+  "external_ref": "INBOX:891",
+  "item": "w-20261122-ae46",
+  "occurred_at": "2026-11-22",
+  "summary": "First connection: PROGRAMBFNOR unanswered on COM3 (cable/port)"
+}

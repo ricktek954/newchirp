@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:28:59",
+  "details": "5RH Pro owner asked to print channels. The Print button only prints the GMRS/FRS reference; workaround: Save as... CSV and print from a spreadsheet.",
+  "event_type": "created",
+  "external_ref": "INBOX:889",
+  "item": "w-20261122-685e",
+  "occurred_at": "2026-11-22",
+  "summary": "Print the channel list"
+}

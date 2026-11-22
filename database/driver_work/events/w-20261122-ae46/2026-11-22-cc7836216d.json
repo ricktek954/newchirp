@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:28:59",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:d5f01349",
+  "item": "w-20261122-ae46",
+  "occurred_at": "2026-11-22",
+  "summary": "5RM no-response now shows the port/cable checklist"
+}
