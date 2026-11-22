@@ -234,6 +234,7 @@ class RadioCapabilities {
     required this.validCharacters,
     required this.validBands,
     required this.hasTuningStep,
+    this.hasNostepTuning = false,
   });
 
   final List<String> duplexes;
@@ -251,6 +252,14 @@ class RadioCapabilities {
   final String validCharacters;
   final List<({double startMhz, double endMhz})> validBands;
   final bool hasTuningStep;
+
+  /// CHIRP `has_nostep_tuning`: the radio stores any frequency (for example
+  /// to 10 Hz), so the tuning steps do not restrict channel frequencies.
+  final bool hasNostepTuning;
+
+  /// Steps a channel frequency must fit, or empty when any frequency can be
+  /// stored. Matches CHIRP's `validate_memory`.
+  List<double> get frequencyGridSteps => hasNostepTuning ? const [] : steps;
 
   bool get uppercaseNames =>
       validCharacters.isNotEmpty &&
@@ -290,6 +299,7 @@ class RadioCapabilities {
           )
           .toList(),
       hasTuningStep: json['hasTuningStep'] as bool? ?? true,
+      hasNostepTuning: json['hasNostepTuning'] as bool? ?? false,
     );
   }
 }

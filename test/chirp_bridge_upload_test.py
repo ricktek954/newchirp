@@ -967,6 +967,33 @@ class UploadHandshakeTest(unittest.TestCase):
 
         self.assertEqual(channel["mode"], "FM")
 
+    def test_nostep_tuning_is_exported(self):
+        # DM-32UV stores frequencies to 10 Hz (has_nostep_tuning), so the
+        # app must not restrict channel frequencies to its tuning steps.
+        dm32 = bridge.radio_from_image(
+            self.directory,
+            "Baofeng_DM-32UV",
+            str(SOURCE / "tests/images/Baofeng_DM-32UV.img"),
+        )
+        uv5rm = bridge.radio_from_image(
+            self.directory,
+            "Baofeng_5RM",
+            str(SOURCE / "tests/images/Baofeng_5RM.img"),
+        )
+
+        self.assertTrue(bridge.features_json(dm32)["hasNostepTuning"])
+        self.assertFalse(bridge.features_json(uv5rm)["hasNostepTuning"])
+
+        mem = dm32.get_memory(1)
+        mem.empty = False
+        mem.freq = 145_163_750
+        mem.duplex = ""
+        messages = [str(m) for m in dm32.validate_memory(mem)]
+        self.assertFalse(
+            [m for m in messages if "step" in m.lower()],
+            messages,
+        )
+
     def test_driver_frequency_bands_are_exported_in_mhz(self):
         image = SOURCE / "tests/images/Baofeng_5RM.img"
         radio = bridge.radio_from_image(

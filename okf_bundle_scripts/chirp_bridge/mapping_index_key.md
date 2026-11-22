@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-21T14:09:19Z"
+timestamp: "2026-11-22T09:18:47Z"
 concept_id: chirp_bridge/mapping_index_key
 language: python
 ---
@@ -29,7 +29,7 @@ def _mapping_index_key(index)
 | `index` | `—` | `—` |
 
 ## Source
-Lines 2016–2017 in `chirp_bridge.py`
+Lines 2017–2018 in `chirp_bridge.py`
 
 ## Relationships
 

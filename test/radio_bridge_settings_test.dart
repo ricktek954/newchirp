@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/services/radio_bridge.dart';
 
 void main() {
@@ -120,5 +121,34 @@ void main() {
     expect(capabilities.validBands, hasLength(2));
     expect(capabilities.validBands.first.startMhz, 108);
     expect(capabilities.validBands.last.endMhz, 520);
+  });
+
+  test('no-step radios do not restrict frequencies to the tuning steps', () {
+    // 2026-11-22 DM-32UV report: 145.163750 MHz read from the radio was
+    // flagged as unprogrammable because it fits none of the 2.5-100 kHz
+    // steps, although the radio stores frequencies to 10 Hz.
+    const steps = [2.5, 5.0, 6.25, 10.0, 12.5, 25.0, 50.0, 100.0];
+    final noStep = RadioCapabilities.fromJson({
+      'steps': steps,
+      'hasNostepTuning': true,
+    });
+    final stepped = RadioCapabilities.fromJson({'steps': steps});
+    final channel = RadioChannel(
+      location: 1,
+      name: 'RPT',
+      frequency: 145.16375,
+    );
+
+    expect(noStep.steps, steps);
+    expect(noStep.frequencyGridSteps, isEmpty);
+    expect(
+      channel.validate(validTuningSteps: noStep.frequencyGridSteps),
+      isEmpty,
+    );
+    expect(stepped.hasNostepTuning, isFalse);
+    expect(
+      channel.validate(validTuningSteps: stepped.frequencyGridSteps),
+      hasLength(1),
+    );
   });
 }

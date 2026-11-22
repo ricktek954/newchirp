@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 205 concepts across 10 domains and 10 modul
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-21T14:09:20Z'
+timestamp: '2026-11-22T09:18:47Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
@@ -93,7 +93,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) | Function | `chirp_bridge.py` | Apply bank/zone names and memberships to an already loaded i… |
 | [fetch_repeaterbook_search](/chirp_bridge/fetch_repeaterbook_search.md) | Function | `chirp_bridge.py` | Query NewChirp's relay without exposing RepeaterBook credent… |
 | [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) | Function | `chirp_bridge.py` | Resolve a US ZIP code to a representative latitude and longi… |
-| [bridge_error_message](/chirp_bridge/bridge_error_message.md) | Function | `chirp_bridge.py` | Add safe, command-specific recovery guidance to bridge failu… |
+| [rebuild_cache](/driver_work/rebuild_cache.md) | Function | `driver_work.py` | Build a fresh SQLite cache from the text store (atomic repla… |
 
 ## Usage with OpenCode
 

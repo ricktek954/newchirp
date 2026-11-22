@@ -33,8 +33,4 @@ Lines 162–180 in `check_linux_release_abi.py`
 | Type | Target |
 |------|--------|
 | related | [check_linux_release_abi](/check_linux_release_abi.md) |
-| called_by | [main](/build_macos_dmg/main.md) |
-| called_by | [main](/check_linux_release_abi/main.md) |
 | called_by | [main](/chirp_bridge/main.md) |
-| called_by | [main](/driver_work/main.md) |
-| called_by | [main](/generate_repeater_counties/main.md) |

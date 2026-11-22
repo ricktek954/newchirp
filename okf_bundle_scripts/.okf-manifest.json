@@ -3,10 +3,198 @@
   "manifest_version": 2,
   "source_root": "/Volumes/RICKEXT/desktop/newchirp/scripts",
   "files": {
+    "build_macos_dmg.py": {
+      "path": "build_macos_dmg.py",
+      "mtime_ns": 1792753027569896057,
+      "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
+      "concept_ids": [
+        "build_macos_dmg/build_background",
+        "build_macos_dmg/main",
+        "build_macos_dmg/project_version",
+        "build_macos_dmg"
+      ]
+    },
+    "check_linux_release_abi.py": {
+      "path": "check_linux_release_abi.py",
+      "mtime_ns": 1794748425231791025,
+      "hash": "5c1e7c15252615df653bacb9d7e54d6e9017657d73d3462009e0fa63a2f3ad64",
+      "concept_ids": [
+        "check_linux_release_abi/check_roots",
+        "check_linux_release_abi/command_version",
+        "check_linux_release_abi/elf_files",
+        "check_linux_release_abi/main",
+        "check_linux_release_abi/parse_args",
+        "check_linux_release_abi/read_os_release",
+        "check_linux_release_abi/require_release_host",
+        "check_linux_release_abi/required_glibc_versions",
+        "check_linux_release_abi/version_tuple",
+        "check_linux_release_abi"
+      ]
+    },
+    "check_private_data.py": {
+      "path": "check_private_data.py",
+      "mtime_ns": 1795034009325250997,
+      "hash": "db09f722486206a9fc07a537b7e254276292433191a74d026143052efe0f6c01",
+      "concept_ids": [
+        "check_private_data/allowed_email",
+        "check_private_data/main",
+        "check_private_data/tracked_files",
+        "check_private_data"
+      ]
+    },
+    "driver_work.py": {
+      "path": "driver_work.py",
+      "mtime_ns": 1795269282954991881,
+      "hash": "be5c6c6719066d70d1134eb18e9857dcc2ff89acf0b41bfb2fdd9ef100177c0c",
+      "concept_ids": [
+        "driver_work/StoreError",
+        "driver_work/add_event",
+        "driver_work/add_work",
+        "driver_work/connect",
+        "driver_work/digest",
+        "driver_work/display_path",
+        "driver_work/dump",
+        "driver_work/execute",
+        "driver_work/export_markdown",
+        "driver_work/file_timestamp",
+        "driver_work/find_work_id",
+        "driver_work/get_or_create_radio",
+        "driver_work/item_file_key",
+        "driver_work/main",
+        "driver_work/manufacturer_and_model",
+        "driver_work/migrate_from_sqlite",
+        "driver_work/new_uid",
+        "driver_work/persist",
+        "driver_work/print_work_rows",
+        "driver_work/query_work",
+        "driver_work/read_store",
+        "driver_work/rebuild_cache",
+        "driver_work/sanitize_reporter",
+        "driver_work/sanitize_tester",
+        "driver_work/show_work",
+        "driver_work/slug",
+        "driver_work/status_from_ledger",
+        "driver_work/store_records",
+        "driver_work/sync_driver_status",
+        "driver_work/today",
+        "driver_work/work_ref",
+        "driver_work"
+      ]
+    },
+    "generate_gmrs_frs_pdf.py": {
+      "path": "generate_gmrs_frs_pdf.py",
+      "mtime_ns": 1787526889873622751,
+      "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
+      "concept_ids": [
+        "generate_gmrs_frs_pdf/PdfWriter",
+        "generate_gmrs_frs_pdf/as_pdf",
+        "generate_gmrs_frs_pdf/esc",
+        "generate_gmrs_frs_pdf/init",
+        "generate_gmrs_frs_pdf/line",
+        "generate_gmrs_frs_pdf/main",
+        "generate_gmrs_frs_pdf/rect",
+        "generate_gmrs_frs_pdf/rgb",
+        "generate_gmrs_frs_pdf/row_color",
+        "generate_gmrs_frs_pdf/set_fill",
+        "generate_gmrs_frs_pdf/set_stroke",
+        "generate_gmrs_frs_pdf/table_cell",
+        "generate_gmrs_frs_pdf/text",
+        "generate_gmrs_frs_pdf/text_in_rect",
+        "generate_gmrs_frs_pdf"
+      ]
+    },
+    "generate_international_frequency_pdfs.py": {
+      "path": "generate_international_frequency_pdfs.py",
+      "mtime_ns": 1795034009326443867,
+      "hash": "47ce7afa7b78c1e932a1200c0747b0589563118002fbb365dd3a2ef3222113b4",
+      "concept_ids": [
+        "generate_international_frequency_pdfs/draw_table",
+        "generate_international_frequency_pdfs/main",
+        "generate_international_frequency_pdfs/make_pdf",
+        "generate_international_frequency_pdfs/uhf_rows",
+        "generate_international_frequency_pdfs"
+      ]
+    },
+    "generate_repeater_counties.py": {
+      "path": "generate_repeater_counties.py",
+      "mtime_ns": 1793439376655566408,
+      "hash": "5b41696728c60fba0706a10867eadf154b89b4d803f0ed4e9038319bc7fe3c24",
+      "concept_ids": [
+        "generate_repeater_counties/dart_string",
+        "generate_repeater_counties/display_name",
+        "generate_repeater_counties/generate",
+        "generate_repeater_counties/main",
+        "generate_repeater_counties/read_source",
+        "generate_repeater_counties"
+      ]
+    },
+    "newchirp_mass_storage.py": {
+      "path": "newchirp_mass_storage.py",
+      "mtime_ns": 1795034009326723783,
+      "hash": "6f449f1034003a5e5a5584c1f96a5fc7759fb7f2fc5d19b2c82afb700f2f57cc",
+      "concept_ids": [
+        "newchirp_mass_storage/CS750Profile",
+        "newchirp_mass_storage/LinuxScsiPassthrough",
+        "newchirp_mass_storage/MacScsiPassthrough",
+        "newchirp_mass_storage/MassStorageError",
+        "newchirp_mass_storage/RapMassStorageRadio",
+        "newchirp_mass_storage/ScsiPassthrough",
+        "newchirp_mass_storage/WindowsScsiPassthrough",
+        "newchirp_mass_storage/close",
+        "newchirp_mass_storage/command",
+        "newchirp_mass_storage/helper_path",
+        "newchirp_mass_storage/init",
+        "newchirp_mass_storage/list_devices",
+        "newchirp_mass_storage/parse_rap_packet",
+        "newchirp_mass_storage/rap_packet",
+        "newchirp_mass_storage/read_codeplug",
+        "newchirp_mass_storage/read_exact",
+        "newchirp_mass_storage/receive",
+        "newchirp_mass_storage/send",
+        "newchirp_mass_storage/transfer",
+        "newchirp_mass_storage/windows_io_error",
+        "newchirp_mass_storage/windows_open_access",
+        "newchirp_mass_storage/windows_open_error",
+        "newchirp_mass_storage"
+      ]
+    },
+    "newchirp_usb_dfu.py": {
+      "path": "newchirp_usb_dfu.py",
+      "mtime_ns": 1793532981625641026,
+      "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
+      "concept_ids": [
+        "newchirp_usb_dfu/DeviceDescriptor",
+        "newchirp_usb_dfu/DfuError",
+        "newchirp_usb_dfu/DfuTransport",
+        "newchirp_usb_dfu/bind_library",
+        "newchirp_usb_dfu/candidate_libraries",
+        "newchirp_usb_dfu/close",
+        "newchirp_usb_dfu/command",
+        "newchirp_usb_dfu/devices",
+        "newchirp_usb_dfu/download",
+        "newchirp_usb_dfu/erase",
+        "newchirp_usb_dfu/error_text",
+        "newchirp_usb_dfu/identity",
+        "newchirp_usb_dfu/init",
+        "newchirp_usb_dfu/libusb_exit",
+        "newchirp_usb_dfu/list_devices",
+        "newchirp_usb_dfu/load_library",
+        "newchirp_usb_dfu/program_mode",
+        "newchirp_usb_dfu/read",
+        "newchirp_usb_dfu/reboot",
+        "newchirp_usb_dfu/set_address",
+        "newchirp_usb_dfu/status",
+        "newchirp_usb_dfu/transfer",
+        "newchirp_usb_dfu/upload",
+        "newchirp_usb_dfu/wait_idle",
+        "newchirp_usb_dfu/write",
+        "newchirp_usb_dfu"
+      ]
+    },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795270159854323642,
-      "hash": "531798333e1658cdcdce39961ee1ddd3722d12f7d365e89ac418acb4d92933f0",
+      "mtime_ns": 1795339127133619528,
+      "hash": "97203bf03165b2a0c03f4c345995f5b922bc7329de81e0e047dffe7c1f56096f",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -88,194 +276,6 @@
         "chirp_bridge/main",
         "chirp_bridge/RadioCommunicationTrace",
         "chirp_bridge/TracedSerial"
-      ]
-    },
-    "check_private_data.py": {
-      "path": "check_private_data.py",
-      "mtime_ns": 1795034009325250997,
-      "hash": "db09f722486206a9fc07a537b7e254276292433191a74d026143052efe0f6c01",
-      "concept_ids": [
-        "check_private_data",
-        "check_private_data/allowed_email",
-        "check_private_data/tracked_files",
-        "check_private_data/main"
-      ]
-    },
-    "newchirp_mass_storage.py": {
-      "path": "newchirp_mass_storage.py",
-      "mtime_ns": 1795034009326723783,
-      "hash": "6f449f1034003a5e5a5584c1f96a5fc7759fb7f2fc5d19b2c82afb700f2f57cc",
-      "concept_ids": [
-        "newchirp_mass_storage",
-        "newchirp_mass_storage/windows_open_access",
-        "newchirp_mass_storage/windows_open_error",
-        "newchirp_mass_storage/windows_io_error",
-        "newchirp_mass_storage/helper_path",
-        "newchirp_mass_storage/init",
-        "newchirp_mass_storage/read_exact",
-        "newchirp_mass_storage/transfer",
-        "newchirp_mass_storage/close",
-        "newchirp_mass_storage/list_devices",
-        "newchirp_mass_storage/rap_packet",
-        "newchirp_mass_storage/parse_rap_packet",
-        "newchirp_mass_storage/send",
-        "newchirp_mass_storage/receive",
-        "newchirp_mass_storage/command",
-        "newchirp_mass_storage/read_codeplug",
-        "newchirp_mass_storage/MassStorageError",
-        "newchirp_mass_storage/MacScsiPassthrough",
-        "newchirp_mass_storage/WindowsScsiPassthrough",
-        "newchirp_mass_storage/LinuxScsiPassthrough",
-        "newchirp_mass_storage/ScsiPassthrough",
-        "newchirp_mass_storage/RapMassStorageRadio",
-        "newchirp_mass_storage/CS750Profile"
-      ]
-    },
-    "driver_work.py": {
-      "path": "driver_work.py",
-      "mtime_ns": 1795269282954991881,
-      "hash": "be5c6c6719066d70d1134eb18e9857dcc2ff89acf0b41bfb2fdd9ef100177c0c",
-      "concept_ids": [
-        "driver_work",
-        "driver_work/today",
-        "driver_work/display_path",
-        "driver_work/sanitize_reporter",
-        "driver_work/sanitize_tester",
-        "driver_work/connect",
-        "driver_work/manufacturer_and_model",
-        "driver_work/get_or_create_radio",
-        "driver_work/add_event",
-        "driver_work/add_work",
-        "driver_work/status_from_ledger",
-        "driver_work/sync_driver_status",
-        "driver_work/print_work_rows",
-        "driver_work/query_work",
-        "driver_work/show_work",
-        "driver_work/export_markdown",
-        "driver_work/work_ref",
-        "driver_work/find_work_id",
-        "driver_work/new_uid",
-        "driver_work/slug",
-        "driver_work/digest",
-        "driver_work/item_file_key",
-        "driver_work/file_timestamp",
-        "driver_work/dump",
-        "driver_work/read_store",
-        "driver_work/rebuild_cache",
-        "driver_work/store_records",
-        "driver_work/persist",
-        "driver_work/migrate_from_sqlite",
-        "driver_work/main",
-        "driver_work/execute",
-        "driver_work/StoreError"
-      ]
-    },
-    "newchirp_usb_dfu.py": {
-      "path": "newchirp_usb_dfu.py",
-      "mtime_ns": 1793532981625641026,
-      "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
-      "concept_ids": [
-        "newchirp_usb_dfu",
-        "newchirp_usb_dfu/candidate_libraries",
-        "newchirp_usb_dfu/load_library",
-        "newchirp_usb_dfu/bind_library",
-        "newchirp_usb_dfu/error_text",
-        "newchirp_usb_dfu/devices",
-        "newchirp_usb_dfu/list_devices",
-        "newchirp_usb_dfu/init",
-        "newchirp_usb_dfu/libusb_exit",
-        "newchirp_usb_dfu/transfer",
-        "newchirp_usb_dfu/status",
-        "newchirp_usb_dfu/wait_idle",
-        "newchirp_usb_dfu/download",
-        "newchirp_usb_dfu/upload",
-        "newchirp_usb_dfu/command",
-        "newchirp_usb_dfu/program_mode",
-        "newchirp_usb_dfu/identity",
-        "newchirp_usb_dfu/set_address",
-        "newchirp_usb_dfu/erase",
-        "newchirp_usb_dfu/read",
-        "newchirp_usb_dfu/write",
-        "newchirp_usb_dfu/reboot",
-        "newchirp_usb_dfu/close",
-        "newchirp_usb_dfu/DfuError",
-        "newchirp_usb_dfu/DeviceDescriptor",
-        "newchirp_usb_dfu/DfuTransport"
-      ]
-    },
-    "check_linux_release_abi.py": {
-      "path": "check_linux_release_abi.py",
-      "mtime_ns": 1794748425231791025,
-      "hash": "5c1e7c15252615df653bacb9d7e54d6e9017657d73d3462009e0fa63a2f3ad64",
-      "concept_ids": [
-        "check_linux_release_abi",
-        "check_linux_release_abi/version_tuple",
-        "check_linux_release_abi/read_os_release",
-        "check_linux_release_abi/command_version",
-        "check_linux_release_abi/require_release_host",
-        "check_linux_release_abi/elf_files",
-        "check_linux_release_abi/required_glibc_versions",
-        "check_linux_release_abi/check_roots",
-        "check_linux_release_abi/parse_args",
-        "check_linux_release_abi/main"
-      ]
-    },
-    "generate_gmrs_frs_pdf.py": {
-      "path": "generate_gmrs_frs_pdf.py",
-      "mtime_ns": 1787526889873622751,
-      "hash": "df1a1f0a1b83f1e4347450ea7480e921a0268146a2aa1ad640f71d44348ff7ac",
-      "concept_ids": [
-        "generate_gmrs_frs_pdf",
-        "generate_gmrs_frs_pdf/esc",
-        "generate_gmrs_frs_pdf/rgb",
-        "generate_gmrs_frs_pdf/init",
-        "generate_gmrs_frs_pdf/set_fill",
-        "generate_gmrs_frs_pdf/set_stroke",
-        "generate_gmrs_frs_pdf/rect",
-        "generate_gmrs_frs_pdf/line",
-        "generate_gmrs_frs_pdf/text",
-        "generate_gmrs_frs_pdf/text_in_rect",
-        "generate_gmrs_frs_pdf/table_cell",
-        "generate_gmrs_frs_pdf/as_pdf",
-        "generate_gmrs_frs_pdf/row_color",
-        "generate_gmrs_frs_pdf/main",
-        "generate_gmrs_frs_pdf/PdfWriter"
-      ]
-    },
-    "generate_international_frequency_pdfs.py": {
-      "path": "generate_international_frequency_pdfs.py",
-      "mtime_ns": 1795034009326443867,
-      "hash": "47ce7afa7b78c1e932a1200c0747b0589563118002fbb365dd3a2ef3222113b4",
-      "concept_ids": [
-        "generate_international_frequency_pdfs",
-        "generate_international_frequency_pdfs/uhf_rows",
-        "generate_international_frequency_pdfs/draw_table",
-        "generate_international_frequency_pdfs/make_pdf",
-        "generate_international_frequency_pdfs/main"
-      ]
-    },
-    "generate_repeater_counties.py": {
-      "path": "generate_repeater_counties.py",
-      "mtime_ns": 1793439376655566408,
-      "hash": "5b41696728c60fba0706a10867eadf154b89b4d803f0ed4e9038319bc7fe3c24",
-      "concept_ids": [
-        "generate_repeater_counties",
-        "generate_repeater_counties/display_name",
-        "generate_repeater_counties/dart_string",
-        "generate_repeater_counties/read_source",
-        "generate_repeater_counties/generate",
-        "generate_repeater_counties/main"
-      ]
-    },
-    "build_macos_dmg.py": {
-      "path": "build_macos_dmg.py",
-      "mtime_ns": 1792753027569896057,
-      "hash": "e624279571e421cd54757125bdf976d42233cf8a45bc400b912bde09bbd246e9",
-      "concept_ids": [
-        "build_macos_dmg",
-        "build_macos_dmg/project_version",
-        "build_macos_dmg/build_background",
-        "build_macos_dmg/main"
       ]
     }
   },
@@ -1581,7 +1581,7 @@
       "type": "Function",
       "resource": "check_linux_release_abi.py",
       "render_hash": "stale",
-      "edge_hash": "bae7eb98f2d7b1394568f0a0978b85381a6c66be852c70d8306c6ee3283a0042",
+      "edge_hash": "d2ed03cee45b437ce841485944a68d02df38809887fb343c4c42d539dfc2e36c",
       "enriched": false
     },
     "check_linux_release_abi/main": {
@@ -1961,5 +1961,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-21T14:09:20Z"
+  "generated_at": "2026-11-22T09:18:47Z"
 }

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:22:21",
+  "details": "Linux 1.0.68: reading a codeplug built elsewhere flagged 30 channels, e.g. 145.163750 MHz -> nearest 145.165. The radio holds the frequency; the driver sets has_nostep_tuning (10 Hz storage), which CHIRP's validate_memory honors, but the bridge never exported it and the app's pre-write check applied the 2.5-100 kHz steps. Affects every has_nostep_tuning radio (22 driver files).",
+  "event_type": "created",
+  "external_ref": "INBOX:895 <84f2a5ed-80a4-2f1a-f7de-971c3e81b271@newchirp.net>",
+  "item": "w-20261122-f1fb",
+  "occurred_at": "2026-11-22",
+  "summary": "Frequencies off the tuning-step grid (145.16375 MHz) flagged as unprogrammable"
+}

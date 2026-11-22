@@ -1168,6 +1168,7 @@ def features_json(radio):
             for start, end in features.valid_bands
         ],
         "hasTuningStep": features.has_tuning_step,
+        "hasNostepTuning": features.has_nostep_tuning,
     }
 
 
