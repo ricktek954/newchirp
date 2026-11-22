@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 14:18:17",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179535707219.6776.4971154091783975344@newchirp.net>",
+  "item": "w-20261122-1af9",
+  "occurred_at": "2026-11-22",
+  "summary": "Explained early DIAL press / leftover data; workaround: power-cycle, CLONE mode, start read, wait ~10 s, then press DIAL; same port; next release adds the cue and flush"
+}

@@ -760,7 +760,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### FTM-300DR
 
-- **#w-20261122-1af9 bug | fix_committed | normal:** First clone frame failed checksum after repeated read attempts
+- **#w-20261122-1af9 bug | awaiting_user | normal:** First clone frame failed checksum after repeated read attempts
   Linux 1.0.68: reads started on ttyUSB2, ttyUSB3, then ttyUSB2 again; the last failed 'Block failed checksum' about 20 s in. Radio-initiated clone of 131-byte frames; a misaligned or stale first frame fails its checksum. The FTM-300 prompt ('press the DIAL knob') got no 'press now' cue.
   Source: `email` INBOX:899
 
