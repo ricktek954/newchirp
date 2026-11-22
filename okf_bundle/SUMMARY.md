@@ -1,37 +1,37 @@
 ---
-description: 'Top-level OKF summary: 655 concepts across 4 domains and 32 modules'
+description: 'Top-level OKF summary: 671 concepts across 4 domains and 33 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-22T10:38:40Z'
+timestamp: '2026-11-22T10:54:24Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 655 concepts | 4 domains | 32 modules
+> OKF v0.2 bundle | 671 concepts | 4 domains | 33 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 510 |
-| Class | 103 |
-| Module | 32 |
+| Function | 524 |
+| Class | 104 |
+| Module | 33 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 655 |
+| dart | 671 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 240 concepts
+### [main.dart](main.dart/index.md) — 242 concepts
 
-- [main](main/index.md) (240 concepts)
+- [main](main/index.md) (242 concepts)
 
 ### [models](models/index.md) — 112 concepts
 
@@ -45,7 +45,7 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - *…and 1 more modules*
 
-### [services](services/index.md) — 239 concepts
+### [services](services/index.md) — 253 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (55 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
@@ -54,8 +54,8 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/update_checker](services/update_checker/index.md) (17 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
-- [services/update_installer](services/update_installer/index.md) (11 concepts)
-- *…and 8 more modules*
+- [services/channel_list_pdf](services/channel_list_pdf/index.md) (14 concepts)
+- *…and 9 more modules*
 
 ### [widgets](widgets/index.md) — 64 concepts
 
@@ -88,10 +88,10 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
-| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
-| [_waitForSendKeyCue](/main/waitForSendKeyCue.md) | Function | `main.dart` | For radios that start a clone read from their own key ("Afte… |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 | [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
+| [_waitForSendKeyCue](/main/waitForSendKeyCue.md) | Function | `main.dart` | For radios that start a clone read from their own key ("Afte… |
+| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
 
 ## Usage with OpenCode
 

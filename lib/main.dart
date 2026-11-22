@@ -20,6 +20,7 @@ import 'models/radio_channel.dart';
 import 'models/radio_mapping.dart';
 import 'models/repeater_regions.dart';
 import 'models/repeater_search.dart';
+import 'services/channel_list_pdf.dart';
 import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
 import 'services/diagnostic_log.dart';
@@ -824,7 +825,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       minimumLocation: _capabilities?.memoryStart,
                       maximumLocation: _capabilities?.memoryEnd,
                       maximumNameLength: _capabilities?.nameLength,
-                      validTuningSteps: _capabilities?.frequencyGridSteps ?? const [],
+                      validTuningSteps:
+                          _capabilities?.frequencyGridSteps ?? const [],
                       validBands: _capabilities?.validBands ?? const [],
                       validModes: _capabilities?.modes ?? const [],
                       hasTuningStep: _capabilities?.hasTuningStep ?? true,
@@ -3997,6 +3999,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 onOpen: _openLibraryFile,
                                 onSave: () => _saveCsv(),
                                 onSaveAs: () => _saveCsv(saveAs: true),
+                                onPrintChannels: () =>
+                                    unawaited(_printChannelList()),
                                 canSave: _libraryOpen,
                                 minimalMode:
                                     _page == 2 || _page == 3 || _page == 4,
@@ -5555,6 +5559,56 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
 
     if (!mounted || !prepared) return;
+    await _printPdfFile(
+      temp,
+      noun: 'reference',
+      taskLabel: 'Printing frequency reference…',
+      sentText: 'The GMRS/FRS reference',
+    );
+  }
+
+  Future<void> _printChannelList() async {
+    final rows = channelListRows(_channels, radioModel: _model);
+    final title = _model == null
+        ? 'NewChirp channel list'
+        : 'NewChirp channel list: ${displayRadioModelName(_model!)}';
+    final today = DateTime.now().toIso8601String().substring(0, 10);
+    final subtitle =
+        '$_libraryName · ${rows.length} channel${rows.length == 1 ? '' : 's'}'
+        ' · printed $today';
+    final locale = Platform.localeName.toUpperCase();
+    final letter = locale.contains('_US') || locale.contains('_CA');
+    final temp = File('${Directory.systemTemp.path}/newchirp-channel-list.pdf');
+    var prepared = false;
+    await _task('Preparing channel list…', () async {
+      await temp.writeAsBytes(
+        buildChannelListPdf(
+          title: title,
+          subtitle: subtitle,
+          rows: rows,
+          letter: letter,
+        ),
+      );
+      prepared = true;
+    });
+    if (!mounted || !prepared) return;
+    await _printPdfFile(
+      temp,
+      noun: 'channel list',
+      taskLabel: 'Printing channel list…',
+      sentText: 'The channel list',
+    );
+  }
+
+  /// Open [pdf] in the PDF viewer (Windows, or no printers) or send it to a
+  /// chosen CUPS printer.
+  Future<void> _printPdfFile(
+    File pdf, {
+    required String noun,
+    required String taskLabel,
+    required String sentText,
+  }) async {
+    final temp = pdf;
 
     Future<void> openInPdfViewer({required bool noPrinters}) async {
       try {
@@ -5568,13 +5622,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         context: context,
         builder: (context) => AlertDialog(
           icon: const Icon(Icons.print_outlined, color: Color(0xFFC46A15)),
-          title: Text(noPrinters ? 'No printers found' : 'Reference opened'),
+          title: Text(
+            noPrinters
+                ? 'No printers found'
+                : '${noun[0].toUpperCase()}${noun.substring(1)} opened',
+          ),
           content: Text(
             noPrinters
                 ? 'NewChirp could not find any system printers, so the '
-                      'reference PDF was opened in your default PDF viewer. '
+                      '$noun PDF was opened in your default PDF viewer. '
                       'Use the viewer’s Print command to print it.'
-                : 'The reference PDF was opened in your default PDF viewer. '
+                : 'The $noun PDF was opened in your default PDF viewer. '
                       'Use the viewer’s Print command to print it.',
           ),
           actions: [
@@ -5651,7 +5709,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (chosenPrinter == null || !mounted) return;
 
     var printSent = false;
-    await _task('Printing frequency reference…', () async {
+    await _task(taskLabel, () async {
       final result = await Process.run('/usr/bin/lp', [
         '-d',
         chosenPrinter,
@@ -5659,7 +5717,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ]);
       if (result.exitCode != 0) {
         throw Exception(
-          'Could not send the reference to $chosenPrinter:\n'
+          'Could not send the $noun to $chosenPrinter:\n'
           '${result.stderr.toString().trim()}',
         );
       }
@@ -5675,7 +5733,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             color: Color(0xFF1F7455),
           ),
           title: const Text('Print job sent'),
-          content: Text('The GMRS/FRS reference was sent to $chosenPrinter.'),
+          content: Text('$sentText was sent to $chosenPrinter.'),
           actions: [
             FilledButton(
               onPressed: () => Navigator.pop(context),
@@ -7637,6 +7695,7 @@ class _TopBar extends StatelessWidget {
     required this.onOpen,
     required this.onSave,
     required this.onSaveAs,
+    required this.onPrintChannels,
     required this.canSave,
     required this.minimalMode,
     required this.minimalTitle,
@@ -7662,6 +7721,7 @@ class _TopBar extends StatelessWidget {
   final VoidCallback onOpen;
   final VoidCallback onSave;
   final VoidCallback onSaveAs;
+  final VoidCallback onPrintChannels;
   final bool canSave;
   final bool minimalMode;
   final String minimalTitle;
@@ -7884,6 +7944,12 @@ class _TopBar extends StatelessWidget {
                   MenuItemButton(
                     onPressed: onSaveAs,
                     child: const Text('Save as…'),
+                  ),
+                  MenuItemButton(
+                    key: const ValueKey('print-channel-list'),
+                    onPressed: onPrintChannels,
+                    leadingIcon: const Icon(Icons.print_outlined),
+                    child: const Text('Print channel list…'),
                   ),
                 ],
               ),

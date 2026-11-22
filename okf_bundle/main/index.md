@@ -140,7 +140,9 @@
 - [_pasteChannelsAtLocation](pasteChannelsAtLocation.md)
 - [_preferencesChanged](preferencesChanged.md)
 - [_prepareRestoredRadio](prepareRestoredRadio.md)
+- [_printChannelList](printChannelList.md)
 - [_printFrequencyReference](printFrequencyReference.md)
+- [_printPdfFile](printPdfFile.md) — Open [pdf] in the PDF viewer (Windows, or no printers) or send it to a
 - [_radioSettingChanges](radioSettingChanges.md)
 - [_readRadioSettings](readRadioSettings.md)
 - [_recordHistory](recordHistory.md)

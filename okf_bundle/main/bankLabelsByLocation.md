@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:07:40Z"
+timestamp: "2026-11-22T10:54:23Z"
 concept_id: main/bankLabelsByLocation
 language: dart
 ---
@@ -23,7 +23,7 @@ Map_bankLabelsByLocation_bankLabelsByLocation
 ```
 
 ## Source
-Lines 660–660 in `main.dart`
+Lines 661–661 in `main.dart`
 
 ## Relationships
 

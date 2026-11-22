@@ -1,0 +1,40 @@
+---
+okf_version: "0.2"
+type: Function
+title: channelToneSummary
+description: Human-readable squelch summary for one channel.
+resource: services/channel_list_pdf.dart
+tags:
+  - "lang:dart"
+  - "type:Function"
+  - "module:services"
+  - "domain:channel_list_pdf.dart"
+  - "git:branch:main"
+  - "git:repo:newchirp"
+timestamp: "2026-11-22T10:54:22Z"
+concept_id: services/channel_list_pdf/channelToneSummary
+language: dart
+---
+
+# channelToneSummary
+
+Human-readable squelch summary for one channel.
+
+## Signature
+
+```dart
+StringchannelToneSummary(RadioChannel channel)
+```
+
+## Docstring
+
+Human-readable squelch summary for one channel.
+
+## Source
+Lines 41–41 in `services/channel_list_pdf.dart`
+
+## Relationships
+
+| Type | Target |
+|------|--------|
+| related | [channel_list_pdf](/services/channel_list_pdf.md) |

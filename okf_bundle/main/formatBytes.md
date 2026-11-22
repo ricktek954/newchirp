@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:07:40Z"
+timestamp: "2026-11-22T10:54:23Z"
 concept_id: main/formatBytes
 language: dart
 ---
@@ -23,7 +23,7 @@ String_formatBytes(int bytes)
 ```
 
 ## Source
-Lines 62–62 in `main.dart`
+Lines 63–63 in `main.dart`
 
 ## Relationships
 

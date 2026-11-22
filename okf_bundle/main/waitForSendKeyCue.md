@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:07:40Z"
+timestamp: "2026-11-22T10:54:23Z"
 concept_id: main/waitForSendKeyCue
 language: dart
 ---
@@ -35,7 +35,7 @@ FT-1D report). The quoted text matches `manual_send_ready_message` in
 `scripts/chirp_bridge.py`.
 
 ## Source
-Lines 109–109 in `main.dart`
+Lines 110–110 in `main.dart`
 
 ## Relationships
 
