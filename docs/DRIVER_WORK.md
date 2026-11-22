@@ -166,6 +166,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   1.0.61: squelch_new.vhf.sql9 = 124 is outside uv5r.py's 0-123, CHIRP leaves it unset and set_settings raises int(None), so no setting can be written. Radio is labelled UV-5RH Pro GPS but reads 45 channels with the UV-5R profile.
   Source: `email` INBOX:833
 
+### UV-5R Mini
+
+- **#w-20261122-e807 bug | fix_committed | normal:** Read stops when the radio misses one block reply; stock aborts instead of re-requesting
+  Windows 1.0.66 (two attempts): COM7 answered PROGRAMCOLOR with 'P' (echoed command, so not the programming cable); COM6 read ~75 68-byte blocks, then one R request got no reply and the read failed. OEM CPS v1.0.7 resends an unanswered block request every 1 s up to five more times; stock CHIRP aborts on the first timeout.
+  Source: `email` INBOX:885/886 <2f9de842-1d9b-dc3d-5a27-e45a36374471@newchirp.net> <69ebea44-574d-fd41-9a84-077b4c1c2697@newchirp.net>
+
 ### UV-5R8W
 
 - **#102 bug | pending_validation | normal:** Web Programmer read times out on UV-5R8W (BF-F8HP magic)
@@ -588,6 +594,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#63 maintenance | experimental | normal:** Current driver status
   Transport: TYT addressed blocks, 9600 then 57600 8N1. Read: 1,000 channels. Write: Yes, offline-tested. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:87
+
+### RA87
+
+- **#w-20261122-8452 bug | fix_committed | normal:** Download refuses an RA87 whose 8-byte ident differs from the two captured fingerprints
+  Windows 1.0.66: PROGRAM echoed+ACK, 0x02 returned 1-byte echo + 8-byte ident, then 'Radio identification failed'. The ident bytes are not in the trace (pre-1.0.68). OEM CPS read handshake accepts any 8 bytes (RX VA x8) and identifies the model by byte 0x1F05 (5A/79/A5 per band version); the ident is the image's 0x1F00-0x1F07 block, so byte 5 is that model byte.
+  Source: `email` INBOX:888 <47d79ef8-296c-98ac-64fd-6d375374a1f8@newchirp.net>
 
 ### RA89
 

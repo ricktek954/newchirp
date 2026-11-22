@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:01:48",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:11ab7cae",
+  "item": "w-20261122-e807",
+  "occurred_at": "2026-11-22",
+  "summary": "CPS-derived override committed with offline regressions (stock reproduces the failure); not hardware-validated"
+}
