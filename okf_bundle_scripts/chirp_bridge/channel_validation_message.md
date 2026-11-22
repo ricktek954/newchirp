@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:53:24Z"
+timestamp: "2026-11-22T10:16:10Z"
 concept_id: chirp_bridge/channel_validation_message
 language: python
 ---
@@ -40,7 +40,7 @@ Add a frequency suggestion to CHIRP's unsupported-step error.
 | `steps_khz` | `—` | `—` |
 
 ## Source
-Lines 1474–1484 in `chirp_bridge.py`
+Lines 1533–1543 in `chirp_bridge.py`
 
 ## Relationships
 

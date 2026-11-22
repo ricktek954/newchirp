@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-22T10:07:40Z"
 concept_id: main/label
 language: dart
 ---
@@ -23,7 +23,7 @@ Widgetlabel({Color? color})
 ```
 
 ## Source
-Lines 10480–10480 in `main.dart`
+Lines 10510–10510 in `main.dart`
 
 ## Relationships
 

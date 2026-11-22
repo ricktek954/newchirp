@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-22T10:07:40Z"
 concept_id: main/TextField
 language: dart
 ---
@@ -27,7 +27,7 @@ class _TextField
 - `createState`
 
 ## Source
-Lines 11462–11481 in `main.dart`
+Lines 11492–11511 in `main.dart`
 
 ## Relationships
 

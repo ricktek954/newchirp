@@ -202,6 +202,7 @@
 - [_useGmrsStarter](useGmrsStarter.md)
 - [_useMarineTemplate](useMarineTemplate.md)
 - [_useSavedRadioSnapshot](useSavedRadioSnapshot.md)
+- [_waitForSendKeyCue](waitForSendKeyCue.md) — For radios that start a clone read from their own key ("After clicking
 - [_windowDisplayArea](windowDisplayArea.md)
 - [_WindowStateManager](WindowStateManager.md)
 - [_writeBlockedByDriver](writeBlockedByDriver.md) — Explains, before any write work starts, that this radio is read-only.

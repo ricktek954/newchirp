@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:53:24Z"
+timestamp: "2026-11-22T10:16:10Z"
 concept_id: chirp_bridge/binary_label
 language: python
 ---
@@ -33,7 +33,7 @@ def _binary_label(raw)
 | `raw` | `—` | `—` |
 
 ## Source
-Lines 225–228 in `chirp_bridge.py`
+Lines 234–237 in `chirp_bridge.py`
 
 ## Relationships
 

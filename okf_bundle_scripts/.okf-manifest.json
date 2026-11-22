@@ -193,8 +193,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795341204605172095,
-      "hash": "8bbf2ce6a54c214fd5598b77e2b14823193d37ba535e742dd7c607c9c7a7eb67",
+      "mtime_ns": 1795342570260411585,
+      "hash": "1ab867aa4d551b564051d418512130075854b7411e5796cf0223211bab6ff512",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -207,6 +207,7 @@
         "chirp_bridge/received",
         "chirp_bridge/alinco_result",
         "chirp_bridge/finish_pending",
+        "chirp_bridge/last_reply_was_echo_only",
         "chirp_bridge/format",
         "chirp_bridge/getattr",
         "chirp_bridge/setattr",
@@ -219,6 +220,7 @@
         "chirp_bridge/exit",
         "chirp_bridge/emit_progress",
         "chirp_bridge/bridge_error_message",
+        "chirp_bridge/manual_send_key_for_model",
         "chirp_bridge/status_progress",
         "chirp_bridge/load_module",
         "chirp_bridge/allow_driver_specific_modes",
@@ -253,6 +255,8 @@
         "chirp_bridge/live_channel_context",
         "chirp_bridge/radio_for",
         "chirp_bridge/download_decode_error_message",
+        "chirp_bridge/manual_send_key",
+        "chirp_bridge/manual_send_ready_message",
         "chirp_bridge/emit_read_ready",
         "chirp_bridge/radio_from_image",
         "chirp_bridge/channel_context",
@@ -286,7 +290,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "7b796307e7bcfc812d2cc653dae87e0024348b03080dfdb16793d55ab2098d0f",
+      "edge_hash": "db36f617a71af789a36246ef5a0676db1cd48df7403535122d7307b79dfaabf8",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -598,7 +602,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "77fae6e3faea335ec3c06a0a2627d5b6078c6475162f4f2bcabed87a064425b5",
+      "edge_hash": "01e9b18f863b0c79c03619099e27063e1b4a646d18a13fe9973e93104c2f077e",
       "enriched": false
     },
     "chirp_bridge/bridge_error_message": {
@@ -606,7 +610,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "463c23c2b7a1e62915b538ba853a463b8acabc5ddf8070683928b4c2fee6c70b",
+      "edge_hash": "66a954dd0b9e1353a975b4166282ac355fd482dd2b70dfa89121f35bfec9d6c8",
       "enriched": false
     },
     "chirp_bridge/extra_field_doc": {
@@ -886,7 +890,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "51da641ed02cee3ec4cbfbbf5adf36988a6d6fd9540309693cd4ff78b133944a",
+      "edge_hash": "a007a405a95ee108ee8f0741c949f83929440d517025b29a72c51dc427a9b3e2",
       "enriched": false
     },
     "chirp_bridge/format": {
@@ -958,7 +962,7 @@
       "type": "Class",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "b7ea31134d60d40d1aa3ceeca0131a00e70cb42b331685f23b6680db710b9b8f",
+      "edge_hash": "dc1d22f74573f28a8aa3844b55cc7a03eeb37f8da7f48b650d9ff11485092015",
       "enriched": false
     },
     "chirp_bridge/TracedSerial": {
@@ -1968,7 +1972,39 @@
       "render_hash": "stale",
       "edge_hash": "6144fa1d51fce37600f8437e69fe6885782757d2d792b0715474202bbc4f4e26",
       "enriched": false
+    },
+    "chirp_bridge/manual_send_key": {
+      "concept_id": "chirp_bridge/manual_send_key",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "5293e7eb32ac223020775ced6b3da60b8c19d71a3ea4f3af1eb905829d6d4f7d",
+      "enriched": false
+    },
+    "chirp_bridge/manual_send_ready_message": {
+      "concept_id": "chirp_bridge/manual_send_ready_message",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "e340ab269aafd4c489f62ab46bda36b3fc1d55d54988b9423fb807187b538d4b",
+      "enriched": false
+    },
+    "chirp_bridge/manual_send_key_for_model": {
+      "concept_id": "chirp_bridge/manual_send_key_for_model",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "710c8ec73ddf081dd29a225f27c094d68e21203494b1b9da8e2f9665772ee18f",
+      "enriched": false
+    },
+    "chirp_bridge/last_reply_was_echo_only": {
+      "concept_id": "chirp_bridge/last_reply_was_echo_only",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "ce9c91bb4e236b319aea851dc742375cbc0ebae7f2fc9d564bec389e2167fc3a",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-22T09:53:25Z"
+  "generated_at": "2026-11-22T10:16:11Z"
 }

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:18:41",
+  "details": "Windows 1.0.66, two attempts: the only exchange is the ACK CHIRP writes after _safe_read, which it sends even when nothing arrived. Old CHIRP worked. NewChirp shows the prompt ('After clicking OK, press [BAND]') and only then starts the bridge, which loads all drivers before opening the port; the bridge's ready cue covered only [PTT]/[Send], so an immediate [BAND] press sends the image to a closed port and the radio waits for an ACK. Affects every 'After clicking OK, press [KEY]' Yaesu clone radio (FT-1D, VX-3/6/7/8, FT-817, FT-857, FT-7800, FT-8800, FT-90, FT-1802, FT-1500M, FT-70D, FTM-3200D, FTM-7250D, FT-450).",
+  "event_type": "created",
+  "external_ref": "INBOX:880 <1dccdb08-b5b6-c3ec-6e24-d7acc8d754c4@newchirp.net>",
+  "item": "w-20261122-ddc6",
+  "occurred_at": "2026-11-22",
+  "summary": "[BAND] pressed before the port is open: ID block lost, then 'No response from radio'"
+}

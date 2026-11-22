@@ -110,6 +110,15 @@ warnings.filterwarnings(
 )
 
 
+ECHO_ONLY_RESULT = "echo of the command only, no radio reply"
+ECHO_ONLY_GUIDANCE = (
+    "The programming cable sent NewChirp's own command back, but the radio "
+    "did not answer. Check that the radio is switched on, the cable is "
+    "pushed fully into the radio's programming jack, and the selected "
+    "model matches the radio."
+)
+
+
 class RadioCommunicationTrace:
     """Keep a bounded, privacy-safe view of recent serial exchanges."""
 
@@ -238,6 +247,7 @@ class RadioCommunicationTrace:
             "started": time.monotonic(),
             "response": bytearray(),
             "alinco": raw if raw.startswith(b"AL~") else None,
+            "raw": raw,
         }
 
     def received(self, data):
@@ -285,10 +295,21 @@ class RadioCommunicationTrace:
             return
         self._pending = None
         response = bytes(pending["response"])
+        raw = pending.get("raw") or b""
         if pending.get("alinco") is not None:
             result = self._alinco_result(
                 pending["alinco"], pending["command"], response,
             )
+        elif (
+            len(raw) >= 2
+            and response == raw
+            and any(not 32 <= byte < 127 for byte in raw.rstrip(b"\r\n"))
+        ):
+            # Only our own binary command came back: a cable that echoes,
+            # with no radio answering behind it (2026-11-21 KT7900D report:
+            # the 8-byte magic returned 8 bytes, read as "Bad ack"). Text
+            # commands are excluded: some radios answer "ID" with "ID".
+            result = "%s (%i bytes)" % (ECHO_ONLY_RESULT, len(response))
         elif pending["command"] == "ID":
             text = response.decode("ascii", errors="replace").strip()
             identifier = re.search(
@@ -361,6 +382,13 @@ class RadioCommunicationTrace:
         })
         if len(self._entries) > self.max_entries:
             del self._entries[: len(self._entries) - self.max_entries]
+
+    def last_reply_was_echo_only(self):
+        """True when the last exchange returned only the command's echo."""
+        self._finish_pending()
+        return bool(self._entries) and self._entries[-1]["result"].startswith(
+            ECHO_ONLY_RESULT
+        )
 
     def format(self):
         self._finish_pending()
@@ -742,10 +770,41 @@ def bridge_error_message(exc, command=None, model=None, port=None):
             "cable and port, report that result with the cable model."
             % (radio_name, selected_port, cps, pc_mode, cps)
         )
+    if (
+        command == "download"
+        and model
+        and message.strip().lower() == "no response from radio"
+    ):
+        key = manual_send_key_for_model(model)
+        if key and key.lower() != "[send]":
+            message = (
+                "No response from the radio. Leave it in CLONE mode, start "
+                "the read again, and press %s on the radio only after "
+                "NewChirp says \"%s\" A key pressed earlier sends the image "
+                "before NewChirp is listening, and the radio then waits. If "
+                "it still fails, select the COM port created by the "
+                "programming cable." % (key, manual_send_ready_message(key))
+            )
+    if RADIO_TRACE.last_reply_was_echo_only():
+        message = "%s\n\n%s" % (ECHO_ONLY_GUIDANCE, message)
     trace = RADIO_TRACE.format()
     if trace:
         message += RADIO_TRACE_MARKER + trace
     return message
+
+
+def manual_send_key_for_model(model):
+    """The send key from a registered driver's read prompt, if loaded."""
+    try:
+        from chirp import directory
+
+        radio_class = directory.get_radio(model)
+        pre_download = radio_class.get_prompts().pre_download or ""
+    except Exception:
+        return None
+    if "[PTT]" in pre_download:
+        return None
+    return manual_send_key(pre_download)
 
 
 def status_progress(status, start=0.0, end=1.0):
@@ -1969,12 +2028,44 @@ def download_decode_error_message(model, image, exc):
     )
 
 
+# The radio-side key in a clone prompt's "After clicking OK, press [KEY]"
+# step (FT-1D "[BAND]", FT-817 "[A]", FT-8800 "left" [V/M], ...).
+_SEND_KEY_STEP = re.compile(
+    r'after\s+clicking\s+(?:OK|"[^"]+")(?:\s+here)?,\s*'
+    r'press(?:\s+the)?(?:\s+"[^"]+")?\s+(\[[^\]]+\](?:\([^)]*\))?)',
+    re.IGNORECASE,
+)
+
+
+def manual_send_key(pre_download):
+    """Return the key a clone prompt says to press after OK, if any."""
+    text = re.sub(r"<[^>]+>", "", pre_download or "")
+    match = _SEND_KEY_STEP.search(text)
+    return match.group(1) if match else None
+
+
+def manual_send_ready_message(key):
+    """Ready cue for a radio that starts the clone from its own key."""
+    if key.lower() == "[send]":
+        return MANUAL_SEND_READY_MESSAGE
+    return "Radio is ready - press %s on the radio now." % key
+
+
 def emit_read_ready(radio):
-    """Tell the user when a manual PTT-triggered clone read can begin."""
+    """Tell the user when a manually triggered clone read can begin.
+
+    The bridge opens the port only after the user confirms the prompt, so a
+    radio key pressed before this message sends the image to a closed port.
+    The radio then waits for an ACK that never comes (2026-11-21 FT-1D
+    report: ID block lost, then "No response from radio").
+    """
     prompts = radio.get_prompts()
     pre_download = getattr(prompts, "pre_download", "") or ""
+    key = manual_send_key(pre_download)
     if "[PTT]" in pre_download:
         emit_progress(MANUAL_READ_READY_MESSAGE, 0.01)
+    elif key:
+        emit_progress(manual_send_ready_message(key), 0.01)
     elif "[Send]" in pre_download:
         emit_progress(MANUAL_SEND_READY_MESSAGE, 0.01)
     else:

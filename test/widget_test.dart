@@ -325,6 +325,46 @@ void main() {
     );
   });
 
+  test('send-key read prompts wait for the bridge ready cue', () {
+    // 2026-11-21 FT-1D report: [BAND] pressed before the port was open, so
+    // the radio's ID went unanswered and the read failed.
+    expect(
+      adaptRadioPromptButton(
+        '4. <b>After clicking OK</b>, press the [BAND] key to send image.',
+        'Radio is ready',
+      ),
+      '4. After clicking "Radio is ready", wait until the transfer window '
+      'says "Radio is ready - press [BAND] on the radio now.", then press '
+      'the [BAND] key to send image.',
+    );
+    expect(
+      adaptRadioPromptButton(
+        '6. <b>After clicking OK</b>, press the "left" [V/M] key to\n'
+        '     send image.',
+        'Radio is ready',
+      ),
+      contains(
+        'says "Radio is ready - press [V/M] on the radio now.", then press '
+        'the "left" [V/M] key',
+      ),
+    );
+    expect(
+      adaptRadioPromptButton(
+        '5. <b>After clicking OK</b>, press the [Send] screen button.',
+        'Radio is ready',
+      ),
+      contains('"Radio is ready - press Send on the radio now."'),
+    );
+    // Writes start from NewChirp, so their prompts are left alone.
+    expect(
+      adaptRadioPromptButton(
+        '4. <b>After clicking OK</b>, press the [BAND] key.',
+        'Radio is ready to receive',
+      ),
+      '4. After clicking "Radio is ready to receive", press the [BAND] key.',
+    );
+  });
+
   testWidgets('channel summary cards collapse to show more channels', (
     tester,
   ) async {

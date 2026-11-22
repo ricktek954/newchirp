@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:53:24Z"
+timestamp: "2026-11-22T10:16:10Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -33,6 +33,7 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [TracedSerial](/chirp_bridge/TracedSerial.md) |
 | related | [emit_progress](/chirp_bridge/emit_progress.md) |
 | related | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |
+| related | [manual_send_key_for_model](/chirp_bridge/manual_send_key_for_model.md) |
 | related | [status_progress](/chirp_bridge/status_progress.md) |
 | related | [_load_module](/chirp_bridge/load_module.md) |
 | related | [_allow_driver_specific_modes](/chirp_bridge/allow_driver_specific_modes.md) |
@@ -67,6 +68,8 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [live_channel_context](/chirp_bridge/live_channel_context.md) |
 | related | [radio_for](/chirp_bridge/radio_for.md) |
 | related | [download_decode_error_message](/chirp_bridge/download_decode_error_message.md) |
+| related | [manual_send_key](/chirp_bridge/manual_send_key.md) |
+| related | [manual_send_ready_message](/chirp_bridge/manual_send_ready_message.md) |
 | related | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | related | [radio_from_image](/chirp_bridge/radio_from_image.md) |
 | related | [channel_context](/chirp_bridge/channel_context.md) |

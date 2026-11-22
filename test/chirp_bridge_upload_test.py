@@ -651,6 +651,66 @@ class UploadHandshakeTest(unittest.TestCase):
             rendered,
         )
 
+    def test_send_key_radios_get_a_named_ready_cue(self):
+        # 2026-11-21 FT-1D report: no "press now" cue for [BAND] radios.
+        cases = {
+            "Yaesu_FT-1D_R": "[BAND]",
+            "Yaesu_FT-817": "[A]",
+            "Yaesu_FT-8800": "[V/M]",
+            "Yaesu_FT-70D": "[BAND]",
+            # FT2D/FT3D word their step differently; the existing [Send]
+            # branch of emit_read_ready covers them.
+            "Yaesu_FT2D_R": None,
+        }
+        for model, key in cases.items():
+            pre = self.directory.get_radio(model).get_prompts().pre_download
+            self.assertEqual(bridge.manual_send_key(pre), key, model)
+        self.assertEqual(
+            bridge.manual_send_ready_message("[BAND]"),
+            "Radio is ready - press [BAND] on the radio now.",
+        )
+        self.assertEqual(
+            bridge.manual_send_ready_message("[Send]"),
+            bridge.MANUAL_SEND_READY_MESSAGE,
+        )
+        self.assertIsNone(bridge.manual_send_key("Turn the radio on."))
+
+    def test_send_key_no_response_explains_the_timing(self):
+        message = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(),
+            command="download",
+            model="Yaesu_FT-1D_R",
+        )
+        self.assertIn("press [BAND] on the radio only after", message)
+        self.assertIn("Radio is ready - press [BAND] on the radio now.", message)
+
+    def test_echo_only_reply_is_named_and_explained(self):
+        # 2026-11-21 KT7900D report: the 8-byte magic came back as 8 bytes
+        # and the user saw only "Bad ack from radio".
+        magic = b"\x55\x20\x15\x09\x16\x45\x4d\x02"
+        bridge.RADIO_TRACE.__init__()
+        self.addCleanup(bridge.RADIO_TRACE.__init__)
+        bridge.RADIO_TRACE.begin(magic)
+        bridge.RADIO_TRACE.received(magic)
+
+        message = bridge.bridge_error_message(
+            self.errors.RadioError("Bad ack from radio"),
+            command="download",
+            model="QYT_KT7900D",
+        )
+
+        self.assertTrue(message.startswith(bridge.ECHO_ONLY_GUIDANCE))
+        self.assertIn("Bad ack from radio", message)
+        self.assertIn("echo of the command only, no radio reply (8 bytes)",
+                      message)
+
+    def test_echo_followed_by_a_reply_is_not_echo_only(self):
+        trace = bridge.RadioCommunicationTrace()
+        trace.begin(b"PROGRAM")
+        trace.received(b"PROGRAM\x06")
+        self.assertFalse(trace.last_reply_was_echo_only())
+        self.assertIn("reply=50 52 4f 47 52 41 4d 06", trace.format())
+
     def test_trace_shows_short_block_command_bytes(self):
         """2026-11-21 UV-5R Mini report: the stalled block address was hidden."""
         trace = bridge.RadioCommunicationTrace()

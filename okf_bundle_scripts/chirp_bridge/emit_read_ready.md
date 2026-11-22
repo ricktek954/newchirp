@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: emit_read_ready
-description: Tell the user when a manual PTT-triggered clone read can begin.
+description: Tell the user when a manually triggered clone read can begin.
 resource: chirp_bridge.py
 tags:
   - "lang:python"
@@ -10,14 +10,14 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:53:24Z"
+timestamp: "2026-11-22T10:16:10Z"
 concept_id: chirp_bridge/emit_read_ready
 language: python
 ---
 
 # emit_read_ready
 
-Tell the user when a manual PTT-triggered clone read can begin.
+Tell the user when a manually triggered clone read can begin.
 
 ## Signature
 
@@ -27,7 +27,12 @@ def emit_read_ready(radio)
 
 ## Docstring
 
-Tell the user when a manual PTT-triggered clone read can begin.
+Tell the user when a manually triggered clone read can begin.
+
+The bridge opens the port only after the user confirms the prompt, so a
+radio key pressed before this message sends the image to a closed port.
+The radio then waits for an ACK that never comes (2026-11-21 FT-1D
+report: ID block lost, then "No response from radio").
 
 ## Parameters
 
@@ -36,12 +41,14 @@ Tell the user when a manual PTT-triggered clone read can begin.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1972–1981 in `chirp_bridge.py`
+Lines 2054–2072 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
+| calls | [manual_send_key](/chirp_bridge/manual_send_key.md) |
 | calls | [emit_progress](/chirp_bridge/emit_progress.md) |
+| calls | [manual_send_ready_message](/chirp_bridge/manual_send_ready_message.md) |
 | called_by | [main](/chirp_bridge/main.md) |

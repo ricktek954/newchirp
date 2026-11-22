@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-22T10:07:40Z"
 concept_id: main
 language: dart
 ---
@@ -71,6 +71,7 @@ language: dart
 | related | [shouldLoadRadioCatalogForRestoredSelection](/main/shouldLoadRadioCatalogForRestoredSelection.md) |
 | related | [_formatBytes](/main/formatBytes.md) |
 | related | [adaptRadioPromptButton](/main/adaptRadioPromptButton.md) |
+| related | [_waitForSendKeyCue](/main/waitForSendKeyCue.md) |
 | related | [main](/main/main.md) |
 | related | [_clampWindowState](/main/clampWindowState.md) |
 | related | [_windowDisplayArea](/main/windowDisplayArea.md) |

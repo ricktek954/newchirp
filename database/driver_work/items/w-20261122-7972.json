@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-22 10:18:41",
+  "kind": "bug",
+  "manufacturer": "QYT",
+  "model": "KT7900D",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:881 <89c3682f-beb1-0f59-885f-48fc9ea7afcb@newchirp.net>",
+  "status": "awaiting_user",
+  "summary": "Windows 1.0.66: the 8-byte MSTRING_KT8900D magic returned exactly 8 bytes within the 1.5 s timeout instead of the 50-byte ACK+ident, so btech._do_ident reported 'Bad ack from radio'. Same length as the command, so most likely the cable echo with no radio reply (radio off, cable not fully seated, or wrong port/cable). Bytes not logged in 1.0.66. Trace now labels echo-only replies and the error explains them.",
+  "title": "Programming command came back as 8 bytes (likely cable echo, radio silent), shown as 'Bad ack'",
+  "uid": "w-20261122-7972"
+}

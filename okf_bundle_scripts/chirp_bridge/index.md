@@ -34,7 +34,7 @@
 - [display_mapping_name](display_mapping_name.md) — Return a safe display name for a CHIRP bank or zone.
 - [download_decode_error_message](download_decode_error_message.md) — Explain a post-download map failure without losing the saved image.
 - [emit_progress](emit_progress.md) — Send structured transfer progress without touching the JSON stdout.
-- [emit_read_ready](emit_read_ready.md) — Tell the user when a manual PTT-triggered clone read can begin.
+- [emit_read_ready](emit_read_ready.md) — Tell the user when a manually triggered clone read can begin.
 - [erase_memory_with_extras](erase_memory_with_extras.md) — Erase a channel and remove its metadata-backed fields.
 - [external_memory_owner](external_memory_owner.md) — Return the object that owns metadata for a radio or channel subdevice.
 - [extra_field_doc](extra_field_doc.md) — Return CHIRP's documentation or a concise fallback for common terms.
@@ -44,11 +44,15 @@
 - [format](format.md)
 - [has_global_settings](has_global_settings.md)
 - [headless_live_adapter](headless_live_adapter.md) — Give a live radio the file-backed interfaces NewChirp requires.
+- [last_reply_was_echo_only](last_reply_was_echo_only.md) — True when the last exchange returned only the command's echo.
 - [live_channel_context](live_channel_context.md) — Choose a live-radio subdevice without probing every memory slot.
 - [live_memory_matches](live_memory_matches.md) — Compare fields that every live radio must retain after a write.
 - [live_models_by_vendor](live_models_by_vendor.md) — Return selectable serial/transport radios, excluding file-only models.
 - [load_chirp](load_chirp.md)
 - [main](main.md)
+- [manual_send_key](manual_send_key.md) — Return the key a clone prompt says to press after OK, if any.
+- [manual_send_key_for_model](manual_send_key_for_model.md) — The send key from a registered driver's read prompt, if loaded.
+- [manual_send_ready_message](manual_send_ready_message.md) — Ready cue for a radio that starts the clone from its own key.
 - [mapping_payload](mapping_payload.md) — Describe CHIRP's bank/zone models for an image or channel owner.
 - [memory_json](memory_json.md)
 - [memory_with_extras](memory_with_extras.md) — Load a channel plus CHIRP's metadata-backed fields such as comments.

@@ -86,7 +86,9 @@ String adaptRadioPromptButton(String message, String buttonLabel) {
       return '$cased "$buttonLabel"';
     },
   );
-  if (!adapted.contains('[PTT]')) return adapted;
+  if (!adapted.contains('[PTT]')) {
+    return _waitForSendKeyCue(adapted, buttonLabel);
+  }
   return adapted.replaceFirst(
     RegExp(
       r',\s*hold the \[PTT\] switch for one second'
@@ -95,6 +97,34 @@ String adaptRadioPromptButton(String message, String buttonLabel) {
     ),
     ', wait until the transfer window says "Listening for the radio", '
     'then hold the [PTT] switch for one second to send the image.',
+  );
+}
+
+/// For radios that start a clone read from their own key ("After clicking
+/// OK, press the [BAND] key"), tell the user to wait for the bridge's ready
+/// cue. NewChirp opens the port only after the dialog closes, so an early
+/// press sends the image to nobody and the radio then waits (2026-11-21
+/// FT-1D report). The quoted text matches `manual_send_ready_message` in
+/// `scripts/chirp_bridge.py`.
+String _waitForSendKeyCue(String message, String buttonLabel) {
+  if (buttonLabel != 'Radio is ready') return message;
+  final label = RegExp.escape(buttonLabel);
+  final step = RegExp(
+    '(after\\s+clicking\\s+"$label"(?:\\s+here)?,\\s*)'
+    r'(press(?:\s+the)?(?:\s+"[^"]+")?\s+(\[[^\]]+\](?:\([^)]*\))?))',
+    caseSensitive: false,
+  );
+  final match = step.firstMatch(message);
+  if (match == null) return message;
+  final key = match.group(3)!;
+  final cue = key.toLowerCase() == '[send]'
+      ? 'Radio is ready - press Send on the radio now.'
+      : 'Radio is ready - press $key on the radio now.';
+  return message.replaceRange(
+    match.start,
+    match.end,
+    '${match.group(1)}wait until the transfer window says "$cue", '
+    'then ${match.group(2)}',
   );
 }
 
