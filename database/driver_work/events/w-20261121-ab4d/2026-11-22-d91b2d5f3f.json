@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 13:47:01",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:a589dea8db387df65ee90d1e868093c3f37e7950b2cdebfd722a8cd6ed9f7bb6",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-22",
+  "summary": "Owner's file drop 13 (1.0.68): writes that ran completed in 49-59 s; the two 'frozen' writes were cancelled at 14 s and 37 s in the same app session; screenshot at 18% 'Scanning flash pages' was from a write that completed. Likely slow, not hung: stock progress stays near 18% until the first page is written."
+}
