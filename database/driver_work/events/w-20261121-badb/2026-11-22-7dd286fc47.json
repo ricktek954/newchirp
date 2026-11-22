@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 14:07:32",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:acefd8d334c55ec34edd0b05de4dc74c115d5ab70073084c9bc2d52b2f08f68d",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-22",
+  "summary": "Retevis RT22 CPS V1.05: handshake sends PROGRGS/02, reads 8 bytes and never compares them (buffer overwritten by first R read); writes W addr 10 up to 0x3F0, same 0x400 layout as CHIRP"
+}

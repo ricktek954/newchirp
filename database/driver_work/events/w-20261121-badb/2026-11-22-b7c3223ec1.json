@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 14:07:32",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:eb77e8d1",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-22",
+  "summary": "Plain RT22 accepts any complete 8-byte ID as the OEM software does; other family models unchanged; offline tests; not hardware-validated"
+}
