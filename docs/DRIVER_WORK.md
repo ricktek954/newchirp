@@ -466,6 +466,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261121-5acc release | released | normal:** macOS 1.0.66 published
   Published a universal signed, notarized, stapled DMG from source commit ee72c09e. It includes the DM-32UV channel/zone NUL-termination fix, current RT-950 Pro behavior, approved RepeaterBook API search, and cumulative driver/UI/bridge compatibility changes. Artifact SHA-256: 0087cb989e126669d63be4f5eaa94ca80dbc41ecd03b2d81b1091359723893b9. Notarization: a48065c5-5e65-488c-aa7a-0c19fe5c3755. Live manifest reports macOS 1.0.66.
   Source: `release` desktop:ee72c09e
+- **#w-20261122-cd4e release | released | normal:** macOS 1.0.67 published
+  Published a universal signed and notarized DMG from source commit 8e03e24b. It includes the cumulative driver, UI, bridge, trace, printing, and write-progress fixes after 1.0.66, including FTM-300DR and F4HWN 7.0, RT22, DM-32UV progress/cancel, UV-K60 Plus, RA87, UV-5R Mini, VX-170, TH-350, and no-step tuning work. Artifact SHA-256: 250f68ae8fe5d2be54e0e73956277e5ba114c5f6dd4258eb35763e41722b7f22. Apple notarization: 653b46a8-5cd8-43e5-bea0-da202daa2832. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.67.
+  Source: `release` desktop:8e03e24b
 
 ## Quansheng
 

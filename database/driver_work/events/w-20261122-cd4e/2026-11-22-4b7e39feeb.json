@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 14:33:09",
+  "details": "Published a universal signed and notarized DMG from source commit 8e03e24b. It includes the cumulative driver, UI, bridge, trace, printing, and write-progress fixes after 1.0.66, including FTM-300DR and F4HWN 7.0, RT22, DM-32UV progress/cancel, UV-K60 Plus, RA87, UV-5R Mini, VX-170, TH-350, and no-step tuning work. Artifact SHA-256: 250f68ae8fe5d2be54e0e73956277e5ba114c5f6dd4258eb35763e41722b7f22. Apple notarization: 653b46a8-5cd8-43e5-bea0-da202daa2832. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.67.",
+  "event_type": "created",
+  "external_ref": "desktop:8e03e24b",
+  "item": "w-20261122-cd4e",
+  "occurred_at": "2026-11-22",
+  "summary": "macOS 1.0.67 published"
+}

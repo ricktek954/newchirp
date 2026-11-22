@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-21
+Last updated: 2026-11-22
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -68,6 +68,20 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.67` is live from source commit `8e03e24b` as a universal,
+  signed, and notarized DMG. It includes the cumulative driver, UI, bridge,
+  trace, printing, and write-progress fixes after 1.0.66, including FTM-300DR
+  and F4HWN 7.0, RT22, DM-32UV progress/cancel, UV-K60 Plus, RA87, UV-5R Mini,
+  VX-170, TH-350, and no-step tuning work. Verification: analyzer clean; 249
+  Flutter tests; 597 Python tests with two fixture-dependent skips; embedded
+  version `1.0.67` / `67`; arm64 and x86_64 Python `3.13.15`; CHIRP
+  `21e42e4518c167548af90ed7f9edf75e516c491a`; 269 driver modules; catalog
+  `list-models` returned 602 models; Apple notarization accepted and the
+  ticket validates; mounted-app launch smoke test passed; and matching local,
+  server, and public SHA-256. This host's code-signing assessment service
+  reported an internal error for both the new DMG and the already-published
+  1.0.66 control, so that local check is not treated as an artifact failure.
+  Notarization submission: `653b46a8-5cd8-43e5-bea0-da202daa2832`.
 - macOS `1.0.66` is live from source commit `ee72c09e` as a universal,
   signed, notarized, stapled, Gatekeeper-accepted DMG. It includes the
   DM-32UV channel and zone name NUL-termination fix, current RT-950 Pro
@@ -1142,6 +1156,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.67` artifact source commit: `8e03e24b`
 - macOS `1.0.66` artifact source commit: `ee72c09e`
 - macOS `1.0.65` artifact source commit: `8f56c3da`
 - macOS `1.0.64` artifact source commit: `2fc54348`
@@ -1154,7 +1169,7 @@ release requirements.
 - macOS `1.0.57` artifact source commit: `1d94b15f`
 - Linux `1.0.68` is live from source commit `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.66+66`
+- Checked-out source version: `1.0.67+67`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1168,7 +1183,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.66 |
+| macOS | 1.0.67 |
 | Windows | 1.0.66 |
 | Linux | 1.0.68 |
 
@@ -1259,6 +1274,24 @@ Linux `1.0.65` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums, sizes, and permissions matched the local artifacts
 - Linux platform manifest reports `1.0.65`
+
+macOS `1.0.67` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.67.dmg`
+- Version/build: `1.0.67` / `67`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `250f68ae8fe5d2be54e0e73956277e5ba114c5f6dd4258eb35763e41722b7f22`
+- Size: `86,928,648` bytes
+- Built from `8e03e24b`
+- Notarization submission:
+  `653b46a8-5cd8-43e5-bea0-da202daa2832`
+- Apple notarization accepted and the stapled ticket validates
+- Mounted-app launch smoke test passed
+- Bundle contains the cumulative post-1.0.66 FTM-300DR/F4HWN 7.0, RT22,
+  DM-32UV progress/cancel, UV-K60 Plus, RA87, UV-5R Mini, VX-170, TH-350,
+  no-step tuning, trace, printing, and write-progress changes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.66` artifact:
 
