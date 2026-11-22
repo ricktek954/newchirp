@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 14:09:18",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "web:437936e",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-22",
+  "summary": "Web Programmer plain RT22 profile accepts any 8-byte ID; deployed as index-CRPttjtF.js"
+}
