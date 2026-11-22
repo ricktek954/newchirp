@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:15:31",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179533891162.21781.3285490206382075355@newchirp.net>",
+  "item": "w-20261120-8af9",
+  "occurred_at": "2026-11-22",
+  "summary": "Explained the unwritten 0x1000 bank count; fix ships in the next Windows release; asked owner to write, power-cycle, check ch 25 and send a read-back"
+}
