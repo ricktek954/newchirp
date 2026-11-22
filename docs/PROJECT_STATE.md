@@ -27,6 +27,19 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.69` is live from source commit `5dd9aa67`. It adds the
+  experimental Retevis RA87 driver, fixes Retevis RT22 identification and Web
+  Programmer mapping, adds the UV-5R Mini driver with OEM-style block retries,
+  decodes Yaesu VX-170/VX-177 split tones, adds channel-list PDF printing,
+  hardens radio-key clone readiness and stale-input flushing, fixes TK-270G
+  bank counts, and updates UV-K60 Plus and F4HWN 7.0 behavior. Verification:
+  all 249 Flutter tests passed; 597 Python tests passed with two
+  fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum
+  GLIBC `2.18`; DEB and AppImage Xvfb smoke tests passed; the final AppImage
+  launched under host Wayland and XWayland; package payloads include the four
+  release drivers and omit GLVND/EGL/GLES loaders; the embedded version is
+  `1.0.69`; all public downloads returned HTTP 200; and the Linux platform
+  manifest reports `1.0.69`.
 - Linux `1.0.68` is live from source commit `360773be`. It ends DM-32UV
   channel and zone names at the first NUL so stale padding no longer leaks
   into edited names. Verification: analyzer clean; 242 Flutter tests; 559
@@ -1167,7 +1180,8 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
-- Linux `1.0.68` is live from source commit `360773be`
+- Linux `1.0.69` artifact source commit: `5dd9aa67`
+- Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
 - Checked-out source version: `1.0.67+67`
 - macOS builds are pinned to CocoaPods with
@@ -1185,7 +1199,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.67 |
 | Windows | 1.0.66 |
-| Linux | 1.0.68 |
+| Linux | 1.0.69 |
+
+Linux `1.0.69` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.69.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.69.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.69.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.69.pkg.tar.zst`
+- DEB: `48,590,228` bytes, SHA-256
+  `18890608dadda95a0b4601cb376acd983958dc0947a075b7daa823d77c4060e0`
+- RPM: `48,678,376` bytes, SHA-256
+  `f47c61949b62b60b276e6462d433ffb7a172f81c27dc9ca1e97cc98feae6ada8`
+- AppImage: `48,878,784` bytes, SHA-256
+  `15be796f559b3f184308e8dd74899f79b5e9a6c2cc527dc6dd9bf178792f20d8`
+- Pacman: `47,543,913` bytes, SHA-256
+  `fd7164a91f42a7d0a45871512e826b28de5f4cb503757be9cac6facbba7e9abe`
+- Public HTTP checks returned `200 OK`
+- Server checksums and sizes matched the local artifacts
+- Linux platform manifest reports `1.0.69`
 
 Linux `1.0.68` artifacts:
 

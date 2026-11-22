@@ -451,6 +451,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261121-1690 release | released | normal:** Linux 1.0.68 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 360773be. The release ends DM-32UV channel and zone names at the first NUL so stale padding no longer leaks into edited names. Public manifest reports 1.0.68. Package SHA-256 values: a60af27ff15691a98a88057f2f9b6213ed026dc0c65fc410e4d2add9c18ee3e8, 0ea65c3d2163d403923df814d4276c96407275f24b589298abf824677a3c7419, 4e5c027498b788f4c1747a0fa5f06482d1e04bcac51ea9c1ddd9d8ed0a798d0f, and b56ba89d36e0f513f73b2014809e4ecff49a8e8e58d0bd809b9bad76497c625d.
   Source: `release` desktop:360773be
+- **#w-20261122-0a10 release | released | normal:** Linux 1.0.69 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 5dd9aa67. The release adds the experimental Retevis RA87 driver; fixes Retevis RT22 identification and Web Programmer mapping; adds the UV-5R Mini driver and OEM-style block retry; decodes Yaesu VX-170/VX-177 split tones; adds channel-list PDF printing; hardens radio-key clone readiness and stale-input flushing; fixes TK-270G bank counts; and updates UV-K60 Plus and F4HWN 7.0 behavior. Verification: all 249 Flutter tests passed; 597 Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; package payloads include the four release drivers and omit GLVND/EGL/GLES loaders; the embedded version and public Linux 1.0.69 manifest were verified. Package SHA-256 values: 18890608dadda95a0b4601cb376acd983958dc0947a075b7daa823d77c4060e0, f47c61949b62b60b276e6462d433ffb7a172f81c27dc9ca1e97cc98feae6ada8, 15be796f559b3f184308e8dd74899f79b5e9a6c2cc527dc6dd9bf178792f20d8, and fd7164a91f42a7d0a45871512e826b28de5f4cb503757be9cac6facbba7e9abe.
+  Source: `release` desktop:5dd9aa67
 
 ### macOS desktop
 
