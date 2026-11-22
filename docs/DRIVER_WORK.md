@@ -421,7 +421,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Desktop app
 
-- **#w-20261122-685e enhancement | open | low:** Print the channel list
+- **#w-20261122-685e enhancement | fix_committed | low:** Print the channel list
   5RH Pro owner asked to print channels. The Print button only prints the GMRS/FRS reference; workaround: Save as... CSV and print from a spreadsheet.
   Source: `email` INBOX:889
 
