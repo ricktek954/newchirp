@@ -471,7 +471,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-K1 & UV-K5 V3 (F4HWN)
 
-- **#w-20261119-7381 enhancement | open | normal:** F4HWN 7.0.0 firmware profile
+- **#w-20261119-7381 enhancement | fix_committed | normal:** F4HWN 7.0.0 firmware profile
   F4HWN 7.0.0 released 2026-11-19. Built-in profile supports v6.3.x only and refuses other F4HWN versions before I/O. Needs analysis of the 7.0 CHIRP module memory map.
   Source: `email` INBOX:809
 

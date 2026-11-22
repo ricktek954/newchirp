@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:42:14",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:8eb622ec4a4eeaa26cf77ef878022e066b3d674d9fa214bf99c889571b9f4f41",
+  "item": "w-20261119-7381",
+  "occurred_at": "2026-11-22",
+  "summary": "Official f4hwn.chirp.v7.0.0.py (emailed copy identical apart from CRLF) differs from 6.3 only by set_rxg/set_fnt in formerly unused bytes; layout unchanged"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:42:14",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:ad64beac",
+  "item": "w-20261119-7381",
+  "occurred_at": "2026-11-22",
+  "summary": "F4HWN 7.0.x accepted on the 6.3 profile; cross-series image writes refused before any write"
+}

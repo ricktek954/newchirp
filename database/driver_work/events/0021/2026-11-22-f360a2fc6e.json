@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:42:13",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:ad64beac",
+  "item": "21",
+  "occurred_at": "2026-11-22",
+  "summary": "Unmapped records (clear in both 0x1A00/0x1A20 maps) decode as empty; owner's image now shows 83 channels like MH-580; desktop and Web Programmer"
+}
