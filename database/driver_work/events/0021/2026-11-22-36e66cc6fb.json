@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:45:09",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179534428516.91384.8408477352144912217@newchirp.net>",
+  "item": "21",
+  "occurred_at": "2026-11-22",
+  "summary": "Explained the channel maps (83 in use, 84-97 deleted factory records); fix in next release; ch38 50 MHz TX is radio content; writes still disabled"
+}
