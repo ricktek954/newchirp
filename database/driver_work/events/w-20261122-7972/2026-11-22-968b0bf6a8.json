@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:18:43",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:46301605",
+  "item": "w-20261122-7972",
+  "occurred_at": "2026-11-22",
+  "summary": "Trace labels echo-only replies to binary commands; error prepends cable/radio guidance."
+}

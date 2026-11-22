@@ -484,6 +484,14 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: UV-K5 framed serial, 38400 8N1. Read: Yes, firmware-ID retry. Write: Stock CHIRP policy. Settings: Stock CHIRP policy. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:42
 
+## QYT
+
+### KT7900D
+
+- **#w-20261122-7972 bug | awaiting_user | normal:** Programming command came back as 8 bytes (likely cable echo, radio silent), shown as 'Bad ack'
+  Windows 1.0.66: the 8-byte MSTRING_KT8900D magic returned exactly 8 bytes within the 1.5 s timeout instead of the 50-byte ACK+ident, so btech._do_ident reported 'Bad ack from radio'. Same length as the command, so most likely the cable echo with no radio reply (radio off, cable not fully seated, or wrong port/cable). Bytes not logged in 1.0.66. Trace now labels echo-only replies and the error explains them.
+  Source: `email` INBOX:881 <89c3682f-beb1-0f59-885f-48fc9ea7afcb@newchirp.net>
+
 ## Radioddity
 
 ### DB25-G
@@ -701,6 +709,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261121-fd47 bug | awaiting_user | normal:** Read fails: 'Failed to read header' (macOS 1.0.61)
   macOS 13.7.8, NewChirp 1.0.61, FTDI cable /dev/cu.usbserial-AE9NJ8YH, Yaesu_FT-2900R_1900R driver. Two reads 14-23 s each ended with 'Failed to read header': the radio sent no clone header. That is the usual sign it was not put into clone mode or not told to send (hold MHz(PRI) at power-on, then press LOW(ACC) after clicking Read). Setup is suspected; not a confirmed driver defect.
   Source: `email triage 2026-11-21` INBOX:862
+
+### FT-1D
+
+- **#w-20261122-ddc6 bug | fix_committed | normal:** [BAND] pressed before the port is open: ID block lost, then 'No response from radio'
+  Windows 1.0.66, two attempts: the only exchange is the ACK CHIRP writes after _safe_read, which it sends even when nothing arrived. Old CHIRP worked. NewChirp shows the prompt ('After clicking OK, press [BAND]') and only then starts the bridge, which loads all drivers before opening the port; the bridge's ready cue covered only [PTT]/[Send], so an immediate [BAND] press sends the image to a closed port and the radio waits for an ACK. Affects every 'After clicking OK, press [KEY]' Yaesu clone radio (FT-1D, VX-3/6/7/8, FT-817, FT-857, FT-7800, FT-8800, FT-90, FT-1802, FT-1500M, FT-70D, FTM-3200D, FTM-7250D, FT-450).
+  Source: `email` INBOX:880 <1dccdb08-b5b6-c3ec-6e24-d7acc8d754c4@newchirp.net>
 
 ### FT-1D/2D/3D/5D clone family
 
