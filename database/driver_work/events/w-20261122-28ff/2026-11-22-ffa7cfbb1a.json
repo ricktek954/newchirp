@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:40:07",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:7498cd30",
+  "item": "w-20261122-28ff",
+  "occurred_at": "2026-11-22",
+  "summary": "NewChirp VX-170/VX-177 override decodes raw tmode 5-7 as Cross (DTCS->, Tone->DTCS, DTCS->Tone) and round-trips them; stock code reproduces the reporter's IndexError on a synthetic image. Not hardware-validated; reporter image still wanted to confirm."
+}

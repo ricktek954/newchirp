@@ -734,7 +734,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### VX-170
 
-- **#w-20261122-28ff bug | awaiting_user | normal:** Read of a 193-channel codeplug from another tool fails to decode: list index out of range
+- **#w-20261122-28ff bug | fix_committed | normal:** Read of a 193-channel codeplug from another tool fails to decode: list index out of range
   Linux 1.0.68: clone download completed and saved /tmp/newchirp-5h4w6vr4.img, then channel decoding failed with IndexError. FT-7800-family get_memory indexes TONES (6-bit field, 50 tones), DTCS_CODES (7-bit, 104), TMODES (3-bit, 5), DUPLEX (3-bit, 5) and power levels (2-bit, 3) without bounds checks; a value written by the other tool probably overflows one. The image was not attached (reports cannot carry files) and /tmp may be cleared on reboot. Need the .img to identify the field.
   Source: `email` INBOX:893 <1d1f2c4e-65b8-b971-2ae4-7cb3b6ce4c66@newchirp.net>
 
