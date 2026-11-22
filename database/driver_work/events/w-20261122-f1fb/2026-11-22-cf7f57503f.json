@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:29:38",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179533975784.34161.2377778160336943656@newchirp.net>",
+  "item": "w-20261122-f1fb",
+  "occurred_at": "2026-11-22",
+  "summary": "Told reporter 145.16375 MHz is valid on the DM-32UV, the warning is fixed for the next release, and not to change those frequencies"
+}
