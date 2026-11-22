@@ -11,6 +11,7 @@ const Map<String, String> _modelPickerHints = {
   'Baofeng_UV-5G_Mini': 'GMRS-only profile; channels 1-30 are frequency-locked',
   'Baofeng_UV-29Pro': "Uses Baofeng's UV-28 Plus compatibility profile",
   'Wouxun_KG-UV9GX': 'Also for the KG-UV9GX Plus (KG-UV9GX+); USB cable',
+  'Quansheng_UV-K1_F4HWN_6.3': 'Also for F4HWN 7.0 firmware (same memory layout)',
 };
 
 /// Manufacturer model names for CHIRP driver IDs whose model part differs.

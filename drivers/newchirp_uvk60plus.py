@@ -31,6 +31,15 @@ NAME_SIZE = 0x10
 NAME_FIELD_OFFSET = 4
 NAME_LENGTH = 12
 READ_RANGES = ((0x0000, 0x1F40), (0x2000, IMAGE_SIZE))
+# Two 128-bit channel maps (bit n-1 = channel n, LSB first). A record whose
+# bits are clear is a deleted channel that MH-580 does not show: the
+# 2026-11-21 read held factory records 84-97 with clear bits, and the
+# owner's MH-580 file of the same radio had 83 channels and blank records
+# there; the earlier OEM dump's maps also mark exactly its 17 channels.
+# Both maps are identical in every sample, so which one is "in use" and
+# which may be the scan list is unproven; a channel is shown when either
+# map marks it (see docs/KSUN_UVK60PLUS_PROTOCOL.md).
+CHANNEL_MAPS = (0x1A00, 0x1A20)
 
 
 def _read_exact(pipe, count, context, timeout=2.0):
@@ -256,12 +265,20 @@ class KSUNUVK60Plus(chirp_common.CloneModeRadio):
         start = CHANNEL_START + (number - 1) * CHANNEL_SIZE
         return self._mmap[start:start + CHANNEL_SIZE].hex()
 
+    def _channel_mapped(self, number):
+        index = number - 1
+        return any(
+            bytes(self._mmap[base + index // 8:base + index // 8 + 1])[0]
+            >> (index % 8) & 1
+            for base in CHANNEL_MAPS
+        )
+
     def get_memory(self, number):
         memory = chirp_common.Memory(number)
         start = CHANNEL_START + (number - 1) * CHANNEL_SIZE
         record = bytes(self._mmap[start:start + CHANNEL_SIZE])
         frequency = _decode_bcd_frequency(record[0:4])
-        if frequency is None:
+        if frequency is None or not self._channel_mapped(number):
             memory.empty = True
             return memory
 

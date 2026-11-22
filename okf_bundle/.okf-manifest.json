@@ -848,8 +848,8 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1795343007830867183,
-      "hash": "b545250c3c6f8f2d0509df71393eb75aeb0a3a5e10df58f0cc664e81a5058bc6",
+      "mtime_ns": 1795343918951623359,
+      "hash": "7269ecb70824ce01c9c3f68971c5d48e6b7ae314386e9cef06ab97e0a02792bb",
       "concept_ids": [
         "widgets/radio_model_picker",
         "widgets/radio_model_picker/VendorModels",
@@ -6557,5 +6557,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-22T10:27:57Z"
+  "generated_at": "2026-11-22T10:38:40Z"
 }

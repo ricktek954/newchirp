@@ -207,6 +207,34 @@ class UVK60PlusDriverTest(unittest.TestCase):
         self.assertEqual(receive_only.name, "FFG1")
         self.assertTrue(radio.get_memory(3).empty)
 
+    def test_unmapped_records_are_deleted_channels(self):
+        # 2026-11-21 owner read: records 1-97 present, both channel maps at
+        # 0x1A00/0x1A20 = ff x10 07 (83 channels); MH-580 showed 83 and
+        # blank records 84-97. NewChirp showed 97, with factory names.
+        image = bytearray(b"\xff" * IMAGE_SIZE)
+        for number in range(1, 98):
+            start = CHANNEL_START + (number - 1) * 16
+            image[start:start + 16] = _channel(145_500_000, 145_500_000)
+        for base in (0x1A00, 0x1A20):
+            image[base:base + 16] = b"\xff" * 10 + b"\x07" + b"\x00" * 5
+        radio = self._radio(FakeUVK60PlusSerial(bytes(image)))
+        radio._mmap = driver.memmap.MemoryMapBytes(bytes(image))
+        radio.process_mmap()
+
+        shown = [n for n in range(1, 129) if not radio.get_memory(n).empty]
+        self.assertEqual(shown, list(range(1, 84)))
+
+        # Either map marks a channel in use (which one is the scan list is
+        # unproven).
+        image[0x1A00 + 10] = 0x03          # clear channel 83 in one map
+        radio._mmap = driver.memmap.MemoryMapBytes(bytes(image))
+        radio.process_mmap()
+        self.assertFalse(radio.get_memory(83).empty)
+        image[0x1A20 + 10] = 0x03          # and in the other
+        radio._mmap = driver.memmap.MemoryMapBytes(bytes(image))
+        radio.process_mmap()
+        self.assertTrue(radio.get_memory(83).empty)
+
     def test_bad_checksum_retries_same_page_then_fails(self):
         serial = FakeUVK60PlusSerial(bad_at=0x0060)
         radio = self._radio(serial)

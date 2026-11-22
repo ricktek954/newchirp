@@ -288,16 +288,45 @@ class UVK1F4HWNDriverTest(unittest.TestCase):
         self.assertEqual(fake.read_requests, [])
 
     def test_newer_f4hwn_is_not_sent_to_stock_profile(self):
-        fake = _F4HWNFakeRadio(self._image(), firmware="F4HWN v7.0.0")
+        fake = _F4HWNFakeRadio(self._image(), firmware="F4HWN v7.1.0")
         radio = self._radio(fake)
 
         with self.assertRaises(Exception) as caught:
             radio.sync_in()
         text = str(caught.exception)
-        self.assertIn("supports F4HWN v6.3.x only", text)
+        self.assertIn("supports F4HWN v6.3.x and v7.0.x", text)
         self.assertIn("Do not use the stock", text)
         self.assertNotIn("7.03.x", text)
         self.assertEqual(fake.read_requests, [])
+
+    def test_f4hwn_7_0_reads_and_writes_its_own_image(self):
+        # F4HWN 7.0.0 keeps the 6.3 layout; its CHIRP module only names two
+        # formerly unused setting bytes (2026-11-21 reporter, INBOX:879).
+        fake = _F4HWNFakeRadio(self._image(), firmware="F4HWN v7.0.0")
+        radio = self._radio(fake)
+        radio.sync_in()
+        self.assertEqual(radio.get_memory(1).name, "CALL")
+        radio.sync_out()
+        self.assertTrue(fake.write_requests)
+
+    def test_image_from_other_f4hwn_series_is_not_written(self):
+        read_63 = _F4HWNFakeRadio(self._image(), firmware="F4HWN v6.3.0")
+        radio = self._radio(read_63)
+        radio.sync_in()
+        radio_70 = _F4HWNFakeRadio(self._image(), firmware="F4HWN v7.0.0")
+        radio.pipe = radio_70
+        with self.assertRaisesRegex(Exception, "nothing was written"):
+            radio.sync_out()
+        self.assertEqual(radio_70.write_requests, [])
+
+        read_70 = _F4HWNFakeRadio(self._image(), firmware="F4HWN v7.0.1")
+        radio = self._radio(read_70)
+        radio.sync_in()
+        radio_63 = _F4HWNFakeRadio(self._image(), firmware="F4HWN v6.3.0")
+        radio.pipe = radio_63
+        with self.assertRaisesRegex(Exception, "nothing was written"):
+            radio.sync_out()
+        self.assertEqual(radio_63.write_requests, [])
 
 
 if __name__ == "__main__":

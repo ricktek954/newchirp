@@ -100,6 +100,30 @@ The replacement driver uses the independently recovered `0x0010` channel
 base and `0x2000` 16-byte name table. It preserves all OEM bytes and exposes
 only channel frequency, TX direction/offset, CTCSS, and name fields.
 
+## Channel maps (2026-11-22)
+
+The first same-state pair arrived on 2026-11-21: a NewChirp read
+(`KSUN_UV-K60-Plus.img`, SHA-256
+`197dd91a1d1893f593590b48376975460a1aa6abf5e8caf8681fd79bc7dcb8ea`) and the
+owner's MH-580 file of the same radio (`MH-580-UVK60PLUS-21_11_26.txt`, a
+raw `0x2A00` image despite the extension, SHA-256
+`0f99b996e3f5221a533f3b2ba6ba89bfe902b87e2a67e9a3dbe67b65a1352fa1`). They
+are byte-identical except:
+
+- `0x0540-0x061F`, channel records 84-97: valid-looking factory records
+  (145.500 ... 435.700 MHz, GBK name 号机) in the radio read, `FF` in the
+  MH-580 file. MH-580 shows 83 channels; NewChirp showed 97.
+- `0x1F40-0x1FFF`: the gap neither reader requests (`FF` vs `00` fill).
+
+Both `0x1A00` and `0x1A20` hold a 128-bit map (bit n-1 = channel n, LSB
+first): `FF x10 07`, i.e. channels 1-83. The earlier OEM dump's maps mark
+exactly its 17 channels. Records whose bits are clear are deleted channels.
+The two maps are identical in both samples, so which is "in use" and which
+may be the scan list is unproven; NewChirp shows a channel when either map
+marks it (correct under either reading, provided the scan list is a subset
+of the channels in use). Channel 38 (135.458 MHz RX, 50.000 MHz TX) is the
+same in both files, so it is radio content, not a decode error.
+
 ## Next evidence required
 
 1. Save the fresh NewChirp image produced from this exact radio before changing
@@ -121,6 +145,6 @@ can be compared with the OEM CPS.
   progression, BCD frequencies and tones, names, and bad checksums.
 - The supplied OEM image decodes to 17 active records with RX/TX values and
   tones matching CSV rows 1-17.
-- E4: no complete physical NewChirp read has yet been compared with an OEM
-  CPS read of the same radio state.
+- E4: one same-state NewChirp read and MH-580 file (2026-11-21) agree on
+  every byte both read, apart from MH-580 blanking unmapped records 84-97.
 - E5: writes are disabled.

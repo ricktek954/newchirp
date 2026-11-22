@@ -151,6 +151,12 @@ F4HWN_MEM_BLOCK = 0x80
 F4HWN_CHANNEL_COUNT = 1024
 F4HWN_VFO_COUNT = 14
 F4HWN_FIRMWARE_PREFIX = "F4HWN v6.3."
+# F4HWN 7.0.0 keeps the 6.3 layout byte for byte; its official CHIRP module
+# (f4hwn.chirp.v7.0.0.py, SHA-256 8eb622ec4a4eeaa2...) differs from 6.3 only
+# by naming two formerly unused setting bytes, set_rxg and set_fnt. This
+# profile hides settings and writes images back unchanged, so those bytes
+# keep the radio's values as long as the image came from a 7.0 radio.
+F4HWN_FIRMWARE_SERIES = ("F4HWN v6.3.", "F4HWN v7.0.")
 
 F4HWN_OFFSET_NONE = 0b00
 F4HWN_OFFSET_PLUS = 0b01
@@ -212,8 +218,37 @@ F4HWN_SCANLISTS = (
 )
 
 
+def _f4hwn_series(firmware):
+    """The supported F4HWN release series a firmware string belongs to."""
+    reported = str(firmware or "").upper()
+    for series in F4HWN_FIRMWARE_SERIES:
+        if reported.startswith(series.upper()):
+            return series
+    return None
+
+
 def _f4hwn_firmware_supported(firmware):
-    return firmware.upper().startswith(F4HWN_FIRMWARE_PREFIX.upper())
+    return _f4hwn_series(firmware) is not None
+
+
+def _f4hwn_require_matching_image(radio, firmware):
+    """Refuse to write an image read under a different F4HWN series.
+
+    7.0 uses two bytes that 6.3 left unused, so a 6.3 image written to a
+    7.0 radio would overwrite its font and RX noise-gate settings.
+    """
+    radio_series = _f4hwn_series(firmware)
+    image_series = _f4hwn_series(
+        (getattr(radio, "metadata", None) or {}).get("f4hwn_firmware")
+    )
+    if radio_series == "F4HWN v6.3." and image_series is None:
+        return  # Unchanged 6.3 behaviour for older images.
+    if image_series != radio_series:
+        raise errors.RadioError(
+            "This image was not read from F4HWN %sx firmware, but the radio "
+            "runs %r. Read the radio first and make your changes on that "
+            "image; nothing was written." % (radio_series, firmware)
+        )
 
 
 def _f4hwn_sayhello(serport):
@@ -257,16 +292,17 @@ def _f4hwn_require_firmware(firmware):
         reported = str(firmware or "")
         if reported.upper().startswith("F4HWN"):
             hint = (
-                "NewChirp supports F4HWN v6.3.x only; this F4HWN version's "
-                "memory layout is not supported yet. Do not use the stock "
-                "UV-K1 model with F4HWN firmware."
+                "NewChirp supports F4HWN v6.3.x and v7.0.x; this F4HWN "
+                "version's memory layout is not supported yet. Do not use the "
+                "stock UV-K1 model with F4HWN firmware."
             )
         else:
             hint = (
                 "Select the stock UV-K1 model for Quansheng firmware 7.03.x."
             )
         raise errors.RadioError(
-            "This profile requires F4HWN v6.3.x firmware; the radio reports "
+            "This profile requires F4HWN v6.3.x or v7.0.x firmware; the radio "
+            "reports "
             "%r. %s" % (firmware, hint)
         )
 
@@ -371,6 +407,7 @@ def _f4hwn_upload(radio):
 
     firmware = _f4hwn_sayhello(serport)
     _f4hwn_require_firmware(firmware)
+    _f4hwn_require_matching_image(radio, firmware)
     image = radio.get_mmap()
     if len(image) < F4HWN_PROG_SIZE:
         raise errors.RadioError(
@@ -428,7 +465,8 @@ class QuanshengUVK1F4HWN63(uvk5.UVK5RadioBase):
     def get_prompts(cls):
         prompts = uvk5.UVK5RadioBase.get_prompts()
         prompts.experimental = (
-            "This profile targets the open-source F4HWN v6.3.x firmware on "
+            "This profile targets the open-source F4HWN v6.3.x and v7.0.x "
+            "firmware on "
             "the UV-K1 and UV-K5 V3. It uses the firmware's separate "
             "1,024-channel memory map. Download and keep an original image "
             "before writing. Only the program/configuration region is "

@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:23:27Z"
+timestamp: "2026-11-22T10:38:38Z"
 concept_id: widgets/radio_model_picker/groupModels
 language: dart
 ---
@@ -24,7 +24,7 @@ List_groupModels_groupModels
 ```
 
 ## Source
-Lines 66–69 in `widgets/radio_model_picker.dart`
+Lines 67–70 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

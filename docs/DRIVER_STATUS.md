@@ -1493,8 +1493,17 @@ Last updated: 2026-11-20
 - Implemented: channel and VFO read/write, frequency, offset, duplex, CTCSS,
   DCS, mode, tuning step, power, TX lock, busy-channel lockout, frequency
   reverse, PTT ID, compander, and scan-list assignment
-- Read/write policy: require `F4HWN v6.3.x`; write only
-  `0x0000-0xA177`; preserve calibration at `0xB000-0xB18F`
+- Read/write policy: require `F4HWN v6.3.x` or `v7.0.x`; write only
+  `0x0000-0xA177`; preserve calibration at `0xB000-0xB18F`. An image is
+  written only to a radio of the series it was read from (6.3 images
+  without firmware metadata are still accepted by 6.3 radios).
+- F4HWN 7.0 (2026-11-22, ledger `w-20261119-7381`): the official
+  `f4hwn.chirp.v7.0.0.py` (SHA-256
+  `8eb622ec4a4eeaa26cf77ef878022e066b3d674d9fa214bf99c889571b9f4f41`)
+  differs from the 6.3 module only by naming two formerly unused bytes,
+  `set_rxg` (RX noise gate) and `set_fnt` (display font). Layout, size and
+  every channel structure are unchanged. Settings stay hidden; the bytes
+  round-trip unchanged within one series.
 - Settings: hidden until the complete F4HWN settings layout has dedicated
   validation. Firmware and scan-list MIX data remain untouched by channel
   edits.
@@ -1550,11 +1559,16 @@ Last updated: 2026-11-20
   The supplied OEM dump decodes correctly for its 17 active records, but it
   does not match the separate 97-channel CSV snapshot
 - Driver SHA-256:
-  `6dced38861e73cad495389234bba17b81658f901ac78b45d55b09b35e2291706`
+  `e7a317a59d25f786453fb25dc108a18a3ecbdfaf62ec815518c6dee52e2647a8`
 - Website: experimental catalog entry and read-only Web Serial profile
 - Hardware validation: none
-- Next milestone: compare a complete NewChirp read with an OEM CPS read of
-  the same radio state before promoting beyond read-only experimental
+- 2026-11-22: the first same-state NewChirp read and MH-580 file agree on
+  every byte both read, except that MH-580 blanks records 84-97, whose bits
+  are clear in the channel maps at `0x1A00`/`0x1A20`. NewChirp now treats
+  unmapped records as deleted (83 channels, as MH-580); the Web Programmer
+  does the same. Which map is the scan list is unproven.
+- Next milestone: a controlled single-channel write and read-back compared
+  with MH-580 before enabling writes
 
 ### Baofeng UV-9R
 
