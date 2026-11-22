@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 671 concepts across 4 domains and 33 module
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-22T10:54:24Z'
+timestamp: '2026-11-22T13:43:56Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
@@ -53,8 +53,8 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/chirp_csv](services/chirp_csv/index.md) (17 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/update_checker](services/update_checker/index.md) (17 concepts)
-- [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
 - [services/channel_list_pdf](services/channel_list_pdf/index.md) (14 concepts)
+- [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
 - *…and 9 more modules*
 
 ### [widgets](widgets/index.md) — 64 concepts

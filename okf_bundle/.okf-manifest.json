@@ -178,6 +178,27 @@
         "models/repeater_search"
       ]
     },
+    "services/channel_list_pdf.dart": {
+      "path": "services/channel_list_pdf.dart",
+      "mtime_ns": 1795344862917294456,
+      "hash": "8e5dc95a1b5eaec465da44e993a9a6fa340e31a65c5c45a932b9bf09b8b71d2d",
+      "concept_ids": [
+        "services/channel_list_pdf/ChannelListColumn",
+        "services/channel_list_pdf/buildChannelListPdf",
+        "services/channel_list_pdf/cellOps",
+        "services/channel_list_pdf/channelListRows",
+        "services/channel_list_pdf/channelToneSummary",
+        "services/channel_list_pdf/crossSummary",
+        "services/channel_list_pdf/dcs",
+        "services/channel_list_pdf/fit",
+        "services/channel_list_pdf/mhz",
+        "services/channel_list_pdf/pdfText",
+        "services/channel_list_pdf/side",
+        "services/channel_list_pdf/textWidth",
+        "services/channel_list_pdf/write",
+        "services/channel_list_pdf"
+      ]
+    },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
       "mtime_ns": 1795164855609566210,
@@ -637,8 +658,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795344863117571786,
-      "hash": "191857418ac981da7a4de4cb352156019b907e0392ef34125c53918830da2340",
+      "mtime_ns": 1795355034669415999,
+      "hash": "72bfed7ec4d32b2ba4445e77aeb12b1e441709feaeff893d3e6f1629eea1dda9",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -882,27 +903,6 @@
         "main/channelRow",
         "main/handleFocusChange",
         "main/replaceText"
-      ]
-    },
-    "services/channel_list_pdf.dart": {
-      "path": "services/channel_list_pdf.dart",
-      "mtime_ns": 1795344862917294456,
-      "hash": "8e5dc95a1b5eaec465da44e993a9a6fa340e31a65c5c45a932b9bf09b8b71d2d",
-      "concept_ids": [
-        "services/channel_list_pdf",
-        "services/channel_list_pdf/ChannelListColumn",
-        "services/channel_list_pdf/mhz",
-        "services/channel_list_pdf/dcs",
-        "services/channel_list_pdf/channelToneSummary",
-        "services/channel_list_pdf/crossSummary",
-        "services/channel_list_pdf/side",
-        "services/channel_list_pdf/channelListRows",
-        "services/channel_list_pdf/pdfText",
-        "services/channel_list_pdf/textWidth",
-        "services/channel_list_pdf/fit",
-        "services/channel_list_pdf/buildChannelListPdf",
-        "services/channel_list_pdf/cellOps",
-        "services/channel_list_pdf/write"
       ]
     }
   },
@@ -6708,5 +6708,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-22T10:54:24Z"
+  "generated_at": "2026-11-22T13:43:56Z"
 }

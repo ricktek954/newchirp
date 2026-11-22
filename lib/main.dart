@@ -467,6 +467,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   bool _transferActive = false;
   bool _transferCancelling = false;
   String _transferLabel = '';
+  bool _transferWriting = false;
   double? _transferFraction;
   String _transferDetail = '';
   RadioSettings? _radioSettings;
@@ -3876,6 +3877,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _transferActive = true;
       _transferCancelling = false;
       _transferLabel = label;
+      _transferWriting = label.startsWith('Writing');
       _transferFraction = null;
       _transferDetail = '';
       _status = label;
@@ -3916,8 +3918,42 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
-  void _cancelTransfer() {
+  Future<void> _cancelTransfer() async {
     if (!_transferActive || _transferCancelling) return;
+    if (_transferWriting) {
+      // 2026-11-21 DM-32UV report: two writes that were still working were
+      // cancelled; stopping mid-write can leave a flash page half-written.
+      final stop = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          icon: const Icon(
+            Icons.warning_amber_rounded,
+            color: Color(0xFFC46A15),
+          ),
+          title: const Text('Stop writing the radio?'),
+          content: const Text(
+            'The radio is being written now. Some radios take a minute or '
+            'two, and the elapsed time shows the write is still running. '
+            'Stopping partway can leave part of the radio\'s memory '
+            'half-written; it may then need a power cycle and a fresh '
+            'write.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text('Stop anyway'),
+            ),
+            FilledButton(
+              autofocus: true,
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text('Keep writing'),
+            ),
+          ],
+        ),
+      );
+      if (stop != true || !mounted) return;
+      if (!_transferActive || _transferCancelling) return;
+    }
     setState(() {
       _transferCancelling = true;
       _transferLabel = 'Cancelling safely…';

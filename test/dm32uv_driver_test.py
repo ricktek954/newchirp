@@ -6,6 +6,7 @@ import importlib.util
 from pathlib import Path
 import sys
 import unittest
+from unittest import mock
 
 
 from chirp_test_source import chirp_source
@@ -84,6 +85,49 @@ class DM32UVDriverTest(unittest.TestCase):
             self.radio_class.__module__,
             "newchirp.drivers.newchirp_dm32uv",
         )
+
+    def test_upload_relabels_after_scan_and_reports_each_page(self):
+        # 2026-11-21 report: the dialog sat on "Scanning flash pages" at ~18%
+        # for most of a ~50 s write, and two working writes were cancelled.
+        stock = sys.modules[self.radio_class.__mro__[1].__module__]
+        driver = self.driver
+        messages = []
+        radio = self.radio_class(None)
+        radio.status_fn = lambda status: messages.append(status.msg)
+
+        def fake_upload(radio_):
+            status = mock.Mock(msg="Scanning flash pages", cur=0, max=10)
+            stock._scan(None, 0, 0x2FFF, radio_, status)
+            status.msg = "Cloning to radio"
+            stock._write_page(None, 0x1000, b"", 0, 0x2FFF)
+            stock._write_page(None, 0x2000, b"", 0, 0x2FFF)
+
+        with mock.patch.object(driver, "_original_scan",
+                               return_value=({}, [])), \
+                mock.patch.object(driver, "_original_write_page"), \
+                mock.patch.object(stock, "do_upload", fake_upload):
+            radio.sync_out()
+
+        self.assertEqual(messages[0], driver.WRITE_LABEL)
+        self.assertEqual(
+            messages[1:],
+            [
+                driver.WRITE_LABEL + " (memory page 1)",
+                driver.WRITE_LABEL + " (memory page 2)",
+            ],
+        )
+        self.assertEqual(driver._upload_progress, {})
+
+    def test_download_scan_is_not_relabelled(self):
+        stock = sys.modules[self.radio_class.__mro__[1].__module__]
+        messages = []
+        radio = self.radio_class(None)
+        radio.status_fn = lambda status: messages.append(status.msg)
+        status = mock.Mock(msg="Scanning flash pages")
+        with mock.patch.object(self.driver, "_original_scan",
+                               return_value=({}, [])):
+            stock._scan(None, 0, 0x2FFF, radio, status)
+        self.assertEqual(messages, [])
 
     def test_airband_is_accepted_only_as_receive_only(self):
         radio = self.radio_class(None)

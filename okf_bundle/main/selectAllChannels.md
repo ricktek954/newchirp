@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:23Z"
+timestamp: "2026-11-22T13:43:54Z"
 concept_id: main/selectAllChannels
 language: dart
 ---
@@ -23,7 +23,7 @@ void_selectAllChannels()
 ```
 
 ## Source
-Lines 688–688 in `main.dart`
+Lines 689–689 in `main.dart`
 
 ## Relationships
 

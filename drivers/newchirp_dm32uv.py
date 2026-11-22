@@ -173,6 +173,50 @@ if not getattr(
     baofeng_dm32uv._Link.query_v = _query_v_with_retry
 
 
+# Upload progress. Stock do_upload reports once per memory tag and only
+# relabels "Scanning flash pages" after the first page has been erased and
+# written, so the dialog sat on a low percentage for most of a ~50-60 s
+# write. A 2026-11-21 owner cancelled two writes at 14 s and 37 s that were
+# still working (ledger w-20261121-ab4d). These wrappers relabel the moment
+# scanning ends and report every page write. Downloads are unchanged.
+WRITE_LABEL = (
+    "Writing to radio - this takes about a minute. Keep the cable connected "
+    "and do not cancel"
+)
+_upload_progress = {}
+_current_scan = baofeng_dm32uv._scan
+_original_scan = getattr(_current_scan, "newchirp_original", _current_scan)
+_current_write_page = baofeng_dm32uv._write_page
+_original_write_page = getattr(
+    _current_write_page, "newchirp_original", _current_write_page
+)
+
+
+def _scan_then_announce_write(link, start, end, radio, status):
+    result = _original_scan(link, start, end, radio, status)
+    if _upload_progress.get("radio") is radio:
+        _upload_progress.update(status=status, pages=0)
+        status.msg = WRITE_LABEL
+        radio.status_fn(status)
+    return result
+
+
+def _write_page_with_progress(link, addr, data, start, end):
+    progress = _upload_progress
+    if progress.get("status") is not None:
+        progress["pages"] += 1
+        status = progress["status"]
+        status.msg = "%s (memory page %i)" % (WRITE_LABEL, progress["pages"])
+        progress["radio"].status_fn(status)
+    return _original_write_page(link, addr, data, start, end)
+
+
+_scan_then_announce_write.newchirp_original = _original_scan
+_write_page_with_progress.newchirp_original = _original_write_page
+baofeng_dm32uv._scan = _scan_then_announce_write
+baofeng_dm32uv._write_page = _write_page_with_progress
+
+
 def _stored_name(raw):
     """A name as the radio shows it: text up to the first NUL or 0xFF.
 
@@ -212,6 +256,14 @@ class DM32UV(baofeng_dm32uv.DM32UV):
         features = super().get_features()
         features.valid_bands.insert(0, AIRBAND)
         return features
+
+    def sync_out(self):
+        _upload_progress.clear()
+        _upload_progress["radio"] = self
+        try:
+            return super().sync_out()
+        finally:
+            _upload_progress.clear()
 
     def get_memory(self, number):
         mem = super().get_memory(number)

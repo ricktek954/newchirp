@@ -1345,6 +1345,13 @@ Last updated: 2026-11-20
   radio-information queries up to three times. Information queries allow up
   to 1.5 seconds for the header and two seconds for the body. A malformed
   final response reports its hexadecimal reply bytes.
+- Upload progress (2026-11-22, ledger `w-20261121-ab4d`): stock reports once
+  per memory tag and kept the "Scanning flash pages" label until the first
+  page was erased and written, so a ~50-60 s write sat near 18%; the
+  reporter cancelled two working writes. The label now switches to
+  "Writing to radio - this takes about a minute" when scanning ends and
+  reports each page written. The app asks before cancelling any radio
+  write. Protocol and written bytes are unchanged.
 - Evidence: upstream CHIRP commit
   `832d349e050fbdcde50185f77cdb34fbe5bab57a`, vendor CPS v1.60 protocol
   work recorded by the upstream driver author, and CHIRP issue 12652

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:23Z"
+timestamp: "2026-11-22T13:43:54Z"
 concept_id: main/bankRangeAt
 language: dart
 ---
@@ -23,7 +23,7 @@ language: dart
 ```
 
 ## Source
-Lines 1020–1020 in `main.dart`
+Lines 1021–1021 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:23Z"
+timestamp: "2026-11-22T13:43:54Z"
 concept_id: main/matchesQuery
 language: dart
 ---
@@ -23,7 +23,7 @@ boolmatchesQuery(RadioChannel channel)
 ```
 
 ## Source
-Lines 541–541 in `main.dart`
+Lines 542–542 in `main.dart`
 
 ## Relationships
 
