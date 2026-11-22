@@ -193,8 +193,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795339127133619528,
-      "hash": "97203bf03165b2a0c03f4c345995f5b922bc7329de81e0e047dffe7c1f56096f",
+      "mtime_ns": 1795341204605172095,
+      "hash": "8bbf2ce6a54c214fd5598b77e2b14823193d37ba535e742dd7c607c9c7a7eb67",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -202,6 +202,7 @@
         "chirp_bridge/init",
         "chirp_bridge/set_radio_class",
         "chirp_bridge/command_summary",
+        "chirp_bridge/binary_label",
         "chirp_bridge/begin",
         "chirp_bridge/received",
         "chirp_bridge/alinco_result",
@@ -861,7 +862,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "4e2beec2810c52fb4433d8f03fe37cb6a7fa7e35b97ad86579c22c2352bef7da",
+      "edge_hash": "b44df9019df5064d1e72c3a45ee6f62e2f276371a9b3e569decde0945b5383a0",
       "enriched": false
     },
     "chirp_bridge/begin": {
@@ -957,7 +958,7 @@
       "type": "Class",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "5e1bf5c8185741684bafd2e132d54ddd22c939e986c4cf9faafcd43e05704a32",
+      "edge_hash": "b7ea31134d60d40d1aa3ceeca0131a00e70cb42b331685f23b6680db710b9b8f",
       "enriched": false
     },
     "chirp_bridge/TracedSerial": {
@@ -1959,7 +1960,15 @@
       "render_hash": "stale",
       "edge_hash": "2441215137d1583b960c8f1ca994ff83bb1ac058b83bed96e864c22c263760c4",
       "enriched": false
+    },
+    "chirp_bridge/binary_label": {
+      "concept_id": "chirp_bridge/binary_label",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "6144fa1d51fce37600f8437e69fe6885782757d2d792b0715474202bbc4f4e26",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-22T09:18:47Z"
+  "generated_at": "2026-11-22T09:53:25Z"
 }

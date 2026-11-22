@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:01:36",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:54d14be98e42274419946de60ccf998f19114ae47d69b98f347bf02c7fdf8eb0",
+  "item": "w-20261122-8452",
+  "occurred_at": "2026-11-22",
+  "summary": "RA87 CPS (RunApp.exe, VB6) read handshake accepts any 8-byte ident (RX VA x8) and identifies by 0x1F05 (5A/79/A5); ident = image 0x1F00-0x1F07; exit script equals CHIRP CMD_EXIT"
+}

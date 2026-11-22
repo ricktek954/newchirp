@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-22T09:53:24Z"
 concept_id: chirp_bridge/RadioCommunicationTrace
 language: python
 ---
@@ -28,6 +28,7 @@ Keep a bounded, privacy-safe view of recent serial exchanges.
 - `__init__`
 - `set_radio_class`
 - `_command_summary`
+- `_binary_label`
 - `begin`
 - `received`
 - `_alinco_result`
@@ -35,7 +36,7 @@ Keep a bounded, privacy-safe view of recent serial exchanges.
 - `format`
 
 ## Source
-Lines 113–366 in `chirp_bridge.py`
+Lines 113–381 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -45,6 +46,7 @@ Lines 113–366 in `chirp_bridge.py`
 | related | [__init__](/chirp_bridge/init.md) |
 | related | [set_radio_class](/chirp_bridge/set_radio_class.md) |
 | related | [_command_summary](/chirp_bridge/command_summary.md) |
+| related | [_binary_label](/chirp_bridge/binary_label.md) |
 | related | [begin](/chirp_bridge/begin.md) |
 | related | [received](/chirp_bridge/received.md) |
 | related | [_alinco_result](/chirp_bridge/alinco_result.md) |

@@ -190,13 +190,22 @@ class RadioCommunicationTrace:
             return "%s (%i bytes)" % (label, len(raw))
         if len(raw) >= 4 and raw[:4] == b"\xab\xcd\x08\x00":
             return "UV-K5 hello"
+        # Block reads/writes such as R <addr> <addr> <len> are short; show
+        # their bytes so a report names the address where a radio stopped
+        # (2026-11-21 UV-5R Mini report: 75 blocks read, then silence, at
+        # an unknown address). Longer frames stay hidden: they can carry
+        # radio passwords.
+        if len(raw) == 4 and raw[:1] in (b"R", b"W", b"S") and not (
+            raw.rstrip(b"\r\n").isalpha()
+        ):
+            return self._binary_label(raw)
         try:
             text = raw.decode("cp1252").strip("\r\n")
         except UnicodeDecodeError:
-            return "<binary command, %i bytes>" % len(raw)
+            return self._binary_label(raw)
         body = text.split(";", 1)[0].strip()
         if not body or not all(32 <= ord(char) < 127 for char in body):
-            return "<binary command, %i bytes>" % len(raw)
+            return self._binary_label(raw)
         upper = body.upper()
         memory = re.match(r"^(M[WRA])\s*([01]?),?(\d{3})", upper)
         if memory:
@@ -211,6 +220,12 @@ class RadioCommunicationTrace:
         if command.startswith("AL~EEP"):
             return command[:8]
         return command[:12] or "<text command>"
+
+    @staticmethod
+    def _binary_label(raw):
+        if len(raw) <= 4:
+            return "<binary command, %i bytes: %s>" % (len(raw), raw.hex(" "))
+        return "<binary command, %i bytes>" % len(raw)
 
     def begin(self, data):
         self._finish_pending()

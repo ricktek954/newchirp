@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:52:28",
+  "details": "Windows 1.0.66: PROGRAM echoed+ACK, 0x02 returned 1-byte echo + 8-byte ident, then 'Radio identification failed'. The ident bytes are not in the trace (pre-1.0.68). OEM CPS read handshake accepts any 8 bytes (RX VA x8) and identifies the model by byte 0x1F05 (5A/79/A5 per band version); the ident is the image's 0x1F00-0x1F07 block, so byte 5 is that model byte.",
+  "event_type": "created",
+  "external_ref": "INBOX:888 <47d79ef8-296c-98ac-64fd-6d375374a1f8@newchirp.net>",
+  "item": "w-20261122-8452",
+  "occurred_at": "2026-11-22",
+  "summary": "Download refuses an RA87 whose 8-byte ident differs from the two captured fingerprints"
+}

@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-22T09:53:24Z"
 concept_id: chirp_bridge/enter
 language: python
 ---
@@ -29,7 +29,7 @@ def __enter__(self)
 | `self` | `—` | `—` |
 
 ## Source
-Lines 410–411 in `chirp_bridge.py`
+Lines 425–426 in `chirp_bridge.py`
 
 ## Relationships
 

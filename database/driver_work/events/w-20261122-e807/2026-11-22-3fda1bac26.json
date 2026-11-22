@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:01:36",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:f96977b15bd9859fc53d0fe432ea48d4c4994074de73555ce8615d3d9e38f607",
+  "item": "w-20261122-e807",
+  "occurred_at": "2026-11-22",
+  "summary": "UV-5R Mini CPS v1.0.7 KDH.Communication.Read resends an unanswered 52 hi lo 40 request every 1 s up to five more times; address map matches CHIRP"
+}

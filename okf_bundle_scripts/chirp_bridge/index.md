@@ -14,6 +14,7 @@
 - [__setattr__](setattr.md)
 - [_alinco_result](alinco_result.md)
 - [_allow_driver_specific_modes](allow_driver_specific_modes.md) — Permit declared radio modes rejected by CHIRP's shared memory map.
+- [_binary_label](binary_label.md)
 - [_command_summary](command_summary.md)
 - [_finish_pending](finish_pending.md)
 - [_load_module](load_module.md)

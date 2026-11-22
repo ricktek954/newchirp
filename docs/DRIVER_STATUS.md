@@ -28,6 +28,8 @@ Last updated: 2026-11-20
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
 | Yaesu VX-170 / VX-177 | `drivers/newchirp_yaesu_vx170.py` | Stock CHIRP Yaesu clone serial (FT-7800 family) | Split-tone squelch modes decoded as Cross | Stock path; split modes encoded to raw 5-7, offline-tested | Not exposed by stock driver | Experimental compatibility override |
+| Retevis RA87 | `drivers/newchirp_retevis_ra87.py` | Stock CHIRP clone serial, 9600, echoing cable | Download identifies by model byte 0x1F05 = A5 (OEM CPS rule) instead of two fixed 8-byte fingerprints | Stock CHIRP driver (already checks 0x1F05) | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng UV-5R Mini | `drivers/newchirp_uv5r_mini.py` | Stock CHIRP UV-17Pro-family serial | Unanswered block requests resent up to five times (OEM CPS rule) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables; odd-split channel write (all hardware-confirmed 2026-11-19) | Stock FT-50 settings | Supported; read and write hardware-confirmed 2026-11-19 |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
@@ -455,6 +457,57 @@ Last updated: 2026-11-20
 - Hardware validation: none
 - Next milestone: physical identify/read/edit/write/read-back test and
   libusb-runtime validation in native platform release builds
+
+### Retevis RA87
+
+- Maintained file: `drivers/newchirp_retevis_ra87.py`; it replaces
+  `retevis_ra87._enter_programming_mode_download` in place, so the
+  `Retevis_RA87` IDs and images are unchanged.
+- Driver SHA-256:
+  `c55ada0767c973f21c643f709c82ae0956dd8bf75913f4bc23871336d759c615`
+- Field issue (ledger `w-20261122-8452`, INBOX:888): "Radio identification
+  failed" after `PROGRAM` (echo + ACK) and `0x02` (echo + 8-byte ident). The
+  ident bytes are not in the 1.0.66 trace.
+- OEM evidence: Retevis RA87 CPS `RunApp.exe` (VB6) inside
+  `ra87-programming-software_20251104150930_0234.zip` (SHA-256
+  `54d14be98e42274419946de60ccf998f19114ae47d69b98f347bf02c7fdf8eb0`; an
+  Advanced Installer bootstrapper whose payload's first 512 bytes per file
+  are XOR 0xFF). Its command scripts give the read handshake as
+  `TX PROGRAM RX 06 TX 02 RX VA*8 TX 06 RX 06` (any 8 bytes) and identify the
+  model with `TX 52 1F 05 01 RX 57 1F 05 01 <5A|79|A5>`. The exit script
+  `45 5A A5 32 23 45 F2` equals CHIRP's `CMD_EXIT`. The three model values sit
+  next to the 134-176, 340-400 and 400-480 MHz range strings in that order;
+  the A5/400-480 pairing is static string-table evidence, corroborated by the
+  CHIRP sample image and the stock upload check, not by disassembly.
+- Change: the 8-byte ident is the image's 0x1F00-0x1F07 block (CHIRP's sample
+  holds `FF FF FF FF FF A5 2C FF` there), so the download accepts any ident
+  whose byte 5 is A5. 5A/79 are refused by band name; anything else reports
+  the bytes. Everything after identification is the stock sequence.
+- Hardware validation: none. Next: the reporter's 1.0.68 trace or a read on
+  the fixed build.
+
+### Baofeng UV-5R Mini
+
+- Maintained file: `drivers/newchirp_uv5r_mini.py`; sets
+  `UV5RMini.download_function`. `UV-5G Mini` (a subclass) keeps the stock
+  read.
+- Driver SHA-256:
+  `0fcf88c177b788d90b1525224e65a419b5aa9aa03ac36ea0572f9d8a4c94adae`
+- Field issue (ledger `w-20261122-e807`, INBOX:885/886): about 75 blocks read
+  normally, then one block request got no reply and the read failed. A first
+  attempt on another port got `P` (the handshake echoed), so that port was
+  not the programming cable.
+- OEM evidence: Baofeng UV-5R Mini CPS v1.0.7
+  (`Baofeng_UV_5R_Mini_CPS_V1.0.7.zip`, SHA-256
+  `f96977b15bd9859fc53d0fe432ea48d4c4994074de73555ce8615d3d9e38f607`), .NET,
+  decompiled `KDH.Communication.Read`: `52 hi lo 40`, wait for 68 bytes, a
+  1 s timer resends the same request up to five more times
+  (`timesOfRetry = 5`); address walk 0x0000-0x803F, 0x9000-0x903F,
+  0xA000-0xA1BF, matching CHIRP.
+- Change: each block is requested up to six times, the input is flushed
+  between attempts, and a final failure names the block. Handshake and upload
+  are stock.
+- Hardware validation: none.
 
 ### Yaesu VX-170 / VX-177
 

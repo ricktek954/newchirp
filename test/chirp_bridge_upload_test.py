@@ -647,9 +647,23 @@ class UploadHandshakeTest(unittest.TestCase):
         rendered = trace.format()
 
         self.assertIn(
-            "<binary command, 1 bytes> | reply=50 33 32 30 37 73 f8 ff (8 bytes)",
+            "<binary command, 1 bytes: 02> | reply=50 33 32 30 37 73 f8 ff (8 bytes)",
             rendered,
         )
+
+    def test_trace_shows_short_block_command_bytes(self):
+        """2026-11-21 UV-5R Mini report: the stalled block address was hidden."""
+        trace = bridge.RadioCommunicationTrace()
+        trace.begin(b"\x52\x11\x40\x40")
+        trace.received(b"\xaa" * 0x44)
+        trace.begin(b"R0@@")  # printable address bytes used to show "R"
+        trace.begin(b"\x02\x01\x02\x03\x04\x05")  # longer frames stay hidden
+
+        rendered = trace.format()
+
+        self.assertIn("<binary command, 4 bytes: 52 11 40 40>", rendered)
+        self.assertIn("<binary command, 4 bytes: 52 30 40 40>", rendered)
+        self.assertIn("<binary command, 6 bytes> |", rendered)
 
     def test_trace_hides_long_binary_replies(self):
         trace = bridge.RadioCommunicationTrace()

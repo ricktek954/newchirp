@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-22T09:53:24Z"
 concept_id: chirp_bridge/command_summary
 language: python
 ---
@@ -31,11 +31,12 @@ def _command_summary(self, data)
 | `data` | `—` | `—` |
 
 ## Source
-Lines 127–213 in `chirp_bridge.py`
+Lines 127–222 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [RadioCommunicationTrace](/chirp_bridge/RadioCommunicationTrace.md) |
+| calls | [_binary_label](/chirp_bridge/binary_label.md) |
 | called_by | [begin](/chirp_bridge/begin.md) |

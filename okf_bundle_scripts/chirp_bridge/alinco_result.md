@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-22T09:53:24Z"
 concept_id: chirp_bridge/alinco_result
 language: python
 ---
@@ -37,7 +37,7 @@ def _alinco_result(command_bytes, command, response)
 | `response` | `—` | `—` |
 
 ## Source
-Lines 245–265 in `chirp_bridge.py`
+Lines 260–280 in `chirp_bridge.py`
 
 ## Relationships
 
