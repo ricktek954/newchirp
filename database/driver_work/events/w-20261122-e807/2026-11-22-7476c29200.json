@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 10:03:52",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179534182143.59889.13066286011462545504@newchirp.net>",
+  "item": "w-20261122-e807",
+  "occurred_at": "2026-11-22",
+  "summary": "Told reporter COM7 is not the cable (echo); explained the dropped block and CPS retry; fix in next release; advised cable seated, Bluetooth off, battery charged"
+}
