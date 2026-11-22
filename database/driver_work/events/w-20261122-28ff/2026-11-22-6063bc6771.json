@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:37:10",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "web:chirpmyradio.com/issues/11624",
+  "item": "w-20261122-28ff",
+  "occurred_at": "2026-11-22",
+  "summary": "Upstream #11624 log shows the same IndexError at ft7800 get_memory self.TMODES[_mem.tmode]; tmode is 3 bits but stock TMODES has 5 entries. VX-170 manual Item 44/43 and CHIRP FT-60 (same tmode:3 layout) give 5-7 = DTCS->, Tone->DTCS, DTCS->Tone. No Yaesu CPS exists (RT Systems only)."
+}

@@ -27,6 +27,7 @@ Last updated: 2026-11-20
 | Yaesu FTM-150R/E/ASP | `drivers/newchirp_ftm150.py` | CHIRP clone serial, 38400 8N1 | Yes | Yes | Hidden | Experimental |
 | Yaesu FTX-1 | `drivers/newchirp_yaesu_ftx1.py` | Yaesu CAT serial, 4800-115200 auto-baud | 999 live memories | Yes, offline-tested | Hidden | Experimental |
 | Yaesu FT-991A | `drivers/newchirp_yaesu_ft991a.py` | Yaesu CAT serial, 4800-38400 auto-baud | 117 live memories | Known channel fields, offline-tested | Hidden | Experimental |
+| Yaesu VX-170 / VX-177 | `drivers/newchirp_yaesu_vx170.py` | Stock CHIRP Yaesu clone serial (FT-7800 family) | Split-tone squelch modes decoded as Cross | Stock path; split modes encoded to raw 5-7, offline-tested | Not exposed by stock driver | Experimental compatibility override |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables; odd-split channel write (all hardware-confirmed 2026-11-19) | Stock FT-50 settings | Supported; read and write hardware-confirmed 2026-11-19 |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
@@ -454,6 +455,33 @@ Last updated: 2026-11-20
 - Hardware validation: none
 - Next milestone: physical identify/read/edit/write/read-back test and
   libusb-runtime validation in native platform release builds
+
+### Yaesu VX-170 / VX-177
+
+- Maintained file: `drivers/newchirp_yaesu_vx170.py`; `VX170Radio` and
+  `VX177Radio` replace the stock registrations, keeping the `Yaesu_VX-170`
+  and `Yaesu_VX-177` IDs.
+- Driver SHA-256:
+  `8bbc373d93ef8ee955646c509a4685487430666bff3e05fc8ac5841359b527f1`
+- Transport: unchanged stock CHIRP Yaesu clone (FT-7800 family, 6057 bytes).
+- Field issue (ledger `w-20261122-28ff`, INBOX:893): a 193-channel codeplug
+  from another tool downloaded, then decoding failed with "list index out of
+  range". The memory `tmode` field is 3 bits but stock `TMODES` lists five
+  values, so `self.TMODES[_mem.tmode]` overflows on 5-7 (the same traceback
+  is in upstream CHIRP #11624's debug log; upstream master is unchanged).
+- Evidence for 5-7: the VX-170 manual's Set Mode Item 44 SQL.TYP lists OFF /
+  TONE / TSQL / REV TN / DCS, then, with Item 43 SPLIT on, D (DCS encode
+  only), T DCS and D TSQL; CHIRP's FT-60 driver (same generation, same
+  `tmode:3` layout) maps 5-7 to `DTCS->`, `Tone->DTCS`, `DTCS->Tone`. No
+  Yaesu CPS exists for this radio (only RT Systems ADMS-VX170), so there is
+  no CPS or OEM-capture evidence. EPCS (ECS) is not mapped.
+- Change: raw 5-7 decode as CHIRP Cross with those cross modes and encode
+  back to the same raw value; 0-4 use the stock code unchanged. Offline tests
+  use a synthetic image (CHIRP ships no VX-170 sample).
+- Hardware validation: none. The reporter's image has been requested to
+  confirm which values their channels hold.
+- Next milestone: decode the reporter's image; then a physical read and an
+  unchanged write/read-back.
 
 ### Yaesu FTM-7250D
 
