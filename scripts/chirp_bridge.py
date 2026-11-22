@@ -667,13 +667,19 @@ def bridge_error_message(exc, command=None, model=None, port=None):
             "firmware version shown on the radio in the support report."
             % selected_port
         )
+    no_response_names = {
+        "Baofeng_UV-5R_Mini": "UV-5R Mini",
+        # 2026-11-22 5RM report: PROGRAMBFNOR unanswered three times on a
+        # first connection, shown only as "No response from radio".
+        "Baofeng_5RM": "5RM",
+    }
     if (
         command == "download"
-        and model == "Baofeng_UV-5R_Mini"
+        and model in no_response_names
         and "no response from radio" in message.lower()
     ):
         message = (
-            "No response from the UV-5R Mini. Confirm the selected port is "
+            "No response from the %s. Confirm the selected port is "
             "the USB programming cable, not a built-in COM1 port: unplug the "
             "cable, refresh interfaces, reconnect it, and select the COM port "
             "that newly appears. Fully insert the two-pin cable, turn the "
@@ -684,7 +690,7 @@ def bridge_error_message(exc, command=None, model=None, port=None):
             "Baofeng CPS. If the stock software also cannot read the radio, "
             "replace the cable or install its CH340, CP210x, or FTDI driver. "
             "If the stock software succeeds, report the cable model, COM-port "
-            "device name, and driver provider."
+            "device name, and driver provider." % no_response_names[model]
         )
     if (
         command in ("download", "read-settings")

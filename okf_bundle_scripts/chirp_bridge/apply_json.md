@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:16:10Z"
+timestamp: "2026-11-22T10:24:24Z"
 concept_id: chirp_bridge/apply_json
 language: python
 ---
@@ -33,7 +33,7 @@ def apply_json(radio, mem, item)
 | `item` | `—` | `—` |
 
 ## Source
-Lines 1466–1512 in `chirp_bridge.py`
+Lines 1472–1518 in `chirp_bridge.py`
 
 ## Relationships
 

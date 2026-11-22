@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:16:10Z"
+timestamp: "2026-11-22T10:24:24Z"
 concept_id: chirp_bridge/repeaterbook_api_tone
 language: python
 ---
@@ -29,7 +29,7 @@ def repeaterbook_api_tone(tone)
 | `tone` | `—` | `—` |
 
 ## Source
-Lines 2497–2510 in `chirp_bridge.py`
+Lines 2503–2516 in `chirp_bridge.py`
 
 ## Relationships
 

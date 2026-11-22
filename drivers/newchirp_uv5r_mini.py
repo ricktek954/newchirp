@@ -44,12 +44,16 @@ def _read_block(radio, addr):
             return bfc._rawrecv(radio, radio.BLOCK_SIZE + 4)
         except errors.RadioError as exc:
             if attempt == BLOCK_ATTEMPTS:
+                # Keep the stock text out of the message: the bridge's
+                # port checklist for "No response from radio" would
+                # replace this block-specific explanation.
+                LOG.warning("Block 0x%04x failed: %s", addr, exc)
                 raise errors.RadioError(
                     "The UV-5R Mini stopped answering at memory block "
-                    "0x%04X after %i requests (%s). The radio was not "
-                    "changed. Keep the cable fully inserted, turn off the "
-                    "radio's Bluetooth, and read again." % (
-                        addr, BLOCK_ATTEMPTS, exc)) from exc
+                    "0x%04X after %i requests. The radio was not changed. "
+                    "Keep the cable fully inserted, turn off the radio's "
+                    "Bluetooth, and read again." % (
+                        addr, BLOCK_ATTEMPTS)) from exc
             LOG.warning("No complete reply for block 0x%04x (attempt %i): %s",
                         addr, attempt, exc)
             bfc._clean_buffer(radio)

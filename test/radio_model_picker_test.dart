@@ -250,6 +250,44 @@ void main() {
     );
   });
 
+  testWidgets('KG-UV9GX Plus search finds the KG-UV9GX profile', (
+    tester,
+  ) async {
+    // 2026-11-22 request: an owner could not find the KG-UV9GX Plus.
+    const vendors = {
+      'Wouxun': ['Wouxun_KG-UV9GX', 'Wouxun_KG-UV9PX'],
+    };
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: RadioModelPicker(
+            models: vendors.values.expand((models) => models).toList(),
+            vendorModels: vendors,
+            selectedModel: null,
+            onSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byKey(const ValueKey('radio-model-picker-field')));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('radio-model-search')),
+      'kg-uv9gx plus',
+    );
+    await tester.pumpAndSettle();
+
+    expect(
+      find.byKey(const ValueKey('radio-model-option-Wouxun_KG-UV9GX')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('radio-model-option-Wouxun_KG-UV9PX')),
+      findsNothing,
+    );
+  });
+
   testWidgets('vendor browse makes model selection deliberate', (tester) async {
     String? selectedModel = 'AOR_AR8200';
     await tester.pumpWidget(

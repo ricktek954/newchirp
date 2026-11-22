@@ -492,7 +492,7 @@ Last updated: 2026-11-20
   `UV5RMini.download_function`. `UV-5G Mini` (a subclass) keeps the stock
   read.
 - Driver SHA-256:
-  `0fcf88c177b788d90b1525224e65a419b5aa9aa03ac36ea0572f9d8a4c94adae`
+  `bc3014cf4509165cfe1dd4a10274ddc3bf2004cdebfc7260a5414b407785ba6c`
 - Field issue (ledger `w-20261122-e807`, INBOX:885/886): about 75 blocks read
   normally, then one block request got no reply and the read failed. A first
   attempt on another port got `P` (the handshake echoed), so that port was

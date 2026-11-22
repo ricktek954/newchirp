@@ -60,6 +60,7 @@ class UV5RMiniDriverTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         bridge = _load_bridge()
+        cls.bridge = bridge
         cls.directory = bridge.load_chirp(
             str(SOURCE),
             str(PYTHON_VENDOR),
@@ -100,6 +101,25 @@ class UV5RMiniDriverTest(unittest.TestCase):
         with self.assertRaisesRegex(Exception, "block 0x12C0 after 6"):
             self._download(serial)
         self.assertEqual(serial.requests.count(0x12C0), 6)
+
+    def test_block_failure_is_not_replaced_by_the_port_checklist(self):
+        serial = FakeMiniSerial(drops={0x12C0: 99})
+        with self.assertRaises(Exception) as raised:
+            self._download(serial)
+        message = self.bridge.bridge_error_message(
+            raised.exception, command="download", model="Baofeng_UV-5R_Mini"
+        )
+        self.assertIn("stopped answering at memory block 0x12C0", message)
+        self.assertNotIn("Confirm the selected port", message)
+
+    def test_5rm_no_response_gets_the_port_checklist(self):
+        from chirp import errors
+
+        message = self.bridge.bridge_error_message(
+            errors.RadioNoResponse(), command="download", model="Baofeng_5RM"
+        )
+        self.assertTrue(message.startswith("No response from the 5RM."))
+        self.assertIn("Confirm the selected port", message)
 
     def test_uv5g_mini_keeps_the_stock_read(self):
         radio_class = self.directory.get_radio("Baofeng_UV-5G_Mini")

@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:16:10Z"
+timestamp: "2026-11-22T10:24:24Z"
 concept_id: chirp_bridge/manual_send_key
 language: python
 ---
@@ -36,7 +36,7 @@ Return the key a clone prompt says to press after OK, if any.
 | `pre_download` | `—` | `—` |
 
 ## Source
-Lines 2040–2044 in `chirp_bridge.py`
+Lines 2046–2050 in `chirp_bridge.py`
 
 ## Relationships
 
