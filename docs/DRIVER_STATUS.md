@@ -89,7 +89,7 @@ Last updated: 2026-11-20
 | Kenwood TM-V71A/E (clone mode) | `drivers/newchirp_tmv71.py` | MCP-2A clone serial, 8N1 RTS/CTS, probed baud, `0M PROGRAM` + 256-byte `R` blocks to 0x7EFF | Yes, replay-tested | Disabled | Body settings, Sky Command removed | Experimental read-only |
 | Alinco DR-735 (T/E/R/J) | Pinned CHIRP `alinco_dr735t.py` with `drivers/newchirp_alinco_dr735.py` | DR-735 Memory Editor serial, 38400 8N1, echoed `AL~` lines on the rear LEFT speaker jack | 1000 common + 414 extended channels, VFO/settings/DTMF blocks kept; replay-tested | 1000 common channels with per-model band check; extended channels read-only | Not exposed yet | Experimental; hardware pending |
 | Kenwood TM-D710/V71/TH-D72/TH-D74 (live mode) | `drivers/newchirp_kenwood_live_cache.py` | CHIRP Kenwood live CAT | Stock driver | Fresh-connection write and erase fixed | Stock driver | Write fix offline-tested |
-| Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation and transient checksum retry; offline-tested | Stock driver | Experimental |
+| Kenwood TK-270G | `drivers/newchirp_kenwood_tk270g.py` (`NewChirpTK270G`) | Kenwood Series 60G clone serial, 9600 8E1 | NewChirp decode with raw-preserving invalid-index normalization | NewChirp write path with bank-state validation, bank-count block upload and transient checksum retry; offline-tested | Stock driver | Experimental |
 | Motorola MOTOTRBO R7 | `lib/services/mototrbo_cps2_xml.dart` | CPS 2.0 Zone XML import | Conventional channels | Disabled | Import-only extras | Experimental |
 | Retevis MA1 | Pinned CHIRP `th9800.py` | TYT clone serial, 38400 8N1 | Stock CHIRP driver | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
@@ -1656,7 +1656,7 @@ Last updated: 2026-11-20
 - Maintained driver: `drivers/newchirp_kenwood_tk270g.py`; the
   `NewChirpTK270G` class supersedes CHIRP's `Kenwood_TK-270G` registration.
 - Driver SHA-256:
-  `ddba576676266f818c8889e8d2fb4a56bf5192548274c069652a67affdcab852`
+  `8b430cfbb4a40650878733770961c9c1b4f159b2925cfbb81866596301825b7b`
 - Transport: pinned CHIRP Kenwood Series 60G clone serial at 9600 with even
   parity and one stop bit. KPG-56D statically configures `9600,N,8,2`; the
   live serial setting remains unchanged pending an OEM capture or physical
@@ -1722,6 +1722,18 @@ Last updated: 2026-11-20
   bank counts and record positions rebuild byte for byte. The 0x7000
   per-channel ID area is still filled by count as in stock CHIRP; whether
   the radio indexes it by slot is unconfirmed.
+- 2026-11-22 correction (ledger `w-20261120-8af9`, INBOX:877/884/887): 1.0.66
+  still stopped at channel 24. The owner's read-back after the 1.0.66 write
+  (SHA-256 `2fe8044a22fa40a0fbb2fb29eeb9383284f0c051dd118ffe98c10efba22788a4`)
+  holds the corrected record positions 1..25, a 25-entry 0x300 table and a
+  header count of 25, but the 0x1000 per-bank count is still `01 18` (bank 1,
+  24 channels) from KPG-56D. NewChirp's `sync_out` override skipped every
+  `RO_BLOCKS` entry, including 0x10-0x1E, which stock CHIRP writes when not
+  empty, so the rebuilt counts never reached the radio. The override now
+  matches stock: 0x10-0x1E are written unless empty, and 0x59-0x5E are never
+  sent. A dry run of the owner's image against a fake serial port sends block
+  0x10 as `01 19`. Regression:
+  `test_upload_writes_rebuilt_bank_counts_block`.
 - Hardware validation: none. No controlled NewChirp write/read-back has been
   performed on a TK-270G, and the OEM serial setting has not been compared on
   the wire.

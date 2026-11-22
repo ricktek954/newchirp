@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:08:20",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:2fe8044a22fa40a0fbb2fb29eeb9383284f0c051dd118ffe98c10efba22788a4",
+  "item": "w-20261120-8af9",
+  "occurred_at": "2026-11-22",
+  "summary": "Read-back after 1.0.66 write has positions 1..25, 25-entry 0x300 table and header count 25, but 0x1000 bank count is still 01 18 (24): sync_out override skipped RO block 0x10, which stock CHIRP writes when non-empty, so counts never reached the radio"
+}

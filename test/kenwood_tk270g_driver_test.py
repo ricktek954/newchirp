@@ -441,6 +441,60 @@ class KenwoodTK270GDriverTest(unittest.TestCase):
 
             self.assertEqual(serial.writes[-1], b"E")
 
+    def test_upload_writes_rebuilt_bank_counts_block(self):
+        # 2026-11-21 read-back after a 1.0.66 write: 25 channels in the
+        # header and 0x300 table, but 0x1000 still held the KPG-56D count
+        # (bank 1: 24) because block 0x10 was never sent, so the radio
+        # stopped at channel 24.
+        with tempfile.TemporaryDirectory() as temp:
+            image = Path(temp) / "Kenwood_TK-270G.img"
+            data = bytearray(
+                (SOURCE / "tests/images/Kenwood_TK-272G.img").read_bytes()
+            )
+            data[0xA7:0xAE] = b"P2700\x05\xff"
+            # Stale per-bank counts, one short in every bank.
+            for offset in range(0x1000, 0x1100, 16):
+                if data[offset] != 0xFF:
+                    data[offset + 1] -= 1
+            image.write_bytes(data)
+
+            serial = FakeTK270GSerial()
+            radio = self.radio_class(serial)
+            radio.load_mmap(str(image))
+            radio.status_fn = lambda _status: None
+
+            with mock.patch("time.sleep", return_value=None):
+                radio.sync_out()
+
+            frames = {}
+            for write in serial.writes:
+                if write[:1] in (b"W", b"Z"):
+                    frames.setdefault(
+                        struct.unpack(">H", write[1:3])[0], []
+                    ).append(write)
+
+            packed = radio.get_mmap().get_packed()
+            if isinstance(packed, str):
+                packed = packed.encode("latin-1")
+            self.assertEqual(len(frames.get(0x10, [])), 1)
+            self.assertEqual(frames[0x10][0][:1], b"W")
+            self.assertEqual(frames[0x10][0][3:3 + 256], packed[0x1000:0x1100])
+            written_total = sum(
+                packed[offset + 1]
+                for offset in range(0x1000, 0x1100, 16)
+                if packed[offset] != 0xFF
+            )
+            self.assertEqual(
+                written_total, int(radio._memobj.settings.channels)
+            )
+            # Empty optional blocks and the non-programmable 0x59-0x5E area
+            # are still never sent.
+            for address in range(0x11, 0x1F):
+                if packed[address * 256:(address + 1) * 256] == b"\xff" * 256:
+                    self.assertNotIn(address, frames)
+            for address in range(0x59, 0x5F):
+                self.assertNotIn(address, frames)
+
 
 if __name__ == "__main__":
     unittest.main()

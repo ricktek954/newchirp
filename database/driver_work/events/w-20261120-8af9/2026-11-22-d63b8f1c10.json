@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-22 09:08:20",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<00d201dd79f0$629ea920$27dbfb60$@kieffermail.com>",
+  "item": "w-20261120-8af9",
+  "occurred_at": "2026-11-22",
+  "summary": "Owner: 1.0.66 still stops at channel 24; sent read-backs from 1.0.63/1.0.66 (identical, SHA-256 9bd73c01...) and after the 1.0.66 write (2fe8044a...)"
+}

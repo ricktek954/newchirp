@@ -245,15 +245,16 @@ class NewChirpTK270G(tk760g.TK270G_Radios):
         raddr = 0
         for address in tk760g.MEM_BLOCKS:
             data = self.get_mmap()[raddr:raddr + tk760g.BLOCK_SIZE]
-            if address in self.RO_BLOCKS:
-                if (
-                    address >= 0x10
-                    and address <= 0x1F
-                    and data == tk760g.EMPTY_BLOCK
-                ):
-                    count += 1
-                    raddr = count * tk760g.BLOCK_SIZE
-                    continue
+            # As in stock CHIRP: 0x59-0x5E are never programmed, and
+            # 0x10-0x1E (the 0x1000 per-bank channel counts) are written
+            # unless empty. Skipping 0x10 left the radio's KPG-56D bank count
+            # in place, so it stopped at the old count and dropped channels
+            # added later (2026-11-21 read-back: 0x1000 = 01 18, 24 of 25;
+            # ledger w-20261120-8af9).
+            optional = 0x10 <= address <= 0x1F
+            if address in self.RO_BLOCKS and (
+                not optional or data == tk760g.EMPTY_BLOCK
+            ):
                 count += 1
                 raddr = count * tk760g.BLOCK_SIZE
                 continue
