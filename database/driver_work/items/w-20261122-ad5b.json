@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-22 09:27:34",
+  "kind": "bug",
+  "manufacturer": "TYT",
+  "model": "TH-350",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:894 <42a19195-c6bb-739c-d71e-2dba89860053@newchirp.net>",
+  "status": "awaiting_user",
+  "summary": "Linux 1.0.68 read of 40 channels: frequencies correct, names start in one channel and continue in the next, some blank. Base TYT_TH-350 reads 5-byte names at 0x0A30; TYT_TH-350_US reads 8-byte names at 0x0930. Layouts are otherwise identical and match_model cannot tell them apart, so a US radio read as base gives exactly this. Reporter is in the US and used RT Systems. Ask them to read with TH-350 US and send the .img.",
+  "title": "Channel names shifted across channels: likely TH-350 US radio read as base TH-350",
+  "uid": "w-20261122-ad5b"
+}

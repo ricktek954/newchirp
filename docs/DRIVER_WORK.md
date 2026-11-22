@@ -638,6 +638,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: ST DfuSe USB 0483:DF11 + libusb. Read: 3000 channels + zones. Write: Yes, offline-tested. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:60
 
+### TH-350
+
+- **#w-20261122-ad5b bug | awaiting_user | normal:** Channel names shifted across channels: likely TH-350 US radio read as base TH-350
+  Linux 1.0.68 read of 40 channels: frequencies correct, names start in one channel and continue in the next, some blank. Base TYT_TH-350 reads 5-byte names at 0x0A30; TYT_TH-350_US reads 8-byte names at 0x0930. Layouts are otherwise identical and match_model cannot tell them apart, so a US radio read as base gives exactly this. Reporter is in the US and used RT Systems. Ask them to read with TH-350 US and send the .img.
+  Source: `email` INBOX:894 <42a19195-c6bb-739c-d71e-2dba89860053@newchirp.net>
+
 ### TH-9800
 
 - **#65 maintenance | experimental | normal:** Current driver status
@@ -725,6 +731,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#3 maintenance | experimental | normal:** Current driver status
   Transport: Yaesu CAT serial, 4800-115200 auto-baud. Read: 999 live memories. Write: Yes, offline-tested. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:27
+
+### VX-170
+
+- **#w-20261122-28ff bug | awaiting_user | normal:** Read of a 193-channel codeplug from another tool fails to decode: list index out of range
+  Linux 1.0.68: clone download completed and saved /tmp/newchirp-5h4w6vr4.img, then channel decoding failed with IndexError. FT-7800-family get_memory indexes TONES (6-bit field, 50 tones), DTCS_CODES (7-bit, 104), TMODES (3-bit, 5), DUPLEX (3-bit, 5) and power levels (2-bit, 3) without bounds checks; a value written by the other tool probably overflows one. The image was not attached (reports cannot carry files) and /tmp may be cleared on reboot. Need the .img to identify the field.
+  Source: `email` INBOX:893 <1d1f2c4e-65b8-b971-2ae4-7cb3b6ce4c66@newchirp.net>
 
 ### VX-6
 
