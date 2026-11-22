@@ -758,6 +758,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: CHIRP clone serial, 38400 8N1. Read: Yes. Write: Yes. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:26
 
+### FTM-300DR
+
+- **#w-20261122-1af9 bug | fix_committed | normal:** First clone frame failed checksum after repeated read attempts
+  Linux 1.0.68: reads started on ttyUSB2, ttyUSB3, then ttyUSB2 again; the last failed 'Block failed checksum' about 20 s in. Radio-initiated clone of 131-byte frames; a misaligned or stale first frame fails its checksum. The FTM-300 prompt ('press the DIAL knob') got no 'press now' cue.
+  Source: `email` INBOX:899
+
 ### FTM-7250D
 
 - **#92 bug | fix_committed | high:** Power controls disappear after CSV import and stale channels remain
