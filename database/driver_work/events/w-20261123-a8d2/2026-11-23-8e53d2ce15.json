@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 09:54:30",
+  "details": "NewChirp Android (newchirpmobile) over a USB-C adapter, profile 'Radtel RT-950' (owner's radio is an RT-950 Pro): Read radio shows SocketException Broken pipe errno 32 on 127.0.0.1. The Dart USB proxy (usb_radio_service.dart) wrote after the Python side (chirp_mobile.py) closed, so the underlying Python error is not shown. Also the wrong profile (RT-950 vs RT-950 Pro) may be selected.",
+  "event_type": "created",
+  "external_ref": "INBOX:913",
+  "item": "w-20261123-a8d2",
+  "occurred_at": "2026-11-23",
+  "summary": "Android USB read: 'SocketException: Broken pipe' on the local proxy hides the real error"
+}

@@ -603,6 +603,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-f57b bug | fix_committed | normal:** Channel 26 tone 0x5750 (2235.2) stopped the read
   Windows 1.0.67: channel 26 TX frequency byte 0x6f and tone 0x5750; the CPS GetCTCSS_HexToStr shows '2235.2' for it too, so the radio holds those values. Also 0x0800-style words decoded as tones where the CPS shows OFF.
   Source: `email` INBOX:919
+- **#w-20261123-a8d2 bug | investigating | normal:** Android USB read: 'SocketException: Broken pipe' on the local proxy hides the real error
+  NewChirp Android (newchirpmobile) over a USB-C adapter, profile 'Radtel RT-950' (owner's radio is an RT-950 Pro): Read radio shows SocketException Broken pipe errno 32 on 127.0.0.1. The Dart USB proxy (usb_radio_service.dart) wrote after the Python side (chirp_mobile.py) closed, so the underlying Python error is not shown. Also the wrong profile (RT-950 vs RT-950 Pro) may be selected.
+  Source: `email` INBOX:913
 - **#w-20261120-36d6 enhancement | released | normal:** Stock-firmware RT-950 Pro over Bluetooth
   Add experimental read-only Android Bluetooth support for the stock RT-950 Pro. The stock CPS 1.3.3 exposes a BT Write switch at function-settings byte 29; iOS/Android programming is advertised but the exact BLE wire behavior still requires app or hardware evidence. Bluetooth writes remain disabled.
   Source: `email` INBOX:854
