@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 13:28:24",
+  "details": "Published a universal signed and notarized DMG from source commit 0f7f9048. It adds the read-only UV-K5 Robzyl RO-KO 512K profile, AT-D878UVII Plus support with the D578 second-bank mapping fix, Baofeng 5RX OEM power encoding, safe handling of unknown Baofeng power values, and the cumulative 1.0.68 watchdog, tone, UV-32, Android USB, driver, trace, printing, and write-progress changes. Artifact SHA-256: 38aae79413d8775d704a5b9197f828f11f982ebc354f9ec702560f71cdf298ab. Apple notarization: baa15c49-30d7-4b03-986b-a30fc5dbe577. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.69.",
+  "event_type": "created",
+  "external_ref": "desktop:0f7f9048",
+  "item": "w-20261123-218b",
+  "occurred_at": "2026-11-23",
+  "summary": "macOS 1.0.69 published"
+}

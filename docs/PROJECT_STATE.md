@@ -93,6 +93,21 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.69` is live from source commit `0f7f9048` as a universal,
+  signed, and notarized DMG. It adds a read-only UV-K5 Robzyl RO-KO 512K
+  profile, AT-D878UVII Plus support with the D578 second-bank mapping fix,
+  Baofeng 5RX OEM power encoding, safe handling of unknown Baofeng power
+  values, and the cumulative 1.0.68 watchdog, tone, UV-32, Android USB,
+  driver, trace, printing, and write-progress changes. Verification: analyzer
+  clean; 249 Flutter tests; 618 Python tests with two fixture-dependent skips;
+  embedded version `1.0.69` / `69`; arm64 and x86_64 Python `3.13.15`; CHIRP
+  `21e42e4518c167548af90ed7f9edf75e516c491a`; 272 driver modules; catalog
+  `list-models` returned 604 models; Apple notarization accepted and the
+  ticket validates; mounted-app launch smoke test passed; and matching local,
+  server, and public SHA-256. This host's code-signing assessment service
+  reports the same internal error seen with prior releases, so that local
+  check is not treated as an artifact failure. Notarization submission:
+  `baa15c49-30d7-4b03-986b-a30fc5dbe577`.
 - macOS `1.0.68` is live from source commit `48f56627` as a universal,
   signed, and notarized DMG. It ends stalled writes with a diagnostic
   watchdog, reads unreadable DM-32UV and RT-950 tone values without aborting
@@ -1244,6 +1259,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.69` artifact source commit: `0f7f9048`
 - macOS `1.0.68` artifact source commit: `48f56627`
 - macOS `1.0.67` artifact source commit: `8e03e24b`
 - macOS `1.0.66` artifact source commit: `ee72c09e`
@@ -1260,7 +1276,7 @@ release requirements.
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.70+70`
+- Checked-out source version: `1.0.69+69`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1274,7 +1290,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.68 |
+| macOS | 1.0.69 |
 | Windows | 1.0.68 |
 | Linux | 1.0.70 |
 
@@ -1409,6 +1425,23 @@ Linux `1.0.65` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums, sizes, and permissions matched the local artifacts
 - Linux platform manifest reports `1.0.65`
+
+macOS `1.0.69` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.69.dmg`
+- Version/build: `1.0.69` / `69`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `38aae79413d8775d704a5b9197f828f11f982ebc354f9ec702560f71cdf298ab`
+- Size: `86,986,597` bytes
+- Built from `0f7f9048`
+- Notarization submission:
+  `baa15c49-30d7-4b03-986b-a30fc5dbe577`
+- Apple notarization accepted and the stapled ticket validates
+- Mounted-app launch smoke test passed
+- Bundle contains the UV-K5 RO-KO 512K, AT-D878UVII Plus/D578, Baofeng 5RX,
+  and cumulative 1.0.68 release changes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.68` artifact:
 
