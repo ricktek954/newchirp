@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:920",
-  "status": "fix_committed",
+  "status": "released",
   "summary": "Windows 1.0.67: read and two writes worked; a write started 04:37 logged no completion; later attempts failed 'port reserved by another program', consistent with a hung bridge still holding COM3.",
   "title": "Write never completed, later attempts found the port reserved",
   "uid": "w-20261123-e801"

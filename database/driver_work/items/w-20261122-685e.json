@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:889",
-  "status": "fix_committed",
+  "status": "released",
   "summary": "5RH Pro owner asked to print channels. The Print button only prints the GMRS/FRS reference; workaround: Save as... CSV and print from a spreadsheet.",
   "title": "Print the channel list",
   "uid": "w-20261122-685e"

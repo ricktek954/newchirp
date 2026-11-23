@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 11:03:33",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:76de9782",
+  "item": "w-20261122-cac2",
+  "occurred_at": "2026-11-23",
+  "summary": "Fix shipped in Windows 1.0.68 (dcc91434), macOS 1.0.68 (48f56627) and Linux 1.0.70 (76de9782); ancestry verified. Not hardware-validated."
+}

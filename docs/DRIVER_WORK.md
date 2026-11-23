@@ -66,7 +66,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### BF-F8HP
 
-- **#w-20261123-e801 bug | fix_committed | normal:** Write never completed, later attempts found the port reserved
+- **#w-20261123-e801 bug | released | normal:** Write never completed, later attempts found the port reserved
   Windows 1.0.67: read and two writes worked; a write started 04:37 logged no completion; later attempts failed 'port reserved by another program', consistent with a hung bridge still holding COM3.
   Source: `email` INBOX:920
 
@@ -93,7 +93,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261121-6314 bug | pending_validation | normal:** Channel names show leftover text after the NUL terminator ('Channel 1<NUL>t Mode')
   Forum file drop 12 (CSV, 43 channels) shows 9 names with a NUL followed by old bytes, e.g. 'Channel 1\x00t Mode' and 'RPT 15\x00 23'. Stock CHIRP's get_memory only strips trailing NUL/FF/space, so the leftover text shows in NewChirp and in CSV exports; zone get_name and the settings channel-name choices had the same trailing-only strip. The reporter described it as 'adds test to first channel on read'.
   Source: `forum file drop 12, 2026-11-20` forum-file-drop:12 sha256:8b526f78bb13ce4cb7a7e5a05a0dbebce6fbe42ae79b68c51caad4fffa8e40fb
-- **#w-20261122-f1fb bug | fix_committed | normal:** Frequencies off the tuning-step grid (145.16375 MHz) flagged as unprogrammable
+- **#w-20261122-f1fb bug | released | normal:** Frequencies off the tuning-step grid (145.16375 MHz) flagged as unprogrammable
   Linux 1.0.68: reading a codeplug built elsewhere flagged 30 channels, e.g. 145.163750 MHz -> nearest 145.165. The radio holds the frequency; the driver sets has_nostep_tuning (10 Hz storage), which CHIRP's validate_memory honors, but the bridge never exported it and the app's pre-write check applied the 2.5-100 kHz steps. Affects every has_nostep_tuning radio (22 driver files).
   Source: `email` INBOX:895 <84f2a5ed-80a4-2f1a-f7de-971c3e81b271@newchirp.net>
 - **#w-20261123-9a28 bug | awaiting_user | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
@@ -156,7 +156,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-abf7 bug | fix_committed | normal:** Write stops on blank CSV CrossMode
   NewChirp 1.0.54 write of a CSV stopped at channel 111: cross_mode '' not in CHIRP's valid list. A blank CrossMode cell imported as '' and the bridge set it on every channel. Same report shows the 136.5/151.4/156.7 'malformed' tone warnings fixed in 27e3bf07.
   Source: `email` INBOX:828
-- **#w-20261123-23e2 bug | fix_committed | normal:** PROGRAMCOLORPROU answered 0x40; stopped as 'Unexpected response'
+- **#w-20261123-23e2 bug | released | normal:** PROGRAMCOLORPROU answered 0x40; stopped as 'Unexpected response'
   Windows 1.0.67. BF-UVs Pro CPS v1.4.7 discards non-ACK bytes and resends the handshake every 1 s up to 5 times.
   Source: `email` INBOX:915
 
@@ -183,7 +183,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-5R Mini
 
-- **#w-20261122-e807 bug | fix_committed | normal:** Read stops when the radio misses one block reply; stock aborts instead of re-requesting
+- **#w-20261122-e807 bug | released | normal:** Read stops when the radio misses one block reply; stock aborts instead of re-requesting
   Windows 1.0.66 (two attempts): COM7 answered PROGRAMCOLOR with 'P' (echoed command, so not the programming cable); COM6 read ~75 68-byte blocks, then one R request got no reply and the read failed. OEM CPS v1.0.7 resends an unanswered block request every 1 s up to five more times; stock CHIRP aborts on the first timeout.
   Source: `email` INBOX:885/886 <2f9de842-1d9b-dc3d-5a27-e45a36374471@newchirp.net> <69ebea44-574d-fd41-9a84-077b4c1c2697@newchirp.net>
 
@@ -341,7 +341,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#83 bug | fix_committed | high:** Upload rejects erased bank index sentinel
   A downloaded image containing bank index 128 on an active channel is rejected during unchanged upload before radio I/O. Normalize erased bank metadata before rebuilding bank tables.
   Source: `email` INBOX:723
-- **#w-20261120-8af9 bug | fix_committed | high:** Last channel missing after write: 0-based bank positions collide with KPG 1-based positions
+- **#w-20261120-8af9 bug | released | high:** Last channel missing after write: 0-based bank positions collide with KPG 1-based positions
   1.0.63 writes without error but the last channel in the list (ch 25) is not usable on the radio (INBOX:855). Evidence: CHIRP's OEM-style TK-760G sample image stores each record's bnumb as the 1-based position within its bank, matching the 0x300 table (bank, pos, bank-1, slot). NewChirp (from stock tk760g) assigns new channels bnumb = slot-1 and normalizes the 0x80 sentinel (reporter's ch 24, INBOX:808) to slot-1, i.e. 0-based. With KPG-programmed channels at positions 1..N, the newcomer duplicates position N and position N+1 is empty, so the last channel drops. _prep_data rebuilds 0x300 by slot order and never updates record bnumb. Secondary suspect: 0x7000 per-channel flags filled by count, not slot. Plan: renumber each bank's records 1..n (existing valid order first, then new channels) and build 0x300 from that order; confirm with the reporter's image.
   Source: `email` INBOX:855
 - **#60 maintenance | experimental | normal:** Current driver status
@@ -433,7 +433,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Desktop app
 
-- **#w-20261122-685e enhancement | fix_committed | low:** Print the channel list
+- **#w-20261122-685e enhancement | released | low:** Print the channel list
   5RH Pro owner asked to print channels. The Print button only prints the GMRS/FRS reference; workaround: Save as... CSV and print from a spreadsheet.
   Source: `email` INBOX:889
 
@@ -495,7 +495,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-K1 & UV-K5 V3 (F4HWN)
 
-- **#w-20261119-7381 enhancement | fix_committed | normal:** F4HWN 7.0.0 firmware profile
+- **#w-20261119-7381 enhancement | released | normal:** F4HWN 7.0.0 firmware profile
   F4HWN 7.0.0 released 2026-11-19. Built-in profile supports v6.3.x only and refuses other F4HWN versions before I/O. Needs analysis of the 7.0 CHIRP module memory map.
   Source: `email` INBOX:809
 
@@ -606,7 +606,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-9877 bug | fix_committed | high:** After a write, radio beeps on PTT and will not transmit
   Owner of two RT-950 Pros: the one programmed today (likely Web Programmer; desktop failed at port open, w-20261120-8265) beeps on PTT and does not transmit; the unprogrammed one is fine. Experimental write sends the full CPS block set, settings included. Candidates: TX off on the channel, TX outside the radio's TX range (owner's IC-F60V channels are 450-469 MHz commercial), busy lock, or a settings block changed by the write. Need: tool used, channel/frequency, whether any channel transmits, the pre-write backup and a fresh read.
   Source: `email` INBOX:849
-- **#w-20261123-f57b bug | fix_committed | normal:** Channel 26 tone 0x5750 (2235.2) stopped the read
+- **#w-20261123-f57b bug | released | normal:** Channel 26 tone 0x5750 (2235.2) stopped the read
   Windows 1.0.67: channel 26 TX frequency byte 0x6f and tone 0x5750; the CPS GetCTCSS_HexToStr shows '2235.2' for it too, so the radio holds those values. Also 0x0800-style words decoded as tones where the CPS shows OFF.
   Source: `email` INBOX:919
 - **#w-20261123-a8d2 bug | fix_committed | normal:** Android USB read: 'SocketException: Broken pipe' on the local proxy hides the real error
@@ -644,7 +644,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### RA87
 
-- **#w-20261122-8452 bug | fix_committed | normal:** Download refuses an RA87 whose 8-byte ident differs from the two captured fingerprints
+- **#w-20261122-8452 bug | released | normal:** Download refuses an RA87 whose 8-byte ident differs from the two captured fingerprints
   Windows 1.0.66: PROGRAM echoed+ACK, 0x02 returned 1-byte echo + 8-byte ident, then 'Radio identification failed'. The ident bytes are not in the trace (pre-1.0.68). OEM CPS read handshake accepts any 8 bytes (RX VA x8) and identifies the model by byte 0x1F05 (5A/79/A5 per band version); the ident is the image's 0x1F00-0x1F07 block, so byte 5 is that model byte.
   Source: `email` INBOX:888 <47d79ef8-296c-98ac-64fd-6d375374a1f8@newchirp.net>
 
@@ -743,7 +743,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### KG-UV9GX Plus
 
-- **#w-20261122-cac2 enhancement | fix_committed | low:** Owner could not find the KG-UV9GX Plus; it uses the KG-UV9GX profile
+- **#w-20261122-cac2 enhancement | released | low:** Owner could not find the KG-UV9GX Plus; it uses the KG-UV9GX profile
   Request to add the KG-UV9GX+ (cable, not Bluetooth). Already supported: CHIRP Wouxun_KG-UV9GX on desktop and the Web Programmer KG-UV9GX serial profile; the website catalog says 'KG-UV9GX Plus (use KG-UV9GX)'. The desktop picker search 'KG-UV9GX Plus' found nothing; a search hint now covers it.
   Source: `email` INBOX:896
 
@@ -763,7 +763,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### FT-1D
 
-- **#w-20261122-ddc6 bug | fix_committed | normal:** [BAND] pressed before the port is open: ID block lost, then 'No response from radio'
+- **#w-20261122-ddc6 bug | released | normal:** [BAND] pressed before the port is open: ID block lost, then 'No response from radio'
   Windows 1.0.66, two attempts: the only exchange is the ACK CHIRP writes after _safe_read, which it sends even when nothing arrived. Old CHIRP worked. NewChirp shows the prompt ('After clicking OK, press [BAND]') and only then starts the bridge, which loads all drivers before opening the port; the bridge's ready cue covered only [PTT]/[Send], so an immediate [BAND] press sends the image to a closed port and the radio waits for an ACK. Affects every 'After clicking OK, press [KEY]' Yaesu clone radio (FT-1D, VX-3/6/7/8, FT-817, FT-857, FT-7800, FT-8800, FT-90, FT-1802, FT-1500M, FT-70D, FTM-3200D, FTM-7250D, FT-450).
   Source: `email` INBOX:880 <1dccdb08-b5b6-c3ec-6e24-d7acc8d754c4@newchirp.net>
 
@@ -817,7 +817,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### VX-170
 
-- **#w-20261122-28ff bug | fix_committed | normal:** Read of a 193-channel codeplug from another tool fails to decode: list index out of range
+- **#w-20261122-28ff bug | released | normal:** Read of a 193-channel codeplug from another tool fails to decode: list index out of range
   Linux 1.0.68: clone download completed and saved /tmp/newchirp-5h4w6vr4.img, then channel decoding failed with IndexError. FT-7800-family get_memory indexes TONES (6-bit field, 50 tones), DTCS_CODES (7-bit, 104), TMODES (3-bit, 5), DUPLEX (3-bit, 5) and power levels (2-bit, 3) without bounds checks; a value written by the other tool probably overflows one. The image was not attached (reports cannot carry files) and /tmp may be cleared on reboot. Need the .img to identify the field.
   Source: `email` INBOX:893 <1d1f2c4e-65b8-b971-2ae4-7cb3b6ce4c66@newchirp.net>
 

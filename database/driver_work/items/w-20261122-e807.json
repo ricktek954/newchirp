@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:885/886 <2f9de842-1d9b-dc3d-5a27-e45a36374471@newchirp.net> <69ebea44-574d-fd41-9a84-077b4c1c2697@newchirp.net>",
-  "status": "fix_committed",
+  "status": "released",
   "summary": "Windows 1.0.66 (two attempts): COM7 answered PROGRAMCOLOR with 'P' (echoed command, so not the programming cable); COM6 read ~75 68-byte blocks, then one R request got no reply and the read failed. OEM CPS v1.0.7 resends an unanswered block request every 1 s up to five more times; stock CHIRP aborts on the first timeout.",
   "title": "Read stops when the radio misses one block reply; stock aborts instead of re-requesting",
   "uid": "w-20261122-e807"

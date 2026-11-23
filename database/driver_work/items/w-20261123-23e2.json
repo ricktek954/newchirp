@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:915",
-  "status": "fix_committed",
+  "status": "released",
   "summary": "Windows 1.0.67. BF-UVs Pro CPS v1.4.7 discards non-ACK bytes and resends the handshake every 1 s up to 5 times.",
   "title": "PROGRAMCOLORPROU answered 0x40; stopped as 'Unexpected response'",
   "uid": "w-20261123-23e2"
