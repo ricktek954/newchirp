@@ -1474,5 +1474,59 @@
         "type": "int"
       }
     }
+  },
+  "shortenNamesButton": "{count, plural, =1{Shorten 1 name to {limit}} other{Shorten {count} names to {limit}}}",
+  "@shortenNamesButton": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "shortenNamesTitle": "Shorten names to {limit} characters?",
+  "@shortenNamesTitle": {
+    "placeholders": {
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "shortenNamesBody": "{count, plural, =1{1 channel name is longer than this radio allows. NewChirp will keep its first {limit} characters.} other{{count} channel names are longer than this radio allows. NewChirp will keep the first {limit} characters of each.}} You can undo this.",
+  "@shortenNamesBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "limit": {
+        "type": "int"
+      }
+    }
+  },
+  "shortenNamesMore": "{count, plural, =1{and 1 more} other{and {count} more}}",
+  "@shortenNamesMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shortenNamesDuplicates": "{count, plural, =1{1 shortened name will match another channel's name. Check it before writing.} other{{count} shortened names will match other channel names. Check them before writing.}}",
+  "@shortenNamesDuplicates": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "shortenNamesAction": "{count, plural, =1{Shorten 1 name} other{Shorten {count} names}}",
+  "@shortenNamesAction": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

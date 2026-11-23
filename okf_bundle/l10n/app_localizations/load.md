@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:44:03Z"
+timestamp: "2026-11-23T23:18:34Z"
 concept_id: l10n/app_localizations/load
 language: dart
 ---
@@ -24,7 +24,7 @@ Futureloadload
 ```
 
 ## Source
-Lines 3803–3803 in `l10n/app_localizations.dart`
+Lines 3839–3839 in `l10n/app_localizations.dart`
 
 ## Relationships
 

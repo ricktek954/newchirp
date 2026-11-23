@@ -2053,6 +2053,95 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _showChannelEditorAtLocation(channel.location);
   }
 
+  List<RadioChannel> _channelsWithLongNames() {
+    final limit = _capabilities?.nameLength;
+    if (limit == null || limit <= 0) return const [];
+    return _activeChannels
+        .where((channel) => channel.name.length > limit)
+        .toList();
+  }
+
+  /// Cut every channel name that is longer than the radio allows, after the
+  /// operator confirms a preview. One undo step restores all of them.
+  Future<void> _shortenLongNames() async {
+    final limit = _capabilities?.nameLength;
+    final long = _channelsWithLongNames();
+    if (limit == null || long.isEmpty) return;
+    String shortened(String name) => name.substring(0, limit).trimRight();
+    final shortNames = {
+      for (final channel in _activeChannels)
+        channel.location: channel.name.length > limit
+            ? shortened(channel.name)
+            : channel.name,
+    };
+    final counts = <String, int>{};
+    for (final name in shortNames.values) {
+      if (name.isEmpty) continue;
+      counts[name] = (counts[name] ?? 0) + 1;
+    }
+    final duplicates = long
+        .where((channel) => (counts[shortNames[channel.location]] ?? 0) > 1)
+        .length;
+    final l10n = context.l10n;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(l10n.shortenNamesTitle(limit)),
+        content: SizedBox(
+          width: 460,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(l10n.shortenNamesBody(long.length, limit)),
+              const SizedBox(height: 12),
+              for (final channel in long.take(6))
+                Text(
+                  '${channelNumberLabel(_model, channel.location)}: '
+                  '${channel.name}  →  ${shortNames[channel.location]}',
+                  style: const TextStyle(fontFamily: 'monospace'),
+                ),
+              if (long.length > 6)
+                Text(l10n.shortenNamesMore(long.length - 6)),
+              if (duplicates > 0) ...[
+                const SizedBox(height: 12),
+                Text(
+                  l10n.shortenNamesDuplicates(duplicates),
+                  style: const TextStyle(color: Color(0xFF8A4C0E)),
+                ),
+              ],
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            key: const Key('confirm-shorten-names'),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(l10n.shortenNamesAction(long.length)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true || !mounted) return;
+    _recordHistory(preserveMultiSelection: true);
+    setState(() {
+      for (final channel in long) {
+        channel.name = shortNames[channel.location]!;
+      }
+      _dirty = true;
+      _markChannelLibraryDirty();
+    });
+    _diagnosticLog.record(
+      'library',
+      'Shortened long channel names',
+      context: {'count': long.length, 'limit': limit, 'radio': _model ?? ''},
+    );
+  }
+
   void _sortChannelsByLocation() {
     _channels.sort((left, right) => left.location.compareTo(right.location));
   }
@@ -4985,6 +5074,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         for (final issue in _channelIssues(channel))
           '${channelNumberLabel(_model, channel.location)}: $issue',
     ];
+    final longNameCount = _channelsWithLongNames().length;
     final firstChannelNeedingAttention = channelsNeedingAttention.isEmpty
         ? null
         : channelsNeedingAttention.first;
@@ -5097,6 +5187,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         ],
                       ),
                     ),
+                    if (longNameCount > 0)
+                      TextButton(
+                        key: const Key('shorten-long-names'),
+                        onPressed: () => unawaited(_shortenLongNames()),
+                        child: Text(
+                          context.l10n.shortenNamesButton(
+                            longNameCount,
+                            _capabilities!.nameLength,
+                          ),
+                        ),
+                      ),
                     if (firstChannelNeedingAttention != null)
                       TextButton(
                         key: const Key('review-channel-attention'),

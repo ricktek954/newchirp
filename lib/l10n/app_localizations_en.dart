@@ -2261,4 +2261,68 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String shortenNamesButton(int count, int limit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Shorten $count names to $limit',
+      one: 'Shorten 1 name to $limit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesTitle(int limit) {
+    return 'Shorten names to $limit characters?';
+  }
+
+  @override
+  String shortenNamesBody(int count, int limit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count channel names are longer than this radio allows. NewChirp will keep the first $limit characters of each.',
+      one:
+          '1 channel name is longer than this radio allows. NewChirp will keep its first $limit characters.',
+    );
+    return '$_temp0 You can undo this.';
+  }
+
+  @override
+  String shortenNamesMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'and $count more',
+      one: 'and 1 more',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesDuplicates(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count shortened names will match other channel names. Check them before writing.',
+      one:
+          '1 shortened name will match another channel\'s name. Check it before writing.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesAction(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Shorten $count names',
+      one: 'Shorten 1 name',
+    );
+    return '$_temp0';
+  }
 }

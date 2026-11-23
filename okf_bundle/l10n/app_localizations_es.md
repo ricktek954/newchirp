@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_es.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:45:37Z"
+timestamp: "2026-11-23T23:18:34Z"
 concept_id: l10n/app_localizations_es
 language: dart
 ---
@@ -129,4 +129,10 @@ language: dart
 | related | [moreValidationIssues](/l10n/app_localizations_es/moreValidationIssues.md) |
 | related | [repeatersNoneImportable](/l10n/app_localizations_es/repeatersNoneImportable.md) |
 | related | [countyCount](/l10n/app_localizations_es/countyCount.md) |
+| related | [shortenNamesButton](/l10n/app_localizations_es/shortenNamesButton.md) |
+| related | [shortenNamesTitle](/l10n/app_localizations_es/shortenNamesTitle.md) |
+| related | [shortenNamesBody](/l10n/app_localizations_es/shortenNamesBody.md) |
+| related | [shortenNamesMore](/l10n/app_localizations_es/shortenNamesMore.md) |
+| related | [shortenNamesDuplicates](/l10n/app_localizations_es/shortenNamesDuplicates.md) |
+| related | [shortenNamesAction](/l10n/app_localizations_es/shortenNamesAction.md) |
 | related | [AppLocalizationsEs](/l10n/app_localizations_es/AppLocalizationsEs.md) |

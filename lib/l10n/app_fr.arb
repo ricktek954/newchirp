@@ -614,5 +614,11 @@
   "uiAChannelMayBelongToMore": "Un canal peut appartenir à plusieurs entrées.",
   "uiAChannelCanBelongToOne": "Un canal ne peut appartenir qu'à une seule entrée.",
   "uiThisEmptyEntryIsTheRadio": "Cette entrée vide est la banque ou zone libre de la radio. Ajoutez un canal pour la créer.",
-  "uiChannelsSelected": "{p0} canaux sélectionnés"
+  "uiChannelsSelected": "{p0} canaux sélectionnés",
+  "shortenNamesButton": "{count, plural, =1{Raccourcir 1 nom à {limit}} other{Raccourcir {count} noms à {limit}}}",
+  "shortenNamesTitle": "Raccourcir les noms à {limit} caractères ?",
+  "shortenNamesBody": "{count, plural, =1{1 nom de canal dépasse la longueur permise par la radio. NewChirp gardera ses {limit} premiers caractères.} other{{count} noms de canal dépassent la longueur permise par la radio. NewChirp gardera les {limit} premiers caractères de chacun.}} Vous pourrez annuler.",
+  "shortenNamesMore": "{count, plural, =1{et 1 de plus} other{et {count} de plus}}",
+  "shortenNamesDuplicates": "{count, plural, =1{1 nom raccourci sera identique à celui d'un autre canal. Vérifiez-le avant l'écriture.} other{{count} noms raccourcis seront identiques à ceux d'autres canaux. Vérifiez-les avant l'écriture.}}",
+  "shortenNamesAction": "{count, plural, =1{Raccourcir 1 nom} other{Raccourcir {count} noms}}"
 }

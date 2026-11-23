@@ -3793,6 +3793,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{1 county} other{{count} counties}}'**
   String countyCount(int count);
+
+  /// No description provided for @shortenNamesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Shorten 1 name to {limit}} other{Shorten {count} names to {limit}}}'**
+  String shortenNamesButton(int count, int limit);
+
+  /// No description provided for @shortenNamesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Shorten names to {limit} characters?'**
+  String shortenNamesTitle(int limit);
+
+  /// No description provided for @shortenNamesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 channel name is longer than this radio allows. NewChirp will keep its first {limit} characters.} other{{count} channel names are longer than this radio allows. NewChirp will keep the first {limit} characters of each.}} You can undo this.'**
+  String shortenNamesBody(int count, int limit);
+
+  /// No description provided for @shortenNamesMore.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{and 1 more} other{and {count} more}}'**
+  String shortenNamesMore(int count);
+
+  /// No description provided for @shortenNamesDuplicates.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 shortened name will match another channel\'s name. Check it before writing.} other{{count} shortened names will match other channel names. Check them before writing.}}'**
+  String shortenNamesDuplicates(int count);
+
+  /// No description provided for @shortenNamesAction.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Shorten 1 name} other{Shorten {count} names}}'**
+  String shortenNamesAction(int count);
 }
 
 class _AppLocalizationsDelegate

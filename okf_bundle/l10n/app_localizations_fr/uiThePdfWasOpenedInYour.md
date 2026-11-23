@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_fr.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:45:37Z"
+timestamp: "2026-11-23T23:18:34Z"
 concept_id: l10n/app_localizations_fr/uiThePdfWasOpenedInYour
 language: dart
 ---

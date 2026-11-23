@@ -2290,4 +2290,68 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String shortenNamesButton(int count, int limit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Acortar $count nombres a $limit',
+      one: 'Acortar 1 nombre a $limit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesTitle(int limit) {
+    return '¿Acortar los nombres a $limit caracteres?';
+  }
+
+  @override
+  String shortenNamesBody(int count, int limit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count nombres de canal son más largos de lo que permite la radio. NewChirp conservará los primeros $limit caracteres de cada uno.',
+      one:
+          '1 nombre de canal es más largo de lo que permite la radio. NewChirp conservará sus primeros $limit caracteres.',
+    );
+    return '$_temp0 Puede deshacerlo.';
+  }
+
+  @override
+  String shortenNamesMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'y $count más',
+      one: 'y 1 más',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesDuplicates(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count nombres acortados coincidirán con los de otros canales. Revíselos antes de escribir.',
+      one:
+          '1 nombre acortado coincidirá con el de otro canal. Revíselo antes de escribir.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesAction(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Acortar $count nombres',
+      one: 'Acortar 1 nombre',
+    );
+    return '$_temp0';
+  }
 }

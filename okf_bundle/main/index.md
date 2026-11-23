@@ -77,6 +77,7 @@
 - [_channelIssues](channelIssues.md)
 - [_channelRow](channelRow.md)
 - [_channelsAtLocations](channelsAtLocations.md)
+- [_channelsWithLongNames](channelsWithLongNames.md)
 - [_channelTableRows](channelTableRows.md)
 - [_checkForUpdates](checkForUpdates.md)
 - [_chooseAddChannelPlacement](chooseAddChannelPlacement.md)
@@ -184,6 +185,7 @@
 - [_setResultSelected](setResultSelected.md)
 - [_setShowEmptySlots](setShowEmptySlots.md)
 - [_settingsMessage](settingsMessage.md)
+- [_shortenLongNames](shortenLongNames.md) — Cut every channel name that is longer than the radio allows, after the
 - [_showAbbreviationGlossary](showAbbreviationGlossary.md)
 - [_showActionError](showActionError.md)
 - [_showBulkChannelEditor](showBulkChannelEditor.md)
@@ -243,6 +245,7 @@
 - [revealSelectedChannel](revealSelectedChannel.md)
 - [rowColor](rowColor.md)
 - [save](save.md)
+- [shortened](shortened.md)
 - [shouldLoadRadioCatalogForRestoredSelection](shouldLoadRadioCatalogForRestoredSelection.md)
 - [start](start.md)
 - [toggle](toggle.md)

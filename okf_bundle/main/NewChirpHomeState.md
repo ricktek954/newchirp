@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:44:03Z"
+timestamp: "2026-11-23T23:18:33Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -78,6 +78,9 @@ class _NewChirpHomeState
 - `_nextChannelLocation`
 - `_channelIssues`
 - `_reviewChannelIssues`
+- `_channelsWithLongNames`
+- `_shortenLongNames`
+- `shortened`
 - `_sortChannelsByLocation`
 - `_moveChannel`
 - `_moveChannelToLocation`
@@ -168,7 +171,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 435–6975 in `main.dart`
+Lines 435–7076 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:44:03Z"
+timestamp: "2026-11-23T23:18:33Z"
 concept_id: main
 language: dart
 ---
@@ -79,6 +79,7 @@ language: dart
 | related | [matchesColumnFilters](/main/matchesColumnFilters.md) |
 | related | [matchesQuery](/main/matchesQuery.md) |
 | related | [invalid](/main/invalid.md) |
+| related | [shortened](/main/shortened.md) |
 | related | [walk](/main/walk.md) |
 | related | [_changed](/main/changed.md) |
 | related | [save](/main/save.md) |
@@ -166,6 +167,9 @@ language: dart
 | related | [_nextChannelLocation](/main/nextChannelLocation.md) |
 | related | [_channelIssues](/main/channelIssues.md) |
 | related | [_reviewChannelIssues](/main/reviewChannelIssues.md) |
+| related | [_channelsWithLongNames](/main/channelsWithLongNames.md) |
+| related | [_shortenLongNames](/main/shortenLongNames.md) |
+| related | [shortened](/main/shortened.md) |
 | related | [_sortChannelsByLocation](/main/sortChannelsByLocation.md) |
 | related | [_moveChannel](/main/moveChannel.md) |
 | related | [_moveChannelToLocation](/main/moveChannelToLocation.md) |

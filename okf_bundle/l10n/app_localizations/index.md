@@ -42,6 +42,12 @@
 - [repeaterRangeIn](repeaterRangeIn.md) — No description provided for @repeaterRangeIn.
 - [repeaterRangeZip](repeaterRangeZip.md) — No description provided for @repeaterRangeZip.
 - [repeatersNoneImportable](repeatersNoneImportable.md) — No description provided for @repeatersNoneImportable.
+- [shortenNamesAction](shortenNamesAction.md) — No description provided for @shortenNamesAction.
+- [shortenNamesBody](shortenNamesBody.md) — No description provided for @shortenNamesBody.
+- [shortenNamesButton](shortenNamesButton.md) — No description provided for @shortenNamesButton.
+- [shortenNamesDuplicates](shortenNamesDuplicates.md) — No description provided for @shortenNamesDuplicates.
+- [shortenNamesMore](shortenNamesMore.md) — No description provided for @shortenNamesMore.
+- [shortenNamesTitle](shortenNamesTitle.md) — No description provided for @shortenNamesTitle.
 - [shouldReload](shouldReload.md)
 - [sidebarVersion](sidebarVersion.md) — No description provided for @sidebarVersion.
 - [uiAddSelected2](uiAddSelected2.md) — No description provided for @uiAddSelected2.

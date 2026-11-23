@@ -2299,4 +2299,68 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String shortenNamesButton(int count, int limit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Raccourcir $count noms à $limit',
+      one: 'Raccourcir 1 nom à $limit',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesTitle(int limit) {
+    return 'Raccourcir les noms à $limit caractères ?';
+  }
+
+  @override
+  String shortenNamesBody(int count, int limit) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count noms de canal dépassent la longueur permise par la radio. NewChirp gardera les $limit premiers caractères de chacun.',
+      one:
+          '1 nom de canal dépasse la longueur permise par la radio. NewChirp gardera ses $limit premiers caractères.',
+    );
+    return '$_temp0 Vous pourrez annuler.';
+  }
+
+  @override
+  String shortenNamesMore(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'et $count de plus',
+      one: 'et 1 de plus',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesDuplicates(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other:
+          '$count noms raccourcis seront identiques à ceux d\'autres canaux. Vérifiez-les avant l\'écriture.',
+      one:
+          '1 nom raccourci sera identique à celui d\'un autre canal. Vérifiez-le avant l\'écriture.',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String shortenNamesAction(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Raccourcir $count noms',
+      one: 'Raccourcir 1 nom',
+    );
+    return '$_temp0';
+  }
 }

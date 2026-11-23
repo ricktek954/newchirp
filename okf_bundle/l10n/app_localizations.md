@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:44:03Z"
+timestamp: "2026-11-23T23:18:34Z"
 concept_id: l10n/app_localizations
 language: dart
 ---
@@ -130,6 +130,12 @@ language: dart
 | related | [moreValidationIssues](/l10n/app_localizations/moreValidationIssues.md) |
 | related | [repeatersNoneImportable](/l10n/app_localizations/repeatersNoneImportable.md) |
 | related | [countyCount](/l10n/app_localizations/countyCount.md) |
+| related | [shortenNamesButton](/l10n/app_localizations/shortenNamesButton.md) |
+| related | [shortenNamesTitle](/l10n/app_localizations/shortenNamesTitle.md) |
+| related | [shortenNamesBody](/l10n/app_localizations/shortenNamesBody.md) |
+| related | [shortenNamesMore](/l10n/app_localizations/shortenNamesMore.md) |
+| related | [shortenNamesDuplicates](/l10n/app_localizations/shortenNamesDuplicates.md) |
+| related | [shortenNamesAction](/l10n/app_localizations/shortenNamesAction.md) |
 | related | [lookupAppLocalizations](/l10n/app_localizations/lookupAppLocalizations.md) |
 | related | [of](/l10n/app_localizations/of.md) |
 | related | [sidebarVersion](/l10n/app_localizations/sidebarVersion.md) |
@@ -239,6 +245,12 @@ language: dart
 | related | [moreValidationIssues](/l10n/app_localizations/moreValidationIssues.md) |
 | related | [repeatersNoneImportable](/l10n/app_localizations/repeatersNoneImportable.md) |
 | related | [countyCount](/l10n/app_localizations/countyCount.md) |
+| related | [shortenNamesButton](/l10n/app_localizations/shortenNamesButton.md) |
+| related | [shortenNamesTitle](/l10n/app_localizations/shortenNamesTitle.md) |
+| related | [shortenNamesBody](/l10n/app_localizations/shortenNamesBody.md) |
+| related | [shortenNamesMore](/l10n/app_localizations/shortenNamesMore.md) |
+| related | [shortenNamesDuplicates](/l10n/app_localizations/shortenNamesDuplicates.md) |
+| related | [shortenNamesAction](/l10n/app_localizations/shortenNamesAction.md) |
 | related | [AppLocalizations](/l10n/app_localizations/AppLocalizations.md) |
 | related | [load](/l10n/app_localizations/load.md) |
 | related | [isSupported](/l10n/app_localizations/isSupported.md) |

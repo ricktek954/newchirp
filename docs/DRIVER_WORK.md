@@ -331,6 +331,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: Icom `IcomCloneFormat3` serial, 9600 8N1. Read: Yes, physical image verified. Write: Disabled. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:80
 
+### ID-5100
+
+- **#w-20261123-6995 bug | fix_committed | normal:** Read fails: 'DTCS-T' is not in valid list
+  Stock id5100.py decodes tone mode 8 as 'DTCS-T' (DTCS encode only) and 2/4 as '2??'/'4??' (pocket beep), none valid CHIRP tone modes, so one such channel aborts the whole channel decode. Override maps DTCS-T to Cross 'DTCS->', pocket-beep TSQL/DTCS to TSQL/DTCS (kept on unchanged write-back), undefined values to no tone, and offers TSQL-R/DTCS-R. Covers ID-4100 too. No image attached.
+  Source: `email` INBOX:940 <64a8cf78-71ea-6553-ee6d-dbdeb1de4f93@newchirp.net>
+
 ### ID-52
 
 - **#57 maintenance | experimental | normal:** Current driver status
@@ -826,6 +832,15 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#6 maintenance | hardware_tested | normal:** Current driver status
   Transport: Yaesu clone serial, 9600 8N2. Read: Odd-split channels decode; reporter image verified. Write: Hardware-tested name write and restore; odd-split field write pending. Settings: Stock FT-50 settings. Ledger status: Experimental; partial hardware validation.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:30
+
+### FT-70D
+
+- **#w-20261123-00d7 bug | investigating | normal:** Checksum Failed [0000-FEC9 (@FECA)] on read
+  1.0.70 Windows COM4: first read got no response (BAND pressed early), the next read completed but failed the checksum. ADMS-10 1.0.1.0 REA: protocol is 10-byte AH51G ID, ACK, 65216 data + 1 checksum byte (sum of ID+data), identical to CHIRP's layout; ADMS validates the AH51G ID, CHIRP does not, so a stray byte ahead of the ID shifts the image and fails the checksum. Override flushes input, resyncs on AH51G, and explains the checksum failure.
+  Source: `email` INBOX:937, INBOX:938 <c86ed89e-048b-0454-48f6-ce6ff79ee70f@newchirp.net>
+- **#w-20261123-2df0 enhancement | fix_committed | normal:** Offer to shorten names longer than the radio allows
+  VX-7 channels (8-char names) imported into an FT-70D (6-char) block writing until ~100 names are edited by hand. Added a 'Shorten N names to X' action on the attention banner with a preview, duplicate warning and one-step undo.
+  Source: `email` INBOX:939
 
 ### FT-991A
 
