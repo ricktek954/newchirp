@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newchirp/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/models/radio_mapping.dart';
@@ -44,6 +45,8 @@ Future<_DialogResult> _showDialog(
   addTearDown(() => tester.binding.setSurfaceSize(null));
   await tester.pumpWidget(
     MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
         body: Builder(
           builder: (context) => FilledButton(

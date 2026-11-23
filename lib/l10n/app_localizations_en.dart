@@ -502,4 +502,281 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get choiceDigitalVoice => 'Digital voice';
+
+  @override
+  String get connIntro =>
+      'Read channels from the radio first, edit them in the library, then write the verified image back.';
+
+  @override
+  String moduleLoaded(String name) {
+    return 'Experimental CHIRP module loaded: $name';
+  }
+
+  @override
+  String get unload => 'Unload';
+
+  @override
+  String get step1Title => 'Choose a programming cable';
+
+  @override
+  String get step1Help =>
+      'NewChirp finds USB serial and mass-storage programming interfaces automatically. Choose the one that matches your radio connection. If nothing appears, connect the radio and press refresh.';
+
+  @override
+  String get programmingInterface => 'Programming interface';
+
+  @override
+  String get refreshInterfaces => 'Refresh interfaces';
+
+  @override
+  String get refreshHelp =>
+      'Rescan the system for USB serial and mass-storage programming interfaces. If your radio is not listed, connect it and press refresh.';
+
+  @override
+  String get noInterface =>
+      'No programming interface detected. Connect the radio and choose refresh.';
+
+  @override
+  String get step2Title => 'Choose the exact radio model';
+
+  @override
+  String get step2Help =>
+      'Load the supported radio catalog and select the exact model. Using the wrong model can corrupt a radio. Programming cables do not identify the attached radio, so NewChirp does not guess the model. If a stored image already exists for this model, writing is unlocked without reading again.';
+
+  @override
+  String get loadCatalog => 'Load supported radio catalog';
+
+  @override
+  String get loadCatalogHelp =>
+      'Fetch the list of radio models supported by the bundled CHIRP driver tree. Select the exact model before reading or writing.';
+
+  @override
+  String get step3Title => 'Transfer safely';
+
+  @override
+  String get step3Help =>
+      'Read channels pulls the full memory image from the radio, replaces the current channel list, and stores the image for this model. Radio settings have a separate read action on the Radio settings page. Write sends the current channel list back using the stored image. Keep the radio connected and powered on during either transfer.';
+
+  @override
+  String get readChannelsFromRadio => 'Read channels from radio';
+
+  @override
+  String get imageNone =>
+      'No image for this model yet. Read once to enable writing.';
+
+  @override
+  String imageStored(String model) {
+    return 'Stored image for $model is ready. You can write without reading again.';
+  }
+
+  @override
+  String get imageSession =>
+      'A radio image was read this session. Review all changes before writing.';
+
+  @override
+  String get pickerSemanticsChoose => 'Choose radio model';
+
+  @override
+  String pickerSemanticsSelected(String model) {
+    return 'Selected radio $model';
+  }
+
+  @override
+  String get pickerLabel => 'Radio model';
+
+  @override
+  String pickerHint(int count) {
+    return 'Choose from $count supported radios';
+  }
+
+  @override
+  String get pickerTitle => 'Choose your radio';
+
+  @override
+  String get pickerSubtitle =>
+      'Browse by manufacturer or search the complete catalog.';
+
+  @override
+  String get close => 'Close';
+
+  @override
+  String get pickerSearchHint =>
+      'Search by manufacturer or model, e.g. Icom ID-52';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
+  String get pickerNoMatch => 'No radio models match this search.';
+
+  @override
+  String pickerCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count radios',
+      one: '1 radio',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pickerAllVendors => 'All manufacturers';
+
+  @override
+  String get pickerRecent => 'Recent';
+
+  @override
+  String get selected => 'Selected';
+
+  @override
+  String get edited => '• Edited';
+
+  @override
+  String moduleActive(String name) {
+    return 'Experimental CHIRP module: $name';
+  }
+
+  @override
+  String get menuNew => 'New';
+
+  @override
+  String get newBlank => 'Blank configuration';
+
+  @override
+  String get newGmrs => 'GMRS starter template';
+
+  @override
+  String get newMarine => 'Marine VHF template';
+
+  @override
+  String get newRestoreStock => 'Restore stock channels';
+
+  @override
+  String get openChannelFile => 'Open channel file';
+
+  @override
+  String get loadModule => 'Load CHIRP driver module…';
+
+  @override
+  String get loadModuleShort => 'Load driver…';
+
+  @override
+  String get unloadModule => 'Unload CHIRP module';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get saveAs => 'Save as…';
+
+  @override
+  String get printChannelList => 'Print channel list…';
+
+  @override
+  String get print => 'Print';
+
+  @override
+  String get help => 'Help';
+
+  @override
+  String get reportProblem => 'Report a problem…';
+
+  @override
+  String get checkingUpdates => 'Checking for updates...';
+
+  @override
+  String get checkUpdates => 'Check for updates';
+
+  @override
+  String get showSummary => 'Show channel summary';
+
+  @override
+  String get hideSummary => 'Hide channel summary to show more channels';
+
+  @override
+  String get metricChannels => 'Channels';
+
+  @override
+  String get metricScan => 'Scan enabled';
+
+  @override
+  String get metricAttention => 'Needs attention';
+
+  @override
+  String get editBanksZones => 'Edit banks / zones';
+
+  @override
+  String get banksZonesTitle => 'Banks and zones';
+
+  @override
+  String get banksZonesHelp =>
+      'Use this editor to rename zones or banks and choose which channel memories belong to each one. Some radios allow a channel in multiple zones. An empty “New zone” entry is created by adding a channel to it. Changes are written with the channels; review them before writing because membership follows the channel memory number.';
+
+  @override
+  String get radioSection => 'Radio section';
+
+  @override
+  String zoneChannelCount(String name, int count) {
+    return '$name ($count channels)';
+  }
+
+  @override
+  String get radioSectionsTitle => 'Radio sections';
+
+  @override
+  String get radioSectionsHelp =>
+      'This radio exposes separate channel sections or subdevices. Choose a section to view and edit its channels. Writing preserves the other sections in the saved radio image. Banks and zones are edited separately.';
+
+  @override
+  String get search => 'Search';
+
+  @override
+  String get searchHint => 'Search name, frequency, or note';
+
+  @override
+  String get clearChannelSearch => 'Clear channel search';
+
+  @override
+  String bulkEditTip(int count) {
+    return 'Bulk edit $count selected channels';
+  }
+
+  @override
+  String clearSelectedTip(int count) {
+    return 'Clear $count selected channels';
+  }
+
+  @override
+  String get duplicateChannel => 'Duplicate channel';
+
+  @override
+  String get addChannel => 'Add channel';
+
+  @override
+  String get slots => 'Slots';
+
+  @override
+  String get showEmptySlotsTip =>
+      'Show every memory slot, including empty ones';
+
+  @override
+  String get clearColumnFilters => 'Clear column filters';
+
+  @override
+  String editSelected(int count) {
+    return 'Edit $count selected';
+  }
+
+  @override
+  String get duplicate => 'Duplicate';
+
+  @override
+  String get showEmptySlots => 'Show empty slots';
+
+  @override
+  String get clearFilters => 'Clear filters';
+
+  @override
+  String get openShort => 'Open…';
 }

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:14:53Z"
+timestamp: "2026-11-23T19:24:29Z"
 concept_id: main/selectProvider
 language: dart
 ---
@@ -23,7 +23,7 @@ void_selectProvider(_RepeaterProvider provider)
 ```
 
 ## Source
-Lines 8782–8782 in `main.dart`
+Lines 8769–8769 in `main.dart`
 
 ## Relationships
 

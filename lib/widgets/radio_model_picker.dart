@@ -1,3 +1,4 @@
+import '../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -11,7 +12,8 @@ const Map<String, String> _modelPickerHints = {
   'Baofeng_UV-5G_Mini': 'GMRS-only profile; channels 1-30 are frequency-locked',
   'Baofeng_UV-29Pro': "Uses Baofeng's UV-28 Plus compatibility profile",
   'Wouxun_KG-UV9GX': 'Also for the KG-UV9GX Plus (KG-UV9GX+); USB cable',
-  'Quansheng_UV-K1_F4HWN_6.3': 'Also for F4HWN 7.0 firmware (same memory layout)',
+  'Quansheng_UV-K1_F4HWN_6.3':
+      'Also for F4HWN 7.0 firmware (same memory layout)',
 };
 
 /// Manufacturer model names for CHIRP driver IDs whose model part differs.
@@ -175,8 +177,10 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     return Semantics(
       button: true,
       label: selectedModel == null
-          ? 'Choose radio model'
-          : 'Selected radio ${displayRadioModelName(selectedModel)}',
+          ? context.l10n.pickerSemanticsChoose
+          : context.l10n.pickerSemanticsSelected(
+              displayRadioModelName(selectedModel),
+            ),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -186,9 +190,9 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
           child: InputDecorator(
             isEmpty: selectedModel == null,
             decoration: InputDecoration(
-              labelText: 'Radio model',
+              labelText: context.l10n.pickerLabel,
               hintText: selectedModel == null
-                  ? 'Choose from ${widget.models.length} supported radios'
+                  ? context.l10n.pickerHint(widget.models.length)
                   : null,
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
@@ -366,15 +370,14 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Choose your radio',
+                            context.l10n.pickerTitle,
                             style: theme.textTheme.headlineSmall?.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            'Browse by manufacturer or search the complete '
-                            'catalog.',
+                            context.l10n.pickerSubtitle,
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                             ),
@@ -383,7 +386,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
                       ),
                     ),
                     IconButton(
-                      tooltip: 'Close',
+                      tooltip: context.l10n.close,
                       onPressed: () => Navigator.pop(context),
                       icon: const Icon(Icons.close),
                     ),
@@ -400,13 +403,12 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
                   onChanged: (_) => setState(() {}),
                   onSubmitted: (_) => _submitSearch(),
                   decoration: InputDecoration(
-                    hintText:
-                        'Search by manufacturer or model, e.g. Icom ID-52',
+                    hintText: context.l10n.pickerSearchHint,
                     prefixIcon: const Icon(Icons.search),
                     suffixIcon: _searchController.text.isEmpty
                         ? null
                         : IconButton(
-                            tooltip: 'Clear search',
+                            tooltip: context.l10n.clearSearch,
                             onPressed: () {
                               _searchController.clear();
                               setState(() {});
@@ -433,14 +435,14 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
                                 key: const ValueKey(
                                   'radio-model-vendor-recent',
                                 ),
-                                label: _recentVendors,
+                                label: context.l10n.pickerRecent,
                                 count: widget.recentModels.length,
                                 selected: _vendor == _recentVendors,
                                 onTap: () => _selectVendor(_recentVendors),
                               ),
                             _VendorChoice(
                               key: const ValueKey('radio-model-vendor-all'),
-                              label: _allVendors,
+                              label: context.l10n.pickerAllVendors,
                               count: widget.models.length,
                               selected:
                                   _vendor == null || _vendor == _allVendors,
@@ -469,7 +471,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
                       child: groups.isEmpty
                           ? Center(
                               child: Text(
-                                'No radio models match this search.',
+                                context.l10n.pickerNoMatch,
                                 style: theme.textTheme.bodyLarge,
                               ),
                             )
@@ -489,7 +491,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
                 child: Row(
                   children: [
                     Text(
-                      '$resultCount ${resultCount == 1 ? 'radio' : 'radios'}',
+                      context.l10n.pickerCount(resultCount),
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
@@ -497,7 +499,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
                     const Spacer(),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                      child: Text(context.l10n.cancel),
                     ),
                   ],
                 ),
@@ -637,7 +639,8 @@ class _SectionHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(22, 16, 22, 6),
       child: Text(
-        label.toUpperCase(),
+        (label == _recentVendors ? context.l10n.pickerRecent : label)
+            .toUpperCase(),
         style: theme.textTheme.labelSmall?.copyWith(
           color: theme.colorScheme.primary,
           fontWeight: FontWeight.w800,
@@ -690,7 +693,7 @@ class _ModelChoice extends StatelessWidget {
         ),
         trailing: selected
             ? Text(
-                'Selected',
+                context.l10n.selected,
                 style: theme.textTheme.labelMedium?.copyWith(
                   color: theme.colorScheme.primary,
                   fontWeight: FontWeight.w700,

@@ -26,6 +26,11 @@ language complete.
   flow.
 - Batch 2: channel table column titles and help, and the channel editor
   (field labels, tooltips, choice names, bulk-edit title and button).
+- Batch 3: the radio connection page (steps, cable and model help, transfer
+  buttons and image status), the radio model picker, the top bar (New, Open,
+  Load module, Save, Print and Help menus) and the library toolbar (summary
+  cards, search, add/duplicate, empty slots, filters, banks and zones,
+  radio sections).
 
 Channel table column ids stay English (`_channelColumnTitle` translates at
 display time), because saved column order, widths and filters key on them.
@@ -33,8 +38,18 @@ Choice values stay as stored; only their display names are translated. With
 a radio connected, choices show the driver's own values (TSQL, +, -).
 
 Not yet translated: channel validation messages (`RadioChannel.validate`),
-the radio connection page, library toolbar and menus, repeater search,
-frequency reference and About.
+the long "Channel editing" help text, row context menus, the radio settings
+page apart from its write controls, repeater search, frequency reference,
+About, and the bug-report dialog's labels (its report body stays English).
+
+## Layout
+
+Spanish and French labels run about a third longer than English. The top
+bar and the library toolbar switch to their compact layouts at 1.4 times
+the English widths for those languages. A widget test checks that Spanish
+and French fit wherever English does in the test renderer; that renderer's
+square glyphs are far wider than real fonts, so narrow windows (900-1100 px)
+must be checked in the real app.
 
 ## What stays in English, on purpose
 

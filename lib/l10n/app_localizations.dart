@@ -975,6 +975,480 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Digital voice'**
   String get choiceDigitalVoice;
+
+  /// No description provided for @connIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Read channels from the radio first, edit them in the library, then write the verified image back.'**
+  String get connIntro;
+
+  /// No description provided for @moduleLoaded.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental CHIRP module loaded: {name}'**
+  String moduleLoaded(String name);
+
+  /// No description provided for @unload.
+  ///
+  /// In en, this message translates to:
+  /// **'Unload'**
+  String get unload;
+
+  /// No description provided for @step1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a programming cable'**
+  String get step1Title;
+
+  /// No description provided for @step1Help.
+  ///
+  /// In en, this message translates to:
+  /// **'NewChirp finds USB serial and mass-storage programming interfaces automatically. Choose the one that matches your radio connection. If nothing appears, connect the radio and press refresh.'**
+  String get step1Help;
+
+  /// No description provided for @programmingInterface.
+  ///
+  /// In en, this message translates to:
+  /// **'Programming interface'**
+  String get programmingInterface;
+
+  /// No description provided for @refreshInterfaces.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh interfaces'**
+  String get refreshInterfaces;
+
+  /// No description provided for @refreshHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescan the system for USB serial and mass-storage programming interfaces. If your radio is not listed, connect it and press refresh.'**
+  String get refreshHelp;
+
+  /// No description provided for @noInterface.
+  ///
+  /// In en, this message translates to:
+  /// **'No programming interface detected. Connect the radio and choose refresh.'**
+  String get noInterface;
+
+  /// No description provided for @step2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose the exact radio model'**
+  String get step2Title;
+
+  /// No description provided for @step2Help.
+  ///
+  /// In en, this message translates to:
+  /// **'Load the supported radio catalog and select the exact model. Using the wrong model can corrupt a radio. Programming cables do not identify the attached radio, so NewChirp does not guess the model. If a stored image already exists for this model, writing is unlocked without reading again.'**
+  String get step2Help;
+
+  /// No description provided for @loadCatalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Load supported radio catalog'**
+  String get loadCatalog;
+
+  /// No description provided for @loadCatalogHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Fetch the list of radio models supported by the bundled CHIRP driver tree. Select the exact model before reading or writing.'**
+  String get loadCatalogHelp;
+
+  /// No description provided for @step3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Transfer safely'**
+  String get step3Title;
+
+  /// No description provided for @step3Help.
+  ///
+  /// In en, this message translates to:
+  /// **'Read channels pulls the full memory image from the radio, replaces the current channel list, and stores the image for this model. Radio settings have a separate read action on the Radio settings page. Write sends the current channel list back using the stored image. Keep the radio connected and powered on during either transfer.'**
+  String get step3Help;
+
+  /// No description provided for @readChannelsFromRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Read channels from radio'**
+  String get readChannelsFromRadio;
+
+  /// No description provided for @imageNone.
+  ///
+  /// In en, this message translates to:
+  /// **'No image for this model yet. Read once to enable writing.'**
+  String get imageNone;
+
+  /// No description provided for @imageStored.
+  ///
+  /// In en, this message translates to:
+  /// **'Stored image for {model} is ready. You can write without reading again.'**
+  String imageStored(String model);
+
+  /// No description provided for @imageSession.
+  ///
+  /// In en, this message translates to:
+  /// **'A radio image was read this session. Review all changes before writing.'**
+  String get imageSession;
+
+  /// No description provided for @pickerSemanticsChoose.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose radio model'**
+  String get pickerSemanticsChoose;
+
+  /// No description provided for @pickerSemanticsSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected radio {model}'**
+  String pickerSemanticsSelected(String model);
+
+  /// No description provided for @pickerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio model'**
+  String get pickerLabel;
+
+  /// No description provided for @pickerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from {count} supported radios'**
+  String pickerHint(int count);
+
+  /// No description provided for @pickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose your radio'**
+  String get pickerTitle;
+
+  /// No description provided for @pickerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse by manufacturer or search the complete catalog.'**
+  String get pickerSubtitle;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @pickerSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by manufacturer or model, e.g. Icom ID-52'**
+  String get pickerSearchHint;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
+
+  /// No description provided for @pickerNoMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'No radio models match this search.'**
+  String get pickerNoMatch;
+
+  /// No description provided for @pickerCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 radio} other{{count} radios}}'**
+  String pickerCount(int count);
+
+  /// No description provided for @pickerAllVendors.
+  ///
+  /// In en, this message translates to:
+  /// **'All manufacturers'**
+  String get pickerAllVendors;
+
+  /// No description provided for @pickerRecent.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get pickerRecent;
+
+  /// No description provided for @selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected'**
+  String get selected;
+
+  /// No description provided for @edited.
+  ///
+  /// In en, this message translates to:
+  /// **'• Edited'**
+  String get edited;
+
+  /// No description provided for @moduleActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Experimental CHIRP module: {name}'**
+  String moduleActive(String name);
+
+  /// No description provided for @menuNew.
+  ///
+  /// In en, this message translates to:
+  /// **'New'**
+  String get menuNew;
+
+  /// No description provided for @newBlank.
+  ///
+  /// In en, this message translates to:
+  /// **'Blank configuration'**
+  String get newBlank;
+
+  /// No description provided for @newGmrs.
+  ///
+  /// In en, this message translates to:
+  /// **'GMRS starter template'**
+  String get newGmrs;
+
+  /// No description provided for @newMarine.
+  ///
+  /// In en, this message translates to:
+  /// **'Marine VHF template'**
+  String get newMarine;
+
+  /// No description provided for @newRestoreStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore stock channels'**
+  String get newRestoreStock;
+
+  /// No description provided for @openChannelFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Open channel file'**
+  String get openChannelFile;
+
+  /// No description provided for @loadModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Load CHIRP driver module…'**
+  String get loadModule;
+
+  /// No description provided for @loadModuleShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Load driver…'**
+  String get loadModuleShort;
+
+  /// No description provided for @unloadModule.
+  ///
+  /// In en, this message translates to:
+  /// **'Unload CHIRP module'**
+  String get unloadModule;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @saveAs.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as…'**
+  String get saveAs;
+
+  /// No description provided for @printChannelList.
+  ///
+  /// In en, this message translates to:
+  /// **'Print channel list…'**
+  String get printChannelList;
+
+  /// No description provided for @print.
+  ///
+  /// In en, this message translates to:
+  /// **'Print'**
+  String get print;
+
+  /// No description provided for @help.
+  ///
+  /// In en, this message translates to:
+  /// **'Help'**
+  String get help;
+
+  /// No description provided for @reportProblem.
+  ///
+  /// In en, this message translates to:
+  /// **'Report a problem…'**
+  String get reportProblem;
+
+  /// No description provided for @checkingUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking for updates...'**
+  String get checkingUpdates;
+
+  /// No description provided for @checkUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get checkUpdates;
+
+  /// No description provided for @showSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Show channel summary'**
+  String get showSummary;
+
+  /// No description provided for @hideSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide channel summary to show more channels'**
+  String get hideSummary;
+
+  /// No description provided for @metricChannels.
+  ///
+  /// In en, this message translates to:
+  /// **'Channels'**
+  String get metricChannels;
+
+  /// No description provided for @metricScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan enabled'**
+  String get metricScan;
+
+  /// No description provided for @metricAttention.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs attention'**
+  String get metricAttention;
+
+  /// No description provided for @editBanksZones.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit banks / zones'**
+  String get editBanksZones;
+
+  /// No description provided for @banksZonesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Banks and zones'**
+  String get banksZonesTitle;
+
+  /// No description provided for @banksZonesHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Use this editor to rename zones or banks and choose which channel memories belong to each one. Some radios allow a channel in multiple zones. An empty “New zone” entry is created by adding a channel to it. Changes are written with the channels; review them before writing because membership follows the channel memory number.'**
+  String get banksZonesHelp;
+
+  /// No description provided for @radioSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio section'**
+  String get radioSection;
+
+  /// No description provided for @zoneChannelCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} ({count} channels)'**
+  String zoneChannelCount(String name, int count);
+
+  /// No description provided for @radioSectionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio sections'**
+  String get radioSectionsTitle;
+
+  /// No description provided for @radioSectionsHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'This radio exposes separate channel sections or subdevices. Choose a section to view and edit its channels. Writing preserves the other sections in the saved radio image. Banks and zones are edited separately.'**
+  String get radioSectionsHelp;
+
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search name, frequency, or note'**
+  String get searchHint;
+
+  /// No description provided for @clearChannelSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear channel search'**
+  String get clearChannelSearch;
+
+  /// No description provided for @bulkEditTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Bulk edit {count} selected channels'**
+  String bulkEditTip(int count);
+
+  /// No description provided for @clearSelectedTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear {count} selected channels'**
+  String clearSelectedTip(int count);
+
+  /// No description provided for @duplicateChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate channel'**
+  String get duplicateChannel;
+
+  /// No description provided for @addChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Add channel'**
+  String get addChannel;
+
+  /// No description provided for @slots.
+  ///
+  /// In en, this message translates to:
+  /// **'Slots'**
+  String get slots;
+
+  /// No description provided for @showEmptySlotsTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Show every memory slot, including empty ones'**
+  String get showEmptySlotsTip;
+
+  /// No description provided for @clearColumnFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear column filters'**
+  String get clearColumnFilters;
+
+  /// No description provided for @editSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {count} selected'**
+  String editSelected(int count);
+
+  /// No description provided for @duplicate.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplicate'**
+  String get duplicate;
+
+  /// No description provided for @showEmptySlots.
+  ///
+  /// In en, this message translates to:
+  /// **'Show empty slots'**
+  String get showEmptySlots;
+
+  /// No description provided for @clearFilters.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear filters'**
+  String get clearFilters;
+
+  /// No description provided for @openShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Open…'**
+  String get openShort;
 }
 
 class _AppLocalizationsDelegate

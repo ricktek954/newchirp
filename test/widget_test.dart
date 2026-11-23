@@ -428,10 +428,39 @@ void main() {
     // Headers translate; channel data and saved column ids do not.
     expect(find.text('NOMBRE'), findsOneWidget);
     expect(find.text('NAME'), findsNothing);
+    // Top bar and library toolbar.
+    expect(find.text('Abrir…'), findsOneWidget);
+    expect(find.text('Añadir canal'), findsOneWidget);
+    expect(find.text('Canales'), findsOneWidget);
 
     appLocale.value = const Locale('fr');
     await tester.pumpAndSettle();
     expect(find.text('Bibliothèque de canaux'), findsOneWidget);
+  });
+
+  testWidgets('Spanish and French layouts fit where English does', (
+    tester,
+  ) async {
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(() => appLocale.value = null);
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(1440, 800);
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    await openGmrsStarter(tester);
+    // Only widths where English is clean in the test renderer, whose square
+    // glyphs are much wider than real fonts; narrower windows overflow there
+    // in English too and need checking in the real app.
+    for (final code in ['es', 'fr']) {
+      for (final width in [1280.0, 1440.0]) {
+        tester.view.physicalSize = Size(width, 800);
+        appLocale.value = Locale(code);
+        await tester.pumpAndSettle();
+        // A RenderFlex overflow is reported as a test exception.
+        expect(tester.takeException(), isNull, reason: '$code at $width');
+      }
+    }
   });
 
   testWidgets('channel summary cards collapse to show more channels', (
@@ -469,6 +498,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: StatefulBuilder(
             builder: (context, setState) => ExtraFieldEditor(
@@ -505,6 +536,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -696,6 +729,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -746,6 +781,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -791,6 +828,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -833,6 +872,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -892,6 +933,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -1009,6 +1052,8 @@ void main() {
 
       await tester.pumpWidget(
         MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           home: Builder(
             builder: (context) => Scaffold(
               body: TextButton(
@@ -1071,6 +1116,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -1118,6 +1165,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(
@@ -1433,6 +1482,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioSettingsSourceActions(
             canReadRadio: true,

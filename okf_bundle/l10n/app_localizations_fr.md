@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_fr.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:13:15Z"
+timestamp: "2026-11-23T19:22:04Z"
 concept_id: l10n/app_localizations_fr
 language: dart
 ---
@@ -38,4 +38,14 @@ language: dart
 | related | [writeSameSettingsBody](/l10n/app_localizations_fr/writeSameSettingsBody.md) |
 | related | [editorBulkTitle](/l10n/app_localizations_fr/editorBulkTitle.md) |
 | related | [editorBulkSave](/l10n/app_localizations_fr/editorBulkSave.md) |
+| related | [moduleLoaded](/l10n/app_localizations_fr/moduleLoaded.md) |
+| related | [imageStored](/l10n/app_localizations_fr/imageStored.md) |
+| related | [pickerSemanticsSelected](/l10n/app_localizations_fr/pickerSemanticsSelected.md) |
+| related | [pickerHint](/l10n/app_localizations_fr/pickerHint.md) |
+| related | [pickerCount](/l10n/app_localizations_fr/pickerCount.md) |
+| related | [moduleActive](/l10n/app_localizations_fr/moduleActive.md) |
+| related | [zoneChannelCount](/l10n/app_localizations_fr/zoneChannelCount.md) |
+| related | [bulkEditTip](/l10n/app_localizations_fr/bulkEditTip.md) |
+| related | [clearSelectedTip](/l10n/app_localizations_fr/clearSelectedTip.md) |
+| related | [editSelected](/l10n/app_localizations_fr/editSelected.md) |
 | related | [AppLocalizationsFr](/l10n/app_localizations_fr/AppLocalizationsFr.md) |

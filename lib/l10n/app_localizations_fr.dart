@@ -506,4 +506,282 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get choiceDigitalVoice => 'Voix numérique';
+
+  @override
+  String get connIntro =>
+      'Lisez d\'abord les canaux de la radio, modifiez-les dans la bibliothèque, puis réécrivez l\'image vérifiée.';
+
+  @override
+  String moduleLoaded(String name) {
+    return 'Module CHIRP expérimental chargé : $name';
+  }
+
+  @override
+  String get unload => 'Décharger';
+
+  @override
+  String get step1Title => 'Choisissez un câble de programmation';
+
+  @override
+  String get step1Help =>
+      'NewChirp détecte automatiquement les interfaces de programmation USB série et de stockage de masse. Choisissez celle qui correspond à la connexion de votre radio. Si rien n\'apparaît, connectez la radio et appuyez sur actualiser.';
+
+  @override
+  String get programmingInterface => 'Interface de programmation';
+
+  @override
+  String get refreshInterfaces => 'Actualiser les interfaces';
+
+  @override
+  String get refreshHelp =>
+      'Relance la recherche des interfaces de programmation USB série et de stockage de masse. Si votre radio n\'apparaît pas, connectez-la et appuyez sur actualiser.';
+
+  @override
+  String get noInterface =>
+      'Aucune interface de programmation détectée. Connectez la radio et choisissez actualiser.';
+
+  @override
+  String get step2Title => 'Choisissez le modèle exact de radio';
+
+  @override
+  String get step2Help =>
+      'Chargez le catalogue des radios prises en charge et sélectionnez le modèle exact. Un mauvais modèle peut corrompre une radio. Les câbles de programmation n\'identifient pas la radio branchée, donc NewChirp ne devine pas le modèle. Si une image enregistrée existe déjà pour ce modèle, l\'écriture est possible sans relire la radio.';
+
+  @override
+  String get loadCatalog => 'Charger le catalogue des radios prises en charge';
+
+  @override
+  String get loadCatalogHelp =>
+      'Récupère la liste des modèles de radio pris en charge par les pilotes CHIRP fournis. Sélectionnez le modèle exact avant de lire ou d\'écrire.';
+
+  @override
+  String get step3Title => 'Transférez en toute sécurité';
+
+  @override
+  String get step3Help =>
+      'Lire les canaux récupère l\'image mémoire complète de la radio, remplace la liste de canaux actuelle et enregistre l\'image pour ce modèle. Les réglages de la radio se lisent séparément, sur la page Réglages de la radio. Écrire renvoie la liste de canaux actuelle en utilisant l\'image enregistrée. Gardez la radio connectée et allumée pendant chaque transfert.';
+
+  @override
+  String get readChannelsFromRadio => 'Lire les canaux de la radio';
+
+  @override
+  String get imageNone =>
+      'Pas encore d\'image pour ce modèle. Lisez la radio une fois pour activer l\'écriture.';
+
+  @override
+  String imageStored(String model) {
+    return 'L\'image enregistrée de $model est prête. Vous pouvez écrire sans relire la radio.';
+  }
+
+  @override
+  String get imageSession =>
+      'Une image de la radio a été lue pendant cette session. Vérifiez toutes les modifications avant d\'écrire.';
+
+  @override
+  String get pickerSemanticsChoose => 'Choisir le modèle de radio';
+
+  @override
+  String pickerSemanticsSelected(String model) {
+    return 'Radio sélectionnée : $model';
+  }
+
+  @override
+  String get pickerLabel => 'Modèle de radio';
+
+  @override
+  String pickerHint(int count) {
+    return 'Choisissez parmi $count radios prises en charge';
+  }
+
+  @override
+  String get pickerTitle => 'Choisissez votre radio';
+
+  @override
+  String get pickerSubtitle =>
+      'Parcourez par fabricant ou cherchez dans le catalogue complet.';
+
+  @override
+  String get close => 'Fermer';
+
+  @override
+  String get pickerSearchHint =>
+      'Cherchez par fabricant ou modèle, p. ex. Icom ID-52';
+
+  @override
+  String get clearSearch => 'Effacer la recherche';
+
+  @override
+  String get pickerNoMatch =>
+      'Aucun modèle de radio ne correspond à cette recherche.';
+
+  @override
+  String pickerCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count radios',
+      one: '1 radio',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get pickerAllVendors => 'Tous les fabricants';
+
+  @override
+  String get pickerRecent => 'Récents';
+
+  @override
+  String get selected => 'Sélectionnée';
+
+  @override
+  String get edited => '• Modifié';
+
+  @override
+  String moduleActive(String name) {
+    return 'Module CHIRP expérimental : $name';
+  }
+
+  @override
+  String get menuNew => 'Nouveau';
+
+  @override
+  String get newBlank => 'Configuration vierge';
+
+  @override
+  String get newGmrs => 'Modèle de départ GMRS';
+
+  @override
+  String get newMarine => 'Modèle VHF marine';
+
+  @override
+  String get newRestoreStock => 'Restaurer les canaux d\'usine';
+
+  @override
+  String get openChannelFile => 'Ouvrir un fichier de canaux';
+
+  @override
+  String get loadModule => 'Charger un module de pilote CHIRP…';
+
+  @override
+  String get loadModuleShort => 'Charger un pilote…';
+
+  @override
+  String get unloadModule => 'Décharger le module CHIRP';
+
+  @override
+  String get save => 'Enregistrer';
+
+  @override
+  String get saveAs => 'Enregistrer sous…';
+
+  @override
+  String get printChannelList => 'Imprimer la liste des canaux…';
+
+  @override
+  String get print => 'Imprimer';
+
+  @override
+  String get help => 'Aide';
+
+  @override
+  String get reportProblem => 'Signaler un problème…';
+
+  @override
+  String get checkingUpdates => 'Recherche de mises à jour...';
+
+  @override
+  String get checkUpdates => 'Rechercher des mises à jour';
+
+  @override
+  String get showSummary => 'Afficher le résumé des canaux';
+
+  @override
+  String get hideSummary => 'Masquer le résumé pour afficher plus de canaux';
+
+  @override
+  String get metricChannels => 'Canaux';
+
+  @override
+  String get metricScan => 'Balayage activé';
+
+  @override
+  String get metricAttention => 'À vérifier';
+
+  @override
+  String get editBanksZones => 'Modifier banques / zones';
+
+  @override
+  String get banksZonesTitle => 'Banques et zones';
+
+  @override
+  String get banksZonesHelp =>
+      'Utilisez cet éditeur pour renommer les zones ou les banques et choisir les mémoires de canaux de chacune. Certaines radios acceptent un canal dans plusieurs zones. Une entrée vide « Nouvelle zone » est créée en y ajoutant un canal. Les modifications sont écrites avec les canaux ; vérifiez-les avant d\'écrire, car l\'appartenance suit le numéro de mémoire du canal.';
+
+  @override
+  String get radioSection => 'Section de la radio';
+
+  @override
+  String zoneChannelCount(String name, int count) {
+    return '$name ($count canaux)';
+  }
+
+  @override
+  String get radioSectionsTitle => 'Sections de la radio';
+
+  @override
+  String get radioSectionsHelp =>
+      'Cette radio comporte des sections de canaux ou sous-appareils distincts. Choisissez une section pour afficher et modifier ses canaux. L\'écriture conserve les autres sections de l\'image enregistrée de la radio. Les banques et zones se modifient séparément.';
+
+  @override
+  String get search => 'Rechercher';
+
+  @override
+  String get searchHint => 'Rechercher un nom, une fréquence ou une note';
+
+  @override
+  String get clearChannelSearch => 'Effacer la recherche de canaux';
+
+  @override
+  String bulkEditTip(int count) {
+    return 'Modifier ensemble $count canaux sélectionnés';
+  }
+
+  @override
+  String clearSelectedTip(int count) {
+    return 'Vider $count canaux sélectionnés';
+  }
+
+  @override
+  String get duplicateChannel => 'Dupliquer le canal';
+
+  @override
+  String get addChannel => 'Ajouter un canal';
+
+  @override
+  String get slots => 'Emplacements';
+
+  @override
+  String get showEmptySlotsTip =>
+      'Afficher tous les emplacements mémoire, y compris les vides';
+
+  @override
+  String get clearColumnFilters => 'Effacer les filtres de colonnes';
+
+  @override
+  String editSelected(int count) {
+    return 'Modifier $count sélectionnés';
+  }
+
+  @override
+  String get duplicate => 'Dupliquer';
+
+  @override
+  String get showEmptySlots => 'Afficher les emplacements vides';
+
+  @override
+  String get clearFilters => 'Effacer les filtres';
+
+  @override
+  String get openShort => 'Ouvrir…';
 }

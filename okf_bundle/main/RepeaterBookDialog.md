@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:14:53Z"
+timestamp: "2026-11-23T19:24:29Z"
 concept_id: main/RepeaterBookDialog
 language: dart
 ---
@@ -27,7 +27,7 @@ class RepeaterBookDialog
 - `createState`
 
 ## Source
-Lines 8611–8625 in `main.dart`
+Lines 8598–8612 in `main.dart`
 
 ## Relationships
 

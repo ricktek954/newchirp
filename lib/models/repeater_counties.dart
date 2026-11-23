@@ -336,14 +336,8 @@ const repeaterUsCountiesByState = <String, List<String>>{
     'Southeastern Connecticut Planning Region',
     'Western Connecticut Planning Region',
   ],
-  'Delaware': <String>[
-    'Kent',
-    'New Castle',
-    'Sussex',
-  ],
-  'District of Columbia': <String>[
-    'District of Columbia',
-  ],
+  'Delaware': <String>['Kent', 'New Castle', 'Sussex'],
+  'District of Columbia': <String>['District of Columbia'],
   'Florida': <String>[
     'Alachua',
     'Baker',
@@ -574,13 +568,7 @@ const repeaterUsCountiesByState = <String, List<String>>{
     'Wilkinson',
     'Worth',
   ],
-  'Hawaii': <String>[
-    'Hawaii',
-    'Honolulu',
-    'Kalawao',
-    'Kauai',
-    'Maui',
-  ],
+  'Hawaii': <String>['Hawaii', 'Honolulu', 'Kalawao', 'Kauai', 'Maui'],
   'Idaho': <String>[
     'Ada',
     'Adams',

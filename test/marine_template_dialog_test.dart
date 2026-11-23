@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newchirp/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/models/marine_channels.dart';
 import 'package:newchirp/widgets/marine_template_dialog.dart';
@@ -10,6 +11,8 @@ void main() {
     MarineTemplateSelection? selection;
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Builder(
           builder: (context) => Scaffold(
             body: TextButton(

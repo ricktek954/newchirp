@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:13:15Z"
+timestamp: "2026-11-23T19:22:04Z"
 concept_id: l10n/app_localizations/isSupported
 language: dart
 ---
@@ -24,7 +24,7 @@ boolisSupported(Locale locale)
 ```
 
 ## Source
-Lines 990–990 in `l10n/app_localizations.dart`
+Lines 1464–1464 in `l10n/app_localizations.dart`
 
 ## Relationships
 

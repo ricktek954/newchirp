@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:newchirp/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/widgets/radio_model_picker.dart';
 
@@ -24,6 +25,8 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioModelPicker(
             models: _models,
@@ -65,6 +68,8 @@ void main() {
     ];
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: Padding(
             padding: const EdgeInsets.all(24),
@@ -115,6 +120,8 @@ void main() {
     String? selectedModel = 'Yaesu_FT-60';
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: StatefulBuilder(
             builder: (context, setState) => RadioModelPicker(
@@ -163,6 +170,8 @@ void main() {
     String? selectedModel = 'Yaesu_FTM-150R';
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: StatefulBuilder(
             builder: (context, setState) => RadioModelPicker(
@@ -209,6 +218,8 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioModelPicker(
             models: _models,
@@ -259,6 +270,8 @@ void main() {
     };
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioModelPicker(
             models: vendors.values.expand((models) => models).toList(),
@@ -292,6 +305,8 @@ void main() {
     String? selectedModel = 'AOR_AR8200';
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: StatefulBuilder(
             builder: (context, setState) => RadioModelPicker(
@@ -331,6 +346,8 @@ void main() {
   testWidgets('search reports when no models match', (tester) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioModelPicker(
             models: _models,
@@ -357,6 +374,8 @@ void main() {
     String? selectedModel;
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioModelPicker(
             models: _models,
@@ -397,6 +416,8 @@ void main() {
     };
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioModelPicker(
             models: models,
@@ -445,6 +466,8 @@ void main() {
 
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: RadioModelPicker(
             models: models,

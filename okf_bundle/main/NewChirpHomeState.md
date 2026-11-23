@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:14:53Z"
+timestamp: "2026-11-23T19:24:29Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -168,7 +168,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 435–7084 in `main.dart`
+Lines 435–7060 in `main.dart`
 
 ## Relationships
 

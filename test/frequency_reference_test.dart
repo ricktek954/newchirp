@@ -27,17 +27,13 @@ void main() {
     expect(cb27ReferencePlan.groups[1].rows.first.frequency, '27.60125');
 
     expect(australianUhfCbReferencePlan.groups.single.rows, hasLength(80));
-    final australianRows =
-        australianUhfCbReferencePlan.groups.single.rows;
+    final australianRows = australianUhfCbReferencePlan.groups.single.rows;
     expect(australianRows[0].frequency, '476.4250');
     expect(australianRows[1].frequency, '476.4500');
     expect(australianRows[39].frequency, '477.4000');
     expect(australianRows[40].frequency, '476.4375');
     expect(australianRows[70].frequency, '477.1875');
-    expect(
-      australianRows.last.frequency,
-      '477.4125',
-    );
+    expect(australianRows.last.frequency, '477.4125');
     expect(australianRows[0].notes, 'Repeater output; input Ch 31');
     expect(australianRows[30].notes, 'Repeater input; output Ch 01');
     expect(australianRows[40].notes, 'Repeater output; input Ch 71');

@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_es.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:13:15Z"
+timestamp: "2026-11-23T19:22:04Z"
 concept_id: l10n/app_localizations_es/sidebarVersion
 language: dart
 ---

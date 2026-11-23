@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newchirp/l10n/app_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:newchirp/models/channel_image_baseline.dart';
 import 'package:newchirp/models/radio_channel.dart';
@@ -65,10 +66,7 @@ void main() {
       {2, 3, 5, 6},
     );
     expect(
-      clearedLocationsForUpload(
-        channels: channels,
-        existingCleared: const [2],
-      ),
+      clearedLocationsForUpload(channels: channels, existingCleared: const [2]),
       {2},
     );
   });
@@ -353,6 +351,8 @@ void main() {
   ) async {
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: ChannelLibraryImageBar(
             match: ChannelImageMatch.matchesImage,
@@ -388,6 +388,8 @@ void main() {
     var wrote = false;
     await tester.pumpWidget(
       MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(
           body: ChannelLibraryImageBar(
             match: ChannelImageMatch.differs,

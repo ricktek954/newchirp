@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:13:15Z"
+timestamp: "2026-11-23T19:22:04Z"
 concept_id: l10n/app_localizations/shouldReload
 language: dart
 ---
@@ -24,7 +24,7 @@ boolshouldReload(_AppLocalizationsDelegate old)
 ```
 
 ## Source
-Lines 994–994 in `l10n/app_localizations.dart`
+Lines 1468–1468 in `l10n/app_localizations.dart`
 
 ## Relationships
 

@@ -43,15 +43,14 @@ Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPola
         'Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,'
         'DtcsCode,DtcsPolarity,RxDtcsCode,CrossMode,Mode,TStep,Skip,Power,'
         'Comment';
-    const row = '1,CAFE,462.562500,,0.000000,,88.5,88.5,023,NN,023,'
+    const row =
+        '1,CAFE,462.562500,,0.000000,,88.5,88.5,023,NN,023,'
         'Tone->Tone,FM,12.5,,High,Café 5°';
 
     // 2026-11-19 UV-32 report: "Failed to decode data using encoding
     // 'utf-8'" for a CSV saved by Windows software.
     test('Windows-1252 bytes decode instead of failing', () {
-      final bytes = [
-        for (final unit in '$header\r\n$row\r\n'.codeUnits) unit,
-      ];
+      final bytes = [for (final unit in '$header\r\n$row\r\n'.codeUnits) unit];
       expect(() => utf8.decode(bytes), throwsFormatException);
       final decoded = ChirpCsv.decodeBytes(bytes);
       expect(decoded.single.frequency, 462.5625);

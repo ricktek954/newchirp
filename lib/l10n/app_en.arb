@@ -275,5 +275,157 @@
   "choiceNormalReverse": "Normal / Reverse",
   "choiceReverseNormal": "Reverse / Normal",
   "choiceReverseReverse": "Reverse / Reverse",
-  "choiceDigitalVoice": "Digital voice"
+  "choiceDigitalVoice": "Digital voice",
+  "connIntro": "Read channels from the radio first, edit them in the library, then write the verified image back.",
+  "moduleLoaded": "Experimental CHIRP module loaded: {name}",
+  "@moduleLoaded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "unload": "Unload",
+  "step1Title": "Choose a programming cable",
+  "step1Help": "NewChirp finds USB serial and mass-storage programming interfaces automatically. Choose the one that matches your radio connection. If nothing appears, connect the radio and press refresh.",
+  "programmingInterface": "Programming interface",
+  "refreshInterfaces": "Refresh interfaces",
+  "refreshHelp": "Rescan the system for USB serial and mass-storage programming interfaces. If your radio is not listed, connect it and press refresh.",
+  "noInterface": "No programming interface detected. Connect the radio and choose refresh.",
+  "step2Title": "Choose the exact radio model",
+  "step2Help": "Load the supported radio catalog and select the exact model. Using the wrong model can corrupt a radio. Programming cables do not identify the attached radio, so NewChirp does not guess the model. If a stored image already exists for this model, writing is unlocked without reading again.",
+  "loadCatalog": "Load supported radio catalog",
+  "loadCatalogHelp": "Fetch the list of radio models supported by the bundled CHIRP driver tree. Select the exact model before reading or writing.",
+  "step3Title": "Transfer safely",
+  "step3Help": "Read channels pulls the full memory image from the radio, replaces the current channel list, and stores the image for this model. Radio settings have a separate read action on the Radio settings page. Write sends the current channel list back using the stored image. Keep the radio connected and powered on during either transfer.",
+  "readChannelsFromRadio": "Read channels from radio",
+  "imageNone": "No image for this model yet. Read once to enable writing.",
+  "imageStored": "Stored image for {model} is ready. You can write without reading again.",
+  "@imageStored": {
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "imageSession": "A radio image was read this session. Review all changes before writing.",
+  "pickerSemanticsChoose": "Choose radio model",
+  "pickerSemanticsSelected": "Selected radio {model}",
+  "@pickerSemanticsSelected": {
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "pickerLabel": "Radio model",
+  "pickerHint": "Choose from {count} supported radios",
+  "@pickerHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pickerTitle": "Choose your radio",
+  "pickerSubtitle": "Browse by manufacturer or search the complete catalog.",
+  "close": "Close",
+  "pickerSearchHint": "Search by manufacturer or model, e.g. Icom ID-52",
+  "clearSearch": "Clear search",
+  "pickerNoMatch": "No radio models match this search.",
+  "pickerCount": "{count, plural, =1{1 radio} other{{count} radios}}",
+  "@pickerCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pickerAllVendors": "All manufacturers",
+  "pickerRecent": "Recent",
+  "selected": "Selected",
+  "edited": "• Edited",
+  "moduleActive": "Experimental CHIRP module: {name}",
+  "@moduleActive": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "menuNew": "New",
+  "newBlank": "Blank configuration",
+  "newGmrs": "GMRS starter template",
+  "newMarine": "Marine VHF template",
+  "newRestoreStock": "Restore stock channels",
+  "openChannelFile": "Open channel file",
+  "loadModule": "Load CHIRP driver module…",
+  "loadModuleShort": "Load driver…",
+  "unloadModule": "Unload CHIRP module",
+  "save": "Save",
+  "saveAs": "Save as…",
+  "printChannelList": "Print channel list…",
+  "print": "Print",
+  "help": "Help",
+  "reportProblem": "Report a problem…",
+  "checkingUpdates": "Checking for updates...",
+  "checkUpdates": "Check for updates",
+  "showSummary": "Show channel summary",
+  "hideSummary": "Hide channel summary to show more channels",
+  "metricChannels": "Channels",
+  "metricScan": "Scan enabled",
+  "metricAttention": "Needs attention",
+  "editBanksZones": "Edit banks / zones",
+  "banksZonesTitle": "Banks and zones",
+  "banksZonesHelp": "Use this editor to rename zones or banks and choose which channel memories belong to each one. Some radios allow a channel in multiple zones. An empty “New zone” entry is created by adding a channel to it. Changes are written with the channels; review them before writing because membership follows the channel memory number.",
+  "radioSection": "Radio section",
+  "zoneChannelCount": "{name} ({count} channels)",
+  "@zoneChannelCount": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "radioSectionsTitle": "Radio sections",
+  "radioSectionsHelp": "This radio exposes separate channel sections or subdevices. Choose a section to view and edit its channels. Writing preserves the other sections in the saved radio image. Banks and zones are edited separately.",
+  "search": "Search",
+  "searchHint": "Search name, frequency, or note",
+  "clearChannelSearch": "Clear channel search",
+  "bulkEditTip": "Bulk edit {count} selected channels",
+  "@bulkEditTip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "clearSelectedTip": "Clear {count} selected channels",
+  "@clearSelectedTip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "duplicateChannel": "Duplicate channel",
+  "addChannel": "Add channel",
+  "slots": "Slots",
+  "showEmptySlotsTip": "Show every memory slot, including empty ones",
+  "clearColumnFilters": "Clear column filters",
+  "editSelected": "Edit {count} selected",
+  "@editSelected": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "duplicate": "Duplicate",
+  "showEmptySlots": "Show empty slots",
+  "clearFilters": "Clear filters",
+  "openShort": "Open…"
 }

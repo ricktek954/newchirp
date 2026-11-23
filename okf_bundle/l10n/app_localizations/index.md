@@ -12,15 +12,24 @@
 - [applyTitle](applyTitle.md) — No description provided for @applyTitle.
 - [beforeReading](beforeReading.md) — No description provided for @beforeReading.
 - [beforeWriting](beforeWriting.md) — No description provided for @beforeWriting.
+- [bulkEditTip](bulkEditTip.md) — No description provided for @bulkEditTip.
+- [clearSelectedTip](clearSelectedTip.md) — No description provided for @clearSelectedTip.
 - [editorBulkSave](editorBulkSave.md) — No description provided for @editorBulkSave.
 - [editorBulkTitle](editorBulkTitle.md) — No description provided for @editorBulkTitle.
+- [editSelected](editSelected.md) — No description provided for @editSelected.
+- [imageStored](imageStored.md) — No description provided for @imageStored.
 - [incompatibleMore](incompatibleMore.md) — No description provided for @incompatibleMore.
 - [incompatibleSkipHint](incompatibleSkipHint.md) — No description provided for @incompatibleSkipHint.
 - [incompatibleSummary](incompatibleSummary.md) — No description provided for @incompatibleSummary.
 - [isSupported](isSupported.md)
 - [load](load.md)
 - [lookupAppLocalizations](lookupAppLocalizations.md)
+- [moduleActive](moduleActive.md) — No description provided for @moduleActive.
+- [moduleLoaded](moduleLoaded.md) — No description provided for @moduleLoaded.
 - [of](of.md)
+- [pickerCount](pickerCount.md) — No description provided for @pickerCount.
+- [pickerHint](pickerHint.md) — No description provided for @pickerHint.
+- [pickerSemanticsSelected](pickerSemanticsSelected.md) — No description provided for @pickerSemanticsSelected.
 - [shouldReload](shouldReload.md)
 - [sidebarVersion](sidebarVersion.md) — No description provided for @sidebarVersion.
 - [writeConfirmBody](writeConfirmBody.md) — No description provided for @writeConfirmBody.
@@ -28,3 +37,4 @@
 - [writeSameSettingsBody](writeSameSettingsBody.md) — No description provided for @writeSameSettingsBody.
 - [writeSettingsBody](writeSettingsBody.md) — No description provided for @writeSettingsBody.
 - [writeUnavailableTitle](writeUnavailableTitle.md) — No description provided for @writeUnavailableTitle.
+- [zoneChannelCount](zoneChannelCount.md) — No description provided for @zoneChannelCount.

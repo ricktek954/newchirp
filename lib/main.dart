@@ -5059,7 +5059,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ),
                 IconButton(
                   key: const Key('library-metrics-expand'),
-                  tooltip: 'Show channel summary',
+                  tooltip: context.l10n.showSummary,
                   visualDensity: VisualDensity.compact,
                   icon: const Icon(Icons.expand_more),
                   onPressed: () => _setLibraryMetricsCollapsed(false),
@@ -5070,19 +5070,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             Row(
               children: [
                 _Metric(
-                  label: 'Channels',
+                  label: context.l10n.metricChannels,
                   value: '${libraryStats.activeCount}',
                   icon: Icons.radio,
                 ),
                 const SizedBox(width: 12),
                 _Metric(
-                  label: 'Scan enabled',
+                  label: context.l10n.metricScan,
                   value: '${libraryStats.scanEnabledCount}',
                   icon: Icons.radar,
                 ),
                 const SizedBox(width: 12),
                 _Metric(
-                  label: 'Needs attention',
+                  label: context.l10n.metricAttention,
                   value: '$invalid',
                   icon: invalid == 0
                       ? Icons.check_circle_outline
@@ -5090,7 +5090,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ),
                 IconButton(
                   key: const Key('library-metrics-collapse'),
-                  tooltip: 'Hide channel summary to show more channels',
+                  tooltip: context.l10n.hideSummary,
                   visualDensity: VisualDensity.compact,
                   icon: const Icon(Icons.expand_less),
                   onPressed: () => _setLibraryMetricsCollapsed(true),
@@ -5231,7 +5231,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   key: const ValueKey('edit-radio-mappings'),
                   onPressed: _busy ? null : _editRadioMappings,
                   icon: const Icon(Icons.edit_outlined),
-                  label: const Text('Edit banks / zones'),
+                  label: Text(context.l10n.editBanksZones),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -5244,15 +5244,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const _HelpButton(
-                  title: 'Banks and zones',
-                  details:
-                      'Use this editor to rename zones or banks and choose '
-                      'which channel memories belong to each one. Some radios '
-                      'allow a channel in multiple zones. An empty “New zone” '
-                      'entry is created by adding a channel to it. Changes are '
-                      'written with the channels; review them before writing '
-                      'because membership follows the channel memory number.',
+                _HelpButton(
+                  title: context.l10n.banksZonesTitle,
+                  details: context.l10n.banksZonesHelp,
                 ),
               ],
             ),
@@ -5271,8 +5265,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   child: DropdownButtonFormField<int>(
                     key: ValueKey('radio-zone-$_selectedZone-$_radioImage'),
                     initialValue: _selectedZone,
-                    decoration: const InputDecoration(
-                      labelText: 'Radio section',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.radioSection,
                       isDense: true,
                     ),
                     items: _radioZones
@@ -5280,7 +5274,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           (zone) => DropdownMenuItem(
                             value: zone.index,
                             child: Text(
-                              '${zone.name} (${zone.channelCount} channels)',
+                              context.l10n.zoneChannelCount(
+                                zone.name,
+                                zone.channelCount,
+                              ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -5296,13 +5293,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const _HelpButton(
-                  title: 'Radio sections',
-                  details:
-                      'This radio exposes separate channel sections or '
-                      'subdevices. Choose a section to view and edit its '
-                      'channels. Writing preserves the other sections in the '
-                      'saved radio image. Banks and zones are edited separately.',
+                _HelpButton(
+                  title: context.l10n.radioSectionsTitle,
+                  details: context.l10n.radioSectionsHelp,
                 ),
               ],
             ),
@@ -5317,7 +5310,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     padding: const EdgeInsets.all(14),
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        final compact = constraints.maxWidth < 780;
+                        // Longer Spanish/French labels need room sooner.
+                        final labelScale =
+                            Localizations.localeOf(context).languageCode == 'en'
+                            ? 1.0
+                            : 1.4;
+                        final compact = constraints.maxWidth < 780 * labelScale;
                         return Row(
                           children: [
                             Expanded(
@@ -5329,15 +5327,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 decoration: InputDecoration(
                                   prefixIcon: const Icon(Icons.search),
                                   hintText: compact
-                                      ? 'Search'
-                                      : 'Search name, frequency, or note',
+                                      ? context.l10n.search
+                                      : context.l10n.searchHint,
                                   suffixIcon: _searchController.text.isEmpty
                                       ? null
                                       : IconButton(
                                           key: const ValueKey(
                                             'channel-search-clear',
                                           ),
-                                          tooltip: 'Clear channel search',
+                                          tooltip:
+                                              context.l10n.clearChannelSearch,
                                           onPressed: () {
                                             _searchController.clear();
                                             setState(() => _query = '');
@@ -5353,9 +5352,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 IconButton(
                                   key: const ValueKey('bulk-edit-channels'),
                                   onPressed: _showBulkChannelEditor,
-                                  tooltip:
-                                      'Bulk edit $selectedChannelCount selected '
-                                      'channels',
+                                  tooltip: context.l10n.bulkEditTip(
+                                    selectedChannelCount,
+                                  ),
                                   icon: const Icon(Icons.edit_note_outlined),
                                 ),
                               if (selectedChannelCount > 1)
@@ -5366,20 +5365,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   onPressed: () => _clearChannelsAtLocations(
                                     _selectedChannelLocations,
                                   ),
-                                  tooltip:
-                                      'Clear $selectedChannelCount selected '
-                                      'channels',
+                                  tooltip: context.l10n.clearSelectedTip(
+                                    selectedChannelCount,
+                                  ),
                                   color: const Color(0xFF9B3D34),
                                   icon: const Icon(Icons.delete_sweep_outlined),
                                 ),
                               IconButton(
                                 onPressed: _duplicateChannel,
-                                tooltip: 'Duplicate channel',
+                                tooltip: context.l10n.duplicateChannel,
                                 icon: const Icon(Icons.copy_outlined),
                               ),
                               IconButton.filled(
                                 onPressed: _addChannel,
-                                tooltip: 'Add channel',
+                                tooltip: context.l10n.addChannel,
                                 icon: const Icon(Icons.add),
                               ),
                               const SizedBox(width: 4),
@@ -5388,9 +5387,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 selected: _showEmptySlots,
                                 onSelected: _setShowEmptySlots,
                                 avatar: const Icon(Icons.space_bar, size: 17),
-                                label: const Text('Slots'),
-                                tooltip:
-                                    'Show every memory slot, including empty ones',
+                                label: Text(context.l10n.slots),
+                                tooltip: context.l10n.showEmptySlotsTip,
                               ),
                               if (_columnFilters.values.any(
                                 (value) => value.trim().isNotEmpty,
@@ -5399,7 +5397,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   key: const ValueKey(
                                     'clear-channel-column-filters',
                                   ),
-                                  tooltip: 'Clear column filters',
+                                  tooltip: context.l10n.clearColumnFilters,
                                   onPressed: () =>
                                       setState(_columnFilters.clear),
                                   icon: const Icon(
@@ -5413,7 +5411,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   onPressed: _showBulkChannelEditor,
                                   icon: const Icon(Icons.edit_note_outlined),
                                   label: Text(
-                                    'Edit $selectedChannelCount selected',
+                                    context.l10n.editSelected(
+                                      selectedChannelCount,
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 8),
@@ -5424,9 +5424,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   onPressed: () => _clearChannelsAtLocations(
                                     _selectedChannelLocations,
                                   ),
-                                  tooltip:
-                                      'Clear $selectedChannelCount selected '
-                                      'channels',
+                                  tooltip: context.l10n.clearSelectedTip(
+                                    selectedChannelCount,
+                                  ),
                                   color: const Color(0xFF9B3D34),
                                   icon: const Icon(Icons.delete_sweep_outlined),
                                 ),
@@ -5435,13 +5435,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               OutlinedButton.icon(
                                 onPressed: _duplicateChannel,
                                 icon: const Icon(Icons.copy_outlined),
-                                label: const Text('Duplicate'),
+                                label: Text(context.l10n.duplicate),
                               ),
                               const SizedBox(width: 8),
                               FilledButton.icon(
                                 onPressed: _addChannel,
                                 icon: const Icon(Icons.add),
-                                label: const Text('Add channel'),
+                                label: Text(context.l10n.addChannel),
                               ),
                               const SizedBox(width: 8),
                               FilterChip(
@@ -5449,9 +5449,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 selected: _showEmptySlots,
                                 onSelected: _setShowEmptySlots,
                                 avatar: const Icon(Icons.space_bar, size: 17),
-                                label: const Text('Show empty slots'),
-                                tooltip:
-                                    'Show every memory slot, including empty ones',
+                                label: Text(context.l10n.showEmptySlots),
+                                tooltip: context.l10n.showEmptySlotsTip,
                               ),
                               if (_columnFilters.values.any(
                                 (value) => value.trim().isNotEmpty,
@@ -5466,7 +5465,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   icon: const Icon(
                                     Icons.filter_alt_off_outlined,
                                   ),
-                                  label: const Text('Clear filters'),
+                                  label: Text(context.l10n.clearFilters),
                                 ),
                               ],
                             ],
@@ -6809,14 +6808,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Radio connection',
+                context.l10n.navRadioConnection,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
-                'Read channels from the radio first, edit them in the library, then write the verified image back.',
+                context.l10n.connIntro,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
@@ -6839,8 +6838,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Experimental CHIRP module loaded: '
-                          '$_chirpModuleName',
+                          context.l10n.moduleLoaded(_chirpModuleName!),
                           style: const TextStyle(
                             color: Color(0xFF73420F),
                             fontWeight: FontWeight.w600,
@@ -6849,7 +6847,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       ),
                       TextButton(
                         onPressed: _busy ? null : _unloadChirpModule,
-                        child: const Text('Unload'),
+                        child: Text(context.l10n.unload),
                       ),
                     ],
                   ),
@@ -6862,13 +6860,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const _StepTitle(
+                      _StepTitle(
                         number: '1',
-                        title: 'Choose a programming cable',
-                        help:
-                            'NewChirp finds USB serial and mass-storage programming interfaces '
-                            'automatically. Choose the one that matches your radio connection. '
-                            'If nothing appears, connect the radio and press refresh.',
+                        title: context.l10n.step1Title,
+                        help: context.l10n.step1Help,
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -6884,9 +6879,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   ? _port
                                   : null,
                               isExpanded: true,
-                              decoration: const InputDecoration(
-                                labelText: 'Programming interface',
-                                prefixIcon: Icon(Icons.cable),
+                              decoration: InputDecoration(
+                                labelText: context.l10n.programmingInterface,
+                                prefixIcon: const Icon(Icons.cable),
                               ),
                               items: _ports
                                   .map(
@@ -6908,41 +6903,32 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           const SizedBox(width: 10),
                           IconButton.filledTonal(
                             onPressed: _refreshPorts,
-                            tooltip: 'Refresh interfaces',
+                            tooltip: context.l10n.refreshInterfaces,
                             icon: const Icon(Icons.refresh),
                           ),
                           const SizedBox(width: 2),
-                          const _HelpButton(
-                            title: 'Refresh interfaces',
-                            details:
-                                'Rescan the system for USB serial and mass-storage '
-                                'programming interfaces. If your radio is not listed, '
-                                'connect it and press refresh.',
+                          _HelpButton(
+                            title: context.l10n.refreshInterfaces,
+                            details: context.l10n.refreshHelp,
                           ),
                         ],
                       ),
                       if (_ports.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.only(top: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
                           child: Text(
-                            'No programming interface detected. Connect the radio and '
-                            'choose refresh.',
-                            style: TextStyle(color: Color(0xFF9B5B18)),
+                            context.l10n.noInterface,
+                            style: const TextStyle(color: Color(0xFF9B5B18)),
                           ),
                         ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 22),
                         child: Divider(),
                       ),
-                      const _StepTitle(
+                      _StepTitle(
                         number: '2',
-                        title: 'Choose the exact radio model',
-                        help:
-                            'Load the supported radio catalog and select the exact model. Using the '
-                            'wrong model can corrupt a radio. Programming cables do not identify '
-                            'the attached radio, so NewChirp does not guess the model. If a stored '
-                            'image already exists for this model, writing is unlocked without '
-                            'reading again.',
+                        title: context.l10n.step2Title,
+                        help: context.l10n.step2Help,
                       ),
                       const SizedBox(height: 12),
                       if (_models.isEmpty)
@@ -6954,17 +6940,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 icon: const Icon(
                                   Icons.download_for_offline_outlined,
                                 ),
-                                label: const Text(
-                                  'Load supported radio catalog',
-                                ),
+                                label: Text(context.l10n.loadCatalog),
                               ),
                             ),
                             const SizedBox(width: 2),
-                            const _HelpButton(
-                              title: 'Load supported radio catalog',
-                              details:
-                                  'Fetch the list of radio models supported by the bundled CHIRP '
-                                  'driver tree. Select the exact model before reading or writing.',
+                            _HelpButton(
+                              title: context.l10n.loadCatalog,
+                              details: context.l10n.loadCatalogHelp,
                             ),
                           ],
                         )
@@ -6982,15 +6964,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         padding: EdgeInsets.symmetric(vertical: 22),
                         child: Divider(),
                       ),
-                      const _StepTitle(
+                      _StepTitle(
                         number: '3',
-                        title: 'Transfer safely',
-                        help:
-                            'Read channels pulls the full memory image from the radio, replaces the '
-                            'current channel list, and stores the image for this model. Radio '
-                            'settings have a separate read action on the Radio settings page. Write '
-                            'sends the current channel list back using the stored image. Keep the '
-                            'radio connected and powered on during either transfer.',
+                        title: context.l10n.step3Title,
+                        help: context.l10n.step3Help,
                       ),
                       const SizedBox(height: 12),
                       Row(
@@ -7004,9 +6981,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   ? null
                                   : _downloadRadio,
                               icon: const Icon(Icons.south),
-                              label: const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 12),
-                                child: Text('Read channels from radio'),
+                              label: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                child: Text(context.l10n.readChannelsFromRadio),
                               ),
                             ),
                           ),
@@ -7021,21 +7000,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   ? null
                                   : _uploadRadio,
                               icon: const Icon(Icons.north),
-                              label: const Padding(
-                                padding: EdgeInsets.symmetric(vertical: 12),
-                                child: Text('Write to radio'),
+                              label: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                child: Text(context.l10n.writeToRadio),
                               ),
                             ),
                           ),
                           const SizedBox(width: 2),
-                          const _HelpButton(
-                            title: 'Transfer safely',
-                            details:
-                                'Read channels pulls the full memory image from the radio, replaces '
-                                'the current channel list, and stores the image for this model. '
-                                'Radio settings have a separate read action on the Radio settings '
-                                'page. Write sends the current channel list back using that image. '
-                                'Keep the radio connected and powered on during either.',
+                          _HelpButton(
+                            title: context.l10n.step3Title,
+                            details: context.l10n.step3Help,
                           ),
                         ],
                       ),
@@ -7059,12 +7035,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               Expanded(
                                 child: Text(
                                   _radioImage == null
-                                      ? 'No image for this model yet. Read once to enable writing.'
+                                      ? context.l10n.imageNone
                                       : storedImageReady
-                                      ? 'Stored image for ${displayRadioModelName(_model!)} is ready. '
-                                            'You can write without reading again.'
-                                      : 'A radio image was read this session. '
-                                            'Review all changes before writing.',
+                                      ? context.l10n.imageStored(
+                                          displayRadioModelName(_model!),
+                                        )
+                                      : context.l10n.imageSession,
                                 ),
                               ),
                             ],
@@ -7905,7 +7881,7 @@ class _TopBar extends StatelessWidget {
               TextButton.icon(
                 onPressed: onPrint,
                 icon: const Icon(Icons.print_outlined),
-                label: const Text('Print'),
+                label: Text(context.l10n.print),
               ),
             const SizedBox(width: 8),
             _buildHelpMenu(context, iconOnly: false),
@@ -7920,8 +7896,12 @@ class _TopBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 22),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final iconOnly = constraints.maxWidth < 760;
-          final compactLabels = constraints.maxWidth < 1120;
+          // Spanish and French labels run about a third longer than
+          // English, so they switch to compact and icon-only layouts sooner.
+          final english = Localizations.localeOf(context).languageCode == 'en';
+          final labelScale = english ? 1.0 : 1.4;
+          final iconOnly = constraints.maxWidth < 760 * labelScale;
+          final compactLabels = constraints.maxWidth < 1120 * labelScale;
           return Row(
             children: [
               Expanded(
@@ -7943,11 +7923,11 @@ class _TopBar extends StatelessWidget {
                           ),
                         ),
                         if (dirty)
-                          const Padding(
-                            padding: EdgeInsets.only(left: 7),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 7),
                             child: Text(
-                              '• Edited',
-                              style: TextStyle(
+                              context.l10n.edited,
+                              style: const TextStyle(
                                 color: Color(0xFFC46A15),
                                 fontSize: 12,
                               ),
@@ -7959,7 +7939,7 @@ class _TopBar extends StatelessWidget {
                       Text(
                         busy
                             ? status
-                            : 'Experimental CHIRP module: $chirpModuleName',
+                            : context.l10n.moduleActive(chirpModuleName!),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -7979,7 +7959,7 @@ class _TopBar extends StatelessWidget {
                       : controller.open();
                   if (iconOnly) {
                     return IconButton(
-                      tooltip: 'New',
+                      tooltip: context.l10n.menuNew,
                       onPressed: busy ? null : toggle,
                       icon: const Icon(Icons.note_add_outlined),
                     );
@@ -7987,35 +7967,35 @@ class _TopBar extends StatelessWidget {
                   return TextButton.icon(
                     onPressed: busy ? null : toggle,
                     icon: const Icon(Icons.note_add_outlined),
-                    label: const Text('New'),
+                    label: Text(context.l10n.menuNew),
                   );
                 },
                 menuChildren: [
                   MenuItemButton(
                     onPressed: onNew,
                     leadingIcon: const Icon(Icons.note_add_outlined),
-                    child: const Text('Blank configuration'),
+                    child: Text(context.l10n.newBlank),
                   ),
                   MenuItemButton(
                     onPressed: onGmrsStarter,
                     leadingIcon: const Icon(Icons.view_list_outlined),
-                    child: const Text('GMRS starter template'),
+                    child: Text(context.l10n.newGmrs),
                   ),
                   MenuItemButton(
                     onPressed: onMarineTemplate,
                     leadingIcon: const Icon(Icons.sailing_outlined),
-                    child: const Text('Marine VHF template'),
+                    child: Text(context.l10n.newMarine),
                   ),
                   MenuItemButton(
                     onPressed: onRestoreStock,
                     leadingIcon: const Icon(Icons.restore),
-                    child: const Text('Restore stock channels'),
+                    child: Text(context.l10n.newRestoreStock),
                   ),
                 ],
               ),
               if (iconOnly)
                 IconButton(
-                  tooltip: 'Open channel file',
+                  tooltip: context.l10n.openChannelFile,
                   onPressed: busy ? null : onOpen,
                   icon: const Icon(Icons.folder_open_outlined),
                 )
@@ -8023,14 +8003,18 @@ class _TopBar extends StatelessWidget {
                 TextButton.icon(
                   onPressed: busy ? null : onOpen,
                   icon: const Icon(Icons.folder_open_outlined),
-                  label: const Text('Open channel file'),
+                  label: Text(
+                    compactLabels && !english
+                        ? context.l10n.openShort
+                        : context.l10n.openChannelFile,
+                  ),
                 ),
               if (moduleLoadingAvailable || chirpModuleName != null)
                 if (iconOnly)
                   IconButton(
                     tooltip: chirpModuleName == null
-                        ? 'Load CHIRP driver module…'
-                        : 'Unload CHIRP module',
+                        ? context.l10n.loadModule
+                        : context.l10n.unloadModule,
                     onPressed: busy
                         ? null
                         : chirpModuleName == null
@@ -8056,10 +8040,10 @@ class _TopBar extends StatelessWidget {
                     ),
                     label: Text(
                       chirpModuleName != null
-                          ? 'Unload CHIRP module'
+                          ? context.l10n.unloadModule
                           : compactLabels
-                          ? 'Load driver…'
-                          : 'Load CHIRP driver module…',
+                          ? context.l10n.loadModuleShort
+                          : context.l10n.loadModule,
                     ),
                   ),
               MenuAnchor(
@@ -8069,7 +8053,7 @@ class _TopBar extends StatelessWidget {
                       : controller.open();
                   if (iconOnly) {
                     return IconButton.filled(
-                      tooltip: 'Save',
+                      tooltip: context.l10n.save,
                       onPressed: busy || !canSave ? null : toggle,
                       icon: const Icon(Icons.save_outlined),
                     );
@@ -8077,20 +8061,23 @@ class _TopBar extends StatelessWidget {
                   return FilledButton.icon(
                     onPressed: busy || !canSave ? null : toggle,
                     icon: const Icon(Icons.save_outlined),
-                    label: const Text('Save'),
+                    label: Text(context.l10n.save),
                   );
                 },
                 menuChildren: [
-                  MenuItemButton(onPressed: onSave, child: const Text('Save')),
+                  MenuItemButton(
+                    onPressed: onSave,
+                    child: Text(context.l10n.save),
+                  ),
                   MenuItemButton(
                     onPressed: onSaveAs,
-                    child: const Text('Save as…'),
+                    child: Text(context.l10n.saveAs),
                   ),
                   MenuItemButton(
                     key: const ValueKey('print-channel-list'),
                     onPressed: onPrintChannels,
                     leadingIcon: const Icon(Icons.print_outlined),
-                    child: const Text('Print channel list…'),
+                    child: Text(context.l10n.printChannelList),
                   ),
                 ],
               ),
@@ -8110,7 +8097,7 @@ class _TopBar extends StatelessWidget {
             controller.isOpen ? controller.close() : controller.open();
         if (iconOnly) {
           return IconButton(
-            tooltip: 'Help',
+            tooltip: context.l10n.help,
             onPressed: toggle,
             icon: const Icon(Icons.help_outline),
           );
@@ -8118,20 +8105,20 @@ class _TopBar extends StatelessWidget {
         return TextButton.icon(
           onPressed: toggle,
           icon: const Icon(Icons.help_outline),
-          label: const Text('Help'),
+          label: Text(context.l10n.help),
         );
       },
       menuChildren: [
         MenuItemButton(
           onPressed: onReportProblem,
           leadingIcon: const Icon(Icons.bug_report_outlined),
-          child: const Text('Report a problem…'),
+          child: Text(context.l10n.reportProblem),
         ),
         const Divider(height: 1),
         MenuItemButton(
           onPressed: () => _showAbbreviationGlossary(context),
           leadingIcon: const Icon(Icons.menu_book_outlined),
-          child: const Text('Abbreviations & terms'),
+          child: Text(context.l10n.tipAbbreviations),
         ),
         const Divider(height: 1),
         MenuItemButton(
@@ -8145,8 +8132,8 @@ class _TopBar extends StatelessWidget {
               : const Icon(Icons.system_update_alt_outlined),
           child: Text(
             checkingForUpdates
-                ? 'Checking for updates...'
-                : 'Check for updates',
+                ? context.l10n.checkingUpdates
+                : context.l10n.checkUpdates,
           ),
         ),
       ],

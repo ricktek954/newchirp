@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:14:53Z"
+timestamp: "2026-11-23T19:24:29Z"
 concept_id: main/inactive
 language: dart
 ---
@@ -23,7 +23,7 @@ Stringinactive(bool active, Object value)
 ```
 
 ## Source
-Lines 10561–10561 in `main.dart`
+Lines 10548–10548 in `main.dart`
 
 ## Relationships
 
