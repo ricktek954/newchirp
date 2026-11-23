@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:47:31",
+  "details": "Windows, 1.0.69, COM7: one read and five writes succeeded 14:40-16:24, then every ident attempt got no reply (write and read). Same port and session; points to plug seating, battery or the radio needing a power cycle.",
+  "event_type": "created",
+  "external_ref": "<229ff3ec-97d4-953c-d854-ae317736d42b@newchirp.net>",
+  "item": "w-20261123-17cf",
+  "occurred_at": "2026-11-23",
+  "summary": "Radio stops answering after five successful writes"
+}

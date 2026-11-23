@@ -222,9 +222,15 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-5RM Plus v2
 
-- **#w-20261119-d555 bug | awaiting_user | high:** Writes to zones 2-3 reported in zone 1
+- **#w-20261119-d555 bug | fix_committed | high:** Writes to zones 2-3 reported in zone 1
   Reporter (first v2 hardware read) says frequencies written in zone 2 or 3 land in zone 1, and edits cannot span zones before a write. Offline bridge replay places a zone 2 edit at channel 65 and CPS V1.17 uses the same zone*64+slot IDs. Added EnZone (0x73 bit 2) handling; need the reporter's image and what the radio shows.
   Source: `email` INBOX:807
+
+### UV-82
+
+- **#w-20261123-17cf bug | awaiting_user | normal:** Radio stops answering after five successful writes
+  Windows, 1.0.69, COM7: one read and five writes succeeded 14:40-16:24, then every ident attempt got no reply (write and read). Same port and session; points to plug seating, battery or the radio needing a power cycle.
+  Source: `email:INBOX:928-930` <229ff3ec-97d4-953c-d854-ae317736d42b@newchirp.net>
 
 ### UV-82WP
 
@@ -442,6 +448,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-393e enhancement | fix_committed | normal:** Collapsible Channel Library summary cards
   UV-32 owner asked to collapse the Channels / Scan enabled / Needs attention cards to see more channels.
   Source: `email` INBOX:834
+- **#w-20261123-d293 enhancement | fix_committed | normal:** Write settings to radio disabled after a write
+  Owner programming several identical radios had to edit and revert a setting to re-enable the button. Button now stays enabled; with no edits it confirms writing the whole snapshot again.
+  Source: `email:INBOX:931` <001f01dd7b6e$3f4d9150$bde8b3f0$@gmail.com>
 
 ### Desktop app
 

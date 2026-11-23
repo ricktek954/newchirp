@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:47:30",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:926 <1f5d33ba-592e-cbf3-afbd-3e4fd16be509@newchirp.net>",
+  "item": "93",
+  "occurred_at": "2026-11-23",
+  "summary": "1.0.71 Linux /dev/ttyUSB0: no reply to all 20 wakes with a Wouxun-style 2-pin cable and with a BF-888 cable (both program a BF-888). Echo message gone. Also: switching cables needs a NewChirp restart."
+}

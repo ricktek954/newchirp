@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:807",
-  "status": "awaiting_user",
+  "status": "fix_committed",
   "summary": "Reporter (first v2 hardware read) says frequencies written in zone 2 or 3 land in zone 1, and edits cannot span zones before a write. Offline bridge replay places a zone 2 edit at channel 65 and CPS V1.17 uses the same zone*64+slot IDs. Added EnZone (0x73 bit 2) handling; need the reporter's image and what the radio shows.",
   "title": "Writes to zones 2-3 reported in zone 1",
   "uid": "w-20261119-d555"

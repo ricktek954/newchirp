@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:47:30",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:5e090df2",
+  "item": "w-20261119-d555",
+  "occurred_at": "2026-11-23",
+  "summary": "Root cause in the app, not the driver: Replace-list (default in the apply dialog) cleared _selectedZone while the radio image stayed open, so upload sent zone null and the bridge used zone 0. Zone is now kept and named in the dialog; 249 Flutter tests pass"
+}

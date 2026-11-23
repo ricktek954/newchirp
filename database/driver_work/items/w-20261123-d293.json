@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 17:47:31",
+  "kind": "enhancement",
+  "manufacturer": "NewChirp",
+  "model": "Desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email:INBOX:931",
+  "source_ref": "<001f01dd7b6e$3f4d9150$bde8b3f0$@gmail.com>",
+  "status": "fix_committed",
+  "summary": "Owner programming several identical radios had to edit and revert a setting to re-enable the button. Button now stays enabled; with no edits it confirms writing the whole snapshot again.",
+  "title": "Write settings to radio disabled after a write",
+  "uid": "w-20261123-d293"
+}

@@ -575,6 +575,14 @@ Last updated: 2026-11-20
   logged); a short reply reports its bytes. CHIRP's extra `07`/`4E` step,
   which the Retevis software does not send, is kept because older units
   answer it; if a newer unit refuses it, that step is the next suspect.
+- Tone OFF (2026-11-23, INBOX:925): the Retevis software writes "no tone" as
+  `FF FF` (`0x40DAAE`/`0x40DBA4`), as stock CHIRP's `tone_init=0xFFFF` does
+  on the desktop. The Web Programmer wrote `00 00`, and a 2025 unit then
+  stayed muted on those channels as if a tone were set. Web fix `b89bf7a`
+  writes `FF FF` and repairs `00 00` on channels in use. The Retevis
+  software also writes the identity block at `0x000` and checks a 6-byte
+  password at `0x360` before writing; it never changes channel bytes 12, 14
+  or 15.
 - Hardware validation: none.
 
 ### Retevis RA87

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:47:29",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:6c0c179ccf5da02d737374b10d54dc7efc4289ca86db2d890982d1df839a4ea4",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-23",
+  "summary": "Retevis RT22 CPS V1.05: tone OFF is FF FF (encoder 0x40DAAE/0x40DBA4; decoder shows hi byte FF as OFF); CTCSS binary x10, DCS 0x28xx/0xA8xx octal. Writes every 16-byte block 0x000-0x3E0 (incl. ID block 0x000); reads 0x360 first and compares a 6-byte password with the file (0x4024A5). Never touches channel bytes 12/14/15. Desktop CHIRP already uses tone_init 0xFFFF; Web Programmer wrote 00 00."
+}

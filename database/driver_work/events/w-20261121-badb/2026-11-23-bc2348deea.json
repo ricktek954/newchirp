@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:47:29",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "email:INBOX:925",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-23",
+  "summary": "2025 RT22 read OK in Web Programmer; write ended with read-back mismatch at 0x0 (wrote 04, radio returned 00) and some channels then gave no RX audio as if a tone were set"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:47:31",
+  "details": "Owner programming several identical radios had to edit and revert a setting to re-enable the button. Button now stays enabled; with no edits it confirms writing the whole snapshot again.",
+  "event_type": "created",
+  "external_ref": "<001f01dd7b6e$3f4d9150$bde8b3f0$@gmail.com>",
+  "item": "w-20261123-d293",
+  "occurred_at": "2026-11-23",
+  "summary": "Write settings to radio disabled after a write"
+}
