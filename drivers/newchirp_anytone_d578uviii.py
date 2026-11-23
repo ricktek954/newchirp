@@ -31,7 +31,14 @@ PROGRAM_RESPONSE = b"QX\x06"
 MODEL_IDS = ("D578UV", "D578UV2", "D578UV3", "D578UVIII")
 
 CHANNEL_COUNT = 4000
-CHANNELS_PER_BANK = 1000
+# 128 channels (0x2000 bytes) per bank, banks 0x40000 apart: QDMR computes
+# channelBanks + (i / 128) * 0x40000 + (i % 128) * 0x40 for the D868UV,
+# D878UV and D578UV codeplugs (d868uv_codeplug.cc:1618, d578uv_codeplug.cc
+# :3415; the D578UV keeps the D868UV Limit::channelsPerBank() of 128).
+# 1000 per bank put channel 129 at 0x00802000, the channel-extension area
+# (toChannelExtension 0x2000), so a write could corrupt other channels'
+# extension records (found 2026-11-23 while adding the AT-D878UVII Plus).
+CHANNELS_PER_BANK = 128
 CHANNEL_SIZE = 0x40
 CHANNEL_BANKS_ADDRESS = 0x00800000
 BETWEEN_CHANNEL_BANKS = 0x00040000
@@ -271,6 +278,8 @@ class AnyToneD578UVIIIPlusRadio(
     WANTS_DTR = False
     _model = "D578UV"
     _memsize = 1
+    _model_ids = MODEL_IDS
+    _family = "D578UV"
 
     @classmethod
     def get_prompts(cls):
@@ -347,13 +356,14 @@ class AnyToneD578UVIIIPlusRadio(
         self._model_name = _ascii(identity[1:8])
         self._bands = identity[8]
         self._firmware = _ascii(identity[9:15])
-        if self._model_name not in MODEL_IDS:
+        if self._model_name not in self._model_ids:
             raise errors.RadioError(
-                "Unsupported AnyTone model %r; expected D578UV family"
-                % self._model_name
+                "Unsupported AnyTone model %r; expected %s family"
+                % (self._model_name, self._family)
             )
         LOG.info(
-            "AnyTone D578UV identity: model=%s bands=0x%02x firmware=%s",
+            "AnyTone %s identity: model=%s bands=0x%02x firmware=%s",
+            self._family,
             self._model_name,
             self._bands,
             self._firmware,
@@ -516,7 +526,7 @@ class AnyToneD578UVIIIPlusRadio(
             ]
             status = chirp_common.Status()
             status.max = max(len(used), 1)
-            status.msg = "Reading D578UV channels"
+            status.msg = "Reading %s channels" % self._family
             for position, number in enumerate(used, 1):
                 record = self._read(self._channel_address(number), CHANNEL_SIZE)
                 self._set_channel_record(number, record)

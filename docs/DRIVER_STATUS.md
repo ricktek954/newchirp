@@ -31,6 +31,7 @@ Last updated: 2026-11-20
 | Retevis RT22 | `drivers/newchirp_retevis_rt22.py` | Stock CHIRP clone serial, 9600 | Any complete 8-byte ID accepted for the plain RT22, as Retevis's software does | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Retevis RA87 | `drivers/newchirp_retevis_ra87.py` | Stock CHIRP clone serial, 9600, echoing cable | Download identifies by model byte 0x1F05 = A5 (OEM CPS rule) instead of two fixed 8-byte fingerprints | Stock CHIRP driver (already checks 0x1F05) | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5R Mini | `drivers/newchirp_uv5r_mini.py` | Stock CHIRP UV-17Pro-family serial | Unanswered block requests resent up to five times (OEM CPS rule) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| AnyTone AT-D878UVII Plus | `drivers/newchirp_anytone_d878uvii.py` | AnyTone D578UV/D878UV serial protocol, 115200 8N1 | Conventional channels and zones, offline-tested | Disabled | Hidden | Experimental read-only |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables; odd-split channel write (all hardware-confirmed 2026-11-19) | Stock FT-50 settings | Supported; read and write hardware-confirmed 2026-11-19 |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
@@ -372,6 +373,41 @@ Last updated: 2026-11-20
 - Next milestone: Frank Lopez Sr. selects `Binqi BQ-889 Analog Probe`, runs
   Download From Radio, and sends the generated read-only transcript
 
+### AnyTone AT-D878UVII Plus
+
+- Maintained driver: `drivers/newchirp_anytone_d878uvii.py` (`AnyTone_AT-D878UVII_Plus`),
+  a read-only subclass of the AT-D578UVIII Plus driver
+- Protocol notes: `docs/ANYTONE_D578UVIII_PROTOCOL.md` (shared AnyTone session)
+- Transport: `PROGRAM` -> `QX 06`, `02` -> `I` + model + bands + version + `06`,
+  16-byte `R`/`W` frames, `END`; 115200 8N1. Accepted identity: `D878UV2`.
+- Official CPS evidence: BridgeCom "D878UVII PLUS V4.00 official release 250815"
+  (ZIP SHA-256 `5ba14d88cebef105365e8977529a5817d1d163a9e9eccc5156ccd9575be500e6`),
+  `D878UVII.exe` (SHA-256
+  `4e7f8b4d6e119b8b9ef0a4ffd82aef2bd83d1887d11e5651596b86f371711005`): contains
+  the `D878UV2` model string and the channel-bitmap `0x024C1500`, zone-bitmap
+  `0x024C1300` and zone-name `0x02540000` addresses as constants (static string
+  and constant evidence only, no disassembly).
+- Implementation reference: QDMR commit `fb9c96af53f646c0706fa360209b2e0e6cd79a08`
+  (`anytone_interface.cc` maps `D878UV2` to the D878UVII; `D878UV2Codeplug`
+  inherits the D878UV/D868UV channel and zone layout; channel bytes
+  `0x00-0x33` match the fields decoded by the D578 driver).
+- Implemented: 4000 conventional channels (128 per bank), frequency/offset,
+  FM/NFM/DMR, Low/Mid/High/Turbo power (1/2.5/5/7 W nominal), name, CTCSS/DCS,
+  color code, time slot, TX contact index, RX group index, receive-only,
+  talkaround, and 250 zones; VHF 136-174 and UHF 400-480 MHz
+- Read/write policy: read-only (`NEWCHIRP_WRITE_DISABLED`); `sync_out` refuses
+  before any radio I/O. Web Programmer profile `anytone-at-d878uvii-plus` is
+  read-only too.
+- Driver SHA-256:
+  `f7c4a1f39d0dd931ec1015b4898bb0c22f761630bdbc9932f227053534f8aca8`
+- Field request: forum topic "Can you configure a connection to Anytone
+  AT-D878UVII PLUS" (2026-11-21); the owner's radio rebooted harmlessly when
+  the D578 profile refused its identity and ended PC mode. Ledger
+  `w-20261123-2772`.
+- Hardware validation: none
+- Next milestone: a physical read compared with the official CPS, then a
+  controlled single-channel write and read-back before enabling writes
+
 ### AnyTone AT-D578UVIII Plus
 
 - Maintained driver: `drivers/newchirp_anytone_d578uviii.py`
@@ -390,7 +426,16 @@ Last updated: 2026-11-20
   D578UVIII Plus codeplug commit
   `65ec2c0700fdaae027536aeaa90f92bf116386ee`
 - Driver SHA-256:
-  `9f2a05c5c2f33a7cf53678dcab1a385d41fea514fc4c483e1b407c40c9119c30`
+  `d760e08ed0866cce18ef575a13532656baa177d376a7ca74336373294d2eb7ea`
+- 2026-11-23 channel-bank correction: QDMR computes `0x00800000 + (i / 128)
+  * 0x40000 + (i % 128) * 0x40` for the D868UV/D878UV/D578UV codeplugs
+  (`d868uv_codeplug.cc:1618`, `d578uv_codeplug.cc:3415`); the driver used
+  1000 channels per bank, which put channel 129 at `0x00802000`, the
+  channel-extension area. Reads of channels 129+ were wrong and a write
+  could have overwritten other channels' extension records. Now 128 per
+  bank (desktop and Web Programmer). No hardware reports were affected.
+- Known limitation: High and Turbo have the same wattage in the power list,
+  so a Turbo channel edited here is written as High.
 - Hardware validation: none
 - Next milestone: physical channel/zone edit, upload, read-back, and comparison
   with the radio display and official CPS

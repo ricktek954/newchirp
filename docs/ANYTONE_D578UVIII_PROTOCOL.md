@@ -1,6 +1,6 @@
 # AnyTone AT-D578UVIII Plus protocol notes
 
-Last updated: 2026-11-01
+Last updated: 2026-11-23
 
 ## Status
 
@@ -42,7 +42,9 @@ Radio -> I model[7] bands version[6] 06
 ```
 
 Accepted model identifiers are `D578UV`, `D578UV2`, `D578UV3`, and
-`D578UVIII`.
+`D578UVIII`. The AT-D878UVII Plus uses the same session and reports
+`D878UV2` (official D878UVII CPS 4.00 string; QDMR `anytone_interface.cc`);
+its read-only driver is `drivers/newchirp_anytone_d878uvii.py`.
 
 Read request:
 
@@ -78,12 +80,14 @@ PC -> END
 | Region | Radio address |
 | --- | ---: |
 | Channel bitmap | `0x024C1500` |
-| Channel records | `0x00800000`, four 0x40000 banks |
+| Channel records | `0x00800000`, 128 per bank, banks 0x40000 apart (32 banks) |
 | Zone bitmap | `0x024C1300` |
 | Zone channel lists | `0x01000000`, 0x200 per zone |
 | Zone names | `0x02540000`, 0x20 per zone |
 
-Channel records are 64 bytes. Zone channel lists are arrays of 16-bit
+Channel records are 64 bytes; channel *i* (0-based) is at
+`0x00800000 + (i / 128) * 0x40000 + (i % 128) * 0x40` (QDMR; corrected
+2026-11-23 from an earlier 1000-per-bank assumption). Zone channel lists are arrays of 16-bit
 little-endian channel indexes terminated by `0xFFFF`.
 
 ## Implemented fields

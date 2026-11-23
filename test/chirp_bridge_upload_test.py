@@ -600,6 +600,7 @@ class UploadHandshakeTest(unittest.TestCase):
             if getattr(cls, "NEWCHIRP_WRITE_DISABLED", False)
         )
         self.assertEqual(flagged, sorted([
+            "AnyTone_AT-D878UVII_Plus",
             "Baofeng_K67_Pro_CPS_V1.1.2", "Binqi_BQ-889_Analog_Probe",
             "Connect_Systems_CS750", "Icom_IC-F50V_F60V", "Icom_IC-F50V_F60V_Capture",
             "Icom_ID-50", "Icom_ID-52",
@@ -609,7 +610,8 @@ class UploadHandshakeTest(unittest.TestCase):
             "Retevis_RT97L",
         ]))
         # Writable subclasses must not inherit the flag.
-        for model in ("Radtel_RT-950_Pro_nicFW950", "Radtel_RT-950_Pro"):
+        for model in ("Radtel_RT-950_Pro_nicFW950", "Radtel_RT-950_Pro",
+                      "AnyTone_AT-D578UVIII_Plus"):
             self.assertFalse(getattr(
                 directory.get_radio(model), "NEWCHIRP_WRITE_DISABLED", False))
 
