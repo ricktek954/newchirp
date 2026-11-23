@@ -1947,9 +1947,21 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         label: label,
         count: count,
         initialStart: _nextChannelLocation() ?? _capabilities?.memoryStart ?? 1,
+        zoneName: _keepsRadioZoneOnReplace
+            ? _radioZones
+                  .where((zone) => zone.index == _selectedZone)
+                  .firstOrNull
+                  ?.name
+            : null,
       ),
     );
   }
+
+  // Replacing the list while a zoned radio image is open must keep the zone:
+  // dropping it sent the next write to the driver's default zone 1 and
+  // cleared zone 1's other channels (UV-5RM Plus v2, INBOX:924).
+  bool get _keepsRadioZoneOnReplace =>
+      _radioImage != null && _selectedZone != null;
 
   void _applyChannels(
     List<RadioChannel> incoming,
@@ -1968,6 +1980,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               replacementChannels: sorted,
             )
           : <int>{};
+      final keepZone = _keepsRadioZoneOnReplace;
       setState(() {
         _channels = sorted;
         _selected = sorted.isEmpty ? -1 : 0;
@@ -1975,10 +1988,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         _libraryPath = libraryPath;
         _libraryOpen = true;
         _page = 0;
-        _dirty = false;
-        _radioZones = [];
-        _radioMappings = [];
-        _selectedZone = null;
+        _dirty = keepZone;
+        if (!keepZone) {
+          _radioZones = [];
+          _radioMappings = [];
+          _selectedZone = null;
+        }
         _clearedLocations
           ..clear()
           ..addAll(replacementClears);
@@ -2775,7 +2790,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (model == null || port == null || image == null) return;
     if (_settingsHaveInvalidValues) return;
     final changes = _radioSettingChanges();
-    if (changes.isEmpty) return;
+    // With nothing edited, write the same snapshot again so several
+    // identical radios can be programmed in a row (email INBOX:931).
+    final repeat = changes.isEmpty;
     final confirmed = await showDialog<bool>(
       context: context,
       barrierDismissible: false,
@@ -2785,10 +2802,21 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           color: Color(0xFFC46A15),
           size: 32,
         ),
-        title: const Text('Write these radio settings?'),
+        title: Text(
+          repeat
+              ? 'Write the same settings again?'
+              : 'Write these radio settings?',
+        ),
         content: Text(
-          'This will write ${changes.length} radio setting values to '
-          '$model through $port. Keep the radio connected and powered on.',
+          repeat
+              ? 'Nothing has changed since the last read or write. NewChirp '
+                    'will write this radio snapshot, its settings and its '
+                    'channels, to $model through $port. Use this to program '
+                    'another radio of the same model. Keep the radio '
+                    'connected and powered on.'
+              : 'This will write ${changes.length} radio setting values to '
+                    '$model through $port. Keep the radio connected and '
+                    'powered on.',
         ),
         actions: [
           TextButton(
@@ -6650,7 +6678,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           else
                             FilledButton.icon(
                               onPressed:
-                                  _settingsDirty && !_settingsHaveInvalidValues
+                                  _radioImage != null &&
+                                      !_settingsHaveInvalidValues
                                   ? _writeRadioSettings
                                   : null,
                               icon: const Icon(Icons.save_outlined),
@@ -8303,11 +8332,13 @@ class _ChannelApplyDialog extends StatefulWidget {
     required this.label,
     required this.count,
     required this.initialStart,
+    this.zoneName,
   });
 
   final String label;
   final int count;
   final int initialStart;
+  final String? zoneName;
 
   @override
   State<_ChannelApplyDialog> createState() => _ChannelApplyDialogState();
@@ -8351,9 +8382,16 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
               children: [
                 RadioListTile<bool>(
                   value: true,
-                  title: const Text('Replace the current channel list'),
-                  subtitle: const Text(
-                    'Unsaved edits to the current list will be lost.',
+                  title: Text(
+                    widget.zoneName == null
+                        ? 'Replace the current channel list'
+                        : 'Replace the channels in zone ${widget.zoneName}',
+                  ),
+                  subtitle: Text(
+                    widget.zoneName == null
+                        ? 'Unsaved edits to the current list will be lost.'
+                        : 'Other zones are not changed. Unsaved edits to '
+                              'this zone will be lost.',
                   ),
                 ),
                 RadioListTile<bool>(

@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T13:22:45Z"
+timestamp: "2026-11-23T17:45:41Z"
 concept_id: main/writeBlockedByDriver
 language: dart
 ---
@@ -31,7 +31,7 @@ Explains, before any write work starts, that this radio is read-only.
 Returns true when the write must not continue.
 
 ## Source
-Lines 3571–3571 in `main.dart`
+Lines 3599–3599 in `main.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T13:22:45Z"
+timestamp: "2026-11-23T17:45:41Z"
 concept_id: main/isEnabled
 language: dart
 ---
@@ -23,7 +23,7 @@ boolisEnabled(_SelectAllChannelsIntent intent)
 ```
 
 ## Source
-Lines 10131–10131 in `main.dart`
+Lines 10169–10169 in `main.dart`
 
 ## Relationships
 
