@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T14:14:29Z"
+timestamp: "2026-11-23T09:51:32Z"
 concept_id: chirp_bridge/format
 language: python
 ---
@@ -38,3 +38,4 @@ Lines 393–409 in `chirp_bridge.py`
 | related | [RadioCommunicationTrace](/chirp_bridge/RadioCommunicationTrace.md) |
 | calls | [_finish_pending](/chirp_bridge/finish_pending.md) |
 | called_by | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |
+| called_by | [start_write_watchdog](/chirp_bridge/start_write_watchdog.md) |

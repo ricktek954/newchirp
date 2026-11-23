@@ -291,6 +291,20 @@ class RT950DriverTest(unittest.TestCase):
         self.assertEqual(third.name, "AIR")
         self.assertTrue(radio.get_memory(960).empty)
 
+    def test_tone_words_follow_the_cps_rules(self):
+        # BT-9000_CPS GetQTInfo_HexToStr: high byte 0 = DCS index; else CTCSS
+        # with low byte 0x00/0xFF = OFF. 2026-11-23 report: channel 26 held
+        # 0x5750 ("2235.2" in the CPS) and stopped the whole read.
+        module = sys.modules[self.radio_class.__module__]
+        decode = module._decode_tone
+        self.assertEqual(decode(bytes.fromhex("7503")), ("Tone", 88.5, None))
+        self.assertEqual(decode(bytes.fromhex("5057")), (None, None, None))
+        self.assertEqual(decode(bytes.fromhex("0008")), (None, None, None))
+        self.assertEqual(decode(bytes.fromhex("ff08")), (None, None, None))
+        self.assertEqual(decode(bytes.fromhex("ffff")), (None, None, None))
+        self.assertEqual(decode(bytes.fromhex("0000")), (None, None, None))
+        self.assertEqual(decode(bytes.fromhex("0100")), ("DTCS", 23, "N"))
+
     def test_receive_only_and_damaged_records_do_not_abort_decode(self):
         """2026-11-18 RT-950 Pro report: "Invalid packed frequency 0xff"
         rejected the whole image because one channel's TX field was 0xFF."""

@@ -193,8 +193,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795356869203561490,
-      "hash": "2e33a59b36000f0d34ef8a0e84963067e87309d1be64a3a085d8b695105d4b23",
+      "mtime_ns": 1795427492743837466,
+      "hash": "688376c23fb471f929426885e9d9c323461650a6de83b130d104cb0b2d739f42",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -209,6 +209,10 @@
         "chirp_bridge/finish_pending",
         "chirp_bridge/last_reply_was_echo_only",
         "chirp_bridge/format",
+        "chirp_bridge/note_serial_activity",
+        "chirp_bridge/note_serial_state",
+        "chirp_bridge/write_stall_message",
+        "chirp_bridge/start_write_watchdog",
         "chirp_bridge/getattr",
         "chirp_bridge/setattr",
         "chirp_bridge/write",
@@ -290,7 +294,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "db36f617a71af789a36246ef5a0676db1cd48df7403535122d7307b79dfaabf8",
+      "edge_hash": "f584b2a052b5048f9b872073038a906089baa8a1b1894aa4fe795fefe94a5ee7",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -418,7 +422,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "f34a076a6dba381eb92370a63fbddd443d5d5d4bf3b598f75a49505828ccb0e1",
+      "edge_hash": "0bcedab35cd702c2830cdedc96bdf9e7756683574c6b8a06b6a63af44cd0c8f6",
       "enriched": false
     },
     "build_macos_dmg": {
@@ -898,7 +902,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "ce9c91bb4e236b319aea851dc742375cbc0ebae7f2fc9d564bec389e2167fc3a",
+      "edge_hash": "8e34dc0db73eedfdc2f20c8fcd7b68c002b9c55ac1e8d4de6812d9ad1a2746f7",
       "enriched": false
     },
     "chirp_bridge/getattr": {
@@ -922,7 +926,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "cdcc86c6c11f9c043918ae753dcee9dd0b73c29c937aa97d877cd56391023199",
+      "edge_hash": "a9b8d171ecccee078f07b7ce85c79bc5bd7f625811f8e3f3df1a256933694c01",
       "enriched": false
     },
     "chirp_bridge/read": {
@@ -930,7 +934,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "6b62dfe442cf0537cc61803a0abbe73ef3622e7ed5f46caf02152d181d37e693",
+      "edge_hash": "31ae59eecb986969bf8f232e8b0328a29426dbea39aa0ba55b245d354462d78b",
       "enriched": false
     },
     "chirp_bridge/close": {
@@ -2004,7 +2008,39 @@
       "render_hash": "stale",
       "edge_hash": "ce9c91bb4e236b319aea851dc742375cbc0ebae7f2fc9d564bec389e2167fc3a",
       "enriched": false
+    },
+    "chirp_bridge/note_serial_activity": {
+      "concept_id": "chirp_bridge/note_serial_activity",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "84ee27d8d33a1fe2359e8aeff2f64678107cf4bfe747baec973afe14fc471297",
+      "enriched": false
+    },
+    "chirp_bridge/write_stall_message": {
+      "concept_id": "chirp_bridge/write_stall_message",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "7dbeb3f95d46514349b9d7273e8900f0e0cd3ea15d3317588267ce0a094e2739",
+      "enriched": false
+    },
+    "chirp_bridge/start_write_watchdog": {
+      "concept_id": "chirp_bridge/start_write_watchdog",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "726b25c7c457690051353051cbab0999584ab10709a5690abad253b2131686ef",
+      "enriched": false
+    },
+    "chirp_bridge/note_serial_state": {
+      "concept_id": "chirp_bridge/note_serial_state",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "f44e62f316b6755e8540917dd7e827050385592ade4c272e799c75f70aef11fe",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-22T14:14:29Z"
+  "generated_at": "2026-11-23T09:51:33Z"
 }

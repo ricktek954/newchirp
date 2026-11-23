@@ -412,6 +412,78 @@ class RadioCommunicationTrace:
 RADIO_TRACE = RadioCommunicationTrace()
 
 
+# --- Write stall watchdog ----------------------------------------------------
+#
+# 2026-11-22 DM-32UV report: a write sat at ~18% "indefinitely" while the
+# radio timed out and rebooted; the app had to be killed. Every driver read
+# has a deadline, so such a stall is most likely a serial write that never
+# completes, but nothing showed where. During radio writes a watchdog now
+# ends the bridge after WRITE_STALL_SECONDS without serial activity or
+# progress, with a plain explanation, the communication trace and a stack
+# dump, so the report shows exactly where it stopped.
+WRITE_STALL_SECONDS = 150
+WRITE_STALL_EXIT_CODE = 3
+_ACTIVITY = {"time": time.monotonic(), "state": ""}
+
+
+def _note_serial_activity(state):
+    """Bytes moved (or progress was made); record what happens next."""
+    _ACTIVITY["time"] = time.monotonic()
+    _ACTIVITY["state"] = state
+
+
+def _note_serial_state(state):
+    """Record what the bridge is doing without counting it as activity."""
+    _ACTIVITY["state"] = state
+
+
+def write_stall_message(seconds, state):
+    detail = (" NewChirp was %s when it stopped." % state) if state else ""
+    return (
+        "The radio stopped responding during the write: nothing happened "
+        "for %i seconds, so NewChirp stopped instead of waiting forever.%s "
+        "The write may be incomplete. Turn the radio off and on, check the "
+        "cable, then read the radio before writing again, and send a report "
+        "from this window so the details below reach the developer."
+        % (seconds, detail)
+    )
+
+
+def start_write_watchdog(seconds=None, exit_fn=None, stream=None):
+    """Start a daemon thread that ends a stalled radio write."""
+    import faulthandler
+    import threading
+
+    limit = WRITE_STALL_SECONDS if seconds is None else seconds
+    exit_fn = exit_fn or os._exit
+    stream = stream or sys.stderr
+    stop = threading.Event()
+    _note_serial_activity("")
+
+    def watch():
+        while not stop.wait(min(5.0, limit / 4)):
+            idle = time.monotonic() - _ACTIVITY["time"]
+            if idle < limit:
+                continue
+            try:
+                stream.write(write_stall_message(limit, _ACTIVITY["state"]))
+                trace = RADIO_TRACE.format()
+                if trace:
+                    stream.write(RADIO_TRACE_MARKER + trace)
+                stream.write("\n\nStalled threads:\n")
+                stream.flush()
+                faulthandler.dump_traceback(file=stream, all_threads=True)
+                stream.flush()
+            finally:
+                exit_fn(WRITE_STALL_EXIT_CODE)
+            return
+
+    thread = threading.Thread(target=watch, name="write-watchdog",
+                              daemon=True)
+    thread.start()
+    return stop
+
+
 class TracedSerial:
     """Delegate a serial port while recording sanitized CAT transactions."""
 
@@ -430,11 +502,23 @@ class TracedSerial:
 
     def write(self, data):
         self._trace.begin(data)
-        return self._serial_port.write(data)
+        try:
+            size = len(data)
+        except TypeError:
+            size = 0
+        _note_serial_state("sending a %i-byte command to the radio" % size)
+        result = self._serial_port.write(data)
+        _note_serial_activity("")
+        return result
 
     def read(self, size=1):
+        # Only bytes count as activity: an endless retry loop of empty
+        # reads must still trip the watchdog.
+        _note_serial_state("waiting for the radio's reply")
         data = self._serial_port.read(size)
         self._trace.received(data)
+        if data:
+            _note_serial_activity("")
         return data
 
     def readline(self, size=-1):
@@ -459,6 +543,7 @@ class TracedSerial:
 
 def emit_progress(label, fraction=None):
     """Send structured transfer progress without touching the JSON stdout."""
+    _ACTIVITY["time"] = time.monotonic()
     message = str(label).replace("\r", " ").replace("\n", " ").strip()
     payload = {"label": message or "Working..."}
     if fraction is not None:
@@ -828,6 +913,20 @@ def bridge_error_message(exc, command=None, model=None, port=None):
                 "profiles cannot read it." % (
                     reported.group(1), model or "this model")
             )
+    if (
+        command in ("download", "upload", "read-settings", "write-settings")
+        and model
+        and model.startswith("Wouxun_KG-UV9")
+        and "no response" in message.lower()
+    ):
+        # 2026-11-22 KG-UV9D Plus owner: the radio only answered the cable
+        # with the volume at about halfway (FAQ #wouxun-volume).
+        message = (
+            "%s\n\nWouxun KG-UV9 radios often answer the programming cable "
+            "only when the volume is around halfway. Turn the volume up to "
+            "the middle of its range and try again. See "
+            "https://newchirp.net/faq#wouxun-volume" % message.rstrip()
+        )
     if RADIO_TRACE.last_reply_was_echo_only():
         message = "%s\n\n%s" % (ECHO_ONLY_GUIDANCE, message)
     trace = RADIO_TRACE.format()
@@ -3181,7 +3280,11 @@ def main():
                         active_locations,
                     )
                 emit_progress("Writing the image to the radio...", 0.10)
-                radio.sync_out()
+                watchdog = start_write_watchdog()
+                try:
+                    radio.sync_out()
+                finally:
+                    watchdog.set()
                 emit_progress("Saving the updated image...", 0.99)
                 radio.save_mmap(args.image)
                 emit_progress("Write complete.", 1.0)
@@ -3212,7 +3315,11 @@ def main():
                 emit_progress("Applying settings...", 0.10)
                 radio.set_settings(settings)
                 emit_progress("Writing settings to the radio...", 0.12)
-                radio.sync_out()
+                watchdog = start_write_watchdog()
+                try:
+                    radio.sync_out()
+                finally:
+                    watchdog.set()
                 emit_progress("Saving the updated image...", 0.99)
                 radio.save_mmap(args.image)
                 emit_progress("Settings write complete.", 1.0)

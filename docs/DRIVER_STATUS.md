@@ -144,6 +144,12 @@ Last updated: 2026-11-20
 ### Baofeng UV-5RM Plus and UV-5RH
 
 - Maintained compatibility: `drivers/newchirp_uv5rm_plus.py`
+- 2026-11-23: the handshake retry also covers the UV-32. Baofeng "BF-UVs Pro"
+  CPS v1.4.7 (UV-17/18/19/21/25/28/29/32 Pro, 5RH Pro, AR-152; ZIP SHA-256
+  `d2635bde922a66a182efd00a9c6aae9e79c057648429d3f937fc28051f73fbb2`)
+  discards a reply byte other than `06` and resends `PROGRAMCOLORPROU` on a
+  1 s timer up to five times; a UV-32 answered `40` first (INBOX:915). The
+  v2-firmware hint stays limited to models with a v2 profile.
 - Protocol notes: `docs/BAOFENG_UV5RM_PLUS_PROTOCOL.md`
 - Official CPS:
   `BAOFENG_UV-5RM_Plus_CPS_20240327.zip`, SHA-256
@@ -636,6 +642,12 @@ Last updated: 2026-11-20
 ### Radtel RT-950
 
 - Maintained driver: `drivers/newchirp_rt950.py`
+- 2026-11-23 tone decoding (INBOX:919): mirrors the CPS exactly
+  (`GetQTInfo_HexToStr`): a zero high byte is a 1-based DCS index, otherwise
+  CTCSS with a low byte of `00`/`FF` meaning OFF. Previously `0x0800`-style
+  words decoded as tones, and a channel holding `0x5750` (shown as "2235.2"
+  by the CPS too) stopped the whole read; out-of-list tones now read as none
+  (driver is read-only). Web Programmer decoder updated to match.
 - Protocol notes: `docs/RT950_PROTOCOL.md`
 - Evidence: official RT-950 CPS v1.3.0, native .NET metadata and CIL
 - CPS artifact SHA-256:
@@ -1375,6 +1387,18 @@ Last updated: 2026-11-20
   radio-information queries up to three times. Information queries allow up
   to 1.5 seconds for the header and two seconds for the body. A malformed
   final response reports its hexadecimal reply bytes.
+- Unreadable tones (2026-11-23, INBOX:907): firmware `DM32.00.01.048` stored a
+  tone of `0x3E08`, which the stock BCD decoder read as "3e08" = 3e8 Hz and
+  the whole read failed. DM-32UV CPS v1.60 (SHA-256
+  `8541dc78b2fb5b4a09de9954519b0c8a96baa3ca5717bd4caf04893e095ef895`) offers
+  exactly CHIRP's 50 CTCSS tones, and an OEM save file from another radio
+  stores BCD; so a tone value that is not valid BCD CTCSS/DCS now reads as
+  no tone and its raw bytes are written back unless the user sets a tone.
+  The meaning of `0x3E08` on that firmware is unconfirmed (image requested).
+- Write-stall watchdog (2026-11-23, INBOX:902): the owner reports the app
+  can sit at 17-19% indefinitely while the radio times out and reboots. The
+  bridge now ends any radio write after 150 s without serial activity, with
+  the trace and a stack dump of where it stopped.
 - Upload progress (2026-11-22, ledger `w-20261121-ab4d`): stock reports once
   per memory tag and kept the "Scanning flash pages" label until the first
   page was erased and written, so a ~50-60 s write sat near 18%; the

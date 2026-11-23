@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T14:14:29Z"
+timestamp: "2026-11-23T09:51:32Z"
 concept_id: chirp_bridge/read
 language: python
 ---
@@ -31,13 +31,15 @@ def read(self, size = 1)
 | `size` | `—` | `1` |
 
 ## Source
-Lines 435–438 in `chirp_bridge.py`
+Lines 514–522 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [TracedSerial](/chirp_bridge/TracedSerial.md) |
+| calls | [_note_serial_state](/chirp_bridge/note_serial_state.md) |
 | calls | [received](/chirp_bridge/received.md) |
+| calls | [_note_serial_activity](/chirp_bridge/note_serial_activity.md) |
 | called_by | [fetch_repeaterbook_search](/chirp_bridge/fetch_repeaterbook_search.md) |
 | called_by | [_load_module](/chirp_bridge/load_module.md) |

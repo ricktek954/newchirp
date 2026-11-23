@@ -722,6 +722,89 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(stale.buffer, b"")
         self.assertIsInstance(radio, radio_class)
 
+    def test_write_watchdog_ends_a_stalled_write_with_details(self):
+        # 2026-11-22 DM-32UV report: a write sat at ~18% indefinitely.
+        import io
+        import threading
+
+        stream = io.StringIO()
+        exited = threading.Event()
+        codes = []
+
+        def fake_exit(code):
+            codes.append(code)
+            exited.set()
+
+        bridge.RADIO_TRACE.__init__()
+        self.addCleanup(bridge.RADIO_TRACE.__init__)
+        bridge.RADIO_TRACE.begin(b"W\x00\x10\x00")
+        stop = bridge.start_write_watchdog(
+            seconds=0.4, exit_fn=fake_exit, stream=stream)
+        bridge._note_serial_state("sending a 4102-byte command to the radio")
+        self.assertTrue(exited.wait(5))
+        stop.set()
+        text = stream.getvalue()
+        self.assertEqual(codes, [bridge.WRITE_STALL_EXIT_CODE])
+        self.assertIn("stopped responding during the write", text)
+        self.assertIn("sending a 4102-byte command", text)
+        self.assertIn("Radio communication trace:", text)
+        self.assertIn("Stalled threads:", text)
+
+    def test_empty_reads_do_not_keep_the_watchdog_quiet(self):
+        import io
+        import threading
+
+        class Silent:
+            timeout = 0.01
+
+            def read(self, size=1):
+                return b""
+
+            def write(self, data):
+                return len(data)
+
+        port = bridge.TracedSerial(Silent(), bridge.RadioCommunicationTrace())
+        exited = threading.Event()
+        stop = bridge.start_write_watchdog(
+            seconds=0.4, exit_fn=lambda code: exited.set(),
+            stream=io.StringIO())
+        try:
+            deadline = __import__("time").monotonic() + 5
+            while not exited.is_set() and __import__("time").monotonic() < deadline:
+                port.read(1)
+        finally:
+            stop.set()
+        self.assertTrue(exited.is_set())
+
+    def test_write_watchdog_stays_quiet_while_progress_continues(self):
+        import io
+        import time as _time
+
+        codes = []
+        stop = bridge.start_write_watchdog(
+            seconds=0.6, exit_fn=codes.append, stream=io.StringIO())
+        try:
+            for _ in range(8):
+                _time.sleep(0.15)
+                with mock.patch.object(bridge.sys, "stderr", io.StringIO()):
+                    bridge.emit_progress("Writing", 0.5)
+        finally:
+            stop.set()
+        self.assertEqual(codes, [])
+
+    def test_wouxun_kg_uv9_no_response_mentions_the_volume(self):
+        message = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(),
+            command="download",
+            model="Wouxun_KG-UV9D_Plus",
+        )
+        self.assertIn("volume is around halfway", message)
+        self.assertIn("faq#wouxun-volume", message)
+        other = bridge.bridge_error_message(
+            self.errors.RadioNoResponse(), command="download",
+            model="Baofeng_UV-5R")
+        self.assertNotIn("volume", other)
+
     def test_f4hwn_on_a_stock_uvk5_profile_names_the_right_profile(self):
         # 2026-11-22 report: F4HWN v7.0.0 read with Quansheng_UV-K5_egzumer.
         bridge.RADIO_TRACE.__init__()

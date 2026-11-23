@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T14:14:29Z"
+timestamp: "2026-11-23T09:51:32Z"
 concept_id: chirp_bridge
 language: python
 ---
@@ -30,6 +30,10 @@ Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 | related | [uvk5_firmware_from_hello](/chirp_bridge/uvk5_firmware_from_hello.md) |
 | related | [radio_firmware](/chirp_bridge/radio_firmware.md) |
 | related | [RadioCommunicationTrace](/chirp_bridge/RadioCommunicationTrace.md) |
+| related | [_note_serial_activity](/chirp_bridge/note_serial_activity.md) |
+| related | [_note_serial_state](/chirp_bridge/note_serial_state.md) |
+| related | [write_stall_message](/chirp_bridge/write_stall_message.md) |
+| related | [start_write_watchdog](/chirp_bridge/start_write_watchdog.md) |
 | related | [TracedSerial](/chirp_bridge/TracedSerial.md) |
 | related | [emit_progress](/chirp_bridge/emit_progress.md) |
 | related | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |

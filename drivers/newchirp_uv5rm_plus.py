@@ -23,7 +23,12 @@ from chirp.drivers import baofeng_uv17Pro
 HANDSHAKE_RETRIES = 5
 RETRY_DELAY = 1.0
 UNEXPECTED_RESPONSE = "Unexpected response from radio"
-RETRY_MODELS = {"UV-5RH", "UV-5RM Plus"}
+# UV-32: Baofeng "BF-UVs Pro" CPS v1.4.7 (UV-17/18/19/21/25/28/29/32 Pro,
+# 5RH Pro, AR-152) uses the same PROGRAMCOLORPROU handshake: a reply byte
+# other than 0x06 is discarded and the code is resent on a 1 s timer, up to
+# five times (Communication.HandShake). 2026-11-22 UV-32 report: first
+# reply 0x40, and stock CHIRP stopped with "Unexpected response".
+RETRY_MODELS = {"UV-5RH", "UV-5RM Plus", "UV-32"}
 _ORIGINAL_DO_IDENT = baofeng_uv17Pro._do_ident
 _ORIGINAL_GET_MEMORY = baofeng_uv17Pro.BaofengUV5RMPlus.get_memory
 
@@ -67,8 +72,9 @@ def _do_ident(radio):
                 return _ORIGINAL_DO_IDENT(radio)
             except errors.RadioNoResponse as exc:
                 last_error = exc
-                if not any(reply[:1] == bytes((V2_ANNOUNCE,))
-                           for reply in replies):
+                if radio.MODEL not in V2_MODELS or not any(
+                        reply[:1] == bytes((V2_ANNOUNCE,))
+                        for reply in replies):
                     raise
                 break
             except errors.RadioError as exc:
@@ -79,7 +85,8 @@ def _do_ident(radio):
                     time.sleep(RETRY_DELAY)
     finally:
         baofeng_uv17Pro._sendmagic = original_sendmagic
-    if any(reply[:1] == bytes((V2_ANNOUNCE,)) for reply in replies):
+    if radio.MODEL in V2_MODELS and any(
+            reply[:1] == bytes((V2_ANNOUNCE,)) for reply in replies):
         raise _v2_firmware_error(radio)
     raise last_error
 

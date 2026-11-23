@@ -149,11 +149,17 @@ def _decode_frequency(raw):
 
 
 def _decode_tone(raw):
-    word = int.from_bytes(raw, "little")
-    if word in (0x0000, 0xFFFF):
-        return None, None, None
+    """Decode a tone word exactly as the RT-950 CPS does.
 
-    # DCS uses a one-based index in byte zero and leaves byte one clear.
+    BT-9000_CPS (RT-950 CPS v1.3.0) GetQTInfo_HexToStr /
+    GetSubaudioType_HexToStr / GetCTCSS_HexToStr / GetCDCSS_HexToStr: a zero
+    high byte means DCS, with the low byte a one-based index (1-210, else
+    OFF); otherwise CTCSS, OFF when the low byte is 0x00 or 0xFF, else the
+    little-endian word in tenths of a hertz. The CPS displays any CTCSS
+    value (2026-11-23 report: channel 26 held 0x5750, which the CPS shows as
+    "2235.2"); a value CHIRP cannot represent is shown as no tone here, as
+    this read-only driver never writes it back.
+    """
     if raw[1] == 0:
         index = raw[0] - 1
         if 0 <= index < len(DCS_CODES) * 2:
@@ -162,7 +168,14 @@ def _decode_tone(raw):
             return "DTCS", code, polarity
         return None, None, None
 
-    return "Tone", word / 10.0, None
+    if raw[0] in (0x00, 0xFF):
+        return None, None, None
+    tone = int.from_bytes(raw, "little") / 10.0
+    if tone not in chirp_common.TONES:
+        LOG.warning("RT-950 tone %.1f Hz (raw %s) is outside the standard "
+                    "list; shown as no tone", tone, bytes(raw).hex(" "))
+        return None, None, None
+    return "Tone", tone, None
 
 
 def _extra(name, label, value, doc):

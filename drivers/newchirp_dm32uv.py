@@ -7,12 +7,14 @@
 
 """DM-32UV override with bounded retries for the password-state query."""
 
+import logging
 import time
 
 from chirp import chirp_common, directory, errors
 from chirp.drivers import baofeng_dm32uv
 
 
+LOG = logging.getLogger(__name__)
 AIRBAND = (108_000_000, 136_000_000)
 
 _current_xfer = baofeng_dm32uv._Link.xfer
@@ -217,6 +219,24 @@ baofeng_dm32uv._scan = _scan_then_announce_write
 baofeng_dm32uv._write_page = _write_page_with_progress
 
 
+def _tone_value_readable(value):
+    """True for no tone, a BCD CTCSS tone CHIRP knows, or a BCD DCS code."""
+    if value in (0xFFFF, 0x0000):
+        return True
+    if value & 0x8000:
+        digits = "%03x" % (value & 0x07FF)
+        return digits.isdigit() and int(digits) in chirp_common.DTCS_CODES
+    digits = "%04x" % (value & 0x7FFF)
+    return digits.isdigit() and int(digits) / 10.0 in chirp_common.TONES
+
+
+def _unreadable_tones(_mem):
+    if int(_mem.chtype) in (1, 3):
+        return []   # DMR channels: the stock driver never decodes tones
+    return [name for name in ("rxtone", "txtone")
+            if not _tone_value_readable(int(getattr(_mem, name)))]
+
+
 def _stored_name(raw):
     """A name as the radio shows it: text up to the first NUL or 0xFF.
 
@@ -266,10 +286,44 @@ class DM32UV(baofeng_dm32uv.DM32UV):
             _upload_progress.clear()
 
     def get_memory(self, number):
-        mem = super().get_memory(number)
+        _mem = self._chan(number)
+        bad = _unreadable_tones(_mem)
+        if not bad:
+            mem = super().get_memory(number)
+        else:
+            # 2026-11-22 report (firmware DM32.00.01.048): a tone stored as
+            # 0x3E08 is neither BCD CTCSS nor DCS, and the stock decoder
+            # turned "3e08" into 3e8 Hz, failing the whole read. Show such a
+            # tone as none; set_memory puts the raw value back unless the
+            # user sets a new tone. The encoding stays unguessed until an
+            # image from that firmware is seen (ledger w-20261121-ab4d area,
+            # INBOX:907).
+            saved = {name: int(getattr(_mem, name)) for name in bad}
+            for name in bad:
+                setattr(_mem, name, 0xFFFF)
+            try:
+                mem = super().get_memory(number)
+            finally:
+                for name, value in saved.items():
+                    setattr(_mem, name, value)
+            LOG.warning(
+                "DM-32UV channel %i: unreadable tone value(s) %s shown as "
+                "none and kept unchanged", number,
+                ", ".join("%s=0x%04X" % item for item in saved.items()))
         if not mem.empty:
             mem.name = _stored_name(self._chan(number).name)
         return mem
+
+    def set_memory(self, mem):
+        _mem = self._chan(mem.number) if not mem.empty else None
+        kept = {}
+        if _mem is not None and mem.tmode == "":
+            kept = {name: int(getattr(_mem, name))
+                    for name in _unreadable_tones(_mem)}
+        result = super().set_memory(mem)
+        for name, value in kept.items():
+            setattr(self._chan(mem.number), name, value)
+        return result
 
     def _channel_names(self):
         names = {}

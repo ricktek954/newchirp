@@ -21,6 +21,8 @@
 - [_mapping_entries_by_index](mapping_entries_by_index.md)
 - [_mapping_index_key](mapping_index_key.md)
 - [_mapping_models_by_index](mapping_models_by_index.md)
+- [_note_serial_activity](note_serial_activity.md) — Bytes moved (or progress was made); record what happens next.
+- [_note_serial_state](note_serial_state.md) — Record what the bridge is doing without counting it as activity.
 - [apply_json](apply_json.md)
 - [apply_mapping_payload](apply_mapping_payload.md) — Apply bank/zone names and memberships to an already loaded image.
 - [apply_setting_changes](apply_setting_changes.md)
@@ -84,8 +86,10 @@
 - [setting_value_json](setting_value_json.md)
 - [settings_payload](settings_payload.md)
 - [settings_tree_json](settings_tree_json.md)
+- [start_write_watchdog](start_write_watchdog.md) — Start a daemon thread that ends a stalled radio write.
 - [status_progress](status_progress.md) — Translate a CHIRP Status message into a structured progress event.
 - [uvk5_firmware_from_hello](uvk5_firmware_from_hello.md) — Decode the UV-K5 hello reply without trusting non-printable bytes.
 - [verify_live_write](verify_live_write.md) — Read back live memories so a rejected write cannot report success.
 - [write](write.md)
+- [write_stall_message](write_stall_message.md)
 - [zip_lookup_cache_path](zip_lookup_cache_path.md)

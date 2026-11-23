@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T14:14:29Z"
+timestamp: "2026-11-23T09:51:32Z"
 concept_id: chirp_bridge/readline
 language: python
 ---
@@ -31,7 +31,7 @@ def readline(self, size = -1)
 | `size` | `—` | `-1` |
 
 ## Source
-Lines 440–443 in `chirp_bridge.py`
+Lines 524–527 in `chirp_bridge.py`
 
 ## Relationships
 

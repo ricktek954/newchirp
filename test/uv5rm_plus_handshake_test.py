@@ -102,6 +102,34 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
             b"PROGRAMBFNORMALU",
         ])
 
+    def test_retries_stray_byte_for_uv32_like_its_cps(self):
+        # 2026-11-22 UV-32 report: PROGRAMCOLORPROU answered 0x40. The
+        # "BF-UVs Pro" CPS v1.4.7 discards a non-ACK byte and resends.
+        radio = self.radio_module.UV32(None)
+        magic = radio._idents[0]
+        replies = [b"\x40", b"\x06"] + [
+            reply for _magic, length in radio._magics
+            for reply in (b"\x00" * length,)
+        ]
+        serial = _SequenceSerial(replies)
+        radio = self.radio_module.UV32(serial)
+
+        with mock.patch.object(self.compat.time, "sleep") as sleep:
+            self.assertTrue(self.radio_module._do_ident(radio))
+
+        sleep.assert_called_once_with(self.compat.RETRY_DELAY)
+        self.assertEqual(serial.writes[:2], [magic, magic])
+
+    def test_uv32_0x41_reply_is_not_called_v2_firmware(self):
+        from chirp import errors
+
+        serial = _SequenceSerial([b"\x41"] * 12)
+        radio = self.radio_module.UV32(serial)
+        with mock.patch.object(self.compat.time, "sleep"):
+            with self.assertRaises(errors.RadioError) as caught:
+                self.radio_module._do_ident(radio)
+        self.assertNotIn("v2", str(caught.exception))
+
     def test_does_not_retry_other_handshake_failures(self):
         serial = _SequenceSerial([])
         radio = self.radio_module.BaofengUV5RMPlus(serial)

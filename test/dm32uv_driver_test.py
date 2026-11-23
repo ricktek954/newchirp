@@ -129,6 +129,37 @@ class DM32UVDriverTest(unittest.TestCase):
             stock._scan(None, 0, 0x2FFF, radio, status)
         self.assertEqual(messages, [])
 
+    def test_unreadable_tone_reads_as_none_and_is_kept_on_write(self):
+        # 2026-11-22 report (firmware DM32.00.01.048): a tone of 0x3E08 made
+        # the stock decoder produce 3e8 Hz and the whole read failed. The
+        # CPS v1.60 tone list is CHIRP's 50 tones; OEM data stores BCD.
+        from chirp import memmap
+
+        image = (SOURCE / "tests/images/Baofeng_DM-32UV.img").read_bytes()
+        radio = self.radio_class(memmap.MemoryMapBytes(image))
+        number = next(
+            n for n in range(1, 200)
+            if not radio.get_memory(n).empty
+            and radio.get_memory(n).mode != "DMR"
+        )
+        _mem = radio._chan(number)
+        _mem.txtone = 0x3E08
+        radio._forget()
+
+        mem = radio.get_memory(number)
+        self.assertEqual(mem.tmode, "")
+        self.assertEqual(int(radio._chan(number).txtone), 0x3E08)
+
+        mem.name = "EDITED"
+        radio.set_memory(mem)
+        self.assertEqual(int(radio._chan(number).txtone), 0x3E08)
+
+        mem = radio.get_memory(number)
+        mem.tmode = "Tone"
+        mem.rtone = 100.0
+        radio.set_memory(mem)
+        self.assertEqual(int(radio._chan(number).txtone), 0x1000)
+
     def test_airband_is_accepted_only_as_receive_only(self):
         radio = self.radio_class(None)
         features = radio.get_features()
