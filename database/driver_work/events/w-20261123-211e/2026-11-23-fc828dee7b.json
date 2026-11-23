@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 12:53:50",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:c2581cbd",
+  "item": "w-20261123-211e",
+  "occurred_at": "2026-11-23",
+  "summary": "Read-only desktop driver committed and pushed"
+}
