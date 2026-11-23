@@ -102,6 +102,8 @@ Last updated: 2026-11-20
 | Retevis MA1 model A9305B | `drivers/newchirp_retevis_ma1_a9305b.py` | TYT addressed blocks, 9600 then 57600 8N1 | 1,000 channels | Yes, offline-tested | Hidden | Experimental |
 | Retevis RA89 | `drivers/newchirp_ra89.py` | OEM addressed blocks, 57,600 8N1, DTR/RTS on | 200 channels + core settings | Yes, offline-tested | Core settings and startup text | Experimental |
 | TYT TH-9800 | Pinned CHIRP `th9800.py` with `drivers/newchirp_th9800_compat.py` | TYT clone serial, 38400 8N1 | Reserved tone values no longer abort the read | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Icom ID-4100 / ID-5100 | Pinned CHIRP `id5100.py` with `drivers/newchirp_icom_id5100_tone_compat.py` | Icom clone serial | DTCS(T), pocket-beep TSQL/DTCS and undefined tone values no longer abort the read | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Yaesu FT-70D | Pinned CHIRP `ft70.py` with `drivers/newchirp_ft70_compat.py` | Yaesu clone serial, 38400 8N1 | Read resyncs on the `AH51G` ID block; checksum failures explain recovery | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Yaesu VX-6 | Pinned CHIRP `vx6.py` with `drivers/newchirp_vx6_compat.py` | Yaesu clone serial, 19200 8N1 | Unprogrammable stored slots are treated as empty | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Binqi BQ-889 analog | `drivers/newchirp_bq889_probe.py` | USB/AT probe, baud auto-detect | Read-only transport probe; no channel decoder | Disabled | Hidden | Experimental probe |
 
@@ -355,6 +357,44 @@ Last updated: 2026-11-20
 - Hardware validation: pending
 - Next milestone: retest with the reporter's saved image and confirm the
   channel count against the radio
+
+### Yaesu FT-70D
+
+- Maintained compatibility: `drivers/newchirp_ft70_compat.py`
+- Transport (Yaesu ADMS-10 1.0.1.0, `adms10.exe`
+  `SerialProtocol.backgroundWorker1_DoWork`, static .NET decompile): 38400
+  8N1, no handshake. The radio sends a 10-byte ID starting `AH51G`; ADMS
+  rejects any other ID, sends one ACK (0x06), then reads 65,216 data bytes
+  in 64-byte pieces (5 s first-byte, 1 s inter-block timeout) and one
+  checksum byte. Checksum is the low byte of the sum of the ID and data
+  bytes, matching CHIRP's `YaesuChecksum(0x0000, 0xFEC9)` at 0xFECA. ADMS
+  writes the same order with 64-byte blocks 15 ms apart after a 2 s pause.
+  `default_en.dat` is 65,216 bytes, so the stock image size is unchanged.
+- Read policy: clear stale serial input, discard bytes received ahead of
+  `AH51G` (up to 64), reject a non-FT-70D stream, and turn a checksum
+  failure into ADMS-from-cold recovery guidance. Layout, checksum and the
+  stock write path are unchanged.
+- Evidence: static ADMS-10 REA (package sha256 `ea61c942…499c`); 2026-11-23 report (INBOX:938) of
+  `Checksum Failed [0000-FEC9 (@FECA)]` after an early-[BAND] attempt;
+  offline tests in `test/ft70_id5100_compat_test.py`
+- Hardware validation: pending
+- Next milestone: reporter re-reads with the update; a clean read confirms
+  the stray-byte cause
+
+### Icom ID-4100 / ID-5100 tone modes
+
+- Maintained compatibility: `drivers/newchirp_icom_id5100_tone_compat.py`
+- Decode policy: tone-mode value 8 (`DTCS-T`, the radio's DTCS(T) encode-only
+  setting) is CHIRP cross mode `DTCS->`; values 2 and 4 (TSQL/DTCS with
+  pocket beep) show as TSQL/DTCS and keep the pocket-beep value when an
+  unchanged channel is written; undefined values 12-15 read as no tone
+  without changing image bytes; TSQL-R and DTCS-R are editable
+- Evidence: CHIRP `id5100.py` TMODES table and the 2026-11-23 report
+  (INBOX:940) of `` `DTCS-T' is not in valid list ``; no image attached;
+  offline tests use the CHIRP ID-4100 and ID-5100 fixtures
+- Hardware validation: pending
+- Next milestone: reporter reads the radio with the update and confirms the
+  DTCS(T) channel shows as Cross `DTCS->`
 
 ### Binqi BQ-889 analog probe
 

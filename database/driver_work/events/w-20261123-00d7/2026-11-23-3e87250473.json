@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 23:22:16",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "sha256:ea61c9425d65735295b826f849222d7c4e078561a2a14629a26eab53381b499c",
+  "item": "w-20261123-00d7",
+  "occurred_at": "2026-11-23",
+  "summary": "ADMS-10 package hash"
+}

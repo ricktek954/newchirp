@@ -1,0 +1,8 @@
+{
+  "aliases": "ID-4100",
+  "created_at": "2026-11-23 23:21:44",
+  "driver_path": "id5100.py|drivers/newchirp_icom_id5100_tone_compat.py",
+  "manufacturer": "Icom",
+  "model": "ID-5100",
+  "notes": ""
+}

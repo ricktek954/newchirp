@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 23:21:44",
+  "kind": "bug",
+  "manufacturer": "Yaesu",
+  "model": "FT-70D",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:937, INBOX:938 <c86ed89e-048b-0454-48f6-ce6ff79ee70f@newchirp.net>",
+  "status": "investigating",
+  "summary": "1.0.70 Windows COM4: first read got no response (BAND pressed early), the next read completed but failed the checksum. ADMS-10 1.0.1.0 REA: protocol is 10-byte AH51G ID, ACK, 65216 data + 1 checksum byte (sum of ID+data), identical to CHIRP's layout; ADMS validates the AH51G ID, CHIRP does not, so a stray byte ahead of the ID shifts the image and fails the checksum. Override flushes input, resyncs on AH51G, and explains the checksum failure.",
+  "title": "Checksum Failed [0000-FEC9 (@FECA)] on read",
+  "uid": "w-20261123-00d7"
+}

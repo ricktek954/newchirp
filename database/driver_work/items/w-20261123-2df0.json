@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 23:21:44",
+  "kind": "enhancement",
+  "manufacturer": "Yaesu",
+  "model": "FT-70D",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:939",
+  "status": "fix_committed",
+  "summary": "VX-7 channels (8-char names) imported into an FT-70D (6-char) block writing until ~100 names are edited by hand. Added a 'Shorten N names to X' action on the attention banner with a preview, duplicate warning and one-step undo.",
+  "title": "Offer to shorten names longer than the radio allows",
+  "uid": "w-20261123-2df0"
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 23:21:44",
+  "kind": "bug",
+  "manufacturer": "Icom",
+  "model": "ID-5100",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:940 <64a8cf78-71ea-6553-ee6d-dbdeb1de4f93@newchirp.net>",
+  "status": "fix_committed",
+  "summary": "Stock id5100.py decodes tone mode 8 as 'DTCS-T' (DTCS encode only) and 2/4 as '2??'/'4??' (pocket beep), none valid CHIRP tone modes, so one such channel aborts the whole channel decode. Override maps DTCS-T to Cross 'DTCS->', pocket-beep TSQL/DTCS to TSQL/DTCS (kept on unchanged write-back), undefined values to no tone, and offers TSQL-R/DTCS-R. Covers ID-4100 too. No image attached.",
+  "title": "Read fails: 'DTCS-T' is not in valid list",
+  "uid": "w-20261123-6995"
+}

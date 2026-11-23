@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 23:22:11",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "docs/DRIVER_STATUS.md#yaesu-ft-70d",
+  "item": "w-20261123-00d7",
+  "occurred_at": "2026-11-23",
+  "summary": "Static REA of Yaesu ADMS-10 1.0.1.0 (yaesu.com FT-70D_ADMS-10_ENG.zip, InstallShield stream decrypted): ID AH51G check, ACK, 65216+1, checksum = sum(ID+data) & 0xFF; same as CHIRP"
+}
