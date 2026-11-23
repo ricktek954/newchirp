@@ -72,6 +72,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#89 bug | awaiting_user | normal:** No response on macOS serial adapter
   NewChirp 1.0.56 received no response to its seven-byte identity command on a macOS usbserial adapter. Confirm the radio mode, cable voltage, adapter driver, and OEM CPS behavior.
   Source: `email` INBOX:736
+- **#w-20261123-2763 bug | investigating | high:** Read fails: No attribute power in struct memory
+  NewChirp 1.0.68 Windows read completed, then decode failed. Stock BaofengCommonHT.get_memory logs _mem.power (nonexistent) when lowpower is not 0/2 on tri-band radios, raising AttributeError. Affects 5RX, UV-S9X3, BF-A58S and any BaofengCommonHT radio with an out-of-range value; also unfixed upstream. Meaning of values 1/3 unknown (no image, CPS not obtainable from BTECH page without a browser).
+  Source: `email` INBOX:922
 
 ### BF-F8HP
 

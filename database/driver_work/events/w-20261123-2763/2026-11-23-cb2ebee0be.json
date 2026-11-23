@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 13:03:42",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "desktop:test/baofeng_common_power_test.py",
+  "item": "w-20261123-2763",
+  "occurred_at": "2026-11-23",
+  "summary": "Reproduced with CHIRP sample 5RX image (lowpower=1 -> AttributeError). Override decodes unknown values as High, logs them, and writes the raw value back unless power is edited. Tests: baofeng_common_power_test (5RX, UV-S9X3, BF-A58S); full suite 617 OK."
+}
