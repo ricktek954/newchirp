@@ -32,6 +32,7 @@ Last updated: 2026-11-20
 | Retevis RA87 | `drivers/newchirp_retevis_ra87.py` | Stock CHIRP clone serial, 9600, echoing cable | Download identifies by model byte 0x1F05 = A5 (OEM CPS rule) instead of two fixed 8-byte fingerprints | Stock CHIRP driver (already checks 0x1F05) | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5R Mini | `drivers/newchirp_uv5r_mini.py` | Stock CHIRP UV-17Pro-family serial | Unanswered block requests resent up to five times (OEM CPS rule) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | AnyTone AT-D878UVII Plus | `drivers/newchirp_anytone_d878uvii.py` | AnyTone D578UV/D878UV serial protocol, 115200 8N1 | Conventional channels and zones, offline-tested | Disabled | Hidden | Experimental read-only |
+| Quansheng UV-K5 (V1) with Robzyl RO-KO 512K firmware | `drivers/newchirp_uvk5_roko512k.py` | Stock UV-K5 serial (0x0514 hello, 0x051B read), 38400 8N1 | 999 channels from the firmware layout, offline-tested; refuses other firmware and 8 KB EEPROMs | Disabled | Hidden | Experimental read-only |
 | Yaesu FT-1D/2D/3D/5D clone family | `drivers/newchirp_yaesu_clone.py` | CHIRP Yaesu clone serial, 38400 8N1 | Completion-safe timeout; multi-bank mappings | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Yaesu FT-50 | Pinned CHIRP `ft50.py` with `drivers/newchirp_ft50_compat.py` | Yaesu clone serial, 9600 8N2 | Odd-split channels decode; reporter image verified | Hardware-tested name write and restore; channel clear fixed in both flag tables; odd-split channel write (all hardware-confirmed 2026-11-19) | Stock FT-50 settings | Supported; read and write hardware-confirmed 2026-11-19 |
 | Radtel RT-950 | `drivers/newchirp_rt950.py` | CHIRP-compatible serial, 115200 8N1 + RTS/XON | Yes, designed | Disabled | Hidden | Experimental |
@@ -372,6 +373,42 @@ Last updated: 2026-11-20
 - NewChirp hardware validation: none
 - Next milestone: Frank Lopez Sr. selects `Binqi BQ-889 Analog Probe`, runs
   Download From Radio, and sends the generated read-only transcript
+
+### Quansheng UV-K5 (V1) with Robzyl RO-KO 512K firmware
+
+- Maintained driver: `drivers/newchirp_uvk5_roko512k.py`
+  (`Quansheng_UV-K5_RO-KO_512K`), model "UV-K5 (RO-KO 512K)"
+- Firmware oracle: K5Quan/Robzyl_512K_RO_KO commit
+  `a4ab1a0b6ff56fbe33c1ea202d0e07d5241fc81a` (Apache-2.0). `misc.h` with
+  `ENABLE_EEPROM_512K`: 999 channels, 16-byte records at `0x2000`,
+  attributes at `0x5E80` (band low nibble, scan list high nibble), names in
+  16-byte slots at `0x6280` (10 characters used), history at `0xA100`.
+  `radio.c` `RADIO_ConfigureChannel` defines the field rules; `dcs.c` has 55
+  CTCSS tones (standard 50 plus 55.0-65.0 Hz); `frequencies.c` the 21-step
+  table. The author's own CHIRP module carries a stale 24-entry step list;
+  the firmware table is used.
+- Transport: stock UV-K5 hello and 0x80-byte 0x051B reads of `0x0000-0xA0FF`,
+  38400 8N1. Accepted identity: firmware starting `RO-KO` (V6.11 reports
+  "RO-KO V6.11"). The 8K and 512K builds report the same version, so the
+  driver refuses an image whose `0x2000-0x7FFF` repeats the first 8 KB (a
+  24C64 ignores the upper address bits).
+- Implemented: frequency, offset/direction, FM/NFM/AM/NAM, SSB shown as USB,
+  Low/Mid/High power, 10-character name, CTCSS (including the five low
+  tones)/DCS with cross modes, step; read-only extras for bandwidth,
+  modulation, scan list, scrambler, busy lockout and reverse
+- Read/write policy: read-only (`NEWCHIRP_WRITE_DISABLED`); `sync_out` and
+  `set_memory` refuse before any radio I/O. Web Programmer profile
+  `quansheng-uv-k5-roko-512k` is read-only too.
+- Driver SHA-256: `a2d05335e3abb873114ef73a43e36d86df84de6aa5593b7f19e151da9ed7f463`
+- Field request: forum file drop `512k_CHIRP_UV-K5_V1_ROBZYL-KO.py`
+  (2026-11-22, SHA-256
+  `06df9e84441162d9e65e044f7cecb3b6308c69c3d6a1cef6c3d09de5fd2086ef`). That
+  module split the attribute byte 5/3, used 16-character names and wrote
+  0xA100 bytes without a firmware or EEPROM-size check; it was not used.
+  Ledger `w-20261123-211e`.
+- Hardware validation: none
+- Next milestone: a physical read from an upgraded radio, then a controlled
+  single-channel write and read-back before enabling writes
 
 ### AnyTone AT-D878UVII Plus
 

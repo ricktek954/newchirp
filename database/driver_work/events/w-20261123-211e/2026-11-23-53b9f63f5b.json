@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 12:51:36",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "github:K5Quan/Robzyl_512K_RO_KO@a4ab1a0b6ff56fbe33c1ea202d0e07d5241fc81a",
+  "item": "w-20261123-211e",
+  "occurred_at": "2026-11-23",
+  "summary": "Firmware REA (K5Quan/Robzyl_512K_RO_KO a4ab1a0b): misc.h 512K map, radio.c channel decode, dcs.c 55 tones, frequencies.c steps; 8K/512K builds share the version string, so 8 KB wrap detection added. Submitted module's 5/3 attribute split and 16-char names are wrong."
+}

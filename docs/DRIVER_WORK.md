@@ -526,6 +526,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: UV-K5 framed serial, 38400 8N1. Read: Yes, firmware-ID retry. Write: Stock CHIRP policy. Settings: Stock CHIRP policy. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:42
 
+### UV-K5 V1 (Robzyl RO-KO 512K)
+
+- **#w-20261123-211e new_driver | experimental | normal:** Read-only profile for Robzyl RO-KO firmware on a 512K-EEPROM UV-K5 V1
+  Forum file drop (2026-11-22, '512k_CHIRP_UV-K5_V1_ROBZYL-KO.py', SHA-256 06df9e84441162d9e65e044f7cecb3b6308c69c3d6a1cef6c3d09de5fd2086ef): community CHIRP module for Robzyl RO-KO firmware on a UV-K5 V1 with an upgraded 512 Kbit EEPROM. 0xA100-byte map, 999 channels at 0x2000, attributes 0x5E80, 16-char names 0x6280. Module reviewed: no exec/network/file/obfuscation; non-ASCII is Cyrillic. It writes without checking firmware, which would overrun a stock 8 KB EEPROM. Plan: verify against Robzyl firmware source; read-only profile gated on firmware identity.
+  Source: `forum` file-drop:512k_CHIRP_UV-K5_V1_ROBZYL-KO.py
+
 ## QYT
 
 ### KT7900D
