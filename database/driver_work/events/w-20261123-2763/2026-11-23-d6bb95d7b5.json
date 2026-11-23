@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 13:13:40",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:85768d3e",
+  "item": "w-20261123-2763",
+  "occurred_at": "2026-11-23",
+  "summary": "CPS power encoding for 5RX/UV-S9X3 (desktop) and bit-0 decode in the Web Programmer (web 896c2d9, not yet deployed); 618 desktop tests and web programmer suite pass"
+}
