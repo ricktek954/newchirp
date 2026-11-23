@@ -5,8 +5,8 @@
   "files": {
     "l10n/app_localizations.dart": {
       "path": "l10n/app_localizations.dart",
-      "mtime_ns": 1795460903282924150,
-      "hash": "aa284b9e58e87fc288ef5497f13cef590dabff8201fd1626f462889aa8390225",
+      "mtime_ns": 1795461195345281918,
+      "hash": "e8de20d317209219b078d67029f5b7e1782ec0ade010559cbb558f23c4166d73",
       "concept_ids": [
         "l10n/app_localizations/AppLocalizations",
         "l10n/app_localizations/AppLocalizationsDelegate",
@@ -15,6 +15,8 @@
         "l10n/app_localizations/applyTitle",
         "l10n/app_localizations/beforeReading",
         "l10n/app_localizations/beforeWriting",
+        "l10n/app_localizations/editorBulkSave",
+        "l10n/app_localizations/editorBulkTitle",
         "l10n/app_localizations/incompatibleMore",
         "l10n/app_localizations/incompatibleSkipHint",
         "l10n/app_localizations/incompatibleSummary",
@@ -34,8 +36,8 @@
     },
     "l10n/app_localizations_en.dart": {
       "path": "l10n/app_localizations_en.dart",
-      "mtime_ns": 1795460903279087415,
-      "hash": "2ee02389ecd769d0bf3c9574b47b94a9f7bdf5dab7dc612bcb843fdb2c4b408c",
+      "mtime_ns": 1795461195338144113,
+      "hash": "e6bc27979a2258271473775aaacf15eaaa5b42a356cbf80759951503e47a6faf",
       "concept_ids": [
         "l10n/app_localizations_en/AppLocalizationsEn",
         "l10n/app_localizations_en/applyInsertNote",
@@ -43,6 +45,8 @@
         "l10n/app_localizations_en/applyTitle",
         "l10n/app_localizations_en/beforeReading",
         "l10n/app_localizations_en/beforeWriting",
+        "l10n/app_localizations_en/editorBulkSave",
+        "l10n/app_localizations_en/editorBulkTitle",
         "l10n/app_localizations_en/incompatibleMore",
         "l10n/app_localizations_en/incompatibleSkipHint",
         "l10n/app_localizations_en/incompatibleSummary",
@@ -57,8 +61,8 @@
     },
     "l10n/app_localizations_es.dart": {
       "path": "l10n/app_localizations_es.dart",
-      "mtime_ns": 1795460903280479326,
-      "hash": "d57407903b41297cba15c2e95bd21e838e81284d51d9ed05468ed74a359a645d",
+      "mtime_ns": 1795461195340042938,
+      "hash": "54a25ea3c29f7d1b322dad42853fbfddee43bcc48209558039591e64ec75a740",
       "concept_ids": [
         "l10n/app_localizations_es/AppLocalizationsEs",
         "l10n/app_localizations_es/applyInsertNote",
@@ -66,6 +70,8 @@
         "l10n/app_localizations_es/applyTitle",
         "l10n/app_localizations_es/beforeReading",
         "l10n/app_localizations_es/beforeWriting",
+        "l10n/app_localizations_es/editorBulkSave",
+        "l10n/app_localizations_es/editorBulkTitle",
         "l10n/app_localizations_es/incompatibleMore",
         "l10n/app_localizations_es/incompatibleSkipHint",
         "l10n/app_localizations_es/incompatibleSummary",
@@ -80,8 +86,8 @@
     },
     "l10n/app_localizations_fr.dart": {
       "path": "l10n/app_localizations_fr.dart",
-      "mtime_ns": 1795460903281392906,
-      "hash": "af8afdf5664e8d605a89be3cf31591d76f29b3e60bc0e4e66e2a645d145660bf",
+      "mtime_ns": 1795461195341990723,
+      "hash": "dd6cc99db5191352dcae8e371c2f0d95b2cd3633c9f9f0d88ae9486e90a28a1f",
       "concept_ids": [
         "l10n/app_localizations_fr/AppLocalizationsFr",
         "l10n/app_localizations_fr/applyInsertNote",
@@ -89,6 +95,8 @@
         "l10n/app_localizations_fr/applyTitle",
         "l10n/app_localizations_fr/beforeReading",
         "l10n/app_localizations_fr/beforeWriting",
+        "l10n/app_localizations_fr/editorBulkSave",
+        "l10n/app_localizations_fr/editorBulkTitle",
         "l10n/app_localizations_fr/incompatibleMore",
         "l10n/app_localizations_fr/incompatibleSkipHint",
         "l10n/app_localizations_fr/incompatibleSummary",
@@ -777,8 +785,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795460985000349706,
-      "hash": "439c69bce9797337202bc1a365e42242ad98cdc3105696227ac2fa0c71c351a6",
+      "mtime_ns": 1795461293765028813,
+      "hash": "99dcd8ce4efae2bb5111713f6b3638c63ef8ec81226aeb55f48d21cdd50f6e81",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -852,6 +860,8 @@
         "main/toggle",
         "main/fitAllPoints",
         "main/resizeBy",
+        "main/channelColumnTitle",
+        "main/channelColumnHelp",
         "main/inactive",
         "main/label",
         "main/choices",
@@ -1673,7 +1683,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "1035558b2b87bd35e0ead7008b2a20e3bfdc66709943bef8193b15dd4112f0ad",
+      "edge_hash": "b46d747121b9760564fe39317ae9f9e02be923656bd0d0885e12d7eab1929a53",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -6881,7 +6891,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations.dart",
       "render_hash": "stale",
-      "edge_hash": "3d1573c2b06313e2a31b4691fe43284d0bbf6fcabb3cae8218f1cf5a7bbd7638",
+      "edge_hash": "587a56428a966a540c4fd43991623116b61742cda9494e4a9a772f1ea9f3b80d",
       "enriched": false
     },
     "l10n/app_localizations/AppLocalizations": {
@@ -7057,7 +7067,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_es.dart",
       "render_hash": "stale",
-      "edge_hash": "2e72aa3a97e1abdb5e3d3cce4f45f12af78b40799d60909f50aac1e76a64e930",
+      "edge_hash": "12aa8c27b4dc22fbe8867c1cced92bdbf6540ccf4fa84a277a57a3ea6e481da0",
       "enriched": false
     },
     "l10n/app_localizations_es/AppLocalizationsEs": {
@@ -7185,7 +7195,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_en.dart",
       "render_hash": "stale",
-      "edge_hash": "810c52d6300e669f7a513a9ffcfd65ba0b0f84b74d8a6aff55bb16229acc3510",
+      "edge_hash": "a53162c14e3caf47fe45c13f8696ca28b4a0e77abc34526cbbc06d547e2ba169",
       "enriched": false
     },
     "l10n/app_localizations_en/AppLocalizationsEn": {
@@ -7313,7 +7323,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_fr.dart",
       "render_hash": "stale",
-      "edge_hash": "242b93d484e06394986e59f301ab1d319d0986290a78b21fe260f01a09291c84",
+      "edge_hash": "519180563c6cb5a00384be5fdb2e93a339ebf8fc40d139c0a9cbd12613a95726",
       "enriched": false
     },
     "l10n/app_localizations_fr/AppLocalizationsFr": {
@@ -7459,7 +7469,87 @@
       "render_hash": "stale",
       "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
       "enriched": false
+    },
+    "l10n/app_localizations_en/editorBulkTitle": {
+      "concept_id": "l10n/app_localizations_en/editorBulkTitle",
+      "type": "Function",
+      "resource": "l10n/app_localizations_en.dart",
+      "render_hash": "stale",
+      "edge_hash": "f4a032cd6b75912a244dfdcffedbacbbf3f449c501976c61d52aaf27a6194513",
+      "enriched": false
+    },
+    "l10n/app_localizations_en/editorBulkSave": {
+      "concept_id": "l10n/app_localizations_en/editorBulkSave",
+      "type": "Function",
+      "resource": "l10n/app_localizations_en.dart",
+      "render_hash": "stale",
+      "edge_hash": "f4a032cd6b75912a244dfdcffedbacbbf3f449c501976c61d52aaf27a6194513",
+      "enriched": false
+    },
+    "l10n/app_localizations/editorBulkTitle": {
+      "concept_id": "l10n/app_localizations/editorBulkTitle",
+      "type": "Function",
+      "resource": "l10n/app_localizations.dart",
+      "render_hash": "stale",
+      "edge_hash": "e2ba1adeb8c808921c5a26de137a17e97c1f4456d46493f6bec3e4b49e11f874",
+      "enriched": false
+    },
+    "l10n/app_localizations/editorBulkSave": {
+      "concept_id": "l10n/app_localizations/editorBulkSave",
+      "type": "Function",
+      "resource": "l10n/app_localizations.dart",
+      "render_hash": "stale",
+      "edge_hash": "e2ba1adeb8c808921c5a26de137a17e97c1f4456d46493f6bec3e4b49e11f874",
+      "enriched": false
+    },
+    "l10n/app_localizations_es/editorBulkTitle": {
+      "concept_id": "l10n/app_localizations_es/editorBulkTitle",
+      "type": "Function",
+      "resource": "l10n/app_localizations_es.dart",
+      "render_hash": "stale",
+      "edge_hash": "d897dbebbf2a619454c377a2eebcc9874d160d9497242793e0732d44d6824628",
+      "enriched": false
+    },
+    "l10n/app_localizations_es/editorBulkSave": {
+      "concept_id": "l10n/app_localizations_es/editorBulkSave",
+      "type": "Function",
+      "resource": "l10n/app_localizations_es.dart",
+      "render_hash": "stale",
+      "edge_hash": "d897dbebbf2a619454c377a2eebcc9874d160d9497242793e0732d44d6824628",
+      "enriched": false
+    },
+    "l10n/app_localizations_fr/editorBulkTitle": {
+      "concept_id": "l10n/app_localizations_fr/editorBulkTitle",
+      "type": "Function",
+      "resource": "l10n/app_localizations_fr.dart",
+      "render_hash": "stale",
+      "edge_hash": "4ee97c29eb544879b3274832fc86f134c876400fc940430ef27661f3692780cf",
+      "enriched": false
+    },
+    "l10n/app_localizations_fr/editorBulkSave": {
+      "concept_id": "l10n/app_localizations_fr/editorBulkSave",
+      "type": "Function",
+      "resource": "l10n/app_localizations_fr.dart",
+      "render_hash": "stale",
+      "edge_hash": "4ee97c29eb544879b3274832fc86f134c876400fc940430ef27661f3692780cf",
+      "enriched": false
+    },
+    "main/channelColumnTitle": {
+      "concept_id": "main/channelColumnTitle",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
+    },
+    "main/channelColumnHelp": {
+      "concept_id": "main/channelColumnHelp",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-23T19:09:46Z"
+  "generated_at": "2026-11-23T19:14:55Z"
 }

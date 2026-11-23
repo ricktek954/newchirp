@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:09:45Z"
+timestamp: "2026-11-23T19:14:53Z"
 concept_id: main/ChoiceField
 language: dart
 ---
@@ -27,7 +27,7 @@ class _ChoiceField
 - `build`
 
 ## Source
-Lines 11927–11970 in `main.dart`
+Lines 12000–12043 in `main.dart`
 
 ## Relationships
 

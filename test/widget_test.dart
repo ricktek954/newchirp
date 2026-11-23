@@ -397,6 +397,9 @@ void main() {
         [english.readReplaceTitle, other.readReplaceTitle],
         [english.applyReplaceZoneNote, other.applyReplaceZoneNote],
         [english.writingProgress, other.writingProgress],
+        [english.colName, other.colName],
+        [english.editorSave, other.editorSave],
+        [english.helpDuplex, other.helpDuplex],
       ]) {
         expect(pair[1], isNot(pair[0]), reason: '$code: ${pair[0]}');
       }
@@ -415,11 +418,16 @@ void main() {
     await tester.pumpWidget(testApp());
     await tester.pumpAndSettle();
     expect(find.text('Channel library'), findsWidgets);
+    await openGmrsStarter(tester);
+    expect(find.text('NAME'), findsOneWidget);
 
     appLocale.value = const Locale('es');
     await tester.pumpAndSettle();
     expect(find.text('Biblioteca de canales'), findsOneWidget);
     expect(find.text('Idioma: Español'), findsOneWidget);
+    // Headers translate; channel data and saved column ids do not.
+    expect(find.text('NOMBRE'), findsOneWidget);
+    expect(find.text('NAME'), findsNothing);
 
     appLocale.value = const Locale('fr');
     await tester.pumpAndSettle();

@@ -20,9 +20,21 @@ language complete.
 
 ## What is translated
 
-The sidebar, the read and write confirmations and progress messages, the
-read-only-driver notice, the incompatible-channel prompt, the channel apply
-dialog (CSV/library import) and the radio settings write flow.
+- Batch 1: the sidebar, the read and write confirmations and progress
+  messages, the read-only-driver notice, the incompatible-channel prompt, the
+  channel apply dialog (CSV/library import) and the radio settings write
+  flow.
+- Batch 2: channel table column titles and help, and the channel editor
+  (field labels, tooltips, choice names, bulk-edit title and button).
+
+Channel table column ids stay English (`_channelColumnTitle` translates at
+display time), because saved column order, widths and filters key on them.
+Choice values stay as stored; only their display names are translated. With
+a radio connected, choices show the driver's own values (TSQL, +, -).
+
+Not yet translated: channel validation messages (`RadioChannel.validate`),
+the radio connection page, library toolbar and menus, repeater search,
+frequency reference and About.
 
 ## What stays in English, on purpose
 

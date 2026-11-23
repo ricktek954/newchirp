@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:08:23Z"
+timestamp: "2026-11-23T19:13:15Z"
 concept_id: l10n/app_localizations/lookupAppLocalizations
 language: dart
 ---
@@ -24,7 +24,7 @@ AppLocalizationslookupAppLocalizations(Locale locale)
 ```
 
 ## Source
-Lines 487–487 in `l10n/app_localizations.dart`
+Lines 997–997 in `l10n/app_localizations.dart`
 
 ## Relationships
 

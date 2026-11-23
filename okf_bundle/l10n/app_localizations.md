@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:08:23Z"
+timestamp: "2026-11-23T19:13:15Z"
 concept_id: l10n/app_localizations
 language: dart
 ---
@@ -37,6 +37,8 @@ language: dart
 | related | [applyInsertNote](/l10n/app_localizations/applyInsertNote.md) |
 | related | [writeSettingsBody](/l10n/app_localizations/writeSettingsBody.md) |
 | related | [writeSameSettingsBody](/l10n/app_localizations/writeSameSettingsBody.md) |
+| related | [editorBulkTitle](/l10n/app_localizations/editorBulkTitle.md) |
+| related | [editorBulkSave](/l10n/app_localizations/editorBulkSave.md) |
 | related | [lookupAppLocalizations](/l10n/app_localizations/lookupAppLocalizations.md) |
 | related | [of](/l10n/app_localizations/of.md) |
 | related | [sidebarVersion](/l10n/app_localizations/sidebarVersion.md) |
@@ -53,6 +55,8 @@ language: dart
 | related | [applyInsertNote](/l10n/app_localizations/applyInsertNote.md) |
 | related | [writeSettingsBody](/l10n/app_localizations/writeSettingsBody.md) |
 | related | [writeSameSettingsBody](/l10n/app_localizations/writeSameSettingsBody.md) |
+| related | [editorBulkTitle](/l10n/app_localizations/editorBulkTitle.md) |
+| related | [editorBulkSave](/l10n/app_localizations/editorBulkSave.md) |
 | related | [AppLocalizations](/l10n/app_localizations/AppLocalizations.md) |
 | related | [load](/l10n/app_localizations/load.md) |
 | related | [isSupported](/l10n/app_localizations/isSupported.md) |

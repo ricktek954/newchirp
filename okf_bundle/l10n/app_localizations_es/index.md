@@ -8,6 +8,8 @@
 - [applyTitle](applyTitle.md)
 - [beforeReading](beforeReading.md)
 - [beforeWriting](beforeWriting.md)
+- [editorBulkSave](editorBulkSave.md)
+- [editorBulkTitle](editorBulkTitle.md)
 - [incompatibleMore](incompatibleMore.md)
 - [incompatibleSkipHint](incompatibleSkipHint.md)
 - [incompatibleSummary](incompatibleSummary.md)

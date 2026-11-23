@@ -229,4 +229,278 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get writeSettingsButton => 'Escribir ajustes';
+
+  @override
+  String get colBank => 'BANCO';
+
+  @override
+  String get colName => 'NOMBRE';
+
+  @override
+  String get colRxFrequency => 'FRECUENCIA RX';
+
+  @override
+  String get colToneMode => 'MODO DE TONO';
+
+  @override
+  String get colTxTone => 'TONO TX';
+
+  @override
+  String get colRxTone => 'TONO RX';
+
+  @override
+  String get colDtcs => 'DTCS';
+
+  @override
+  String get colRxDtcs => 'DTCS RX';
+
+  @override
+  String get colDtcsPol => 'POL. DTCS';
+
+  @override
+  String get colDuplex => 'DÚPLEX';
+
+  @override
+  String get colOffset => 'DESPLAZ. / FREC. TX';
+
+  @override
+  String get colCrossMode => 'MODO CRUZADO';
+
+  @override
+  String get colMode => 'MODO';
+
+  @override
+  String get colStep => 'PASO';
+
+  @override
+  String get colPower => 'POTENCIA';
+
+  @override
+  String get colScan => 'ESCANEO';
+
+  @override
+  String get colComment => 'COMENTARIO';
+
+  @override
+  String get helpNumber =>
+      'Número de canal o posición de memoria guardada en la radio.';
+
+  @override
+  String get helpNumberMidland =>
+      'Número de canal Midland. Las filas de repetidor se marcan como RPTR.';
+
+  @override
+  String get helpBank =>
+      'Banco o zona al que pertenece según la radio seleccionada. Un borde verde marca el inicio de cada banco.';
+
+  @override
+  String get helpName => 'Nombre del canal guardado en la memoria de la radio.';
+
+  @override
+  String get helpRxFrequency =>
+      'Frecuencia de recepción: la frecuencia que escucha la radio.';
+
+  @override
+  String get helpToneMode =>
+      'Modo de silenciador de recepción/transmisión. Tone es CTCSS, TSQL es silenciador por tono, DTCS es un código digital y Cross usa tonos distintos.';
+
+  @override
+  String get helpTxTone =>
+      'Tono CTCSS de transmisión en hercios. TSQL usa el mismo tono CTCSS para transmitir y recibir.';
+
+  @override
+  String get helpRxTone =>
+      'Tono CTCSS de recepción en hercios. Primero ponga el modo de tono en TSQL o en un modo Cross adecuado.';
+
+  @override
+  String get helpDtcs => 'Código de silenciador digital DTCS de transmisión.';
+
+  @override
+  String get helpRxDtcs => 'Código de silenciador digital DTCS de recepción.';
+
+  @override
+  String get helpDtcsPol =>
+      'Polaridad DTCS: normal o invertida para transmisión y recepción.';
+
+  @override
+  String get helpDuplex =>
+      'Relación entre transmisión y recepción. Símplex usa una sola frecuencia; los desplazamientos o el modo split usan otra frecuencia de transmisión.';
+
+  @override
+  String get helpOffset =>
+      'Desplazamiento de frecuencia, o la frecuencia de transmisión independiente en modo split.';
+
+  @override
+  String get helpCrossMode =>
+      'Modos de tono/código distintos para recepción y transmisión, usados con Cross.';
+
+  @override
+  String get helpMode =>
+      'Modulación de voz: FM, FM de banda estrecha o AM, según la radio.';
+
+  @override
+  String get helpStep => 'Tamaño del paso de sintonía en kHz.';
+
+  @override
+  String get helpPower => 'Nivel de potencia de transmisión seleccionado.';
+
+  @override
+  String get helpScan => 'Si el canal se incluye en el escaneo.';
+
+  @override
+  String get helpComment =>
+      'Notas libres guardadas con el canal, si la radio lo admite.';
+
+  @override
+  String get helpExtra =>
+      'Ajuste de canal propio de esta radio, informado por el controlador de CHIRP.';
+
+  @override
+  String get dragToReorder => 'Arrastre para reordenar la columna';
+
+  @override
+  String get editorTitle => 'Detalles del canal';
+
+  @override
+  String get editorSave => 'Guardar canal';
+
+  @override
+  String editorBulkTitle(int count) {
+    return 'Editar $count canales';
+  }
+
+  @override
+  String editorBulkSave(int count) {
+    return 'Actualizar $count';
+  }
+
+  @override
+  String get tipAbbreviations => 'Abreviaturas y términos';
+
+  @override
+  String get tipResetRepeater => 'Restablecer repetidor';
+
+  @override
+  String get tipDeleteChannel => 'Eliminar canal';
+
+  @override
+  String get tipCloseEditor => 'Cerrar editor';
+
+  @override
+  String get fieldChannel => 'Canal';
+
+  @override
+  String get fieldLocation => 'Posición';
+
+  @override
+  String get fieldName => 'Nombre';
+
+  @override
+  String get fieldReceiveChannel => 'Canal de recepción';
+
+  @override
+  String get fieldReceiveFrequency => 'Frecuencia de recepción (MHz)';
+
+  @override
+  String get fieldDuplex => 'Dúplex';
+
+  @override
+  String get fieldTxFrequency => 'Frecuencia TX';
+
+  @override
+  String get fieldOffset => 'Desplazamiento (MHz)';
+
+  @override
+  String get fieldToneMode => 'Modo de tono';
+
+  @override
+  String get fieldCrossMode => 'Modo cruzado';
+
+  @override
+  String get fieldCtcssTone => 'Tono CTCSS (Hz)';
+
+  @override
+  String get fieldTransmitTone => 'Tono de transmisión (Hz)';
+
+  @override
+  String get fieldReceiveTone => 'Tono de recepción (Hz)';
+
+  @override
+  String get fieldDtcsCode => 'Código DTCS';
+
+  @override
+  String get fieldTransmitDtcs => 'DTCS de transmisión';
+
+  @override
+  String get fieldReceiveDtcs => 'DTCS de recepción';
+
+  @override
+  String get fieldDtcsPolarity => 'Polaridad DTCS (TX / RX)';
+
+  @override
+  String get fieldMode => 'Modo';
+
+  @override
+  String get fieldStep => 'Paso (kHz)';
+
+  @override
+  String get fieldScan => 'Escaneo';
+
+  @override
+  String get fieldTransmitPower => 'Potencia de transmisión';
+
+  @override
+  String get fieldComment => 'Comentario';
+
+  @override
+  String get radioSpecificSettings => 'Ajustes de canal propios de esta radio';
+
+  @override
+  String get gm32ReceiveOnly =>
+      'Esta frecuencia es solo de recepción. La GM-32 transmite en los canales GMRS.';
+
+  @override
+  String get choiceNone => 'Ninguno';
+
+  @override
+  String get choiceToneSquelch => 'Silenciador por tono';
+
+  @override
+  String get choiceSimplex => 'Símplex';
+
+  @override
+  String get choicePlusShift => 'Desplazamiento +';
+
+  @override
+  String get choiceMinusShift => 'Desplazamiento −';
+
+  @override
+  String get choiceSplit => 'Split';
+
+  @override
+  String get choiceTxOff => 'TX desactivada';
+
+  @override
+  String get choiceDtcsToNone => 'DTCS → Ninguno';
+
+  @override
+  String get choiceNoneToDtcs => 'Ninguno → DTCS';
+
+  @override
+  String get choiceNoneToTone => 'Ninguno → Tone';
+
+  @override
+  String get choiceNormalNormal => 'Normal / Normal';
+
+  @override
+  String get choiceNormalReverse => 'Normal / Invertida';
+
+  @override
+  String get choiceReverseNormal => 'Invertida / Normal';
+
+  @override
+  String get choiceReverseReverse => 'Invertida / Invertida';
+
+  @override
+  String get choiceDigitalVoice => 'Voz digital';
 }

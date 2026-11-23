@@ -12,6 +12,8 @@
 - [applyTitle](applyTitle.md) — No description provided for @applyTitle.
 - [beforeReading](beforeReading.md) — No description provided for @beforeReading.
 - [beforeWriting](beforeWriting.md) — No description provided for @beforeWriting.
+- [editorBulkSave](editorBulkSave.md) — No description provided for @editorBulkSave.
+- [editorBulkTitle](editorBulkTitle.md) — No description provided for @editorBulkTitle.
 - [incompatibleMore](incompatibleMore.md) — No description provided for @incompatibleMore.
 - [incompatibleSkipHint](incompatibleSkipHint.md) — No description provided for @incompatibleSkipHint.
 - [incompatibleSummary](incompatibleSummary.md) — No description provided for @incompatibleSummary.

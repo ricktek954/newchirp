@@ -816,13 +816,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               channel: source,
               radioModel: _model,
               capabilities: _capabilities,
-              title: 'Edit ${channels.length} channels',
+              title: context.l10n.editorBulkTitle(channels.length),
               notice:
                   'Defaults come from channel '
                   '${channelNumberLabel(_model, channels.first.location)}. '
                   'Only fields you change here are applied to all selected '
                   'channels.',
-              saveLabel: 'Update ${channels.length}',
+              saveLabel: context.l10n.editorBulkSave(channels.length),
               showLocation: false,
               canDelete: false,
               canSave: () => _bulkChannelDraftChanged(initial, source),
@@ -10257,6 +10257,70 @@ class _ChannelColumn {
   final String? help;
 }
 
+// Column ids stay English: saved column layouts and filters key on them.
+String _channelColumnTitle(AppLocalizations l10n, _ChannelColumn column) =>
+    switch (column.label) {
+      'BANK' => l10n.colBank,
+      'NAME' => l10n.colName,
+      'RX FREQUENCY' => l10n.colRxFrequency,
+      'TONE MODE' => l10n.colToneMode,
+      'TX TONE' => l10n.colTxTone,
+      'RX TONE' => l10n.colRxTone,
+      'DTCS' => l10n.colDtcs,
+      'RX DTCS' => l10n.colRxDtcs,
+      'DTCS POL' => l10n.colDtcsPol,
+      'DUPLEX' => l10n.colDuplex,
+      'OFFSET / TX FREQ' => l10n.colOffset,
+      'CROSS MODE' => l10n.colCrossMode,
+      'MODE' => l10n.colMode,
+      'STEP' => l10n.colStep,
+      'POWER' => l10n.colPower,
+      'SCAN' => l10n.colScan,
+      'COMMENT' => l10n.colComment,
+      _ => column.label,
+    };
+
+String? _channelColumnHelp(AppLocalizations l10n, _ChannelColumn column) {
+  final help = column.help;
+  if (help == null) return null;
+  return switch (help) {
+    'Memory channel number or slot stored in the radio.' => l10n.helpNumber,
+    'Midland channel number. Repeater rows are labeled RPTR.' =>
+      l10n.helpNumberMidland,
+    'Bank or zone membership reported by the selected radio. A green boundary marks the start of each bank.' =>
+      l10n.helpBank,
+    'Channel name stored in the radio memory.' => l10n.helpName,
+    'Receive frequency: the frequency the radio listens on.' =>
+      l10n.helpRxFrequency,
+    'Receive/transmit squelch mode. Tone is CTCSS, TSQL is tone squelch, DTCS is a digital code, and Cross uses different tones.' =>
+      l10n.helpToneMode,
+    'Transmit CTCSS tone in hertz. TSQL uses the same CTCSS tone for transmit and receive.' =>
+      l10n.helpTxTone,
+    'Receive CTCSS tone in hertz. Set Tone Mode to TSQL or a matching Cross mode first.' =>
+      l10n.helpRxTone,
+    'Transmit DTCS digital squelch code.' => l10n.helpDtcs,
+    'Receive DTCS digital squelch code.' => l10n.helpRxDtcs,
+    'DTCS polarity: normal or inverted for transmit and receive.' =>
+      l10n.helpDtcsPol,
+    'Transmit/receive relationship. Simplex uses one frequency; offsets or split use different transmit frequencies.' =>
+      l10n.helpDuplex,
+    'Frequency offset, or the independent transmit frequency for split.' =>
+      l10n.helpOffset,
+    'Separate receive and transmit tone/code modes used with Cross.' =>
+      l10n.helpCrossMode,
+    'Voice modulation: FM, narrowband FM, or AM depending on the radio.' =>
+      l10n.helpMode,
+    'Tuning step size in kHz.' => l10n.helpStep,
+    'Selected transmit power level.' => l10n.helpPower,
+    'Whether the channel is included in scanning.' => l10n.helpScan,
+    'Free-form notes stored with the channel when supported.' =>
+      l10n.helpComment,
+    'Radio-specific channel setting reported by the CHIRP driver.' =>
+      l10n.helpExtra,
+    _ => help,
+  };
+}
+
 class _ChannelTable extends StatefulWidget {
   const _ChannelTable({
     super.key,
@@ -10724,7 +10788,7 @@ class _ChannelTableState extends State<_ChannelTable> {
       alignment: Alignment.centerLeft,
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Text(
-        column.label,
+        _channelColumnTitle(context.l10n, column),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: const TextStyle(fontSize: 12),
@@ -10743,9 +10807,10 @@ class _ChannelTableState extends State<_ChannelTable> {
             Positioned.fill(
               right: 8,
               child: Tooltip(
-                message: column.help == null
-                    ? 'Drag to reorder column'
-                    : '${column.help}\n\nDrag to reorder column',
+                message: _channelColumnHelp(context.l10n, column) == null
+                    ? context.l10n.dragToReorder
+                    : '${_channelColumnHelp(context.l10n, column)}\n\n'
+                          '${context.l10n.dragToReorder}',
                 waitDuration: const Duration(milliseconds: 350),
                 child: Draggable<String>(
                   data: column.id,
@@ -11136,9 +11201,9 @@ class _ChannelEditor extends StatelessWidget {
     required this.onSave,
     required this.onDelete,
     required this.onClose,
-    this.title = 'Channel details',
+    this.title,
     this.notice,
-    this.saveLabel = 'Save channel',
+    this.saveLabel,
     this.showLocation = true,
     this.canDelete = true,
     this.canSave,
@@ -11148,9 +11213,9 @@ class _ChannelEditor extends StatelessWidget {
   final RadioChannel channel;
   final String? radioModel;
   final RadioCapabilities? capabilities;
-  final String title;
+  final String? title;
   final String? notice;
-  final String saveLabel;
+  final String? saveLabel;
   final bool showLocation;
   final bool enteringFrequency;
   final ValueChanged<bool>? onEnteringFrequency;
@@ -11206,18 +11271,19 @@ class _ChannelEditor extends StatelessWidget {
     Map<String, String> choices(
       List<String>? values,
       Map<String, String> fallback, {
-      String emptyLabel = 'None',
+      String? emptyLabel,
     }) {
       if (values == null || values.isEmpty) return fallback;
       return {
-        for (final value in values) value: value.isEmpty ? emptyLabel : value,
+        for (final value in values)
+          value: value.isEmpty ? emptyLabel ?? context.l10n.choiceNone : value,
       };
     }
 
-    final toneModes = choices(capabilities?.toneModes, const {
-      '': 'None',
+    final toneModes = choices(capabilities?.toneModes, {
+      '': context.l10n.choiceNone,
       'Tone': 'Tone',
-      'TSQL': 'Tone squelch',
+      'TSQL': context.l10n.choiceToneSquelch,
       'DTCS': 'DTCS',
       'Cross': 'Cross',
     });
@@ -11264,7 +11330,7 @@ class _ChannelEditor extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    title,
+                    title ?? context.l10n.editorTitle,
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w700,
@@ -11273,13 +11339,15 @@ class _ChannelEditor extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () => _showAbbreviationGlossary(context),
-                  tooltip: 'Abbreviations & terms',
+                  tooltip: context.l10n.tipAbbreviations,
                   icon: const Icon(Icons.menu_book_outlined),
                 ),
                 if (canDelete)
                   IconButton(
                     onPressed: onDelete,
-                    tooltip: repeaterRow ? 'Reset repeater' : 'Delete channel',
+                    tooltip: repeaterRow
+                        ? context.l10n.tipResetRepeater
+                        : context.l10n.tipDeleteChannel,
                     icon: Icon(
                       repeaterRow ? Icons.restart_alt : Icons.delete_outline,
                       color: repeaterRow ? null : const Color(0xFF9B3D34),
@@ -11287,7 +11355,7 @@ class _ChannelEditor extends StatelessWidget {
                   ),
                 IconButton(
                   onPressed: onClose,
-                  tooltip: 'Close editor',
+                  tooltip: context.l10n.tipCloseEditor,
                   icon: const Icon(Icons.close),
                 ),
               ],
@@ -11316,7 +11384,7 @@ class _ChannelEditor extends StatelessWidget {
                       Expanded(
                         child: showsMidlandChannelNumbers(radioModel)
                             ? _TextField(
-                                label: 'Channel',
+                                label: context.l10n.fieldChannel,
                                 value: channelNumberLabel(
                                   radioModel,
                                   channel.location,
@@ -11325,7 +11393,7 @@ class _ChannelEditor extends StatelessWidget {
                                 onValue: (_) {},
                               )
                             : _NumberField(
-                                label: 'Location',
+                                label: context.l10n.fieldLocation,
                                 value: channel.location.toDouble(),
                                 decimals: 0,
                                 onValue: (v) => onChanged(
@@ -11338,7 +11406,7 @@ class _ChannelEditor extends StatelessWidget {
                     Expanded(
                       flex: showLocation ? 2 : 1,
                       child: _TextField(
-                        label: 'Name',
+                        label: context.l10n.fieldName,
                         value: channel.name,
                         maxLength: capabilities?.nameLength,
                         onValue: (v) => onChanged(() => channel.name = v),
@@ -11350,7 +11418,7 @@ class _ChannelEditor extends StatelessWidget {
                 if (gm32) ...[
                   _ChoiceField(
                     key: ValueKey('gm32-receive-$receiveValue'),
-                    label: 'Receive channel',
+                    label: context.l10n.fieldReceiveChannel,
                     value: receiveValue,
                     choices: gm32ReceiveChoices(
                       channel,
@@ -11369,7 +11437,7 @@ class _ChannelEditor extends StatelessWidget {
                   const SizedBox(height: 12),
                   if (showManualFrequency)
                     _NumberField(
-                      label: 'Receive frequency (MHz)',
+                      label: context.l10n.fieldReceiveFrequency,
                       value: channel.frequency,
                       decimals: 6,
                       onValue: (v) => onChanged(() {
@@ -11382,7 +11450,7 @@ class _ChannelEditor extends StatelessWidget {
                     key: ValueKey(
                       'rx-${channel.location}-${channel.frequency}',
                     ),
-                    label: 'Receive channel',
+                    label: context.l10n.fieldReceiveChannel,
                     value: midlandReceiveChannelValue(
                       channel.location,
                       channel.frequency,
@@ -11400,7 +11468,7 @@ class _ChannelEditor extends StatelessWidget {
                   ),
                 ] else ...[
                   _NumberField(
-                    label: 'Receive frequency (MHz)',
+                    label: context.l10n.fieldReceiveFrequency,
                     value: channel.frequency,
                     decimals: 6,
                     onValue: (v) => onChanged(() => channel.frequency = v),
@@ -11421,7 +11489,7 @@ class _ChannelEditor extends StatelessWidget {
                                 'gm32-duplex-${gm32DuplexChoices(channel).keys.join()}-${channel.duplex}',
                               )
                             : null,
-                        label: 'Duplex',
+                        label: context.l10n.fieldDuplex,
                         value: channel.duplex,
                         enabled: !duplexLocked,
                         choices: midland
@@ -11432,13 +11500,13 @@ class _ChannelEditor extends StatelessWidget {
                               )
                             : gm32
                             ? gm32DuplexChoices(channel)
-                            : choices(capabilities?.duplexes, const {
-                                '': 'Simplex',
-                                '+': '+ shift',
-                                '-': '− shift',
-                                'split': 'Split',
-                                'off': 'TX off',
-                              }, emptyLabel: 'Simplex'),
+                            : choices(capabilities?.duplexes, {
+                                '': context.l10n.choiceSimplex,
+                                '+': context.l10n.choicePlusShift,
+                                '-': context.l10n.choiceMinusShift,
+                                'split': context.l10n.choiceSplit,
+                                'off': context.l10n.choiceTxOff,
+                              }, emptyLabel: context.l10n.choiceSimplex),
                         onValue: (v) => onChanged(() {
                           channel.duplex = v;
                           if (midland) channel.offset = v == '+' ? 5 : 0;
@@ -11450,8 +11518,8 @@ class _ChannelEditor extends StatelessWidget {
                     Expanded(
                       child: _NumberField(
                         label: channel.duplex == 'split'
-                            ? 'TX frequency'
-                            : 'Offset (MHz)',
+                            ? context.l10n.fieldTxFrequency
+                            : context.l10n.fieldOffset,
                         value: channel.offset,
                         decimals: 6,
                         readOnly: midland || gm32,
@@ -11462,14 +11530,14 @@ class _ChannelEditor extends StatelessWidget {
                 ),
                 if (receiveOnly) ...[
                   const SizedBox(height: 8),
-                  const Text(
-                    'This frequency is receive-only. The GM-32 transmits on GMRS channels.',
+                  Text(
+                    context.l10n.gm32ReceiveOnly,
                     style: TextStyle(color: Colors.black54, fontSize: 12),
                   ),
                 ],
                 const SizedBox(height: 12),
                 _ChoiceField(
-                  label: 'Tone mode',
+                  label: context.l10n.fieldToneMode,
                   value: channel.tone,
                   choices: toneModes,
                   onValue: (v) => onChanged(() => channel.tone = v),
@@ -11477,15 +11545,15 @@ class _ChannelEditor extends StatelessWidget {
                 if (channel.tone == 'Cross') ...[
                   const SizedBox(height: 12),
                   _ChoiceField(
-                    label: 'Cross mode',
+                    label: context.l10n.fieldCrossMode,
                     value: channel.crossMode,
-                    choices: choices(capabilities?.crossModes, const {
+                    choices: choices(capabilities?.crossModes, {
                       'Tone->Tone': 'Tone → Tone',
-                      'DTCS->': 'DTCS → None',
-                      '->DTCS': 'None → DTCS',
+                      'DTCS->': context.l10n.choiceDtcsToNone,
+                      '->DTCS': context.l10n.choiceNoneToDtcs,
                       'Tone->DTCS': 'Tone → DTCS',
                       'DTCS->Tone': 'DTCS → Tone',
-                      '->Tone': 'None → Tone',
+                      '->Tone': context.l10n.choiceNoneToTone,
                       'DTCS->DTCS': 'DTCS → DTCS',
                     }),
                     onValue: (v) => onChanged(() => channel.crossMode = v),
@@ -11498,7 +11566,7 @@ class _ChannelEditor extends StatelessWidget {
                       if (sharedCtcss)
                         Expanded(
                           child: _ChoiceField(
-                            label: 'CTCSS tone (Hz)',
+                            label: context.l10n.fieldCtcssTone,
                             value: channel.rxTone.toStringAsFixed(1),
                             choices: toneChoices,
                             onValue: (v) => onChanged(
@@ -11509,7 +11577,7 @@ class _ChannelEditor extends StatelessWidget {
                       if (usesTxTone)
                         Expanded(
                           child: _ChoiceField(
-                            label: 'Transmit tone (Hz)',
+                            label: context.l10n.fieldTransmitTone,
                             value: channel.txTone.toStringAsFixed(1),
                             choices: toneChoices,
                             onValue: (v) => onChanged(
@@ -11521,7 +11589,7 @@ class _ChannelEditor extends StatelessWidget {
                       if (usesRxTone)
                         Expanded(
                           child: _ChoiceField(
-                            label: 'Receive tone (Hz)',
+                            label: context.l10n.fieldReceiveTone,
                             value: channel.rxTone.toStringAsFixed(1),
                             choices: toneChoices,
                             onValue: (v) => onChanged(
@@ -11539,7 +11607,9 @@ class _ChannelEditor extends StatelessWidget {
                       if (usesTxDtcs)
                         Expanded(
                           child: _ChoiceField(
-                            label: simpleDtcs ? 'DTCS code' : 'Transmit DTCS',
+                            label: simpleDtcs
+                                ? context.l10n.fieldDtcsCode
+                                : context.l10n.fieldTransmitDtcs,
                             value: '${channel.dtcs}',
                             choices: dtcsChoices,
                             onValue: (v) =>
@@ -11550,7 +11620,7 @@ class _ChannelEditor extends StatelessWidget {
                       if (usesRxDtcs)
                         Expanded(
                           child: _ChoiceField(
-                            label: 'Receive DTCS',
+                            label: context.l10n.fieldReceiveDtcs,
                             value: '${channel.rxDtcs}',
                             choices: dtcsChoices,
                             onValue: (v) =>
@@ -11561,13 +11631,13 @@ class _ChannelEditor extends StatelessWidget {
                   ),
                   const SizedBox(height: 12),
                   _ChoiceField(
-                    label: 'DTCS polarity (TX / RX)',
+                    label: context.l10n.fieldDtcsPolarity,
                     value: channel.dtcsPolarity,
-                    choices: const {
-                      'NN': 'Normal / Normal',
-                      'NR': 'Normal / Reverse',
-                      'RN': 'Reverse / Normal',
-                      'RR': 'Reverse / Reverse',
+                    choices: {
+                      'NN': context.l10n.choiceNormalNormal,
+                      'NR': context.l10n.choiceNormalReverse,
+                      'RN': context.l10n.choiceReverseNormal,
+                      'RR': context.l10n.choiceReverseReverse,
                     },
                     onValue: (v) => onChanged(() => channel.dtcsPolarity = v),
                   ),
@@ -11578,16 +11648,16 @@ class _ChannelEditor extends StatelessWidget {
                     Expanded(
                       child: _ChoiceField(
                         key: narrowLow ? const ValueKey('gm32-mode-nfm') : null,
-                        label: 'Mode',
+                        label: context.l10n.fieldMode,
                         value: channel.mode,
                         choices: narrowLow
                             ? const {'NFM': 'NFM'}
-                            : choices(capabilities?.modes, const {
+                            : choices(capabilities?.modes, {
                                 'FM': 'FM',
                                 'NFM': 'NFM',
                                 'AM': 'AM',
                                 'DMR': 'DMR (MOTOTRBO)',
-                                'DV': 'Digital voice',
+                                'DV': context.l10n.choiceDigitalVoice,
                               }),
                         onValue: (v) => onChanged(() => channel.mode = v),
                       ),
@@ -11596,7 +11666,7 @@ class _ChannelEditor extends StatelessWidget {
                       const SizedBox(width: 10),
                       Expanded(
                         child: _ChoiceField(
-                          label: 'Step (kHz)',
+                          label: context.l10n.fieldStep,
                           value: '${channel.step}',
                           choices: {
                             for (final step
@@ -11612,7 +11682,7 @@ class _ChannelEditor extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 _ChoiceField(
-                  label: 'Scan',
+                  label: context.l10n.fieldScan,
                   value: channel.skip,
                   choices: scanChoices(capabilities?.skips),
                   onValue: (v) => onChanged(() => channel.skip = v),
@@ -11624,7 +11694,7 @@ class _ChannelEditor extends StatelessWidget {
                   const SizedBox(height: 12),
                   _ChoiceField(
                     key: narrowLow ? const ValueKey('gm32-power-low') : null,
-                    label: 'Transmit power',
+                    label: context.l10n.fieldTransmitPower,
                     value: channel.power,
                     choices: narrowLow
                         ? const {'Low': 'Low'}
@@ -11634,7 +11704,7 @@ class _ChannelEditor extends StatelessWidget {
                 ],
                 const SizedBox(height: 12),
                 _TextField(
-                  label: 'Comment',
+                  label: context.l10n.fieldComment,
                   value: channel.comment,
                   maxLines: 3,
                   onValue: (v) => onChanged(() => channel.comment = v),
@@ -11644,8 +11714,8 @@ class _ChannelEditor extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 18),
                     child: Divider(),
                   ),
-                  const Text(
-                    'Radio-specific channel settings',
+                  Text(
+                    context.l10n.radioSpecificSettings,
                     style: TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 12),
@@ -11683,14 +11753,17 @@ class _ChannelEditor extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
             child: Row(
               children: [
-                TextButton(onPressed: onClose, child: const Text('Cancel')),
+                TextButton(
+                  onPressed: onClose,
+                  child: Text(context.l10n.cancel),
+                ),
                 const Spacer(),
                 FilledButton.icon(
                   onPressed: blocking.isEmpty && (canSave?.call() ?? true)
                       ? onSave
                       : null,
                   icon: const Icon(Icons.check, size: 18),
-                  label: Text(saveLabel),
+                  label: Text(saveLabel ?? context.l10n.editorSave),
                 ),
               ],
             ),

@@ -71,6 +71,8 @@
 - [_changed](changed.md)
 - [_ChannelColumn](ChannelColumn.md)
 - [_channelColumnFilterValue](channelColumnFilterValue.md)
+- [_channelColumnHelp](channelColumnHelp.md)
+- [_channelColumnTitle](channelColumnTitle.md) — Column ids stay English: saved column layouts and filters key on them.
 - [_channelDetail](channelDetail.md)
 - [_channelIssues](channelIssues.md)
 - [_channelRow](channelRow.md)

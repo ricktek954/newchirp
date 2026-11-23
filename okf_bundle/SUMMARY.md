@@ -1,45 +1,45 @@
 ---
-description: 'Top-level OKF summary: 750 concepts across 5 domains and 39 modules'
+description: 'Top-level OKF summary: 760 concepts across 5 domains and 39 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-23T19:09:46Z'
+timestamp: '2026-11-23T19:14:55Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 750 concepts | 5 domains | 39 modules
+> OKF v0.2 bundle | 760 concepts | 5 domains | 39 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 595 |
+| Function | 605 |
 | Class | 106 |
 | Module | 39 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 750 |
+| dart | 760 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [l10n](l10n/index.md) — 71 concepts
+### [l10n](l10n/index.md) — 79 concepts
 
-- [l10n/app_localizations](l10n/app_localizations/index.md) (22 concepts)
-- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (16 concepts)
-- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (16 concepts)
-- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (16 concepts)
+- [l10n/app_localizations](l10n/app_localizations/index.md) (24 concepts)
+- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (18 concepts)
+- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (18 concepts)
+- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (18 concepts)
 - [l10n/l10n](l10n/l10n/index.md) (1 concepts)
 
-### [main.dart](main.dart/index.md) — 244 concepts
+### [main.dart](main.dart/index.md) — 246 concepts
 
-- [main](main/index.md) (244 concepts)
+- [main](main/index.md) (246 concepts)
 
 ### [models](models/index.md) — 112 concepts
 
@@ -98,8 +98,8 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
 | [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 | [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
+| [_channelColumnTitle](/main/channelColumnTitle.md) | Function | `main.dart` | Column ids stay English: saved column layouts and filters ke… |
 | [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
-| [_printPdfFile](/main/printPdfFile.md) | Function | `main.dart` | Open [pdf] in the PDF viewer (Windows, or no printers) or se… |
 
 ## Usage with OpenCode
 

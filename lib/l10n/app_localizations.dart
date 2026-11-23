@@ -465,6 +465,516 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Write settings'**
   String get writeSettingsButton;
+
+  /// No description provided for @colBank.
+  ///
+  /// In en, this message translates to:
+  /// **'BANK'**
+  String get colBank;
+
+  /// No description provided for @colName.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME'**
+  String get colName;
+
+  /// No description provided for @colRxFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'RX FREQUENCY'**
+  String get colRxFrequency;
+
+  /// No description provided for @colToneMode.
+  ///
+  /// In en, this message translates to:
+  /// **'TONE MODE'**
+  String get colToneMode;
+
+  /// No description provided for @colTxTone.
+  ///
+  /// In en, this message translates to:
+  /// **'TX TONE'**
+  String get colTxTone;
+
+  /// No description provided for @colRxTone.
+  ///
+  /// In en, this message translates to:
+  /// **'RX TONE'**
+  String get colRxTone;
+
+  /// No description provided for @colDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'DTCS'**
+  String get colDtcs;
+
+  /// No description provided for @colRxDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'RX DTCS'**
+  String get colRxDtcs;
+
+  /// No description provided for @colDtcsPol.
+  ///
+  /// In en, this message translates to:
+  /// **'DTCS POL'**
+  String get colDtcsPol;
+
+  /// No description provided for @colDuplex.
+  ///
+  /// In en, this message translates to:
+  /// **'DUPLEX'**
+  String get colDuplex;
+
+  /// No description provided for @colOffset.
+  ///
+  /// In en, this message translates to:
+  /// **'OFFSET / TX FREQ'**
+  String get colOffset;
+
+  /// No description provided for @colCrossMode.
+  ///
+  /// In en, this message translates to:
+  /// **'CROSS MODE'**
+  String get colCrossMode;
+
+  /// No description provided for @colMode.
+  ///
+  /// In en, this message translates to:
+  /// **'MODE'**
+  String get colMode;
+
+  /// No description provided for @colStep.
+  ///
+  /// In en, this message translates to:
+  /// **'STEP'**
+  String get colStep;
+
+  /// No description provided for @colPower.
+  ///
+  /// In en, this message translates to:
+  /// **'POWER'**
+  String get colPower;
+
+  /// No description provided for @colScan.
+  ///
+  /// In en, this message translates to:
+  /// **'SCAN'**
+  String get colScan;
+
+  /// No description provided for @colComment.
+  ///
+  /// In en, this message translates to:
+  /// **'COMMENT'**
+  String get colComment;
+
+  /// No description provided for @helpNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Memory channel number or slot stored in the radio.'**
+  String get helpNumber;
+
+  /// No description provided for @helpNumberMidland.
+  ///
+  /// In en, this message translates to:
+  /// **'Midland channel number. Repeater rows are labeled RPTR.'**
+  String get helpNumberMidland;
+
+  /// No description provided for @helpBank.
+  ///
+  /// In en, this message translates to:
+  /// **'Bank or zone membership reported by the selected radio. A green boundary marks the start of each bank.'**
+  String get helpBank;
+
+  /// No description provided for @helpName.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel name stored in the radio memory.'**
+  String get helpName;
+
+  /// No description provided for @helpRxFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive frequency: the frequency the radio listens on.'**
+  String get helpRxFrequency;
+
+  /// No description provided for @helpToneMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive/transmit squelch mode. Tone is CTCSS, TSQL is tone squelch, DTCS is a digital code, and Cross uses different tones.'**
+  String get helpToneMode;
+
+  /// No description provided for @helpTxTone.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmit CTCSS tone in hertz. TSQL uses the same CTCSS tone for transmit and receive.'**
+  String get helpTxTone;
+
+  /// No description provided for @helpRxTone.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive CTCSS tone in hertz. Set Tone Mode to TSQL or a matching Cross mode first.'**
+  String get helpRxTone;
+
+  /// No description provided for @helpDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmit DTCS digital squelch code.'**
+  String get helpDtcs;
+
+  /// No description provided for @helpRxDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive DTCS digital squelch code.'**
+  String get helpRxDtcs;
+
+  /// No description provided for @helpDtcsPol.
+  ///
+  /// In en, this message translates to:
+  /// **'DTCS polarity: normal or inverted for transmit and receive.'**
+  String get helpDtcsPol;
+
+  /// No description provided for @helpDuplex.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmit/receive relationship. Simplex uses one frequency; offsets or split use different transmit frequencies.'**
+  String get helpDuplex;
+
+  /// No description provided for @helpOffset.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency offset, or the independent transmit frequency for split.'**
+  String get helpOffset;
+
+  /// No description provided for @helpCrossMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate receive and transmit tone/code modes used with Cross.'**
+  String get helpCrossMode;
+
+  /// No description provided for @helpMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Voice modulation: FM, narrowband FM, or AM depending on the radio.'**
+  String get helpMode;
+
+  /// No description provided for @helpStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Tuning step size in kHz.'**
+  String get helpStep;
+
+  /// No description provided for @helpPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected transmit power level.'**
+  String get helpPower;
+
+  /// No description provided for @helpScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Whether the channel is included in scanning.'**
+  String get helpScan;
+
+  /// No description provided for @helpComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Free-form notes stored with the channel when supported.'**
+  String get helpComment;
+
+  /// No description provided for @helpExtra.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio-specific channel setting reported by the CHIRP driver.'**
+  String get helpExtra;
+
+  /// No description provided for @dragToReorder.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder column'**
+  String get dragToReorder;
+
+  /// No description provided for @editorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel details'**
+  String get editorTitle;
+
+  /// No description provided for @editorSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save channel'**
+  String get editorSave;
+
+  /// No description provided for @editorBulkTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit {count} channels'**
+  String editorBulkTitle(int count);
+
+  /// No description provided for @editorBulkSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Update {count}'**
+  String editorBulkSave(int count);
+
+  /// No description provided for @tipAbbreviations.
+  ///
+  /// In en, this message translates to:
+  /// **'Abbreviations & terms'**
+  String get tipAbbreviations;
+
+  /// No description provided for @tipResetRepeater.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset repeater'**
+  String get tipResetRepeater;
+
+  /// No description provided for @tipDeleteChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete channel'**
+  String get tipDeleteChannel;
+
+  /// No description provided for @tipCloseEditor.
+  ///
+  /// In en, this message translates to:
+  /// **'Close editor'**
+  String get tipCloseEditor;
+
+  /// No description provided for @fieldChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Channel'**
+  String get fieldChannel;
+
+  /// No description provided for @fieldLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get fieldLocation;
+
+  /// No description provided for @fieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get fieldName;
+
+  /// No description provided for @fieldReceiveChannel.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive channel'**
+  String get fieldReceiveChannel;
+
+  /// No description provided for @fieldReceiveFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive frequency (MHz)'**
+  String get fieldReceiveFrequency;
+
+  /// No description provided for @fieldDuplex.
+  ///
+  /// In en, this message translates to:
+  /// **'Duplex'**
+  String get fieldDuplex;
+
+  /// No description provided for @fieldTxFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'TX frequency'**
+  String get fieldTxFrequency;
+
+  /// No description provided for @fieldOffset.
+  ///
+  /// In en, this message translates to:
+  /// **'Offset (MHz)'**
+  String get fieldOffset;
+
+  /// No description provided for @fieldToneMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Tone mode'**
+  String get fieldToneMode;
+
+  /// No description provided for @fieldCrossMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Cross mode'**
+  String get fieldCrossMode;
+
+  /// No description provided for @fieldCtcssTone.
+  ///
+  /// In en, this message translates to:
+  /// **'CTCSS tone (Hz)'**
+  String get fieldCtcssTone;
+
+  /// No description provided for @fieldTransmitTone.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmit tone (Hz)'**
+  String get fieldTransmitTone;
+
+  /// No description provided for @fieldReceiveTone.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive tone (Hz)'**
+  String get fieldReceiveTone;
+
+  /// No description provided for @fieldDtcsCode.
+  ///
+  /// In en, this message translates to:
+  /// **'DTCS code'**
+  String get fieldDtcsCode;
+
+  /// No description provided for @fieldTransmitDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmit DTCS'**
+  String get fieldTransmitDtcs;
+
+  /// No description provided for @fieldReceiveDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'Receive DTCS'**
+  String get fieldReceiveDtcs;
+
+  /// No description provided for @fieldDtcsPolarity.
+  ///
+  /// In en, this message translates to:
+  /// **'DTCS polarity (TX / RX)'**
+  String get fieldDtcsPolarity;
+
+  /// No description provided for @fieldMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Mode'**
+  String get fieldMode;
+
+  /// No description provided for @fieldStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Step (kHz)'**
+  String get fieldStep;
+
+  /// No description provided for @fieldScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get fieldScan;
+
+  /// No description provided for @fieldTransmitPower.
+  ///
+  /// In en, this message translates to:
+  /// **'Transmit power'**
+  String get fieldTransmitPower;
+
+  /// No description provided for @fieldComment.
+  ///
+  /// In en, this message translates to:
+  /// **'Comment'**
+  String get fieldComment;
+
+  /// No description provided for @radioSpecificSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio-specific channel settings'**
+  String get radioSpecificSettings;
+
+  /// No description provided for @gm32ReceiveOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'This frequency is receive-only. The GM-32 transmits on GMRS channels.'**
+  String get gm32ReceiveOnly;
+
+  /// No description provided for @choiceNone.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get choiceNone;
+
+  /// No description provided for @choiceToneSquelch.
+  ///
+  /// In en, this message translates to:
+  /// **'Tone squelch'**
+  String get choiceToneSquelch;
+
+  /// No description provided for @choiceSimplex.
+  ///
+  /// In en, this message translates to:
+  /// **'Simplex'**
+  String get choiceSimplex;
+
+  /// No description provided for @choicePlusShift.
+  ///
+  /// In en, this message translates to:
+  /// **'+ shift'**
+  String get choicePlusShift;
+
+  /// No description provided for @choiceMinusShift.
+  ///
+  /// In en, this message translates to:
+  /// **'− shift'**
+  String get choiceMinusShift;
+
+  /// No description provided for @choiceSplit.
+  ///
+  /// In en, this message translates to:
+  /// **'Split'**
+  String get choiceSplit;
+
+  /// No description provided for @choiceTxOff.
+  ///
+  /// In en, this message translates to:
+  /// **'TX off'**
+  String get choiceTxOff;
+
+  /// No description provided for @choiceDtcsToNone.
+  ///
+  /// In en, this message translates to:
+  /// **'DTCS → None'**
+  String get choiceDtcsToNone;
+
+  /// No description provided for @choiceNoneToDtcs.
+  ///
+  /// In en, this message translates to:
+  /// **'None → DTCS'**
+  String get choiceNoneToDtcs;
+
+  /// No description provided for @choiceNoneToTone.
+  ///
+  /// In en, this message translates to:
+  /// **'None → Tone'**
+  String get choiceNoneToTone;
+
+  /// No description provided for @choiceNormalNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal / Normal'**
+  String get choiceNormalNormal;
+
+  /// No description provided for @choiceNormalReverse.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal / Reverse'**
+  String get choiceNormalReverse;
+
+  /// No description provided for @choiceReverseNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse / Normal'**
+  String get choiceReverseNormal;
+
+  /// No description provided for @choiceReverseReverse.
+  ///
+  /// In en, this message translates to:
+  /// **'Reverse / Reverse'**
+  String get choiceReverseReverse;
+
+  /// No description provided for @choiceDigitalVoice.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital voice'**
+  String get choiceDigitalVoice;
 }
 
 class _AppLocalizationsDelegate
