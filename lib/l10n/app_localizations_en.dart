@@ -779,4 +779,177 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get openShort => 'Open…';
+
+  @override
+  String get welcomeTitle => 'What would you like to do?';
+
+  @override
+  String get welcomeSubtitle =>
+      'Open an existing CHIRP file or read channels directly from your radio.';
+
+  @override
+  String get welcomeLoadTitle => 'Load configuration';
+
+  @override
+  String get welcomeLoadBody =>
+      'Open a CHIRP CSV or native image file and continue editing.';
+
+  @override
+  String get welcomeLoadHelp =>
+      'Open a CHIRP-compatible CSV or native radio image. Native images retain the selected model and stored image needed for radio transfer.';
+
+  @override
+  String get welcomeReadTitle => 'Read channels from a radio';
+
+  @override
+  String get welcomeReadBody =>
+      'Connect a programming cable and import the radio’s current channels.';
+
+  @override
+  String get welcomeConnect => 'Connect radio';
+
+  @override
+  String get welcomeReadHelp =>
+      'Open the radio connection screen, choose your cable and exact model, then choose Read channels from the radio. Settings are read separately from the Radio settings page.';
+
+  @override
+  String get welcomeRepeatersTitle => 'Find nearby repeaters';
+
+  @override
+  String get welcomeRepeatersBody =>
+      'Search RepeaterBook and add repeater channels.';
+
+  @override
+  String get welcomeRepeatersHelp =>
+      'Search RepeaterBook for amateur and GMRS repeaters, preview matching repeaters, and add selected channels to the current library.';
+
+  @override
+  String get welcomeTip =>
+      'Writing to a radio requires reading a matching image from it first. You can plan or edit a CSV anytime, but radio writes stay locked until a read completes.';
+
+  @override
+  String get updateCheckFailed => 'Couldn’t check for updates';
+
+  @override
+  String get updateCheckFailedHint =>
+      'You can also download the latest version from newchirp.net.';
+
+  @override
+  String get aboutSubtitle =>
+      'Application information and open-source licenses';
+
+  @override
+  String get freqRefTitle => 'Frequency Reference';
+
+  @override
+  String get freqRefUsSubtitle => 'United States Part 95 FRS/GMRS channel plan';
+
+  @override
+  String get settingsSubtitle =>
+      'Radio-wide options exposed by the selected driver';
+
+  @override
+  String aboutTagline(String version) {
+    return 'Desktop radio programmer · Version $version';
+  }
+
+  @override
+  String get contributor => 'Contributor';
+
+  @override
+  String get chirpLayerTitle => 'CHIRP compatibility layer';
+
+  @override
+  String get chirpLayerBody1 =>
+      'NewChirp uses the CHIRP driver tree for radio hardware compatibility. CHIRP copyright is held by its contributors, and CHIRP is free software licensed under the GNU General Public License, version 3 or (at your option) any later version.';
+
+  @override
+  String get chirpLayerBody2 =>
+      'NewChirp also develops its own drivers for radios that do not yet have a CHIRP driver or whose existing CHIRP driver does not work correctly. These NewChirp-maintained drivers are released under GPLv3-or-later and are available for incorporation into upstream CHIRP under the same license, subject to CHIRP maintainer review and acceptance.';
+
+  @override
+  String chirpSource(String url) {
+    return 'CHIRP project and source: $url';
+  }
+
+  @override
+  String newchirpSource(String url) {
+    return 'NewChirp project and source: $url';
+  }
+
+  @override
+  String get licensesTitle => 'Open-source licenses';
+
+  @override
+  String get licensesBody =>
+      'The complete CHIRP GPL text and pySerial, libusb, and Flutter dependency licenses are included with this application.';
+
+  @override
+  String get viewLicenses => 'View complete licenses';
+
+  @override
+  String get notAffiliated =>
+      'NewChirp is an independent interface and is not affiliated with or endorsed by the CHIRP project.';
+
+  @override
+  String get settingsIntro =>
+      'Adjust radio-wide options such as squelch, backlight, VOX, and other controls exposed by the selected CHIRP driver.';
+
+  @override
+  String get settingsNoModel =>
+      'No radio model selected. Open Radio connection first.';
+
+  @override
+  String get settingsNoCable => 'No programming cable selected';
+
+  @override
+  String get settingsReadFromRadio => 'read from radio';
+
+  @override
+  String get settingsSnapshotAvailable => 'saved snapshot available';
+
+  @override
+  String get settingsLoading => 'Loading radio settings...';
+
+  @override
+  String get settingsUnsupportedTitle =>
+      'This radio does not expose global settings';
+
+  @override
+  String get settingsUnsupportedBody =>
+      'The selected CHIRP driver does not provide radio-wide settings. Per-channel settings are still available in the channel editor.';
+
+  @override
+  String get settingsLoadError => 'Could not load radio settings';
+
+  @override
+  String get settingsReadTitle => 'Read radio settings';
+
+  @override
+  String get settingsReadBodyConnected =>
+      'Read the current settings directly from the connected radio. This refreshes the saved snapshot and settings only; the current channel list is not changed.';
+
+  @override
+  String get settingsReadBodyDisconnected =>
+      'Select the programming cable and exact model on Radio connection, then read the radio to load its settings.';
+
+  @override
+  String get openRadioConnection => 'Open radio connection';
+
+  @override
+  String get settingsNotLoadedTitle => 'Settings have not loaded yet';
+
+  @override
+  String get settingsNotLoadedConnected =>
+      'Read the current values from the connected radio, or use the saved radio snapshot for cached values.';
+
+  @override
+  String get settingsNotLoadedSnapshot =>
+      'Use the saved radio snapshot to load cached values.';
+
+  @override
+  String get readSettingsFromRadio => 'Read current settings from radio';
+
+  @override
+  String get useSavedSnapshot => 'Use saved radio snapshot';
 }

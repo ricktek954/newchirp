@@ -4090,20 +4090,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 minimalMode:
                                     _page == 2 || _page == 3 || _page == 4,
                                 minimalTitle: switch (_page) {
-                                  2 => 'About & licenses',
-                                  3 => 'Frequency Reference',
-                                  _ => 'Radio settings',
+                                  2 => context.l10n.navAbout,
+                                  3 => context.l10n.freqRefTitle,
+                                  _ => context.l10n.navRadioSettings,
                                 },
                                 minimalSubtitle: switch (_page) {
-                                  2 =>
-                                    'Application information and open-source licenses',
+                                  2 => context.l10n.aboutSubtitle,
                                   3 =>
                                     _frequencyReferenceIndex < 0
-                                        ? 'United States Part 95 FRS/GMRS channel plan'
+                                        ? context.l10n.freqRefUsSubtitle
                                         : internationalFrequencyReferencePlans[_frequencyReferenceIndex]
                                               .subtitle,
-                                  _ =>
-                                    'Radio-wide options exposed by the selected driver',
+                                  _ => context.l10n.settingsSubtitle,
                                 },
                                 showPrint: _page == 3,
                                 onPrint: _printFrequencyReference,
@@ -4153,14 +4151,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'What would you like to do?',
+                context.l10n.welcomeTitle,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Open an existing CHIRP file or read channels directly from your radio.',
+                context.l10n.welcomeSubtitle,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
@@ -4179,60 +4177,47 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       _WelcomeAction(
                         width: cardWidth,
                         icon: Icons.folder_open_outlined,
-                        title: 'Load configuration',
-                        description:
-                            'Open a CHIRP CSV or native image file and continue editing.',
-                        buttonLabel: 'Open channel file',
+                        title: context.l10n.welcomeLoadTitle,
+                        description: context.l10n.welcomeLoadBody,
+                        buttonLabel: context.l10n.openChannelFile,
                         onPressed: _openLibraryFile,
-                        help:
-                            'Open a CHIRP-compatible CSV or native radio image. Native images '
-                            'retain the selected model and stored image needed for radio transfer.',
+                        help: context.l10n.welcomeLoadHelp,
                       ),
                       _WelcomeAction(
                         width: cardWidth,
                         icon: Icons.settings_input_antenna,
-                        title: 'Read channels from a radio',
-                        description:
-                            'Connect a programming cable and import the radio’s current channels.',
-                        buttonLabel: 'Connect radio',
+                        title: context.l10n.welcomeReadTitle,
+                        description: context.l10n.welcomeReadBody,
+                        buttonLabel: context.l10n.welcomeConnect,
                         onPressed: _openRadioConnection,
-                        help:
-                            'Open the radio connection screen, choose your cable and exact model, '
-                            'then choose Read channels from the radio. Settings are read separately '
-                            'from the Radio settings page.',
+                        help: context.l10n.welcomeReadHelp,
                       ),
                       _WelcomeAction(
                         width: cardWidth,
                         icon: Icons.travel_explore,
-                        title: 'Find nearby repeaters',
-                        description:
-                            'Search RepeaterBook and add repeater channels.',
-                        buttonLabel: 'Find repeaters',
+                        title: context.l10n.welcomeRepeatersTitle,
+                        description: context.l10n.welcomeRepeatersBody,
+                        buttonLabel: context.l10n.navFindRepeaters,
                         onPressed: _findRepeaters,
-                        help:
-                            'Search RepeaterBook for amateur and GMRS repeaters, '
-                            'preview matching repeaters, and add selected channels '
-                            'to the current library.',
+                        help: context.l10n.welcomeRepeatersHelp,
                       ),
                     ],
                   );
                 },
               ),
               const SizedBox(height: 22),
-              const Card(
+              Card(
                 child: Padding(
-                  padding: EdgeInsets.all(18),
+                  padding: const EdgeInsets.all(18),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(Icons.lightbulb_outline, color: Color(0xFF1F7455)),
-                      SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Writing to a radio requires reading a matching image from it first. '
-                          'You can plan or edit a CSV anytime, but radio writes stay locked until a read completes.',
-                        ),
+                      const Icon(
+                        Icons.lightbulb_outline,
+                        color: Color(0xFF1F7455),
                       ),
+                      const SizedBox(width: 12),
+                      Expanded(child: Text(context.l10n.welcomeTip)),
                     ],
                   ),
                 ),
@@ -4260,15 +4245,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Couldn\u2019t check for updates'),
+          title: Text(context.l10n.updateCheckFailed),
           content: Text(
-            '${error.message}\n\n'
-            'You can also download the latest version from newchirp.net.',
+            '${error.message}\n\n${context.l10n.updateCheckFailedHint}',
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(context.l10n.close),
             ),
           ],
         ),
@@ -4573,17 +4557,19 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         Text(
-                          'Desktop radio programmer · Version $_newChirpVersion',
+                          context.l10n.aboutTagline(_newChirpVersion),
                           style: const TextStyle(color: Colors.black54),
                         ),
                         const SizedBox(height: 3),
-                        const _ProgrammerCredit(
-                          roleLine: 'Rick Lopez · Lead Programmer',
+                        _ProgrammerCredit(
+                          roleLine:
+                              'Rick Lopez · ${context.l10n.sidebarLeadProgrammer}',
                           email: 'rick@newchirp.net',
                         ),
                         const SizedBox(height: 8),
-                        const _ProgrammerCredit(
-                          roleLine: 'Randolpho Cafe · Contributor',
+                        _ProgrammerCredit(
+                          roleLine:
+                              'Randolpho Cafe · ${context.l10n.contributor}',
                           email: '[redacted-email]',
                         ),
                         const SizedBox(height: 12),
@@ -4604,8 +4590,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                 : const Icon(Icons.system_update_alt_outlined),
                             label: Text(
                               _checkingForUpdates
-                                  ? 'Checking for updates...'
-                                  : 'Check for updates',
+                                  ? context.l10n.checkingUpdates
+                                  : context.l10n.checkUpdates,
                             ),
                           ),
                         ),
@@ -4615,40 +4601,41 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ],
               ),
               const SizedBox(height: 28),
-              const Card(
+              Card(
                 child: Padding(
-                  padding: EdgeInsets.all(22),
+                  padding: const EdgeInsets.all(22),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'CHIRP compatibility layer',
-                        style: TextStyle(
+                        context.l10n.chirpLayerTitle,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      SizedBox(height: 12),
-                      Text(
-                        'NewChirp uses the CHIRP driver tree for radio hardware compatibility. CHIRP copyright is held by its contributors, and CHIRP is free software licensed under the GNU General Public License, version 3 or (at your option) any later version.',
-                      ),
-                      SizedBox(height: 12),
-                      Text(
-                        'NewChirp also develops its own drivers for radios that do not yet have a CHIRP driver or whose existing CHIRP driver does not work correctly. These NewChirp-maintained drivers are released under GPLv3-or-later and are available for incorporation into upstream CHIRP under the same license, subject to CHIRP maintainer review and acceptance.',
-                      ),
-                      SizedBox(height: 12),
-                      Text(
+                      const SizedBox(height: 12),
+                      Text(context.l10n.chirpLayerBody1),
+                      const SizedBox(height: 12),
+                      Text(context.l10n.chirpLayerBody2),
+                      const SizedBox(height: 12),
+                      // License notice: kept in English, as the authoritative text.
+                      const Text(
                         'CHIRP is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.',
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       SelectableText(
-                        'CHIRP project and source: https://github.com/kk7ds/chirp',
-                        style: TextStyle(color: Color(0xFF1F7455)),
+                        context.l10n.chirpSource(
+                          'https://github.com/kk7ds/chirp',
+                        ),
+                        style: const TextStyle(color: Color(0xFF1F7455)),
                       ),
-                      SizedBox(height: 6),
+                      const SizedBox(height: 6),
                       SelectableText(
-                        'NewChirp project and source: https://github.com/ricktek954/newchirp',
-                        style: TextStyle(color: Color(0xFF1F7455)),
+                        context.l10n.newchirpSource(
+                          'https://github.com/ricktek954/newchirp',
+                        ),
+                        style: const TextStyle(color: Color(0xFF1F7455)),
                       ),
                     ],
                   ),
@@ -4670,17 +4657,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Open-source licenses',
-                              style: TextStyle(
+                            Text(
+                              context.l10n.licensesTitle,
+                              style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
                             const SizedBox(height: 8),
-                            const Text(
-                              'The complete CHIRP GPL text and pySerial, libusb, and Flutter dependency licenses are included with this application.',
-                            ),
+                            Text(context.l10n.licensesBody),
                             const SizedBox(height: 16),
                             OutlinedButton.icon(
                               onPressed: () => showLicensePage(
@@ -4691,7 +4676,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                     'CHIRP is licensed under GPL-3.0-or-later. NewChirp is not affiliated with or endorsed by the CHIRP project.',
                               ),
                               icon: const Icon(Icons.description_outlined),
-                              label: const Text('View complete licenses'),
+                              label: Text(context.l10n.viewLicenses),
                             ),
                           ],
                         ),
@@ -4701,10 +4686,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'NewChirp is an independent interface and is not affiliated with or endorsed by the CHIRP project.',
+              Text(
+                context.l10n.notAffiliated,
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black54, fontSize: 12),
+                style: const TextStyle(color: Colors.black54, fontSize: 12),
               ),
             ],
           ),
@@ -6512,15 +6497,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Text(
-                  'Radio settings',
+                  context.l10n.navRadioSettings,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Adjust radio-wide options such as squelch, backlight, VOX, '
-                  'and other controls exposed by the selected CHIRP driver.',
+                  context.l10n.settingsIntro,
                   style: Theme.of(
                     context,
                   ).textTheme.bodyLarge?.copyWith(color: Colors.black54),
@@ -6542,13 +6526,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             Expanded(
                               child: Text(
                                 model == null
-                                    ? 'No radio model selected. Open Radio connection first.'
+                                    ? context.l10n.settingsNoModel
                                     : '${displayRadioModelName(model)}  |  '
-                                          '${_port ?? 'No programming cable selected'}'
+                                          '${_port ?? context.l10n.settingsNoCable}'
                                           '${_settingsLoadedFromRadio
-                                              ? '  |  read from radio'
+                                              ? '  |  ${context.l10n.settingsReadFromRadio}'
                                               : hasImage
-                                              ? '  |  saved snapshot available'
+                                              ? '  |  ${context.l10n.settingsSnapshotAvailable}'
                                               : ''}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w600,
@@ -6571,18 +6555,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ),
                 const SizedBox(height: 14),
                 if (_settingsLoading)
-                  const Card(
+                  Card(
                     child: Padding(
-                      padding: EdgeInsets.all(24),
+                      padding: const EdgeInsets.all(24),
                       child: Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 22,
                             height: 22,
                             child: CircularProgressIndicator(strokeWidth: 2),
                           ),
-                          SizedBox(width: 14),
-                          Text('Loading radio settings...'),
+                          const SizedBox(width: 14),
+                          Text(context.l10n.settingsLoading),
                         ],
                       ),
                     ),
@@ -6590,55 +6574,43 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 else if (settingsUnsupported)
                   _settingsMessage(
                     icon: Icons.tune,
-                    title: 'This radio does not expose global settings',
-                    body:
-                        'The selected CHIRP driver does not provide radio-wide '
-                        'settings. Per-channel settings are still available in '
-                        'the channel editor.',
+                    title: context.l10n.settingsUnsupportedTitle,
+                    body: context.l10n.settingsUnsupportedBody,
                   )
                 else if (_settingsError != null)
                   _settingsMessage(
                     icon: Icons.error_outline,
-                    title: 'Could not load radio settings',
+                    title: context.l10n.settingsLoadError,
                     body: _settingsError!,
                   )
                 else if (!hasImage)
                   _settingsMessage(
                     icon: Icons.info_outline,
-                    title: 'Read radio settings',
+                    title: context.l10n.settingsReadTitle,
                     body: canReadRadio
-                        ? 'Read the current settings directly from the connected '
-                              'radio. This refreshes the saved snapshot and '
-                              'settings only; the current channel list is not '
-                              'changed.'
-                        : 'Select the programming cable and exact model on Radio '
-                              'connection, then read the radio to load its '
-                              'settings.',
+                        ? context.l10n.settingsReadBodyConnected
+                        : context.l10n.settingsReadBodyDisconnected,
                     action: canReadRadio
                         ? null
                         : FilledButton.icon(
                             onPressed: _openRadioConnection,
                             icon: const Icon(Icons.settings_input_antenna),
-                            label: const Text('Open radio connection'),
+                            label: Text(context.l10n.openRadioConnection),
                           ),
                   )
                 else if (settings == null)
                   _settingsMessage(
                     icon: Icons.tune,
-                    title: 'Settings have not loaded yet',
+                    title: context.l10n.settingsNotLoadedTitle,
                     body: canReadRadio
-                        ? 'Read the current values from the connected radio, or '
-                              'use the saved radio snapshot for cached values.'
-                        : 'Use the saved radio snapshot to load cached values.',
+                        ? context.l10n.settingsNotLoadedConnected
+                        : context.l10n.settingsNotLoadedSnapshot,
                   )
                 else if (!hasSettings)
                   _settingsMessage(
                     icon: Icons.tune,
-                    title: 'This radio does not expose global settings',
-                    body:
-                        'The selected CHIRP driver does not provide radio-wide '
-                        'settings. Per-channel settings are still available in '
-                        'the channel editor.',
+                    title: context.l10n.settingsUnsupportedTitle,
+                    body: context.l10n.settingsUnsupportedBody,
                   )
                 else ...[
                   for (final item in settings.items)
@@ -7464,13 +7436,13 @@ class RadioSettingsSourceActions extends StatelessWidget {
           FilledButton.tonalIcon(
             onPressed: enabled ? onReadRadio : null,
             icon: const Icon(Icons.cable),
-            label: const Text('Read current settings from radio'),
+            label: Text(context.l10n.readSettingsFromRadio),
           ),
         if (hasSavedSnapshot)
           OutlinedButton.icon(
             onPressed: enabled ? onUseSavedSnapshot : null,
             icon: const Icon(Icons.history),
-            label: const Text('Use saved radio snapshot'),
+            label: Text(context.l10n.useSavedSnapshot),
           ),
       ],
     );

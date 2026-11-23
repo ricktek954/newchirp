@@ -1449,6 +1449,294 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Open…'**
   String get openShort;
+
+  /// No description provided for @welcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What would you like to do?'**
+  String get welcomeTitle;
+
+  /// No description provided for @welcomeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open an existing CHIRP file or read channels directly from your radio.'**
+  String get welcomeSubtitle;
+
+  /// No description provided for @welcomeLoadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Load configuration'**
+  String get welcomeLoadTitle;
+
+  /// No description provided for @welcomeLoadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a CHIRP CSV or native image file and continue editing.'**
+  String get welcomeLoadBody;
+
+  /// No description provided for @welcomeLoadHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open a CHIRP-compatible CSV or native radio image. Native images retain the selected model and stored image needed for radio transfer.'**
+  String get welcomeLoadHelp;
+
+  /// No description provided for @welcomeReadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Read channels from a radio'**
+  String get welcomeReadTitle;
+
+  /// No description provided for @welcomeReadBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect a programming cable and import the radio’s current channels.'**
+  String get welcomeReadBody;
+
+  /// No description provided for @welcomeConnect.
+  ///
+  /// In en, this message translates to:
+  /// **'Connect radio'**
+  String get welcomeConnect;
+
+  /// No description provided for @welcomeReadHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the radio connection screen, choose your cable and exact model, then choose Read channels from the radio. Settings are read separately from the Radio settings page.'**
+  String get welcomeReadHelp;
+
+  /// No description provided for @welcomeRepeatersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Find nearby repeaters'**
+  String get welcomeRepeatersTitle;
+
+  /// No description provided for @welcomeRepeatersBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Search RepeaterBook and add repeater channels.'**
+  String get welcomeRepeatersBody;
+
+  /// No description provided for @welcomeRepeatersHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Search RepeaterBook for amateur and GMRS repeaters, preview matching repeaters, and add selected channels to the current library.'**
+  String get welcomeRepeatersHelp;
+
+  /// No description provided for @welcomeTip.
+  ///
+  /// In en, this message translates to:
+  /// **'Writing to a radio requires reading a matching image from it first. You can plan or edit a CSV anytime, but radio writes stay locked until a read completes.'**
+  String get welcomeTip;
+
+  /// No description provided for @updateCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn’t check for updates'**
+  String get updateCheckFailed;
+
+  /// No description provided for @updateCheckFailedHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can also download the latest version from newchirp.net.'**
+  String get updateCheckFailedHint;
+
+  /// No description provided for @aboutSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Application information and open-source licenses'**
+  String get aboutSubtitle;
+
+  /// No description provided for @freqRefTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency Reference'**
+  String get freqRefTitle;
+
+  /// No description provided for @freqRefUsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'United States Part 95 FRS/GMRS channel plan'**
+  String get freqRefUsSubtitle;
+
+  /// No description provided for @settingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Radio-wide options exposed by the selected driver'**
+  String get settingsSubtitle;
+
+  /// No description provided for @aboutTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Desktop radio programmer · Version {version}'**
+  String aboutTagline(String version);
+
+  /// No description provided for @contributor.
+  ///
+  /// In en, this message translates to:
+  /// **'Contributor'**
+  String get contributor;
+
+  /// No description provided for @chirpLayerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'CHIRP compatibility layer'**
+  String get chirpLayerTitle;
+
+  /// No description provided for @chirpLayerBody1.
+  ///
+  /// In en, this message translates to:
+  /// **'NewChirp uses the CHIRP driver tree for radio hardware compatibility. CHIRP copyright is held by its contributors, and CHIRP is free software licensed under the GNU General Public License, version 3 or (at your option) any later version.'**
+  String get chirpLayerBody1;
+
+  /// No description provided for @chirpLayerBody2.
+  ///
+  /// In en, this message translates to:
+  /// **'NewChirp also develops its own drivers for radios that do not yet have a CHIRP driver or whose existing CHIRP driver does not work correctly. These NewChirp-maintained drivers are released under GPLv3-or-later and are available for incorporation into upstream CHIRP under the same license, subject to CHIRP maintainer review and acceptance.'**
+  String get chirpLayerBody2;
+
+  /// No description provided for @chirpSource.
+  ///
+  /// In en, this message translates to:
+  /// **'CHIRP project and source: {url}'**
+  String chirpSource(String url);
+
+  /// No description provided for @newchirpSource.
+  ///
+  /// In en, this message translates to:
+  /// **'NewChirp project and source: {url}'**
+  String newchirpSource(String url);
+
+  /// No description provided for @licensesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Open-source licenses'**
+  String get licensesTitle;
+
+  /// No description provided for @licensesBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The complete CHIRP GPL text and pySerial, libusb, and Flutter dependency licenses are included with this application.'**
+  String get licensesBody;
+
+  /// No description provided for @viewLicenses.
+  ///
+  /// In en, this message translates to:
+  /// **'View complete licenses'**
+  String get viewLicenses;
+
+  /// No description provided for @notAffiliated.
+  ///
+  /// In en, this message translates to:
+  /// **'NewChirp is an independent interface and is not affiliated with or endorsed by the CHIRP project.'**
+  String get notAffiliated;
+
+  /// No description provided for @settingsIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust radio-wide options such as squelch, backlight, VOX, and other controls exposed by the selected CHIRP driver.'**
+  String get settingsIntro;
+
+  /// No description provided for @settingsNoModel.
+  ///
+  /// In en, this message translates to:
+  /// **'No radio model selected. Open Radio connection first.'**
+  String get settingsNoModel;
+
+  /// No description provided for @settingsNoCable.
+  ///
+  /// In en, this message translates to:
+  /// **'No programming cable selected'**
+  String get settingsNoCable;
+
+  /// No description provided for @settingsReadFromRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'read from radio'**
+  String get settingsReadFromRadio;
+
+  /// No description provided for @settingsSnapshotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'saved snapshot available'**
+  String get settingsSnapshotAvailable;
+
+  /// No description provided for @settingsLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading radio settings...'**
+  String get settingsLoading;
+
+  /// No description provided for @settingsUnsupportedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'This radio does not expose global settings'**
+  String get settingsUnsupportedTitle;
+
+  /// No description provided for @settingsUnsupportedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected CHIRP driver does not provide radio-wide settings. Per-channel settings are still available in the channel editor.'**
+  String get settingsUnsupportedBody;
+
+  /// No description provided for @settingsLoadError.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not load radio settings'**
+  String get settingsLoadError;
+
+  /// No description provided for @settingsReadTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Read radio settings'**
+  String get settingsReadTitle;
+
+  /// No description provided for @settingsReadBodyConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the current settings directly from the connected radio. This refreshes the saved snapshot and settings only; the current channel list is not changed.'**
+  String get settingsReadBodyConnected;
+
+  /// No description provided for @settingsReadBodyDisconnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the programming cable and exact model on Radio connection, then read the radio to load its settings.'**
+  String get settingsReadBodyDisconnected;
+
+  /// No description provided for @openRadioConnection.
+  ///
+  /// In en, this message translates to:
+  /// **'Open radio connection'**
+  String get openRadioConnection;
+
+  /// No description provided for @settingsNotLoadedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings have not loaded yet'**
+  String get settingsNotLoadedTitle;
+
+  /// No description provided for @settingsNotLoadedConnected.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the current values from the connected radio, or use the saved radio snapshot for cached values.'**
+  String get settingsNotLoadedConnected;
+
+  /// No description provided for @settingsNotLoadedSnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Use the saved radio snapshot to load cached values.'**
+  String get settingsNotLoadedSnapshot;
+
+  /// No description provided for @readSettingsFromRadio.
+  ///
+  /// In en, this message translates to:
+  /// **'Read current settings from radio'**
+  String get readSettingsFromRadio;
+
+  /// No description provided for @useSavedSnapshot.
+  ///
+  /// In en, this message translates to:
+  /// **'Use saved radio snapshot'**
+  String get useSavedSnapshot;
 }
 
 class _AppLocalizationsDelegate

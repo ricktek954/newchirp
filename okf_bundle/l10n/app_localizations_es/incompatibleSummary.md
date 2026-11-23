@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_es.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:22:04Z"
+timestamp: "2026-11-23T19:32:30Z"
 concept_id: l10n/app_localizations_es/incompatibleSummary
 language: dart
 ---

@@ -31,6 +31,10 @@ language complete.
   Load module, Save, Print and Help menus) and the library toolbar (summary
   cards, search, add/duplicate, empty slots, filters, banks and zones,
   radio sections).
+- Batch 4: the welcome screen, page headers, the About page and the radio
+  settings page (status line, read/snapshot buttons, empty and error
+  states). The GPL "WITHOUT ANY WARRANTY" sentence and the license page
+  legalese stay in English as the authoritative license text.
 
 Channel table column ids stay English (`_channelColumnTitle` translates at
 display time), because saved column order, widths and filters key on them.
@@ -38,9 +42,10 @@ Choice values stay as stored; only their display names are translated. With
 a radio connected, choices show the driver's own values (TSQL, +, -).
 
 Not yet translated: channel validation messages (`RadioChannel.validate`),
-the long "Channel editing" help text, row context menus, the radio settings
-page apart from its write controls, repeater search, frequency reference,
-About, and the bug-report dialog's labels (its report body stays English).
+the long "Channel editing" help text, row context menus, repeater search,
+the frequency reference tables, and the bug-report dialog's labels (its
+report body stays English). Setting names and values on the radio settings
+page come from the CHIRP driver and stay English.
 
 ## Layout
 

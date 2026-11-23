@@ -6,6 +6,7 @@
 
 ## Functions
 
+- [aboutTagline](aboutTagline.md) — No description provided for @aboutTagline.
 - [AppLocalizations](AppLocalizations.md)
 - [applyInsertNote](applyInsertNote.md) — No description provided for @applyInsertNote.
 - [applyReplaceZone](applyReplaceZone.md) — No description provided for @applyReplaceZone.
@@ -13,6 +14,7 @@
 - [beforeReading](beforeReading.md) — No description provided for @beforeReading.
 - [beforeWriting](beforeWriting.md) — No description provided for @beforeWriting.
 - [bulkEditTip](bulkEditTip.md) — No description provided for @bulkEditTip.
+- [chirpSource](chirpSource.md) — No description provided for @chirpSource.
 - [clearSelectedTip](clearSelectedTip.md) — No description provided for @clearSelectedTip.
 - [editorBulkSave](editorBulkSave.md) — No description provided for @editorBulkSave.
 - [editorBulkTitle](editorBulkTitle.md) — No description provided for @editorBulkTitle.
@@ -26,6 +28,7 @@
 - [lookupAppLocalizations](lookupAppLocalizations.md)
 - [moduleActive](moduleActive.md) — No description provided for @moduleActive.
 - [moduleLoaded](moduleLoaded.md) — No description provided for @moduleLoaded.
+- [newchirpSource](newchirpSource.md) — No description provided for @newchirpSource.
 - [of](of.md)
 - [pickerCount](pickerCount.md) — No description provided for @pickerCount.
 - [pickerHint](pickerHint.md) — No description provided for @pickerHint.

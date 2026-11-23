@@ -5,17 +5,19 @@
   "files": {
     "l10n/app_localizations.dart": {
       "path": "l10n/app_localizations.dart",
-      "mtime_ns": 1795461724371782871,
-      "hash": "e0df5e3b42ab48ebf457ac543a0fdfac3755210ddcab95dd9d5f37ed9360653e",
+      "mtime_ns": 1795462350705896915,
+      "hash": "cd1792d1ec312d45b759e45f825a143953409c1f12e1706ceaf6083d5bf6aa43",
       "concept_ids": [
         "l10n/app_localizations/AppLocalizations",
         "l10n/app_localizations/AppLocalizationsDelegate",
+        "l10n/app_localizations/aboutTagline",
         "l10n/app_localizations/applyInsertNote",
         "l10n/app_localizations/applyReplaceZone",
         "l10n/app_localizations/applyTitle",
         "l10n/app_localizations/beforeReading",
         "l10n/app_localizations/beforeWriting",
         "l10n/app_localizations/bulkEditTip",
+        "l10n/app_localizations/chirpSource",
         "l10n/app_localizations/clearSelectedTip",
         "l10n/app_localizations/editSelected",
         "l10n/app_localizations/editorBulkSave",
@@ -29,6 +31,7 @@
         "l10n/app_localizations/lookupAppLocalizations",
         "l10n/app_localizations/moduleActive",
         "l10n/app_localizations/moduleLoaded",
+        "l10n/app_localizations/newchirpSource",
         "l10n/app_localizations/of",
         "l10n/app_localizations/pickerCount",
         "l10n/app_localizations/pickerHint",
@@ -46,16 +49,18 @@
     },
     "l10n/app_localizations_en.dart": {
       "path": "l10n/app_localizations_en.dart",
-      "mtime_ns": 1795461724362509536,
-      "hash": "eb6dff83c7060709cef5256c417ea77630ede03235c14a0cf4eae0069910ea05",
+      "mtime_ns": 1795462350691387352,
+      "hash": "07ea6550fa719c68d43a3005d26e2595ed10b332a1cdcb8f9385d449292c5c9c",
       "concept_ids": [
         "l10n/app_localizations_en/AppLocalizationsEn",
+        "l10n/app_localizations_en/aboutTagline",
         "l10n/app_localizations_en/applyInsertNote",
         "l10n/app_localizations_en/applyReplaceZone",
         "l10n/app_localizations_en/applyTitle",
         "l10n/app_localizations_en/beforeReading",
         "l10n/app_localizations_en/beforeWriting",
         "l10n/app_localizations_en/bulkEditTip",
+        "l10n/app_localizations_en/chirpSource",
         "l10n/app_localizations_en/clearSelectedTip",
         "l10n/app_localizations_en/editSelected",
         "l10n/app_localizations_en/editorBulkSave",
@@ -66,6 +71,7 @@
         "l10n/app_localizations_en/incompatibleSummary",
         "l10n/app_localizations_en/moduleActive",
         "l10n/app_localizations_en/moduleLoaded",
+        "l10n/app_localizations_en/newchirpSource",
         "l10n/app_localizations_en/pickerCount",
         "l10n/app_localizations_en/pickerHint",
         "l10n/app_localizations_en/pickerSemanticsSelected",
@@ -81,16 +87,18 @@
     },
     "l10n/app_localizations_es.dart": {
       "path": "l10n/app_localizations_es.dart",
-      "mtime_ns": 1795461724365251024,
-      "hash": "ce2d3125a064dc4a541f59d5ab7b350c686e664f9c47cc9fa2a9b7a69719ebc4",
+      "mtime_ns": 1795462350697678491,
+      "hash": "0eada44c87db6fc6d6bf1ba09ec33bfd4547d0ac787f781f9119af6b3e5a6e8d",
       "concept_ids": [
         "l10n/app_localizations_es/AppLocalizationsEs",
+        "l10n/app_localizations_es/aboutTagline",
         "l10n/app_localizations_es/applyInsertNote",
         "l10n/app_localizations_es/applyReplaceZone",
         "l10n/app_localizations_es/applyTitle",
         "l10n/app_localizations_es/beforeReading",
         "l10n/app_localizations_es/beforeWriting",
         "l10n/app_localizations_es/bulkEditTip",
+        "l10n/app_localizations_es/chirpSource",
         "l10n/app_localizations_es/clearSelectedTip",
         "l10n/app_localizations_es/editSelected",
         "l10n/app_localizations_es/editorBulkSave",
@@ -101,6 +109,7 @@
         "l10n/app_localizations_es/incompatibleSummary",
         "l10n/app_localizations_es/moduleActive",
         "l10n/app_localizations_es/moduleLoaded",
+        "l10n/app_localizations_es/newchirpSource",
         "l10n/app_localizations_es/pickerCount",
         "l10n/app_localizations_es/pickerHint",
         "l10n/app_localizations_es/pickerSemanticsSelected",
@@ -116,16 +125,18 @@
     },
     "l10n/app_localizations_fr.dart": {
       "path": "l10n/app_localizations_fr.dart",
-      "mtime_ns": 1795461724368703176,
-      "hash": "628f7f43f039a6b6f5251b09595bd6722fbe31da215f5e5cc7bd07911390193e",
+      "mtime_ns": 1795462350701336351,
+      "hash": "7f56dd4c345526ae591a5c79385d253a78f13a477725e5d8bbb024fef58dd85f",
       "concept_ids": [
         "l10n/app_localizations_fr/AppLocalizationsFr",
+        "l10n/app_localizations_fr/aboutTagline",
         "l10n/app_localizations_fr/applyInsertNote",
         "l10n/app_localizations_fr/applyReplaceZone",
         "l10n/app_localizations_fr/applyTitle",
         "l10n/app_localizations_fr/beforeReading",
         "l10n/app_localizations_fr/beforeWriting",
         "l10n/app_localizations_fr/bulkEditTip",
+        "l10n/app_localizations_fr/chirpSource",
         "l10n/app_localizations_fr/clearSelectedTip",
         "l10n/app_localizations_fr/editSelected",
         "l10n/app_localizations_fr/editorBulkSave",
@@ -136,6 +147,7 @@
         "l10n/app_localizations_fr/incompatibleSummary",
         "l10n/app_localizations_fr/moduleActive",
         "l10n/app_localizations_fr/moduleLoaded",
+        "l10n/app_localizations_fr/newchirpSource",
         "l10n/app_localizations_fr/pickerCount",
         "l10n/app_localizations_fr/pickerHint",
         "l10n/app_localizations_fr/pickerSemanticsSelected",
@@ -825,8 +837,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795461869787178468,
-      "hash": "0e09ce34c9bc458248b5ee9a078be1a7b0aaf263287ebff64e988cacabb1b68e",
+      "mtime_ns": 1795462377440827619,
+      "hash": "f50e0bb4abeab8d6781fe5a86b2b489c4e9b8a7813d90a69964444b611b88a91",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -6931,7 +6943,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations.dart",
       "render_hash": "stale",
-      "edge_hash": "8dffb7a6174fa0a2d5bc76215af5888d4ff228c47f0852ece98a97c2ad4c0739",
+      "edge_hash": "8717b58031cd91434a447fc7642d1884a48b08b5bb16247c9a0d150a108ca7f3",
       "enriched": false
     },
     "l10n/app_localizations/AppLocalizations": {
@@ -7107,7 +7119,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_es.dart",
       "render_hash": "stale",
-      "edge_hash": "6921270e496289d8ef0fc9d33a399fb93e2ce7fc45a2b8ffcbcbc60d1acf417e",
+      "edge_hash": "71f013a50b92ca9d3c538473f9d7fe5f4142e1c0890df3407a5a2d354a8c16e0",
       "enriched": false
     },
     "l10n/app_localizations_es/AppLocalizationsEs": {
@@ -7235,7 +7247,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_en.dart",
       "render_hash": "stale",
-      "edge_hash": "915209d441c5f2f0c4f59be34b5b2d48670da6fedac80aed6387ae5575210970",
+      "edge_hash": "cfa780a3cfe62ecc09862416cf3502e1abf2fed123ba11c65be10aec0ff78df0",
       "enriched": false
     },
     "l10n/app_localizations_en/AppLocalizationsEn": {
@@ -7363,7 +7375,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_fr.dart",
       "render_hash": "stale",
-      "edge_hash": "402fc67dfc68e32e3a23758168ac60a774fcd44a41c74758c81f257ee9dfcb85",
+      "edge_hash": "2cd94ad92b8b807145301046f71348b4671d171f59fc46172d7027416765b178",
       "enriched": false
     },
     "l10n/app_localizations_fr/AppLocalizationsFr": {
@@ -7909,7 +7921,103 @@
       "render_hash": "stale",
       "edge_hash": "4ee97c29eb544879b3274832fc86f134c876400fc940430ef27661f3692780cf",
       "enriched": false
+    },
+    "l10n/app_localizations_en/aboutTagline": {
+      "concept_id": "l10n/app_localizations_en/aboutTagline",
+      "type": "Function",
+      "resource": "l10n/app_localizations_en.dart",
+      "render_hash": "stale",
+      "edge_hash": "f4a032cd6b75912a244dfdcffedbacbbf3f449c501976c61d52aaf27a6194513",
+      "enriched": false
+    },
+    "l10n/app_localizations_en/chirpSource": {
+      "concept_id": "l10n/app_localizations_en/chirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations_en.dart",
+      "render_hash": "stale",
+      "edge_hash": "f4a032cd6b75912a244dfdcffedbacbbf3f449c501976c61d52aaf27a6194513",
+      "enriched": false
+    },
+    "l10n/app_localizations_en/newchirpSource": {
+      "concept_id": "l10n/app_localizations_en/newchirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations_en.dart",
+      "render_hash": "stale",
+      "edge_hash": "f4a032cd6b75912a244dfdcffedbacbbf3f449c501976c61d52aaf27a6194513",
+      "enriched": false
+    },
+    "l10n/app_localizations/aboutTagline": {
+      "concept_id": "l10n/app_localizations/aboutTagline",
+      "type": "Function",
+      "resource": "l10n/app_localizations.dart",
+      "render_hash": "stale",
+      "edge_hash": "e2ba1adeb8c808921c5a26de137a17e97c1f4456d46493f6bec3e4b49e11f874",
+      "enriched": false
+    },
+    "l10n/app_localizations/chirpSource": {
+      "concept_id": "l10n/app_localizations/chirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations.dart",
+      "render_hash": "stale",
+      "edge_hash": "e2ba1adeb8c808921c5a26de137a17e97c1f4456d46493f6bec3e4b49e11f874",
+      "enriched": false
+    },
+    "l10n/app_localizations/newchirpSource": {
+      "concept_id": "l10n/app_localizations/newchirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations.dart",
+      "render_hash": "stale",
+      "edge_hash": "e2ba1adeb8c808921c5a26de137a17e97c1f4456d46493f6bec3e4b49e11f874",
+      "enriched": false
+    },
+    "l10n/app_localizations_es/aboutTagline": {
+      "concept_id": "l10n/app_localizations_es/aboutTagline",
+      "type": "Function",
+      "resource": "l10n/app_localizations_es.dart",
+      "render_hash": "stale",
+      "edge_hash": "d897dbebbf2a619454c377a2eebcc9874d160d9497242793e0732d44d6824628",
+      "enriched": false
+    },
+    "l10n/app_localizations_es/chirpSource": {
+      "concept_id": "l10n/app_localizations_es/chirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations_es.dart",
+      "render_hash": "stale",
+      "edge_hash": "d897dbebbf2a619454c377a2eebcc9874d160d9497242793e0732d44d6824628",
+      "enriched": false
+    },
+    "l10n/app_localizations_es/newchirpSource": {
+      "concept_id": "l10n/app_localizations_es/newchirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations_es.dart",
+      "render_hash": "stale",
+      "edge_hash": "d897dbebbf2a619454c377a2eebcc9874d160d9497242793e0732d44d6824628",
+      "enriched": false
+    },
+    "l10n/app_localizations_fr/aboutTagline": {
+      "concept_id": "l10n/app_localizations_fr/aboutTagline",
+      "type": "Function",
+      "resource": "l10n/app_localizations_fr.dart",
+      "render_hash": "stale",
+      "edge_hash": "4ee97c29eb544879b3274832fc86f134c876400fc940430ef27661f3692780cf",
+      "enriched": false
+    },
+    "l10n/app_localizations_fr/chirpSource": {
+      "concept_id": "l10n/app_localizations_fr/chirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations_fr.dart",
+      "render_hash": "stale",
+      "edge_hash": "4ee97c29eb544879b3274832fc86f134c876400fc940430ef27661f3692780cf",
+      "enriched": false
+    },
+    "l10n/app_localizations_fr/newchirpSource": {
+      "concept_id": "l10n/app_localizations_fr/newchirpSource",
+      "type": "Function",
+      "resource": "l10n/app_localizations_fr.dart",
+      "render_hash": "stale",
+      "edge_hash": "4ee97c29eb544879b3274832fc86f134c876400fc940430ef27661f3692780cf",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-23T19:24:31Z"
+  "generated_at": "2026-11-23T19:32:59Z"
 }

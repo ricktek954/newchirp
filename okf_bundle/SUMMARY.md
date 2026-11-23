@@ -1,40 +1,40 @@
 ---
-description: 'Top-level OKF summary: 800 concepts across 5 domains and 39 modules'
+description: 'Top-level OKF summary: 812 concepts across 5 domains and 39 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-23T19:24:31Z'
+timestamp: '2026-11-23T19:32:59Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 800 concepts | 5 domains | 39 modules
+> OKF v0.2 bundle | 812 concepts | 5 domains | 39 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 645 |
+| Function | 657 |
 | Class | 106 |
 | Module | 39 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 800 |
+| dart | 812 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [l10n](l10n/index.md) — 119 concepts
+### [l10n](l10n/index.md) — 131 concepts
 
-- [l10n/app_localizations](l10n/app_localizations/index.md) (34 concepts)
-- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (28 concepts)
-- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (28 concepts)
-- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (28 concepts)
+- [l10n/app_localizations](l10n/app_localizations/index.md) (37 concepts)
+- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (31 concepts)
+- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (31 concepts)
+- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (31 concepts)
 - [l10n/l10n](l10n/l10n/index.md) (1 concepts)
 
 ### [main.dart](main.dart/index.md) — 246 concepts

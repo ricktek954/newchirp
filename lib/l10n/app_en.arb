@@ -427,5 +427,74 @@
   "duplicate": "Duplicate",
   "showEmptySlots": "Show empty slots",
   "clearFilters": "Clear filters",
-  "openShort": "Open…"
+  "openShort": "Open…",
+  "welcomeTitle": "What would you like to do?",
+  "welcomeSubtitle": "Open an existing CHIRP file or read channels directly from your radio.",
+  "welcomeLoadTitle": "Load configuration",
+  "welcomeLoadBody": "Open a CHIRP CSV or native image file and continue editing.",
+  "welcomeLoadHelp": "Open a CHIRP-compatible CSV or native radio image. Native images retain the selected model and stored image needed for radio transfer.",
+  "welcomeReadTitle": "Read channels from a radio",
+  "welcomeReadBody": "Connect a programming cable and import the radio’s current channels.",
+  "welcomeConnect": "Connect radio",
+  "welcomeReadHelp": "Open the radio connection screen, choose your cable and exact model, then choose Read channels from the radio. Settings are read separately from the Radio settings page.",
+  "welcomeRepeatersTitle": "Find nearby repeaters",
+  "welcomeRepeatersBody": "Search RepeaterBook and add repeater channels.",
+  "welcomeRepeatersHelp": "Search RepeaterBook for amateur and GMRS repeaters, preview matching repeaters, and add selected channels to the current library.",
+  "welcomeTip": "Writing to a radio requires reading a matching image from it first. You can plan or edit a CSV anytime, but radio writes stay locked until a read completes.",
+  "updateCheckFailed": "Couldn’t check for updates",
+  "updateCheckFailedHint": "You can also download the latest version from newchirp.net.",
+  "aboutSubtitle": "Application information and open-source licenses",
+  "freqRefTitle": "Frequency Reference",
+  "freqRefUsSubtitle": "United States Part 95 FRS/GMRS channel plan",
+  "settingsSubtitle": "Radio-wide options exposed by the selected driver",
+  "aboutTagline": "Desktop radio programmer · Version {version}",
+  "@aboutTagline": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "contributor": "Contributor",
+  "chirpLayerTitle": "CHIRP compatibility layer",
+  "chirpLayerBody1": "NewChirp uses the CHIRP driver tree for radio hardware compatibility. CHIRP copyright is held by its contributors, and CHIRP is free software licensed under the GNU General Public License, version 3 or (at your option) any later version.",
+  "chirpLayerBody2": "NewChirp also develops its own drivers for radios that do not yet have a CHIRP driver or whose existing CHIRP driver does not work correctly. These NewChirp-maintained drivers are released under GPLv3-or-later and are available for incorporation into upstream CHIRP under the same license, subject to CHIRP maintainer review and acceptance.",
+  "chirpSource": "CHIRP project and source: {url}",
+  "@chirpSource": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "newchirpSource": "NewChirp project and source: {url}",
+  "@newchirpSource": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "licensesTitle": "Open-source licenses",
+  "licensesBody": "The complete CHIRP GPL text and pySerial, libusb, and Flutter dependency licenses are included with this application.",
+  "viewLicenses": "View complete licenses",
+  "notAffiliated": "NewChirp is an independent interface and is not affiliated with or endorsed by the CHIRP project.",
+  "settingsIntro": "Adjust radio-wide options such as squelch, backlight, VOX, and other controls exposed by the selected CHIRP driver.",
+  "settingsNoModel": "No radio model selected. Open Radio connection first.",
+  "settingsNoCable": "No programming cable selected",
+  "settingsReadFromRadio": "read from radio",
+  "settingsSnapshotAvailable": "saved snapshot available",
+  "settingsLoading": "Loading radio settings...",
+  "settingsUnsupportedTitle": "This radio does not expose global settings",
+  "settingsUnsupportedBody": "The selected CHIRP driver does not provide radio-wide settings. Per-channel settings are still available in the channel editor.",
+  "settingsLoadError": "Could not load radio settings",
+  "settingsReadTitle": "Read radio settings",
+  "settingsReadBodyConnected": "Read the current settings directly from the connected radio. This refreshes the saved snapshot and settings only; the current channel list is not changed.",
+  "settingsReadBodyDisconnected": "Select the programming cable and exact model on Radio connection, then read the radio to load its settings.",
+  "openRadioConnection": "Open radio connection",
+  "settingsNotLoadedTitle": "Settings have not loaded yet",
+  "settingsNotLoadedConnected": "Read the current values from the connected radio, or use the saved radio snapshot for cached values.",
+  "settingsNotLoadedSnapshot": "Use the saved radio snapshot to load cached values.",
+  "readSettingsFromRadio": "Read current settings from radio",
+  "useSavedSnapshot": "Use saved radio snapshot"
 }

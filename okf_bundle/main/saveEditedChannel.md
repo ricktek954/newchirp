@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:24:29Z"
+timestamp: "2026-11-23T19:32:57Z"
 concept_id: main/saveEditedChannel
 language: dart
 ---
@@ -27,7 +27,7 @@ void_saveEditedChannel(
 ```
 
 ## Source
-Lines 4855–4859 in `main.dart`
+Lines 4840–4844 in `main.dart`
 
 ## Relationships
 

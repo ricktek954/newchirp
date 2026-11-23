@@ -781,4 +781,179 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get openShort => 'Abrir…';
+
+  @override
+  String get welcomeTitle => '¿Qué quiere hacer?';
+
+  @override
+  String get welcomeSubtitle =>
+      'Abra un archivo de CHIRP existente o lea los canales directamente de su radio.';
+
+  @override
+  String get welcomeLoadTitle => 'Cargar configuración';
+
+  @override
+  String get welcomeLoadBody =>
+      'Abra un CSV de CHIRP o un archivo de imagen nativo y siga editando.';
+
+  @override
+  String get welcomeLoadHelp =>
+      'Abra un CSV compatible con CHIRP o una imagen nativa de radio. Las imágenes nativas conservan el modelo seleccionado y la imagen guardada necesarios para transferir a la radio.';
+
+  @override
+  String get welcomeReadTitle => 'Leer canales de una radio';
+
+  @override
+  String get welcomeReadBody =>
+      'Conecte un cable de programación e importe los canales actuales de la radio.';
+
+  @override
+  String get welcomeConnect => 'Conectar radio';
+
+  @override
+  String get welcomeReadHelp =>
+      'Abra la pantalla de conexión de la radio, elija su cable y el modelo exacto y después elija Leer canales de la radio. Los ajustes se leen aparte, en la página Ajustes de la radio.';
+
+  @override
+  String get welcomeRepeatersTitle => 'Buscar repetidores cercanos';
+
+  @override
+  String get welcomeRepeatersBody =>
+      'Busque en RepeaterBook y añada canales de repetidores.';
+
+  @override
+  String get welcomeRepeatersHelp =>
+      'Busque repetidores de radioaficionado y GMRS en RepeaterBook, vea los que coinciden y añada los canales seleccionados a la biblioteca actual.';
+
+  @override
+  String get welcomeTip =>
+      'Para escribir en una radio, primero hay que leer de ella una imagen del mismo modelo. Puede planificar o editar un CSV en cualquier momento, pero la escritura en la radio sigue bloqueada hasta completar una lectura.';
+
+  @override
+  String get updateCheckFailed => 'No se pudieron buscar actualizaciones';
+
+  @override
+  String get updateCheckFailedHint =>
+      'También puede descargar la última versión desde newchirp.net.';
+
+  @override
+  String get aboutSubtitle =>
+      'Información de la aplicación y licencias de código abierto';
+
+  @override
+  String get freqRefTitle => 'Referencia de frecuencias';
+
+  @override
+  String get freqRefUsSubtitle =>
+      'Plan de canales FRS/GMRS de EE. UU. (Parte 95)';
+
+  @override
+  String get settingsSubtitle =>
+      'Opciones generales de la radio que ofrece el controlador seleccionado';
+
+  @override
+  String aboutTagline(String version) {
+    return 'Programador de radios de escritorio · Versión $version';
+  }
+
+  @override
+  String get contributor => 'Colaborador';
+
+  @override
+  String get chirpLayerTitle => 'Capa de compatibilidad con CHIRP';
+
+  @override
+  String get chirpLayerBody1 =>
+      'NewChirp usa los controladores de CHIRP para la compatibilidad con las radios. Los derechos de autor de CHIRP pertenecen a sus colaboradores, y CHIRP es software libre con licencia GNU General Public License, versión 3 o (a su elección) cualquier versión posterior.';
+
+  @override
+  String get chirpLayerBody2 =>
+      'NewChirp también desarrolla sus propios controladores para radios que aún no tienen controlador en CHIRP o cuyo controlador de CHIRP no funciona bien. Estos controladores mantenidos por NewChirp se publican bajo GPLv3 o posterior y pueden incorporarse a CHIRP con la misma licencia, sujeto a la revisión y aceptación de sus mantenedores.';
+
+  @override
+  String chirpSource(String url) {
+    return 'Proyecto y código fuente de CHIRP: $url';
+  }
+
+  @override
+  String newchirpSource(String url) {
+    return 'Proyecto y código fuente de NewChirp: $url';
+  }
+
+  @override
+  String get licensesTitle => 'Licencias de código abierto';
+
+  @override
+  String get licensesBody =>
+      'El texto completo de la GPL de CHIRP y las licencias de pySerial, libusb y las dependencias de Flutter se incluyen con esta aplicación.';
+
+  @override
+  String get viewLicenses => 'Ver licencias completas';
+
+  @override
+  String get notAffiliated =>
+      'NewChirp es una interfaz independiente y no está afiliada ni respaldada por el proyecto CHIRP.';
+
+  @override
+  String get settingsIntro =>
+      'Ajuste opciones generales de la radio, como el silenciador, la retroiluminación, el VOX y otros controles que ofrece el controlador de CHIRP seleccionado.';
+
+  @override
+  String get settingsNoModel =>
+      'No hay ningún modelo de radio seleccionado. Abra primero Conexión de la radio.';
+
+  @override
+  String get settingsNoCable => 'Ningún cable de programación seleccionado';
+
+  @override
+  String get settingsReadFromRadio => 'leídos de la radio';
+
+  @override
+  String get settingsSnapshotAvailable => 'copia guardada disponible';
+
+  @override
+  String get settingsLoading => 'Cargando los ajustes de la radio...';
+
+  @override
+  String get settingsUnsupportedTitle =>
+      'Esta radio no ofrece ajustes generales';
+
+  @override
+  String get settingsUnsupportedBody =>
+      'El controlador de CHIRP seleccionado no ofrece ajustes generales de la radio. Los ajustes de cada canal siguen disponibles en el editor de canales.';
+
+  @override
+  String get settingsLoadError =>
+      'No se pudieron cargar los ajustes de la radio';
+
+  @override
+  String get settingsReadTitle => 'Leer los ajustes de la radio';
+
+  @override
+  String get settingsReadBodyConnected =>
+      'Lea los ajustes actuales directamente de la radio conectada. Solo se actualizan la copia guardada y los ajustes; la lista de canales actual no cambia.';
+
+  @override
+  String get settingsReadBodyDisconnected =>
+      'Seleccione el cable de programación y el modelo exacto en Conexión de la radio y después lea la radio para cargar sus ajustes.';
+
+  @override
+  String get openRadioConnection => 'Abrir conexión de la radio';
+
+  @override
+  String get settingsNotLoadedTitle => 'Los ajustes aún no se han cargado';
+
+  @override
+  String get settingsNotLoadedConnected =>
+      'Lea los valores actuales de la radio conectada o use la copia guardada de la radio para ver los valores almacenados.';
+
+  @override
+  String get settingsNotLoadedSnapshot =>
+      'Use la copia guardada de la radio para cargar los valores almacenados.';
+
+  @override
+  String get readSettingsFromRadio => 'Leer los ajustes actuales de la radio';
+
+  @override
+  String get useSavedSnapshot => 'Usar la copia guardada de la radio';
 }

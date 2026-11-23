@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:22:04Z"
+timestamp: "2026-11-23T19:32:30Z"
 concept_id: l10n/app_localizations
 language: dart
 ---
@@ -49,6 +49,9 @@ language: dart
 | related | [bulkEditTip](/l10n/app_localizations/bulkEditTip.md) |
 | related | [clearSelectedTip](/l10n/app_localizations/clearSelectedTip.md) |
 | related | [editSelected](/l10n/app_localizations/editSelected.md) |
+| related | [aboutTagline](/l10n/app_localizations/aboutTagline.md) |
+| related | [chirpSource](/l10n/app_localizations/chirpSource.md) |
+| related | [newchirpSource](/l10n/app_localizations/newchirpSource.md) |
 | related | [lookupAppLocalizations](/l10n/app_localizations/lookupAppLocalizations.md) |
 | related | [of](/l10n/app_localizations/of.md) |
 | related | [sidebarVersion](/l10n/app_localizations/sidebarVersion.md) |
@@ -77,6 +80,9 @@ language: dart
 | related | [bulkEditTip](/l10n/app_localizations/bulkEditTip.md) |
 | related | [clearSelectedTip](/l10n/app_localizations/clearSelectedTip.md) |
 | related | [editSelected](/l10n/app_localizations/editSelected.md) |
+| related | [aboutTagline](/l10n/app_localizations/aboutTagline.md) |
+| related | [chirpSource](/l10n/app_localizations/chirpSource.md) |
+| related | [newchirpSource](/l10n/app_localizations/newchirpSource.md) |
 | related | [AppLocalizations](/l10n/app_localizations/AppLocalizations.md) |
 | related | [load](/l10n/app_localizations/load.md) |
 | related | [isSupported](/l10n/app_localizations/isSupported.md) |

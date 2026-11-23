@@ -2,6 +2,7 @@
 
 ## Functions
 
+- [aboutTagline](aboutTagline.md)
 - [AppLocalizationsEs](AppLocalizationsEs.md)
 - [applyInsertNote](applyInsertNote.md)
 - [applyReplaceZone](applyReplaceZone.md)
@@ -9,6 +10,7 @@
 - [beforeReading](beforeReading.md)
 - [beforeWriting](beforeWriting.md)
 - [bulkEditTip](bulkEditTip.md)
+- [chirpSource](chirpSource.md)
 - [clearSelectedTip](clearSelectedTip.md)
 - [editorBulkSave](editorBulkSave.md)
 - [editorBulkTitle](editorBulkTitle.md)
@@ -19,6 +21,7 @@
 - [incompatibleSummary](incompatibleSummary.md)
 - [moduleActive](moduleActive.md)
 - [moduleLoaded](moduleLoaded.md)
+- [newchirpSource](newchirpSource.md)
 - [pickerCount](pickerCount.md)
 - [pickerHint](pickerHint.md)
 - [pickerSemanticsSelected](pickerSemanticsSelected.md)

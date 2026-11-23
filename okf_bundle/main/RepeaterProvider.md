@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:24:29Z"
+timestamp: "2026-11-23T19:32:57Z"
 concept_id: main/RepeaterProvider
 language: dart
 ---
@@ -30,7 +30,7 @@ enum _RepeaterProvider
 - `myGmrs`
 
 ## Source
-Lines 8516–8516 in `main.dart`
+Lines 8488–8488 in `main.dart`
 
 ## Relationships
 
