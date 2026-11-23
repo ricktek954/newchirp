@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 20:26:43",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "web:3856dce",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-23",
+  "summary": "Web Programmer RT22 read-back ignores 0x200-0x3FF; deployed as index-Ef0AsuxS.js (backup /root/newchirp-before-rt22mirror-20261123152609.tgz)"
+}

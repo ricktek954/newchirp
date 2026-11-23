@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 20:26:42",
+  "details": "Web Programmer path on a 2025 RT22 (INBOX:936): read, channel write, and on-air check of all 16 channels. Not yet confirmed: clean read-back after a power cycle, and the desktop app path.",
+  "event_type": "hardware_test",
+  "external_ref": "",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-23",
+  "summary": "reporter hardware test: pass"
+}

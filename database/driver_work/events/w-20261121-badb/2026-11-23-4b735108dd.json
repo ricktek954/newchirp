@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 20:26:43",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179546558175.37181.291230034011671823@newchirp.net>",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-23",
+  "summary": "Confirmed the fix and explained the 0x388 mirror false alarm; next write should verify cleanly; images no longer needed"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 20:26:43",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "web:3856dce",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-23",
+  "summary": "0x388 is the firmware's mirror of the channel records (0x300-0x3FF; Retevis's sample file has P32073 at 0x300 then copies of channels 1-16). CHIRP and the Web Programmer write only to 0x33F; the radio refreshes the mirror after a write."
+}
