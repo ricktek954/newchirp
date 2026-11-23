@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 18:06:24",
+  "details": "Published DEB, RPM, AppImage, and Pacman packages from source commit 6704d9bb. The release preserves the selected radio zone when replacing the channel list and allows repeat radio-settings writes. It also carries the RT22 tone and deployment updates plus the UV-5RM Plus zone, UV-82, KG-689, and settings-button report and reply records. Verification: flutter analyze passed; all 249 Flutter tests passed with the bundled Python 3.13 runtime; 618 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.72 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.72. Package SHA-256 values: 6903bbc19dc4a0d8ebf826287451e96696220a4df08540ba2ee271f4373c6605, 60a74750fb66bacf1b2cc2d02c6ea9c27cca40d5fcea53fcdde216f4f86d5c89, eaf12f5fe21c997b87f29aca8c979e0db680d1cac73402fc4add9117a01b5049, and e34cc9ce28b344bf3f82fb7351631947eff5c1c14a0f7f708737b2f6a5fe7396.",
+  "event_type": "created",
+  "external_ref": "desktop:6704d9bb",
+  "item": "w-20261123-bf5e",
+  "occurred_at": "2026-11-23",
+  "summary": "Linux 1.0.72 published"
+}
