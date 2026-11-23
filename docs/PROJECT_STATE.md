@@ -411,6 +411,28 @@ release requirements.
   reports macOS `1.0.56`; and local/server DMG SHA-256 both match
   `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
   Physical FT-50 upload/read-back validation is still pending.
+- Windows `1.0.70` is live from source commit `4fde327b`. It preserves the
+  active radio zone when replacing the channel list from CSV, the library, or
+  a repeater search, and allows repeated radio-settings writes so several
+  identical radios can be programmed in a row. It also carries the cumulative
+  1.0.69 drivers: the read-only AnyTone AT-D878UVII Plus, the AnyTone D578
+  channel-bank sizing fix, the read-only Quansheng UV-K5 Robzyl RO-KO 512K
+  profile, Baofeng 5RX/UV-S9X3 OEM power encoding, safe unknown Baofeng power
+  values, the watchdog, tone handling, UV-5RM Plus handshake, and Android
+  broken-pipe work. Verification: installer metadata `1.0.70.0` / `1.0.70`;
+  release app `1.0.70+70` with an in-app version string of `1.0.70`; bundled
+  Python `3.13.15`; no `__pycache__`/`.pyc` files; 272 CHIRP driver modules
+  pinned to `21e42e4518c167548af90ed7f9edf75e516c491a`; bridge `list-models`
+  exit 0 with empty stderr and 604 models across 62 vendors; all four
+  frequency-reference PDFs; matching local/server/public SHA-256
+  `f6b86ac40af732f9e27a4fb6b8ce10e706e82d979e48eae5b525426626e89c5a`,
+  size `51,073,329` bytes; public HTTP 200; and live manifest Windows
+  `1.0.70`. `flutter analyze lib test` is clean. The full Flutter suite ran
+  244 passing tests with the five known Windows-only sandbox/Help failures.
+  The complete Python suite ran 618 tests: 613 passed, 2 fixture-dependent
+  tests skipped, and 3 known Windows temporary-file-lock helper errors. The
+  installer remains unsigned. At verification time, macOS was `1.0.70` and
+  Linux was `1.0.72`.
 - Windows `1.0.69` is live from source commit `5db67c3b`. It adds the
   read-only AnyTone AT-D878UVII Plus driver, fixes AnyTone D578 channel-bank
   sizing, adds the read-only Quansheng UV-K5 Robzyl RO-KO 512K profile,
@@ -1310,6 +1332,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
+- Windows `1.0.70` artifact source commit: `4fde327b`
 - Windows `1.0.69` artifact source commit: `5db67c3b`
 - Windows `1.0.68` artifact source commit: `dcc91434`
 - Windows `1.0.67` artifact source commit: `8e03e24b`
@@ -1355,7 +1378,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.70 |
-| Windows | 1.0.69 |
+| Windows | 1.0.70 |
 | Linux | 1.0.72 |
 
 Linux `1.0.72` artifacts:
@@ -1993,7 +2016,28 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.69` artifact:
+Windows `1.0.70` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.70.exe`
+- Version/build: `1.0.70` / `70`
+- SHA-256:
+  `f6b86ac40af732f9e27a4fb6b8ce10e706e82d979e48eae5b525426626e89c5a`
+- Size: `51,073,329` bytes
+- Built from `4fde327b`
+- Installer metadata `1.0.70.0` / `1.0.70`; release app `1.0.70+70`;
+  in-app version string `1.0.70`
+- Bundled Python `3.13.15`, 272 CHIRP driver modules pinned to
+  `21e42e4518c167548af90ed7f9edf75e516c491a`, and a bridge `list-models`
+  run with exit 0, empty stderr, and 604 models across 62 vendors
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains no `__pycache__` or `.pyc` files
+- The bundle's `data/app.so` contains `1.0.70`
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.70`
+- Authenticode: not signed
+
+Windows `1.0.69` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.69.exe`
 - Version/build: `1.0.69` / `69`
@@ -2894,6 +2938,24 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.70` from source commit `4fde327b`. The release
+  preserves the active radio zone when replacing the channel list from CSV,
+  the library, or a repeater search, and allows repeated radio-settings
+  writes so several identical radios can be programmed in a row. It carries
+  the cumulative 1.0.69 drivers, watchdog, tone, UV-5RM Plus handshake, and
+  Android broken-pipe work. Verification: installer metadata `1.0.70.0` /
+  `1.0.70`, release app `1.0.70+70`, in-app version string `1.0.70`,
+  bundled Python `3.13.15`, zero bytecode caches, 272 CHIRP driver modules
+  pinned to `21e42e4518c167548af90ed7f9edf75e516c491a`, bridge `list-models`
+  exit 0 with empty stderr, 604 models across 62 vendors, all four
+  frequency-reference PDFs, matching local/server/public SHA-256
+  `f6b86ac40af732f9e27a4fb6b8ce10e706e82d979e48eae5b525426626e89c5a`,
+  size `51,073,329` bytes, public HTTP 200, and live manifest Windows
+  `1.0.70`. `flutter analyze lib test` is clean. The full Flutter suite ran
+  244 passing tests with the five known Windows-only sandbox/Help failures.
+  The complete Python suite ran 618 tests: 613 passed, 2 fixture-dependent
+  tests skipped, and 3 known Windows temporary-file-lock helper errors. The
+  installer remains unsigned.
 - Published Windows `1.0.69` from source commit `5db67c3b`. The release
   adds the read-only AnyTone AT-D878UVII Plus driver, fixes AnyTone D578
   channel-bank sizing, adds the read-only Quansheng UV-K5 Robzyl RO-KO 512K
