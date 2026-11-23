@@ -484,6 +484,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261122-cd4e release | released | normal:** macOS 1.0.67 published
   Published a universal signed and notarized DMG from source commit 8e03e24b. It includes the cumulative driver, UI, bridge, trace, printing, and write-progress fixes after 1.0.66, including FTM-300DR and F4HWN 7.0, RT22, DM-32UV progress/cancel, UV-K60 Plus, RA87, UV-5R Mini, VX-170, TH-350, and no-step tuning work. Artifact SHA-256: 250f68ae8fe5d2be54e0e73956277e5ba114c5f6dd4258eb35763e41722b7f22. Apple notarization: 653b46a8-5cd8-43e5-bea0-da202daa2832. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.67.
   Source: `release` desktop:8e03e24b
+- **#w-20261123-22e6 release | released | normal:** macOS 1.0.68 published
+  Published a universal signed and notarized DMG from source commit 48f56627. It includes stalled-write watchdog termination with diagnostic details, safe decoding of unreadable DM-32UV and RT-950 tone values, UV-32 handshake retries, Android USB broken-pipe handling, and the cumulative 1.0.67 driver, UI, bridge, trace, printing, and write-progress changes. Artifact SHA-256: 3fd6068c5750adcb1d3a53928e41cddaab789394989d60ee9b76f321e334c47d. Apple notarization: ad8c3d81-e2f2-493a-a972-cb34f65952ea. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.68.
+  Source: `release` desktop:48f56627
 
 ## Quansheng
 

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 10:25:53",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "macOS desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:48f56627",
+  "status": "released",
+  "summary": "Published a universal signed and notarized DMG from source commit 48f56627. It includes stalled-write watchdog termination with diagnostic details, safe decoding of unreadable DM-32UV and RT-950 tone values, UV-32 handshake retries, Android USB broken-pipe handling, and the cumulative 1.0.67 driver, UI, bridge, trace, printing, and write-progress changes. Artifact SHA-256: 3fd6068c5750adcb1d3a53928e41cddaab789394989d60ee9b76f321e334c47d. Apple notarization: ad8c3d81-e2f2-493a-a972-cb34f65952ea. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.68.",
+  "title": "macOS 1.0.68 published",
+  "uid": "w-20261123-22e6"
+}
