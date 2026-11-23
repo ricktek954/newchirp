@@ -28,9 +28,18 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### AT-D578UVIII Plus
 
+- **#w-20261123-60bd bug | fix_committed | high:** Channels 129+ used a 1000-per-bank layout; QDMR/CPS layout is 128 per bank
+  Found while adding the D878UVII. Channel 129 was read/written at 0x00802000 (channel-extension area) instead of 0x00840000. Reads of channels 129+ wrong; a write could overwrite extension records. Desktop and Web Programmer fixed. No hardware reports affected.
+  Source: `analysis` QDMR fb9c96af d868uv_codeplug.cc:1618
 - **#35 maintenance | experimental | normal:** Current driver status
   Transport: D578UV CPS serial, 115200 8N1. Read: 4000 channels + zones. Write: Yes, offline-tested. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:59
+
+### AT-D878UVII Plus
+
+- **#w-20261123-2772 new_driver | experimental | normal:** Support the AT-D878UVII Plus (read-only first)
+  Forum feature request (topic 'Can you configure a connection to Anytone AT-D878UVII PLUS', 2026-11-21). Owner tried the AT-D578UVIII Plus profile: the radio rebooted harmlessly (driver refuses non-D578 model IDs and leaves PC mode). Same AnyTone serial protocol; different memory map. Plan: official D878UVII Plus CPS REA cross-checked with QDMR's D878UV2 codeplug; read-only driver, website catalog entry and Web Programmer profile.
+  Source: `forum` forum:878UVII-feature-request-2026-11-21
 
 ## Baofeng
 

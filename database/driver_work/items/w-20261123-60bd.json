@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 12:02:00",
+  "kind": "bug",
+  "manufacturer": "AnyTone",
+  "model": "AT-D578UVIII Plus",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "maintainer",
+  "source": "analysis",
+  "source_ref": "QDMR fb9c96af d868uv_codeplug.cc:1618",
+  "status": "fix_committed",
+  "summary": "Found while adding the D878UVII. Channel 129 was read/written at 0x00802000 (channel-extension area) instead of 0x00840000. Reads of channels 129+ wrong; a write could overwrite extension records. Desktop and Web Programmer fixed. No hardware reports affected.",
+  "title": "Channels 129+ used a 1000-per-bank layout; QDMR/CPS layout is 128 per bank",
+  "uid": "w-20261123-60bd"
+}

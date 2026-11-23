@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 11:50:19",
+  "details": "Forum feature request (topic 'Can you configure a connection to Anytone AT-D878UVII PLUS', 2026-11-21). Owner tried the AT-D578UVIII Plus profile: the radio rebooted harmlessly (driver refuses non-D578 model IDs and leaves PC mode). Same AnyTone serial protocol; different memory map. Plan: official D878UVII Plus CPS REA cross-checked with QDMR's D878UV2 codeplug; read-only driver, website catalog entry and Web Programmer profile.",
+  "event_type": "created",
+  "external_ref": "forum:878UVII-feature-request-2026-11-21",
+  "item": "w-20261123-2772",
+  "occurred_at": "2026-11-23",
+  "summary": "Support the AT-D878UVII Plus (read-only first)"
+}

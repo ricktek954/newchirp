@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 12:01:59",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:5ba14d88cebef105365e8977529a5817d1d163a9e9eccc5156ccd9575be500e6",
+  "item": "w-20261123-2772",
+  "occurred_at": "2026-11-23",
+  "summary": "Official D878UVII CPS 4.00 contains 'D878UV2' and the 0x024C1500/0x024C1300/0x02540000 constants; QDMR maps D878UV2 to the D878UVII codeplug (D878UV/D868UV layout, 128 channels per bank)"
+}
