@@ -27,6 +27,18 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.70` is live from source commit `76de9782`. It adds a write
+  watchdog that ends stalled radio operations, safely treats malformed or
+  out-of-range tone fields as no tone without rewriting them on DM-32UV,
+  RT-950, and UV-17ProGPS images, and retries the UV-32/UV-5RM Plus handshake.
+  It also carries the latest Android USB and proxy broken-pipe work plus all
+  intervening driver-work records. Verification: analyzer clean; all 249
+  Flutter tests; 605 bundled Python tests with two fixture-dependent skips;
+  Ubuntu 20.04 ABI maximum GLIBC `2.18`; DEB, RPM, and Pacman metadata plus
+  embedded version `1.0.70`; DEB and AppImage Xvfb smoke tests; AppImage host
+  launches under Wayland and X11; changed drivers and bridge code present in
+  package payloads with no GLVND/EGL/GLES loaders; all public downloads
+  returned HTTP 200; and the Linux platform manifest reports `1.0.70`.
 - Linux `1.0.69` is live from source commit `5dd9aa67`. It adds the
   experimental Retevis RA87 driver, fixes Retevis RT22 identification and Web
   Programmer mapping, adds the UV-5R Mini driver with OEM-style block retries,
@@ -1222,6 +1234,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.70` artifact source commit: `76de9782`
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
@@ -1241,7 +1254,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.68 |
 | Windows | 1.0.67 |
-| Linux | 1.0.69 |
+| Linux | 1.0.70 |
+
+Linux `1.0.70` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.70.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.70.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.70.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.70.pkg.tar.zst`
+- DEB: `48,590,972` bytes, SHA-256
+  `2bdae61e142ec25efc3199a71ec3a95e782b9342253c7c7c638186f23d12d66a`
+- RPM: `48,678,830` bytes, SHA-256
+  `d2cd41886d279e467f7aefba08d03cea6f0ea09b4cd2e3b77f33bc80d2c15f7c`
+- AppImage: `48,878,784` bytes, SHA-256
+  `d7faf36fcabe83dd02b1d0df1c4cb0b5077b21f31bd26dc52d2c2ef62ea0fcbe`
+- Pacman: `47,540,072` bytes, SHA-256
+  `895ec1bb9cc2b7706c35c7b918ac5ae1eb8b1372c2390a69f6c39e5ed2e4a68f`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.70`
 
 Linux `1.0.69` artifacts:
 
