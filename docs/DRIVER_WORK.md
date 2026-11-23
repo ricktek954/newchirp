@@ -744,6 +744,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TH-9800
 
+- **#w-20261123-8b91 bug | awaiting_user | normal:** COM3 not available on first read (Windows 11)
+  Brand-new radio, first connection, 1.0.69 on Windows 11: Windows could not open COM3 before any radio traffic. Likely the cable driver (TH-9800 cables are usually Prolific PL2303, refused by current Windows drivers) or a wrong/stale port. User-side; FAQ #cable-driver and #which-port.
+  Source: `email:INBOX:934` <503cda7b-824d-8942-b8fe-f0aa878fc509@newchirp.net>
 - **#65 maintenance | experimental | normal:** Current driver status
   Transport: TYT clone serial, 38400 8N1. Read: Reserved tone values no longer abort the read. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:89

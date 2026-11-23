@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 18:24:42",
+  "details": "Brand-new radio, first connection, 1.0.69 on Windows 11: Windows could not open COM3 before any radio traffic. Likely the cable driver (TH-9800 cables are usually Prolific PL2303, refused by current Windows drivers) or a wrong/stale port. User-side; FAQ #cable-driver and #which-port.",
+  "event_type": "created",
+  "external_ref": "<503cda7b-824d-8942-b8fe-f0aa878fc509@newchirp.net>",
+  "item": "w-20261123-8b91",
+  "occurred_at": "2026-11-23",
+  "summary": "COM3 not available on first read (Windows 11)"
+}

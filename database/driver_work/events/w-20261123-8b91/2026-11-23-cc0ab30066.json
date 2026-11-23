@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 18:25:20",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179545830272.39205.12047774638294412570@newchirp.net>",
+  "item": "w-20261123-8b91",
+  "occurred_at": "2026-11-23",
+  "summary": "Pointed to Device Manager, Prolific PL2303 driver refusal and port choice (FAQ #cable-driver, #which-port); suggested 1.0.71"
+}
