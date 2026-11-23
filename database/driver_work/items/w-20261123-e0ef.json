@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 19:00:31",
+  "kind": "bug",
+  "manufacturer": "Kenwood",
+  "model": "TH-D75",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email:INBOX:935",
+  "source_ref": "<1871f05d-91dc-1a87-21db-010a43348b40@newchirp.net>",
+  "status": "awaiting_user",
+  "summary": "1.0.70 macOS /dev/cu.usbmodem: no reply to ID at 9600-57600. Notes say TH-75A (no PC programming) but the CDC port fits a TH-D75. Likely setup: KISS/TNC or GPS PC Output (Menu 405) on the USB port, another app holding the port, or a charge-only cable. Asked to confirm the model.",
+  "title": "No reply to ID on macOS USB (notes say TH-75A)",
+  "uid": "w-20261123-e0ef"
+}

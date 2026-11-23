@@ -341,6 +341,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TH-D75
 
+- **#w-20261123-e0ef bug | awaiting_user | normal:** No reply to ID on macOS USB (notes say TH-75A)
+  1.0.70 macOS /dev/cu.usbmodem: no reply to ID at 9600-57600. Notes say TH-75A (no PC programming) but the CDC port fits a TH-D75. Likely setup: KISS/TNC or GPS PC Output (Menu 405) on the USB port, another app holding the port, or a charge-only cable. Asked to confirm the model.
+  Source: `email:INBOX:935` <1871f05d-91dc-1a87-21db-010a43348b40@newchirp.net>
 - **#13 maintenance | experimental | normal:** Current driver status
   Transport: Kenwood clone CAT serial, 9600-57,600 baud. Read: Yes, echo-tolerant. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:37
