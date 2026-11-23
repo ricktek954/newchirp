@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T10:18:07Z"
+timestamp: "2026-11-23T10:21:02Z"
 concept_id: main/copyChannelsAtLocations
 language: dart
 ---
