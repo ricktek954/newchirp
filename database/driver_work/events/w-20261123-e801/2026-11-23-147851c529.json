@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 09:58:05",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179542787174.81905.7810918556153034502@newchirp.net>",
+  "item": "w-20261123-e801",
+  "occurred_at": "2026-11-23",
+  "summary": "Explained the stalled write holding the port; restart NewChirp, power-cycle, re-read; next release frees the port"
+}

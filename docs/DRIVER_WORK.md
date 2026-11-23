@@ -96,7 +96,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261122-f1fb bug | fix_committed | normal:** Frequencies off the tuning-step grid (145.16375 MHz) flagged as unprogrammable
   Linux 1.0.68: reading a codeplug built elsewhere flagged 30 channels, e.g. 145.163750 MHz -> nearest 145.165. The radio holds the frequency; the driver sets has_nostep_tuning (10 Hz storage), which CHIRP's validate_memory honors, but the bridge never exported it and the app's pre-write check applied the 2.5-100 kHz steps. Affects every has_nostep_tuning radio (22 driver files).
   Source: `email` INBOX:895 <84f2a5ed-80a4-2f1a-f7de-971c3e81b271@newchirp.net>
-- **#w-20261123-9a28 bug | fix_committed | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
+- **#w-20261123-9a28 bug | awaiting_user | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
   Read completed; decode failed with 30000000.0 not valid for rtone. 0x3E08 is not BCD; stock formats it as '3e08' and parses scientific notation. CPS v1.60 offers CHIRP's 50 tones; OEM data from another radio stores BCD. Image not attached.
   Source: `email` INBOX:907
 - **#24 maintenance | experimental | normal:** Current driver status
