@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 13:31:31",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "Linux desktop",
+  "occurred_at": "2026-11-23",
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:98309c23",
+  "status": "released",
+  "summary": "Published DEB, RPM, AppImage, and Pacman packages from source commit 98309c23. The release adds the read-only AnyTone AT-D878UVII Plus driver, fixes AnyTone D578 channel-bank sizing, adds the read-only Quansheng UV-K5 Robzyl RO-KO 512K profile, encodes Baofeng 5RX/UV-S9X3 channel power as the CPS does, and keeps unknown Baofeng power values readable without rewriting them. Verification: flutter analyze passed; all 249 Flutter tests passed with the bundled Python 3.13 runtime; 618 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.71 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include the new drivers and power handling and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.71. Package SHA-256 values: 61d3e9b6f5f2d9a013bfd7e963ce2ea808d1c104fd2c865bbe58cb58cfaaa6dc, 67059796d48aa5c4daef76db0fa69d178a65564d78ca8dc2893ccca8771c45a4, 9796efebdab17374cb56d99f0e41598a5ac5fd4859caaf7f0e852dd620e7f019, and dcd91cc86a283a4ca415007d033048954755c3bb7d5f3f54c1fd650274f1aeea.",
+  "title": "Linux 1.0.71 published",
+  "uid": "w-20261123-6cd4"
+}

@@ -27,6 +27,18 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.71` is live from source commit `98309c23`. It adds the read-only
+  AnyTone AT-D878UVII Plus driver, fixes AnyTone D578 channel-bank sizing,
+  adds the read-only Quansheng UV-K5 Robzyl RO-KO 512K profile, encodes
+  Baofeng 5RX/UV-S9X3 channel power as the CPS does, and keeps unknown
+  Baofeng power values readable without rewriting them. Verification:
+  analyzer clean; all 249 Flutter tests; 618 bundled Python tests with two
+  fixture-dependent skips; Ubuntu 20.04 ABI maximum GLIBC `2.18`; DEB, RPM,
+  and Pacman metadata plus embedded version `1.0.71`; DEB and AppImage Xvfb
+  smoke tests; AppImage host launches under Wayland and X11; new drivers and
+  power handling present in package payloads with no GLVND/EGL/GLES loaders;
+  all public downloads returned HTTP 200; and the Linux platform manifest
+  reports `1.0.71`.
 - Linux `1.0.70` is live from source commit `76de9782`. It adds a write
   watchdog that ends stalled radio operations, safely treats malformed or
   out-of-range tone fields as no tone without rewriting them on DM-32UV,
@@ -1272,6 +1284,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.71` artifact source commit: `98309c23`
 - Linux `1.0.70` artifact source commit: `76de9782`
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
@@ -1292,7 +1305,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.69 |
 | Windows | 1.0.68 |
-| Linux | 1.0.70 |
+| Linux | 1.0.71 |
+
+Linux `1.0.71` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.71.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.71.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.71.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.71.pkg.tar.zst`
+- DEB: `48,598,690` bytes, SHA-256
+  `61d3e9b6f5f2d9a013bfd7e963ce2ea808d1c104fd2c865bbe58cb58cfaaa6dc`
+- RPM: `48,686,205` bytes, SHA-256
+  `67059796d48aa5c4daef76db0fa69d178a65564d78ca8dc2893ccca8771c45a4`
+- AppImage: `48,886,976` bytes, SHA-256
+  `9796efebdab17374cb56d99f0e41598a5ac5fd4859caaf7f0e852dd620e7f019`
+- Pacman: `47,561,213` bytes, SHA-256
+  `dcd91cc86a283a4ca415007d033048954755c3bb7d5f3f54c1fd650274f1aeea`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.71`
 
 Linux `1.0.70` artifacts:
 
