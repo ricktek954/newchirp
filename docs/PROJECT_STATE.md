@@ -385,6 +385,28 @@ release requirements.
   reports macOS `1.0.56`; and local/server DMG SHA-256 both match
   `b2cae937143218eddcaea1896a7bec7e5a2d87a3429982eccde894326c3e08fe`.
   Physical FT-50 upload/read-back validation is still pending.
+- Windows `1.0.69` is live from source commit `5db67c3b`. It adds the
+  read-only AnyTone AT-D878UVII Plus driver, fixes AnyTone D578 channel-bank
+  sizing, adds the read-only Quansheng UV-K5 Robzyl RO-KO 512K profile,
+  encodes Baofeng 5RX/UV-S9X3 channel power as the CPS does, keeps unknown
+  Baofeng power values readable without rewriting them, and carries the
+  cumulative 1.0.68 watchdog, tone, UV-5RM Plus handshake, and Android
+  broken-pipe work. Verification: installer metadata `1.0.69.0` / `1.0.69`;
+  release app `1.0.69+69` with an in-app version string of `1.0.69`;
+  bundled Python `3.13.15`; a clean runtime with no `__pycache__`/`.pyc`
+  files and no `okf`/`tree_sitter`/`tqdm`/`colorama` contamination; 272
+  CHIRP driver modules pinned to
+  `21e42e4518c167548af90ed7f9edf75e516c491a`; bridge `list-models` exit 0
+  with empty stderr and 604 models across 62 vendors including
+  `AnyTone_AT-D878UVII_Plus`, `Baofeng_5RX`, and
+  `Quansheng_UV-K5_RO-KO_512K`; all four frequency-reference PDFs; matching
+  local/server/public SHA-256; public HTTP 200; and live manifest Windows
+  `1.0.69`. `flutter analyze lib test` is clean. The full Flutter suite ran
+  244 passing tests with the five known Windows-only sandbox/Help failures.
+  The complete Python suite ran 618 tests: 613 passed, 2 fixture-dependent
+  tests skipped, and 3 known Windows temporary-file-lock helper errors. The
+  installer remains unsigned. At verification time, macOS was `1.0.69` and
+  Linux was `1.0.71`.
 - Windows `1.0.68` is live from source commit `dcc91434`. It adds the
   stalled-write diagnostic watchdog, safe reads of unreadable DM-32UV and
   RT-950 tone values, the OEM-style UV-5RM Plus handshake retry, Android
@@ -1262,6 +1284,7 @@ release requirements.
 
 - Local path: `/home/rlopez/newchirp.net`
 - Branch: `main`
+- Windows `1.0.69` artifact source commit: `5db67c3b`
 - Windows `1.0.68` artifact source commit: `dcc91434`
 - Windows `1.0.67` artifact source commit: `8e03e24b`
 - Windows `1.0.66` artifact source commit: `cd9ced58`
@@ -1304,7 +1327,7 @@ Latest public artifacts reported by
 | Platform | Version |
 |---|---:|
 | macOS | 1.0.69 |
-| Windows | 1.0.68 |
+| Windows | 1.0.69 |
 | Linux | 1.0.71 |
 
 Linux `1.0.71` artifacts:
@@ -1902,7 +1925,32 @@ Linux `1.0.55` artifacts:
 - Server checksums matched the local artifacts
 - Linux platform manifest reports `1.0.55`
 
-Windows `1.0.68` artifact:
+Windows `1.0.69` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.69.exe`
+- Version/build: `1.0.69` / `69`
+- SHA-256:
+  `c3be7a1fefda0c883111ec730c1eaf3100771e880791a6d60a4acae2d7a2b774`
+- Size: `51,070,106` bytes
+- Built from `5db67c3b`
+- Installer metadata `1.0.69.0` / `1.0.69`; release app `1.0.69+69`;
+  in-app version string `1.0.69`
+- Bundled Python `3.13.15`, 272 CHIRP driver modules pinned to
+  `21e42e4518c167548af90ed7f9edf75e516c491a`, and a bridge `list-models`
+  run with exit 0, empty stderr, and 604 models across 62 vendors including
+  `AnyTone_AT-D878UVII_Plus`, `Baofeng_5RX`, and
+  `Quansheng_UV-K5_RO-KO_512K`
+- Bundled marine VHF, 27 MHz CB, Australian UHF CB, and GMRS/FRS
+  frequency-reference PDFs
+- The runtime contains no `__pycache__` or `.pyc` files and no
+  `okf`/`tree_sitter`/`tqdm`/`colorama` contamination
+- The bundle's `data/app.so` contains `1.0.69`; the installer was compiled
+  from the clean runtime bundle after purging host bytecode caches
+- Server and public-download checksums matched the local artifact; public
+  HTTP 200 and the live platform manifest reports Windows `1.0.69`
+- Authenticode: not signed
+
+Windows `1.0.68` artifact (historical, superseded):
 
 - URL: `https://newchirp.net/downloads/NewChirp-Installer-1.0.68.exe`
 - Version/build: `1.0.68` / `68`
@@ -2778,6 +2826,25 @@ Linux 1.0.41 sizes:
 
 ## Recently completed
 
+- Published Windows `1.0.69` from source commit `5db67c3b`. The release
+  adds the read-only AnyTone AT-D878UVII Plus driver, fixes AnyTone D578
+  channel-bank sizing, adds the read-only Quansheng UV-K5 Robzyl RO-KO 512K
+  profile, encodes Baofeng 5RX/UV-S9X3 channel power like the CPS, keeps
+  unknown Baofeng power values readable, and carries the cumulative 1.0.68
+  watchdog, tone, UV-5RM Plus handshake, and Android broken-pipe work.
+  Verification: installer metadata `1.0.69.0` / `1.0.69`, release app
+  `1.0.69+69`, in-app version string `1.0.69`, bundled Python `3.13.15`,
+  zero bytecode caches, 272 CHIRP driver modules pinned to
+  `21e42e4518c167548af90ed7f9edf75e516c491a`, bridge `list-models` exit 0
+  with empty stderr, 604 models across 62 vendors, all four
+  frequency-reference PDFs, matching local/server/public SHA-256
+  `c3be7a1fefda0c883111ec730c1eaf3100771e880791a6d60a4acae2d7a2b774`,
+  size `51,070,106` bytes, public HTTP 200, and live manifest Windows
+  `1.0.69`. `flutter analyze lib test` is clean. The full Flutter suite ran
+  244 passing tests with the five known Windows-only sandbox/Help failures.
+  The complete Python suite ran 618 tests: 613 passed, 2 fixture-dependent
+  tests skipped, and 3 known Windows temporary-file-lock helper errors. The
+  installer remains unsigned.
 - Published Windows `1.0.68` from source commit `dcc91434`. The release
   adds the stalled-write diagnostic watchdog, safe reads of unreadable
   DM-32UV and RT-950 tone values, the OEM-style UV-5RM Plus handshake
