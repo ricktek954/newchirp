@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 10:00:29",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "mobile:7cd2044",
+  "item": "w-20261123-a8d2",
+  "occurred_at": "2026-11-23",
+  "summary": "Mobile app: proxy writes drop bytes after the engine closes, closes ignore far-end failure, background write errors handled; regression test fails on old code; 44 mobile tests pass. Needs an Android release."
+}
