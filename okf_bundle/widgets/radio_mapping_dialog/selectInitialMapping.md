@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-11-23T19:42:01Z"
 concept_id: widgets/radio_mapping_dialog/selectInitialMapping
 language: dart
 ---
@@ -24,7 +24,7 @@ void_selectInitialMapping()
 ```
 
 ## Source
-Lines 61–61 in `widgets/radio_mapping_dialog.dart`
+Lines 62–62 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

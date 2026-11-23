@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:32:57Z"
+timestamp: "2026-11-23T19:44:03Z"
 concept_id: main/printPdfFile
 language: dart
 ---
@@ -31,7 +31,7 @@ Open [pdf] in the PDF viewer (Windows, or no printers) or send it to a
 chosen CUPS printer.
 
 ## Source
-Lines 5674–5679 in `main.dart`
+Lines 5616–5621 in `main.dart`
 
 ## Relationships
 

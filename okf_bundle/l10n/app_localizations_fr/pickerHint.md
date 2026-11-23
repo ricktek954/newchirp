@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_fr.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:32:30Z"
+timestamp: "2026-11-23T19:45:37Z"
 concept_id: l10n/app_localizations_fr/pickerHint
 language: dart
 ---

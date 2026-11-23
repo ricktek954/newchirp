@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-11-23T19:42:01Z"
 concept_id: widgets/radio_mapping_dialog/renameMapping
 language: dart
 ---
@@ -24,7 +24,7 @@ void_renameMapping(String value)
 ```
 
 ## Source
-Lines 105–105 in `widgets/radio_mapping_dialog.dart`
+Lines 106–106 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

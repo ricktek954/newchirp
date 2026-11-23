@@ -1,0 +1,43 @@
+---
+okf_version: "0.2"
+type: Function
+title: uiClearedChannelsUseCmdCtrlZ
+description: "No description provided for @uiClearedChannelsUseCmdCtrlZ."
+resource: l10n/app_localizations.dart
+tags:
+  - "lang:dart"
+  - "type:Function"
+  - "module:l10n"
+  - "domain:app_localizations.dart"
+  - "git:branch:main"
+  - "git:repo:newchirp"
+timestamp: "2026-11-23T19:44:03Z"
+concept_id: l10n/app_localizations/uiClearedChannelsUseCmdCtrlZ
+language: dart
+---
+
+# uiClearedChannelsUseCmdCtrlZ
+
+No description provided for @uiClearedChannelsUseCmdCtrlZ.
+
+## Signature
+
+```dart
+StringuiClearedChannelsUseCmdCtrlZ(Object p0)
+```
+
+## Docstring
+
+No description provided for @uiClearedChannelsUseCmdCtrlZ.
+
+In en, this message translates to:
+**'Cleared {p0} channels. Use Cmd/Ctrl+Z to undo.'**
+
+## Source
+Lines 2013–2013 in `l10n/app_localizations.dart`
+
+## Relationships
+
+| Type | Target |
+|------|--------|
+| related | [app_localizations](/l10n/app_localizations.md) |

@@ -110,6 +110,7 @@
 - [_findRepeaters](findRepeaters.md)
 - [_formatBytes](formatBytes.md)
 - [_friendlyActionError](friendlyActionError.md)
+- [_glossaryTerms](glossaryTerms.md)
 - [_handleFocusChange](handleFocusChange.md)
 - [_headerCell](headerCell.md)
 - [_importChirpImage](importChirpImage.md)

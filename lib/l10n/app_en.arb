@@ -496,5 +496,983 @@
   "settingsNotLoadedConnected": "Read the current values from the connected radio, or use the saved radio snapshot for cached values.",
   "settingsNotLoadedSnapshot": "Use the saved radio snapshot to load cached values.",
   "readSettingsFromRadio": "Read current settings from radio",
-  "useSavedSnapshot": "Use saved radio snapshot"
+  "useSavedSnapshot": "Use saved radio snapshot",
+  "uiDefaultsComeFromChannelOnlyFields": "Defaults come from channel {p0}. Only fields you change here are applied to all selected channels.",
+  "@uiDefaultsComeFromChannelOnlyFields": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiSelectedChannelsNeedChanges": "Selected channels need changes",
+  "uiBackToEditor": "Back to editor",
+  "uiUpdatedSelectedChannels": "Updated {p0} selected channels",
+  "@uiUpdatedSelectedChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiConnectTheAndChooseItsPort": "Connect the {p0} and choose its port to read {p1}.",
+  "@uiConnectTheAndChooseItsPort": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiBankAndZoneChangesAreReady": "Bank and zone changes are ready. Write them with the channels.",
+  "uiCouldnTCompleteThatAction": "Couldn’t complete that action",
+  "uiMoreInfo": "More Info:",
+  "uiSubmitBugReport": "Submit Bug Report",
+  "uiLoadExperimentalChirpModule": "Load experimental CHIRP module?",
+  "uiChirpModulesAreExecutablePythonCode": "CHIRP modules are executable Python code. NewChirp runs the module in a sandbox that blocks your home folder, other drives, and the network. The module can still use the selected radio and the files for this session.",
+  "uiOnlyLoadAModuleFromA": "Only load a module from a source you trust. A bad module can still damage the radio. The module remains active only for this NewChirp session. Select the radio model and read the radio again before writing.",
+  "uiLoadModule": "Load module",
+  "uiMovedToChannel": "Moved {p0} to channel {p1}",
+  "@uiMovedToChannel": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiThisRadioHasFixedChannelLocations": "This radio has fixed channel locations, so empty slots cannot be inserted.",
+  "uiInsertedAnEmptySlotBeforeChannel": "Inserted an empty slot before channel {p0}",
+  "@uiInsertedAnEmptySlotBeforeChannel": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiThisRadioHasFixedChannelLocations2": "This radio has fixed channel locations, so empty slots cannot be removed.",
+  "uiRemovedEmptySlot": "Removed empty slot {p0}",
+  "@uiRemovedEmptySlot": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiRepeaterbookResults": "RepeaterBook results",
+  "uiMacosBlockedTheSaveLocation": "macOS blocked the save location",
+  "uiNewchirpDoesNotHavePermissionTo": "NewChirp does not have permission to write to this folder. Choose another folder now, or allow NewChirp access in System Settings > Privacy & Security > Files and Folders.",
+  "uiChooseAnotherFolder": "Choose another folder",
+  "uiStart": "Start {p0}?",
+  "@uiStart": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiKeepCurrentList": "Keep current list",
+  "uiDiscardAndContinue": "Discard and continue",
+  "uiMarineVhfTemplate": "{p0} Marine VHF template",
+  "@uiMarineVhfTemplate": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiStockChannels": "stock channels",
+  "uiDiscardUnsavedSettingsChanges": "Discard unsaved settings changes?",
+  "uiUsingTheSavedRadioSnapshotWill": "Using the saved radio snapshot will replace the unsaved settings changes shown on this page.",
+  "uiUseSavedSnapshot": "Use saved snapshot",
+  "uiReplaceUnsavedSettingsChanges": "Replace unsaved settings changes?",
+  "uiReadingSettingsFromTheRadioWill": "Reading settings from the radio will replace the unsaved settings changes shown on this page. The current channel list is not changed.",
+  "uiReadSettings": "Read settings",
+  "uiWhereShouldTheNewChannelGo": "Where should the new channel go?",
+  "uiAtTheEnd": "At the end",
+  "uiBeforeTheSelectedChannel": "Before the selected channel",
+  "uiAfterTheSelectedChannel": "After the selected channel",
+  "uiChannelAdded": "Channel {p0} added",
+  "@uiChannelAdded": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiThisRadioHasFixedChannelLocations3": "This radio has fixed channel locations. New channels can only be added after the final channel.",
+  "uiOverwriteChannels": "Overwrite {p0} channels?",
+  "@uiOverwriteChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiTheDestinationRangeThroughContainsChannels": "The destination range {p0} through {p1} contains {p2} channels with data. Pasting will replace them.",
+  "@uiTheDestinationRangeThroughContainsChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      },
+      "p2": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiOverwriteChannels2": "Overwrite channels",
+  "uiOverwriteChannel": "Overwrite channel {p0}?",
+  "@uiOverwriteChannel": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiOverwriteChannel2": "Overwrite channel",
+  "uiClearedChannelsUseCmdCtrlZ": "Cleared {p0} channels. Use Cmd/Ctrl+Z to undo.",
+  "@uiClearedChannelsUseCmdCtrlZ": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiStaysInTheRadioTheName": "{p0} stays in the radio. The name is cleared and the plain repeater frequency is back.",
+  "@uiStaysInTheRadioTheName": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiAndMoreChannels": "…and {p0} more channels.",
+  "@uiAndMoreChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiNamesAreConvertedOnlyWhenThe": "Names are converted only when the selected radio requires it. Custom frequencies may require a channel outside the radio's locked memory range.",
+  "uiStopWritingTheRadio": "Stop writing the radio?",
+  "uiTheRadioIsBeingWrittenNow": "The radio is being written now. Some radios take a minute or two, and the elapsed time shows the write is still running. Stopping partway can leave part of the radio's memory half-written; it may then need a power cycle and a fresh write.",
+  "uiStopAnyway": "Stop anyway",
+  "uiKeepWriting": "Keep writing",
+  "uiLater": "Later",
+  "uiOpenDownloadPage": "Open download page",
+  "uiDownloadAndInstall": "Download and install",
+  "uiFinishTheCurrentOperationFirst": "Finish the current operation first",
+  "uiWaitForTheCurrentRadioOr": "Wait for the current radio or file operation to finish before installing NewChirp.",
+  "uiSaveRadioSettingsFirst": "Save radio settings first",
+  "uiYouHaveRadioSettingChangesThat": "You have radio setting changes that have not been written. Save those settings before installing the update.",
+  "uiSaveYourChannelChangesFirst": "Save your channel changes first",
+  "uiNewchirpWillCloseToInstallThe": "NewChirp will close to install the update. Save the current channel list before continuing.",
+  "uiSaveAndContinue": "Save and continue",
+  "uiInstallingNewchirpUpdate": "Installing NewChirp update",
+  "uiNewchirpWillCloseAndReopenAutomatically": "NewChirp will close and reopen automatically when the installer is ready.",
+  "uiUpdateCouldNotBeInstalled": "Update could not be installed",
+  "uiYouCanStillDownloadTheLatest": "{p0}\n\nYou can still download the latest version from newchirp.net.",
+  "@uiYouCanStillDownloadTheLatest": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiCouldnTOpenYourBrowser": "Couldn’t open your browser",
+  "uiNewchirpCouldNotStartTheBrowser": "NewChirp could not start the browser on this computer. Open this address yourself to get the update:\n\n{p0}",
+  "@uiNewchirpCouldNotStartTheBrowser": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiCopyLink": "Copy link",
+  "uiYouReUpToDate": "You’re up to date",
+  "uiNewchirpIsTheLatestVersion": "NewChirp {p0} is the latest version.",
+  "@uiNewchirpIsTheLatestVersion": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiChannelIsOccupied": "Channel {p0} is occupied",
+  "@uiChannelIsOccupied": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiReplace": "Replace",
+  "uiSwap": "Swap",
+  "uiMoveAndShift": "Move and shift",
+  "uiChannelsScanEnabledNeedAttention": "{p0} channels · {p1} scan enabled · {p2} need attention",
+  "@uiChannelsScanEnabledNeedAttention": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      },
+      "p2": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiReview": "Review",
+  "uiNoRadioImageLoadedEditingAnd": "No radio image loaded. Editing and CSV export work, but writing stays locked until you read from this radio.",
+  "uiChannelEditing": "Channel editing",
+  "uiAddLetsYouPlaceANew": "Add lets you place a new channel at the end, before the selected channel, or after it. Before and after shift following channels through the radio memory slots. Duplicate copies the selected row, and Delete removes it after confirmation. Double-click any row to edit all of its fields. Right-click a row to copy, cut, paste, duplicate, or clear it. Copying or cutting a multi-row selection copies the active channels as a block; paste places the block at the target row. Click selects one row. Shift-click selects a range, and Cmd/Ctrl-click toggles individual rows. Use Bulk edit to change channel properties on all selected rows; only fields you modify are applied. Right-click and choose Properties for the same editor. Drag the handle at the left edge of a row to move it; intervening channels shift through the same memory slots. Show empty slots keeps the radio memory layout visible; double-click an empty slot to create a channel there. Clear removes the selected row or all selected rows from the radio on the next write. Use Cmd/Ctrl+Z to undo and Cmd/Ctrl+Shift+Z to redo.",
+  "uiChooseAPrinter": "Choose a printer",
+  "uiPrintJobSent": "Print job sent",
+  "uiWasSentTo": "{p0} was sent to {p1}.",
+  "@uiWasSentTo": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiUsFrsGmrs": "US FRS / GMRS",
+  "uiReferenceSourceVerifyCurrentNationalRules": "Reference source: {p0} Verify current national rules before transmitting.",
+  "@uiReferenceSourceVerifyCurrentNationalRules": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiGmrsFrsFrequencyReference": "GMRS & FRS Frequency Reference",
+  "uiUnitedStatesPartChannelPlanColor": "United States Part 95 channel plan - color-coded by frequency band and power class.",
+  "uiRepeaterPairsGmrsOnly": "Repeater Pairs (GMRS Only)",
+  "uiKeyNotes": "Key notes",
+  "uiAllFrequenciesAreInMhzGmrs": "All frequencies are in MHz. GMRS requires an FCC license; FRS is license-by-rule.\nGMRS mobile/base radios may not transmit on channels 8-14. Repeater inputs are GMRS-only.\nCommunity convention: Channel 20 (462.675 MHz) with CTCSS 141.3 Hz is often used as a travel/assistance channel.\nReference only - verify against current FCC Part 95 rules and your radio manual.",
+  "uiNoEditableOptionsInThisGroup": "No editable options in this group.",
+  "uiKeepTheRadioPoweredOnAnd": "Keep the radio powered on and the cable connected.",
+  "uiThisSettingTypeIsNotSupported": "{p0}: this setting type is not supported yet.",
+  "@uiThisSettingTypeIsNotSupported": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiSearchAbbreviationsOrDefinitions": "Search abbreviations or definitions",
+  "uiNoMatchingTerms": "No matching terms.",
+  "uiThanksTheDiagnosticLogAndError": "Thanks. The diagnostic log and error details were sent to the NewChirp developer.",
+  "uiYourEmail": "Your email",
+  "uiUsedOnlyIfTheDeveloperNeeds": "Used only if the developer needs more information.",
+  "uiWhatWereYouTryingToDo": "What were you trying to do?",
+  "uiTheReportIncludesAppAndOperating": "The report includes app and operating-system versions, the selected radio and serial port, and recent diagnostic events. Channel contents and loaded files are not logged.",
+  "uiPreviewDiagnosticEvents": "Preview {p0} diagnostic events",
+  "@uiPreviewDiagnosticEvents": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiFilterCounties": "Filter {p0} counties",
+  "@uiFilterCounties": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiFindACounty": "Find a county",
+  "uiOfCounties": "{p0} of {p1} counties",
+  "@uiOfCounties": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiClearAll": "Clear all",
+  "uiNoMatchingCounties": "No matching counties.",
+  "uiNoCoordinatesAreAvailableForThese": "No coordinates are available for these results.",
+  "uiMappedTapAPinToSelect": "{p0} mapped • tap a pin to select",
+  "@uiMappedTapAPinToSelect": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiSearchARepeaterDirectoryAndAdd": "Search a repeater directory and add selected channels to your current library. Verify repeater status and access before transmitting.",
+  "uiDirectory": "Directory",
+  "uiMygmrsRequiresAnActiveGmrsLicense": "myGMRS requires an active GMRS license for repeater frequencies. PL tones and rules require a Premium membership. This sign-in lasts until NewChirp closes.",
+  "uiCountry": "Country",
+  "uiSortResults": "Sort results",
+  "uiSourceOrder": "Source order",
+  "uiFrequency": "Frequency",
+  "uiCallsignName": "Callsign / name",
+  "uiCity": "City",
+  "uiCounty": "County",
+  "uiService": "Service",
+  "uiAmateurGmrs": "Amateur + GMRS",
+  "uiAmateurHam": "Amateur (ham)",
+  "uiClearRepeaterSearch": "Clear repeater search",
+  "uiLatitudeOptional": "Latitude (optional)",
+  "uiLongitudeOptional": "Longitude (optional)",
+  "uiRadiusKm": "Radius km",
+  "uiOpenRepeatersOnly": "Open repeaters only",
+  "uiFmCapableOnly": "FM-capable only",
+  "uiSearchAmateurRepeatersInstead": "Search Amateur repeaters instead",
+  "uiFilterLoadedResults": "Filter loaded results",
+  "uiCityCountyCallsignModeServiceOr": "City, county, callsign, mode, service, or frequency",
+  "uiClearResultFilter": "Clear result filter",
+  "uiList": "List",
+  "uiMap": "Map",
+  "uiSelectAll": "Select all",
+  "uiClear": "Clear",
+  "uiDataCourtesyOfRepeaterbookCom": "Data courtesy of RepeaterBook.com.",
+  "uiDragToResize": "Drag to resize",
+  "uiInsertEmptySlotBefore": "Insert empty slot before",
+  "uiRemoveEmptySlot": "Remove empty slot",
+  "uiMove": "Move {p0}",
+  "@uiMove": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiDragRowsToRearrangeChannels": "Drag rows to rearrange channels",
+  "uiFilter": "Filter",
+  "uiNoMatchingChannels": "No matching channels",
+  "uiWriteChannelsToRadio": "Write channels to radio",
+  "uiThanksTheDiagnosticLogAndProblem": "Thanks. The diagnostic log and problem details were sent to the NewChirp developer.",
+  "uiTheReportIncludesAppAndOperating2": "The report includes app and operating-system versions, the selected radio, firmware when available, serial port, and recent diagnostic events. Channel contents and loaded files are not logged.",
+  "uiSaveFile": "Save file",
+  "uiDoNotShowMeThisMessage": "Do not show me this message again",
+  "uiMarineVhfChannelTemplate": "Marine VHF channel template",
+  "uiPlan": "Plan",
+  "uiSource": "Source: {p0}",
+  "@uiSource": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiTheChannelPlanIsSelectedBy": "The channel plan is selected by regulatory region, not ZIP code. Marine channel assignments are national or international and do not change by postal code.",
+  "uiProgramShipTransmitFrequencies": "Program ship transmit frequencies",
+  "uiReceiveOnlyIsTheSafeDefault": "Receive-only is the safe default. Enable this only when the radio and installation are authorized for marine VHF transmission.",
+  "uiMostAmateurTransceiversAreNotType": "Most amateur transceivers are not type-accepted for marine-band transmit. Prohibited and receive-only channels remain transmission-disabled.",
+  "uiChannelsTransmitCapableReceiveOnly": "{p0} channels: {p1} transmit-capable, {p2} receive-only.",
+  "@uiChannelsTransmitCapableReceiveOnly": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      },
+      "p2": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiAllRowsWillBeAddedReceive": "All rows will be added receive-only (Duplex \"off\"). The radio will beep and not transmit on them. Check the box above to program transmit frequencies.",
+  "uiContinue": "Continue",
+  "uiType": "Type",
+  "uiThisRadioDoesNotExposeEditable": "This radio does not expose editable banks.",
+  "uiTheseBanksAreFixedByThe": "These banks are fixed by the radio and are shown for reference.",
+  "uiUseTheseChanges": "Use these changes",
+  "uiFindAChannel": "Find a channel",
+  "uiChannel": "Channel {p0}",
+  "@uiChannel": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiLoadingRadioCatalog": "Loading radio catalog…",
+  "uiActionFailed": "Action failed",
+  "uiMacosBlockedNewchirpFromWritingTo": "{p0}\n\nmacOS blocked NewChirp from writing to that folder. Choose a different save location, or allow NewChirp access under:\n\nSystem Settings > Privacy & Security > Files and Folders > NewChirp\n\nGrant access to Documents, then retry Save.",
+  "@uiMacosBlockedNewchirpFromWritingTo": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiOnLinuxThisUsuallyMeansYour": "{p0}\n\nOn Linux, this usually means your user does not have permission to open the radio programming cable.\n\nFix it with:\n    sudo usermod -aG dialout $USER\n\nThen log out and back in, reconnect the cable, and try again.\n\nFor the current terminal session only:\n    newgrp dialout",
+  "@uiOnLinuxThisUsuallyMeansYour": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiMototrboCpsChannels": "MOTOTRBO CPS 2.0 channels",
+  "uiCsvChannels": "CSV channels",
+  "uiRefreshingRadioCatalog": "Refreshing radio catalog…",
+  "uiThisChirpImage": "this CHIRP image",
+  "uiNoEmptyChannelSlotIsAvailable": "No empty channel slot is available.",
+  "uiNoEmptyChannelSlotsAreAvailable": "No empty channel slots are available for this radio.",
+  "uiSavingChannelLibrary": "Saving channel library…",
+  "uiSaveCanceled": "Save canceled",
+  "uiDiscardTheCurrentChannelListAny": "Discard the current channel list? Any unsaved changes will be lost.",
+  "uiCloseTheCurrentChannelListAnd": "Close the current channel list and start {p0}?",
+  "@uiCloseTheCurrentChannelListAnd": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiANewBlankConfiguration": "a new blank configuration",
+  "uiReadingRadioSettingsDoNotDisconnect": "Reading radio settings - do not disconnect...",
+  "uiSelectAChannelFirst": "Select a channel first",
+  "uiThisRadioHasFixedChannelLocations4": "This radio has fixed channel locations.",
+  "uiAndFollowingChannelsMoveDownOne": "{p0} and following channels move down one slot.",
+  "@uiAndFollowingChannelsMoveDownOne": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiUseChannelAfterTheFinalChannel": "Use channel {p0} after the final channel.",
+  "@uiUseChannelAfterTheFinalChannel": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiTheCopiedChannelDoesNotFit": "The copied channel does not fit in this radio’s memory.",
+  "uiTheCopiedChannelsDoNotFit": "The copied channels do not fit starting at this row.",
+  "uiThisChannelContainsDataPastingWill": "This channel contains data. Pasting will replace it.",
+  "uiContainsDataPastingWillReplaceIt": "“{p0}” contains data. Pasting will replace it.",
+  "@uiContainsDataPastingWillReplaceIt": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiLoadingRadioInstructions": "Loading radio instructions…",
+  "uiRestoringChannelsFromTheStoredRadio": "Restoring channels from the stored radio image…",
+  "uiSomeChannelsWereNotWritten": "Some channels were not written",
+  "uiSomeChannelValuesWereAdjusted": "Some channel values were adjusted",
+  "uiTheWriteFinishedChannelsWereAdjusted": "The write finished. {p0} channels were adjusted and {p1} could not be written.",
+  "@uiTheWriteFinishedChannelsWereAdjusted": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiTheCompatibleChannelsWereWrittenBut": "The compatible channels were written, but {p0} channels could not be written.",
+  "@uiTheCompatibleChannelsWereWrittenBut": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiTheWriteFinishedButNewchirpAdjusted": "The write finished, but NewChirp adjusted values the radio does not support.",
+  "uiChannelCouldNotBeWritten": "Channel {p0} {p1} could not be written: {p2}",
+  "@uiChannelCouldNotBeWritten": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      },
+      "p2": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiNameChangedFromTo": "name changed from \"{p0}\" to \"{p1}\"",
+  "@uiNameChangedFromTo": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiLockedFieldSEverythingElseWas": "locked field(s): {p0}; everything else was written",
+  "@uiLockedFieldSEverythingElseWas": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiCancellingSafely": "Cancelling safely…",
+  "uiUpdateAvailable": "Update available",
+  "uiNewchirpIsReady": "NewChirp {p0} is ready",
+  "@uiNewchirpIsReady": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiNewchirpIsAvailableYouAreRunning": "NewChirp {p0} is available. You are running {p1}.\n\nOpen the download page to get the right installer for your computer.",
+  "@uiNewchirpIsAvailableYouAreRunning": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiYouAreRunningNewchirpCanDownload": "You are running {p0}. NewChirp can download and install {p1} for you, then reopen automatically. No visit to the website is required.",
+  "@uiYouAreRunningNewchirpCanDownload": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiPreparingTheUpdateDownload": "Preparing the update download…",
+  "uiDownloadingNewchirp": "Downloading NewChirp {p0}…",
+  "@uiDownloadingNewchirp": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiVerifiedStartingTheInstallerAndRestarting": "Verified. Starting the installer and restarting NewChirp…",
+  "uiNewchirpCouldNotPrepareTheUpdate": "NewChirp could not prepare the update.",
+  "uiDeleteChannel": "Delete channel {p0}?",
+  "@uiDeleteChannel": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiRepeaterRowsThroughStayInThe": "Repeater rows 15 through 22 stay in the radio. The name is cleared and the plain GMRS repeater frequency is put back.",
+  "uiThisChannelWillBeRemovedFrom": "This channel will be removed from the current configuration.",
+  "uiWillBeRemovedFromTheCurrent": "“{p0}” will be removed from the current configuration.",
+  "@uiWillBeRemovedFromTheCurrent": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiStoredImageReadyForYouCan": "Stored image ready for {p0}. You can write without reading again.",
+  "@uiStoredImageReadyForYouCan": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiARadioImageIsLoadedFrom": "A radio image is loaded from this session. Review all changes before writing.",
+  "uiClearSearchAndColumnFiltersTo": "Clear search and column filters to rearrange channels",
+  "uiRearrangeChannels": "Rearrange channels",
+  "uiPreparingFrequencyReference": "Preparing frequency reference…",
+  "uiPrintingFrequencyReference": "Printing frequency reference…",
+  "uiTheGmrsFrsReference": "The GMRS/FRS reference",
+  "uiNewchirpChannelList": "NewChirp channel list",
+  "uiNewchirpChannelList2": "NewChirp channel list: {p0}",
+  "@uiNewchirpChannelList2": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiPreparingChannelList": "Preparing channel list…",
+  "uiChannelList": "channel list",
+  "uiPrintingChannelList": "Printing channel list…",
+  "uiTheChannelList": "The channel list",
+  "uiNoPrintersFound": "No printers found",
+  "uiNewchirpCouldNotFindAnySystem": "NewChirp could not find any system printers, so the {p0} PDF was opened in your default PDF viewer. Use the viewer’s Print command to print it.",
+  "@uiNewchirpCouldNotFindAnySystem": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiThePdfWasOpenedInYour": "The {p0} PDF was opened in your default PDF viewer. Use the viewer’s Print command to print it.",
+  "@uiThePdfWasOpenedInYour": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiFrequencyMhz": "Frequency (MHz)",
+  "uiUseNotes": "Use / notes",
+  "uiSharedMhzInterstitial": "Shared 462 MHz interstitial",
+  "uiHandheldOnly": "Handheld only",
+  "uiMainRepeaterOutput": "Main / repeater output",
+  "uiChMhzInterstitial": "Ch 1-7: 462 MHz interstitial",
+  "uiChMhzInterstitial2": "Ch 8-14: 467 MHz interstitial",
+  "uiChMhzMain": "Ch 15-22: 462 MHz main",
+  "uiFrsPower": "FRS Power",
+  "uiGmrsPower": "GMRS Power",
+  "uiInputYouTransmit": "Input - You Transmit",
+  "uiOutputYouListen": "Output - You Listen",
+  "uiInputOutputMhz": "Input = output + 5 MHz",
+  "uiPreparingTransfer": "Preparing transfer...",
+  "uiWaitingForTheRadioToReport": "Waiting for the radio to report progress",
+  "uiCompleteElapsed": "{p0}% complete  |  {p1} elapsed",
+  "@uiCompleteElapsed": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiEnterAWholeNumber": "Enter a whole number",
+  "uiValueMustBeAtLeast": "Value must be at least {p0}",
+  "@uiValueMustBeAtLeast": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiValueMustBeAtMost": "Value must be at most {p0}",
+  "@uiValueMustBeAtMost": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiUseAtLeastCharacters": "Use at least {p0} characters",
+  "@uiUseAtLeastCharacters": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiUseAtMostCharacters": "Use at most {p0} characters",
+  "@uiUseAtMostCharacters": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiEnterAValidEmailAddress": "Enter a valid email address.",
+  "uiCouldNotSendTheErrorReport": "Could not send the error report.",
+  "uiErrorReportSent": "Error report sent",
+  "uiSubmitErrorReport": "Submit error report",
+  "uiNoDiagnosticEventsRecorded": "No diagnostic events recorded.",
+  "uiSendReport": "Send report",
+  "uiWaitingForMygmrsSignInYou": "Waiting for myGMRS sign-in. You can cancel this attempt.",
+  "uiSignedInToMygmrsForThis": "Signed in to myGMRS for this session.",
+  "uiMygmrsSignInCancelled": "myGMRS sign-in cancelled.",
+  "uiSigningOutOfMygmrs": "Signing out of myGMRS…",
+  "uiSignedOutOfMygmrs": "Signed out of myGMRS.",
+  "uiEnterBothLatitudeAndLongitudeOr": "Enter both latitude and longitude, or neither.",
+  "uiLatitudeMustBeBetweenAnd": "Latitude must be between -90 and 90.",
+  "uiLongitudeMustBeBetweenAnd": "Longitude must be between -180 and 180.",
+  "uiUseEitherAZipCodeOr": "Use either a ZIP code or coordinates, not both.",
+  "uiLatitudeAndLongitudeAreRequiredFor": "Latitude and longitude are required for a radius search.",
+  "uiRadiusMustBeGreaterThanZero": "Radius must be greater than zero.",
+  "uiSignInToMygmrsBeforeSearching": "Sign in to myGMRS before searching.",
+  "uiSigningInToMygmrs": "Signing in to myGMRS…",
+  "uiSearchingRepeaterbook": "Searching RepeaterBook…",
+  "uiMygmrsRequiresAnActiveGmrsLicense2": "myGMRS requires an active GMRS license to expose repeater frequencies. Confirm that you are signed in with an eligible account. myGMRS text search does not understand county names; enter a 5-digit ZIP code for a nearby repeater search.",
+  "uiRepeaterbookMayNotHaveAGmrs": "RepeaterBook may not have a GMRS listing for this area yet.",
+  "uiCoordinatesAreSearchedWithinTheSelected": "Coordinates are searched within the selected region.",
+  "uiCheckThatCountryAndRegionAre": "Check that Country and Region are correct.",
+  "uiNoMatchingGmrsRepeatersWereFound": "No matching GMRS repeaters were found{p0}. {p1} {p2}",
+  "@uiNoMatchingGmrsRepeatersWereFound": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      },
+      "p2": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiOpenUse": "open use",
+  "uiFmAnalog": "FM analog",
+  "uiNoMatchingRepeatersWereFoundZip": "No matching repeaters were found{p0}. ZIP searches default to 50 km; increase the radius or turn off active filters.{p1}",
+  "@uiNoMatchingRepeatersWereFoundZip": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiNoMatchingRepeatersWereFoundCoordinates": "No matching repeaters were found{p0}. Coordinates are searched within the selected region. Increase the radius or turn off active filters.{p1}",
+  "@uiNoMatchingRepeatersWereFoundCoordinates": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiNoMatchingRepeatersWereFoundCheck": "No matching repeaters were found{p0}. Check the selected region or increase the radius.{p1}",
+  "@uiNoMatchingRepeatersWereFoundCheck": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiNoTone": "no tone",
+  "uiCancelSignIn": "Cancel sign-in",
+  "uiSignOut": "Sign out",
+  "uiSignInToMygmrs": "Sign in to myGMRS",
+  "uiRepeaterNameCityOrZipCode": "Repeater name, city, or ZIP code",
+  "uiCityZipCountyCallsignLandmarkOr": "City, ZIP, county, callsign, landmark, or notes",
+  "uiADigitZipSearchesNearbyRepeaters": "A 5-digit ZIP searches nearby repeaters. County names are not supported by myGMRS.",
+  "uiADigitZipSearchesRepeatersWithin": "A 5-digit ZIP searches repeaters within 50 km by default.",
+  "uiAllCounties": "All counties",
+  "uiSearchToPreviewRepeaterChannels": "Search to preview repeater channels.",
+  "uiShownOfLoadedDataFrom": "{p0} shown of {p1} loaded • Data from {p2}",
+  "@uiShownOfLoadedDataFrom": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      },
+      "p1": {
+        "type": "Object"
+      },
+      "p2": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiAddSelected": "Add selected",
+  "uiAddSelected2": "Add {p0} selected",
+  "@uiAddSelected2": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiEditSelectedProperties": "Edit selected properties",
+  "uiCopyChannels": "Copy {p0} channels",
+  "@uiCopyChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiCutChannels": "Cut {p0} channels",
+  "@uiCutChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiPasteChannels": "Paste {p0} channels",
+  "@uiPasteChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiClearSelectedChannels": "Clear {p0} selected channels",
+  "@uiClearSelectedChannels": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiClearChannel": "Clear channel",
+  "uiEmptyMemorySlotDoubleClickTo": "Empty memory slot. Double-click to create a channel.",
+  "uiDoubleClickToEditChannel": "Double-click to edit channel",
+  "uiDragToRearrangeChannel": "Drag to rearrange channel",
+  "uiEmptySlot": "Empty slot",
+  "uiBugReportSent": "Bug report sent",
+  "uiSubmitBugReport2": "Submit bug report",
+  "uiGiveEveryEntryANameBefore": "Give every {p0} entry a name before saving.",
+  "@uiGiveEveryEntryANameBefore": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "uiAddAChannelToCreate": "Add a channel to create",
+  "uiAChannelMayBelongToMore": "A channel may belong to more than one entry.",
+  "uiAChannelCanBelongToOne": "A channel can belong to one entry.",
+  "uiThisEmptyEntryIsTheRadio": "This empty entry is the radio’s spare bank or zone. Add a channel to create it.",
+  "uiChannelsSelected": "{p0} channels selected",
+  "@uiChannelsSelected": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
+  },
+  "glossFrs": "Family Radio Service. A license-free UHF service in the United States.",
+  "glossGmrs": "General Mobile Radio Service. A licensed UHF service in the United States.",
+  "glossRx": "Receive. The frequency or tone used when listening.",
+  "glossTx": "Transmit. The frequency or tone used when sending.",
+  "glossCtcss": "Continuous Tone-Coded Squelch System. A subaudible analog tone commonly called a PL tone.",
+  "glossTsql": "Tone squelch. Requires a matching CTCSS tone for both receive and transmit.",
+  "glossDcs": "Digital-Coded Squelch System. A digital squelch code; NewChirp labels it DTCS.",
+  "glossDtcs": "Digital-Coded Squelch System. A digital code used like a CTCSS tone to open a receiver or repeater.",
+  "glossDtcsPol": "DTCS polarity. Normal or inverted code polarity must match between the radio and repeater.",
+  "glossFm": "Frequency modulation. Standard analog voice mode.",
+  "glossNfm": "Narrowband FM. Uses less bandwidth and is common on FRS, GMRS, and busy repeater systems.",
+  "glossAm": "Amplitude modulation. Used by some aircraft and amateur-radio channels.",
+  "glossDuplex": "Transmit/receive relationship. Simplex uses the same frequency; offsets and splits use different transmit frequencies.",
+  "glossOffset": "The frequency difference between receive and transmit.",
+  "glossSplit": "Independent receive and transmit frequencies rather than a fixed offset.",
+  "glossStep": "Tuning step size used when changing frequency.",
+  "glossScan": "Whether the channel is included in scanning or marked to skip.",
+  "glossBcl": "Busy Channel Lockout. Prevents transmitting when the channel is already in use.",
+  "glossPttId": "Station identification sent at the beginning or end of a transmission, depending on the radio.",
+  "glossSCode": "Signaling code selector. Chooses which stored PTT-ID or signaling code the channel uses.",
+  "fileSaveWarning": "Saving this file does not write these changes to your radio. You must write your changes to the radio for them to take effect.",
+  "repeaterRangeIn": " in {location}",
+  "@repeaterRangeIn": {
+    "placeholders": {
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "repeaterRangeZip": " within {km} km of ZIP code {zip} in {location}",
+  "@repeaterRangeZip": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      },
+      "zip": {
+        "type": "String"
+      },
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "repeaterRangeCoords": " within {km} km of your coordinates in {location}",
+  "@repeaterRangeCoords": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      },
+      "location": {
+        "type": "String"
+      }
+    }
+  },
+  "repeaterFilterHint": " Active filters require {filters}; try turning them off.",
+  "@repeaterFilterHint": {
+    "placeholders": {
+      "filters": {
+        "type": "String"
+      }
+    }
+  },
+  "listAnd": " and ",
+  "occupiedBody": "{occupant} already uses channel {channel}. Choose how to place {moving}.",
+  "@occupiedBody": {
+    "placeholders": {
+      "occupant": {
+        "type": "String"
+      },
+      "channel": {
+        "type": "Object"
+      },
+      "moving": {
+        "type": "String"
+      }
+    }
+  },
+  "anExistingChannel": "An existing channel",
+  "thisChannel": "this channel",
+  "channelsNeedAttention": "{count, plural, =1{1 channel needs attention before writing.} other{{count} channels need attention before writing.}}",
+  "@channelsNeedAttention": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "moreValidationIssues": "{count, plural, =1{1 more validation issue.} other{{count} more validation issues.}}",
+  "@moreValidationIssues": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "repeatersNoneImportable": "{count, plural, =1{{source} returned 1 matching repeater, but none could be imported.} other{{source} returned {count} matching repeaters, but none could be imported.}}",
+  "@repeatersNoneImportable": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "countyCount": "{count, plural, =1{1 county} other{{count} counties}}",
+  "@countyCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

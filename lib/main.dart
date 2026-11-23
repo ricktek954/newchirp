@@ -817,11 +817,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               radioModel: _model,
               capabilities: _capabilities,
               title: context.l10n.editorBulkTitle(channels.length),
-              notice:
-                  'Defaults come from channel '
-                  '${channelNumberLabel(_model, channels.first.location)}. '
-                  'Only fields you change here are applied to all selected '
-                  'channels.',
+              notice: context.l10n.uiDefaultsComeFromChannelOnlyFields(
+                channelNumberLabel(_model, channels.first.location),
+              ),
               saveLabel: context.l10n.editorBulkSave(channels.length),
               showLocation: false,
               canDelete: false,
@@ -868,14 +866,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     showDialog<void>(
                       context: context,
                       builder: (context) => AlertDialog(
-                        title: const Text('Selected channels need changes'),
+                        title: Text(context.l10n.uiSelectedChannelsNeedChanges),
                         content: SingleChildScrollView(
                           child: Text(issues.join('\n\n')),
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(context),
-                            child: const Text('Back to editor'),
+                            child: Text(context.l10n.uiBackToEditor),
                           ),
                         ],
                       ),
@@ -901,7 +899,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   ..showSnackBar(
                     SnackBar(
                       content: Text(
-                        'Updated ${channels.length} selected channels',
+                        context.l10n.uiUpdatedSelectedChannels(channels.length),
                       ),
                       behavior: SnackBarBehavior.floating,
                       duration: const Duration(seconds: 2),
@@ -1294,8 +1292,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           ..showSnackBar(
             SnackBar(
               content: Text(
-                'Connect the ${displayRadioModelName(model)} and choose its '
-                'port to read ${zone.name}.',
+                context.l10n.uiConnectTheAndChooseItsPort(
+                  displayRadioModelName(model),
+                  zone.name,
+                ),
               ),
             ),
           );
@@ -1372,10 +1372,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Bank and zone changes are ready. Write them with the channels.',
-          ),
+        SnackBar(
+          content: Text(context.l10n.uiBankAndZoneChangesAreReady),
           behavior: SnackBarBehavior.floating,
           duration: Duration(seconds: 3),
         ),
@@ -1438,7 +1436,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final radioSelectionLoad = _radioSelectionLoad;
     if (radioSelectionLoad != null) await radioSelectionLoad;
     String? storedImage;
-    await _task('Loading radio catalog…', () async {
+    if (!mounted) return;
+    await _task(context.l10n.uiLoadingRadioCatalog, () async {
       final catalog = await _bridge.modelCatalog();
       final models = catalog.models;
       setState(() {
@@ -1518,7 +1517,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       if (mounted) setState(() => _status = 'Ready');
     } catch (error) {
       if (mounted) {
-        setState(() => _status = 'Action failed');
+        setState(() => _status = context.l10n.uiActionFailed);
         await _showActionError(error);
       }
     } finally {
@@ -1532,26 +1531,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         error is FileSystemException &&
         (error.osError?.errorCode == 1 ||
             message.contains('Operation not permitted'))) {
-      return '$message\n\n'
-          'macOS blocked NewChirp from writing to that folder. Choose a '
-          'different save location, or allow NewChirp access under:\n\n'
-          'System Settings > Privacy & Security > Files and Folders > '
-          'NewChirp\n\n'
-          'Grant access to Documents, then retry Save.';
+      return context.l10n.uiMacosBlockedNewchirpFromWritingTo(message);
     }
     if (Platform.isLinux &&
         (message.contains('Permission denied') ||
             message.contains('Errno 13')) &&
         (message.contains('/dev/tty') ||
             message.contains('could not open port'))) {
-      return '$message\n\n'
-          'On Linux, this usually means your user does not have permission '
-          'to open the radio programming cable.\n\n'
-          'Fix it with:\n'
-          '    sudo usermod -aG dialout \$USER\n\n'
-          'Then log out and back in, reconnect the cable, and try again.\n\n'
-          'For the current terminal session only:\n'
-          '    newgrp dialout';
+      return context.l10n.uiOnLinuxThisUsuallyMeansYour(message);
     }
     return message;
   }
@@ -1614,7 +1601,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Couldn’t complete that action'),
+        title: Text(context.l10n.uiCouldnTCompleteThatAction),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 620),
           child: SingleChildScrollView(
@@ -1638,8 +1625,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     child: ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       childrenPadding: const EdgeInsets.only(top: 4, bottom: 8),
-                      title: const Text(
-                        'More Info:',
+                      title: Text(
+                        context.l10n.uiMoreInfo,
                         style: TextStyle(
                           color: Colors.black54,
                           fontSize: 12,
@@ -1675,7 +1662,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Close'),
+            child: Text(context.l10n.close),
           ),
           FilledButton.icon(
             onPressed: () {
@@ -1688,7 +1675,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               );
             },
             icon: const Icon(Icons.bug_report_outlined),
-            label: const Text('Submit Bug Report'),
+            label: Text(context.l10n.uiSubmitBugReport),
           ),
         ],
       ),
@@ -1755,10 +1742,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       }
       return;
     }
+    if (!mounted) return;
 
     final mode = _libraryOpen && _channels.isNotEmpty
         ? await _chooseChannelApplyMode(
-            label: isXml ? 'MOTOTRBO CPS 2.0 channels' : 'CSV channels',
+            label: isXml
+                ? context.l10n.uiMototrboCpsChannels
+                : context.l10n.uiCsvChannels,
             count: channels.length,
           )
         : const _ChannelApplyMode(replaceAll: true, startAt: 1);
@@ -1794,40 +1784,30 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Load experimental CHIRP module?'),
+        title: Text(context.l10n.uiLoadExperimentalChirpModule),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 560),
-          child: const Column(
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'CHIRP modules are executable Python code. NewChirp runs the '
-                'module in a sandbox that blocks your home folder, other '
-                'drives, and the network. The module can still use the '
-                'selected radio and the files for this session.',
-              ),
+              Text(context.l10n.uiChirpModulesAreExecutablePythonCode),
               SizedBox(height: 12),
-              Text(
-                'Only load a module from a source you trust. A bad module can '
-                'still damage the radio. The module remains active only for '
-                'this NewChirp session. Select the radio model and read the '
-                'radio again before writing.',
-              ),
+              Text(context.l10n.uiOnlyLoadAModuleFromA),
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: const Color(0xFF9B3D2E),
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Load module'),
+            child: Text(context.l10n.uiLoadModule),
           ),
         ],
       ),
@@ -1862,7 +1842,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _unloadChirpModule() async {
     _bridge.unloadModule();
-    await _task('Refreshing radio catalog…', () async {
+    await _task(context.l10n.uiRefreshingRadioCatalog, () async {
       final catalog = await _bridge.modelCatalog();
       final models = catalog.models;
       if (!mounted) return;
@@ -1911,7 +1891,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
     if (!mounted) return;
     final proceed = await _confirmReplaceLibrary(
-      destination: 'this CHIRP image',
+      destination: context.l10n.uiThisChirpImage,
     );
     if (!proceed || !mounted) return;
 
@@ -2125,7 +2105,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text('Moved ${moved.name} to channel ${moved.location}'),
+          content: Text(
+            context.l10n.uiMovedToChannel(moved.name, moved.location),
+          ),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 2),
         ),
@@ -2172,7 +2154,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text('Moved ${moved.name} to channel $targetLocation'),
+          content: Text(
+            context.l10n.uiMovedToChannel(moved.name, targetLocation),
+          ),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 2),
         ),
@@ -2188,11 +2172,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(
-            content: Text(
-              'This radio has fixed channel locations, so empty slots '
-              'cannot be inserted.',
-            ),
+          SnackBar(
+            content: Text(context.l10n.uiThisRadioHasFixedChannelLocations),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -2257,7 +2238,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text('Inserted an empty slot before channel $location'),
+          content: Text(
+            context.l10n.uiInsertedAnEmptySlotBeforeChannel(location),
+          ),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 2),
         ),
@@ -2270,11 +2253,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(
-            content: Text(
-              'This radio has fixed channel locations, so empty slots '
-              'cannot be removed.',
-            ),
+          SnackBar(
+            content: Text(context.l10n.uiThisRadioHasFixedChannelLocations2),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -2320,7 +2300,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text('Removed empty slot $location'),
+          content: Text(context.l10n.uiRemovedEmptySlot(location)),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 2),
         ),
@@ -2339,7 +2319,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (channels == null || channels.isEmpty || !mounted) return;
     final mode = _libraryOpen && _channels.isNotEmpty
         ? await _chooseChannelApplyMode(
-            label: 'RepeaterBook results',
+            label: context.l10n.uiRepeaterbookResults,
             count: channels.length,
           )
         : const _ChannelApplyMode(replaceAll: true, startAt: 1);
@@ -2355,8 +2335,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         SnackBar(
           content: Text(
             _capabilities?.memoryEnd == null
-                ? 'No empty channel slot is available.'
-                : 'No empty channel slots are available for this radio.',
+                ? context.l10n.uiNoEmptyChannelSlotIsAvailable
+                : context.l10n.uiNoEmptyChannelSlotsAreAvailable,
           ),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 3),
@@ -2422,7 +2402,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     var savePath = path.endsWith('.csv') ? path : '$path.csv';
     setState(() {
       _busy = true;
-      _status = 'Saving channel library…';
+      _status = context.l10n.uiSavingChannelLibrary;
     });
     try {
       try {
@@ -2442,28 +2422,24 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               Icons.folder_off_outlined,
               color: Color(0xFFC46A15),
             ),
-            title: const Text('macOS blocked the save location'),
-            content: const Text(
-              'NewChirp does not have permission to write to this folder. '
-              'Choose another folder now, or allow NewChirp access in '
-              'System Settings > Privacy & Security > Files and Folders.',
-            ),
+            title: Text(context.l10n.uiMacosBlockedTheSaveLocation),
+            content: Text(context.l10n.uiNewchirpDoesNotHavePermissionTo),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
-                child: const Text('Cancel'),
+                child: Text(context.l10n.cancel),
               ),
               FilledButton.icon(
                 onPressed: () => Navigator.pop(context, true),
                 icon: const Icon(Icons.folder_open_outlined),
-                label: const Text('Choose another folder'),
+                label: Text(context.l10n.uiChooseAnotherFolder),
               ),
             ],
           ),
         );
         if (!mounted) return;
         if (chooseAnother != true) {
-          setState(() => _status = 'Save canceled');
+          setState(() => _status = context.l10n.uiSaveCanceled);
           return;
         }
         const type = XTypeGroup(label: 'CHIRP CSV', extensions: ['csv']);
@@ -2473,7 +2449,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         );
         if (!mounted) return;
         if (location == null) {
-          setState(() => _status = 'Save canceled');
+          setState(() => _status = context.l10n.uiSaveCanceled);
           return;
         }
         savePath = location.path.endsWith('.csv')
@@ -2490,7 +2466,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       }
     } catch (error) {
       if (mounted) {
-        setState(() => _status = 'Action failed');
+        setState(() => _status = context.l10n.uiActionFailed);
         await _showActionError(error);
       }
     } finally {
@@ -2505,20 +2481,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         icon: const Icon(Icons.warning_amber_rounded, color: Color(0xFFC46A15)),
-        title: Text('Start $destination?'),
+        title: Text(context.l10n.uiStart(destination)),
         content: Text(
           _dirty
-              ? 'Discard the current channel list? Any unsaved changes will be lost.'
-              : 'Close the current channel list and start $destination?',
+              ? context.l10n.uiDiscardTheCurrentChannelListAny
+              : context.l10n.uiCloseTheCurrentChannelListAnd(destination),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Keep current list'),
+            child: Text(context.l10n.uiKeepCurrentList),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Discard and continue'),
+            child: Text(context.l10n.uiDiscardAndContinue),
           ),
         ],
       ),
@@ -2528,7 +2504,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   Future<void> _newLibrary() async {
     if (!await _confirmReplaceLibrary(
-      destination: 'a new blank configuration',
+      destination: context.l10n.uiANewBlankConfiguration,
     )) {
       return;
     }
@@ -2554,7 +2530,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final template = gmrsStarterChannels();
     final mode = _libraryOpen && _channels.isNotEmpty
         ? await _chooseChannelApplyMode(
-            label: 'GMRS starter template',
+            label: context.l10n.newGmrs,
             count: template.length,
           )
         : const _ChannelApplyMode(replaceAll: true, startAt: 1);
@@ -2572,7 +2548,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final template = marineTemplateChannels(selection);
     final mode = _libraryOpen && _channels.isNotEmpty
         ? await _chooseChannelApplyMode(
-            label: '${selection.plan.label} Marine VHF template',
+            label: context.l10n.uiMarineVhfTemplate(selection.plan.label),
             count: template.length,
           )
         : const _ChannelApplyMode(replaceAll: true, startAt: 1);
@@ -2611,10 +2587,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       }
       return;
     }
+    if (!mounted) return;
 
     final mode = _libraryOpen && _channels.isNotEmpty
         ? await _chooseChannelApplyMode(
-            label: 'stock channels',
+            label: context.l10n.uiStockChannels,
             count: channels.length,
           )
         : const _ChannelApplyMode(replaceAll: true, startAt: 1);
@@ -2687,19 +2664,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: const Text('Discard unsaved settings changes?'),
-          content: const Text(
-            'Using the saved radio snapshot will replace the unsaved settings '
-            'changes shown on this page.',
-          ),
+          title: Text(context.l10n.uiDiscardUnsavedSettingsChanges),
+          content: Text(context.l10n.uiUsingTheSavedRadioSnapshotWill),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Use saved snapshot'),
+              child: Text(context.l10n.uiUseSavedSnapshot),
             ),
           ],
         ),
@@ -2718,19 +2692,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: const Text('Replace unsaved settings changes?'),
-          content: const Text(
-            'Reading settings from the radio will replace the unsaved settings '
-            'changes shown on this page. The current channel list is not changed.',
-          ),
+          title: Text(context.l10n.uiReplaceUnsavedSettingsChanges),
+          content: Text(context.l10n.uiReadingSettingsFromTheRadioWill),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Read settings'),
+              child: Text(context.l10n.uiReadSettings),
             ),
           ],
         ),
@@ -2749,7 +2720,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
     try {
       await _transferTask(
-        'Reading radio settings - do not disconnect...',
+        context.l10n.uiReadingRadioSettingsDoNotDisconnect,
         () async {
           final settings = await _bridge.readSettings(
             model: model,
@@ -2903,17 +2874,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final canInsertAround =
         selected != null && !showsMidlandChannelNumbers(_model);
     final selectedLabel = selected == null
-        ? 'Select a channel first'
+        ? context.l10n.uiSelectAChannelFirst
         : 'Channel ${channelNumberLabel(_model, selected.location)}';
     final aroundSubtitle = selected == null
         ? selectedLabel
         : showsMidlandChannelNumbers(_model)
-        ? 'This radio has fixed channel locations.'
-        : '$selectedLabel and following channels move down one slot.';
+        ? context.l10n.uiThisRadioHasFixedChannelLocations4
+        : context.l10n.uiAndFollowingChannelsMoveDownOne(selectedLabel);
     return showDialog<_AddChannelPlacement>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Where should the new channel go?'),
+        title: Text(context.l10n.uiWhereShouldTheNewChannelGo),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -2921,11 +2892,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               key: const ValueKey('add-channel-at-end'),
               enabled: endLocation != null,
               leading: const Icon(Icons.last_page),
-              title: const Text('At the end'),
+              title: Text(context.l10n.uiAtTheEnd),
               subtitle: Text(
                 endLocation == null
                     ? 'No free slot follows the final channel.'
-                    : 'Use channel $endLocation after the final channel.',
+                    : context.l10n.uiUseChannelAfterTheFinalChannel(
+                        endLocation,
+                      ),
               ),
               onTap: () => Navigator.pop(context, _AddChannelPlacement.end),
             ),
@@ -2933,7 +2906,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               key: const ValueKey('add-channel-before-selected'),
               enabled: canInsertAround,
               leading: const Icon(Icons.vertical_align_top),
-              title: const Text('Before the selected channel'),
+              title: Text(context.l10n.uiBeforeTheSelectedChannel),
               subtitle: Text(aroundSubtitle),
               onTap: () =>
                   Navigator.pop(context, _AddChannelPlacement.beforeSelected),
@@ -2942,7 +2915,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               key: const ValueKey('add-channel-after-selected'),
               enabled: canInsertAround,
               leading: const Icon(Icons.vertical_align_bottom),
-              title: const Text('After the selected channel'),
+              title: Text(context.l10n.uiAfterTheSelectedChannel),
               subtitle: Text(aroundSubtitle),
               onTap: () =>
                   Navigator.pop(context, _AddChannelPlacement.afterSelected),
@@ -2952,7 +2925,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
         ],
       ),
@@ -3018,7 +2991,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text('Channel $location added'),
+          content: Text(context.l10n.uiChannelAdded(location)),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 2),
         ),
@@ -3036,11 +3009,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(
-            content: Text(
-              'This radio has fixed channel locations. New channels can only '
-              'be added after the final channel.',
-            ),
+          SnackBar(
+            content: Text(context.l10n.uiThisRadioHasFixedChannelLocations3),
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -3165,8 +3135,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           SnackBar(
             content: Text(
               _channelClipboard.length == 1
-                  ? 'The copied channel does not fit in this radio’s memory.'
-                  : 'The copied channels do not fit starting at this row.',
+                  ? context.l10n.uiTheCopiedChannelDoesNotFit
+                  : context.l10n.uiTheCopiedChannelsDoNotFit,
             ),
             behavior: SnackBarBehavior.floating,
           ),
@@ -3239,20 +3209,22 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         icon: const Icon(Icons.warning_amber_rounded, color: Color(0xFFC46A15)),
-        title: Text('Overwrite ${channels.length} channels?'),
+        title: Text(context.l10n.uiOverwriteChannels(channels.length)),
         content: Text(
-          'The destination range ${channelNumberLabel(_model, first.location)} '
-          'through ${channelNumberLabel(_model, last.location)} contains '
-          '${channels.length} channels with data. Pasting will replace them.',
+          context.l10n.uiTheDestinationRangeThroughContainsChannels(
+            channelNumberLabel(_model, first.location),
+            channelNumberLabel(_model, last.location),
+            channels.length,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Overwrite channels'),
+            child: Text(context.l10n.uiOverwriteChannels2),
           ),
         ],
       ),
@@ -3267,21 +3239,23 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       builder: (context) => AlertDialog(
         icon: const Icon(Icons.warning_amber_rounded, color: Color(0xFFC46A15)),
         title: Text(
-          'Overwrite channel ${channelNumberLabel(_model, channel.location)}?',
+          context.l10n.uiOverwriteChannel(
+            channelNumberLabel(_model, channel.location),
+          ),
         ),
         content: Text(
           channel.name.isEmpty
-              ? 'This channel contains data. Pasting will replace it.'
-              : '“${channel.name}” contains data. Pasting will replace it.',
+              ? context.l10n.uiThisChannelContainsDataPastingWill
+              : context.l10n.uiContainsDataPastingWillReplaceIt(channel.name),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Overwrite channel'),
+            child: Text(context.l10n.uiOverwriteChannel2),
           ),
         ],
       ),
@@ -3392,8 +3366,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ..showSnackBar(
           SnackBar(
             content: Text(
-              'Cleared ${clearableChannels.length} channels. '
-              'Use Cmd/Ctrl+Z to undo.',
+              context.l10n.uiClearedChannelsUseCmdCtrlZ(
+                clearableChannels.length,
+              ),
             ),
             behavior: SnackBarBehavior.floating,
             duration: const Duration(seconds: 3),
@@ -3416,10 +3391,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
-          content: Text(
-            '$label stays in the radio. The name is cleared and the '
-            'plain repeater frequency is back.',
-          ),
+          content: Text(context.l10n.uiStaysInTheRadioTheName(label)),
           behavior: SnackBarBehavior.floating,
           duration: const Duration(seconds: 3),
         ),
@@ -3569,13 +3541,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   Future<RadioInstructions?> _loadRadioInstructions() async {
     setState(() {
       _busy = true;
-      _status = 'Loading radio instructions…';
+      _status = context.l10n.uiLoadingRadioInstructions;
     });
     try {
       return await _bridge.instructions(_model!);
     } catch (error) {
       if (mounted) {
-        setState(() => _status = 'Action failed');
+        setState(() => _status = context.l10n.uiActionFailed);
         await _showActionError(error);
       }
       return null;
@@ -3592,7 +3564,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       return;
     }
     final zone = _channelImageBaseline?.zone;
-    await _task('Restoring channels from the stored radio image…', () async {
+    await _task(context.l10n.uiRestoringChannelsFromTheStoredRadio, () async {
       final imported = await _bridge.readImage(image, zone: zone);
       if (!mounted || _radioImage != image) return;
       _recordHistory();
@@ -3841,8 +3813,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         builder: (context) => AlertDialog(
           title: Text(
             skippedCount > 0
-                ? 'Some channels were not written'
-                : 'Some channel values were adjusted',
+                ? context.l10n.uiSomeChannelsWereNotWritten
+                : context.l10n.uiSomeChannelValuesWereAdjusted,
           ),
           content: SingleChildScrollView(
             child: Column(
@@ -3851,13 +3823,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               children: [
                 Text(
                   skippedCount > 0 && adjustedCount > 0
-                      ? 'The write finished. $adjustedCount channels were '
-                            'adjusted and $skippedCount could not be written.'
+                      ? context.l10n.uiTheWriteFinishedChannelsWereAdjusted(
+                          adjustedCount,
+                          skippedCount,
+                        )
                       : skippedCount > 0
-                      ? 'The compatible channels were written, but '
-                            '$skippedCount channels could not be written.'
-                      : 'The write finished, but NewChirp adjusted values the '
-                            'radio does not support.',
+                      ? context.l10n.uiTheCompatibleChannelsWereWrittenBut(
+                          skippedCount,
+                        )
+                      : context.l10n.uiTheWriteFinishedButNewchirpAdjusted,
                 ),
                 const SizedBox(height: 12),
                 for (final entry in changes.take(20))
@@ -3869,8 +3843,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       final reason = entry['reason'];
                       if (reason != null) {
                         if (entry['skipped'] == true) {
-                          return 'Channel $location $name could not be '
-                              'written: $reason';
+                          return context.l10n.uiChannelCouldNotBeWritten(
+                            location,
+                            name,
+                            reason,
+                          );
                         }
                         return 'Channel $location $name: $reason.';
                       }
@@ -3880,14 +3857,15 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       if (nameFrom != null &&
                           nameTo != null &&
                           '$nameFrom' != '$nameTo') {
-                        notes.add('name changed from "$nameFrom" to "$nameTo"');
+                        notes.add(
+                          context.l10n.uiNameChangedFromTo(nameFrom, nameTo),
+                        );
                       }
                       final fields = (entry['fields'] as List? ?? const [])
                           .join(', ');
                       if (fields.isNotEmpty) {
                         notes.add(
-                          'locked field(s): $fields; everything else was '
-                          'written',
+                          context.l10n.uiLockedFieldSEverythingElseWas(fields),
                         );
                       }
                       return 'Channel $location $name: ${notes.join('; ')}.';
@@ -3895,21 +3873,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   ),
                 if (changes.length > 20)
                   Text(
-                    '…and ${changes.length - 20} more channels.',
+                    context.l10n.uiAndMoreChannels(changes.length - 20),
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                const Text(
-                  'Names are converted only when the selected radio requires '
-                  'it. Custom frequencies may require a channel outside the '
-                  'radio\'s locked memory range.',
-                ),
+                Text(context.l10n.uiNamesAreConvertedOnlyWhenThe),
               ],
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(context.l10n.close),
             ),
           ],
         ),
@@ -3941,7 +3915,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       if (!_transferCancelling) failure = error;
       if (mounted) {
         setState(
-          () => _status = _transferCancelling ? 'Cancelled' : 'Action failed',
+          () => _status = _transferCancelling
+              ? 'Cancelled'
+              : context.l10n.uiActionFailed,
         );
       }
     } finally {
@@ -3979,23 +3955,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             Icons.warning_amber_rounded,
             color: Color(0xFFC46A15),
           ),
-          title: const Text('Stop writing the radio?'),
-          content: const Text(
-            'The radio is being written now. Some radios take a minute or '
-            'two, and the elapsed time shows the write is still running. '
-            'Stopping partway can leave part of the radio\'s memory '
-            'half-written; it may then need a power cycle and a fresh '
-            'write.',
-          ),
+          title: Text(context.l10n.uiStopWritingTheRadio),
+          content: Text(context.l10n.uiTheRadioIsBeingWrittenNow),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Stop anyway'),
+              child: Text(context.l10n.uiStopAnyway),
             ),
             FilledButton(
               autofocus: true,
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Keep writing'),
+              child: Text(context.l10n.uiKeepWriting),
             ),
           ],
         ),
@@ -4005,7 +3975,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
     setState(() {
       _transferCancelling = true;
-      _transferLabel = 'Cancelling safely…';
+      _transferLabel = context.l10n.uiCancellingSafely;
     });
     _bridge.cancelActive();
   }
@@ -4270,24 +4240,24 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       builder: (dialogContext) => AlertDialog(
         title: Text(
           installerUrl == null
-              ? 'Update available'
-              : 'NewChirp ${result.latestVersion} is ready',
+              ? context.l10n.uiUpdateAvailable
+              : context.l10n.uiNewchirpIsReady(result.latestVersion),
         ),
         content: Text(
           installerUrl == null
-              ? 'NewChirp ${result.latestVersion} is available. '
-                    'You are running ${result.currentVersion}.\n\n'
-                    'Open the download page to get the right installer for '
-                    'your computer.'
-              : 'You are running ${result.currentVersion}. '
-                    'NewChirp can download and install ${result.latestVersion} '
-                    'for you, then reopen automatically. No visit to the '
-                    'website is required.',
+              ? context.l10n.uiNewchirpIsAvailableYouAreRunning(
+                  result.latestVersion,
+                  result.currentVersion,
+                )
+              : context.l10n.uiYouAreRunningNewchirpCanDownload(
+                  result.currentVersion,
+                  result.latestVersion,
+                ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Later'),
+            child: Text(context.l10n.uiLater),
           ),
           if (installerUrl == null)
             FilledButton.icon(
@@ -4296,7 +4266,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 unawaited(_openDownloadPage(downloadPageUrl));
               },
               icon: const Icon(Icons.open_in_new),
-              label: const Text('Open download page'),
+              label: Text(context.l10n.uiOpenDownloadPage),
             )
           else
             FilledButton.icon(
@@ -4305,7 +4275,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 unawaited(_downloadAndInstallUpdate(result));
               },
               icon: const Icon(Icons.system_update_alt),
-              label: const Text('Download and install'),
+              label: Text(context.l10n.uiDownloadAndInstall),
             ),
         ],
       ),
@@ -4313,19 +4283,17 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   Future<void> _downloadAndInstallUpdate(UpdateCheckResult result) async {
+    final l10n = context.l10n;
     if (_busy || _transferActive || _savingLibrary) {
       await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Finish the current operation first'),
-          content: const Text(
-            'Wait for the current radio or file operation to finish before '
-            'installing NewChirp.',
-          ),
+          title: Text(l10n.uiFinishTheCurrentOperationFirst),
+          content: Text(l10n.uiWaitForTheCurrentRadioOr),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(l10n.close),
             ),
           ],
         ),
@@ -4337,15 +4305,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Save radio settings first'),
-          content: const Text(
-            'You have radio setting changes that have not been written. '
-            'Save those settings before installing the update.',
-          ),
+          title: Text(l10n.uiSaveRadioSettingsFirst),
+          content: Text(l10n.uiYouHaveRadioSettingChangesThat),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(l10n.close),
             ),
           ],
         ),
@@ -4357,19 +4322,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       final save = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Save your channel changes first'),
-          content: const Text(
-            'NewChirp will close to install the update. Save the current '
-            'channel list before continuing.',
-          ),
+          title: Text(l10n.uiSaveYourChannelChangesFirst),
+          content: Text(l10n.uiNewchirpWillCloseToInstallThe),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Later'),
+              child: Text(l10n.uiLater),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Save and continue'),
+              child: Text(l10n.uiSaveAndContinue),
             ),
           ],
         ),
@@ -4379,7 +4341,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       if (!mounted || _dirty) return;
     }
 
-    final status = ValueNotifier<String>('Preparing the update download…');
+    final status = ValueNotifier<String>(l10n.uiPreparingTheUpdateDownload);
     final progress = ValueNotifier<UpdateDownloadProgress>(
       const UpdateDownloadProgress(receivedBytes: 0),
     );
@@ -4390,7 +4352,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       builder: (dialogContext) {
         progressNavigator = Navigator.of(dialogContext);
         return AlertDialog(
-          title: const Text('Installing NewChirp update'),
+          title: Text(l10n.uiInstallingNewchirpUpdate),
           content: SizedBox(
             width: 430,
             child: Column(
@@ -4421,9 +4383,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'NewChirp will close and reopen automatically when the '
-                  'installer is ready.',
+                Text(
+                  l10n.uiNewchirpWillCloseAndReopenAutomatically,
                   style: TextStyle(color: Colors.black54),
                 ),
               ],
@@ -4439,11 +4400,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         result,
         onProgress: (value) {
           progress.value = value;
-          status.value = 'Downloading NewChirp ${result.latestVersion}…';
+          status.value = l10n.uiDownloadingNewchirp(result.latestVersion);
         },
       );
-      status.value =
-          'Verified. Starting the installer and restarting NewChirp…';
+      status.value = l10n.uiVerifiedStartingTheInstallerAndRestarting;
       await _updateInstaller.install(downloaded);
       progressNavigator?.pop();
       await (widget.exitForUpdate ?? _exitForUpdate)();
@@ -4453,21 +4413,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       await progressDialog;
       final message = error is UpdateInstallException
           ? error.message
-          : 'NewChirp could not prepare the update.';
+          : l10n.uiNewchirpCouldNotPrepareTheUpdate;
       if (!mounted) return;
       final downloadPageUrl = trustedDownloadUrl(result.releaseUrl);
       await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Update could not be installed'),
-          content: Text(
-            '$message\n\nYou can still download the latest version from '
-            'newchirp.net.',
-          ),
+          title: Text(l10n.uiUpdateCouldNotBeInstalled),
+          content: Text(l10n.uiYouCanStillDownloadTheLatest(message)),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(l10n.close),
             ),
             FilledButton.icon(
               onPressed: () {
@@ -4475,7 +4432,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 unawaited(_openDownloadPage(downloadPageUrl));
               },
               icon: const Icon(Icons.open_in_new),
-              label: const Text('Open download page'),
+              label: Text(l10n.uiOpenDownloadPage),
             ),
           ],
         ),
@@ -4497,15 +4454,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Couldn\u2019t open your browser'),
-        content: Text(
-          'NewChirp could not start the browser on this computer. Open this '
-          'address yourself to get the update:\n\n$url',
-        ),
+        title: Text(context.l10n.uiCouldnTOpenYourBrowser),
+        content: Text(context.l10n.uiNewchirpCouldNotStartTheBrowser(url)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text('Close'),
+            child: Text(context.l10n.close),
           ),
           FilledButton.icon(
             onPressed: () async {
@@ -4513,7 +4467,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               if (dialogContext.mounted) Navigator.pop(dialogContext);
             },
             icon: const Icon(Icons.copy),
-            label: const Text('Copy link'),
+            label: Text(context.l10n.uiCopyLink),
           ),
         ],
       ),
@@ -4523,12 +4477,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   Future<void> _showUpToDate(UpdateCheckResult result) => showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
-      title: const Text('You\u2019re up to date'),
-      content: Text('NewChirp ${result.currentVersion} is the latest version.'),
+      title: Text(context.l10n.uiYouReUpToDate),
+      content: Text(
+        context.l10n.uiNewchirpIsTheLatestVersion(result.currentVersion),
+      ),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
+          child: Text(context.l10n.close),
         ),
       ],
     ),
@@ -4805,32 +4761,36 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       barrierDismissible: false,
       builder: (context) => AlertDialog(
         icon: const Icon(Icons.swap_horiz),
-        title: Text('Channel ${target.location} is occupied'),
+        title: Text(context.l10n.uiChannelIsOccupied(target.location)),
         content: Text(
-          '${target.name.isEmpty ? 'An existing channel' : target.name} '
-          'already uses channel ${target.location}. Choose how to place '
-          '${source?.name.isNotEmpty == true ? source!.name : 'this channel'}.',
+          context.l10n.occupiedBody(
+            target.name.isEmpty ? context.l10n.anExistingChannel : target.name,
+            target.location,
+            source?.name.isNotEmpty == true
+                ? source!.name
+                : context.l10n.thisChannel,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           TextButton(
             onPressed: () =>
                 Navigator.pop(context, _ChannelLocationConflictAction.replace),
-            child: const Text('Replace'),
+            child: Text(context.l10n.uiReplace),
           ),
           if (source != null)
             TextButton(
               onPressed: () =>
                   Navigator.pop(context, _ChannelLocationConflictAction.swap),
-              child: const Text('Swap'),
+              child: Text(context.l10n.uiSwap),
             ),
           FilledButton(
             onPressed: () =>
                 Navigator.pop(context, _ChannelLocationConflictAction.move),
-            child: const Text('Move and shift'),
+            child: Text(context.l10n.uiMoveAndShift),
           ),
         ],
       ),
@@ -4961,20 +4921,20 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           kept ? Icons.restart_alt : Icons.delete_outline,
           color: kept ? null : const Color(0xFF9B3D34),
         ),
-        title: Text(kept ? 'Reset $label?' : 'Delete channel $label?'),
+        title: Text(
+          kept ? 'Reset $label?' : context.l10n.uiDeleteChannel(label),
+        ),
         content: Text(
           kept
-              ? 'Repeater rows 15 through 22 stay in the radio. '
-                    'The name is cleared and the plain GMRS repeater '
-                    'frequency is put back.'
+              ? context.l10n.uiRepeaterRowsThroughStayInThe
               : channel.name.isEmpty
-              ? 'This channel will be removed from the current configuration.'
-              : '“${channel.name}” will be removed from the current configuration.',
+              ? context.l10n.uiThisChannelWillBeRemovedFrom
+              : context.l10n.uiWillBeRemovedFromTheCurrent(channel.name),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             style: kept
@@ -4983,7 +4943,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     backgroundColor: const Color(0xFF9B3D34),
                   ),
             onPressed: () => Navigator.pop(context, true),
-            child: Text(kept ? 'Reset repeater' : 'Delete channel'),
+            child: Text(
+              kept
+                  ? context.l10n.tipResetRepeater
+                  : context.l10n.tipDeleteChannel,
+            ),
           ),
         ],
       ),
@@ -5034,9 +4998,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               children: [
                 Expanded(
                   child: Text(
-                    '${libraryStats.activeCount} channels · '
-                    '${libraryStats.scanEnabledCount} scan enabled · '
-                    '$invalid need attention',
+                    context.l10n.uiChannelsScanEnabledNeedAttention(
+                      libraryStats.activeCount,
+                      libraryStats.scanEnabledCount,
+                      invalid,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(color: Colors.black54, fontSize: 12),
@@ -5102,8 +5068,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '$invalid ${invalid == 1 ? 'channel needs' : 'channels need'} '
-                            'attention before writing.',
+                            context.l10n.channelsNeedAttention(invalid),
                             style: const TextStyle(
                               color: Color(0xFF8A4C0E),
                               fontWeight: FontWeight.w700,
@@ -5120,9 +5085,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             ),
                             if (channelIssueDetails.length > 1)
                               Text(
-                                '${channelIssueDetails.length - 1} more '
-                                'validation '
-                                '${channelIssueDetails.length == 2 ? 'issue' : 'issues'}.',
+                                context.l10n.moreValidationIssues(
+                                  channelIssueDetails.length - 1,
+                                ),
                                 style: const TextStyle(
                                   color: Color(0xFF8A4C0E),
                                   fontSize: 12,
@@ -5138,7 +5103,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         onPressed: () => unawaited(
                           _reviewChannelIssues(firstChannelNeedingAttention),
                         ),
-                        child: const Text('Review'),
+                        child: Text(context.l10n.uiReview),
                       ),
                   ],
                 ),
@@ -5153,17 +5118,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: const Color(0xFFE7C9A5)),
               ),
-              child: const Padding(
+              child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 child: Row(
                   children: [
                     Icon(Icons.shield_outlined, color: Color(0xFF9B5B18)),
                     SizedBox(width: 10),
                     Expanded(
-                      child: Text(
-                        'No radio image loaded. Editing and CSV export work, but '
-                        'writing stays locked until you read from this radio.',
-                      ),
+                      child: Text(context.l10n.uiNoRadioImageLoadedEditingAnd),
                     ),
                   ],
                 ),
@@ -5192,10 +5154,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     Expanded(
                       child: Text(
                         storedImageReady
-                            ? 'Stored image ready for ${displayRadioModelName(_model!)}. '
-                                  'You can write without reading again.'
-                            : 'A radio image is loaded from this session. '
-                                  'Review all changes before writing.',
+                            ? context.l10n.uiStoredImageReadyForYouCan(
+                                displayRadioModelName(_model!),
+                              )
+                            : context.l10n.uiARadioImageIsLoadedFrom,
                       ),
                     ),
                   ],
@@ -5455,29 +5417,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                               ],
                             ],
                             const SizedBox(width: 2),
-                            const _HelpButton(
-                              title: 'Channel editing',
-                              details:
-                                  'Add lets you place a new channel at the end, before the '
-                                  'selected channel, or after it. Before and after shift following '
-                                  'channels through the radio memory slots. '
-                                  'Duplicate copies the selected row, and Delete removes it after '
-                                  'confirmation. Double-click any row to edit all of its fields. '
-                                  'Right-click a row to copy, cut, paste, duplicate, or clear it. '
-                                  'Copying or cutting a multi-row selection copies the active '
-                                  'channels as a block; paste places the block at the target row. '
-                                  'Click selects one row. Shift-click selects a range, and '
-                                  'Cmd/Ctrl-click toggles individual rows. Use Bulk edit to '
-                                  'change channel properties on all selected rows; only fields '
-                                  'you modify are applied. Right-click and choose Properties '
-                                  'for the same editor. '
-                                  'Drag the handle at the left edge of a row to move it; intervening '
-                                  'channels shift through the same memory slots. '
-                                  'Show empty slots keeps the radio memory layout visible; '
-                                  'double-click an empty slot to create a channel there. '
-                                  'Clear removes the selected row or all selected rows '
-                                  'from the radio on the next write. Use '
-                                  'Cmd/Ctrl+Z to undo and Cmd/Ctrl+Shift+Z to redo.',
+                            _HelpButton(
+                              title: context.l10n.uiChannelEditing,
+                              details: context.l10n.uiAddLetsYouPlaceANew,
                             ),
                           ],
                         );
@@ -5567,8 +5509,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                     _columnFilters.values.any(
                                       (value) => value.trim().isNotEmpty,
                                     )
-                                ? 'Clear search and column filters to rearrange channels'
-                                : 'Rearrange channels',
+                                ? context.l10n.uiClearSearchAndColumnFiltersTo
+                                : context.l10n.uiRearrangeChannels,
                             onOpen: (location) {
                               final index = _channels.indexWhere(
                                 (channel) => channel.location == location,
@@ -5619,7 +5561,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         : internationalFrequencyReferencePlans[_frequencyReferenceIndex]
               .pdfAsset;
     var prepared = false;
-    await _task('Preparing frequency reference…', () async {
+    await _task(context.l10n.uiPreparingFrequencyReference, () async {
       final data = await rootBundle.load(asset);
       await temp.writeAsBytes(
         data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
@@ -5631,16 +5573,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _printPdfFile(
       temp,
       noun: 'reference',
-      taskLabel: 'Printing frequency reference…',
-      sentText: 'The GMRS/FRS reference',
+      taskLabel: context.l10n.uiPrintingFrequencyReference,
+      sentText: context.l10n.uiTheGmrsFrsReference,
     );
   }
 
   Future<void> _printChannelList() async {
     final rows = channelListRows(_channels, radioModel: _model);
     final title = _model == null
-        ? 'NewChirp channel list'
-        : 'NewChirp channel list: ${displayRadioModelName(_model!)}';
+        ? context.l10n.uiNewchirpChannelList
+        : context.l10n.uiNewchirpChannelList2(displayRadioModelName(_model!));
     final today = DateTime.now().toIso8601String().substring(0, 10);
     final subtitle =
         '$_libraryName · ${rows.length} channel${rows.length == 1 ? '' : 's'}'
@@ -5649,7 +5591,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     final letter = locale.contains('_US') || locale.contains('_CA');
     final temp = File('${Directory.systemTemp.path}/newchirp-channel-list.pdf');
     var prepared = false;
-    await _task('Preparing channel list…', () async {
+    await _task(context.l10n.uiPreparingChannelList, () async {
       await temp.writeAsBytes(
         buildChannelListPdf(
           title: title,
@@ -5663,9 +5605,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (!mounted || !prepared) return;
     await _printPdfFile(
       temp,
-      noun: 'channel list',
-      taskLabel: 'Printing channel list…',
-      sentText: 'The channel list',
+      noun: context.l10n.uiChannelList,
+      taskLabel: context.l10n.uiPrintingChannelList,
+      sentText: context.l10n.uiTheChannelList,
     );
   }
 
@@ -5693,21 +5635,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           icon: const Icon(Icons.print_outlined, color: Color(0xFFC46A15)),
           title: Text(
             noPrinters
-                ? 'No printers found'
+                ? context.l10n.uiNoPrintersFound
                 : '${noun[0].toUpperCase()}${noun.substring(1)} opened',
           ),
           content: Text(
             noPrinters
-                ? 'NewChirp could not find any system printers, so the '
-                      '$noun PDF was opened in your default PDF viewer. '
-                      'Use the viewer’s Print command to print it.'
-                : 'The $noun PDF was opened in your default PDF viewer. '
-                      'Use the viewer’s Print command to print it.',
+                ? context.l10n.uiNewchirpCouldNotFindAnySystem(noun)
+                : context.l10n.uiThePdfWasOpenedInYour(noun),
           ),
           actions: [
             FilledButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(context.l10n.close),
             ),
           ],
         ),
@@ -5735,7 +5674,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       builder: (dialogContext) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
           icon: const Icon(Icons.print_outlined, color: Color(0xFF1F7455)),
-          title: const Text('Choose a printer'),
+          title: Text(context.l10n.uiChooseAPrinter),
           content: SizedBox(
             width: 460,
             height: 320,
@@ -5762,13 +5701,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(dialogContext),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               onPressed: selectedPrinter == null
                   ? null
                   : () => Navigator.pop(dialogContext, selectedPrinter),
-              child: const Text('Print'),
+              child: Text(context.l10n.print),
             ),
           ],
         ),
@@ -5801,12 +5740,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             Icons.check_circle_outline,
             color: Color(0xFF1F7455),
           ),
-          title: const Text('Print job sent'),
-          content: Text('$sentText was sent to $chosenPrinter.'),
+          title: Text(context.l10n.uiPrintJobSent),
+          content: Text(context.l10n.uiWasSentTo(sentText, chosenPrinter)),
           actions: [
             FilledButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Close'),
+              child: Text(context.l10n.close),
             ),
           ],
         ),
@@ -5859,7 +5798,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 onSelected: (_) =>
                     setState(() => _frequencyReferenceIndex = -1),
                 avatar: const Icon(Icons.public, size: 17),
-                label: const Text('US FRS / GMRS'),
+                label: Text(context.l10n.uiUsFrsGmrs),
               ),
               for (
                 var index = 0;
@@ -5957,8 +5896,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           decoration: const BoxDecoration(color: green),
                           children: [
                             cell('Channel', header: true),
-                            cell('Frequency (MHz)', header: true),
-                            cell('Use / notes', header: true),
+                            cell(context.l10n.uiFrequencyMhz, header: true),
+                            cell(context.l10n.uiUseNotes, header: true),
                           ],
                         ),
                         for (final row in group.rows)
@@ -5976,8 +5915,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               ],
               const SizedBox(height: 18),
               Text(
-                'Reference source: ${plan.source} Verify current national '
-                'rules before transmitting.',
+                context.l10n.uiReferenceSourceVerifyCurrentNationalRules(
+                  plan.source,
+                ),
                 style: const TextStyle(color: muted, fontSize: 11),
               ),
             ],
@@ -6005,7 +5945,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '5 W',
         '20 kHz',
-        'Shared 462 MHz interstitial',
+        context.l10n.uiSharedMhzInterstitial,
       ],
       [
         '2',
@@ -6014,7 +5954,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '5 W',
         '20 kHz',
-        'Shared 462 MHz interstitial',
+        context.l10n.uiSharedMhzInterstitial,
       ],
       [
         '3',
@@ -6023,7 +5963,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '5 W',
         '20 kHz',
-        'Shared 462 MHz interstitial',
+        context.l10n.uiSharedMhzInterstitial,
       ],
       [
         '4',
@@ -6032,7 +5972,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '5 W',
         '20 kHz',
-        'Shared 462 MHz interstitial',
+        context.l10n.uiSharedMhzInterstitial,
       ],
       [
         '5',
@@ -6041,7 +5981,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '5 W',
         '20 kHz',
-        'Shared 462 MHz interstitial',
+        context.l10n.uiSharedMhzInterstitial,
       ],
       [
         '6',
@@ -6050,7 +5990,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '5 W',
         '20 kHz',
-        'Shared 462 MHz interstitial',
+        context.l10n.uiSharedMhzInterstitial,
       ],
       [
         '7',
@@ -6059,7 +5999,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '5 W',
         '20 kHz',
-        'Shared 462 MHz interstitial',
+        context.l10n.uiSharedMhzInterstitial,
       ],
       [
         '8',
@@ -6068,7 +6008,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '0.5 W',
         '12.5 kHz',
-        'Handheld only',
+        context.l10n.uiHandheldOnly,
       ],
       [
         '9',
@@ -6077,7 +6017,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '0.5 W',
         '12.5 kHz',
-        'Handheld only',
+        context.l10n.uiHandheldOnly,
       ],
       [
         '10',
@@ -6086,7 +6026,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '0.5 W',
         '12.5 kHz',
-        'Handheld only',
+        context.l10n.uiHandheldOnly,
       ],
       [
         '11',
@@ -6095,7 +6035,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '0.5 W',
         '12.5 kHz',
-        'Handheld only',
+        context.l10n.uiHandheldOnly,
       ],
       [
         '12',
@@ -6104,7 +6044,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '0.5 W',
         '12.5 kHz',
-        'Handheld only',
+        context.l10n.uiHandheldOnly,
       ],
       [
         '13',
@@ -6113,7 +6053,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '0.5 W',
         '12.5 kHz',
-        'Handheld only',
+        context.l10n.uiHandheldOnly,
       ],
       [
         '14',
@@ -6122,7 +6062,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '0.5 W',
         '12.5 kHz',
-        'Handheld only',
+        context.l10n.uiHandheldOnly,
       ],
       [
         '15',
@@ -6131,7 +6071,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
       [
         '16',
@@ -6140,7 +6080,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
       [
         '17',
@@ -6149,7 +6089,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
       [
         '18',
@@ -6158,7 +6098,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
       [
         '19',
@@ -6167,7 +6107,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
       [
         '20',
@@ -6176,7 +6116,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
       [
         '21',
@@ -6185,7 +6125,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
       [
         '22',
@@ -6194,7 +6134,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         '12.5 kHz',
         '50 W',
         '20 kHz',
-        'Main / repeater output',
+        context.l10n.uiMainRepeaterOutput,
       ],
     ];
 
@@ -6277,7 +6217,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'GMRS & FRS Frequency Reference',
+                context.l10n.uiGmrsFrsFrequencyReference,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   color: green,
                   fontWeight: FontWeight.w700,
@@ -6285,7 +6225,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               ),
               const SizedBox(height: 5),
               Text(
-                'United States Part 95 channel plan - color-coded by frequency band and power class.',
+                context.l10n.uiUnitedStatesPartChannelPlanColor,
                 style: Theme.of(
                   context,
                 ).textTheme.bodyMedium?.copyWith(color: muted),
@@ -6293,9 +6233,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               const SizedBox(height: 14),
               Wrap(
                 children: [
-                  legendItem(band1, 'Ch 1-7: 462 MHz interstitial'),
-                  legendItem(band2, 'Ch 8-14: 467 MHz interstitial'),
-                  legendItem(band3, 'Ch 15-22: 462 MHz main'),
+                  legendItem(band1, context.l10n.uiChMhzInterstitial),
+                  legendItem(band2, context.l10n.uiChMhzInterstitial2),
+                  legendItem(band3, context.l10n.uiChMhzMain),
                 ],
               ),
               const SizedBox(height: 16),
@@ -6320,12 +6260,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         children: [
                           headerCell('Ch', align: TextAlign.center),
                           headerCell(
-                            'Frequency (MHz)',
+                            context.l10n.uiFrequencyMhz,
                             align: TextAlign.center,
                           ),
-                          headerCell('FRS Power', align: TextAlign.center),
+                          headerCell(
+                            context.l10n.uiFrsPower,
+                            align: TextAlign.center,
+                          ),
                           headerCell('FRS BW', align: TextAlign.center),
-                          headerCell('GMRS Power', align: TextAlign.center),
+                          headerCell(
+                            context.l10n.uiGmrsPower,
+                            align: TextAlign.center,
+                          ),
                           headerCell('GMRS BW', align: TextAlign.center),
                           headerCell('Notes'),
                         ],
@@ -6351,7 +6297,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               ),
               const SizedBox(height: 20),
               Text(
-                'Repeater Pairs (GMRS Only)',
+                context.l10n.uiRepeaterPairsGmrsOnly,
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: green,
                   fontWeight: FontWeight.w700,
@@ -6376,11 +6322,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                         children: [
                           headerCell('Repeater'),
                           headerCell(
-                            'Input - You Transmit',
+                            context.l10n.uiInputYouTransmit,
                             align: TextAlign.center,
                           ),
                           headerCell(
-                            'Output - You Listen',
+                            context.l10n.uiOutputYouListen,
                             align: TextAlign.center,
                           ),
                           headerCell('Notes'),
@@ -6393,7 +6339,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             cell(row[0]),
                             cell(row[1], align: TextAlign.center),
                             cell(row[2], align: TextAlign.center),
-                            cell('Input = output + 5 MHz'),
+                            cell(context.l10n.uiInputOutputMhz),
                           ],
                         ),
                     ],
@@ -6401,7 +6347,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                 ),
               ),
               const SizedBox(height: 18),
-              const DecoratedBox(
+              DecoratedBox(
                 decoration: BoxDecoration(
                   color: Color(0xFFF5F8F5),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -6412,7 +6358,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Key notes',
+                        context.l10n.uiKeyNotes,
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 13,
@@ -6420,10 +6366,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'All frequencies are in MHz. GMRS requires an FCC license; FRS is license-by-rule.\n'
-                        'GMRS mobile/base radios may not transmit on channels 8-14. Repeater inputs are GMRS-only.\n'
-                        'Community convention: Channel 20 (462.675 MHz) with CTCSS 141.3 Hz is often used as a travel/assistance channel.\n'
-                        'Reference only - verify against current FCC Part 95 rules and your radio manual.',
+                        context.l10n.uiAllFrequenciesAreInMhzGmrs,
                         style: TextStyle(
                           color: Color(0xFF56615B),
                           height: 1.45,
@@ -6724,10 +6667,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
           ),
         ],
         if (group.children.isEmpty)
-          const Padding(
+          Padding(
             padding: EdgeInsets.only(top: 10),
             child: Text(
-              'No editable options in this group.',
+              context.l10n.uiNoEditableOptionsInThisGroup,
               style: TextStyle(color: Colors.black45),
             ),
           )
@@ -7366,7 +7309,7 @@ class _TransferOverlayState extends State<_TransferOverlay> {
                     const SizedBox(height: 8),
                     Text(
                       widget.detail.isEmpty
-                          ? 'Preparing transfer...'
+                          ? context.l10n.uiPreparingTransfer
                           : widget.detail,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
@@ -7379,14 +7322,17 @@ class _TransferOverlayState extends State<_TransferOverlay> {
                     const SizedBox(height: 10),
                     Text(
                       percent == null
-                          ? 'Waiting for the radio to report progress'
-                          : '$percent% complete  |  $_elapsedText elapsed',
+                          ? context.l10n.uiWaitingForTheRadioToReport
+                          : context.l10n.uiCompleteElapsed(
+                              percent,
+                              _elapsedText,
+                            ),
                       textAlign: TextAlign.center,
                       style: const TextStyle(color: Colors.black54),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
-                      'Keep the radio powered on and the cable connected.',
+                    Text(
+                      context.l10n.uiKeepTheRadioPoweredOnAnd,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.black54),
                     ),
@@ -7505,11 +7451,11 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
     if (node.kind == 'integer') {
       final parsed = int.tryParse(text.trim());
       if (parsed == null) {
-        error = 'Enter a whole number';
+        error = context.l10n.uiEnterAWholeNumber;
       } else if (node.min != null && parsed < node.min!) {
-        error = 'Value must be at least ${node.min}';
+        error = context.l10n.uiValueMustBeAtLeast('${node.min}');
       } else if (node.max != null && parsed > node.max!) {
-        error = 'Value must be at most ${node.max}';
+        error = context.l10n.uiValueMustBeAtMost('${node.max}');
       } else {
         node.value = parsed;
       }
@@ -7518,18 +7464,18 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
       if (parsed == null) {
         error = 'Enter a number';
       } else if (node.min != null && parsed < node.min!) {
-        error = 'Value must be at least ${node.min}';
+        error = context.l10n.uiValueMustBeAtLeast('${node.min}');
       } else if (node.max != null && parsed > node.max!) {
-        error = 'Value must be at most ${node.max}';
+        error = context.l10n.uiValueMustBeAtMost('${node.max}');
       } else {
         node.value = parsed;
       }
     } else {
       final length = text.length;
       if (node.minLength != null && length < node.minLength!) {
-        error = 'Use at least ${node.minLength} characters';
+        error = context.l10n.uiUseAtLeastCharacters('${node.minLength}');
       } else if (node.maxLength != null && length > node.maxLength!) {
-        error = 'Use at most ${node.maxLength} characters';
+        error = context.l10n.uiUseAtMostCharacters('${node.maxLength}');
       } else {
         node.value = text;
       }
@@ -7587,7 +7533,7 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
     }
     if (node.kind == 'unsupported') {
       return Text(
-        '${node.label}: this setting type is not supported yet.',
+        context.l10n.uiThisSettingTypeIsNotSupported(node.label),
         style: const TextStyle(color: Color(0xFF9B5B18)),
       );
     }
@@ -7613,69 +7559,27 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
   }
 }
 
-const _glossaryTerms = <(String, String)>[
-  (
-    'FRS',
-    'Family Radio Service. A license-free UHF service in the United States.',
-  ),
-  (
-    'GMRS',
-    'General Mobile Radio Service. A licensed UHF service in the United States.',
-  ),
-  ('RX', 'Receive. The frequency or tone used when listening.'),
-  ('TX', 'Transmit. The frequency or tone used when sending.'),
-  (
-    'CTCSS',
-    'Continuous Tone-Coded Squelch System. A subaudible analog tone commonly called a PL tone.',
-  ),
-  (
-    'TSQL',
-    'Tone squelch. Requires a matching CTCSS tone for both receive and transmit.',
-  ),
-  (
-    'DCS',
-    'Digital-Coded Squelch System. A digital squelch code; NewChirp labels it DTCS.',
-  ),
-  (
-    'DTCS',
-    'Digital-Coded Squelch System. A digital code used like a CTCSS tone to open a receiver or repeater.',
-  ),
-  (
-    'DTCS POL',
-    'DTCS polarity. Normal or inverted code polarity must match between the radio and repeater.',
-  ),
-  ('FM', 'Frequency modulation. Standard analog voice mode.'),
-  (
-    'NFM',
-    'Narrowband FM. Uses less bandwidth and is common on FRS, GMRS, and busy repeater systems.',
-  ),
-  (
-    'AM',
-    'Amplitude modulation. Used by some aircraft and amateur-radio channels.',
-  ),
-  (
-    'DUPLEX',
-    'Transmit/receive relationship. Simplex uses the same frequency; offsets and splits use different transmit frequencies.',
-  ),
-  ('OFFSET', 'The frequency difference between receive and transmit.'),
-  (
-    'SPLIT',
-    'Independent receive and transmit frequencies rather than a fixed offset.',
-  ),
-  ('STEP', 'Tuning step size used when changing frequency.'),
-  ('SCAN', 'Whether the channel is included in scanning or marked to skip.'),
-  (
-    'BCL',
-    'Busy Channel Lockout. Prevents transmitting when the channel is already in use.',
-  ),
-  (
-    'PTT ID',
-    'Station identification sent at the beginning or end of a transmission, depending on the radio.',
-  ),
-  (
-    'S-CODE',
-    'Signaling code selector. Chooses which stored PTT-ID or signaling code the channel uses.',
-  ),
+List<(String, String)> _glossaryTerms(AppLocalizations l10n) => [
+  ('FRS', l10n.glossFrs),
+  ('GMRS', l10n.glossGmrs),
+  ('RX', l10n.glossRx),
+  ('TX', l10n.glossTx),
+  ('CTCSS', l10n.glossCtcss),
+  ('TSQL', l10n.glossTsql),
+  ('DCS', l10n.glossDcs),
+  ('DTCS', l10n.glossDtcs),
+  ('DTCS POL', l10n.glossDtcsPol),
+  ('FM', l10n.glossFm),
+  ('NFM', l10n.glossNfm),
+  ('AM', l10n.glossAm),
+  ('DUPLEX', l10n.glossDuplex),
+  ('OFFSET', l10n.glossOffset),
+  ('SPLIT', l10n.glossSplit),
+  ('STEP', l10n.glossStep),
+  ('SCAN', l10n.glossScan),
+  ('BCL', l10n.glossBcl),
+  ('PTT ID', l10n.glossPttId),
+  ('S-CODE', l10n.glossSCode),
 ];
 
 Future<void> _showAbbreviationGlossary(BuildContext context) {
@@ -7705,7 +7609,7 @@ class _GlossaryDialogState extends State<_GlossaryDialog> {
   @override
   Widget build(BuildContext context) {
     final query = _query.trim().toLowerCase();
-    final terms = _glossaryTerms
+    final terms = _glossaryTerms(context.l10n)
         .where(
           (entry) =>
               query.isEmpty ||
@@ -7714,7 +7618,7 @@ class _GlossaryDialogState extends State<_GlossaryDialog> {
         )
         .toList();
     return AlertDialog(
-      title: const Text('Abbreviations & terms'),
+      title: Text(context.l10n.tipAbbreviations),
       content: SizedBox(
         width: 640,
         height: 520,
@@ -7724,15 +7628,15 @@ class _GlossaryDialogState extends State<_GlossaryDialog> {
               controller: _controller,
               autofocus: true,
               onChanged: (value) => setState(() => _query = value),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 prefixIcon: Icon(Icons.search),
-                hintText: 'Search abbreviations or definitions',
+                hintText: context.l10n.uiSearchAbbreviationsOrDefinitions,
               ),
             ),
             const SizedBox(height: 14),
             Expanded(
               child: terms.isEmpty
-                  ? const Center(child: Text('No matching terms.'))
+                  ? Center(child: Text(context.l10n.uiNoMatchingTerms))
                   : ListView.separated(
                       itemCount: terms.length,
                       separatorBuilder: (_, _) => const Divider(height: 1),
@@ -7757,7 +7661,7 @@ class _GlossaryDialogState extends State<_GlossaryDialog> {
       actions: [
         FilledButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Close'),
+          child: Text(context.l10n.close),
         ),
       ],
     );
@@ -8186,7 +8090,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
   Future<void> _submit() async {
     final email = _emailController.text.trim();
     if (!email.contains('@') || email.startsWith('@') || email.endsWith('@')) {
-      setState(() => _error = 'Enter a valid email address.');
+      setState(() => _error = context.l10n.uiEnterAValidEmailAddress);
       return;
     }
     setState(() {
@@ -8223,7 +8127,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
       if (mounted) setState(() => _error = error.message);
     } on Object {
       if (mounted) {
-        setState(() => _error = 'Could not send the error report.');
+        setState(() => _error = context.l10n.uiCouldNotSendTheErrorReport);
       }
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -8236,12 +8140,16 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
       maxCharacters: 6000,
     );
     return AlertDialog(
-      title: Text(_sent ? 'Error report sent' : 'Submit error report'),
+      title: Text(
+        _sent
+            ? context.l10n.uiErrorReportSent
+            : context.l10n.uiSubmitErrorReport,
+      ),
       content: SizedBox(
         width: 620,
         child: SingleChildScrollView(
           child: _sent
-              ? const Padding(
+              ? Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -8253,8 +8161,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
                       ),
                       SizedBox(height: 14),
                       Text(
-                        'Thanks. The diagnostic log and error details were '
-                        'sent to the NewChirp developer.',
+                        context.l10n.uiThanksTheDiagnosticLogAndError,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -8273,10 +8180,9 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
-                      decoration: const InputDecoration(
-                        labelText: 'Your email',
-                        helperText:
-                            'Used only if the developer needs more information.',
+                      decoration: InputDecoration(
+                        labelText: context.l10n.uiYourEmail,
+                        helperText: context.l10n.uiUsedOnlyIfTheDeveloperNeeds,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -8285,23 +8191,22 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
                       minLines: 3,
                       maxLines: 6,
                       maxLength: 3500,
-                      decoration: const InputDecoration(
-                        labelText: 'What were you trying to do?',
+                      decoration: InputDecoration(
+                        labelText: context.l10n.uiWhatWereYouTryingToDo,
                         alignLabelWithHint: true,
                       ),
                     ),
-                    const Text(
-                      'The report includes app and operating-system versions, '
-                      'the selected radio and serial port, and recent '
-                      'diagnostic events. Channel contents and loaded files '
-                      'are not logged.',
+                    Text(
+                      context.l10n.uiTheReportIncludesAppAndOperating,
                       style: TextStyle(color: Colors.black54, height: 1.4),
                     ),
                     const SizedBox(height: 8),
                     ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       title: Text(
-                        'Preview ${widget.diagnosticLog.entryCount} diagnostic events',
+                        context.l10n.uiPreviewDiagnosticEvents(
+                          widget.diagnosticLog.entryCount,
+                        ),
                         style: const TextStyle(fontSize: 13),
                       ),
                       childrenPadding: const EdgeInsets.only(bottom: 8),
@@ -8317,7 +8222,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
                           child: SingleChildScrollView(
                             child: SelectableText(
                               diagnosticPreview.isEmpty
-                                  ? 'No diagnostic events recorded.'
+                                  ? context.l10n.uiNoDiagnosticEventsRecorded
                                   : diagnosticPreview,
                               style: const TextStyle(
                                 fontFamily: 'monospace',
@@ -8355,7 +8260,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(Icons.send_outlined),
-            label: Text(_sending ? 'Sending…' : 'Send report'),
+            label: Text(_sending ? 'Sending…' : context.l10n.uiSendReport),
           ),
       ],
     );
@@ -8766,12 +8671,12 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _loading = true;
       _myGmrsSigningIn = true;
       _error = null;
-      _status = 'Waiting for myGMRS sign-in. You can cancel this attempt.';
+      _status = context.l10n.uiWaitingForMygmrsSignInYou;
     });
     try {
       await _myGmrs.signIn();
       if (mounted) {
-        setState(() => _status = 'Signed in to myGMRS for this session.');
+        setState(() => _status = context.l10n.uiSignedInToMygmrsForThis);
       }
     } catch (error) {
       if (mounted && !_myGmrsSignInCancelled) {
@@ -8794,7 +8699,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       setState(() {
         _loading = false;
         _myGmrsSigningIn = false;
-        _status = 'myGMRS sign-in cancelled.';
+        _status = context.l10n.uiMygmrsSignInCancelled;
         _error = null;
       });
     }
@@ -8804,13 +8709,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     setState(() {
       _loading = true;
       _error = null;
-      _status = 'Signing out of myGMRS…';
+      _status = context.l10n.uiSigningOutOfMygmrs;
     });
     try {
       await _myGmrs.signOut();
       if (mounted) {
         setState(() {
-          _status = 'Signed out of myGMRS.';
+          _status = context.l10n.uiSignedOutOfMygmrs;
           _results = null;
           _selected.clear();
           _selectedCounties.clear();
@@ -8849,36 +8754,33 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     final longitude = double.tryParse(_longitudeController.text.trim());
     final distance = double.tryParse(_distanceController.text.trim());
     if ((latitude == null) != (longitude == null)) {
-      setState(() => _error = 'Enter both latitude and longitude, or neither.');
+      setState(() => _error = context.l10n.uiEnterBothLatitudeAndLongitudeOr);
       return;
     }
     if (latitude != null && (latitude < -90 || latitude > 90)) {
-      setState(() => _error = 'Latitude must be between -90 and 90.');
+      setState(() => _error = context.l10n.uiLatitudeMustBeBetweenAnd);
       return;
     }
     if (longitude != null && (longitude < -180 || longitude > 180)) {
-      setState(() => _error = 'Longitude must be between -180 and 180.');
+      setState(() => _error = context.l10n.uiLongitudeMustBeBetweenAnd);
       return;
     }
     if (zipSearch && latitude != null) {
-      setState(
-        () => _error = 'Use either a ZIP code or coordinates, not both.',
-      );
+      setState(() => _error = context.l10n.uiUseEitherAZipCodeOr);
       return;
     }
     if (distance != null && latitude == null && !zipSearch) {
       setState(
-        () =>
-            _error = 'Latitude and longitude are required for a radius search.',
+        () => _error = context.l10n.uiLatitudeAndLongitudeAreRequiredFor,
       );
       return;
     }
     if (distance != null && distance <= 0) {
-      setState(() => _error = 'Radius must be greater than zero.');
+      setState(() => _error = context.l10n.uiRadiusMustBeGreaterThanZero);
       return;
     }
     if (_provider == _RepeaterProvider.myGmrs && !_myGmrs.signedIn) {
-      setState(() => _error = 'Sign in to myGMRS before searching.');
+      setState(() => _error = context.l10n.uiSignInToMygmrsBeforeSearching);
       return;
     }
     _preferencesSaveTimer?.cancel();
@@ -8892,8 +8794,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       _selected.clear();
       _selectedCounties.clear();
       _status = _provider == _RepeaterProvider.myGmrs
-          ? 'Signing in to myGMRS…'
-          : 'Searching RepeaterBook…';
+          ? context.l10n.uiSigningInToMygmrs
+          : context.l10n.uiSearchingRepeaterbook;
     });
     try {
       final results = _provider == _RepeaterProvider.myGmrs
@@ -8938,9 +8840,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         ? 'myGMRS'
         : 'RepeaterBook';
     if (totalMatches > 0) {
-      return '$source returned $totalMatches matching '
-          '${totalMatches == 1 ? 'repeater' : 'repeaters'}, but none could '
-          'be imported.';
+      return context.l10n.repeatersNoneImportable(totalMatches, source);
     }
     final hasCoordinates =
         double.tryParse(_latitudeController.text.trim()) != null &&
@@ -8953,41 +8853,50 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
       r'^\d{5}(?:-\d{4})?$',
     ).hasMatch(_filterController.text.trim());
     final effectiveRadius = radius == null && zip ? 50.0 : radius;
+    final km = effectiveRadius?.toStringAsFixed(
+      effectiveRadius == effectiveRadius.roundToDouble() ? 0 : 1,
+    );
     final range = effectiveRadius == null || effectiveRadius <= 0
-        ? ' in $location'
-        : ' within ${effectiveRadius.toStringAsFixed(effectiveRadius == effectiveRadius.roundToDouble() ? 0 : 1)} km '
-              'of ${zip ? 'ZIP code ${_filterController.text.trim()}' : 'your coordinates'} '
-              'in $location';
+        ? context.l10n.repeaterRangeIn(location)
+        : zip
+        ? context.l10n.repeaterRangeZip(
+            km!,
+            _filterController.text.trim(),
+            location,
+          )
+        : context.l10n.repeaterRangeCoords(km!, location);
     if (_country == 'United States' && _service == 'gmrs') {
       final sourceHint = _provider == _RepeaterProvider.myGmrs
-          ? 'myGMRS requires an active GMRS license to expose repeater '
-                'frequencies. Confirm that you are signed in with an eligible '
-                'account. myGMRS text search does not understand county names; '
-                'enter a 5-digit ZIP code for a nearby repeater search.'
-          : 'RepeaterBook may not have a GMRS listing for this area yet.';
+          ? context.l10n.uiMygmrsRequiresAnActiveGmrsLicense2
+          : context.l10n.uiRepeaterbookMayNotHaveAGmrs;
       final scopeHint = hasCoordinates
-          ? 'Coordinates are searched within the selected region.'
-          : 'Check that Country and Region are correct.';
-      return 'No matching GMRS repeaters were found$range. $sourceHint '
-          '$scopeHint';
+          ? context.l10n.uiCoordinatesAreSearchedWithinTheSelected
+          : context.l10n.uiCheckThatCountryAndRegionAre;
+      return context.l10n.uiNoMatchingGmrsRepeatersWereFound(
+        range,
+        sourceHint,
+        scopeHint,
+      );
     }
-    final activeFilters = [if (_openOnly) 'open use', if (_fmOnly) 'FM analog'];
+    final activeFilters = [
+      if (_openOnly) context.l10n.uiOpenUse,
+      if (_fmOnly) context.l10n.uiFmAnalog,
+    ];
     final filterHint = activeFilters.isEmpty
         ? ''
-        : ' Active filters require ${activeFilters.join(' and ')}; try '
-              'turning them off.';
+        : context.l10n.repeaterFilterHint(
+            activeFilters.join(context.l10n.listAnd),
+          );
     if (zip) {
-      return 'No matching repeaters were found$range. ZIP searches default to '
-          '50 km; increase the radius or turn off active filters.$filterHint';
+      return context.l10n.uiNoMatchingRepeatersWereFoundZip(range, filterHint);
     }
     if (hasCoordinates) {
-      return 'No matching repeaters were found$range. Coordinates are '
-          'searched within the selected region. Increase the radius or turn '
-          'off active filters.'
-          '$filterHint';
+      return context.l10n.uiNoMatchingRepeatersWereFoundCoordinates(
+        range,
+        filterHint,
+      );
     }
-    return 'No matching repeaters were found$range. Check the selected region '
-        'or increase the radius.$filterHint';
+    return context.l10n.uiNoMatchingRepeatersWereFoundCheck(range, filterHint);
   }
 
   List<RadioChannel> get _selectedChannels {
@@ -9028,7 +8937,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
               )
               .toList();
           return AlertDialog(
-            title: Text('Filter $_state counties'),
+            title: Text(context.l10n.uiFilterCounties(_state)),
             content: SizedBox(
               width: 460,
               height: 420,
@@ -9038,8 +8947,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                     key: const ValueKey('county-filter-field'),
                     controller: _countyFilterController,
                     autofocus: true,
-                    decoration: const InputDecoration(
-                      labelText: 'Find a county',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.uiFindACounty,
                       prefixIcon: Icon(Icons.search),
                     ),
                     onChanged: (value) => setDialogState(
@@ -9050,8 +8959,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                   Row(
                     children: [
                       Text(
-                        '${visibleCounties.length} of ${counties.length} '
-                        'counties',
+                        context.l10n.uiOfCounties(
+                          visibleCounties.length,
+                          counties.length,
+                        ),
                         style: const TextStyle(
                           color: Colors.black54,
                           fontSize: 12,
@@ -9060,13 +8971,13 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                       const Spacer(),
                       TextButton(
                         onPressed: () => setDialogState(selected.clear),
-                        child: const Text('Clear all'),
+                        child: Text(context.l10n.uiClearAll),
                       ),
                     ],
                   ),
                   Expanded(
                     child: visibleCounties.isEmpty
-                        ? const Center(child: Text('No matching counties.'))
+                        ? Center(child: Text(context.l10n.uiNoMatchingCounties))
                         : ListView.builder(
                             itemCount: visibleCounties.length,
                             itemBuilder: (context, index) {
@@ -9092,11 +9003,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext),
-                child: const Text('Cancel'),
+                child: Text(context.l10n.cancel),
               ),
               FilledButton(
                 onPressed: () => Navigator.pop(dialogContext, selected),
-                child: const Text('Apply'),
+                child: Text(context.l10n.apply),
               ),
             ],
           );
@@ -9124,7 +9035,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   String _channelDetail(RepeaterSearchResult result) {
     final channel = result.channel;
     final frequency = '${channel.frequency.toStringAsFixed(4)} MHz';
-    final tone = channel.tone.isEmpty ? 'no tone' : channel.tone;
+    final tone = channel.tone.isEmpty ? context.l10n.uiNoTone : channel.tone;
     final distance = result.distanceKm == null
         ? ''
         : ' • ${result.distanceKm!.toStringAsFixed(1)} km';
@@ -9249,11 +9160,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
           ),
         ),
         if (points.isEmpty)
-          const Positioned.fill(
+          Positioned.fill(
             child: ColoredBox(
               color: Color(0xCCFFFFFF),
               child: Center(
-                child: Text('No coordinates are available for these results.'),
+                child: Text(context.l10n.uiNoCoordinatesAreAvailableForThese),
               ),
             ),
           )
@@ -9268,7 +9179,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                   vertical: 6,
                 ),
                 child: Text(
-                  '${points.length} mapped • tap a pin to select',
+                  context.l10n.uiMappedTapAPinToSelect(points.length),
                   style: const TextStyle(fontSize: 11),
                 ),
               ),
@@ -9328,8 +9239,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                     size: 30,
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Find repeaters',
+                  Text(
+                    context.l10n.navFindRepeaters,
                     style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 14),
@@ -9338,10 +9249,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Search a repeater directory and add selected channels to '
-                            'your current library. Verify repeater status and access '
-                            'before transmitting.',
+                          Text(
+                            context.l10n.uiSearchARepeaterDirectoryAndAdd,
                             style: TextStyle(color: Colors.black54),
                           ),
                           const SizedBox(height: 14),
@@ -9358,8 +9267,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         ),
                                         isExpanded: true,
                                         initialValue: _provider,
-                                        decoration: const InputDecoration(
-                                          labelText: 'Directory',
+                                        decoration: InputDecoration(
+                                          labelText: context.l10n.uiDirectory,
                                         ),
                                         items: const [
                                           DropdownMenuItem(
@@ -9401,10 +9310,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     ),
                                     label: Text(
                                       _myGmrsSigningIn
-                                          ? 'Cancel sign-in'
+                                          ? context.l10n.uiCancelSignIn
                                           : _myGmrs.signedIn
-                                          ? 'Sign out'
-                                          : 'Sign in to myGMRS',
+                                          ? context.l10n.uiSignOut
+                                          : context.l10n.uiSignInToMygmrs,
                                     ),
                                   ),
                                 ],
@@ -9412,11 +9321,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             ),
                             if (_provider == _RepeaterProvider.myGmrs) ...[
                               const SizedBox(height: 6),
-                              const Text(
-                                'myGMRS requires an active GMRS license for '
-                                'repeater frequencies. PL tones and rules require '
-                                'a Premium membership. This sign-in lasts until '
-                                'NewChirp closes.',
+                              Text(
+                                context
+                                    .l10n
+                                    .uiMygmrsRequiresAnActiveGmrsLicense,
                                 style: TextStyle(
                                   color: Colors.black54,
                                   fontSize: 12,
@@ -9432,8 +9340,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   key: ValueKey('repeater-country-$_country'),
                                   isExpanded: true,
                                   initialValue: _country,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Country',
+                                  decoration: InputDecoration(
+                                    labelText: context.l10n.uiCountry,
                                   ),
                                   items: repeaterCountryChoices
                                       .map(
@@ -9454,7 +9362,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         },
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12),
                               SizedBox(
                                 width: 165,
                                 child:
@@ -9464,29 +9372,33 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       ),
                                       isExpanded: true,
                                       initialValue: _sortOrder,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Sort results',
+                                      decoration: InputDecoration(
+                                        labelText: context.l10n.uiSortResults,
                                       ),
-                                      items: const [
+                                      items: [
                                         DropdownMenuItem(
                                           value: RepeaterSortOrder.source,
-                                          child: Text('Source order'),
+                                          child: Text(
+                                            context.l10n.uiSourceOrder,
+                                          ),
                                         ),
                                         DropdownMenuItem(
                                           value: RepeaterSortOrder.frequency,
-                                          child: Text('Frequency'),
+                                          child: Text(context.l10n.uiFrequency),
                                         ),
                                         DropdownMenuItem(
                                           value: RepeaterSortOrder.callsignName,
-                                          child: Text('Callsign / name'),
+                                          child: Text(
+                                            context.l10n.uiCallsignName,
+                                          ),
                                         ),
                                         DropdownMenuItem(
                                           value: RepeaterSortOrder.city,
-                                          child: Text('City'),
+                                          child: Text(context.l10n.uiCity),
                                         ),
                                         DropdownMenuItem(
                                           value: RepeaterSortOrder.county,
-                                          child: Text('County'),
+                                          child: Text(context.l10n.uiCounty),
                                         ),
                                       ],
                                       onChanged: (value) {
@@ -9522,7 +9434,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   },
                                 ),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: 12),
                               SizedBox(
                                 width: 190,
                                 child: DropdownButtonFormField<String>(
@@ -9531,17 +9443,17 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   ),
                                   isExpanded: true,
                                   initialValue: _service,
-                                  decoration: const InputDecoration(
-                                    labelText: 'Service',
+                                  decoration: InputDecoration(
+                                    labelText: context.l10n.uiService,
                                   ),
-                                  items: const [
+                                  items: [
                                     DropdownMenuItem(
                                       value: 'all',
-                                      child: Text('Amateur + GMRS'),
+                                      child: Text(context.l10n.uiAmateurGmrs),
                                     ),
                                     DropdownMenuItem(
                                       value: 'amateur',
-                                      child: Text('Amateur (ham)'),
+                                      child: Text(context.l10n.uiAmateurHam),
                                     ),
                                     DropdownMenuItem(
                                       value: 'gmrs',
@@ -9581,13 +9493,17 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             onSubmitted: (_) => _search(),
                             decoration: InputDecoration(
                               labelText: _provider == _RepeaterProvider.myGmrs
-                                  ? 'Repeater name, city, or ZIP code'
-                                  : 'City, ZIP, county, callsign, landmark, or notes',
+                                  ? context.l10n.uiRepeaterNameCityOrZipCode
+                                  : context
+                                        .l10n
+                                        .uiCityZipCountyCallsignLandmarkOr,
                               helperText: _provider == _RepeaterProvider.myGmrs
-                                  ? 'A 5-digit ZIP searches nearby repeaters. '
-                                        'County names are not supported by myGMRS.'
-                                  : 'A 5-digit ZIP searches repeaters within '
-                                        '50 km by default.',
+                                  ? context
+                                        .l10n
+                                        .uiADigitZipSearchesNearbyRepeaters
+                                  : context
+                                        .l10n
+                                        .uiADigitZipSearchesRepeatersWithin,
                               prefixIcon: const Icon(Icons.search),
                               suffixIcon: _filterController.text.isEmpty
                                   ? null
@@ -9595,7 +9511,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       key: const ValueKey(
                                         'repeater-search-clear',
                                       ),
-                                      tooltip: 'Clear repeater search',
+                                      tooltip:
+                                          context.l10n.uiClearRepeaterSearch,
                                       onPressed: () {
                                         setState(() {
                                           _preferencesTouched = true;
@@ -9621,8 +9538,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         decimal: true,
                                         signed: true,
                                       ),
-                                  decoration: const InputDecoration(
-                                    labelText: 'Latitude (optional)',
+                                  decoration: InputDecoration(
+                                    labelText: context.l10n.uiLatitudeOptional,
                                   ),
                                 ),
                               ),
@@ -9638,8 +9555,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                         decimal: true,
                                         signed: true,
                                       ),
-                                  decoration: const InputDecoration(
-                                    labelText: 'Longitude (optional)',
+                                  decoration: InputDecoration(
+                                    labelText: context.l10n.uiLongitudeOptional,
                                   ),
                                 ),
                               ),
@@ -9654,8 +9571,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                       const TextInputType.numberWithOptions(
                                         decimal: true,
                                       ),
-                                  decoration: const InputDecoration(
-                                    labelText: 'Radius km',
+                                  decoration: InputDecoration(
+                                    labelText: context.l10n.uiRadiusKm,
                                   ),
                                 ),
                               ),
@@ -9670,7 +9587,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 dense: true,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: const Text('Open repeaters only'),
+                                title: Text(context.l10n.uiOpenRepeatersOnly),
                                 value: _openOnly,
                                 onChanged: _loading
                                     ? null
@@ -9687,7 +9604,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                 dense: true,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: const Text('FM-capable only'),
+                                title: Text(context.l10n.uiFmCapableOnly),
                                 value: _fmOnly,
                                 onChanged:
                                     _loading ||
@@ -9727,8 +9644,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     ? null
                                     : _searchAmateurInstead,
                                 icon: const Icon(Icons.search),
-                                label: const Text(
-                                  'Search Amateur repeaters instead',
+                                label: Text(
+                                  context.l10n.uiSearchAmateurRepeatersInstead,
                                 ),
                               ),
                           ],
@@ -9742,9 +9659,11 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                     onChanged: (_) => setState(() {}),
                                     decoration: InputDecoration(
                                       isDense: true,
-                                      labelText: 'Filter loaded results',
-                                      hintText:
-                                          'City, county, callsign, mode, service, or frequency',
+                                      labelText:
+                                          context.l10n.uiFilterLoadedResults,
+                                      hintText: context
+                                          .l10n
+                                          .uiCityCountyCallsignModeServiceOr,
                                       prefixIcon: const Icon(
                                         Icons.filter_alt_outlined,
                                       ),
@@ -9752,7 +9671,9 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                           _resultFilterController.text.isEmpty
                                           ? null
                                           : IconButton(
-                                              tooltip: 'Clear result filter',
+                                              tooltip: context
+                                                  .l10n
+                                                  .uiClearResultFilter,
                                               onPressed: () => setState(
                                                 _resultFilterController.clear,
                                               ),
@@ -9771,9 +9692,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   ),
                                   label: Text(
                                     _selectedCounties.isEmpty
-                                        ? 'All counties'
-                                        : '${_selectedCounties.length} '
-                                              '${_selectedCounties.length == 1 ? 'county' : 'counties'}',
+                                        ? context.l10n.uiAllCounties
+                                        : context.l10n.countyCount(
+                                            _selectedCounties.length,
+                                          ),
                                   ),
                                 ),
                               ],
@@ -9785,11 +9707,15 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                               Expanded(
                                 child: Text(
                                   results == null
-                                      ? 'Search to preview repeater channels.'
-                                      : '${visibleResults.length} shown'
-                                            ' of ${results.results.length} loaded'
-                                            ' • Data from ${results.source}',
-                                  style: const TextStyle(
+                                      ? context
+                                            .l10n
+                                            .uiSearchToPreviewRepeaterChannels
+                                      : context.l10n.uiShownOfLoadedDataFrom(
+                                          visibleResults.length,
+                                          results.results.length,
+                                          results.source,
+                                        ),
+                                  style: TextStyle(
                                     color: Colors.black54,
                                     fontSize: 12,
                                   ),
@@ -9798,16 +9724,16 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                               if (results != null &&
                                   visibleResults.isNotEmpty) ...[
                                 SegmentedButton<bool>(
-                                  segments: const [
+                                  segments: [
                                     ButtonSegment(
                                       value: false,
                                       icon: Icon(Icons.view_list_outlined),
-                                      label: Text('List'),
+                                      label: Text(context.l10n.uiList),
                                     ),
                                     ButtonSegment(
                                       value: true,
                                       icon: Icon(Icons.map_outlined),
-                                      label: Text('Map'),
+                                      label: Text(context.l10n.uiMap),
                                     ),
                                   ],
                                   selected: {_mapView},
@@ -9828,21 +9754,21 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   onPressed: () => setState(
                                     () => _selected.addAll(visibleResults),
                                   ),
-                                  child: const Text('Select all'),
+                                  child: Text(context.l10n.uiSelectAll),
                                 ),
                                 TextButton(
                                   onPressed: () => setState(_selected.clear),
-                                  child: const Text('Clear'),
+                                  child: Text(context.l10n.uiClear),
                                 ),
                               ],
                             ],
                           ),
                           if (results != null &&
                               results.source == 'RepeaterBook')
-                            const Padding(
+                            Padding(
                               padding: EdgeInsets.only(top: 2),
                               child: Text(
-                                'Data courtesy of RepeaterBook.com.',
+                                context.l10n.uiDataCourtesyOfRepeaterbookCom,
                                 style: TextStyle(
                                   color: Colors.black54,
                                   fontSize: 11,
@@ -9912,7 +9838,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                         onPressed: _loading
                             ? null
                             : () => Navigator.pop(context),
-                        child: const Text('Close'),
+                        child: Text(context.l10n.close),
                       ),
                       const SizedBox(width: 8),
                       FilledButton.tonalIcon(
@@ -9923,7 +9849,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                             ? null
                             : _search,
                         icon: const Icon(Icons.search),
-                        label: const Text('Search'),
+                        label: Text(context.l10n.search),
                       ),
                       const SizedBox(width: 8),
                       FilledButton.icon(
@@ -9933,8 +9859,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                         icon: const Icon(Icons.add),
                         label: Text(
                           _selected.isEmpty
-                              ? 'Add selected'
-                              : 'Add ${_selected.length} selected',
+                              ? context.l10n.uiAddSelected
+                              : context.l10n.uiAddSelected2(_selected.length),
                         ),
                       ),
                       const SizedBox(width: 18),
@@ -9999,7 +9925,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
               child: MouseRegion(
                 cursor: SystemMouseCursors.resizeDownRight,
                 child: Tooltip(
-                  message: 'Drag to resize',
+                  message: context.l10n.uiDragToResize,
                   child: GestureDetector(
                     key: const Key('repeater-book-corner-handle'),
                     behavior: HitTestBehavior.opaque,
@@ -10057,7 +9983,7 @@ class _HelpButton extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Close'),
+                child: Text(context.l10n.close),
               ),
             ],
           ),
@@ -10426,7 +10352,9 @@ class _ChannelTableState extends State<_ChannelTable> {
           value: 7,
           enabled: !isCleared,
           child: Text(
-            multiSelected ? 'Edit selected properties' : 'Properties',
+            multiSelected
+                ? context.l10n.uiEditSelectedProperties
+                : 'Properties',
           ),
         ),
         const PopupMenuDivider(),
@@ -10435,7 +10363,7 @@ class _ChannelTableState extends State<_ChannelTable> {
           enabled: !isCleared,
           child: Text(
             multiSelected
-                ? 'Copy ${widget.selectedLocations.length} channels'
+                ? context.l10n.uiCopyChannels(widget.selectedLocations.length)
                 : 'Copy',
           ),
         ),
@@ -10444,7 +10372,7 @@ class _ChannelTableState extends State<_ChannelTable> {
           enabled: !isCleared,
           child: Text(
             multiSelected
-                ? 'Cut ${widget.selectedLocations.length} channels'
+                ? context.l10n.uiCutChannels(widget.selectedLocations.length)
                 : 'Cut',
           ),
         ),
@@ -10453,32 +10381,34 @@ class _ChannelTableState extends State<_ChannelTable> {
           enabled: widget.clipboardCount > 0,
           child: Text(
             widget.clipboardCount > 1
-                ? 'Paste ${widget.clipboardCount} channels'
+                ? context.l10n.uiPasteChannels(widget.clipboardCount)
                 : 'Paste',
           ),
         ),
         PopupMenuItem(
           value: 3,
           enabled: !isCleared,
-          child: const Text('Duplicate'),
+          child: Text(context.l10n.duplicate),
         ),
         PopupMenuItem(
           value: 5,
           enabled: !isCleared && widget.reorderEnabled,
-          child: const Text('Insert empty slot before'),
+          child: Text(context.l10n.uiInsertEmptySlotBefore),
         ),
         PopupMenuItem(
           value: 6,
           enabled: isCleared && widget.reorderEnabled,
-          child: const Text('Remove empty slot'),
+          child: Text(context.l10n.uiRemoveEmptySlot),
         ),
         PopupMenuItem(
           value: 4,
           enabled: !isCleared,
           child: Text(
             multiSelected
-                ? 'Clear ${widget.selectedLocations.length} selected channels'
-                : 'Clear channel',
+                ? context.l10n.uiClearSelectedChannels(
+                    widget.selectedLocations.length,
+                  )
+                : context.l10n.uiClearChannel,
           ),
         ),
       ],
@@ -10533,53 +10463,35 @@ class _ChannelTableState extends State<_ChannelTable> {
           'BANK',
           138,
           (channel) => widget.bankLabels[channel.location] ?? '—',
-          help:
-              'Bank or zone membership reported by the selected radio. '
-              'A green boundary marks the start of each bank.',
+          help: context.l10n.helpBank,
         ),
       _ChannelColumn(
         'NAME',
         160,
         (channel) => channel.name.isEmpty ? '—' : channel.name,
-        help: 'Channel name stored in the radio memory.',
+        help: context.l10n.helpName,
       ),
       _ChannelColumn(
         'RX FREQUENCY',
         126,
         (channel) =>
             channel.frequency <= 0 ? '' : channel.frequency.toStringAsFixed(6),
-        help: 'Receive frequency: the frequency the radio listens on.',
+        help: context.l10n.helpRxFrequency,
       ),
       _ChannelColumn(
         'TONE MODE',
         96,
         (channel) => channel.tone.isEmpty ? 'None' : channel.tone,
-        help:
-            'Receive/transmit squelch mode. Tone is CTCSS, TSQL is tone '
-            'squelch, DTCS is a digital code, and Cross uses different tones.',
+        help: context.l10n.helpToneMode,
       ),
-      _ChannelColumn(
-        'TX TONE',
-        82,
-        (channel) {
-          final tone = effectiveTransmitCtcssTone(channel);
-          return tone == null ? '—' : tone.toStringAsFixed(1);
-        },
-        help:
-            'Transmit CTCSS tone in hertz. TSQL uses the same CTCSS tone for '
-            'transmit and receive.',
-      ),
-      _ChannelColumn(
-        'RX TONE',
-        82,
-        (channel) {
-          final tone = effectiveReceiveCtcssTone(channel);
-          return tone == null ? '—' : tone.toStringAsFixed(1);
-        },
-        help:
-            'Receive CTCSS tone in hertz. Set Tone Mode to TSQL or a matching '
-            'Cross mode first.',
-      ),
+      _ChannelColumn('TX TONE', 82, (channel) {
+        final tone = effectiveTransmitCtcssTone(channel);
+        return tone == null ? '—' : tone.toStringAsFixed(1);
+      }, help: context.l10n.helpTxTone),
+      _ChannelColumn('RX TONE', 82, (channel) {
+        final tone = effectiveReceiveCtcssTone(channel);
+        return tone == null ? '—' : tone.toStringAsFixed(1);
+      }, help: context.l10n.helpRxTone),
       _ChannelColumn(
         'DTCS',
         66,
@@ -10588,7 +10500,7 @@ class _ChannelTableState extends State<_ChannelTable> {
               (channel.tone == 'Cross' && channel.crossMode.startsWith('DTCS')),
           channel.dtcs.toString().padLeft(3, '0'),
         ),
-        help: 'Transmit DTCS digital squelch code.',
+        help: context.l10n.helpDtcs,
       ),
       _ChannelColumn(
         'RX DTCS',
@@ -10600,7 +10512,7 @@ class _ChannelTableState extends State<_ChannelTable> {
               .toString()
               .padLeft(3, '0'),
         ),
-        help: 'Receive DTCS digital squelch code.',
+        help: context.l10n.helpRxDtcs,
       ),
       _ChannelColumn(
         'DTCS POL',
@@ -10610,15 +10522,13 @@ class _ChannelTableState extends State<_ChannelTable> {
               (channel.tone == 'Cross' && channel.crossMode.contains('DTCS')),
           channel.dtcsPolarity,
         ),
-        help: 'DTCS polarity: normal or inverted for transmit and receive.',
+        help: context.l10n.helpDtcsPol,
       ),
       _ChannelColumn(
         'DUPLEX',
         82,
         (channel) => channel.duplex.isEmpty ? 'Simplex' : channel.duplex,
-        help:
-            'Transmit/receive relationship. Simplex uses one frequency; '
-            'offsets or split use different transmit frequencies.',
+        help: context.l10n.helpDuplex,
       ),
       _ChannelColumn(
         'OFFSET / TX FREQ',
@@ -10627,46 +10537,44 @@ class _ChannelTableState extends State<_ChannelTable> {
           channel.duplex.isNotEmpty && channel.duplex != 'off',
           channel.offset.toStringAsFixed(6),
         ),
-        help:
-            'Frequency offset, or the independent transmit frequency for split.',
+        help: context.l10n.helpOffset,
       ),
       _ChannelColumn(
         'CROSS MODE',
         112,
         (channel) => inactive(channel.tone == 'Cross', channel.crossMode),
-        help: 'Separate receive and transmit tone/code modes used with Cross.',
+        help: context.l10n.helpCrossMode,
       ),
       _ChannelColumn(
         'MODE',
         68,
         (channel) => channel.mode,
-        help:
-            'Voice modulation: FM, narrowband FM, or AM depending on the radio.',
+        help: context.l10n.helpMode,
       ),
       if (showStep)
         _ChannelColumn(
           'STEP',
           68,
           (channel) => channel.step.toStringAsFixed(2),
-          help: 'Tuning step size in kHz.',
+          help: context.l10n.helpStep,
         ),
       _ChannelColumn(
         'POWER',
         82,
         (channel) => channel.power.isEmpty ? '—' : channel.power,
-        help: 'Selected transmit power level.',
+        help: context.l10n.helpPower,
       ),
       _ChannelColumn(
         'SCAN',
         72,
         (channel) => scanLabel(channel.skip),
-        help: 'Whether the channel is included in scanning.',
+        help: context.l10n.helpScan,
       ),
       _ChannelColumn(
         'COMMENT',
         210,
         (channel) => channel.comment.isEmpty ? '—' : channel.comment,
-        help: 'Free-form notes stored with the channel when supported.',
+        help: context.l10n.helpComment,
       ),
     ];
 
@@ -10876,8 +10784,8 @@ class _ChannelTableState extends State<_ChannelTable> {
                 _showRowMenu(context, entry.key, details.globalPosition),
             child: Tooltip(
               message: isCleared
-                  ? 'Empty memory slot. Double-click to create a channel.'
-                  : 'Double-click to edit channel',
+                  ? context.l10n.uiEmptyMemorySlotDoubleClickTo
+                  : context.l10n.uiDoubleClickToEditChannel,
               child: InkWell(
                 onDoubleTap: () => widget.onOpen(entry.key),
                 child: Container(
@@ -10922,7 +10830,7 @@ class _ChannelTableState extends State<_ChannelTable> {
                                 vertical: 9,
                               ),
                               child: Text(
-                                'Move $dragLabel',
+                                context.l10n.uiMove(dragLabel),
                                 style: const TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
@@ -10944,7 +10852,7 @@ class _ChannelTableState extends State<_ChannelTable> {
                                 : SystemMouseCursors.basic,
                             child: Tooltip(
                               message: canDrag
-                                  ? 'Drag to rearrange channel'
+                                  ? context.l10n.uiDragToRearrangeChannel
                                   : widget.reorderDisabledMessage,
                               child: Icon(
                                 Icons.drag_indicator,
@@ -10969,7 +10877,7 @@ class _ChannelTableState extends State<_ChannelTable> {
                                     ? column.label == '#'
                                           ? column.value(entry.value)
                                           : column.label == 'NAME'
-                                          ? 'Empty slot'
+                                          ? context.l10n.uiEmptySlot
                                           : '—'
                                     : column.value(entry.value),
                                 maxLines: 1,
@@ -11043,8 +10951,8 @@ class _ChannelTableState extends State<_ChannelTable> {
                       children: [
                         SizedBox(
                           width: dragHandleWidth,
-                          child: const Tooltip(
-                            message: 'Drag rows to rearrange channels',
+                          child: Tooltip(
+                            message: context.l10n.uiDragRowsToRearrangeChannels,
                             child: Icon(
                               Icons.drag_indicator,
                               size: 18,
@@ -11089,9 +10997,9 @@ class _ChannelTableState extends State<_ChannelTable> {
                                 onChanged: (value) =>
                                     widget.onFilterChanged(column.id, value),
                                 style: const TextStyle(fontSize: 11),
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   isDense: true,
-                                  hintText: 'Filter',
+                                  hintText: context.l10n.uiFilter,
                                   contentPadding: EdgeInsets.symmetric(
                                     horizontal: 8,
                                     vertical: 7,
@@ -12004,13 +11912,16 @@ class _ChoiceField extends StatelessWidget {
 class _EmptyLibrary extends StatelessWidget {
   const _EmptyLibrary();
   @override
-  Widget build(BuildContext context) => const Center(
+  Widget build(BuildContext context) => Center(
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Icon(Icons.inbox_outlined, size: 42, color: Colors.black26),
         SizedBox(height: 10),
-        Text('No matching channels', style: TextStyle(color: Colors.black45)),
+        Text(
+          context.l10n.uiNoMatchingChannels,
+          style: TextStyle(color: Colors.black45),
+        ),
       ],
     ),
   );

@@ -1,3 +1,4 @@
+import '../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../models/marine_channels.dart';
@@ -24,7 +25,7 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
         .length;
     final transmitCapable = definitions.length - receiveOnly;
     return AlertDialog(
-      title: const Text('Marine VHF channel template'),
+      title: Text(context.l10n.uiMarineVhfChannelTemplate),
       content: SizedBox(
         width: 640,
         child: SingleChildScrollView(
@@ -35,7 +36,7 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
               DropdownButtonFormField<MarineChannelPlan>(
                 key: const ValueKey('marine-plan-selector'),
                 initialValue: _plan,
-                decoration: const InputDecoration(labelText: 'Plan'),
+                decoration: InputDecoration(labelText: context.l10n.uiPlan),
                 items: [
                   for (final plan in MarineChannelPlan.values)
                     DropdownMenuItem(value: plan, child: Text(plan.label)),
@@ -51,7 +52,7 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
               ),
               const SizedBox(height: 6),
               Text(
-                'Source: ${_plan.source}',
+                context.l10n.uiSource(_plan.source),
                 style: const TextStyle(color: Colors.black45, fontSize: 12),
               ),
               const SizedBox(height: 14),
@@ -68,13 +69,8 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
                     children: [
                       const Icon(Icons.info_outline, color: Color(0xFF1F7455)),
                       const SizedBox(width: 9),
-                      const Expanded(
-                        child: Text(
-                          'The channel plan is selected by regulatory region, '
-                          'not ZIP code. Marine channel assignments are '
-                          'national or international and do not change by '
-                          'postal code.',
-                        ),
+                      Expanded(
+                        child: Text(context.l10n.uiTheChannelPlanIsSelectedBy),
                       ),
                     ],
                   ),
@@ -87,12 +83,8 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
                 value: _programTransmit,
                 onChanged: (value) =>
                     setState(() => _programTransmit = value == true),
-                title: const Text('Program ship transmit frequencies'),
-                subtitle: const Text(
-                  'Receive-only is the safe default. Enable this only when '
-                  'the radio and installation are authorized for marine VHF '
-                  'transmission.',
-                ),
+                title: Text(context.l10n.uiProgramShipTransmitFrequencies),
+                subtitle: Text(context.l10n.uiReceiveOnlyIsTheSafeDefault),
               ),
               if (_programTransmit) ...[
                 const SizedBox(height: 8),
@@ -112,11 +104,9 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
                           color: Color(0xFF9B5B18),
                         ),
                         const SizedBox(width: 9),
-                        const Expanded(
+                        Expanded(
                           child: Text(
-                            'Most amateur transceivers are not type-accepted '
-                            'for marine-band transmit. Prohibited and '
-                            'receive-only channels remain transmission-disabled.',
+                            context.l10n.uiMostAmateurTransceiversAreNotType,
                           ),
                         ),
                       ],
@@ -126,18 +116,19 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
               ],
               const SizedBox(height: 14),
               Text(
-                '${definitions.length} channels: '
-                '$transmitCapable transmit-capable, $receiveOnly receive-only.',
+                context.l10n.uiChannelsTransmitCapableReceiveOnly(
+                  definitions.length,
+                  transmitCapable,
+                  receiveOnly,
+                ),
                 key: const ValueKey('marine-template-summary'),
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               if (!_programTransmit)
-                const Padding(
+                Padding(
                   padding: EdgeInsets.only(top: 4),
                   child: Text(
-                    'All rows will be added receive-only (Duplex "off"). '
-                    'The radio will beep and not transmit on them. Check '
-                    'the box above to program transmit frequencies.',
+                    context.l10n.uiAllRowsWillBeAddedReceive,
                     style: TextStyle(color: Colors.black54, fontSize: 12),
                   ),
                 ),
@@ -148,7 +139,7 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           key: const ValueKey('marine-template-continue'),
@@ -159,7 +150,7 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
               programTransmit: _programTransmit,
             ),
           ),
-          child: const Text('Continue'),
+          child: Text(context.l10n.uiContinue),
         ),
       ],
     );

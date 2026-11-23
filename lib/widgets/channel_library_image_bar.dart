@@ -1,3 +1,4 @@
+import '../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../models/channel_image_baseline.dart';
@@ -44,7 +45,7 @@ class ChannelLibraryImageBar extends StatelessWidget {
             TextButton(
               key: const Key('channel-library-discard'),
               onPressed: canDiscard ? onDiscard : null,
-              child: const Text('Discard changes'),
+              child: Text(context.l10n.discardChanges),
             ),
             const SizedBox(width: 10),
             if (showConnect)
@@ -52,14 +53,14 @@ class ChannelLibraryImageBar extends StatelessWidget {
                 key: const Key('channel-library-connect'),
                 onPressed: onConnect,
                 icon: const Icon(Icons.cable),
-                label: const Text('Connect radio to write'),
+                label: Text(context.l10n.connectRadioToWrite),
               )
             else
               FilledButton.icon(
                 key: const Key('channel-library-write'),
                 onPressed: canWrite ? onWrite : null,
                 icon: const Icon(Icons.save_outlined),
-                label: const Text('Write channels to radio'),
+                label: Text(context.l10n.uiWriteChannelsToRadio),
               ),
           ],
         ),

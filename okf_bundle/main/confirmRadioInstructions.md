@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:32:57Z"
+timestamp: "2026-11-23T19:44:03Z"
 concept_id: main/confirmRadioInstructions
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_confirmRadioInstructions_confirmRadioInstructions
 ```
 
 ## Source
-Lines 3519–3522 in `main.dart`
+Lines 3491–3494 in `main.dart`
 
 ## Relationships
 

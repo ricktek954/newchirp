@@ -10,7 +10,7 @@ tags:
   - "domain:channel_library_image_bar.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T21:41:58Z"
+timestamp: "2026-11-23T19:36:42Z"
 concept_id: widgets/channel_library_image_bar
 language: dart
 ---

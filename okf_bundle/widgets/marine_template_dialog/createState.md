@@ -10,7 +10,7 @@ tags:
   - "domain:marine_template_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-23T19:37:19Z"
 concept_id: widgets/marine_template_dialog/createState
 language: dart
 ---
@@ -24,7 +24,7 @@ StatecreateStatecreateState
 ```
 
 ## Source
-Lines 11–11 in `widgets/marine_template_dialog.dart`
+Lines 12–12 in `widgets/marine_template_dialog.dart`
 
 ## Relationships
 

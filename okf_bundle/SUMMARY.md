@@ -1,45 +1,45 @@
 ---
-description: 'Top-level OKF summary: 812 concepts across 5 domains and 39 modules'
+description: 'Top-level OKF summary: 1125 concepts across 5 domains and 39 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-23T19:32:59Z'
+timestamp: '2026-11-23T19:45:38Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 812 concepts | 5 domains | 39 modules
+> OKF v0.2 bundle | 1,125 concepts | 5 domains | 39 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 657 |
+| Function | 970 |
 | Class | 106 |
 | Module | 39 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 812 |
+| dart | 1,125 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [l10n](l10n/index.md) — 131 concepts
+### [l10n](l10n/index.md) — 443 concepts
 
-- [l10n/app_localizations](l10n/app_localizations/index.md) (37 concepts)
-- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (31 concepts)
-- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (31 concepts)
-- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (31 concepts)
+- [l10n/app_localizations](l10n/app_localizations/index.md) (115 concepts)
+- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (109 concepts)
+- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (109 concepts)
+- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (109 concepts)
 - [l10n/l10n](l10n/l10n/index.md) (1 concepts)
 
-### [main.dart](main.dart/index.md) — 246 concepts
+### [main.dart](main.dart/index.md) — 247 concepts
 
-- [main](main/index.md) (246 concepts)
+- [main](main/index.md) (247 concepts)
 
 ### [models](models/index.md) — 112 concepts
 
@@ -83,9 +83,11 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) | Class | `models/channel_image_baseline.dart` | Remembers the last library snapshot so search and row select… |
 | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
+| [uiTheDestinationRangeThroughContainsChannels](/l10n/app_localizations/uiTheDestinationRangeThroughContainsChannels.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiTheDestinationRangeThroughCon… |
 | [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
 | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
+| [uiReferenceSourceVerifyCurrentNationalRules](/l10n/app_localizations/uiReferenceSourceVerifyCurrentNationalRules.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiReferenceSourceVerifyCurrentN… |
 | [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
@@ -94,12 +96,10 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [receiveOnlyWriteNote](/models/radio_channel/receiveOnlyWriteNote.md) | Function | `models/radio_channel.dart` | Write-confirmation note naming the receive-only channels, or… |
 | [radioMappingsSignature](/models/radio_mapping/radioMappingsSignature.md) | Function | `models/radio_mapping.dart` | Fixed (non-editable) zone models are derived from channel nu… |
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
+| [uiNoMatchingRepeatersWereFoundCoordinates](/l10n/app_localizations/uiNoMatchingRepeatersWereFoundCoordinates.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiNoMatchingRepeatersWereFoundC… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
-| [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
-| [showsMidlandChannelNumbers](/models/radio_channel/showsMidlandChannelNumbers.md) | Function | `models/radio_channel.dart` | This radio's list uses Midland's channel numbers instead of … |
 | [_channelColumnTitle](/main/channelColumnTitle.md) | Function | `main.dart` | Column ids stay English: saved column layouts and filters ke… |
-| [_openDownloadPage](/main/openDownloadPage.md) | Function | `main.dart` | Opens [url] in the browser and keeps the link reachable if t… |
 
 ## Usage with OpenCode
 

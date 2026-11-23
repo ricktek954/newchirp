@@ -1,3 +1,4 @@
+import '../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../services/diagnostic_log.dart';
@@ -43,7 +44,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
   Future<void> _submit() async {
     final email = _emailController.text.trim();
     if (!email.contains('@') || email.startsWith('@') || email.endsWith('@')) {
-      setState(() => _error = 'Enter a valid email address.');
+      setState(() => _error = context.l10n.uiEnterAValidEmailAddress);
       return;
     }
     setState(() {
@@ -84,7 +85,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
       if (mounted) setState(() => _error = error.message);
     } on Object {
       if (mounted) {
-        setState(() => _error = 'Could not send the error report.');
+        setState(() => _error = context.l10n.uiCouldNotSendTheErrorReport);
       }
     } finally {
       if (mounted) setState(() => _sending = false);
@@ -97,12 +98,14 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
       maxCharacters: 6000,
     );
     return AlertDialog(
-      title: Text(_sent ? 'Bug report sent' : 'Submit bug report'),
+      title: Text(
+        _sent ? context.l10n.uiBugReportSent : context.l10n.uiSubmitBugReport2,
+      ),
       content: SizedBox(
         width: 620,
         child: SingleChildScrollView(
           child: _sent
-              ? const Padding(
+              ? Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -114,8 +117,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                       ),
                       SizedBox(height: 14),
                       Text(
-                        'Thanks. The diagnostic log and problem details were '
-                        'sent to the NewChirp developer.',
+                        context.l10n.uiThanksTheDiagnosticLogAndProblem,
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -134,10 +136,9 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       autocorrect: false,
-                      decoration: const InputDecoration(
-                        labelText: 'Your email',
-                        helperText:
-                            'Used only if the developer needs more information.',
+                      decoration: InputDecoration(
+                        labelText: context.l10n.uiYourEmail,
+                        helperText: context.l10n.uiUsedOnlyIfTheDeveloperNeeds,
                       ),
                     ),
                     const SizedBox(height: 12),
@@ -146,24 +147,22 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                       minLines: 3,
                       maxLines: 6,
                       maxLength: 3500,
-                      decoration: const InputDecoration(
-                        labelText: 'What were you trying to do?',
+                      decoration: InputDecoration(
+                        labelText: context.l10n.uiWhatWereYouTryingToDo,
                         alignLabelWithHint: true,
                       ),
                     ),
-                    const Text(
-                      'The report includes app and operating-system versions, '
-                      'the selected radio, firmware when available, serial '
-                      'port, and recent '
-                      'diagnostic events. Channel contents and loaded files '
-                      'are not logged.',
+                    Text(
+                      context.l10n.uiTheReportIncludesAppAndOperating2,
                       style: TextStyle(color: Colors.black54, height: 1.4),
                     ),
                     const SizedBox(height: 8),
                     ExpansionTile(
                       tilePadding: EdgeInsets.zero,
                       title: Text(
-                        'Preview ${widget.diagnosticLog.entryCount} diagnostic events',
+                        context.l10n.uiPreviewDiagnosticEvents(
+                          widget.diagnosticLog.entryCount,
+                        ),
                         style: const TextStyle(fontSize: 13),
                       ),
                       childrenPadding: const EdgeInsets.only(bottom: 8),
@@ -179,7 +178,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                           child: SingleChildScrollView(
                             child: SelectableText(
                               diagnosticPreview.isEmpty
-                                  ? 'No diagnostic events recorded.'
+                                  ? context.l10n.uiNoDiagnosticEventsRecorded
                                   : diagnosticPreview,
                               style: const TextStyle(
                                 fontFamily: 'monospace',
@@ -217,7 +216,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(Icons.send_outlined),
-            label: Text(_sending ? 'Sending…' : 'Send report'),
+            label: Text(_sending ? 'Sending…' : context.l10n.uiSendReport),
           ),
       ],
     );

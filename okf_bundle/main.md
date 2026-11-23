@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:32:57Z"
+timestamp: "2026-11-23T19:44:03Z"
 concept_id: main
 language: dart
 ---
@@ -88,6 +88,7 @@ language: dart
 | related | [cell](/main/cell.md) |
 | related | [_headerCell](/main/headerCell.md) |
 | related | [legendItem](/main/legendItem.md) |
+| related | [_glossaryTerms](/main/glossaryTerms.md) |
 | related | [_showAbbreviationGlossary](/main/showAbbreviationGlossary.md) |
 | related | [toggle](/main/toggle.md) |
 | related | [toggle](/main/toggle.md) |

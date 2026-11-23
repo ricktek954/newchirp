@@ -1,3 +1,4 @@
+import '../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 import '../models/radio_channel.dart';
@@ -147,9 +148,9 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
         if (mapping.name.trim().isEmpty &&
             mapping.channelLocations.isNotEmpty) {
           setState(() {
-            _error =
-                'Give every ${model.name.toLowerCase()} entry a name before '
-                'saving.';
+            _error = context.l10n.uiGiveEveryEntryANameBefore(
+              model.name.toLowerCase(),
+            );
           });
           return;
         }
@@ -187,7 +188,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Banks and zones',
+                            context.l10n.banksZonesTitle,
                             style: Theme.of(context).textTheme.titleLarge,
                           ),
                           Text(
@@ -199,7 +200,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      tooltip: 'Close',
+                      tooltip: context.l10n.close,
                       icon: const Icon(Icons.close),
                     ),
                   ],
@@ -211,8 +212,8 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                   padding: const EdgeInsets.fromLTRB(22, 12, 22, 0),
                   child: DropdownButtonFormField<int>(
                     initialValue: _modelIndex,
-                    decoration: const InputDecoration(
-                      labelText: 'Type',
+                    decoration: InputDecoration(
+                      labelText: context.l10n.uiType,
                       isDense: true,
                     ),
                     items: [
@@ -279,7 +280,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                                   ),
                                   subtitle: Text(
                                     mapping.channelLocations.isEmpty
-                                        ? 'Add a channel to create'
+                                        ? context.l10n.uiAddAChannelToCreate
                                         : '${mapping.channelLocations.length} channels',
                                   ),
                                   onTap: () => _selectMapping(index),
@@ -293,9 +294,9 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                     const VerticalDivider(width: 1),
                     Expanded(
                       child: _mapping == null
-                          ? const Center(
+                          ? Center(
                               child: Text(
-                                'This radio does not expose editable banks.',
+                                context.l10n.uiThisRadioDoesNotExposeEditable,
                               ),
                             )
                           : _buildMappingEditor(context),
@@ -309,19 +310,16 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                 child: Row(
                   children: [
                     if (!_model.editable)
-                      const Expanded(
-                        child: Text(
-                          'These banks are fixed by the radio and are shown '
-                          'for reference.',
-                        ),
+                      Expanded(
+                        child: Text(context.l10n.uiTheseBanksAreFixedByThe),
                       )
                     else
                       Expanded(
                         child: Text(
                           _error ??
                               (_error == null && _model.multiple
-                                  ? 'A channel may belong to more than one entry.'
-                                  : 'A channel can belong to one entry.'),
+                                  ? context.l10n.uiAChannelMayBelongToMore
+                                  : context.l10n.uiAChannelCanBelongToOne),
                           style: TextStyle(
                             color: _error == null
                                 ? Theme.of(context).colorScheme.onSurfaceVariant
@@ -331,13 +329,13 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                       ),
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                      child: Text(context.l10n.cancel),
                     ),
                     const SizedBox(width: 8),
                     FilledButton(
                       key: const ValueKey('apply-radio-mappings'),
                       onPressed: _save,
-                      child: const Text('Use these changes'),
+                      child: Text(context.l10n.uiUseTheseChanges),
                     ),
                   ],
                 ),
@@ -373,11 +371,12 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
             maxLength: 32,
             onChanged: _renameMapping,
             decoration: InputDecoration(
-              labelText: 'Name',
+              labelText: context.l10n.fieldName,
               helperText: mapping.channelLocations.isEmpty
-                  ? 'This empty entry is the radio’s spare bank or zone. '
-                        'Add a channel to create it.'
-                  : '${mapping.channelLocations.length} channels selected',
+                  ? context.l10n.uiThisEmptyEntryIsTheRadio
+                  : context.l10n.uiChannelsSelected(
+                      mapping.channelLocations.length,
+                    ),
             ),
           ),
           const SizedBox(height: 6),
@@ -385,9 +384,9 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
             key: const ValueKey('radio-mapping-channel-search'),
             controller: _searchController,
             onChanged: (value) => setState(() => _query = value),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               prefixIcon: Icon(Icons.search),
-              labelText: 'Find a channel',
+              labelText: context.l10n.uiFindAChannel,
               isDense: true,
             ),
           ),
@@ -396,7 +395,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
             child: Card(
               clipBehavior: Clip.antiAlias,
               child: filtered.isEmpty
-                  ? const Center(child: Text('No matching channels'))
+                  ? Center(child: Text(context.l10n.uiNoMatchingChannels))
                   : ListView.builder(
                       itemCount: filtered.length,
                       itemBuilder: (context, index) {
@@ -421,7 +420,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
                                 )
                               : null,
                           title: Text(
-                            'Channel ${channel.location}',
+                            context.l10n.uiChannel(channel.location),
                             overflow: TextOverflow.ellipsis,
                           ),
                           subtitle: Text(

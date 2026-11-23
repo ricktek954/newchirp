@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-11-23T19:42:01Z"
 concept_id: widgets/radio_mapping_dialog/RadioMappingDialogState
 language: dart
 ---
@@ -38,7 +38,7 @@ class _RadioMappingDialogState
 - `_buildMappingEditor`
 
 ## Source
-Lines 22–441 in `widgets/radio_mapping_dialog.dart`
+Lines 23–440 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

@@ -20,47 +20,37 @@ language complete.
 
 ## What is translated
 
-- Batch 1: the sidebar, the read and write confirmations and progress
-  messages, the read-only-driver notice, the incompatible-channel prompt, the
-  channel apply dialog (CSV/library import) and the radio settings write
-  flow.
-- Batch 2: channel table column titles and help, and the channel editor
-  (field labels, tooltips, choice names, bulk-edit title and button).
-- Batch 3: the radio connection page (steps, cable and model help, transfer
-  buttons and image status), the radio model picker, the top bar (New, Open,
-  Load module, Save, Print and Help menus) and the library toolbar (summary
-  cards, search, add/duplicate, empty slots, filters, banks and zones,
-  radio sections).
-- Batch 4: the welcome screen, page headers, the About page and the radio
-  settings page (status line, read/snapshot buttons, empty and error
-  states). The GPL "WITHOUT ANY WARRANTY" sentence and the license page
-  legalese stay in English as the authoritative license text.
+Every screen and dialog of the desktop app (615 messages): sidebar,
+welcome screen, radio connection, model picker, channel library and table,
+channel editor, right-click menus, radio settings, frequency reference,
+repeater search (RepeaterBook and myGMRS), banks/zones editor, marine
+template, printing, updates, abbreviations glossary, About, and the bug
+report dialog's labels.
+
+`test/translations_test.dart` fails if Spanish or French is missing a
+message or uses different placeholders from English.
 
 Channel table column ids stay English (`_channelColumnTitle` translates at
 display time), because saved column order, widths and filters key on them.
 Choice values stay as stored; only their display names are translated. With
 a radio connected, choices show the driver's own values (TSQL, +, -).
 
-Not yet translated: channel validation messages (`RadioChannel.validate`),
-the long "Channel editing" help text, row context menus, repeater search,
-the frequency reference tables, and the bug-report dialog's labels (its
-report body stays English). Setting names and values on the radio settings
-page come from the CHIRP driver and stay English.
-
-## Layout
-
-Spanish and French labels run about a third longer than English. The top
-bar and the library toolbar switch to their compact layouts at 1.4 times
-the English widths for those languages. A widget test checks that Spanish
-and French fit wherever English does in the test renderer; that renderer's
-square glyphs are far wider than real fonts, so narrow windows (900-1100 px)
-must be checked in the real app.
+Most UI messages were moved by a script and have generated `ui…` keys; their
+English text is unchanged.
 
 ## What stays in English, on purpose
 
 - Driver instructions, errors and setting names from CHIRP and the Python
   bridge, and the communication trace. These are what support reads.
-- Bug-report contents and diagnostic logs.
+- Bug-report contents and diagnostic logs (the report summary, cable, radio
+  and firmware fields and the "Reported error" body).
+- Channel validation messages from `RadioChannel.validate` (model code with
+  no UI context; tests depend on the wording) and exception messages the
+  friendly-error code matches on.
+- The GPL warranty sentence and license legalese (authoritative text).
+- Radio model picker hints (top-level constant table), the radio prompt
+  cue text matched against driver instructions, and data such as the default
+  country and state.
 - Model names, which follow the manufacturer's spelling.
 
 ## Adding a message

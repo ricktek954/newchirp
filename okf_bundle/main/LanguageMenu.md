@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:32:57Z"
+timestamp: "2026-11-23T19:44:03Z"
 concept_id: main/LanguageMenu
 language: dart
 ---
@@ -27,7 +27,7 @@ class _LanguageMenu
 - `build`
 
 ## Source
-Lines 7139–7188 in `main.dart`
+Lines 7082–7131 in `main.dart`
 
 ## Relationships
 

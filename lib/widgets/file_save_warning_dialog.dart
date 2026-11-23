@@ -1,3 +1,4 @@
+import '../l10n/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// Warning shown before a Channel Library file save.
@@ -26,21 +27,21 @@ class _FileSaveWarningDialogState extends State<FileSaveWarningDialog> {
         color: Color(0xFFC46A15),
         size: 32,
       ),
-      title: const Text('Save file'),
+      title: Text(context.l10n.uiSaveFile),
       content: SizedBox(
         width: 440,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(FileSaveWarningDialog.message),
+            Text(context.l10n.fileSaveWarning),
             const SizedBox(height: 8),
             CheckboxListTile(
               value: _hide,
               onChanged: (value) => setState(() => _hide = value ?? false),
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
-              title: const Text('Do not show me this message again'),
+              title: Text(context.l10n.uiDoNotShowMeThisMessage),
             ),
           ],
         ),
@@ -48,7 +49,7 @@ class _FileSaveWarningDialogState extends State<FileSaveWarningDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.pop(context, _hide),

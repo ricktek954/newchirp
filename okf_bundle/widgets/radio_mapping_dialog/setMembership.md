@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-30T23:58:44Z"
+timestamp: "2026-11-23T19:42:01Z"
 concept_id: widgets/radio_mapping_dialog/setMembership
 language: dart
 ---
@@ -24,7 +24,7 @@ void_setMembership(int location, bool selected)
 ```
 
 ## Source
-Lines 111–111 in `widgets/radio_mapping_dialog.dart`
+Lines 112–112 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 
