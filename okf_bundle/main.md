@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T17:57:15Z"
+timestamp: "2026-11-23T19:09:45Z"
 concept_id: main
 language: dart
 ---
@@ -25,6 +25,7 @@ language: dart
 | related | [NewChirpHome](/main/NewChirpHome.md) |
 | related | [_NewChirpHomeState](/main/NewChirpHomeState.md) |
 | related | [_Sidebar](/main/Sidebar.md) |
+| related | [_LanguageMenu](/main/LanguageMenu.md) |
 | related | [_ProgrammerCredit](/main/ProgrammerCredit.md) |
 | related | [_Logo](/main/Logo.md) |
 | related | [_NavItem](/main/NavItem.md) |
@@ -106,6 +107,7 @@ language: dart
 | related | [save](/main/save.md) |
 | related | [_WindowStateManager](/main/WindowStateManager.md) |
 | related | [build](/main/build.md) |
+| related | [_buildApp](/main/buildApp.md) |
 | related | [createState](/main/createState.md) |
 | related | [_channelTableRows](/main/channelTableRows.md) |
 | related | [matchesColumnFilters](/main/matchesColumnFilters.md) |
@@ -249,6 +251,7 @@ language: dart
 | related | [_buildRadioSettings](/main/buildRadioSettings.md) |
 | related | [_buildRadioSettingsGroup](/main/buildRadioSettingsGroup.md) |
 | related | [_buildRadio](/main/buildRadio.md) |
+| related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |
 | related | [build](/main/build.md) |

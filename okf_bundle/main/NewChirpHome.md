@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T17:57:15Z"
+timestamp: "2026-11-23T19:09:45Z"
 concept_id: main/NewChirpHome
 language: dart
 ---
@@ -27,7 +27,7 @@ class NewChirpHome
 - `createState`
 
 ## Source
-Lines 382–412 in `main.dart`
+Lines 401–431 in `main.dart`
 
 ## Relationships
 

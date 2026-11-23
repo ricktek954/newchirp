@@ -2,6 +2,7 @@
 
 ## Subdirectories
 
+- [app_language](app_language/index.md)
 - [channel_list_pdf](channel_list_pdf/index.md)
 - [chirp_csv](chirp_csv/index.md)
 - [column_layout_store](column_layout_store/index.md)
@@ -22,6 +23,7 @@
 
 ## Modules
 
+- [app_language](app_language.md)
 - [channel_list_pdf](channel_list_pdf.md)
 - [chirp_csv](chirp_csv.md)
 - [column_layout_store](column_layout_store.md)

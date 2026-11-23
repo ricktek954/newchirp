@@ -7,11 +7,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'l10n/l10n.dart';
 import 'models/channel_image_baseline.dart';
 import 'models/frequency_reference.dart';
 import 'models/gm32_channel.dart';
@@ -20,6 +22,7 @@ import 'models/radio_channel.dart';
 import 'models/radio_mapping.dart';
 import 'models/repeater_regions.dart';
 import 'models/repeater_search.dart';
+import 'services/app_language.dart';
 import 'services/channel_list_pdf.dart';
 import 'services/chirp_csv.dart';
 import 'services/column_layout_store.dart';
@@ -166,6 +169,7 @@ Future<void> main() async {
       'libusb',
     ], await rootBundle.loadString('assets/licenses/LIBUSB-LGPL-2.1.txt'));
   });
+  appLocale.value = localeForLanguageCode(await AppLanguageStore().load());
   if (Platform.isLinux) {
     runApp(NewChirpApp(diagnosticLog: diagnosticLog));
     return;
@@ -326,9 +330,24 @@ class NewChirpApp extends StatelessWidget {
   Widget build(BuildContext context) {
     const ink = Color(0xFF15211D);
     const green = Color(0xFF1F7455);
+    return ValueListenableBuilder<Locale?>(
+      valueListenable: appLocale,
+      builder: (context, locale, _) => _buildApp(locale, ink, green),
+    );
+  }
+
+  Widget _buildApp(Locale? locale, Color ink, Color green) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'NewChirp',
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -2720,7 +2739,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
-    if (!await _confirmRadioInstructions(instructions, writing: false)) return;
+    if (!await _confirmRadioInstructions(instructions, writing: false) ||
+        !mounted) {
+      return;
+    }
     setState(() {
       _settingsLoading = true;
       _settingsError = null;
@@ -2804,28 +2826,22 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ),
         title: Text(
           repeat
-              ? 'Write the same settings again?'
-              : 'Write these radio settings?',
+              ? context.l10n.writeSameSettingsTitle
+              : context.l10n.writeSettingsTitle,
         ),
         content: Text(
           repeat
-              ? 'Nothing has changed since the last read or write. NewChirp '
-                    'will write this radio snapshot, its settings and its '
-                    'channels, to $model through $port. Use this to program '
-                    'another radio of the same model. Keep the radio '
-                    'connected and powered on.'
-              : 'This will write ${changes.length} radio setting values to '
-                    '$model through $port. Keep the radio connected and '
-                    'powered on.',
+              ? context.l10n.writeSameSettingsBody(model, port)
+              : context.l10n.writeSettingsBody(changes.length, model, port),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Write settings'),
+            child: Text(context.l10n.writeSettingsButton),
           ),
         ],
       ),
@@ -2833,9 +2849,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (confirmed != true || !mounted) return;
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
-    if (!await _confirmRadioInstructions(instructions, writing: true)) return;
+    if (!await _confirmRadioInstructions(instructions, writing: true) ||
+        !mounted) {
+      return;
+    }
     final succeeded = await _transferTask(
-      'Writing radio settings - do not disconnect...',
+      context.l10n.writingSettingsProgress,
       () async {
         await _bridge.writeSettings(
           model: model,
@@ -3419,19 +3438,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
             Icons.warning_amber_rounded,
             color: Color(0xFFC46A15),
           ),
-          title: const Text('Replace current channel list?'),
-          content: const Text(
-            'Reading channels from the radio will replace the current channel list. '
-            'Save it as a CSV first if you want to keep it.',
-          ),
+          title: Text(context.l10n.readReplaceTitle),
+          content: Text(context.l10n.readReplaceBody),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text('Read channels'),
+              child: Text(context.l10n.readChannels),
             ),
           ],
         ),
@@ -3450,61 +3466,63 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
-    if (!await _confirmRadioInstructions(instructions, writing: false)) return;
-    await _transferTask(
-      'Reading radio channels - do not disconnect...',
-      () async {
-        final result = await _bridge.download(
-          model: _model!,
-          port: _port!,
-          zone: liveZone ?? _selectedZone,
-          onProgress: _reportTransferProgress,
-        );
-        final storedImage = await _imageStore.saveForModel(
-          _model!,
-          result.imagePath,
-        );
-        setState(() {
-          _channels = [...result.channels]
-            ..sort((left, right) => left.location.compareTo(right.location));
-          _clearedLocations.clear();
-          _selected = _channels.isEmpty ? -1 : 0;
-          _radioImage = storedImage;
-          _radioFirmware = result.firmware;
-          _capabilities = result.capabilities;
-          _radioZones = result.zones;
-          _radioMappings = result.mappings;
-          _selectedZone = result.zone;
-          _libraryName = displayRadioModelName(_model!);
-          _libraryOpen = true;
-          _dirty = false;
-          _page = 0;
-          _radioSettings = null;
-          _settingsDirty = false;
-          _settingsLoadedFromRadio = false;
-          _settingsLoadedModel = null;
-          _settingsLoadedImage = null;
-          _rememberChannelImageBaseline(fromRadio: true);
-        });
-        _diagnosticLog.record(
-          'radio',
-          'Radio read completed',
-          context: {
-            'model': _model!,
-            'port': _port!,
-            'channels': result.channels.length,
-            'firmware': result.firmware ?? '',
-          },
-        );
-      },
-    );
+    if (!await _confirmRadioInstructions(instructions, writing: false) ||
+        !mounted) {
+      return;
+    }
+    await _transferTask(context.l10n.readingProgress, () async {
+      final result = await _bridge.download(
+        model: _model!,
+        port: _port!,
+        zone: liveZone ?? _selectedZone,
+        onProgress: _reportTransferProgress,
+      );
+      final storedImage = await _imageStore.saveForModel(
+        _model!,
+        result.imagePath,
+      );
+      setState(() {
+        _channels = [...result.channels]
+          ..sort((left, right) => left.location.compareTo(right.location));
+        _clearedLocations.clear();
+        _selected = _channels.isEmpty ? -1 : 0;
+        _radioImage = storedImage;
+        _radioFirmware = result.firmware;
+        _capabilities = result.capabilities;
+        _radioZones = result.zones;
+        _radioMappings = result.mappings;
+        _selectedZone = result.zone;
+        _libraryName = displayRadioModelName(_model!);
+        _libraryOpen = true;
+        _dirty = false;
+        _page = 0;
+        _radioSettings = null;
+        _settingsDirty = false;
+        _settingsLoadedFromRadio = false;
+        _settingsLoadedModel = null;
+        _settingsLoadedImage = null;
+        _rememberChannelImageBaseline(fromRadio: true);
+      });
+      _diagnosticLog.record(
+        'radio',
+        'Radio read completed',
+        context: {
+          'model': _model!,
+          'port': _port!,
+          'channels': result.channels.length,
+          'firmware': result.firmware ?? '',
+        },
+      );
+    });
   }
 
   Future<bool> _confirmRadioInstructions(
     RadioInstructions instructions, {
     required bool writing,
   }) async {
-    final readyLabel = writing ? 'Radio is ready to receive' : 'Radio is ready';
+    final readyLabel = writing
+        ? context.l10n.radioReadyToReceive
+        : context.l10n.radioReady;
     final messages =
         (writing ? instructions.writeMessages : instructions.readMessages)
             .map((message) => message.trim())
@@ -3525,8 +3543,9 @@ class _NewChirpHomeState extends State<NewChirpHome> {
               : const Color(0xFFC46A15),
         ),
         title: Text(
-          'Before ${writing ? 'writing' : 'reading'} '
-          '${displayRadioModelName(_model!)}',
+          writing
+              ? context.l10n.beforeWriting(displayRadioModelName(_model!))
+              : context.l10n.beforeReading(displayRadioModelName(_model!)),
         ),
         content: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 520),
@@ -3535,7 +3554,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
@@ -3609,18 +3628,12 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await showDialog<void>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Writing to the $model isn\'t available yet'),
-        content: const Text(
-          'NewChirp can read this radio, but writing stays off until a write '
-          'has been tested and checked on a real radio. That keeps an '
-          'untested write from damaging your radio\'s setup.\n\n'
-          'You can still read the radio, edit channels, and save or export '
-          'them. If you can help test writing, send a bug report and say so.',
-        ),
+        title: Text(context.l10n.writeUnavailableTitle(model)),
+        content: Text(context.l10n.writeUnavailableBody),
         actions: [
           FilledButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
+            child: Text(context.l10n.ok),
           ),
         ],
       ),
@@ -3667,26 +3680,25 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       final skipIncompatible = await showDialog<bool>(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Some channels are incompatible'),
+          title: Text(context.l10n.incompatibleTitle),
           content: SingleChildScrollView(
             child: Text(
-              '${invalidChannels.length} of ${_activeChannels.length} '
-              'channels cannot be written to this radio.\n\n'
+              '${context.l10n.incompatibleSummary(invalidChannels.length, _activeChannels.length)}\n\n'
               '${issues.take(8).join('\n')}'
-              '${issues.length > 8 ? '\n…and ${issues.length - 8} more.' : ''}'
-              '${compatibleCount > 0 ? '\n\nYou can skip the incompatible channels and write the other $compatibleCount.' : ''}',
+              '${issues.length > 8 ? '\n${context.l10n.incompatibleMore(issues.length - 8)}' : ''}'
+              '${compatibleCount > 0 ? '\n\n${context.l10n.incompatibleSkipHint(compatibleCount)}' : ''}',
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Review channels'),
+              child: Text(context.l10n.reviewChannels),
             ),
             if (compatibleCount > 0)
               FilledButton(
                 key: const ValueKey('upload-skip-incompatible'),
                 onPressed: () => Navigator.pop(context, true),
-                child: const Text('Skip and write remaining'),
+                child: Text(context.l10n.skipAndWriteRemaining),
               ),
           ],
         ),
@@ -3720,25 +3732,30 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ),
         title: Text(
           mappingsChanged
-              ? 'Write these radio changes?'
-              : 'Write these channels to the radio?',
+              ? context.l10n.writeChangesTitle
+              : context.l10n.writeChannelsTitle,
         ),
         content: Text(
-          'This will program $compatibleCount channels on $_model '
-          'through $_port. Keep the radio connected and powered on.'
-          '${mappingsChanged ? '\n\nBank and zone changes will be written too.' : ''}'
-          '${invalidChannels.isNotEmpty ? '\n\n${invalidChannels.length} incompatible channels will be left unchanged and listed after the write.' : ''}'
-          '${uppercasesNames ? '\n\nLowercase channel names will be converted to uppercase because this radio only supports uppercase names.' : ''}'
-          '${receiveOnlyNote.isEmpty ? '' : '\n\n$receiveOnlyNote'}',
+          context.l10n.writeConfirmBody(compatibleCount, _model!, _port!) +
+              (mappingsChanged
+                  ? '\n\n${context.l10n.writeConfirmMappings}'
+                  : '') +
+              (invalidChannels.isNotEmpty
+                  ? '\n\n${context.l10n.writeConfirmIncompatible(invalidChannels.length)}'
+                  : '') +
+              (uppercasesNames
+                  ? '\n\n${context.l10n.writeConfirmUppercase}'
+                  : '') +
+              (receiveOnlyNote.isEmpty ? '' : '\n\n$receiveOnlyNote'),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Write to radio'),
+            child: Text(context.l10n.writeToRadio),
           ),
         ],
       ),
@@ -3746,7 +3763,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (confirmed != true) return;
     final instructions = await _loadRadioInstructions();
     if (instructions == null || !mounted) return;
-    if (!await _confirmRadioInstructions(instructions, writing: true)) return;
+    if (!await _confirmRadioInstructions(instructions, writing: true) ||
+        !mounted) {
+      return;
+    }
     final incompatibleChanges = <Map<String, dynamic>>[
       for (final channel in invalidChannels)
         {
@@ -3763,7 +3783,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       minimum: _capabilities?.memoryStart,
       maximum: _capabilities?.memoryEnd,
     );
-    await _transferTask('Writing radio — do not disconnect…', () async {
+    if (!mounted) return;
+    await _transferTask(context.l10n.writingProgress, () async {
       final result = await _bridge.upload(
         model: _model!,
         port: _port!,
@@ -6648,10 +6669,10 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                           Expanded(
                             child: Text(
                               _settingsDirty
-                                  ? 'Unsaved settings changes'
+                                  ? context.l10n.settingsUnsaved
                                   : _settingsLoadedFromRadio
-                                  ? 'Settings match the values last read from the radio.'
-                                  : 'Settings match the saved radio snapshot.',
+                                  ? context.l10n.settingsMatchRadio
+                                  : context.l10n.settingsMatchSnapshot,
                               style: TextStyle(
                                 color: _settingsDirty
                                     ? const Color(0xFFC46A15)
@@ -6666,14 +6687,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                             onPressed: _settingsDirty
                                 ? () => _loadRadioSettings(force: true)
                                 : null,
-                            child: const Text('Discard changes'),
+                            child: Text(context.l10n.discardChanges),
                           ),
                           const SizedBox(width: 10),
                           if (_port == null)
                             OutlinedButton.icon(
                               onPressed: _openRadioConnection,
                               icon: const Icon(Icons.cable),
-                              label: const Text('Connect radio to write'),
+                              label: Text(context.l10n.connectRadioToWrite),
                             )
                           else
                             FilledButton.icon(
@@ -6683,7 +6704,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                                   ? _writeRadioSettings
                                   : null,
                               icon: const Icon(Icons.save_outlined),
-                              label: const Text('Write settings to radio'),
+                              label: Text(context.l10n.writeSettingsToRadio),
                             ),
                         ],
                       ),
@@ -7104,51 +7125,55 @@ class _Sidebar extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           _NavItem(
-            label: 'Radio connection',
+            label: context.l10n.navRadioConnection,
             icon: Icons.settings_input_antenna,
             selected: page == 1,
             onTap: () => onPage(1),
           ),
           const SizedBox(height: 6),
           _NavItem(
-            label: 'Channel library',
+            label: context.l10n.navChannelLibrary,
             icon: Icons.table_rows_outlined,
             selected: page == 0,
             onTap: () => onPage(0),
           ),
           const SizedBox(height: 6),
           _NavItem(
-            label: 'Radio settings',
+            label: context.l10n.navRadioSettings,
             icon: Icons.tune,
             selected: page == 4,
             onTap: () => onPage(4),
           ),
           const SizedBox(height: 6),
           _NavItem(
-            label: 'Find repeaters',
+            label: context.l10n.navFindRepeaters,
             icon: Icons.travel_explore,
             selected: false,
             onTap: onFindRepeaters,
           ),
           const SizedBox(height: 6),
           _NavItem(
-            label: 'Frequency reference',
+            label: context.l10n.navFrequencyReference,
             icon: Icons.table_chart_outlined,
             selected: page == 3,
             onTap: () => onPage(3),
           ),
           const SizedBox(height: 6),
           _NavItem(
-            label: 'About & licenses',
+            label: context.l10n.navAbout,
             icon: Icons.info_outline,
             selected: page == 2,
             onTap: () => onPage(2),
           ),
           const Spacer(),
+          const _LanguageMenu(),
           Padding(
             padding: const EdgeInsets.all(10),
             child: Text(
-              'DESKTOP RADIO PROGRAMMER\nRick Lopez · Lead Programmer\nrick@newchirp.net\nVersion $_newChirpVersion',
+              '${context.l10n.sidebarDesktopProgrammer}\n'
+              'Rick Lopez · ${context.l10n.sidebarLeadProgrammer}\n'
+              'rick@newchirp.net\n'
+              '${context.l10n.sidebarVersion(_newChirpVersion)}',
               style: const TextStyle(
                 color: Color(0xFF8FA59B),
                 fontSize: 10,
@@ -7158,6 +7183,57 @@ class _Sidebar extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LanguageMenu extends StatelessWidget {
+  const _LanguageMenu();
+
+  @override
+  Widget build(BuildContext context) {
+    final current = appLocale.value?.languageCode ?? 'system';
+    final label = current == 'system'
+        ? context.l10n.languageSystem
+        : languageNativeNames[current] ?? current;
+    return Tooltip(
+      message: context.l10n.languageBetaNote,
+      child: PopupMenuButton<String>(
+        key: const Key('language-menu'),
+        tooltip: '',
+        initialValue: current,
+        onSelected: (code) {
+          appLocale.value = localeForLanguageCode(code);
+          unawaited(AppLanguageStore().save(code));
+        },
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: 'system',
+            child: Text(context.l10n.languageSystem),
+          ),
+          for (final code in supportedLanguageCodes)
+            PopupMenuItem(value: code, child: Text(languageNativeNames[code]!)),
+        ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            children: [
+              const Icon(Icons.translate, color: Color(0xFF9CB0A8), size: 18),
+              const SizedBox(width: 11),
+              Expanded(
+                child: Text(
+                  '${context.l10n.languageLabel}: $label',
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Color(0xFFB7C6C0),
+                    fontSize: 13,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -8365,12 +8441,12 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       icon: const Icon(Icons.merge_type),
-      title: Text('Apply ${widget.label}'),
+      title: Text(context.l10n.applyTitle(widget.label)),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Choose how to add these channels to the current list.'),
+          Text(context.l10n.applyIntro),
           const SizedBox(height: 12),
           RadioGroup<bool>(
             groupValue: _replaceAll,
@@ -8384,23 +8460,19 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
                   value: true,
                   title: Text(
                     widget.zoneName == null
-                        ? 'Replace the current channel list'
-                        : 'Replace the channels in zone ${widget.zoneName}',
+                        ? context.l10n.applyReplaceList
+                        : context.l10n.applyReplaceZone(widget.zoneName!),
                   ),
                   subtitle: Text(
                     widget.zoneName == null
-                        ? 'Unsaved edits to the current list will be lost.'
-                        : 'Other zones are not changed. Unsaved edits to '
-                              'this zone will be lost.',
+                        ? context.l10n.applyReplaceListNote
+                        : context.l10n.applyReplaceZoneNote,
                   ),
                 ),
                 RadioListTile<bool>(
                   value: false,
-                  title: const Text('Insert starting at channel number'),
-                  subtitle: Text(
-                    'Channels in the ${widget.count}-channel range will be '
-                    'overwritten.',
-                  ),
+                  title: Text(context.l10n.applyInsertAt),
+                  subtitle: Text(context.l10n.applyInsertNote(widget.count)),
                 ),
               ],
             ),
@@ -8413,7 +8485,7 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
                 decimal: false,
               ),
               decoration: InputDecoration(
-                labelText: 'Starting channel number',
+                labelText: context.l10n.applyStartLabel,
                 errorText: _startError,
               ),
             ),
@@ -8423,9 +8495,9 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
-        FilledButton(onPressed: _apply, child: const Text('Apply')),
+        FilledButton(onPressed: _apply, child: Text(context.l10n.apply)),
       ],
     );
   }
@@ -8440,7 +8512,7 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
     }
     final start = int.tryParse(_startController.text);
     if (start == null || start < 1) {
-      setState(() => _startError = 'Enter a channel number of 1 or higher.');
+      setState(() => _startError = context.l10n.applyStartError);
       return;
     }
     Navigator.pop(

@@ -6,7 +6,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:newchirp/l10n/app_localizations.dart';
 import 'package:newchirp/main.dart';
+import 'package:newchirp/services/app_language.dart';
 import 'package:newchirp/models/radio_channel.dart';
 import 'package:newchirp/models/repeater_search.dart';
 import 'package:newchirp/services/column_layout_store.dart';
@@ -381,6 +383,47 @@ void main() {
       ),
       '4. After clicking "Radio is ready to receive", press the [BAND] key.',
     );
+  });
+
+  test('Spanish and French translate every interface message', () {
+    final english = lookupAppLocalizations(const Locale('en'));
+    for (final code in ['es', 'fr']) {
+      final other = lookupAppLocalizations(Locale(code));
+      expect(other.localeName, code);
+      // Spot-check that safety prompts are really translated, not copies.
+      for (final pair in [
+        [english.writeToRadio, other.writeToRadio],
+        [english.writeChannelsTitle, other.writeChannelsTitle],
+        [english.readReplaceTitle, other.readReplaceTitle],
+        [english.applyReplaceZoneNote, other.applyReplaceZoneNote],
+        [english.writingProgress, other.writingProgress],
+      ]) {
+        expect(pair[1], isNot(pair[0]), reason: '$code: ${pair[0]}');
+      }
+      expect(other.writeConfirmBody(3, 'UV-5R', 'COM3'), contains('UV-5R'));
+      expect(other.writeConfirmBody(3, 'UV-5R', 'COM3'), contains('COM3'));
+    }
+  });
+
+  testWidgets('sidebar follows the chosen interface language', (tester) async {
+    tester.view.physicalSize = const Size(1440, 900);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(() => appLocale.value = null);
+
+    await tester.pumpWidget(testApp());
+    await tester.pumpAndSettle();
+    expect(find.text('Channel library'), findsWidgets);
+
+    appLocale.value = const Locale('es');
+    await tester.pumpAndSettle();
+    expect(find.text('Biblioteca de canales'), findsOneWidget);
+    expect(find.text('Idioma: Español'), findsOneWidget);
+
+    appLocale.value = const Locale('fr');
+    await tester.pumpAndSettle();
+    expect(find.text('Bibliothèque de canaux'), findsOneWidget);
   });
 
   testWidgets('channel summary cards collapse to show more channels', (

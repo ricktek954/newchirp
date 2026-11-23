@@ -1,37 +1,45 @@
 ---
-description: 'Top-level OKF summary: 671 concepts across 4 domains and 33 modules'
+description: 'Top-level OKF summary: 750 concepts across 5 domains and 39 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-23T17:57:17Z'
+timestamp: '2026-11-23T19:09:46Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 671 concepts | 4 domains | 33 modules
+> OKF v0.2 bundle | 750 concepts | 5 domains | 39 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 524 |
-| Class | 104 |
-| Module | 33 |
+| Function | 595 |
+| Class | 106 |
+| Module | 39 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 671 |
+| dart | 750 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [main.dart](main.dart/index.md) — 242 concepts
+### [l10n](l10n/index.md) — 71 concepts
 
-- [main](main/index.md) (242 concepts)
+- [l10n/app_localizations](l10n/app_localizations/index.md) (22 concepts)
+- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (16 concepts)
+- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (16 concepts)
+- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (16 concepts)
+- [l10n/l10n](l10n/l10n/index.md) (1 concepts)
+
+### [main.dart](main.dart/index.md) — 244 concepts
+
+- [main](main/index.md) (244 concepts)
 
 ### [models](models/index.md) — 112 concepts
 
@@ -45,7 +53,7 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - *…and 1 more modules*
 
-### [services](services/index.md) — 253 concepts
+### [services](services/index.md) — 259 concepts
 
 - [services/radio_bridge](services/radio_bridge/index.md) (55 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
@@ -55,7 +63,7 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/update_checker](services/update_checker/index.md) (17 concepts)
 - [services/channel_list_pdf](services/channel_list_pdf/index.md) (14 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (14 concepts)
-- *…and 9 more modules*
+- *…and 10 more modules*
 
 ### [widgets](widgets/index.md) — 64 concepts
 
@@ -100,7 +108,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 RUN cat ./okf_bundle/SUMMARY.md
 
 # Prime specific domain
-RUN cat ./okf_bundle/main.dart/index.md
+RUN cat ./okf_bundle/l10n/index.md
 
 # Find a concept
 RUN find ./okf_bundle -name '<ConceptName>.md' | xargs cat

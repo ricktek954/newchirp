@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T17:57:15Z"
+timestamp: "2026-11-23T19:09:45Z"
 concept_id: main/shouldLoadRadioCatalogForRestoredSelection
 language: dart
 ---
@@ -26,7 +26,7 @@ boolshouldLoadRadioCatalogForRestoredSelection(
 ```
 
 ## Source
-Lines 56–59 in `main.dart`
+Lines 59–62 in `main.dart`
 
 ## Relationships
 

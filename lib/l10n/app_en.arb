@@ -1,0 +1,180 @@
+{
+  "@@locale": "en",
+  "navRadioConnection": "Radio connection",
+  "navChannelLibrary": "Channel library",
+  "navRadioSettings": "Radio settings",
+  "navFindRepeaters": "Find repeaters",
+  "navFrequencyReference": "Frequency reference",
+  "navAbout": "About & licenses",
+  "sidebarDesktopProgrammer": "DESKTOP RADIO PROGRAMMER",
+  "sidebarLeadProgrammer": "Lead Programmer",
+  "sidebarVersion": "Version {version}",
+  "@sidebarVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "languageLabel": "Language",
+  "languageSystem": "System default",
+  "languageBetaNote": "Translations are in beta. Messages from radio drivers stay in English.",
+  "cancel": "Cancel",
+  "ok": "OK",
+  "apply": "Apply",
+  "readReplaceTitle": "Replace current channel list?",
+  "readReplaceBody": "Reading channels from the radio will replace the current channel list. Save it as a CSV first if you want to keep it.",
+  "readChannels": "Read channels",
+  "radioReadyToReceive": "Radio is ready to receive",
+  "radioReady": "Radio is ready",
+  "beforeReading": "Before reading {model}",
+  "@beforeReading": {
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "beforeWriting": "Before writing {model}",
+  "@beforeWriting": {
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "readingProgress": "Reading radio channels - do not disconnect...",
+  "writingProgress": "Writing radio — do not disconnect…",
+  "writingSettingsProgress": "Writing radio settings - do not disconnect...",
+  "writeUnavailableTitle": "Writing to the {model} isn't available yet",
+  "@writeUnavailableTitle": {
+    "placeholders": {
+      "model": {
+        "type": "String"
+      }
+    }
+  },
+  "writeUnavailableBody": "NewChirp can read this radio, but writing stays off until a write has been tested and checked on a real radio. That keeps an untested write from damaging your radio's setup.\n\nYou can still read the radio, edit channels, and save or export them. If you can help test writing, send a bug report and say so.",
+  "incompatibleTitle": "Some channels are incompatible",
+  "incompatibleSummary": "{invalid} of {total} channels cannot be written to this radio.",
+  "@incompatibleSummary": {
+    "placeholders": {
+      "invalid": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "incompatibleMore": "…and {count} more.",
+  "@incompatibleMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "incompatibleSkipHint": "You can skip the incompatible channels and write the other {count}.",
+  "@incompatibleSkipHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "reviewChannels": "Review channels",
+  "skipAndWriteRemaining": "Skip and write remaining",
+  "writeChangesTitle": "Write these radio changes?",
+  "writeChannelsTitle": "Write these channels to the radio?",
+  "writeConfirmBody": "This will program {count} channels on {model} through {port}. Keep the radio connected and powered on.",
+  "@writeConfirmBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "model": {
+        "type": "String"
+      },
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "writeConfirmMappings": "Bank and zone changes will be written too.",
+  "writeConfirmIncompatible": "{count} incompatible channels will be left unchanged and listed after the write.",
+  "@writeConfirmIncompatible": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "writeConfirmUppercase": "Lowercase channel names will be converted to uppercase because this radio only supports uppercase names.",
+  "writeToRadio": "Write to radio",
+  "applyTitle": "Apply {label}",
+  "@applyTitle": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "applyIntro": "Choose how to add these channels to the current list.",
+  "applyReplaceList": "Replace the current channel list",
+  "applyReplaceZone": "Replace the channels in zone {zone}",
+  "@applyReplaceZone": {
+    "placeholders": {
+      "zone": {
+        "type": "String"
+      }
+    }
+  },
+  "applyReplaceListNote": "Unsaved edits to the current list will be lost.",
+  "applyReplaceZoneNote": "Other zones are not changed. Unsaved edits to this zone will be lost.",
+  "applyInsertAt": "Insert starting at channel number",
+  "applyInsertNote": "Channels in the {count}-channel range will be overwritten.",
+  "@applyInsertNote": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "applyStartLabel": "Starting channel number",
+  "applyStartError": "Enter a channel number of 1 or higher.",
+  "settingsUnsaved": "Unsaved settings changes",
+  "settingsMatchRadio": "Settings match the values last read from the radio.",
+  "settingsMatchSnapshot": "Settings match the saved radio snapshot.",
+  "discardChanges": "Discard changes",
+  "connectRadioToWrite": "Connect radio to write",
+  "writeSettingsToRadio": "Write settings to radio",
+  "writeSettingsTitle": "Write these radio settings?",
+  "writeSameSettingsTitle": "Write the same settings again?",
+  "writeSettingsBody": "This will write {count} radio setting values to {model} through {port}. Keep the radio connected and powered on.",
+  "@writeSettingsBody": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "model": {
+        "type": "String"
+      },
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "writeSameSettingsBody": "Nothing has changed since the last read or write. NewChirp will write this radio snapshot, its settings and its channels, to {model} through {port}. Use this to program another radio of the same model. Keep the radio connected and powered on.",
+  "@writeSameSettingsBody": {
+    "placeholders": {
+      "model": {
+        "type": "String"
+      },
+      "port": {
+        "type": "String"
+      }
+    }
+  },
+  "writeSettingsButton": "Write settings"
+}

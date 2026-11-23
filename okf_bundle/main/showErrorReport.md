@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T17:57:15Z"
+timestamp: "2026-11-23T19:09:45Z"
 concept_id: main/showErrorReport
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_showErrorReport_showErrorReport
 ```
 
 ## Source
-Lines 1679–1679 in `main.dart`
+Lines 1698–1698 in `main.dart`
 
 ## Relationships
 

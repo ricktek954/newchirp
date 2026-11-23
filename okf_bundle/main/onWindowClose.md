@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T17:57:15Z"
+timestamp: "2026-11-23T19:09:45Z"
 concept_id: main/onWindowClose
 language: dart
 ---
@@ -23,7 +23,7 @@ voidonWindowClose()
 ```
 
 ## Source
-Lines 265–265 in `main.dart`
+Lines 269–269 in `main.dart`
 
 ## Relationships
 
