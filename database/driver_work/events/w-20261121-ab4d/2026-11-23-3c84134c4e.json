@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 09:52:19",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:902",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-23",
+  "summary": "Owner: the write finishes on the radio (it reboots to normal) but the app sits at 17-19% indefinitely and must be killed; earlier 'slow, not hung' reading was incomplete"
+}

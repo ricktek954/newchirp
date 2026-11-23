@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 09:52:19",
+  "details": "Windows 1.0.67: read and two writes worked; a write started 04:37 logged no completion; later attempts failed 'port reserved by another program', consistent with a hung bridge still holding COM3.",
+  "event_type": "created",
+  "external_ref": "INBOX:920",
+  "item": "w-20261123-e801",
+  "occurred_at": "2026-11-23",
+  "summary": "Write never completed, later attempts found the port reserved"
+}

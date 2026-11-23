@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 09:52:20",
+  "kind": "bug",
+  "manufacturer": "Wouxun",
+  "model": "KG-UV9D Plus",
+  "occurred_at": null,
+  "priority": "low",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:909",
+  "status": "closed",
+  "summary": "Owner found the radio only talks to the cable with volume around 50%. User-side cause; FAQ #wouxun-volume and a KG-UV9 'no response' hint added.",
+  "title": "No response until the volume was set to about halfway",
+  "uid": "w-20261123-4b54"
+}

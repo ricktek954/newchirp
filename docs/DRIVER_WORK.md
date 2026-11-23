@@ -64,6 +64,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   NewChirp 1.0.56 received no response to its seven-byte identity command on a macOS usbserial adapter. Confirm the radio mode, cable voltage, adapter driver, and OEM CPS behavior.
   Source: `email` INBOX:736
 
+### BF-F8HP
+
+- **#w-20261123-e801 bug | fix_committed | normal:** Write never completed, later attempts found the port reserved
+  Windows 1.0.67: read and two writes worked; a write started 04:37 logged no completion; later attempts failed 'port reserved by another program', consistent with a hung bridge still holding COM3.
+  Source: `email` INBOX:920
+
 ### BF-F8HP-PRO
 
 - **#100 bug | fix_committed | normal:** Zones not shown; radio scans all channels as one zone
@@ -81,7 +87,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#72 bug | fix_committed | high:** Airband receive-only validation
   Accept 108-136 MHz only when duplex is Off.
   Source: `email triage` 2026-11-16
-- **#w-20261121-ab4d bug | pending_validation | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
+- **#w-20261121-ab4d bug | investigating | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
   Linux (Manjaro, KDE Wayland) 1.0.64: inserting a channel, or moving a channel added at the end up, then writing leaves a blank slot above the inserted channel; the write froze partway and needed a force quit; the radio rebooted and recovered. CPS cleanup restored the radio.
   Source: `email triage 2026-11-21` INBOX:863
 - **#w-20261121-6314 bug | pending_validation | normal:** Channel names show leftover text after the NUL terminator ('Channel 1<NUL>t Mode')
@@ -90,6 +96,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261122-f1fb bug | fix_committed | normal:** Frequencies off the tuning-step grid (145.16375 MHz) flagged as unprogrammable
   Linux 1.0.68: reading a codeplug built elsewhere flagged 30 channels, e.g. 145.163750 MHz -> nearest 145.165. The radio holds the frequency; the driver sets has_nostep_tuning (10 Hz storage), which CHIRP's validate_memory honors, but the bridge never exported it and the app's pre-write check applied the 2.5-100 kHz steps. Affects every has_nostep_tuning radio (22 driver files).
   Source: `email` INBOX:895 <84f2a5ed-80a4-2f1a-f7de-971c3e81b271@newchirp.net>
+- **#w-20261123-9a28 bug | fix_committed | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
+  Read completed; decode failed with 30000000.0 not valid for rtone. 0x3E08 is not BCD; stock formats it as '3e08' and parses scientific notation. CPS v1.60 offers CHIRP's 50 tones; OEM data from another radio stores BCD. Image not attached.
+  Source: `email` INBOX:907
 - **#24 maintenance | experimental | normal:** Current driver status
   Transport: CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS. Read: Stock CHIRP driver; receive-only airband accepted. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:48
@@ -147,6 +156,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-abf7 bug | fix_committed | normal:** Write stops on blank CSV CrossMode
   NewChirp 1.0.54 write of a CSV stopped at channel 111: cross_mode '' not in CHIRP's valid list. A blank CrossMode cell imported as '' and the bridge set it on every channel. Same report shows the 136.5/151.4/156.7 'malformed' tone warnings fixed in 27e3bf07.
   Source: `email` INBOX:828
+- **#w-20261123-23e2 bug | fix_committed | normal:** PROGRAMCOLORPROU answered 0x40; stopped as 'Unexpected response'
+  Windows 1.0.67. BF-UVs Pro CPS v1.4.7 discards non-ACK bytes and resends the handshake every 1 s up to 5 times.
+  Source: `email` INBOX:915
 
 ### UV-5G Mini
 
@@ -588,6 +600,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-9877 bug | fix_committed | high:** After a write, radio beeps on PTT and will not transmit
   Owner of two RT-950 Pros: the one programmed today (likely Web Programmer; desktop failed at port open, w-20261120-8265) beeps on PTT and does not transmit; the unprogrammed one is fine. Experimental write sends the full CPS block set, settings included. Candidates: TX off on the channel, TX outside the radio's TX range (owner's IC-F60V channels are 450-469 MHz commercial), busy lock, or a settings block changed by the write. Need: tool used, channel/frequency, whether any channel transmits, the pre-write backup and a fresh read.
   Source: `email` INBOX:849
+- **#w-20261123-f57b bug | fix_committed | normal:** Channel 26 tone 0x5750 (2235.2) stopped the read
+  Windows 1.0.67: channel 26 TX frequency byte 0x6f and tone 0x5750; the CPS GetCTCSS_HexToStr shows '2235.2' for it too, so the radio holds those values. Also 0x0800-style words decoded as tones where the CPS shows OFF.
+  Source: `email` INBOX:919
 - **#w-20261120-36d6 enhancement | released | normal:** Stock-firmware RT-950 Pro over Bluetooth
   Add experimental read-only Android Bluetooth support for the stock RT-950 Pro. The stock CPS 1.3.3 exposes a BT Write switch at function-settings byte 29; iOS/Android programming is advertised but the exact BLE wire behavior still requires app or hardware evidence. Bluetooth writes remain disabled.
   Source: `email` INBOX:854
@@ -710,6 +725,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#48 maintenance | experimental | normal:** Current driver status
   Transport: Wouxun clone serial, 19200 8N1, 64-byte blocks. Read: Reserved DCS words no longer abort channel decode; raw bytes preserved. Write: Stock CHIRP driver, offline round-trip. Settings: Stock CHIRP settings. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:72
+
+### KG-UV9D Plus
+
+- **#w-20261123-4b54 bug | closed | low:** No response until the volume was set to about halfway
+  Owner found the radio only talks to the cable with volume around 50%. User-side cause; FAQ #wouxun-volume and a KG-UV9 'no response' hint added.
+  Source: `email` INBOX:909
 
 ### KG-UV9GX Plus
 

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 09:52:20",
+  "details": "Owner found the radio only talks to the cable with volume around 50%. User-side cause; FAQ #wouxun-volume and a KG-UV9 'no response' hint added.",
+  "event_type": "created",
+  "external_ref": "INBOX:909",
+  "item": "w-20261123-4b54",
+  "occurred_at": "2026-11-23",
+  "summary": "No response until the volume was set to about halfway"
+}

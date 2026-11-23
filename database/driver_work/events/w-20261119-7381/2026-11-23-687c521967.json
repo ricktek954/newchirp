@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 09:52:21",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:904",
+  "item": "w-20261119-7381",
+  "occurred_at": "2026-11-23",
+  "summary": "Another F4HWN v7.0.0 radio (same hello bytes) tried with UV-K1 and egzumer profiles on 1.0.37"
+}

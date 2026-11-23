@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 09:52:20",
+  "details": "Windows 1.0.67. BF-UVs Pro CPS v1.4.7 discards non-ACK bytes and resends the handshake every 1 s up to 5 times.",
+  "event_type": "created",
+  "external_ref": "INBOX:915",
+  "item": "w-20261123-23e2",
+  "occurred_at": "2026-11-23",
+  "summary": "PROGRAMCOLORPROU answered 0x40; stopped as 'Unexpected response'"
+}
