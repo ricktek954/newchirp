@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-23 18:04:54",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "macOS desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:b6fbc544",
+  "status": "released",
+  "summary": "Published a universal signed and notarized DMG from source commit b6fbc544. It preserves the active radio zone when replacing the channel list, allows repeated radio-settings writes, adds RT22 tone and UV-5RM Plus zone fixes, applies UV-82 and KG-689 settings-button corrections, and carries the cumulative 1.0.69 drivers, watchdog, tone handling, Android USB, UI, bridge, trace, printing, and write-progress changes. Artifact SHA-256: 93c57aea40bf5d03f6fa65007a7d0a4af14f41b1b9a11f1b5423cc801a9d2202. Apple notarization: c763ad92-b1db-4a94-9110-757a471ab3f0. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.70.",
+  "title": "macOS 1.0.70 published",
+  "uid": "w-20261123-8e17"
+}

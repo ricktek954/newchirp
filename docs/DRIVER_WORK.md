@@ -517,6 +517,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-218b release | released | normal:** macOS 1.0.69 published
   Published a universal signed and notarized DMG from source commit 0f7f9048. It adds the read-only UV-K5 Robzyl RO-KO 512K profile, AT-D878UVII Plus support with the D578 second-bank mapping fix, Baofeng 5RX OEM power encoding, safe handling of unknown Baofeng power values, and the cumulative 1.0.68 watchdog, tone, UV-32, Android USB, driver, trace, printing, and write-progress changes. Artifact SHA-256: 38aae79413d8775d704a5b9197f828f11f982ebc354f9ec702560f71cdf298ab. Apple notarization: baa15c49-30d7-4b03-986b-a30fc5dbe577. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.69.
   Source: `release` desktop:0f7f9048
+- **#w-20261123-8e17 release | released | normal:** macOS 1.0.70 published
+  Published a universal signed and notarized DMG from source commit b6fbc544. It preserves the active radio zone when replacing the channel list, allows repeated radio-settings writes, adds RT22 tone and UV-5RM Plus zone fixes, applies UV-82 and KG-689 settings-button corrections, and carries the cumulative 1.0.69 drivers, watchdog, tone handling, Android USB, UI, bridge, trace, printing, and write-progress changes. Artifact SHA-256: 93c57aea40bf5d03f6fa65007a7d0a4af14f41b1b9a11f1b5423cc801a9d2202. Apple notarization: c763ad92-b1db-4a94-9110-757a471ab3f0. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.70.
+  Source: `release` desktop:b6fbc544
 
 ## Quansheng
 
