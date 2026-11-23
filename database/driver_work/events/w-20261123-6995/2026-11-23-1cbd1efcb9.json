@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 23:22:37",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:46ac99e8",
+  "item": "w-20261123-6995",
+  "occurred_at": "2026-11-23",
+  "summary": "DTCS-T/pocket-beep/undefined tone decode override"
+}
