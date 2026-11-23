@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 13:08:36",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "cps:Baofeng_UV-5RX_CPS_20231124.zip",
+  "item": "w-20261123-2763",
+  "occurred_at": "2026-11-23",
+  "summary": "Official Baofeng UV-5RX CPS 20231124 (baofengradio.com download page; ZIP SHA-256 4848128a68dcb0d2ddfa54c65ad43591718d8e9e3b62112691ff6cd60926590a; Inno 5.5.7 -> BF_5R_ThreeBand.exe .NET). Identity hSTable1 50 BB FF 20 12 07 25 = CHIRP MSTRING_UVS9X3. WriFreq.GetCHTxPower writes record byte 14 = 0 (H) or 1 (L); GetCHOtherImf reads bit0 (1 = Low). CHIRP tri-band writes Low as 2, which the CPS reads as High. CHIRP 5RX/UV-S9X3/BF-A58S sample images hold only 0."
+}

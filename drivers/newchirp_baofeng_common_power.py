@@ -16,15 +16,24 @@ BF-A58S) only expect 0 (High) and 2 (Low); other radios expect an index
 into their power list. A 2026-11-23 5RX report (NewChirp 1.0.68, INBOX:922)
 hit this after a successful read.
 
-What the radio means by the other values is not known yet (no CPS or image
-from that radio), so this override does not guess. The channel is shown at
-the first (High) power level, the fallback stock CHIRP intended, and the
-original raw value is written back unless the user changes the power.
+5RX and UV-S9X3: the official Baofeng UV-5RX CPS 20231124 (baofengradio.com;
+ZIP SHA-256 4848128a68dcb0d2ddfa54c65ad43591718d8e9e3b62112691ff6cd60926590a,
+BF_5R_ThreeBand.exe, identity 50 BB FF 20 12 07 25 = CHIRP MSTRING_UVS9X3)
+writes record byte 14 as 0 for High and 1 for Low (WriFreq.GetCHTxPower) and
+reads Low from bit 0 (WriFreq.GetCHOtherImf). Stock CHIRP writes Low as 2,
+which that CPS reads as High. These two models now decode and encode power
+the CPS way.
+
+Other radios: what an unrecognised value means is not known, so the channel
+is shown at the first (High) level, the fallback stock CHIRP intended.
+
+In both cases a channel whose power is not edited keeps its original raw
+value on write, so opening and saving never changes the radio's setting.
 """
 
 import logging
 
-from chirp.drivers import baofeng_common
+from chirp.drivers import baofeng_common, baofeng_wp970i
 
 
 LOG = logging.getLogger(__name__)
@@ -36,7 +45,16 @@ _current_set = _Base.set_memory
 _original_set = getattr(_current_set, "newchirp_original", _current_set)
 
 
+CPS_LOW_BIT = 0x01
+
+
+def _uses_cps_power(radio):
+    return getattr(type(radio), "_newchirp_cps_power", False)
+
+
 def _power_known(radio, value):
+    if _uses_cps_power(radio):
+        return True
     if radio._tri_band:
         return value in (baofeng_common.TXPOWER_HIGH,
                          baofeng_common.TXPOWER_LOW)
@@ -56,15 +74,22 @@ def _get_memory_keeping_power(self, number):
     if _mem.get_raw()[:1] == b"\xff":
         return _original_get(self, number)
     raw = int(_mem.lowpower)
-    if _power_known(self, raw):
+    if _uses_cps_power(self):
+        shown = (baofeng_common.TXPOWER_LOW if raw & CPS_LOW_BIT
+                 else baofeng_common.TXPOWER_HIGH)
+    elif _power_known(self, raw):
         _unknown_powers(self).pop(number, None)
         return _original_get(self, number)
-    _mem.lowpower = baofeng_common.TXPOWER_HIGH
+    else:
+        shown = baofeng_common.TXPOWER_HIGH
+    _mem.lowpower = shown
     try:
         mem = _original_get(self, number)
     finally:
         _mem.lowpower = raw
-    _unknown_powers(self)[number] = raw
+    _unknown_powers(self)[number] = (raw, mem.power)
+    if _uses_cps_power(self):
+        return mem
     LOG.warning(
         "%s channel %i: unrecognised power value %i shown as %s and kept "
         "unchanged unless the power is edited",
@@ -73,14 +98,21 @@ def _get_memory_keeping_power(self, number):
 
 
 def _set_memory_keeping_power(self, mem):
-    raw = _unknown_powers(self).get(mem.number)
+    kept = _unknown_powers(self).get(mem.number)
     result = _original_set(self, mem)
-    if raw is not None:
-        if (not mem.empty and mem.power is not None
-                and mem.power == self.POWER_LEVELS[0]):
-            self._memobj.memory[mem.number].lowpower = raw
-        else:
-            _unknown_powers(self).pop(mem.number, None)
+    if mem.empty:
+        _unknown_powers(self).pop(mem.number, None)
+        return result
+    _mem = self._memobj.memory[mem.number]
+    if kept is not None and mem.power is not None and mem.power == kept[1]:
+        _mem.lowpower = kept[0]          # power not edited: keep the radio's
+        return result
+    _unknown_powers(self).pop(mem.number, None)
+    if _uses_cps_power(self):
+        # CPS GetCHTxPower: High 0, Low 1
+        _mem.lowpower = (CPS_LOW_BIT
+                         if int(_mem.lowpower) == baofeng_common.TXPOWER_LOW
+                         else 0)
     return result
 
 
@@ -88,3 +120,6 @@ _get_memory_keeping_power.newchirp_original = _original_get
 _set_memory_keeping_power.newchirp_original = _original_set
 _Base.get_memory = _get_memory_keeping_power
 _Base.set_memory = _set_memory_keeping_power
+
+baofeng_wp970i.BF5RXRadio._newchirp_cps_power = True
+baofeng_wp970i.UVS9X3._newchirp_cps_power = True
