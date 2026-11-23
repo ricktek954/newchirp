@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:50:43",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "web:b89bf7a",
+  "item": "w-20261121-badb",
+  "occurred_at": "2026-11-23",
+  "summary": "RT22 tone-off fix deployed to the Web Programmer as index-Bo0ANG7D.js; backup /root/newchirp-before-rt22tone-20261123125028.tgz"
+}

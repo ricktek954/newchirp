@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:51:52",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179545626865.4467.2497143626364489599@newchirp.net>",
+  "item": "w-20261119-d555",
+  "occurred_at": "2026-11-23",
+  "summary": "Explained the zone-drop bug; 1.0.71 workaround: Insert at 1 for zone 3, Replace in zone 1 to restore it"
+}

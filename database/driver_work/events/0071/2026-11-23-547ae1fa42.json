@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:51:53",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179545630096.4851.11928617572342714063@newchirp.net>",
+  "item": "71",
+  "occurred_at": "2026-11-23",
+  "summary": "Confirmed the FTDI 2-pin cable type; asked for a 1.0.71 read and in-app report if it fails"
+}

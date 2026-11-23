@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:51:52",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179545628916.4716.14037968692761213104@newchirp.net>",
+  "item": "w-20261123-17cf",
+  "occurred_at": "2026-11-23",
+  "summary": "Five writes succeeded before silence; advised plug seating, battery, power cycle, COM port check, update to 1.0.71"
+}

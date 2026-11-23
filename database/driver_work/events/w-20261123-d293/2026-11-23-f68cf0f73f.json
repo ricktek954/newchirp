@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-23 17:51:53",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "email:<179545629516.4764.1361126224768947283@newchirp.net>",
+  "item": "w-20261123-d293",
+  "occurred_at": "2026-11-23",
+  "summary": "Fix in next release; workaround: use the channel Write to radio, which writes the whole snapshot including settings"
+}
