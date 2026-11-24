@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 20:29:04",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:974",
+  "item": "w-20261124-87c9",
+  "occurred_at": "2026-11-24",
+  "summary": "INBOX:974, same owner and session (1.0.23, COM3, notes 'UV5R Mini version 2'): also tried UV-5R and UV-5G Mini; every attempt got only instant 1-byte or 16-byte replies (echo of the command), consistent with the earlier echo/plug-seating diagnosis. Covered by the INBOX:973 reply; no second reply sent."
+}
