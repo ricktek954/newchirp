@@ -1644,6 +1644,57 @@ class UploadHandshakeTest(unittest.TestCase):
         self.assertEqual(written, [1])
         self.assertEqual(erased, [2])
 
+    def test_live_refusal_names_channel_and_stopping_point(self):
+        from chirp import chirp_common
+
+        def blank_memory(number):
+            memory = chirp_common.Memory()
+            memory.number = number
+            memory.empty = True
+            return memory
+
+        written = []
+
+        def set_live_memory(memory):
+            if memory.number == 3:
+                raise self.errors.InvalidDataError("Radio refused 3")
+            written.append(memory.number)
+
+        features = SimpleNamespace(memory_bounds=(1, 4))
+        live_radio = SimpleNamespace(
+            VENDOR="Kenwood", MODEL="TH-D7G", VARIANT="", BAUD_RATE=9600,
+            HARDWARE_FLOW=False, pipe=SimpleNamespace(), status_fn=None,
+            get_features=lambda: features,
+            get_memory=blank_memory,
+            set_memory=set_live_memory,
+            erase_memory=lambda number: None,
+        )
+        adapter = bridge.headless_live_adapter(live_radio)
+        adapter.status_fn = None
+        with tempfile.NamedTemporaryFile(
+            mode="w", suffix=".img", encoding="utf-8",
+        ) as handle:
+            handle.write(",".join(chirp_common.Memory.CSV_FORMAT) + "\n")
+            handle.flush()
+            adapter.load_mmap(handle.name)
+        for number, freq in ((1, 146520000), (3, 121512500)):
+            memory = chirp_common.Memory()
+            memory.number = number
+            memory.freq = freq
+            memory.mode = "AM"
+            memory.tuning_step = 12.5
+            memory.name = "AIR"
+            adapter.set_memory(memory)
+
+        with self.assertRaises(self.errors.RadioError) as caught:
+            adapter.sync_out()
+
+        message = str(caught.exception)
+        self.assertEqual(written, [1])
+        self.assertIn("refused channel 3 (121.51250 MHz, AM", message)
+        self.assertIn("Channels 1-2 were written; 3-4 were not", message)
+        self.assertIn("(Radio refused 3)", message)
+
     def test_upload_preparation_skips_locations_outside_radio_bounds(self):
         radio = self.directory.get_radio_by_image(str(TD_H8_IMAGE))
         radio.load_mmap(str(TD_H8_IMAGE))

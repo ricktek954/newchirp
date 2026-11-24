@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 20:06:48",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:972",
+  "item": "w-20261124-db43",
+  "occurred_at": "2026-11-24",
+  "summary": "Reporter now uses TH-D7G (read worked): writing a TM-D710 CSV (139 channels) on 1.0.62 stopped at 'Radio refused 191' from kenwood_d7 set_memory (MW answered N). Headless live adapter writes slots 0-199 in order, so 0-190 were written and 191-199 untouched; the refused channel's values are unknown without the CSV."
+}

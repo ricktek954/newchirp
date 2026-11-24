@@ -1997,6 +1997,48 @@ def open_serial(radio_class, port):
     return handle
 
 
+def live_refusal_message(exc, memory, start, end):
+    """Say which channel a live radio refused and how far the write got.
+
+    2026-11-24 TH-D7G report: "Radio refused 191" after a CSV from another
+    model; the slot's values and the stopping point were not shown.
+    """
+    text = str(exc).strip() or exc.__class__.__name__
+    if not text.lower().startswith("radio refused"):
+        return text
+    number = memory.number
+    if memory.empty:
+        what = "clearing channel %s" % number
+    else:
+        parts = ["%.5f MHz" % (memory.freq / 1e6), memory.mode or "FM"]
+        step = getattr(memory, "tuning_step", None)
+        if step:
+            parts.append("step %g kHz" % step)
+        if memory.duplex == "split":
+            parts.append("TX %.5f MHz" % (memory.offset / 1e6))
+        elif memory.duplex in ("+", "-") and memory.offset:
+            parts.append("offset %s%.3f MHz" % (memory.duplex,
+                                                memory.offset / 1e6))
+        if memory.tmode == "Tone":
+            parts.append("Tone %.1f" % memory.rtone)
+        elif memory.tmode == "TSQL":
+            parts.append("TSQL %.1f" % memory.ctone)
+        elif memory.tmode:
+            parts.append(memory.tmode)
+        if memory.name:
+            parts.append('name "%s"' % memory.name)
+        what = "channel %s (%s)" % (number, ", ".join(parts))
+    done = ("channels %s-%s were written" % (start, number - 1)
+            if number > start else "nothing was written")
+    return (
+        "The radio refused %s. %s; %s-%s were not. Check that the frequency "
+        "is within this radio's bands and on one of its tuning steps, and "
+        "that the mode and tone are ones it supports, then edit or clear "
+        "that channel and write again. (%s)"
+        % (what, done[0].upper() + done[1:], number, end, text)
+    )
+
+
 def headless_live_adapter(live_radio):
     """Give a live radio the file-backed interfaces NewChirp requires."""
     from chirp import chirp_common, errors
@@ -2044,11 +2086,16 @@ def headless_live_adapter(live_radio):
             written = []
             for number in range(start, end + 1):
                 memory = self.get_memory(number)
-                if memory.empty:
-                    self._live_radio.erase_memory(number)
-                else:
-                    self._live_radio.set_memory(memory)
-                    written.append(memory.dupe())
+                try:
+                    if memory.empty:
+                        self._live_radio.erase_memory(number)
+                    else:
+                        self._live_radio.set_memory(memory)
+                        written.append(memory.dupe())
+                except (errors.InvalidDataError, errors.RadioError) as exc:
+                    raise errors.RadioError(
+                        live_refusal_message(exc, memory, start, end)
+                    ) from exc
                 if self.status_fn:
                     status = chirp_common.Status()
                     status.cur = number

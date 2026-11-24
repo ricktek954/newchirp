@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 215 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 216 concepts across 10 domains and 10 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-24T19:23:43Z'
+timestamp: '2026-11-24T20:06:00Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 215 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 216 concepts | 10 domains | 10 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 191 |
+| Function | 192 |
 | Class | 14 |
 | Module | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 215 |
+| python | 216 |
 
 ## Domain Map
 
@@ -40,9 +40,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [check_private_data](check_private_data/index.md) (4 concepts) — Fail when private email addresses or local build paths are tracked.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 90 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 91 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (90 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (91 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [driver_work.py](driver_work.py/index.md) — 32 concepts
 
@@ -91,9 +91,9 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [memory_with_new_extras](/chirp_bridge/memory_with_new_extras.md) | Function | `chirp_bridge.py` | Reload a slot after giving it the incoming channel's basic f… |
 | [verify_live_write](/chirp_bridge/verify_live_write.md) | Function | `chirp_bridge.py` | Read back live memories so a rejected write cannot report su… |
 | [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
+| [live_refusal_message](/chirp_bridge/live_refusal_message.md) | Function | `chirp_bridge.py` | Say which channel a live radio refused and how far the write… |
 | [manual_send_key](/chirp_bridge/manual_send_key.md) | Function | `chirp_bridge.py` | Return the control a clone prompt says to press after OK, if… |
 | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) | Function | `chirp_bridge.py` | Apply bank/zone names and memberships to an already loaded i… |
-| [fetch_repeaterbook_search](/chirp_bridge/fetch_repeaterbook_search.md) | Function | `chirp_bridge.py` | Query NewChirp's relay without exposing RepeaterBook credent… |
 
 ## Usage with OpenCode
 

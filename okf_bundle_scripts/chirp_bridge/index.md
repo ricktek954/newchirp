@@ -50,6 +50,7 @@
 - [live_channel_context](live_channel_context.md) — Choose a live-radio subdevice without probing every memory slot.
 - [live_memory_matches](live_memory_matches.md) — Compare fields that every live radio must retain after a write.
 - [live_models_by_vendor](live_models_by_vendor.md) — Return selectable serial/transport radios, excluding file-only models.
+- [live_refusal_message](live_refusal_message.md) — Say which channel a live radio refused and how far the write got.
 - [load_chirp](load_chirp.md)
 - [main](main.md)
 - [manual_send_key](manual_send_key.md) — Return the control a clone prompt says to press after OK, if any.

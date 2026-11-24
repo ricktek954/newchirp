@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T19:23:42Z"
+timestamp: "2026-11-24T20:05:59Z"
 concept_id: chirp_bridge/headless_live_adapter
 language: python
 ---
@@ -36,7 +36,7 @@ Give a live radio the file-backed interfaces NewChirp requires.
 | `live_radio` | `—` | `—` |
 
 ## Source
-Lines 2000–2078 in `chirp_bridge.py`
+Lines 2042–2125 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -45,4 +45,5 @@ Lines 2000–2078 in `chirp_bridge.py`
 | related | [chirp_bridge](/chirp_bridge.md) |
 | calls | [__init__](/chirp_bridge/init.md) |
 | calls | [verify_live_write](/chirp_bridge/verify_live_write.md) |
+| calls | [live_refusal_message](/chirp_bridge/live_refusal_message.md) |
 | called_by | [radio_for](/chirp_bridge/radio_for.md) |

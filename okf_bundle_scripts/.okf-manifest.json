@@ -193,8 +193,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795548222641941438,
-      "hash": "f020f8a88ae94a633d63ce1c316a7eab64c63f6b7ef6d0506fae3b1de15398ce",
+      "mtime_ns": 1795550759175936263,
+      "hash": "8db00d425786ac31c44eea496369687abafaca2c9f39a444f4b5847b4f40fa8b",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -254,6 +254,7 @@
         "chirp_bridge/prepare_upload_channels",
         "chirp_bridge/serial_read_timeout",
         "chirp_bridge/open_serial",
+        "chirp_bridge/live_refusal_message",
         "chirp_bridge/headless_live_adapter",
         "chirp_bridge/live_memory_matches",
         "chirp_bridge/verify_live_write",
@@ -295,7 +296,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "55d97198199855f704568269691eb076eaab5bdd507b19c634ba12dfbcacc493",
+      "edge_hash": "56ee423223dd10b9b1c0c137e2ab9bc6f5cadccceea87cce14358aaed641a7f2",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -631,7 +632,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "fa8d46163971ee8a1362acb90539c6600706e2a4de96ef00619536591b3fb899",
+      "edge_hash": "05d6491293e9fccbfa780031052c976271735646f7163b2b2996e55ec64721e2",
       "enriched": false
     },
     "chirp_bridge/repeaterbook_resource_name": {
@@ -2049,7 +2050,15 @@
       "render_hash": "stale",
       "edge_hash": "925e748fc619eaaf641071e26d3b6e5ef42cc7b1c98778e9b57f4eeb52f04125",
       "enriched": false
+    },
+    "chirp_bridge/live_refusal_message": {
+      "concept_id": "chirp_bridge/live_refusal_message",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "2e61ed5971f8f80174539dff65b35a4ce928f16c83c19af24f7ba9775c44a891",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-24T19:23:43Z"
+  "generated_at": "2026-11-24T20:06:00Z"
 }
