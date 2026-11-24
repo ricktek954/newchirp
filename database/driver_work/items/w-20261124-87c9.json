@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 12:10:13",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-5R Mini",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email INBOX:948/950",
+  "source_ref": "",
+  "status": "fix_committed",
+  "summary": "Windows 1.0.70 COM5 (same cable/port read a UV-5RM fine) and macOS 1.0.70: the first handshake byte was 0x50, the start of the echoed PROGRAMCOLORPROU. CPS v1.0.7 HandShake reads byte by byte, ignores non-ACK bytes and resends every 1 s up to 5 times; stock CHIRP reads one byte and aborts. Likely plug not fully seated on the Mini.",
+  "title": "PROGRAMCOLORPROU answered 'P' (echoed command); stock stops as 'Unexpected response'",
+  "uid": "w-20261124-87c9"
+}

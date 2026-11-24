@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:11:12",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:fe773d56",
+  "item": "w-20261124-dbed",
+  "occurred_at": "2026-11-24",
+  "summary": "0x7C sent right after NRK with a 3 s read timeout; no-parity framing; Web Programmer matched (web:f78c5e0). Old driver reproduces the user's error in the new test."
+}

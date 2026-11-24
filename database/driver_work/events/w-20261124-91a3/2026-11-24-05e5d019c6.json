@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:10:13",
+  "details": "Windows 1.0.70 COM13: PROGRAMCOLORPROU got '02 24 00 03 00 10 00 03' x2, then silence; a retry got repeated 0x2D. Likely a Bluetooth serial port or other device, not the programming cable.",
+  "event_type": "created",
+  "external_ref": "email INBOX:951/952",
+  "item": "w-20261124-91a3",
+  "occurred_at": "2026-11-24",
+  "summary": "COM13 replies do not look like a UV-32 (repeating pattern, then '-' bytes)"
+}

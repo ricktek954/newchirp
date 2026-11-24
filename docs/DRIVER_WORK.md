@@ -171,6 +171,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-23e2 bug | released | normal:** PROGRAMCOLORPROU answered 0x40; stopped as 'Unexpected response'
   Windows 1.0.67. BF-UVs Pro CPS v1.4.7 discards non-ACK bytes and resends the handshake every 1 s up to 5 times.
   Source: `email` INBOX:915
+- **#w-20261124-70d9 bug | awaiting_user | normal:** Android Bluetooth: connects but cannot read
+  Forum topic 59 posts 208-210: first device failed with UniversalBle unknown error 147; second device connected GATT (trace truncated by the forum after the 1800/1801 services); user reports it connected but cannot read. Need the full Bluetooth diagnostics.
+  Source: `forum topic 59 (INBOX:942/944/945)` 
+- **#w-20261124-91a3 bug | awaiting_user | normal:** COM13 replies do not look like a UV-32 (repeating pattern, then '-' bytes)
+  Windows 1.0.70 COM13: PROGRAMCOLORPROU got '02 24 00 03 00 10 00 03' x2, then silence; a retry got repeated 0x2D. Likely a Bluetooth serial port or other device, not the programming cable.
+  Source: `email INBOX:951/952` 
 
 ### UV-5G Mini
 
@@ -198,6 +204,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261122-e807 bug | released | normal:** Read stops when the radio misses one block reply; stock aborts instead of re-requesting
   Windows 1.0.66 (two attempts): COM7 answered PROGRAMCOLOR with 'P' (echoed command, so not the programming cable); COM6 read ~75 68-byte blocks, then one R request got no reply and the read failed. OEM CPS v1.0.7 resends an unanswered block request every 1 s up to five more times; stock CHIRP aborts on the first timeout.
   Source: `email` INBOX:885/886 <2f9de842-1d9b-dc3d-5a27-e45a36374471@newchirp.net> <69ebea44-574d-fd41-9a84-077b4c1c2697@newchirp.net>
+- **#w-20261124-87c9 bug | fix_committed | normal:** PROGRAMCOLORPROU answered 'P' (echoed command); stock stops as 'Unexpected response'
+  Windows 1.0.70 COM5 (same cable/port read a UV-5RM fine) and macOS 1.0.70: the first handshake byte was 0x50, the start of the echoed PROGRAMCOLORPROU. CPS v1.0.7 HandShake reads byte by byte, ignores non-ACK bytes and resends every 1 s up to 5 times; stock CHIRP reads one byte and aborts. Likely plug not fully seated on the Mini.
+  Source: `email INBOX:948/950` 
 
 ### UV-5R8W
 
@@ -401,6 +410,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TK-863G
 
+- **#w-20261124-dbed bug | fix_committed | normal:** Read stops at 0x7C memory session: 0 of 2 bytes
+  Linux 1.0.72: PROGRAM, M0863 identity and a valid NRK record, then no reply to 0x7C. KPG-76D 0x403110 sets a 3000 ms read timeout (SetCommTimeouts helper 0x401340, not a sleep), sends 0x7C immediately and reads 2 bytes; the driver slept 3 s and then allowed 1 s. CPS framing is 9600,N,8,2; the driver used even parity.
+  Source: `email INBOX:943` 
 - **#17 maintenance | experimental | normal:** Current driver status
   Transport: KPG-76D clone serial, 9600 8E2 with OEM baud fallback. Read: 128 channels + full 32 KiB image, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental read-only.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:41
@@ -573,6 +585,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Windows 1.0.66: the 8-byte MSTRING_KT8900D magic returned exactly 8 bytes within the 1.5 s timeout instead of the 50-byte ACK+ident, so btech._do_ident reported 'Bad ack from radio'. Same length as the command, so most likely the cable echo with no radio reply (radio off, cable not fully seated, or wrong port/cable). Bytes not logged in 1.0.66. Trace now labels echo-only replies and the error explains them.
   Source: `email` INBOX:881 <89c3682f-beb1-0f59-885f-48fc9ea7afcb@newchirp.net>
 
+### KT8900
+
+- **#w-20261124-a24a bug | awaiting_user | normal:** No response on COM1 (built-in port, not the CH340 cable)
+  Windows 1.0.66: user installed CH340 driver but selected COM1; one 8-byte magic, no reply. Setup issue.
+  Source: `email INBOX:946` 
+
 ## Radioddity
 
 ### DB25-G
@@ -736,6 +754,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#40 maintenance | experimental | normal:** Current driver status
   Transport: ODMaster-verified TD-H8 G4 clone serial, 38,400 8N1. Read: Normal, HAM, and GMRS G4 identities; 151-channel physical read. Write: Official 170-page map, offline-tested. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:64
+
+### TD-H9
+
+- **#w-20261124-dfcb new_driver | investigating | normal:** TD-H9 identity TDH9 is unsupported
+  macOS 1.0.70 with TD-H8 G4 selected: PVOJH\x1c\x14 -> 06, 02 -> 'TDH9\xff\xff\xffN', then 'Unsupported model'. ODMaster 2.6.4 IndexFragment reads TD-H9 with H8ReadUtil (same as TD-H8/TD-H3); its per-model map comes from the public readProtocol service (not bundled). Next: fetch the TD-H9 read/write templates and compare with the G4 map.
+  Source: `email INBOX:949` 
 
 ## TYT
 

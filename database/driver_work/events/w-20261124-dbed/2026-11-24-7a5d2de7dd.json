@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:11:11",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:2041afe2b14883ea1411d139227bb6c19ff4292c909c89599a812c475bafcfde",
+  "item": "w-20261124-dbed",
+  "occurred_at": "2026-11-24",
+  "summary": "KPG-76D kpg76d.exe 0x403110: SetCommTimeouts(3000) via 0x401340, PurgeComm(RX)+write 0x7C, read 2; SetCommTimeouts(500), write 06, read 1. No Sleep. Only mode string 9600,N,8,2 (0x401000/0x4012A0 BuildCommDCB)."
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:10:13",
+  "details": "Forum topic 59 posts 208-210: first device failed with UniversalBle unknown error 147; second device connected GATT (trace truncated by the forum after the 1800/1801 services); user reports it connected but cannot read. Need the full Bluetooth diagnostics.",
+  "event_type": "created",
+  "external_ref": "forum topic 59 (INBOX:942/944/945)",
+  "item": "w-20261124-70d9",
+  "occurred_at": "2026-11-24",
+  "summary": "Android Bluetooth: connects but cannot read"
+}

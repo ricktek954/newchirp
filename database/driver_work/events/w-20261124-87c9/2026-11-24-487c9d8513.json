@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:11:11",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:f96977b15bd9859fc53d0fe432ea48d4c4994074de73555ce8615d3d9e38f607",
+  "item": "w-20261124-87c9",
+  "occurred_at": "2026-11-24",
+  "summary": "CPS v1.0.7 KDH.Communication.HandShake STEP_HANDSHAKE_2 reads one byte at a time, ignores non-0x06 bytes and keeps waiting; the 1 s timer resends the code up to 5 times. Stock _sendmagic reads exactly one byte."
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 12:10:13",
+  "kind": "bug",
+  "manufacturer": "QYT",
+  "model": "KT8900",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email INBOX:946",
+  "source_ref": "",
+  "status": "awaiting_user",
+  "summary": "Windows 1.0.66: user installed CH340 driver but selected COM1; one 8-byte magic, no reply. Setup issue.",
+  "title": "No response on COM1 (built-in port, not the CH340 cable)",
+  "uid": "w-20261124-a24a"
+}

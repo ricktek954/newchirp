@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:11:12",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:52e6d0516f49de17f2869c800ef8fc84f41933b768e1205a0d7876705e2afdf5",
+  "item": "w-20261124-dfcb",
+  "occurred_at": "2026-11-24",
+  "summary": "ODMaster 2.6.4 IndexFragment routes TD-H8/TD-H3/TD-H9/TD-H7/TD-H4 to H8ReadUtil; the TD-H9 map is server-provided (protocol/readProtocol?modelValue=...&lang=), not bundled. Template fetch not yet done (needs network approval)."
+}

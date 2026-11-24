@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:11:11",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:fe773d56",
+  "item": "w-20261124-87c9",
+  "occurred_at": "2026-11-24",
+  "summary": "UV-5R Mini added to the UV-17-family handshake retry; reads up to 24 more bytes for the ACK within 1 s; echo-only attempts give a plug-seating message. Offline tests; not hardware-validated."
+}

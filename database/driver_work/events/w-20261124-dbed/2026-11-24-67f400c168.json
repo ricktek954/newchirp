@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:10:13",
+  "details": "Linux 1.0.72: PROGRAM, M0863 identity and a valid NRK record, then no reply to 0x7C. KPG-76D 0x403110 sets a 3000 ms read timeout (SetCommTimeouts helper 0x401340, not a sleep), sends 0x7C immediately and reads 2 bytes; the driver slept 3 s and then allowed 1 s. CPS framing is 9600,N,8,2; the driver used even parity.",
+  "event_type": "created",
+  "external_ref": "email INBOX:943",
+  "item": "w-20261124-dbed",
+  "occurred_at": "2026-11-24",
+  "summary": "Read stops at 0x7C memory session: 0 of 2 bytes"
+}

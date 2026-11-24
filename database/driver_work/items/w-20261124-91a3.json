@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 12:10:13",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-32",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email INBOX:951/952",
+  "source_ref": "",
+  "status": "awaiting_user",
+  "summary": "Windows 1.0.70 COM13: PROGRAMCOLORPROU got '02 24 00 03 00 10 00 03' x2, then silence; a retry got repeated 0x2D. Likely a Bluetooth serial port or other device, not the programming cable.",
+  "title": "COM13 replies do not look like a UV-32 (repeating pattern, then '-' bytes)",
+  "uid": "w-20261124-91a3"
+}
