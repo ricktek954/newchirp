@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 11:49:15",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "linux:d7f48c99",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-24",
+  "summary": "Hyprland/Intel negative result reviewed: the simulated write stayed at 160-180 MB with continuous frames, while the owner's KDE Wayland session reached 4.9 GB and stopped presenting frames even though Dart logged 'Radio write completed' on time. So the Dart isolate was not blocked; consistent with a compositor or GPU-driver presentation stall specific to the owner's KWin/GPU stack (KWin Wayland NVIDIA leak reports exist; no matching Flutter issue found). Next evidence must come from the owner: GDK_BACKEND=x11 write and GPU/driver (inxi -G)."
+}
