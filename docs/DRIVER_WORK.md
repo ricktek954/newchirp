@@ -99,7 +99,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#72 bug | fix_committed | high:** Airband receive-only validation
   Accept 108-136 MHz only when duplex is Off.
   Source: `email triage` 2026-11-16
-- **#w-20261121-ab4d bug | fix_committed | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
+- **#w-20261121-ab4d bug | awaiting_user | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
   Linux (Manjaro, KDE Wayland) 1.0.64: inserting a channel, or moving a channel added at the end up, then writing leaves a blank slot above the inserted channel; the write froze partway and needed a force quit; the radio rebooted and recovered. CPS cleanup restored the radio.
   Source: `email triage 2026-11-21` INBOX:863
 - **#w-20261121-6314 bug | pending_validation | normal:** Channel names show leftover text after the NUL terminator ('Channel 1<NUL>t Mode')
