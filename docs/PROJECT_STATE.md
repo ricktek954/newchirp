@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-23
+Last updated: 2026-11-24
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,10 +8,14 @@ release requirements.
 
 ## Resume here
 
-- **Linux build machine, to do (2026-11-24):** run the DM-32UV write-freeze
-  test in `docs/LINUX_WAYLAND_FREEZE_TEST.md` on a KDE Plasma Wayland
-  session. It needs no radio (`NEWCHIRP_SIMULATE_WRITE=60`). Record the
-  results on ledger item `w-20261121-ab4d`. The owner's 1.0.72 logs show the
+- **Linux Wayland freeze follow-up (2026-11-24):** the simulated write test
+  in `docs/LINUX_WAYLAND_FREEZE_TEST.md` did not reproduce the freeze on the
+  available Hyprland 0.56.2 Wayland host. Foreground, switch-away,
+  hidden-workspace, XWayland, and 120-second native runs all completed with
+  continuous frame heartbeats, steady RSS, and no stale progress. Exact KDE
+  Plasma Wayland/X11 controls and multi-monitor scaling remain untested
+  because Plasma is not installed and this host has one display. Evidence is
+  on ledger item `w-20261121-ab4d`. The owner's 1.0.72 logs still show the
   write finishing while the window stops redrawing at 18%.
 - RepeaterBook approved NewChirp's centralized-server API application on
   2026-11-20 for `api.export` and `api.export_row`. The shared `app_` token is

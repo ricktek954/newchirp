@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 10:48:51",
+  "details": "",
+  "event_type": "test",
+  "external_ref": "linux:41bd6a98",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-24",
+  "summary": "Wayland freeze simulation on available Hyprland 0.56.2 Wayland host (not KDE Plasma): kernel 7.2.15, Intel HD 520 i915, Mesa 26.2.5, XWayland 24.1.14, one 1366x768 display at scale 1. A) 60 s native Wayland foreground: frames 16-42 per 5 s, RSS 173-179 MB, completed, progress closed. B) 60 s switch away at 15 s and return at 45 s: frames 16-27, RSS 164-172 MB, completed. C) 60 s moved to workspace 5 from 15-50 s: frames 16-29, RSS 166-175 MB, completed. D) XWayland switch-away equivalent: frames 16-28, RSS 160-165 MB, completed; XWayland rendered oversized on this desktop. A follow-up 120 s native run: frames 10-27, RSS 166-171 MB, completed. Peak sampled CPU was 45.3, 43.2, 42.7, 44.1, and 23.3 percent respectively, highest at startup and declining; no zero-frame heartbeat, sustained high CPU, memory growth, stale progress, or post-completion hang. A used the unmodified diagnostic AppImage; B-D and 120 s used a disposable build with only the startup update modal disabled. KDE Plasma Wayland/X11 controls and multi-monitor scaling were unavailable because Plasma is not installed and the host has one display."
+}
