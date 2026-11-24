@@ -877,7 +877,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### FT-60
 
-- **#w-20261124-55e8 bug | fix_committed | normal:** Read gets no response from radio (zero bytes) on Windows COM4
+- **#w-20261124-55e8 bug | awaiting_user | normal:** Read gets no response from radio (zero bytes) on Windows COM4
   Windows 11 (build 26200), 1.0.67, COM4: five reads 20-110 s each all end in RadioNoResponse; CHIRP ft60 _download received zero bytes every time, so the radio never sent its header. Points to clone mode not entered (F8 CLONE selected without pressing F/W), the cable, or the port rather than timing.
   Source: `email triage 2026-11-24` INBOX:962
 
