@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 14:17:50",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-5R",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:959",
+  "status": "awaiting_user",
+  "summary": "All wake-up/ident commands got zero bytes back; cable seating or port. Sent plug/volume/port/update steps",
+  "title": "macOS 1.0.68: FTDI cable, no reply to any UV-5R magic",
+  "uid": "w-20261124-0d1e"
+}

@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 14:17:49",
+  "kind": "enhancement",
+  "manufacturer": "NewChirp",
+  "model": "Desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:958",
+  "status": "fix_committed",
+  "summary": "Read-first rule kept (avoids writing an old stored image's settings); status text now says to read the radio first",
+  "title": "Write greyed out for a channel file opened before reading the radio; status text did not explain",
+  "uid": "w-20261124-8c3d"
+}

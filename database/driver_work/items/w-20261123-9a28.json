@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:907",
-  "status": "awaiting_user",
+  "status": "closed",
   "summary": "Read completed; decode failed with 30000000.0 not valid for rtone. 0x3E08 is not BCD; stock formats it as '3e08' and parses scientific notation. CPS v1.60 offers CHIRP's 50 tones; OEM data from another radio stores BCD. Image not attached.",
   "title": "Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed",
   "uid": "w-20261123-9a28"

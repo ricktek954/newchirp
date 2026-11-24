@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 14:17:49",
+  "details": "Read-first rule kept (avoids writing an old stored image's settings); status text now says to read the radio first",
+  "event_type": "created",
+  "external_ref": "INBOX:958",
+  "item": "w-20261124-8c3d",
+  "occurred_at": "2026-11-24",
+  "summary": "Write greyed out for a channel file opened before reading the radio; status text did not explain"
+}

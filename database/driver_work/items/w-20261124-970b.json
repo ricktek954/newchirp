@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 14:17:50",
+  "kind": "enhancement",
+  "manufacturer": "NewChirp",
+  "model": "Desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "INBOX:960",
+  "status": "fix_committed",
+  "summary": "16 analogue channels with ECC/DEC/(15)05 licence-free conditions and printable PDF",
+  "title": "PMR446 (Europe) table in the Frequency Reference",
+  "uid": "w-20261124-970b"
+}

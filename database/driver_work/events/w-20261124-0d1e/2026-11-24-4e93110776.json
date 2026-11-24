@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 14:17:50",
+  "details": "All wake-up/ident commands got zero bytes back; cable seating or port. Sent plug/volume/port/update steps",
+  "event_type": "created",
+  "external_ref": "INBOX:959",
+  "item": "w-20261124-0d1e",
+  "occurred_at": "2026-11-24",
+  "summary": "macOS 1.0.68: FTDI cable, no reply to any UV-5R magic"
+}

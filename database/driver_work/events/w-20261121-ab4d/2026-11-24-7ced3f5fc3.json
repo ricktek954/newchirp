@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 14:17:48",
+  "details": "",
+  "event_type": "test",
+  "external_ref": "mailbox:INBOX:958",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-24",
+  "summary": "Owner: GDK_BACKEND=x11 on 1.0.72 completes writes normally; KDE kwin_wayland, Intel TGL Iris Xe (Mesa 26.2.7) + NVIDIA GTX 1650 Mobile 620.70.06"
+}

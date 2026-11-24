@@ -50,6 +50,4 @@ Lines 59–70 in `generate_gmrs_frs_pdf.py`
 |------|--------|
 | related | [PdfWriter](/generate_gmrs_frs_pdf/PdfWriter.md) |
 | calls | [set_fill](/generate_gmrs_frs_pdf/set_fill.md) |
-| called_by | [main](/generate_gmrs_frs_pdf/main.md) |
-| called_by | [table_cell](/generate_gmrs_frs_pdf/table_cell.md) |
 | called_by | [make_pdf](/generate_international_frequency_pdfs/make_pdf.md) |

@@ -99,7 +99,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#72 bug | fix_committed | high:** Airband receive-only validation
   Accept 108-136 MHz only when duplex is Off.
   Source: `email triage` 2026-11-16
-- **#w-20261121-ab4d bug | investigating | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
+- **#w-20261121-ab4d bug | fix_committed | high:** Write after inserting/moving a channel: blank channel left above it, write froze mid-upload
   Linux (Manjaro, KDE Wayland) 1.0.64: inserting a channel, or moving a channel added at the end up, then writing leaves a blank slot above the inserted channel; the write froze partway and needed a force quit; the radio rebooted and recovered. CPS cleanup restored the radio.
   Source: `email triage 2026-11-21` INBOX:863
 - **#w-20261121-6314 bug | pending_validation | normal:** Channel names show leftover text after the NUL terminator ('Channel 1<NUL>t Mode')
@@ -108,7 +108,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261122-f1fb bug | released | normal:** Frequencies off the tuning-step grid (145.16375 MHz) flagged as unprogrammable
   Linux 1.0.68: reading a codeplug built elsewhere flagged 30 channels, e.g. 145.163750 MHz -> nearest 145.165. The radio holds the frequency; the driver sets has_nostep_tuning (10 Hz storage), which CHIRP's validate_memory honors, but the bridge never exported it and the app's pre-write check applied the 2.5-100 kHz steps. Affects every has_nostep_tuning radio (22 driver files).
   Source: `email` INBOX:895 <84f2a5ed-80a4-2f1a-f7de-971c3e81b271@newchirp.net>
-- **#w-20261123-9a28 bug | awaiting_user | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
+- **#w-20261123-9a28 bug | closed | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
   Read completed; decode failed with 30000000.0 not valid for rtone. 0x3E08 is not BCD; stock formats it as '3e08' and parses scientific notation. CPS v1.60 offers CHIRP's 50 tones; OEM data from another radio stores BCD. Image not attached.
   Source: `email` INBOX:907
 - **#24 maintenance | experimental | normal:** Current driver status
@@ -198,6 +198,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261120-a8df bug | fix_committed | normal:** Settings write fails on out-of-range factory squelch calibration
   1.0.61: squelch_new.vhf.sql9 = 124 is outside uv5r.py's 0-123, CHIRP leaves it unset and set_settings raises int(None), so no setting can be written. Radio is labelled UV-5RH Pro GPS but reads 45 channels with the UV-5R profile.
   Source: `email` INBOX:833
+- **#w-20261124-0d1e bug | awaiting_user | normal:** macOS 1.0.68: FTDI cable, no reply to any UV-5R magic
+  All wake-up/ident commands got zero bytes back; cable seating or port. Sent plug/volume/port/update steps
+  Source: `email` INBOX:959
 
 ### UV-5R Mini
 
@@ -472,6 +475,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-d293 enhancement | fix_committed | normal:** Write settings to radio disabled after a write
   Owner programming several identical radios had to edit and revert a setting to re-enable the button. Button now stays enabled; with no edits it confirms writing the whole snapshot again.
   Source: `email:INBOX:931` <001f01dd7b6e$3f4d9150$bde8b3f0$@gmail.com>
+- **#w-20261124-8c3d enhancement | fix_committed | normal:** Write greyed out for a channel file opened before reading the radio; status text did not explain
+  Read-first rule kept (avoids writing an old stored image's settings); status text now says to read the radio first
+  Source: `email` INBOX:958
+- **#w-20261124-970b enhancement | fix_committed | normal:** PMR446 (Europe) table in the Frequency Reference
+  16 analogue channels with ECC/DEC/(15)05 licence-free conditions and printable PDF
+  Source: `email` INBOX:960
 
 ### Desktop app
 

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 14:17:49",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:955",
+  "item": "w-20261123-9a28",
+  "occurred_at": "2026-11-24",
+  "summary": "Owner blanked the odd tone entries in the Baofeng CPS; NewChirp now reads normally. Fix 29c552b9 already makes such tones read as none"
+}

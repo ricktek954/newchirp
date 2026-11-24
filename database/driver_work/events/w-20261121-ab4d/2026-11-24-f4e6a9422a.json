@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 14:17:49",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:e73b5584",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-24",
+  "summary": "Linux runner prefers XWayland on Wayland sessions (NEWCHIRP_WAYLAND=1 opts out); startup log records session and GDK backend"
+}
