@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T09:51:32Z"
+timestamp: "2026-11-24T13:55:48Z"
 concept_id: chirp_bridge/prepare_upload_channels
 language: python
 ---
@@ -40,7 +40,7 @@ Validate and apply imported channels without touching invalid slots.
 | `progress_callback` | `—` | `None` |
 
 ## Source
-Lines 1747–1879 in `chirp_bridge.py`
+Lines 1756–1888 in `chirp_bridge.py`
 
 ## Relationships
 

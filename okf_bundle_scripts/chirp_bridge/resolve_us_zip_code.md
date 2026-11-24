@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T09:51:32Z"
+timestamp: "2026-11-24T13:55:48Z"
 concept_id: chirp_bridge/resolve_us_zip_code
 language: python
 ---
@@ -36,7 +36,7 @@ Resolve a US ZIP code to a representative latitude and longitude.
 | `zip_code` | `—` | `—` |
 
 ## Source
-Lines 2756–2841 in `chirp_bridge.py`
+Lines 2765–2850 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -69,6 +69,17 @@ class ExperimentalSerialFollowupTest(unittest.TestCase):
             str(ROOT / "drivers"),
         )
 
+    def test_repeated_driver_loading_reuses_registered_classes(self):
+        radio_class = self.directory.get_radio("TIDRADIO_TD-H9")
+
+        directory = self.bridge.load_chirp(
+            str(SOURCE),
+            str(VENDOR),
+            str(ROOT / "drivers"),
+        )
+
+        self.assertIs(directory.get_radio("TIDRADIO_TD-H9"), radio_class)
+
     def test_tm_d710gp_regional_identity_is_accepted(self):
         from chirp import errors
         from chirp.drivers import tmd710

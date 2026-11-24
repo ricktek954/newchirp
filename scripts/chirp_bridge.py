@@ -1097,6 +1097,15 @@ def load_chirp(
                 if module_name.startswith("_"):
                     continue
                 full_name = "newchirp.drivers.%s" % module_name
+                existing = sys.modules.get(full_name)
+                if existing is not None:
+                    existing_path = getattr(existing, "__file__", None)
+                    if (
+                        existing_path
+                        and os.path.realpath(existing_path)
+                        == os.path.realpath(driver_path)
+                    ):
+                        continue
                 spec = importlib.util.spec_from_file_location(
                     full_name, driver_path
                 )
