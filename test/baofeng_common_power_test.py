@@ -97,5 +97,52 @@ class BaofengCommonPowerTest(unittest.TestCase):
             self.assertEqual(int(_mem.lowpower), raw)
 
 
+    def test_invalid_tone_word_reads_as_no_tone_and_is_kept(self):
+        # INBOX:969: 5RX rxtone 0xFF30 failed the read as ctone 6532.8.
+        radio = self._radio("Baofeng_5RX.img")
+        number = self._first_used(radio)
+        _mem = radio._memobj.memory[number]
+        _mem.txtone = 0
+        _mem.rxtone = 0xFF30
+        mem = radio.get_memory(number)
+        self.assertEqual(mem.tmode, "")
+        mem.name = "EDITED"                     # tones untouched
+        radio.set_memory(mem)
+        self.assertEqual(int(_mem.rxtone), 0xFF30)
+        self.assertEqual(int(_mem.txtone), 0)
+        radio.set_memory(radio.get_memory(number))   # still kept on resave
+        self.assertEqual(int(_mem.rxtone), 0xFF30)
+
+        mem = radio.get_memory(number)
+        mem.tmode = "TSQL"
+        mem.ctone = 100.0
+        radio.set_memory(mem)                   # edited: normal encoding
+        self.assertEqual(int(_mem.rxtone), 1000)
+        self.assertEqual(int(_mem.txtone), 1000)
+        self.assertEqual(radio.get_memory(number).ctone, 100.0)
+
+    def test_invalid_dcs_index_reads_as_no_tone(self):
+        radio = self._radio("Baofeng_5RX.img")
+        number = self._first_used(radio)
+        _mem = radio._memobj.memory[number]
+        _mem.txtone = 0x0200                     # past the DCS table
+        _mem.rxtone = 0
+        mem = radio.get_memory(number)
+        self.assertEqual(mem.tmode, "")
+        radio.set_memory(mem)
+        self.assertEqual(int(_mem.txtone), 0x0200)
+
+    def test_valid_tones_unchanged(self):
+        radio = self._radio("Baofeng_5RX.img")
+        number = self._first_used(radio)
+        _mem = radio._memobj.memory[number]
+        _mem.txtone = 885
+        _mem.rxtone = 885
+        mem = radio.get_memory(number)
+        self.assertEqual((mem.tmode, mem.ctone), ("TSQL", 88.5))
+        radio.set_memory(mem)
+        self.assertEqual((int(_mem.txtone), int(_mem.rxtone)), (885, 885))
+
+
 if __name__ == "__main__":
     unittest.main()

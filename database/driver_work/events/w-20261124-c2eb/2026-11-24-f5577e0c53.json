@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 19:00:59",
+  "details": "Windows 11 (build 26340), 1.0.71, COM3: read completed (power fix working) then decode failed: '`6532.8' is not a valid value for `ctone''. Stock BaofengCommonHT decodes any tone word >= 0x0258 as CTCSS value/10. Settings also logged 'Failed to load scode value 0: Value for 15 is out of range' (non-fatal). No .img attached.",
+  "event_type": "created",
+  "external_ref": "INBOX:969",
+  "item": "w-20261124-c2eb",
+  "occurred_at": "2026-11-24",
+  "summary": "Read decodes fail: invalid CTCSS word 6532.8 (rxtone 0xFF30)"
+}

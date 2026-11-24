@@ -29,10 +29,20 @@ is shown at the first (High) level, the fallback stock CHIRP intended.
 
 In both cases a channel whose power is not edited keeps its original raw
 value on write, so opening and saving never changes the radio's setting.
+
+Tones: stock decodes any tone word >= 0x0258 as CTCSS value/10 and indexes
+DTCS_CODES for smaller ones, so a corrupt word fails the whole download. A
+2026-11-24 5RX report (NewChirp 1.0.71, INBOX:969) stopped at "`6532.8' is
+not a valid value for `ctone'" (rxtone 0xFF30). The Baofeng UV-5RX CPS
+(WriFreq.CaculateCTCSS_HexToStr) treats a word as off only when its low byte
+is 0x00 or 0xFF and would show this one as 6532.8 too, so it is bad data in
+that channel, not another encoding. Such a word is now shown as no tone and
+its raw value is written back unless the channel's tones are edited.
 """
 
 import logging
 
+from chirp import chirp_common
 from chirp.drivers import baofeng_common, baofeng_wp970i
 
 
@@ -69,10 +79,55 @@ def _unknown_powers(radio):
     return store
 
 
+def _tone_known(radio, raw):
+    if raw in (0, 0xFFFF):
+        return True
+    if raw >= 0x0258:
+        return raw / 10.0 in chirp_common.TONES
+    index = raw - 0x6A if raw >= 0x6A else raw - 1
+    return 0 <= index < len(radio.DTCS_CODES)
+
+
+def _unknown_tones(radio):
+    store = getattr(radio, "_newchirp_unknown_tones", None)
+    if store is None:
+        store = {}
+        radio._newchirp_unknown_tones = store
+    return store
+
+
+def _tone_state(mem):
+    return (mem.tmode, mem.rtone, mem.ctone, mem.dtcs, mem.rx_dtcs,
+            mem.dtcs_polarity, mem.cross_mode)
+
+
 def _get_memory_keeping_power(self, number):
     _mem = self._memobj.memory[number]
     if _mem.get_raw()[:1] == b"\xff":
         return _original_get(self, number)
+    bad = {field: int(getattr(_mem, field))
+           for field in ("txtone", "rxtone")
+           if not _tone_known(self, int(getattr(_mem, field)))}
+    if not bad:
+        _unknown_tones(self).pop(number, None)
+        return _get_memory_power(self, number)
+    for field in bad:
+        setattr(_mem, field, 0)
+    try:
+        mem = _get_memory_power(self, number)
+    finally:
+        for field, raw in bad.items():
+            setattr(_mem, field, raw)
+    _unknown_tones(self)[number] = (bad, _tone_state(mem))
+    LOG.warning(
+        "%s channel %i: invalid tone word(s) %s shown as no tone and kept "
+        "unchanged unless the tones are edited", self.MODEL, number,
+        ", ".join("%s=0x%04X" % item for item in sorted(bad.items())))
+    return mem
+
+
+def _get_memory_power(self, number):
+    _mem = self._memobj.memory[number]
     raw = int(_mem.lowpower)
     if _uses_cps_power(self):
         shown = (baofeng_common.TXPOWER_LOW if raw & CPS_LOW_BIT
@@ -98,6 +153,19 @@ def _get_memory_keeping_power(self, number):
 
 
 def _set_memory_keeping_power(self, mem):
+    tones = _unknown_tones(self).pop(mem.number, None)
+    result = _set_memory_power(self, mem)
+    if tones is not None and not mem.empty:
+        bad, state = tones
+        if _tone_state(mem) == state:        # tones not edited
+            _mem = self._memobj.memory[mem.number]
+            for field, raw in bad.items():
+                setattr(_mem, field, raw)
+            _unknown_tones(self)[mem.number] = tones
+    return result
+
+
+def _set_memory_power(self, mem):
     kept = _unknown_powers(self).get(mem.number)
     result = _original_set(self, mem)
     if mem.empty:
