@@ -757,7 +757,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TD-H9
 
-- **#w-20261124-dfcb new_driver | investigating | normal:** TD-H9 identity TDH9 is unsupported
+- **#w-20261124-dfcb new_driver | fix_committed | normal:** TD-H9 identity TDH9 is unsupported
   macOS 1.0.70 with TD-H8 G4 selected: PVOJH\x1c\x14 -> 06, 02 -> 'TDH9\xff\xff\xffN', then 'Unsupported model'. ODMaster 2.6.4 IndexFragment reads TD-H9 with H8ReadUtil (same as TD-H8/TD-H3); its per-model map comes from the public readProtocol service (not bundled). Next: fetch the TD-H9 read/write templates and compare with the G4 map.
   Source: `email INBOX:949` 
 

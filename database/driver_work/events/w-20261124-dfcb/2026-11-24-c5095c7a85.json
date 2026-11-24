@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:30:33",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:1ca88ca709d0e67e16f368b459c4743182ae8b33babf1477af0a048cff559edf",
+  "item": "w-20261124-dfcb",
+  "occurred_at": "2026-11-24",
+  "summary": "TIDRADIO protocol service: TD-H9/Ham/GMRS readProtocol identical to TD-H8 4rd/Ham/GMRS except initresult; wfDirect (from defaultRecord) writes exactly the 170 G4 pages; translateRead decodes one image identically (2,493 fields; H9 adds DTMF speed and backlight). Hashes in docs/DRIVER_STATUS.md."
+}
