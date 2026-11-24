@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 10:22:59",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:fb3a78dac1f42e7f3f116ef4dcbddd1d3039e780cfbeb418f9192e50fe26da80",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-24",
+  "summary": "File drop 15 (1.0.72, AppImage, Manjaro KDE Wayland): diagnostics log both writes as 'Radio write completed' after 55 s and 51 s with 0 adjustments, so the bridge and the app's Dart isolate finished normally; screenshot shows the NewChirp app process (not the bridge) at 98.5% CPU and 4.9 GB RSS while the window stays at 18%. Earlier drop 13 showed Cancel clicks registering while the window looked frozen. Points to the window not repainting (Flutter Linux/Wayland presentation) rather than a stuck write; the 150 s bridge watchdog cannot see it. Next: X11 (GDK_BACKEND=x11) comparison run and a UI-frame heartbeat in diagnostics."
+}
