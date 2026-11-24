@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 1155 concepts across 5 domains and 39 modul
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-24T13:54:22Z'
+timestamp: '2026-11-24T13:59:51Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
