@@ -544,6 +544,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-8e17 release | released | normal:** macOS 1.0.70 published
   Published a universal signed and notarized DMG from source commit b6fbc544. It preserves the active radio zone when replacing the channel list, allows repeated radio-settings writes, adds RT22 tone and UV-5RM Plus zone fixes, applies UV-82 and KG-689 settings-button corrections, and carries the cumulative 1.0.69 drivers, watchdog, tone handling, Android USB, UI, bridge, trace, printing, and write-progress changes. Artifact SHA-256: 93c57aea40bf5d03f6fa65007a7d0a4af14f41b1b9a11f1b5423cc801a9d2202. Apple notarization: c763ad92-b1db-4a94-9110-757a471ab3f0. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.70.
   Source: `release` desktop:b6fbc544
+- **#w-20261124-7616 release | released | normal:** macOS 1.0.71 published
+  Published a universal signed and notarized DMG from source commit 876c765b. It adds TIDRADIO TD-H9 Normal, HAM, and GMRS profiles on the TD-H8 G4 transport, matches TK-863G OEM memory-session timing, improves UV-5R Mini echo and handshake recovery, preserves the selected zone during list replacement, and includes the cumulative 1.0.70 UI, driver, bridge, Android USB, trace, printing, and write-progress changes. The bridge now reuses loaded NewChirp driver modules for the same file path instead of re-registering duplicate classes. Artifact SHA-256: cb0bc91f4c1268cd13859170ca329e08c8ba65c606840d68c6541538e8b2ae8b. Apple notarization: 11a7e4f4-f0b4-4bec-bffa-e89561f2a606. The DMG launched from the mounted image; local/server/public hashes matched and the live manifest reports macOS 1.0.71.
+  Source: `release` desktop:876c765b
 
 ## Quansheng
 

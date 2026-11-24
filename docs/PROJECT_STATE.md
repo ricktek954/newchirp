@@ -124,6 +124,25 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.71` is live from source commit `876c765b` as a universal,
+  signed, and notarized DMG. It adds TIDRADIO TD-H9 Normal, HAM, and GMRS
+  profiles on the TD-H8 G4 transport, matches TK-863G OEM memory-session
+  timing, improves UV-5R Mini echo and handshake recovery, preserves the
+  selected zone during list replacement, and includes the cumulative 1.0.70
+  UI, driver, bridge, Android USB, trace, printing, and write-progress
+  changes. The bridge now reuses loaded NewChirp driver modules for the same
+  file path instead of re-registering duplicate classes. Verification:
+  analyzer clean; 253 Flutter tests; 636 Python tests with two
+  fixture-dependent skips; embedded version `1.0.71` / `71`; arm64 and
+  x86_64 Python `3.13.15`; CHIRP
+  `21e42e4518c167548af90ed7f9edf75e516c491a`; 274 driver modules; catalog
+  `list-models` returned 607 models including all three TD-H9 profiles;
+  Apple notarization accepted and the ticket validates; mounted-app launch
+  smoke test passed; and matching local, server, and public SHA-256. This
+  host's code-signing assessment service reports the same internal error seen
+  with prior releases, so that local check is not treated as an artifact
+  failure. Notarization submission:
+  `11a7e4f4-f0b4-4bec-bffa-e89561f2a606`.
 - macOS `1.0.70` is live from source commit `b6fbc544` as a universal,
   signed, and notarized DMG. It preserves the active radio zone when replacing
   the channel list, allows repeated radio-settings writes, adds RT22 tone and
@@ -1352,6 +1371,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.71` artifact source commit: `876c765b`
 - macOS `1.0.70` artifact source commit: `b6fbc544`
 - macOS `1.0.69` artifact source commit: `0f7f9048`
 - macOS `1.0.68` artifact source commit: `48f56627`
@@ -1372,7 +1392,7 @@ release requirements.
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.70+70`
+- Checked-out source version: `1.0.71+71`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1386,7 +1406,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.70 |
+| macOS | 1.0.71 |
 | Windows | 1.0.70 |
 | Linux | 1.0.72 |
 
@@ -1565,6 +1585,23 @@ Linux `1.0.65` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums, sizes, and permissions matched the local artifacts
 - Linux platform manifest reports `1.0.65`
+
+macOS `1.0.71` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.71.dmg`
+- Version/build: `1.0.71` / `71`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `cb0bc91f4c1268cd13859170ca329e08c8ba65c606840d68c6541538e8b2ae8b`
+- Size: `87,642,244` bytes
+- Built from `876c765b`
+- Notarization submission:
+  `11a7e4f4-f0b4-4bec-bffa-e89561f2a606`
+- Apple notarization accepted and the stapled ticket validates
+- Mounted-app launch smoke test passed
+- Bundle contains all TD-H9 profiles, TK-863G timing, UV-5R Mini handshake,
+  zone preservation, and cumulative 1.0.70 changes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.70` artifact:
 
