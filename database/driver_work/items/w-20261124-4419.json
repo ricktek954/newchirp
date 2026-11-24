@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 14:22:21",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "Linux desktop",
+  "occurred_at": "2026-11-24",
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:b8dd8004",
+  "status": "released",
+  "summary": "Published DEB, RPM, AppImage, and Pacman packages from source commit b8dd8004. The release adds Spanish and French beta interface translations, offers channel-name shortening for radio limits, resynchronizes FT-70D clone reads on the AH51G identifier, decodes Icom ID-5100 DTCS-T and pocket-beep tones, adds the TIDRADIO TD-H9 Normal/HAM/GMRS driver on the TD-H8 G4 transport, matches OEM memory-session timing for TK-863G, updates UV-5R Mini handshakes, and reuses loaded bridge drivers across reloads. Verification: flutter analyze passed; all 253 Flutter tests passed with the bundled Python 3.13 runtime; 636 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.73 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include the TD-H9, UV-5RM Plus, TK-863G, and bridge updates and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.73. Package SHA-256 values: 3f0b742e9fe3e0b188d1a574d3c9d9743d60c2855fcfb735930c6c6762f0a914, bea404982c8bec2ec63f107888f129dcf8eaa63997d06cf942ad3967402b5189, 49739a2e85308e9a6ea3273c72100d958753cb0c4f7fecf832505d122f7eaade, and 93b0f1e1225f6033e6d532561454473602872f87e48317ec71a37fa379b6b56e.",
+  "title": "Linux 1.0.73 published",
+  "uid": "w-20261124-4419"
+}

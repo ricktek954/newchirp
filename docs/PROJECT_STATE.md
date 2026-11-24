@@ -36,6 +36,19 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.73` is live from source commit `b8dd8004`. It adds Spanish and
+  French beta translations, offers channel-name shortening for radio limits,
+  resynchronizes FT-70D clone reads on the AH51G identifier, decodes Icom
+  ID-5100 DTCS-T and pocket-beep tones, adds the TIDRADIO TD-H9
+  Normal/HAM/GMRS driver on the TD-H8 G4 transport, matches OEM memory-session
+  timing for TK-863G, updates UV-5R Mini handshakes, and reuses loaded bridge
+  drivers across reloads. Verification: analyzer clean; all 253 Flutter tests;
+  636 bundled Python tests with two fixture-dependent skips; Ubuntu 20.04 ABI
+  maximum GLIBC `2.18`; DEB, RPM, and Pacman metadata plus embedded version
+  `1.0.73`; DEB and AppImage Xvfb smoke tests; AppImage host launches under
+  Wayland and X11; package payloads include the TD-H9, UV-5RM Plus, TK-863G,
+  and bridge updates and omit GLVND/EGL/GLES loaders; all public downloads
+  returned HTTP 200; and the Linux platform manifest reports `1.0.73`.
 - Linux `1.0.72` is live from source commit `6704d9bb`. It preserves the
   selected radio zone when replacing the channel list and allows repeat radio
   settings writes. It also carries the RT22 tone and deployment updates plus
@@ -1386,6 +1399,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.73` artifact source commit: `b8dd8004`
 - Linux `1.0.72` artifact source commit: `6704d9bb`
 - Linux `1.0.71` artifact source commit: `98309c23`
 - Linux `1.0.70` artifact source commit: `76de9782`
@@ -1408,7 +1422,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.71 |
 | Windows | 1.0.70 |
-| Linux | 1.0.72 |
+| Linux | 1.0.73 |
+
+Linux `1.0.73` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.73.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.73.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.73.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.73.pkg.tar.zst`
+- DEB: `48,906,462` bytes, SHA-256
+  `3f0b742e9fe3e0b188d1a574d3c9d9743d60c2855fcfb735930c6c6762f0a914`
+- RPM: `48,987,301` bytes, SHA-256
+  `bea404982c8bec2ec63f107888f129dcf8eaa63997d06cf942ad3967402b5189`
+- AppImage: `49,185,984` bytes, SHA-256
+  `49739a2e85308e9a6ea3273c72100d958753cb0c4f7fecf832505d122f7eaade`
+- Pacman: `47,843,544` bytes, SHA-256
+  `93b0f1e1225f6033e6d532561454473602872f87e48317ec71a37fa379b6b56e`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.73`
 
 Linux `1.0.72` artifacts:
 
