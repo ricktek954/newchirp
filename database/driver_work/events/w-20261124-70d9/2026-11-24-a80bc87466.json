@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:34:08",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "forum:topic/59#post-208",
+  "item": "w-20261124-70d9",
+  "occurred_at": "2026-11-24",
+  "summary": "Full log (forum post 208): radio c8:17:f5:cb:60:69 connects, exposes FFE0/FFE1 (read, write, writeWithoutResponse, notify), but negotiates MTU 23; ble_radio_service.dart rejects builtInRadio below MTU 135 ('Move closer' message is misleading: 23 is the module's limit). 135 comes from CHIRP's UV-17 BLE upload using 0x80-byte blocks (132-byte frame). Reads (4-byte requests, replies reassembled across notifications) should work at MTU 23 with existing 20-byte chunking; writes at MTU 23 are unproven. Fix belongs in newchirpmobile."
+}
