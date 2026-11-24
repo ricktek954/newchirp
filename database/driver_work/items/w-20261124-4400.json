@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 14:20:21",
+  "kind": "new_driver",
+  "manufacturer": "Radtel",
+  "model": "RT-950 Pro",
+  "occurred_at": null,
+  "priority": "low",
+  "reporter": "",
+  "source": "forum",
+  "source_ref": "topic86-post211",
+  "status": "open",
+  "summary": "Open-source RT-950 Pro firmware, PolyForm Noncommercial; programmed only by Ferrite Console over the cable; protocol spec in github.com/FerriteFW/docs. Channel layout differs from nicFW950.",
+  "title": "Ferrite firmware (FerriteFW 0.9.x) support",
+  "uid": "w-20261124-4400"
+}

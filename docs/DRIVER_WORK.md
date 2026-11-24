@@ -696,6 +696,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#8 maintenance | experimental | normal:** Current driver status
   Transport: RT-950/BT-9000 clone serial, 115200 8N1 + RTS/DTR. Read: 960 channels + Pro map, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:32
+- **#w-20261124-4400 new_driver | open | low:** Ferrite firmware (FerriteFW 0.9.x) support
+  Open-source RT-950 Pro firmware, PolyForm Noncommercial; programmed only by Ferrite Console over the cable; protocol spec in github.com/FerriteFW/docs. Channel layout differs from nicFW950.
+  Source: `forum` topic86-post211
 
 ### RT-950 Pro, Bajeton BJ-9000 with nicFW950
 
