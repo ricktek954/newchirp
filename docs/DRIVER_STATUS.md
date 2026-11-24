@@ -40,6 +40,7 @@ Last updated: 2026-11-20
 | Radtel RT-950 Pro | `drivers/newchirp_rt950pro.py` | USB: RT-950 Pro CPS 1.3.3 clone serial, 115200 8N1 + RTS/DTR; Bluetooth: experimental raw FFE1 stream | 990 channels + full CPS map (272 blocks); USB old-map read hardware-confirmed; Bluetooth read unvalidated | USB: CPS write path, owner write confirmed; Bluetooth: refused | Hidden | Experimental; stock-firmware Bluetooth read pending hardware validation; Bluetooth write not implemented |
 | Radtel RT-860 | `drivers/newchirp_rt860.py` | iRadio/Iradio clone serial, 115200 8N1 + DTR | 1,024 channels + 256 zones, offline-tested | Disabled | Hidden | Experimental |
 | Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950 | `drivers/newchirp_nicfw950.py` | nicFW serial, 38400 → 460800 8N1 | Yes | Changed blocks | Global settings and group names | Hardware-tested on one 6.00.16c unit; other versions/aliases experimental |
+| Radtel RT-950 Pro with Ferrite | `drivers/newchirp_ferrite.py` | Ferrite link protocol 1, COBS frames, 115200 8N1 | Yes (channels, zones) | Changed channels through the radio's own checks | Not exposed | Experimental; offline-tested only |
 | Retevis RT97L | `drivers/newchirp_rt97l.py` | Stock USB serial, 9600 8N1 + DTR/RTS | Yes, hardware pending | Disabled | Hidden | Experimental |
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
@@ -1072,6 +1073,38 @@ Last updated: 2026-11-20
 - Next milestone: the reporter reads the radio on the next build, saves an
   unedited image, and compares channels/settings with the CPS or radio display.
   Enable the first controlled write only after that read succeeds.
+
+### Radtel RT-950 Pro with Ferrite
+
+- Maintained driver: `drivers/newchirp_ferrite.py`; protocol notes in
+  `docs/FERRITE_PROTOCOL.md`; tests `test/ferrite_driver_test.py`
+- Catalog entry: `Radtel_RT-950_Pro_Ferrite` (separate from stock and
+  nicFW950)
+- Evidence: Ferrite's published specification only, FerriteFW/docs commit
+  `7dcbe19` (2026-11-23), `manual/G-link-protocol.md` SHA-256
+  `58373b6a417b930c46df3e8d562c4ead75dc42836c06ff1dee37974bff5e11c4`; record layouts cross-checked against
+  the Ferrite Console and firmware sources for field order. No Ferrite code
+  is copied (Ferrite is PolyForm Noncommercial; NewChirp's code is GPL).
+- Driver SHA-256: `99e8ce328e720e7e1aaf149562cb5fc7183e30a6b3198e5e861a5d50082458cf`
+- Transport: 115200 8N1; 0x03 then 0x00 takes the cable from Ferrite's
+  terminal; COBS frames with CRC-16/CCITT-FALSE; `HELLO` must report
+  protocol 1, may-go-on (no PIN lock) and chip layout 3. Compression is not
+  requested. Bluetooth (FFE0/FFE1, 20-byte paced writes) is specified but
+  not implemented.
+- Implemented: 4,000 channels, 16-character names in Ferrite's character
+  set, RX, shift/split/RX-only, FM/NFM/AM/NAM/WFM (USB/LSB/CW on HF
+  channels), CTCSS 60.0-260.0 and DCS normal/inverted per direction,
+  Low/Mid/High, skip/priority, and extras for zone, squelch, step, busy
+  lockout, reverse, APRS and hidden. Zones are read and kept; settings,
+  positions, APRS and other lists are untouched.
+- Read/write policy: `READ_MANY` of channels and zones. Writes use
+  `BEGIN`/`WRITE_MANY`/`END` for changed, new and deleted channels only,
+  after checking each against the radio; the radio validates every record
+  and a refusal stops the write naming the channel and reason. The image
+  keeps an as-read baseline so a saved image or a second write is checked
+  the same way; written channels are read back.
+- Physical-radio validation: none yet. Next milestone: one owner's full
+  read and a one-channel write that reads back after a power cycle.
 
 ### Radtel RT-950 Pro, Bajeton BJ-9000 with nicFW950
 
