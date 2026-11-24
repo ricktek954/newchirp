@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 1156 concepts across 5 domains and 39 modul
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-24T14:16:24Z'
+timestamp: '2026-11-24T20:32:20Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
@@ -99,7 +99,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [uiNoMatchingRepeatersWereFoundCoordinates](/l10n/app_localizations/uiNoMatchingRepeatersWereFoundCoordinates.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiNoMatchingRepeatersWereFoundC… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
-| [_channelColumnTitle](/main/channelColumnTitle.md) | Function | `main.dart` | Column ids stay English: saved column layouts and filters ke… |
+| [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 
 ## Usage with OpenCode
 
