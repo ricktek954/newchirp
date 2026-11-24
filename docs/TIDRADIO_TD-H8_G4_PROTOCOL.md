@@ -33,6 +33,15 @@ ODMaster identifies the family with the TD-H3 magic
 use `PVOJH\x1c\x14` because that is the magic observed during successful G4
 reads in NewChirp reports. Upload uses the ODMaster G4 magic.
 
+## TD-H9 (2026-11-24)
+
+TIDRADIO's `readProtocol` templates for `TD-H9`, `TD-H9 Ham` and
+`TD-H9 GMRS` match the three G4 templates apart from the identity
+(`54 44 48 39 FF FF FF 4E/48/47`); its `wfDirect` template writes the same
+170 pages; and `translateRead` decodes one image identically for both
+models. NewChirp therefore supports the TD-H9 with the G4 transport. See
+`docs/DRIVER_STATUS.md` (TIDRADIO TD-H9) for hashes.
+
 ## Read operation
 
 ODMaster's G4 read template was compared for all three regional profiles. It

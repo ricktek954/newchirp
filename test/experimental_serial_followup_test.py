@@ -131,6 +131,49 @@ class ExperimentalSerialFollowupTest(unittest.TestCase):
                 self.assertEqual(radio_class.ident_mode, identity)
                 self.assertEqual(radio_class.VARIANT, "G4")
 
+    def test_tdh9_identity_is_detected_as_td_h9(self):
+        """2026-11-24 INBOX:949: TD-H9 answered TDH9\\xff\\xff\\xffN."""
+        from chirp.drivers import tdh8
+
+        variants = {
+            b"TDH9\xff\xff\xffN": ("TIDRadioTDH9", "TIDRADIO_TD-H9"),
+            b"TDH9\xff\xff\xffH": ("TIDRadioTDH9HAM", "TIDRADIO_TD-H9-HAM"),
+            b"TDH9\xff\xff\xffG": ("TIDRadioTDH9GMRS", "TIDRADIO_TD-H9-GMRS"),
+        }
+        for identity, (class_name, radio_id) in variants.items():
+            with self.subTest(identity=identity):
+                with mock.patch.object(
+                    tdh8, "_do_ident", return_value=identity
+                ):
+                    radio_class = tdh8.TDH8.detect_from_serial(object())
+                self.assertEqual(radio_class.__name__, class_name)
+                self.assertEqual(radio_class.VARIANT, "")
+                self.assertIs(self.directory.get_radio(radio_id), radio_class)
+
+    def test_tdh9_write_uses_the_g4_pages_and_identity(self):
+        newchirp_tdh8 = importlib.import_module(
+            "newchirp.drivers.newchirp_tdh8_serial"
+        )
+        radio_class = newchirp_tdh8.TIDRadioTDH9
+        image = bytes(newchirp_tdh8.TDH8_G4_IMAGE_SIZE)
+        pipe = FakeTDH8G4Serial(radio_class.ident_mode)
+
+        radio_class.sync_out(self._radio(radio_class, pipe, image))
+
+        self.assertEqual(len(pipe.frames), 170)
+        with self.assertRaises(Exception):
+            radio_class.sync_out(self._radio(
+                radio_class, FakeTDH8G4Serial(b"TDH84GEN"), image))
+
+    def test_tdh9_decodes_the_g4_test_image(self):
+        radio = self.bridge.radio_from_image(
+            self.directory,
+            "TIDRADIO_TD-H9",
+            str(SOURCE / "tests/images/TIDRADIO_TD-H8-HAM.img"),
+        )
+        memory = radio.get_memory(1)
+        self.assertGreater(memory.freq, 0)
+
     @staticmethod
     def _radio(radio_class, pipe, image):
         from chirp import memmap

@@ -70,6 +70,7 @@ Last updated: 2026-11-20
 | Baofeng UV-9R | `drivers/newchirp_uv9r.py` | CHIRP WP970I clone serial, 9600 8N1 | Stock CHIRP driver | Retry for missing write ACK | Stock CHIRP driver | Experimental |
 | TIDRADIO TD-H3 family | `drivers/newchirp_tdh3.py` | OEM-verified TD-H3 clone serial, 38400 8N1 | Invalid brightness normalized; five-attempt identity probe | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | TIDRADIO TD-H8 fourth-generation | `drivers/newchirp_tdh8_serial.py` | ODMaster-verified TD-H8 G4 clone serial, 38,400 8N1 | Normal, HAM, and GMRS G4 identities; 151-channel physical read | Official 170-page map, offline-tested | Stock CHIRP driver | Experimental |
+| TIDRADIO TD-H9 (Normal, HAM, GMRS) | `drivers/newchirp_tdh8_serial.py` | TD-H8 G4 clone serial, 38,400 8N1 (TIDRADIO templates identical apart from the identity) | Full `0x1FEF` image, G4 channel decode, offline-tested | Official 170-page G4 map, offline-tested | Stock CHIRP TD-H8 settings | Experimental |
 | Radioddity GA-510 V2 | `drivers/newchirp_ga510_v2.py` | OEM CPS v1.00.36, 57,600 8N1, DTR/RTS | Dynamic five-block `0x5000` image, offline-tested | Mapped 64-byte blocks, offline-tested | Stock V2 decoder | Experimental |
 | Radioddity DB25-G | `drivers/newchirp_db25g.py` | OEM DB25-G CPS clone serial, 9600 8N1, no DTR/RTS | CPS retry handshake; block framing | 16-byte blocks through 0x30FF; hardware pending | Stock decoder cross-check | Experimental |
 | Radioddity DB35-G | `drivers/newchirp_db35g.py` | OEM clone serial, 115200 8N1 | 80 channels + settings | Disabled pending hardware validation | Basic radio settings | Experimental |
@@ -1339,6 +1340,45 @@ Last updated: 2026-11-20
 - Next milestone: the reporter edits one unused channel, uploads, reads back,
   and verifies the edited channel on the radio. This is required before
   claiming E5 hardware validation.
+
+### TIDRADIO TD-H9
+
+- Maintained file: `drivers/newchirp_tdh8_serial.py` (`TIDRadioTDH9`,
+  `TIDRadioTDH9HAM`, `TIDRadioTDH9GMRS`; IDs `TIDRADIO_TD-H9`,
+  `TIDRADIO_TD-H9-HAM`, `TIDRADIO_TD-H9-GMRS`), reusing the G4 mixin.
+- Field report: ledger `w-20261124-dfcb` (INBOX:949, macOS 1.0.70, TD-H8 G4
+  selected): the entry magic was ACKed and `02` returned
+  `54 44 48 39 FF FF FF 4E` (`TDH9...N`), then "Unsupported model".
+- Identities: `TDH9\xff\xff\xffN` Normal, `...H` HAM, `...G` GMRS (from
+  TIDRADIO's templates; the HID cable profiles in the website list the same
+  three).
+- OEM evidence (2026-11-24):
+  - ODMaster 2.6.4 `IndexFragment` reads `TD-H9` with `H8ReadUtil`, the
+    same path as TD-H8 and TD-H3.
+  - TIDRADIO's public `protocol/readProtocol` templates for `TD-H9`,
+    `TD-H9 Ham` and `TD-H9 GMRS` are identical to `TD-H8 4rd`, `TD-H8 4rd
+    Ham` and `TD-H8 4rd GMRS` except for `initresult` (same entry codes, same
+    225 block requests). SHA-256 of the saved responses: `1ca88ca709d0e67e16f368b459c4743182ae8b33babf1477af0a048cff559edf`,
+    `3b64d3bddf67ad714bf14ee14206d1b1770fab6a40295610fe1cce228800f375`, `1874d8c765e573dafb3cc75bbe5f87e1f82c9284c8f339c4d98a537d8ea0cc1d`.
+  - `protocol/wfDirect` for `TD-H9` (from its `protocol/defaultRecord`)
+    returns exactly the 170 pages of `TDH8_G4_WRITE_RANGES`, every frame
+    `57 addr 20 <32> <sum>` (`d1a5c02182da2e8379be7b3c2276c6f86721a30deb473eb704721bc152219fdf`).
+  - `protocol/translateRead` decodes one synthetic image (CHIRP
+    `TIDRADIO_TD-H8-HAM.img` packed into the template's 224 replies,
+    `e06c142da96944d732179c5b6e8f435404b8a16ccf1df9bda41943f49b03d176`) identically for TD-H9 and TD-H8 4rd in all three
+    regions: all 2,493 G4 fields match. The TD-H9 adds two settings, DTMF
+    speed and backlight brightness, which NewChirp preserves but does not
+    show yet.
+- Read/write: read and write enabled as experimental, the same policy as the
+  G4 profiles (validated image, identity check before writing, stop on the
+  first missing page ACK). Hardware validation: none.
+- Website: `TD-H9`, `TD-H9-GMRS`, `TD-H9-HAM` in the experimental catalog;
+  Web Programmer USB-serial profiles with the same names in
+  `lib/tdh8-web.ts` (reads like the G4, writes only the 170 pages with the
+  ODMaster entry magic). The existing read-only HID cable profiles are now
+  listed as `TD-H9-... (HID)`.
+- Next milestone: a physical read, then one channel edit, write, power
+  cycle and read-back.
 
 ### Radioddity GA-510 V2
 

@@ -136,3 +136,44 @@ class TIDRadioTDH8FourthGenGMRS(
     """TIDRADIO TD-H8 fourth-generation GMRS serial profile."""
 
     ident_mode = b"TDH84GEG"
+
+
+@directory.register
+@directory.detected_by(tdh8.TDH8)
+class TIDRadioTDH9(_TDH8FourthGenMixin, tdh8.TDH8_3rd_Gen):
+    """TIDRADIO TD-H9: a fourth-generation TD-H8 layout with its own ID.
+
+    Evidence (2026-11-24, ledger ``w-20261124-dfcb``): ODMaster 2.6.4 reads
+    the TD-H9 through ``H8ReadUtil`` like the TD-H8 and TD-H3. TIDRADIO's
+    public ``protocol/readProtocol`` template for ``TD-H9`` is identical to
+    ``TD-H8 4rd`` (same entry codes and 225 block requests) except for the
+    identity ``TDH9\\xff\\xff\\xffN``; its ``protocol/wfDirect`` template
+    writes exactly the same 170 pages as ``TDH8_G4_WRITE_RANGES``; and the
+    server's ``protocol/translateRead`` decodes one image identically for
+    both models (all 2,493 G4 fields), the TD-H9 adding only DTMF speed and
+    backlight brightness settings, which are preserved but not shown.
+    """
+
+    MODEL = "TD-H9"
+    VARIANT = ""
+    ident_mode = b"TDH9\xff\xff\xffN"
+
+
+@directory.register
+@directory.detected_by(tdh8.TDH8)
+class TIDRadioTDH9HAM(_TDH8FourthGenMixin, tdh8.TDH8_3rd_Gen_HAM):
+    """TIDRADIO TD-H9 HAM; ``TD-H9 Ham`` template matches ``TD-H8 4rd Ham``."""
+
+    MODEL = "TD-H9-HAM"
+    VARIANT = ""
+    ident_mode = b"TDH9\xff\xff\xffH"
+
+
+@directory.register
+@directory.detected_by(tdh8.TDH8)
+class TIDRadioTDH9GMRS(_TDH8FourthGenMixin, tdh8.TDH8_3rd_Gen_GMRS):
+    """TIDRADIO TD-H9 GMRS; ``TD-H9 GMRS`` template matches ``TD-H8 4rd GMRS``."""
+
+    MODEL = "TD-H9-GMRS"
+    VARIANT = ""
+    ident_mode = b"TDH9\xff\xff\xffG"
