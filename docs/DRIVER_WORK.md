@@ -37,6 +37,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### AT-D878UVII Plus
 
+- **#w-20261124-24b4 bug | awaiting_user | normal:** No answer to PROGRAM on Windows COM9
+  Windows 10 (19045), 1.0.71, COM9: read stopped at 'Radio returned 0 of 3 bytes while entering program mode'; trace shows PROGRAM and END with no response at all, so the radio never saw the command. Same session as QDMR (PROGRAM -> QX06 at 115200). Likely port/cable/GD virtual COM driver; first desktop read attempt of this experimental read-only driver.
+  Source: `email triage 2026-11-24` INBOX:971
 - **#w-20261123-2772 new_driver | experimental | normal:** Support the AT-D878UVII Plus (read-only first)
   Forum feature request (topic 'Can you configure a connection to Anytone AT-D878UVII PLUS', 2026-11-21). Owner tried the AT-D578UVIII Plus profile: the radio rebooted harmlessly (driver refuses non-D578 model IDs and leaves PC mode). Same AnyTone serial protocol; different memory map. Plan: official D878UVII Plus CPS REA cross-checked with QDMR's D878UV2 codeplug; read-only driver, website catalog entry and Web Programmer profile.
   Source: `forum` forum:878UVII-feature-request-2026-11-21

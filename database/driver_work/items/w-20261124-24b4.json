@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email triage 2026-11-24",
   "source_ref": "INBOX:971",
-  "status": "investigating",
+  "status": "awaiting_user",
   "summary": "Windows 10 (19045), 1.0.71, COM9: read stopped at 'Radio returned 0 of 3 bytes while entering program mode'; trace shows PROGRAM and END with no response at all, so the radio never saw the command. Same session as QDMR (PROGRAM -> QX06 at 115200). Likely port/cable/GD virtual COM driver; first desktop read attempt of this experimental read-only driver.",
   "title": "No answer to PROGRAM on Windows COM9",
   "uid": "w-20261124-24b4"
