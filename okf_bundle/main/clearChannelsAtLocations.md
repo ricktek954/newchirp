@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T23:18:33Z"
+timestamp: "2026-11-24T10:28:54Z"
 concept_id: main/clearChannelsAtLocations
 language: dart
 ---
@@ -23,7 +23,7 @@ void_clearChannelsAtLocations(Iterable<int> locations)
 ```
 
 ## Source
-Lines 3385–3385 in `main.dart`
+Lines 3492–3492 in `main.dart`
 
 ## Relationships
 

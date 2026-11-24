@@ -6,6 +6,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -487,6 +488,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   bool _transferCancelling = false;
   String _transferLabel = '';
   bool _transferWriting = false;
+  // Transfer heartbeat (2026-11-24, DM-32UV on KDE Wayland, ledger
+  // w-20261121-ab4d): the write finished but the window stopped redrawing at
+  // 18% while the app used 98% CPU and 4.9 GB. Logging frames and memory
+  // every few seconds during transfers shows whether the window is still
+  // drawing.
+  Timer? _transferHeartbeat;
+  int _framesDrawn = 0;
+  bool _frameCounterInstalled = false;
   double? _transferFraction;
   String _transferDetail = '';
   RadioSettings? _radioSettings;
@@ -1121,6 +1130,103 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         if (mounted) unawaited(_checkForUpdates(startup: true));
       });
     }
+    final simulatedWrite = int.tryParse(
+      Platform.environment['NEWCHIRP_SIMULATE_WRITE'] ?? '',
+    );
+    if (simulatedWrite != null && simulatedWrite > 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) unawaited(_simulateWrite(simulatedWrite));
+      });
+    }
+  }
+
+  void _startTransferHeartbeat(String label) {
+    if (!_frameCounterInstalled) {
+      _frameCounterInstalled = true;
+      SchedulerBinding.instance.addTimingsCallback((timings) {
+        _framesDrawn += timings.length;
+      });
+    }
+    _transferHeartbeat?.cancel();
+    final elapsed = Stopwatch()..start();
+    var lastFrames = _framesDrawn;
+    _transferHeartbeat = Timer.periodic(const Duration(seconds: 5), (_) {
+      final frames = _framesDrawn - lastFrames;
+      lastFrames = _framesDrawn;
+      _diagnosticLog.record(
+        'transfer',
+        'Transfer heartbeat',
+        context: {
+          'label': label,
+          'seconds': elapsed.elapsed.inSeconds,
+          'framesLast5s': frames,
+          'rssMB': ProcessInfo.currentRss ~/ (1024 * 1024),
+          'fraction': _transferFraction ?? -1,
+        },
+      );
+    });
+  }
+
+  void _stopTransferHeartbeat() {
+    _transferHeartbeat?.cancel();
+    _transferHeartbeat = null;
+  }
+
+  /// Debug aid: `NEWCHIRP_SIMULATE_WRITE=<seconds>` runs the write progress
+  /// window with the DM-32UV's real progress messages and no radio, so a
+  /// display freeze can be reproduced on any desktop session. See
+  /// docs/LINUX_WAYLAND_FREEZE_TEST.md.
+  Future<void> _simulateWrite(int seconds) async {
+    _diagnosticLog.record(
+      'radio',
+      'Simulated write started',
+      context: {
+        'seconds': seconds,
+        'session': Platform.environment['XDG_SESSION_TYPE'] ?? '',
+        'gdkBackend': Platform.environment['GDK_BACKEND'] ?? '',
+        'desktop': Platform.environment['XDG_CURRENT_DESKTOP'] ?? '',
+      },
+    );
+    const writeLabel =
+        'Writing to radio - this takes about a minute. Keep the cable '
+        'connected and do not cancel';
+    final total = Duration(seconds: seconds);
+    final scanEnd = total * 0.3;
+    const pages = 120;
+    await _transferTask(context.l10n.writingProgress, () async {
+      final clock = Stopwatch()..start();
+      _reportTransferProgress(
+        const RadioProgress(label: 'Scanning flash pages', fraction: 0.10),
+      );
+      while (clock.elapsed < scanEnd) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        final part = clock.elapsed.inMilliseconds / scanEnd.inMilliseconds;
+        _reportTransferProgress(
+          RadioProgress(
+            label: 'Scanning flash pages',
+            fraction: 0.10 + 0.08 * part.clamp(0.0, 1.0),
+          ),
+        );
+      }
+      final pageTime = (total - scanEnd) ~/ pages;
+      for (var page = 1; page <= pages; page++) {
+        await Future<void>.delayed(pageTime);
+        _reportTransferProgress(
+          RadioProgress(
+            label: '$writeLabel (memory page $page)',
+            fraction: 0.18 + 0.80 * page / pages,
+          ),
+        );
+      }
+    });
+    _diagnosticLog.record(
+      'radio',
+      'Simulated write completed',
+      context: {
+        'seconds': seconds,
+        'rssMB': ProcessInfo.currentRss ~/ (1024 * 1024),
+      },
+    );
   }
 
   Future<void> _loadColumnLayout() async {
@@ -1416,6 +1522,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   @override
   void dispose() {
+    _stopTransferHeartbeat();
     _searchController.dispose();
     _settingsScrollController.dispose();
     super.dispose();
@@ -3994,6 +4101,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       _transferDetail = '';
       _status = label;
     });
+    _startTransferHeartbeat(label);
     Object? failure;
     var succeeded = false;
     try {
@@ -4010,6 +4118,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         );
       }
     } finally {
+      _stopTransferHeartbeat();
       if (mounted) {
         setState(() {
           _busy = false;

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T23:18:33Z"
+timestamp: "2026-11-24T10:28:54Z"
 concept_id: main
 language: dart
 ---
@@ -132,6 +132,9 @@ language: dart
 | related | [_rememberChannelImageBaseline](/main/rememberChannelImageBaseline.md) |
 | related | [invalid](/main/invalid.md) |
 | related | [initState](/main/initState.md) |
+| related | [_startTransferHeartbeat](/main/startTransferHeartbeat.md) |
+| related | [_stopTransferHeartbeat](/main/stopTransferHeartbeat.md) |
+| related | [_simulateWrite](/main/simulateWrite.md) |
 | related | [_loadColumnLayout](/main/loadColumnLayout.md) |
 | related | [_saveColumnLayout](/main/saveColumnLayout.md) |
 | related | [_snapshotLibrary](/main/snapshotLibrary.md) |

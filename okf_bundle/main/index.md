@@ -197,8 +197,11 @@
 - [_showUpToDate](showUpToDate.md)
 - [_signInMyGmrs](signInMyGmrs.md)
 - [_signOutMyGmrs](signOutMyGmrs.md)
+- [_simulateWrite](simulateWrite.md) — Debug aid: `NEWCHIRP_SIMULATE_WRITE=<seconds>` runs the write progress
 - [_snapshotLibrary](snapshotLibrary.md)
 - [_sortChannelsByLocation](sortChannelsByLocation.md)
+- [_startTransferHeartbeat](startTransferHeartbeat.md)
+- [_stopTransferHeartbeat](stopTransferHeartbeat.md)
 - [_submit](submit.md)
 - [_switchRadioZone](switchRadioZone.md)
 - [_syncMenuState](syncMenuState.md)

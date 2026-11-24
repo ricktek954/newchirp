@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T23:18:33Z"
+timestamp: "2026-11-24T10:28:54Z"
 concept_id: main/NewChirpHomeState
 language: dart
 ---
@@ -43,6 +43,9 @@ class _NewChirpHomeState
 - `_rememberChannelImageBaseline`
 - `invalid`
 - `initState`
+- `_startTransferHeartbeat`
+- `_stopTransferHeartbeat`
+- `_simulateWrite`
 - `_loadColumnLayout`
 - `_saveColumnLayout`
 - `_snapshotLibrary`
@@ -171,7 +174,7 @@ class _NewChirpHomeState
 - `_buildRadio`
 
 ## Source
-Lines 435–7076 in `main.dart`
+Lines 436–7185 in `main.dart`
 
 ## Relationships
 

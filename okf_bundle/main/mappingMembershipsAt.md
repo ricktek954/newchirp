@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T23:18:33Z"
+timestamp: "2026-11-24T10:28:54Z"
 concept_id: main/mappingMembershipsAt
 language: dart
 ---
@@ -23,7 +23,7 @@ List_mappingMembershipsAt_mappingMembershipsAt
 ```
 
 ## Source
-Lines 1029–1029 in `main.dart`
+Lines 1038–1038 in `main.dart`
 
 ## Relationships
 

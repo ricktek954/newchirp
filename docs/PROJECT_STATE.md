@@ -8,6 +8,11 @@ release requirements.
 
 ## Resume here
 
+- **Linux build machine, to do (2026-11-24):** run the DM-32UV write-freeze
+  test in `docs/LINUX_WAYLAND_FREEZE_TEST.md` on a KDE Plasma Wayland
+  session. It needs no radio (`NEWCHIRP_SIMULATE_WRITE=60`). Record the
+  results on ledger item `w-20261121-ab4d`. The owner's 1.0.72 logs show the
+  write finishing while the window stops redrawing at 18%.
 - RepeaterBook approved NewChirp's centralized-server API application on
   2026-11-20 for `api.export` and `api.export_row`. The shared `app_` token is
   configured only on `newchirp.net`; desktop and browser searches use the
