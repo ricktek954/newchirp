@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 18:53:30",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179554633763.15974.17964774829334191352@newchirp.net>",
+  "item": "w-20261124-c288",
+  "occurred_at": "2026-11-24",
+  "summary": "Explained Windows 11 refuses the PL2303TA; recommended an FTDI/CH340 cable, noted the old-driver workaround is unreliable, linked FAQ #cable-driver (deployed)"
+}

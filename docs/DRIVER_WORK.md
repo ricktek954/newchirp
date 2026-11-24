@@ -81,6 +81,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-e801 bug | released | normal:** Write never completed, later attempts found the port reserved
   Windows 1.0.67: read and two writes worked; a write started 04:37 logged no completion; later attempts failed 'port reserved by another program', consistent with a hung bridge still holding COM3.
   Source: `email` INBOX:920
+- **#w-20261124-c288 bug | closed | normal:** COM5 unavailable: Prolific PL2303TA driver refuses Windows 11
+  Windows 11 (build 26300), 1.0.71: 'could not open COM5'; reporter notes Device Manager says the Prolific PL2303TA does not support Windows 11. User-side cable driver, FAQ #cable-driver.
+  Source: `email triage 2026-11-24` INBOX:966
 
 ### BF-F8HP-PRO
 
@@ -356,6 +359,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:81
 
 ## Kenwood
+
+### TH-D7
+
+- **#w-20261124-db43 bug | awaiting_user | normal:** TH-D7G read as TH-D7 stops at 'Radio reports TH-D7G' with no next step
+  Windows 10, 1.0.62, COM9: model TH-D7 selected; kenwood_d7 ID check got TH-D7G and raised 'Radio reports TH-D7G (not TH-D7)'. CHIRP has a separate Kenwood_TH-D7G driver; the user needs that model, but the error did not say so.
+  Source: `email triage 2026-11-24` INBOX:967
 
 ### TH-D75
 

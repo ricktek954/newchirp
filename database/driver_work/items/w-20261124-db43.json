@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email triage 2026-11-24",
   "source_ref": "INBOX:967",
-  "status": "investigating",
+  "status": "awaiting_user",
   "summary": "Windows 10, 1.0.62, COM9: model TH-D7 selected; kenwood_d7 ID check got TH-D7G and raised 'Radio reports TH-D7G (not TH-D7)'. CHIRP has a separate Kenwood_TH-D7G driver; the user needs that model, but the error did not say so.",
   "title": "TH-D7G read as TH-D7 stops at 'Radio reports TH-D7G' with no next step",
   "uid": "w-20261124-db43"
