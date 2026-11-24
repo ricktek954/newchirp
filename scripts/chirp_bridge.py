@@ -664,10 +664,19 @@ def bridge_error_message(exc, command=None, model=None, port=None):
         and model == "Yaesu_FT-60"
         and "no response from radio" in message.lower()
     ):
+        # The FT-60 sends nothing until it is in clone mode: selecting
+        # F8 CLONE is not enough, [F/W] must be pressed so the display reads
+        # CLONE (2026-11-24 report: five reads, zero bytes each time).
         message = (
-            "No response from the FT-60. Leave the radio on its F8 CLONE "
-            "screen, read again, and hold PTT only after the transfer window "
-            'says "%s"' % MANUAL_READ_READY_MESSAGE
+            "No response from the FT-60; NewChirp received nothing from the "
+            "radio. Turn the radio off, hold [MONI] while turning it on, "
+            "select F8 CLONE with the dial, then press [F/W] once so the "
+            "display reads CLONE. Start the read and hold PTT only after the "
+            'transfer window says "%s" If it still receives nothing, check '
+            "that the cable is an FT-60 (Yaesu 4-pole MIC/SP) cable pushed "
+            "fully into the jack, and that %s is the port that appears in "
+            "Device Manager when the cable is plugged in."
+            % (MANUAL_READ_READY_MESSAGE, port or "the selected port")
         )
     if (
         command == "download"

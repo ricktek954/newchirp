@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T13:55:48Z"
+timestamp: "2026-11-24T16:28:57Z"
 concept_id: chirp_bridge/fetch_repeaterbook_search
 language: python
 ---
@@ -54,7 +54,7 @@ Query NewChirp's relay without exposing RepeaterBook credentials.
 | `limit` | `—` | `200` |
 
 ## Source
-Lines 2541–2609 in `chirp_bridge.py`
+Lines 2550–2618 in `chirp_bridge.py`
 
 ## Relationships
 

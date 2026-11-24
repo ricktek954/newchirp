@@ -1,0 +1,8 @@
+{
+  "aliases": "FT60",
+  "created_at": "2026-11-24 16:29:41",
+  "driver_path": "build_support/chirp/drivers/ft60.py",
+  "manufacturer": "Yaesu",
+  "model": "FT-60",
+  "notes": ""
+}

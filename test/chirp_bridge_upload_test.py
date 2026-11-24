@@ -483,6 +483,7 @@ class UploadHandshakeTest(unittest.TestCase):
         )
 
         self.assertIn("F8 CLONE", message)
+        self.assertIn("[F/W]", message)
         self.assertIn(bridge.MANUAL_READ_READY_MESSAGE, message)
         self.assertNotIn(
             "read again",

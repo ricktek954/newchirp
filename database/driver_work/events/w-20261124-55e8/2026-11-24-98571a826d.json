@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 16:29:47",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "mailbox:INBOX:962",
+  "item": "w-20261124-55e8",
+  "occurred_at": "2026-11-24",
+  "summary": "Stock CHIRP ft60 driver (no OEM CPS to fetch: Yaesu ADMS-1J and RT Systems are paid). _download polls 10 x 8 bytes then raises RadioNoResponse; diagnostics show no partial data. NewChirp's hint told the user to stay on the F8 CLONE screen but not to press [F/W], which is what puts the FT-60 into CLONE."
+}

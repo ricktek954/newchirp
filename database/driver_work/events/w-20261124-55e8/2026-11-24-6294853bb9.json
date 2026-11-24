@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 16:29:41",
+  "details": "Windows 11 (build 26200), 1.0.67, COM4: five reads 20-110 s each all end in RadioNoResponse; CHIRP ft60 _download received zero bytes every time, so the radio never sent its header. Points to clone mode not entered (F8 CLONE selected without pressing F/W), the cable, or the port rather than timing.",
+  "event_type": "created",
+  "external_ref": "INBOX:962",
+  "item": "w-20261124-55e8",
+  "occurred_at": "2026-11-24",
+  "summary": "Read gets no response from radio (zero bytes) on Windows COM4"
+}
