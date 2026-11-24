@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 20:25:52",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179555193385.42260.12910070809404119827@newchirp.net>",
+  "item": "w-20261124-87c9",
+  "occurred_at": "2026-11-24",
+  "summary": "INBOX:973: update to 1.0.71 (handshake retry), seat the plug firmly, report again from 1.0.71 if it still fails"
+}

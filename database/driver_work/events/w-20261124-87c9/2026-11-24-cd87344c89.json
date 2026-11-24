@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 20:23:09",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:973",
+  "item": "w-20261124-87c9",
+  "occurred_at": "2026-11-24",
+  "summary": "Third report of the same symptom: Windows 10, NewChirp 1.0.23 (pre-fix), COM3: PROGRAMCOLOR answered one byte immediately, so stock stopped at 'Unexpected response'. Handshake retry fe773d56 is in macOS 1.0.71 and the current Windows download is 1.0.71."
+}
