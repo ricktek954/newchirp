@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 1155 concepts across 5 domains and 39 modules'
+description: 'Top-level OKF summary: 1156 concepts across 5 domains and 39 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-24T14:09:32Z'
+timestamp: '2026-11-24T14:16:24Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 1,155 concepts | 5 domains | 39 modules
+> OKF v0.2 bundle | 1,156 concepts | 5 domains | 39 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 1,000 |
+| Function | 1,001 |
 | Class | 106 |
 | Module | 39 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 1,155 |
+| dart | 1,156 |
 
 ## Domain Map
 
@@ -41,13 +41,13 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [main](main/index.md) (253 concepts)
 
-### [models](models/index.md) — 112 concepts
+### [models](models/index.md) — 113 concepts
 
 - [models/radio_channel](models/radio_channel/index.md) (45 concepts)
 - [models/gm32_channel](models/gm32_channel/index.md) (15 concepts)
 - [models/channel_image_baseline](models/channel_image_baseline/index.md) (12 concepts)
 - [models/radio_mapping](models/radio_mapping/index.md) (12 concepts)
-- [models/frequency_reference](models/frequency_reference/index.md) (8 concepts)
+- [models/frequency_reference](models/frequency_reference/index.md) (9 concepts)
 - [models/marine_channels](models/marine_channels/index.md) (7 concepts)
 - [models/repeater_search](models/repeater_search/index.md) (7 concepts)
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
@@ -99,7 +99,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [uiNoMatchingRepeatersWereFoundCoordinates](/l10n/app_localizations/uiNoMatchingRepeatersWereFoundCoordinates.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiNoMatchingRepeatersWereFoundC… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
-| [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
+| [_channelColumnTitle](/main/channelColumnTitle.md) | Function | `main.dart` | Column ids stay English: saved column layouts and filters ke… |
 
 ## Usage with OpenCode
 

@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:frequency_reference.dart"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-17T12:40:24Z"
+timestamp: "2026-11-24T14:16:23Z"
 concept_id: models/frequency_reference/australianUhfRows
 language: dart
 ---

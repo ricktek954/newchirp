@@ -122,8 +122,13 @@ ChannelImageMatch channelImageMatch({
 String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.noImage =>
     'No stored radio image. Read the radio before writing channels.',
+  // A CSV or edited list opened before this session's read has no radio
+  // memory to go into yet. Writing it over an older stored image could send
+  // another radio's settings, so the user reads first (2026-11-24 report).
   ChannelImageMatch.notLoaded =>
-    'Channel list has not been loaded from the stored radio image.',
+    'Read the radio before writing this channel list. NewChirp writes it '
+        'into a fresh copy of the radio\'s memory, so the radio keeps its '
+        'own settings.',
   ChannelImageMatch.matchesRadio =>
     'Channels, banks, and zones match the values last read from the radio.',
   ChannelImageMatch.matchesImage =>

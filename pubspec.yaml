@@ -81,6 +81,7 @@ flutter:
     - assets/Marine_VHF_Frequency_Reference.pdf
     - assets/CB_27MHz_Frequency_Reference.pdf
     - assets/Australia_UHF_CB_Frequency_Reference.pdf
+    - assets/PMR446_Frequency_Reference.pdf
 
   # To add assets to your application, add an assets section, like this:
   # assets:

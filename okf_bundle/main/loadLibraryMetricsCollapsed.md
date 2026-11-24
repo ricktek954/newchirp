@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:09:26Z"
+timestamp: "2026-11-24T14:14:26Z"
 concept_id: main/loadLibraryMetricsCollapsed
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_loadLibraryMetricsCollapsed_loadLibraryMetricsCollapsed
 ```
 
 ## Source
-Lines 5156–5156 in `main.dart`
+Lines 5159–5159 in `main.dart`
 
 ## Relationships
 

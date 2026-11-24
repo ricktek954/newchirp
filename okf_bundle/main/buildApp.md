@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:09:26Z"
+timestamp: "2026-11-24T14:14:26Z"
 concept_id: main/buildApp
 language: dart
 ---
@@ -23,7 +23,7 @@ Widget_buildApp(Locale? locale, Color ink, Color green)
 ```
 
 ## Source
-Lines 340–340 in `main.dart`
+Lines 344–344 in `main.dart`
 
 ## Relationships
 

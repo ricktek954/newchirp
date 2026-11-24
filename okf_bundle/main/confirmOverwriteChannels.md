@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:09:26Z"
+timestamp: "2026-11-24T14:14:26Z"
 concept_id: main/confirmOverwriteChannels
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_confirmOverwriteChannels_confirmOverwriteChannels
 ```
 
 ## Source
-Lines 3399–3399 in `main.dart`
+Lines 3402–3402 in `main.dart`
 
 ## Relationships
 

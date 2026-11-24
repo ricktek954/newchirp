@@ -104,3 +104,17 @@ Likely next steps, in order:
 3. Reduce animation during transfers (the indeterminate spinner and the
    1-second elapsed-time ticker) and retest, to see whether continuous
    repaint requests are what pile up.
+
+## Outcome (2026-11-24)
+
+The owner confirmed that `GDK_BACKEND=x11` (XWayland) avoids the freeze on
+1.0.72 (INBOX:958). Their setup: KDE Plasma `kwin_wayland`, Intel TigerLake
+Iris Xe (i915, Mesa 26.2.7) plus NVIDIA GTX 1650 Mobile (driver 620.70.06).
+A Hyprland session on Intel graphics did not reproduce it.
+
+`linux/runner/main.cc` now sets `GDK_BACKEND=x11` before GTK starts when a
+Wayland session also offers XWayland (`WAYLAND_DISPLAY` and `DISPLAY` set).
+An existing `GDK_BACKEND` is respected, and `NEWCHIRP_WAYLAND=1` keeps the
+native Wayland backend. The startup diagnostics entry records `session` and
+`gdkBackend` on Linux. This covers every Linux package format because they
+all start the same binary.

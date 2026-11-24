@@ -36,6 +36,14 @@ store a frequency.
 - Emergency, calling, telemetry/data, road/truck, and guard-channel
   restrictions must be checked against the current ACMA class licence
 
+## PMR446 (Europe)
+
+- CEPT ECC Decision (15)05 (446.0-446.2 MHz, channels 9-16 added from 2018)
+- 16 analogue FM channels, 12.5 kHz spacing, 446.00625-446.19375 MHz
+- Licence-free only on PMR446-approved radios with a fixed antenna and at
+  most 500 mW ERP; no repeaters. Digital dPMR446/DMR446 channel plans are
+  not listed.
+
 ## Generated assets
 
 `scripts/generate_international_frequency_pdfs.py` creates:
@@ -43,6 +51,7 @@ store a frequency.
 - `assets/Marine_VHF_Frequency_Reference.pdf`
 - `assets/CB_27MHz_Frequency_Reference.pdf`
 - `assets/Australia_UHF_CB_Frequency_Reference.pdf`
+- `assets/PMR446_Frequency_Reference.pdf`
 
 The desktop frequency-reference page and its Print action use the matching
 asset for the selected reference plan.

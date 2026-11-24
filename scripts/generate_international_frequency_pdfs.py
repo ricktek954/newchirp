@@ -285,6 +285,27 @@ def main():
         },
     )
 
+    pmr_rows = [
+        (
+            str(channel),
+            f"{446.00625 + (channel - 1) * 0.0125:.5f}",
+            "Original PMR446 channel"
+            if channel <= 8
+            else "Added 2018 (ECC/DEC/(15)05)",
+        )
+        for channel in range(1, 17)
+    ]
+    make_pdf(
+        ASSETS / "PMR446_Frequency_Reference.pdf",
+        "PMR446 (Europe)",
+        "16-channel 446.0-446.2 MHz licence-free analogue FM plan. "
+        "Approved radios only: fixed antenna, 500 mW ERP, no repeaters.",
+        "CEPT ECC Decision (15)05; national rules in each CEPT country.",
+        {
+            "Channels 1-8": pmr_rows[:8],
+            "Channels 9-16": pmr_rows[8:],
+        },
+    )
 
 if __name__ == "__main__":
     main()

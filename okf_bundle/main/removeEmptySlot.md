@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:09:26Z"
+timestamp: "2026-11-24T14:14:26Z"
 concept_id: main/removeEmptySlot
 language: dart
 ---
@@ -23,7 +23,7 @@ void_removeEmptySlot(int location)
 ```
 
 ## Source
-Lines 2446–2446 in `main.dart`
+Lines 2449–2449 in `main.dart`
 
 ## Relationships
 

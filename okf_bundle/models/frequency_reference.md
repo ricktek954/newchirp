@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:models"
   - "domain:frequency_reference.dart"
-  - "git:branch:feature/driver-work-ledger"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-17T12:40:24Z"
+timestamp: "2026-11-24T14:16:23Z"
 concept_id: models/frequency_reference
 language: dart
 ---
@@ -28,3 +28,4 @@ language: dart
 | related | [_australianUhfNote](/models/frequency_reference/australianUhfNote.md) |
 | related | [_standardCbRows](/models/frequency_reference/standardCbRows.md) |
 | related | [_ukCbRows](/models/frequency_reference/ukCbRows.md) |
+| related | [_pmr446Rows](/models/frequency_reference/pmr446Rows.md) |

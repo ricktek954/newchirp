@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:09:26Z"
+timestamp: "2026-11-24T14:14:26Z"
 concept_id: main/matchesColumnFilters
 language: dart
 ---
@@ -23,7 +23,7 @@ boolmatchesColumnFilters(RadioChannel channel)
 ```
 
 ## Source
-Lines 553–553 in `main.dart`
+Lines 557–557 in `main.dart`
 
 ## Relationships
 

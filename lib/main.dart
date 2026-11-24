@@ -143,6 +143,10 @@ Future<void> main() async {
     context: {
       'version': _newChirpVersion,
       'os': Platform.operatingSystemVersion,
+      if (Platform.isLinux) ...{
+        'session': Platform.environment['XDG_SESSION_TYPE'] ?? '',
+        'gdkBackend': Platform.environment['GDK_BACKEND'] ?? '',
+      },
     },
   );
   FlutterError.onError = (details) {
@@ -2208,8 +2212,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
                   '${channel.name}  →  ${shortNames[channel.location]}',
                   style: const TextStyle(fontFamily: 'monospace'),
                 ),
-              if (long.length > 6)
-                Text(l10n.shortenNamesMore(long.length - 6)),
+              if (long.length > 6) Text(l10n.shortenNamesMore(long.length - 6)),
               if (duplicates > 0) ...[
                 const SizedBox(height: 12),
                 Text(

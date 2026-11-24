@@ -513,8 +513,44 @@ final australianUhfCbReferencePlan = FrequencyReferencePlan(
   ],
 );
 
+List<FrequencyReferenceRow> _pmr446Rows() {
+  return [
+    for (var channel = 1; channel <= 16; channel++)
+      FrequencyReferenceRow(
+        channel: '$channel',
+        frequency: (446.00625 + (channel - 1) * 0.0125).toStringAsFixed(5),
+        notes: channel <= 8
+            ? 'Original PMR446 channel'
+            : 'Added 2018 (ECC/DEC/(15)05); older radios lack it',
+      ),
+  ];
+}
+
+// Suggested by a Belgian NewChirp user (2026-11-24): PMR446 is the
+// licence-free band most European newcomers start on.
+final pmr446ReferencePlan = FrequencyReferencePlan(
+  id: 'pmr446',
+  title: 'PMR446 (Europe)',
+  subtitle: '16-channel 446.0-446.2 MHz licence-free analogue FM plan',
+  source: 'CEPT ECC Decision (15)05; national rules in each CEPT country.',
+  pdfAsset: 'assets/PMR446_Frequency_Reference.pdf',
+  groups: [
+    FrequencyReferenceGroup(
+      title: 'PMR446 analogue channels',
+      note:
+          '12.5 kHz FM channels. Licence-free use is limited to radios '
+          'approved for PMR446, with a fixed antenna and at most 500 mW '
+          'ERP; no repeaters. A programmed amateur or business handheld '
+          'with a removable antenna is not a licence-free PMR446 radio. '
+          'Check your national regulator before transmitting.',
+      rows: _pmr446Rows(),
+    ),
+  ],
+);
+
 final internationalFrequencyReferencePlans = [
   marineVhfReferencePlan,
   cb27ReferencePlan,
   australianUhfCbReferencePlan,
+  pmr446ReferencePlan,
 ];

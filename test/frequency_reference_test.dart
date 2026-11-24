@@ -43,6 +43,16 @@ void main() {
     expect(australianRows[39].notes, 'Australia-wide road / truck');
   });
 
+  test('PMR446 lists the 16 CEPT analogue channels', () {
+    final rows = pmr446ReferencePlan.groups.single.rows;
+    expect(rows, hasLength(16));
+    expect(rows.first.frequency, '446.00625');
+    expect(rows[7].frequency, '446.09375');
+    expect(rows[8].frequency, '446.10625');
+    expect(rows.last.frequency, '446.19375');
+    expect(internationalFrequencyReferencePlans, contains(pmr446ReferencePlan));
+  });
+
   test('each international reference has a printable PDF asset', () {
     for (final plan in internationalFrequencyReferencePlans) {
       expect(File(plan.pdfAsset).existsSync(), isTrue, reason: plan.pdfAsset);

@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:09:26Z"
+timestamp: "2026-11-24T14:14:26Z"
 concept_id: main/simulateWrite
 language: dart
 ---
@@ -33,7 +33,7 @@ display freeze can be reproduced on any desktop session. See
 docs/LINUX_WAYLAND_FREEZE_TEST.md.
 
 ## Source
-Lines 1179–1179 in `main.dart`
+Lines 1183–1183 in `main.dart`
 
 ## Relationships
 

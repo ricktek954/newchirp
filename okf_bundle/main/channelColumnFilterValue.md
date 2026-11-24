@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:09:26Z"
+timestamp: "2026-11-24T14:14:26Z"
 concept_id: main/channelColumnFilterValue
 language: dart
 ---
@@ -23,7 +23,7 @@ String_channelColumnFilterValue(RadioChannel channel, String columnId)
 ```
 
 ## Source
-Lines 653–653 in `main.dart`
+Lines 657–657 in `main.dart`
 
 ## Relationships
 
