@@ -473,6 +473,17 @@ class UploadHandshakeTest(unittest.TestCase):
             ],
         )
 
+    def test_anytone_no_answer_to_program_explains_usb_port(self):
+        message = bridge.bridge_error_message(
+            Exception("Radio returned 0 of 3 bytes while entering program mode"),
+            command="download",
+            model="AnyTone_AT-D878UVII_Plus",
+            port="COM9",
+        )
+
+        self.assertIn("did not answer on COM9", message)
+        self.assertIn("GD virtual COM port driver", message)
+
     def test_reported_sibling_model_names_the_model_to_choose(self):
         message = bridge.bridge_error_message(
             Exception("Radio reports TH-D7G (not TH-D7)"),

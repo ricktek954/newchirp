@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T18:50:05Z"
+timestamp: "2026-11-24T19:23:42Z"
 concept_id: chirp_bridge/repair_uninitialized_extras
 language: python
 ---
@@ -43,7 +43,7 @@ safe replacement. Returns the names of repaired settings.
 | `memory` | `—` | `—` |
 
 ## Source
-Lines 1230–1280 in `chirp_bridge.py`
+Lines 1250–1300 in `chirp_bridge.py`
 
 ## Relationships
 

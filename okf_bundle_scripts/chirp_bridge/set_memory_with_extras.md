@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T18:50:05Z"
+timestamp: "2026-11-24T19:23:42Z"
 concept_id: chirp_bridge/set_memory_with_extras
 language: python
 ---
@@ -38,7 +38,7 @@ Write a channel and persist fields CHIRP stores outside radio memory.
 | `memory` | `—` | `—` |
 
 ## Source
-Lines 1283–1289 in `chirp_bridge.py`
+Lines 1303–1309 in `chirp_bridge.py`
 
 ## Relationships
 

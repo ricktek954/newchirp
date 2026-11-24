@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 19:22:36",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:970",
+  "item": "w-20261124-c2eb",
+  "occurred_at": "2026-11-24",
+  "summary": "Duplicate report sent before the reply arrived (same failure, second image newchirp-e0gngec8.img); reporter notes it read once after the power fix and now fails on the tone"
+}

@@ -957,6 +957,26 @@ def bridge_error_message(exc, command=None, model=None, port=None):
             "the middle of its range and try again. See "
             "https://newchirp.net/faq#wouxun-volume" % message.rstrip()
         )
+    if (
+        model in ("AnyTone_AT-D578UVIII_Plus", "AnyTone_AT-D878UVII_Plus")
+        and "returned 0 of 3 bytes while entering program mode" in message
+    ):
+        # 2026-11-24 D878UVII Plus report: no answer to PROGRAM on COM9.
+        # The radio is its own USB serial device (AnyTone "Virtual Driver
+        # Installation" guide: GD virtual COM driver); the port exists only
+        # while the radio is on and connected.
+        selected_port = str(port or "the selected port")
+        message = (
+            "The radio did not answer on %s. AnyTone DMR radios are their "
+            "own USB serial device, so the port appears only while the radio "
+            "is switched on and connected with the AnyTone USB programming "
+            "cable pushed fully into the mic/speaker jack. Turn the radio on "
+            "to its normal screen, close the AnyTone CPS, then refresh the "
+            "port list and pick the port that appears when you plug the "
+            "cable in. On Windows, if no new port appears or it shows a "
+            "warning icon, install the GD virtual COM port driver that comes "
+            "with the AnyTone CPS and restart the computer." % selected_port
+        )
     other_model = reported_model_choice(message, model)
     if other_model:
         # 2026-11-24 report: a TH-D7G read as TH-D7 stopped at "Radio

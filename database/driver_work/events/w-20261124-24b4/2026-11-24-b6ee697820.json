@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 19:24:12",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:5ba14d88cebef105365e8977529a5817d1d163a9e9eccc5156ccd9575be500e6",
+  "item": "w-20261124-24b4",
+  "occurred_at": "2026-11-24",
+  "summary": "QDMR anytone_interface.cc enter_program_mode sends PROGRAM and expects QX06 with no DTR/RTS setup, as the driver does. Official package guide 'Virtual Driver Installation.pdf' (D878UVII PLUS V4.00 ZIP) requires the GD virtual COM driver; the port exists only with the radio on and connected."
+}
