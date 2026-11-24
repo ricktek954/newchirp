@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:13:18",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179552236984.47472.1843227350631686158@newchirp.net>",
+  "item": "w-20261124-91a3",
+  "occurred_at": "2026-11-24",
+  "summary": "COM13 replies are not a UV-32 (likely Bluetooth serial port); identify the cable's port in Device Manager (FAQ #which-port)"
+}

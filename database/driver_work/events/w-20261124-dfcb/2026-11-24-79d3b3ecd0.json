@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 12:13:17",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179552235716.47323.7289239340298148715@newchirp.net>",
+  "item": "w-20261124-dfcb",
+  "occurred_at": "2026-11-24",
+  "summary": "TD-H9 not supported yet; same transport family as TD-H8 per ODMaster; work started; do not write with another model"
+}
