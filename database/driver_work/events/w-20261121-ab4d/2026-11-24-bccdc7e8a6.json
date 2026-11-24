@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 16:30:00",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "mailbox:INBOX:963",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-24",
+  "summary": "Owner asks what changed, since earlier versions worked on the same Wayland setup. The transfer overlay code is unchanged since 2026-10-22. Linux-side changes since then: from 1.0.55 (2026-11-15) releases are built on the Ubuntu 20.04 baseline, and the Flutter engine went 3.47.1 -> 3.47.8 on 2026-11-16; the owner's rolling Manjaro KWin/Mesa/NVIDIA 620 updates are the other candidate. Asked for the last good version and recent pacman graphics updates."
+}

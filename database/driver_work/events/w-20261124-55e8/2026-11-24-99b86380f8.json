@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 16:29:59",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:aeec72c6",
+  "item": "w-20261124-55e8",
+  "occurred_at": "2026-11-24",
+  "summary": "No-response hint now says to press [F/W] so the display reads CLONE, then hold PTT after the listening cue; adds FT-60 cable and Device Manager port checks"
+}
