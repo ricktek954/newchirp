@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 18:50:37",
+  "details": "Windows 10, 1.0.62, COM9: model TH-D7 selected; kenwood_d7 ID check got TH-D7G and raised 'Radio reports TH-D7G (not TH-D7)'. CHIRP has a separate Kenwood_TH-D7G driver; the user needs that model, but the error did not say so.",
+  "event_type": "created",
+  "external_ref": "INBOX:967",
+  "item": "w-20261124-db43",
+  "occurred_at": "2026-11-24",
+  "summary": "TH-D7G read as TH-D7 stops at 'Radio reports TH-D7G' with no next step"
+}

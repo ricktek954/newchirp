@@ -193,8 +193,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795537737483204320,
-      "hash": "b93b379db2c089d0801a4fc1d31da9c62169bdb5b5c9363135a8afcb7f191916",
+      "mtime_ns": 1795546205764826196,
+      "hash": "4e31b5274e468ccca0befd5426c03a87d0f007f62d1c84cddc3e4b0714eb36ae",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -223,6 +223,7 @@
         "chirp_bridge/enter",
         "chirp_bridge/exit",
         "chirp_bridge/emit_progress",
+        "chirp_bridge/reported_model_choice",
         "chirp_bridge/bridge_error_message",
         "chirp_bridge/manual_send_key_for_model",
         "chirp_bridge/status_progress",
@@ -294,7 +295,7 @@
       "type": "Module",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "f584b2a052b5048f9b872073038a906089baa8a1b1894aa4fe795fefe94a5ee7",
+      "edge_hash": "55d97198199855f704568269691eb076eaab5bdd507b19c634ba12dfbcacc493",
       "enriched": false
     },
     "chirp_bridge/emit_progress": {
@@ -614,7 +615,7 @@
       "type": "Function",
       "resource": "chirp_bridge.py",
       "render_hash": "stale",
-      "edge_hash": "66a954dd0b9e1353a975b4166282ac355fd482dd2b70dfa89121f35bfec9d6c8",
+      "edge_hash": "3c66969f8de7e1c186723366d54838b6176fe8ad02884333cb583214b52e97b2",
       "enriched": false
     },
     "chirp_bridge/extra_field_doc": {
@@ -2040,7 +2041,15 @@
       "render_hash": "stale",
       "edge_hash": "f44e62f316b6755e8540917dd7e827050385592ade4c272e799c75f70aef11fe",
       "enriched": false
+    },
+    "chirp_bridge/reported_model_choice": {
+      "concept_id": "chirp_bridge/reported_model_choice",
+      "type": "Function",
+      "resource": "chirp_bridge.py",
+      "render_hash": "stale",
+      "edge_hash": "925e748fc619eaaf641071e26d3b6e5ef42cc7b1c98778e9b57f4eeb52f04125",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-24T16:28:58Z"
+  "generated_at": "2026-11-24T18:50:06Z"
 }

@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 214 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 215 concepts across 10 domains and 10 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-24T16:28:58Z'
+timestamp: '2026-11-24T18:50:06Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 214 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 215 concepts | 10 domains | 10 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 190 |
+| Function | 191 |
 | Class | 14 |
 | Module | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 214 |
+| python | 215 |
 
 ## Domain Map
 
@@ -40,9 +40,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [check_private_data](check_private_data/index.md) (4 concepts) — Fail when private email addresses or local build paths are tracked.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 89 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 90 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (89 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (90 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [driver_work.py](driver_work.py/index.md) — 32 concepts
 
@@ -75,6 +75,7 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
 | [preserve_unloadable_settings](/chirp_bridge/preserve_unloadable_settings.md) | Function | `chirp_bridge.py` | Write back settings CHIRP could not load exactly as the radi… |
+| [reported_model_choice](/chirp_bridge/reported_model_choice.md) | Function | `chirp_bridge.py` | Return (vendor, model) when a driver's ID check names a sibl… |
 | [live_models_by_vendor](/chirp_bridge/live_models_by_vendor.md) | Function | `chirp_bridge.py` | Return selectable serial/transport radios, excluding file-on… |
 | [external_memory_owner](/chirp_bridge/external_memory_owner.md) | Function | `chirp_bridge.py` | Return the object that owns metadata for a radio or channel … |
 | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) | Function | `chirp_bridge.py` | Write a channel and persist fields CHIRP stores outside radi… |
@@ -93,7 +94,6 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [manual_send_key](/chirp_bridge/manual_send_key.md) | Function | `chirp_bridge.py` | Return the control a clone prompt says to press after OK, if… |
 | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) | Function | `chirp_bridge.py` | Apply bank/zone names and memberships to an already loaded i… |
 | [fetch_repeaterbook_search](/chirp_bridge/fetch_repeaterbook_search.md) | Function | `chirp_bridge.py` | Query NewChirp's relay without exposing RepeaterBook credent… |
-| [resolve_us_zip_code](/chirp_bridge/resolve_us_zip_code.md) | Function | `chirp_bridge.py` | Resolve a US ZIP code to a representative latitude and longi… |
 
 ## Usage with OpenCode
 

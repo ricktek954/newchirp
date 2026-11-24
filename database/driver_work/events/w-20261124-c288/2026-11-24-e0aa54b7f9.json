@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-24 18:50:37",
+  "details": "Windows 11 (build 26300), 1.0.71: 'could not open COM5'; reporter notes Device Manager says the Prolific PL2303TA does not support Windows 11. User-side cable driver, FAQ #cable-driver.",
+  "event_type": "created",
+  "external_ref": "INBOX:966",
+  "item": "w-20261124-c288",
+  "occurred_at": "2026-11-24",
+  "summary": "COM5 unavailable: Prolific PL2303TA driver refuses Windows 11"
+}

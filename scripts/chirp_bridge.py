@@ -557,6 +557,27 @@ def emit_progress(label, fraction=None):
     sys.stderr.flush()
 
 
+def reported_model_choice(message, model):
+    """Return (vendor, model) when a driver's ID check names a sibling model.
+
+    CHIRP drivers raise "Radio reports X (not Y)" when the radio answers with
+    another model's ID. Only suggest X when it is a registered driver from the
+    same vendor, so an unrecognized or garbled ID keeps the original error.
+    """
+    match = re.search(r"Radio reports (\S{1,24}) \(not [^)]+\)", message)
+    if not match or not model or "_" not in model:
+        return None
+    vendor = model.split("_", 1)[0]
+    reported = match.group(1)
+    try:
+        from chirp import directory
+    except Exception:
+        return None
+    if "%s_%s" % (vendor, reported) not in directory.DRV_TO_RADIO:
+        return None
+    return vendor, reported
+
+
 def bridge_error_message(exc, command=None, model=None, port=None):
     """Add safe, command-specific recovery guidance to bridge failures."""
     message = str(exc).strip() or exc.__class__.__name__
@@ -935,6 +956,16 @@ def bridge_error_message(exc, command=None, model=None, port=None):
             "only when the volume is around halfway. Turn the volume up to "
             "the middle of its range and try again. See "
             "https://newchirp.net/faq#wouxun-volume" % message.rstrip()
+        )
+    other_model = reported_model_choice(message, model)
+    if other_model:
+        # 2026-11-24 report: a TH-D7G read as TH-D7 stopped at "Radio
+        # reports TH-D7G (not TH-D7)" without saying what to choose instead.
+        vendor, reported = other_model
+        message = (
+            "This radio identifies itself as a %s %s, not the %s selected. "
+            "Choose %s %s in the radio list and read again."
+            % (vendor, reported, model.split("_", 1)[-1], vendor, reported)
         )
     if RADIO_TRACE.last_reply_was_echo_only():
         message = "%s\n\n%s" % (ECHO_ONLY_GUIDANCE, message)

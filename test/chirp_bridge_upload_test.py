@@ -473,6 +473,25 @@ class UploadHandshakeTest(unittest.TestCase):
             ],
         )
 
+    def test_reported_sibling_model_names_the_model_to_choose(self):
+        message = bridge.bridge_error_message(
+            Exception("Radio reports TH-D7G (not TH-D7)"),
+            command="download",
+            model="Kenwood_TH-D7",
+        )
+
+        self.assertIn("Choose Kenwood TH-D7G", message)
+
+    def test_reported_unknown_model_keeps_original_error(self):
+        message = bridge.bridge_error_message(
+            Exception("Radio reports XYZ123 (not TH-D7)"),
+            command="download",
+            model="Kenwood_TH-D7",
+        )
+
+        self.assertIn("Radio reports XYZ123 (not TH-D7)", message)
+        self.assertNotIn("Choose", message)
+
     def test_ft60_read_timeout_explains_when_to_press_ptt(self):
         error = self.errors.RadioNoResponse()
 

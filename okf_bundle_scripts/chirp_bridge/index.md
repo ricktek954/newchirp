@@ -77,6 +77,7 @@
 - [repeaterbook_api_tone](repeaterbook_api_tone.md)
 - [repeaterbook_item_to_channel](repeaterbook_item_to_channel.md)
 - [repeaterbook_tone](repeaterbook_tone.md)
+- [reported_model_choice](reported_model_choice.md) — Return (vendor, model) when a driver's ID check names a sibling model.
 - [resolve_us_zip_code](resolve_us_zip_code.md) — Resolve a US ZIP code to a representative latitude and longitude.
 - [search_repeaterbook](search_repeaterbook.md)
 - [serial_read_timeout](serial_read_timeout.md)
