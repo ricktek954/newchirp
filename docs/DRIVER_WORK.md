@@ -75,6 +75,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-2763 bug | fix_committed | high:** Read fails: No attribute power in struct memory
   NewChirp 1.0.68 Windows read completed, then decode failed. Stock BaofengCommonHT.get_memory logs _mem.power (nonexistent) when lowpower is not 0/2 on tri-band radios, raising AttributeError. Affects 5RX, UV-S9X3, BF-A58S and any BaofengCommonHT radio with an out-of-range value; also unfixed upstream. Meaning of values 1/3 unknown (no image, CPS not obtainable from BTECH page without a browser).
   Source: `email` INBOX:922
+- **#w-20261124-c2eb bug | awaiting_user | high:** Read decodes fail: invalid CTCSS word 6532.8 (rxtone 0xFF30)
+  Windows 11 (build 26340), 1.0.71, COM3: read completed (power fix working) then decode failed: '`6532.8' is not a valid value for `ctone''. Stock BaofengCommonHT decodes any tone word >= 0x0258 as CTCSS value/10. Settings also logged 'Failed to load scode value 0: Value for 15 is out of range' (non-fatal). No .img attached.
+  Source: `email triage 2026-11-24` INBOX:969
 
 ### BF-F8HP
 
