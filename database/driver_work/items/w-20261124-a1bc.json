@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-24 20:50:36",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "Linux desktop",
+  "occurred_at": "2026-11-24",
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:76519b2d",
+  "status": "released",
+  "summary": "Published DEB, RPM, AppImage, and Pacman packages from source commit 76519b2d. The release adds the experimental Ferrite RT-950 Pro link-protocol driver and web profile; renders corrupt Baofeng tone words as no tone; names the refused channel and write progress for live-radio refusals; adds FT-60 clone/cable guidance, sibling-model selection, and AnyTone USB guidance; prefers XWayland on Linux; adds the PMR446 frequency reference; and includes TH-D7G, UV-5R Mini, AT-D878UVII Plus, 5RX, and Wayland follow-up fixes. Verification: flutter analyze passed; all 254 Flutter tests passed with the bundled Python 3.13 runtime; 653 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.74 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include Ferrite, Baofeng tone handling, PMR446, and bridge updates and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.74. Package SHA-256 values: c07aade70cc9efb115336f5a09e78a4ed3b64bfa90feec8f2b5c07d986ddbe87, 06e3fa3c80c5ce7eb2fcde11dd5645cdfa53c1ebae087c85e3917597448008d5, 02658d6459f53b684bbe42f9b102980884e8cc1b99d64e4071c5a072f7c67978, and 294483a0c8f92ca825332cec669b6c21db239294b7f60e56ffadef931e2163a6.",
+  "title": "Linux 1.0.74 published",
+  "uid": "w-20261124-a1bc"
+}

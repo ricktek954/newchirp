@@ -36,6 +36,20 @@ release requirements.
   events, and export `docs/DRIVER_WORK.md`. The initial database contains all
   67 current driver inventory rows plus recent CPS-derived drivers and email
   bug-fix history. `database/README.md` documents statuses and commands.
+- Linux `1.0.74` is live from source commit `76519b2d`. It adds the
+  experimental Ferrite RT-950 Pro link-protocol driver and web profile,
+  renders corrupt Baofeng tone words as no tone, names refused channels and
+  write progress for live-radio refusals, adds FT-60 clone/cable guidance,
+  sibling-model selection, AnyTone USB guidance, XWayland preference, and the
+  PMR446 frequency reference. It also carries TH-D7G, UV-5R Mini,
+  AT-D878UVII Plus, 5RX, and Wayland follow-up fixes. Verification: analyzer
+  clean; all 254 Flutter tests; 653 bundled Python tests with two
+  fixture-dependent skips; Ubuntu 20.04 ABI maximum GLIBC `2.18`; DEB, RPM,
+  and Pacman metadata plus embedded version `1.0.74`; DEB and AppImage Xvfb
+  smoke tests; AppImage host launches under Wayland and X11; package payloads
+  include Ferrite, Baofeng tone handling, PMR446, and bridge updates and omit
+  GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the
+  Linux platform manifest reports `1.0.74`.
 - Linux `1.0.73` is live from source commit `b8dd8004`. It adds Spanish and
   French beta translations, offers channel-name shortening for radio limits,
   resynchronizes FT-70D clone reads on the AH51G identifier, decodes Icom
@@ -1399,6 +1413,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.74` artifact source commit: `76519b2d`
 - Linux `1.0.73` artifact source commit: `b8dd8004`
 - Linux `1.0.72` artifact source commit: `6704d9bb`
 - Linux `1.0.71` artifact source commit: `98309c23`
@@ -1406,7 +1421,7 @@ release requirements.
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.71+71`
+- Checked-out source version: `1.0.74+74`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1422,7 +1437,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.71 |
 | Windows | 1.0.70 |
-| Linux | 1.0.73 |
+| Linux | 1.0.74 |
+
+Linux `1.0.74` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.74.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.74.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.74.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.74.pkg.tar.zst`
+- DEB: `48,920,586` bytes, SHA-256
+  `c07aade70cc9efb115336f5a09e78a4ed3b64bfa90feec8f2b5c07d986ddbe87`
+- RPM: `48,997,835` bytes, SHA-256
+  `06e3fa3c80c5ce7eb2fcde11dd5645cdfa53c1ebae087c85e3917597448008d5`
+- AppImage: `49,198,272` bytes, SHA-256
+  `02658d6459f53b684bbe42f9b102980884e8cc1b99d64e4071c5a072f7c67978`
+- Pacman: `47,866,435` bytes, SHA-256
+  `294483a0c8f92ca825332cec669b6c21db239294b7f60e56ffadef931e2163a6`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.74`
 
 Linux `1.0.73` artifacts:
 
