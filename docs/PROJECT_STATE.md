@@ -808,7 +808,7 @@ release requirements.
   upload from file-drop IDs 3 and 4 (`w8one`, account 586). The supplied
   CPS-read DAT maps to a 0x8000-byte image after a 0x70-byte DAT wrapper and
   contains 128 32-byte channel records at image offset 0x02F0. The new
-  `drivers/newchirp_kenwood_tk863g.py` implements the OEM 9600 8E2
+  `drivers/newchirp_kenwood_tk863g.py` implements the OEM 9600 8N2
   `PROGRAM`/`M0863`/`NRK`/`0x7C`/256-byte-`R` read transport, fragmented
   reads, fill blocks, checksums, retries, model checks, and read-only decode
   for frequency, offset, name, bandwidth, CTCSS, DTCS, and cross tones.

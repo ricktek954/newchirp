@@ -28,7 +28,19 @@ UNEXPECTED_RESPONSE = "Unexpected response from radio"
 # other than 0x06 is discarded and the code is resent on a 1 s timer, up to
 # five times (Communication.HandShake). 2026-11-22 UV-32 report: first
 # reply 0x40, and stock CHIRP stopped with "Unexpected response".
-RETRY_MODELS = {"UV-5RH", "UV-5RM Plus", "UV-32"}
+#
+# UV-5R Mini: CPS v1.0.7 (KDH.Communication.HandShake, STEP_HANDSHAKE_2)
+# reads one byte at a time and simply ignores anything that is not 0x06,
+# so a stray byte, or the start of an echoed command, is skipped and a later
+# ACK is still accepted; the 1 s timer resends the code up to five times.
+# Stock CHIRP reads exactly one byte. 2026-11-24 reports INBOX:948/950 (and
+# INBOX:885 earlier): PROGRAMCOLORPROU answered 0x50 ("P", the first byte
+# of the command itself) and the read stopped as "Unexpected response".
+RETRY_MODELS = {"UV-5RH", "UV-5RM Plus", "UV-32", "UV-5R Mini"}
+# After a non-ACK first byte, keep reading this many more bytes (enough for
+# a full echo of the 16-byte code plus the radio's ACK), as the CPS does.
+SCAN_LIMIT = 24
+ECHO_PREFIX = 4
 _ORIGINAL_DO_IDENT = baofeng_uv17Pro._do_ident
 _ORIGINAL_GET_MEMORY = baofeng_uv17Pro.BaofengUV5RMPlus.get_memory
 
@@ -49,6 +61,30 @@ def _v2_firmware_error(radio):
         V2_MODELS.get(radio.MODEL, "v2"))
 
 
+def _echo_error(radio):
+    return errors.RadioError(
+        "NewChirp is hearing its own programming command back instead of an "
+        "answer from the %s. That happens when the cable's plug is not all "
+        "the way into the radio, or the radio is off. Turn the radio off, "
+        "push the plug in firmly until it clicks (the radio's case is "
+        "tight, so it takes more force than expected), turn the radio on, "
+        "and read again. The radio was not changed." % radio.MODEL)
+
+
+def _scan_for_ack(radio, first, fingerprint):
+    """Discard non-ACK bytes after ``first`` like the CPS handshake."""
+    seen = bytearray(first)
+    deadline = time.monotonic() + RETRY_DELAY
+    while len(seen) < SCAN_LIMIT and time.monotonic() < deadline:
+        byte = radio.pipe.read(1)
+        if not byte:
+            break
+        seen += byte
+        if byte == fingerprint:
+            return bytes(seen)
+    return bytes(seen)
+
+
 def _do_ident(radio):
     if getattr(radio, "MODEL", "") not in RETRY_MODELS:
         return _ORIGINAL_DO_IDENT(radio)
@@ -57,11 +93,22 @@ def _do_ident(radio):
     # 2026-11-19 Linux report: PROGRAMBFNORMALU answered 41, 03, 41, 03 and
     # the user only saw "No response from radio".
     replies = []
+    echoed = []
     original_sendmagic = baofeng_uv17Pro._sendmagic
+    fingerprint = bytes(radio._fingerprint)
 
     def recording_sendmagic(radio_, magic, response_len):
         reply = original_sendmagic(radio_, magic, response_len)
         replies.append(bytes(reply or b""))
+        if (magic in radio_._idents and reply
+                and not reply.startswith(fingerprint)
+                and len(fingerprint) == 1):
+            seen = _scan_for_ack(radio_, reply, fingerprint)
+            if seen.endswith(fingerprint):
+                return fingerprint
+            if len(seen) >= ECHO_PREFIX and seen[:ECHO_PREFIX] == bytes(
+                    magic[:ECHO_PREFIX]):
+                echoed.append(seen)
         return reply
 
     baofeng_uv17Pro._sendmagic = recording_sendmagic
@@ -88,6 +135,8 @@ def _do_ident(radio):
     if radio.MODEL in V2_MODELS and any(
             reply[:1] == bytes((V2_ANNOUNCE,)) for reply in replies):
         raise _v2_firmware_error(radio)
+    if echoed:
+        raise _echo_error(radio) from last_error
     raise last_error
 
 

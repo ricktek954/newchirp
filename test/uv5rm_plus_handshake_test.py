@@ -67,6 +67,7 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
     def test_retries_stray_byte_like_official_cps(self):
         serial = _SequenceSerial([
             b"\x05",
+            b"",
             b"\x06",
             b"F" * 16,
             b"M" * 15,
@@ -86,6 +87,7 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
     def test_retries_stray_byte_for_uv5rh(self):
         serial = _SequenceSerial([
             b"\xE0",
+            b"",
             b"\x06",
             b"F" * 16,
             b"M" * 15,
@@ -107,7 +109,7 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
         # "BF-UVs Pro" CPS v1.4.7 discards a non-ACK byte and resends.
         radio = self.radio_module.UV32(None)
         magic = radio._idents[0]
-        replies = [b"\x40", b"\x06"] + [
+        replies = [b"\x40", b"", b"\x06"] + [
             reply for _magic, length in radio._magics
             for reply in (b"\x00" * length,)
         ]
@@ -119,6 +121,58 @@ class UV5RMPlusHandshakeTest(unittest.TestCase):
 
         sleep.assert_called_once_with(self.compat.RETRY_DELAY)
         self.assertEqual(serial.writes[:2], [magic, magic])
+
+    def test_stray_byte_then_ack_is_accepted_without_resend(self):
+        # The CPS keeps reading after a non-ACK byte and accepts a later ACK.
+        radio = self.radio_module.UV5RMini(None)
+        replies = [b"\x40", b"\x06"] + [
+            b"\x00" * length for _magic, length in radio._magics
+        ]
+        serial = _SequenceSerial(replies)
+        radio = self.radio_module.UV5RMini(serial)
+
+        with mock.patch.object(self.compat.time, "sleep") as sleep:
+            self.assertTrue(self.radio_module._do_ident(radio))
+
+        sleep.assert_not_called()
+        self.assertEqual(serial.writes[0], b"PROGRAMCOLORPROU")
+        self.assertEqual(len(serial.writes), 1 + len(radio._magics))
+
+    def test_mini_echo_followed_by_ack_reads(self):
+        """2026-11-24 INBOX:948/950: PROGRAMCOLORPROU answered "P"."""
+        radio = self.radio_module.UV5RMini(None)
+        magic = radio._idents[0]
+        replies = [bytes((b,)) for b in magic] + [b"\x06"] + [
+            b"\x00" * length for _magic, length in radio._magics
+        ]
+        serial = _SequenceSerial(replies)
+        radio = self.radio_module.UV5RMini(serial)
+
+        with mock.patch.object(self.compat.time, "sleep"):
+            self.assertTrue(self.radio_module._do_ident(radio))
+
+        self.assertEqual(serial.writes[0], magic)
+
+    def test_mini_echo_only_explains_the_plug(self):
+        from chirp import errors
+
+        radio = self.radio_module.UV5RMini(None)
+        magic = radio._idents[0]
+        replies = []
+        for _attempt in range(self.compat.HANDSHAKE_RETRIES):
+            replies += [bytes((b,)) for b in magic] + [b""]
+        serial = _SequenceSerial(replies)
+        radio = self.radio_module.UV5RMini(serial)
+
+        with mock.patch.object(self.compat.time, "sleep") as sleep:
+            with self.assertRaisesRegex(errors.RadioError,
+                                        "hearing its own") as caught:
+                self.radio_module._do_ident(radio)
+
+        self.assertIn("was not changed", str(caught.exception))
+        self.assertEqual(sleep.call_count, self.compat.HANDSHAKE_RETRIES - 1)
+        self.assertEqual(serial.writes,
+                         [magic] * self.compat.HANDSHAKE_RETRIES)
 
     def test_uv32_0x41_reply_is_not_called_v2_firmware(self):
         from chirp import errors

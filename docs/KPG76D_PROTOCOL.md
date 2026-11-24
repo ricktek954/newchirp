@@ -47,7 +47,9 @@ The CPS probes the following speeds in order:
 9600, 19200, 4800, 2400, 1200
 ```
 
-At 9,600 baud it sends `PROGRAM`, waits 500 ms, and expects ACK `0x06`.
+At 9,600 baud it sends `PROGRAM` and reads the ACK `0x06` with a 500 ms read
+timeout. Every write is preceded by `PurgeComm(PURGE_RXCLEAR)`; the helper at
+`0x401340` sets `ReadTotalTimeoutConstant`, it does not sleep.
 Fallback probes use the CPS' 100 ms initial wait, `0x16` speed response, and a
 second 500 ms wait for ACK.
 
@@ -59,9 +61,8 @@ second 500 ms wait for ACK.
 | Identity | `02` | 8-byte model response | Must contain `M0863` |
 | Acknowledge identity | `06` | `06` | Exact ACK required |
 | Tuning information | `NRK` | `4E` + 32 data bytes + checksum | Byte 33 is the low eight bits of the sum of bytes 1-32 |
-| Settle | None | None | Wait 3,000 ms |
-| Start memory session | `7C` | 2 bytes | CPS reads both bytes before continuing |
-| Acknowledge memory session | `06` after 500 ms | `06` | Exact ACK required |
+| Start memory session | `7C`, sent right after the tuning record | 2 bytes | Read timeout set to 3,000 ms first (SetCommTimeouts, not a pause); CPS reads both bytes before continuing |
+| Acknowledge memory session | `06` | `06` | Read timeout set to 500 ms; exact ACK required |
 | Read block | `52` + address as big-endian u16 | See below | Repeat through `0x7F00` |
 | Leave programming mode | `45` (`E`) | `06` | One ACK |
 
@@ -159,7 +160,7 @@ Relevant `kpg76d.exe` functions:
 | `0x402130` | `PROGRAM` and baud probing |
 | `0x4023B0` | `0x02` identity query and ACK exchange |
 | `0x402D40` | `NRK` 34-byte tuning read and checksum |
-| `0x403110` | three-second wait, `0x7C`, and memory-session ACK |
+| `0x403110` | 3,000 ms read timeout, `0x7C`, 500 ms read timeout, and memory-session ACK |
 | `0x402580` | `R`/`T` 256-byte block read, fill handling, checksum, retry |
 | `0x402540` | `E` programming-mode exit |
 | `0x402760` | disabled write framing |

@@ -30,7 +30,7 @@ Last updated: 2026-11-20
 | Yaesu VX-170 / VX-177 | `drivers/newchirp_yaesu_vx170.py` | Stock CHIRP Yaesu clone serial (FT-7800 family) | Split-tone squelch modes decoded as Cross | Stock path; split modes encoded to raw 5-7, offline-tested | Not exposed by stock driver | Experimental compatibility override |
 | Retevis RT22 | `drivers/newchirp_retevis_rt22.py` | Stock CHIRP clone serial, 9600 | Any complete 8-byte ID accepted for the plain RT22, as Retevis's software does | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Retevis RA87 | `drivers/newchirp_retevis_ra87.py` | Stock CHIRP clone serial, 9600, echoing cable | Download identifies by model byte 0x1F05 = A5 (OEM CPS rule) instead of two fixed 8-byte fingerprints | Stock CHIRP driver (already checks 0x1F05) | Stock CHIRP driver | Experimental compatibility override |
-| Baofeng UV-5R Mini | `drivers/newchirp_uv5r_mini.py` | Stock CHIRP UV-17Pro-family serial | Unanswered block requests resent up to five times (OEM CPS rule) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng UV-5R Mini | `drivers/newchirp_uv5r_mini.py`, `drivers/newchirp_uv5rm_plus.py` | Stock CHIRP UV-17Pro-family serial | CPS handshake (skip non-ACK bytes, resend up to five times); unanswered block requests resent up to five times (OEM CPS rules) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng 5RX, UV-S9X3, BF-A58S and other `BaofengCommonHT` radios | `drivers/newchirp_baofeng_common_power.py` | Stock CHIRP serial | 5RX/UV-S9X3: power read from byte 14 bit 0 (set = Low), as the official Baofeng UV-5RX CPS 20231124 does (ZIP SHA-256 `4848128a68dcb0d2ddfa54c65ad43591718d8e9e3b62112691ff6cd60926590a`); other radios: an unrecognised value shows as High instead of failing the read (stock crashed logging a nonexistent `_mem.power`) | 5RX/UV-S9X3 write Low as 1 and High as 0 like the CPS (stock wrote Low as 2, which the CPS reads as High); a channel whose power is not edited keeps its raw value | Stock CHIRP driver | Experimental compatibility override; CPS-derived, not hardware-confirmed |
 | AnyTone AT-D878UVII Plus | `drivers/newchirp_anytone_d878uvii.py` | AnyTone D578UV/D878UV serial protocol, 115200 8N1 | Conventional channels and zones, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 (V1) with Robzyl RO-KO 512K firmware | `drivers/newchirp_uvk5_roko512k.py` | Stock UV-K5 serial (0x0514 hello, 0x051B read), 38400 8N1 | 999 channels from the firmware layout, offline-tested; refuses other firmware and 8 KB EEPROMs | Disabled | Hidden | Experimental read-only |
@@ -46,7 +46,7 @@ Last updated: 2026-11-20
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
 | Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 9600 8N1, 0xF000 addressed blocks | Yes, offline-tested | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N1, 0xF000 addressed blocks | Yes, offline-tested | Disabled | Hidden | Experimental read-only |
-| Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8E2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8N2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
 | KSUN UV-K60 rebrand | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Stock UV-K5-family profile | Stock UV-K5-family policy | Stock UV-K5-family policy | Experimental |
@@ -672,8 +672,19 @@ Last updated: 2026-11-20
   (`timesOfRetry = 5`); address walk 0x0000-0x803F, 0x9000-0x903F,
   0xA000-0xA1BF, matching CHIRP.
 - Change: each block is requested up to six times, the input is flushed
-  between attempts, and a final failure names the block. Handshake and upload
-  are stock.
+  between attempts, and a final failure names the block. Upload is stock.
+- Handshake (2026-11-24, ledger `w-20261124-87c9`, INBOX:948/950): two more
+  owners got `P` (0x50) as the first handshake byte; one read a UV-5RM on the
+  same cable and port right after. CPS v1.0.7 `KDH.Communication.HandShake`
+  (`STEP_HANDSHAKE_2`) reads one byte at a time and ignores anything that
+  is not 0x06, so a stray byte or an echoed command is skipped and a later
+  ACK is accepted; its 1 s timer resends the code up to five times. The
+  UV-5R Mini now uses `drivers/newchirp_uv5rm_plus.py`'s handshake retry,
+  which also reads up to 24 more bytes in that second looking for the ACK.
+  If all five attempts hear only the echoed `PROGRAMCOLORPROU`, the error
+  says the plug is not fully in (or the radio is off) instead of
+  "Unexpected response". This applies to every model in that module's
+  `RETRY_MODELS` (UV-5RM Plus, UV-5RH, UV-32, UV-5R Mini).
 - Hardware validation: none.
 
 ### Yaesu VX-170 / VX-177
@@ -1913,7 +1924,7 @@ Last updated: 2026-11-20
   `2041afe2b14883ea1411d139227bb6c19ff4292c909c89599a812c475bafcfde`
 - Uploader DAT SHA-256:
   `5afb8f37a3a28a0882b98eb8d340e6caec64f1b8b53b742426cac52ca3b89434`
-- Transport: KPG-76D `PROGRAM` session at 9600 8E2 with the OEM
+- Transport: KPG-76D `PROGRAM` session at 9600 8N2 with the OEM
   9600/19200/4800/2400/1200 fallback order, `M0863` identity, `NRK`
   tuning record, `0x7C` memory-session request, 256-byte `R` blocks,
   additive checksums, fill responses, three-attempt recovery, and `E` exit
@@ -1933,6 +1944,15 @@ Last updated: 2026-11-20
 - Next milestone: the uploader performs a NewChirp read, compares all decoded
   channels with KPG-76D, and reports any missing option fields before the
   write map is considered.
+- 2026-11-24 correction (INBOX:943, Linux 1.0.72 read stopped with "0 of
+  2 bytes while starting the memory session" after a valid `NRK` record):
+  KPG-76D's `0x403110` calls its SetCommTimeouts helper with 3,000 ms, not a
+  sleep. The CPS sends `0x7C` right after `NRK` and waits up to 3 s for the
+  two-byte reply, then 500 ms for the ACK. The driver used to idle 3 s and
+  then wait only 1 s; it now matches the CPS. Framing is `9600,N,8,2` (the
+  only mode string; the baud probe rewrites just the speed), so the driver
+  and Web Programmer now use no parity instead of even. Offline-tested; no
+  physical read yet.
 - Website catalog: live as `TK-863G (experimental)` in the Kenwood catalog
   and **New Experimental Radio Support** from website source `be979f0`
   (`index-CbTrONP8.js`). The read-only `kenwood-tk863g` Web Programmer

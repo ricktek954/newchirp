@@ -8,9 +8,10 @@
 """Experimental read-only Kenwood TK-863G driver.
 
 The transport and memory map were recovered from Kenwood KPG-76D 1.00.
-KPG-76D uses 9,600-baud 8E2 serial framing, a ``PROGRAM`` session,
-an ``M0863`` model identity, the ``NRK`` tuning record, 256-byte ``R``
-blocks, and additive byte checksums.
+KPG-76D uses 9,600-baud 8N2 serial framing (``"9600,N,8,2"`` passed to
+``BuildCommDCB``; the baud probe only rewrites the speed), a ``PROGRAM``
+session, an ``M0863`` model identity, the ``NRK`` tuning record, 256-byte
+``R`` blocks, and additive byte checksums.
 
 Uploads remain disabled until the complete write map has been validated
 on a physical radio.
@@ -49,6 +50,8 @@ NAME_LENGTH = 8
 # the first acknowledgement and uses the 0x16 speed-change response for the
 # fallback probes.
 AUTODETECT_BAUDS = (9600, 19200, 4800, 2400, 1200)
+# KPG-76D sets a 3,000 ms read timeout for the 0x7C memory-session reply.
+MEMORY_SESSION_TIMEOUT = 3.0
 
 VALID_MODES = ["NFM", "FM"]
 VALID_TMODES = ["", "Tone", "TSQL", "DTCS", "Cross"]
@@ -70,13 +73,22 @@ def _sum8(data):
 
 def _read_exact(radio, count, context, timeout=None):
     data = bytearray()
-    deadline = time.monotonic() + (timeout or radio.pipe.timeout or 1)
-    while len(data) < count and time.monotonic() < deadline:
-        chunk = radio.pipe.read(count - len(data))
-        if chunk:
-            data.extend(chunk)
-        else:
-            break
+    previous = radio.pipe.timeout
+    if timeout is not None:
+        # KPG-76D changes the port's total read timeout (SetCommTimeouts)
+        # before steps that need longer than the default.
+        radio.pipe.timeout = timeout
+    try:
+        deadline = time.monotonic() + (timeout or previous or 1)
+        while len(data) < count and time.monotonic() < deadline:
+            chunk = radio.pipe.read(count - len(data))
+            if chunk:
+                data.extend(chunk)
+            else:
+                break
+    finally:
+        if timeout is not None:
+            radio.pipe.timeout = previous
     if len(data) != count:
         raise errors.RadioNoResponse(
             "Radio returned %i of %i bytes while %s"
@@ -105,7 +117,7 @@ def _reset_input(radio):
 def _set_port(radio, baud):
     radio.pipe.baudrate = baud
     radio.pipe.bytesize = 8
-    radio.pipe.parity = "E"
+    radio.pipe.parity = "N"
     radio.pipe.stopbits = 2
     radio.pipe.timeout = 1
     for name, value in (("rtscts", False), ("xonxoff", False)):
@@ -182,12 +194,18 @@ def _open_clone_session(radio):
     identity = _read_identity(radio)
     tuning = _read_tuning_record(radio)
 
-    # The OEM CPS deliberately waits three seconds after the tuning record
-    # before beginning the bulk memory session.
-    time.sleep(3)
+    # KPG-76D 0x403110: SetCommTimeouts(3000 ms), PurgeComm(RX), write 0x7C,
+    # read two bytes; then SetCommTimeouts(500 ms), write ACK, read ACK.
+    # The 3,000 is a read timeout, not a pause: there is no Sleep here, so
+    # 0x7C goes out right after the tuning record and the radio gets up to
+    # three seconds to answer. (Earlier builds slept 3 s and then allowed
+    # only 1 s; a 2026-11-23 TK-863G read got no reply to 0x7C. INBOX:943)
+    _reset_input(radio)
     radio.pipe.write(b"\x7c")
-    readiness = _read_exact(radio, 2, "starting the memory session")
-    time.sleep(0.5)
+    readiness = _read_exact(
+        radio, 2, "starting the memory session",
+        timeout=MEMORY_SESSION_TIMEOUT,
+    )
     _exchange_ack(radio, "starting the memory session")
     return identity, tuning, readiness
 

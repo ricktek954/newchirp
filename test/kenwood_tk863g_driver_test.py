@@ -82,14 +82,19 @@ def _dat_image():
 
 
 class FakeKpg76Serial:
-    def __init__(self, image, chunk_size=1024, corrupt_first=False):
+    def __init__(self, image, chunk_size=1024, corrupt_first=False,
+                 session_delay=0.0):
         self.image = bytearray(image)
+        # Seconds the radio takes to answer 0x7C; bytes are released only
+        # when the read timeout in force is long enough to wait for them.
+        self.session_delay = session_delay
+        self._held = b""
         self.chunk_size = chunk_size
         self.corrupt_first = corrupt_first
         self.timeout = 1
         self.baudrate = 9600
         self.bytesize = 8
-        self.parity = "E"
+        self.parity = "N"
         self.stopbits = 2
         self.rtscts = False
         self.xonxoff = False
@@ -113,7 +118,10 @@ class FakeKpg76Serial:
         elif data == b"NRK":
             self._rx.extend(self._tuning_record())
         elif data == b"\x7c":
-            self._rx.extend(b"\x12\x34")
+            if self.session_delay:
+                self._held = b"\x12\x34"
+            else:
+                self._rx.extend(b"\x12\x34")
         elif data == b"\x15":
             self._rx.extend(b"\x06")
         elif data == b"\x06":
@@ -136,6 +144,11 @@ class FakeKpg76Serial:
         return len(data)
 
     def read(self, size=1):
+        if self._held:
+            if self.timeout < self.session_delay:
+                return b""
+            self._rx.extend(self._held)
+            self._held = b""
         count = min(size, self.chunk_size, len(self._rx))
         data = bytes(self._rx[:count])
         del self._rx[:count]
@@ -232,6 +245,24 @@ class KenwoodTK863GDriverTest(unittest.TestCase):
         self.assertEqual(serial.addresses[-1], 0x7F00)
         self.assertEqual(serial.writes[0], b"PROGRAM")
         self.assertEqual(serial.writes[-1], b"E")
+
+    def test_slow_memory_session_reply_gets_the_cps_timeout(self):
+        """INBOX:943: no reply to 0x7C within the old 1 s window."""
+        image = _synthetic_image()
+        serial = FakeKpg76Serial(image, session_delay=2.0)
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+
+        with mock.patch("time.sleep", return_value=None) as sleep:
+            radio.sync_in()
+
+        self.assertEqual(radio.get_mmap().get_packed(), image)
+        # No three-second idle before 0x7C: KPG-76D's 3000 is a timeout.
+        self.assertNotIn(mock.call(3), sleep.call_args_list)
+        self.assertEqual(serial.timeout, 1)
+        self.assertEqual(serial.parity, "N")
+        nrk = serial.writes.index(b"NRK")
+        self.assertEqual(serial.writes[nrk + 1], b"\x7c")
 
     def test_bad_block_checksum_is_retried(self):
         image = _synthetic_image()
