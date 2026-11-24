@@ -151,6 +151,20 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.72` is live from source commit `d502504e` as a universal,
+  signed, and notarized DMG. It adds the experimental Ferrite protocol driver
+  for the RT-950 Pro, a PMR446 frequency reference, FT-60 clone-entry
+  guidance, sibling-model selection guidance, safe reading of corrupt
+  Baofeng tone words, 5RX tone handling, AnyTone USB-port guidance, and
+  refused-channel plus live-write progress diagnostics. Verification:
+  analyzer clean; 254 Flutter tests; 653 Python tests with two
+  fixture-dependent skips; embedded version `1.0.72` / `72`; arm64 and
+  x86_64 Python `3.13.15`; CHIRP
+  `21e42e4518c167548af90ed7f9edf75e516c491a`; 274 driver modules; catalog
+  `list-models` returned 608 models across 62 vendors; strict codesigning
+  and Gatekeeper accepted; mounted-app launch smoke test passed; and matching
+  local, server, and public SHA-256. Notarization submission:
+  `1fd6915b-24e2-40c2-927e-104e67879ff8`.
 - macOS `1.0.71` is live from source commit `876c765b` as a universal,
   signed, and notarized DMG. It adds TIDRADIO TD-H9 Normal, HAM, and GMRS
   profiles on the TD-H8 G4 transport, matches TK-863G OEM memory-session
@@ -1398,6 +1412,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.72` artifact source commit: `d502504e`
 - macOS `1.0.71` artifact source commit: `876c765b`
 - macOS `1.0.70` artifact source commit: `b6fbc544`
 - macOS `1.0.69` artifact source commit: `0f7f9048`
@@ -1435,7 +1450,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.71 |
+| macOS | 1.0.72 |
 | Windows | 1.0.70 |
 | Linux | 1.0.74 |
 
@@ -1658,6 +1673,24 @@ Linux `1.0.65` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums, sizes, and permissions matched the local artifacts
 - Linux platform manifest reports `1.0.65`
+
+macOS `1.0.72` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.72.dmg`
+- Version/build: `1.0.72` / `72`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `e3fb1bff88d84731222a4e54506bcf470bf1da48bd5324e6f06e1e246cbe812e`
+- Size: `87,695,433` bytes
+- Built from `d502504e`
+- Notarization submission:
+  `1fd6915b-24e2-40c2-927e-104e67879ff8`
+- Apple notarization accepted and the stapled ticket validates
+- Mounted-app launch smoke test passed
+- Bundle contains the Ferrite RT-950 Pro driver, PMR446 reference, FT-60 and
+  sibling-model guidance, corrupt/5RX tone handling, AnyTone USB guidance,
+  and refused-channel/live-write progress diagnostics
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.71` artifact:
 
