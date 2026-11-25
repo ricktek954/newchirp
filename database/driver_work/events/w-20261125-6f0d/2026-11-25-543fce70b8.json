@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 12:20:42",
+  "details": "1.0.73 macOS. 50 BB FF 20 12 07 25 handshake, ident AA 30 76 04 00 05 20 DD. Version reads and channels 0x0000-0x17C0 answered; 0x1EC0 after the channels got no reply. Same as UV-5R, BF-F8HP, UV-5RX3. UV-5RX CPS never reads the settings block after the channels. Fix: read the settings block before the channels.",
+  "event_type": "created",
+  "external_ref": "INBOX:985",
+  "item": "w-20261125-6f0d",
+  "occurred_at": "2026-11-25",
+  "summary": "Read stops at settings block 0x1EC0 after the channels (radio refuses the jump back)"
+}

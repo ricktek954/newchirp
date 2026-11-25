@@ -31,6 +31,8 @@ Last updated: 2026-11-20
 | Retevis RT22 | `drivers/newchirp_retevis_rt22.py` | Stock CHIRP clone serial, 9600 | Any complete 8-byte ID accepted for the plain RT22, as Retevis's software does | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Retevis RA87 | `drivers/newchirp_retevis_ra87.py` | Stock CHIRP clone serial, 9600, echoing cable | Download identifies by model byte 0x1F05 = A5 (OEM CPS rule) instead of two fixed 8-byte fingerprints | Stock CHIRP driver (already checks 0x1F05) | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5R Mini | `drivers/newchirp_uv5r_mini.py`, `drivers/newchirp_uv5rm_plus.py` | Stock CHIRP UV-17Pro-family serial | CPS handshake (skip non-ACK bytes, resend up to five times); unanswered block requests resent up to five times (OEM CPS rules) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
+| Baofeng UV-5R family (`uv5r.py` radios with the settings block: UV-5R, BF-F8HP, UV-82, UV-5RX3 and others) | `drivers/newchirp_uv5r_aux_first.py` | Stock CHIRP UV-5R serial | Download reads the settings block 0x1EC0-0x1FFF right after the firmware-version read, then channels 0x0000-0x17FF; same blocks, block sizes and image layout as stock (a radio on the 50 BB FF 20 12 07 25 handshake refused the jump back to 0x1EC0 after the channels, INBOX:985; the UV-5RX CPS never makes that jump) | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override; offline-tested, not hardware-confirmed |
+| Baofeng UV-3R | `drivers/newchirp_uv3r_compat.py` | Stock CHIRP serial | Stock | Stock | Stock | Compatibility fix: after ten failed handshakes the real error is reported (stock raised a Python "cannot access local variable 'e'" error) |
 | Baofeng 5RX, UV-S9X3, BF-A58S and other `BaofengCommonHT` radios | `drivers/newchirp_baofeng_common_power.py` | Stock CHIRP serial | 5RX/UV-S9X3: power read from byte 14 bit 0 (set = Low), as the official Baofeng UV-5RX CPS 20231124 does (ZIP SHA-256 `4848128a68dcb0d2ddfa54c65ad43591718d8e9e3b62112691ff6cd60926590a`); other radios: an unrecognised value shows as High instead of failing the read (stock crashed logging a nonexistent `_mem.power`); a corrupt tone word (CTCSS not in the standard list, or a DCS index past the table, e.g. 5RX rxtone `0xFF30`) shows as no tone instead of failing the read | 5RX/UV-S9X3 write Low as 1 and High as 0 like the CPS (stock wrote Low as 2, which the CPS reads as High); a channel whose power or tones are not edited keeps its raw power and tone words | Stock CHIRP driver | Experimental compatibility override; CPS-derived, not hardware-confirmed |
 | AnyTone AT-D878UVII Plus | `drivers/newchirp_anytone_d878uvii.py` | AnyTone D578UV/D878UV serial protocol, 115200 8N1 | Conventional channels and zones, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 (V1) with Robzyl RO-KO 512K firmware | `drivers/newchirp_uvk5_roko512k.py` | Stock UV-K5 serial (0x0514 hello, 0x051B read), 38400 8N1 | 999 channels from the firmware layout, offline-tested; refuses other firmware and 8 KB EEPROMs | Disabled | Hidden | Experimental read-only |
@@ -2815,6 +2817,30 @@ Last updated: 2026-11-20
 - Next milestone: import a redacted R7 CPS 2.0 Zone XML sample, compare every
   field with CPS2, then research direct programming only if a physical R7,
   entitled CPS installation, and compatible cable are available
+
+### Baofeng UV-5R family: settings block read first
+
+- Driver: `drivers/newchirp_uv5r_aux_first.py` (2026-11-25, report on
+  1.0.73 macOS, mailbox INBOX:985).
+- Issue: the radio answered the `50 BB FF 20 12 07 25` handshake (ident
+  `AA 30 76 04 00 05 20 DD`), the firmware-version reads at 0x1E80, 0x1EC0
+  and 0x1FC0, and every channel block 0x0000-0x17C0, then sent nothing for
+  0x1EC0. Stock fails with "Radio refused to send second block 0x1ec0". Same
+  result five times as UV-5R, BF-F8HP and UV-5RX3.
+- OEM evidence: Baofeng UV-5RX CPS 20231124 (ZIP SHA-256
+  `4848128a68dcb0d2ddfa54c65ad43591718d8e9e3b62112691ff6cd60926590a`, same
+  handshake in `WriFreq.hSTable1`). `ReadCHData` reads 0x0000-0x17C0 and stops.
+  `ReadConfigData` reads 0x1FC0 then 0x1EC0, at the start of its own session.
+  The CPS never asks for the settings block after the channels.
+- Correction: the settings block is read straight after the firmware-version
+  read, then the channels. The blocks, block sizes, the dropped-byte 0x10 tail
+  reads and the image layout are unchanged. BJ-UV55 and radios without the
+  settings block keep the stock download. Uploads are unchanged. An upload
+  still writes the settings ranges after the channels; whether this radio
+  accepts that is not known yet.
+- Evidence: `test/uv5r_aux_first_test.py` (a fake radio that refuses the
+  jump; stock fails on it, the override reads a byte-identical image).
+  Hardware validation: none.
 
 ### Settings the driver cannot load (all clone radios)
 
