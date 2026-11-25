@@ -22,6 +22,7 @@ class BaofengCommonPowerTest(unittest.TestCase):
         bridge = importlib.util.module_from_spec(spec)
         sys.modules[spec.name] = bridge
         spec.loader.exec_module(bridge)
+        cls.bridge = bridge
         cls.directory = bridge.load_chirp(
             str(SOURCE), str(PYTHON_VENDOR), str(ROOT / "drivers"))
 
@@ -142,6 +143,23 @@ class BaofengCommonPowerTest(unittest.TestCase):
         self.assertEqual((mem.tmode, mem.ctone), ("TSQL", 88.5))
         radio.set_memory(mem)
         self.assertEqual((int(_mem.txtone), int(_mem.rxtone)), (885, 885))
+
+
+    def test_undecodable_extra_does_not_stop_the_write(self):
+        # INBOX:980: S-CODE byte 15 (CPS offers 1-15, stored 0-14) read as
+        # None, and the write stopped with "None is not in list".
+        radio = self._radio("Baofeng_5RX.img")
+        number = self._first_used(radio)
+        radio._memobj.memory[number].scode = 15
+        item = self.bridge.memory_json(radio.get_memory(number))
+        scode = [e for e in item["extras"] if e["name"] == "scode"][0]
+        self.assertIsNone(scode["value"])
+
+        skipped, adjusted, written = self.bridge.prepare_upload_channels(
+            radio, [item])
+
+        self.assertEqual((skipped, written), ([], 1))
+        self.assertEqual(int(radio._memobj.memory[number].scode), 0)
 
 
 if __name__ == "__main__":

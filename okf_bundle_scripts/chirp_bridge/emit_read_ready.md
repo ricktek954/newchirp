@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T20:05:59Z"
+timestamp: "2026-11-25T09:30:41Z"
 concept_id: chirp_bridge/emit_read_ready
 language: python
 ---
@@ -41,7 +41,7 @@ report: ID block lost, then "No response from radio").
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 2342–2360 in `chirp_bridge.py`
+Lines 2348–2366 in `chirp_bridge.py`
 
 ## Relationships
 

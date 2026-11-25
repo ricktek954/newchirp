@@ -1715,7 +1715,13 @@ def apply_json(radio, mem, item):
         for field in item.get("extras", [])
     }
     for setting in mem.extra:
-        if setting.get_name() in extra_values and setting.value.get_mutable():
+        if extra_values.get(setting.get_name()) is None:
+            # No value: the driver could not decode the radio's own value
+            # (2026-11-25 5RX report: S-CODE byte 15, outside the CPS's
+            # 1-15 list, read as None and stopped the write with "None is
+            # not in list"). Leave the setting as the radio has it.
+            continue
+        if setting.value.get_mutable():
             setting.value = coerce_setting_value(
                 setting, extra_values[setting.get_name()]
             )
