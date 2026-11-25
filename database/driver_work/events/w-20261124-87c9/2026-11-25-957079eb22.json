@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:39:13",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179559948327.28091.15726149404062417397@newchirp.net>",
+  "item": "w-20261124-87c9",
+  "occurred_at": "2026-11-25",
+  "summary": "INBOX:975: echo means COM3 isn't reaching the radio; check port via Device Manager, avoid a Bluetooth serial port, reseat plug, try another cable; asked which cable"
+}

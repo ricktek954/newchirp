@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:39:14",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179559952045.28352.2512860748147946129@newchirp.net>",
+  "item": "w-20261124-c2eb",
+  "occurred_at": "2026-11-25",
+  "summary": "Explained S-CODE value on channel 11, fix in next release, workaround set S-CODE to 1; still asked for the .img"
+}

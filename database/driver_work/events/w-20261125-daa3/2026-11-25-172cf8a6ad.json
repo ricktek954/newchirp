@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:39:15",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "web:aafaffe",
+  "item": "w-20261125-daa3",
+  "occurred_at": "2026-11-25",
+  "summary": "Restored only /opt/newchirp/.env.mygmrs (0600 root) from the 2026-11-12 backup and restarted newchirp-web via the ecosystem file; oauth/start 200 with approved client and PKCE S256; DB untouched. .env.moderation also missing (DeepSeek scan disabled), left for the owner's decision"
+}

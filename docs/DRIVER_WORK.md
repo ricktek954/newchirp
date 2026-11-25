@@ -598,7 +598,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Website
 
-- **#w-20261125-daa3 bug | investigating | high:** myGMRS sign-in returns 503: server credentials missing
+- **#w-20261125-daa3 bug | fix_committed | high:** myGMRS sign-in returns 503: server credentials missing
   Desktop 1.0.72 report: Sign in to myGMRS shows 503 'not configured'. Live /api/mygmrs/oauth/start answers 503. /opt/newchirp/.env.mygmrs is missing and the running process (restarted 2026-11-20 15:29 EST) has empty MYGMRS_CLIENT_ID/SECRET. Newest backup holding the file: /root/newchirp-before-shirt-20261112111101.tgz.
   Source: `email triage 2026-11-25` INBOX:983
 
