@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:34:56",
+  "details": "Windows 11 (26300), 1.0.72, COM4: five UV-K5 hellos got 0 bytes, so no firmware version. Cable/port/seating.",
+  "event_type": "created",
+  "external_ref": "INBOX:977",
+  "item": "w-20261125-79f9",
+  "occurred_at": "2026-11-25",
+  "summary": "UV-K5 hello unanswered (0 bytes) on Windows COM4"
+}

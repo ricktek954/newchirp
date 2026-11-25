@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-25 09:35:06",
+  "kind": "bug",
+  "manufacturer": "NewChirp",
+  "model": "Website",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "reporter",
+  "source": "email triage 2026-11-25",
+  "source_ref": "INBOX:983",
+  "status": "investigating",
+  "summary": "Desktop 1.0.72 report: Sign in to myGMRS shows 503 'not configured'. Live /api/mygmrs/oauth/start answers 503. /opt/newchirp/.env.mygmrs is missing and the running process (restarted 2026-11-20 15:29 EST) has empty MYGMRS_CLIENT_ID/SECRET. Newest backup holding the file: /root/newchirp-before-shirt-20261112111101.tgz.",
+  "title": "myGMRS sign-in returns 503: server credentials missing",
+  "uid": "w-20261125-daa3"
+}

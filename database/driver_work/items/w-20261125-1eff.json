@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-25 09:34:57",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-21Pro V2",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email triage 2026-11-25",
+  "source_ref": "INBOX:982",
+  "status": "awaiting_user",
+  "summary": "Windows 10 (19045), 1.0.72, COM1: no reply to PROGRAMBFNOR. COM1 is normally a built-in or virtual serial port, not a USB programming cable.",
+  "title": "PROGRAMBFNOR unanswered on COM1",
+  "uid": "w-20261125-1eff"
+}

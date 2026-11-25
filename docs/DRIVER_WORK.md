@@ -57,7 +57,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### 5RM
 
-- **#95 bug | investigating | high:** Upload fails on a slot with an out-of-range extra (PTT-ID 0xFF)
+- **#95 bug | fix_committed | high:** Upload fails on a slot with an out-of-range extra (PTT-ID 0xFF)
   macOS 1.0.58 CSV write: 'Failed to load pttid value 0: Value for 255 is out of range' then 'Could not prepare channel 7 (GMRS-21): None is not in list'. A programmed slot held PTT-ID 0xFF; the uninitialized extra made stock set_memory fail and blocked the whole upload.
   Source: `email` INBOX:783
 - **#96 bug | awaiting_user | normal:** Every action fails instantly with 'Reported error: 1' on macOS 12
@@ -160,6 +160,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: UV-17-family serial, 115200 8N1. Read: Malformed CTCSS values no longer abort channel decode. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:54
 
+### UV-21Pro V2
+
+- **#w-20261125-1eff bug | awaiting_user | normal:** PROGRAMBFNOR unanswered on COM1
+  Windows 10 (19045), 1.0.72, COM1: no reply to PROGRAMBFNOR. COM1 is normally a built-in or virtual serial port, not a USB programming cable.
+  Source: `email triage 2026-11-25` INBOX:982
+
 ### UV-29 Pro
 
 - **#31 maintenance | experimental | normal:** Current driver status
@@ -246,6 +252,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261119-d555 bug | fix_committed | high:** Writes to zones 2-3 reported in zone 1
   Reporter (first v2 hardware read) says frequencies written in zone 2 or 3 land in zone 1, and edits cannot span zones before a write. Offline bridge replay places a zone 2 edit at channel 65 and CPS V1.17 uses the same zone*64+slot IDs. Added EnZone (0x73 bit 2) handling; need the reporter's image and what the radio shows.
   Source: `email` INBOX:807
+
+### UV-5RM Pro
+
+- **#w-20261125-2905 new_driver | open | normal:** Support the UV-5RM Pro (firmware 1.0.94)
+  Windows 11 (26300), 1.0.72, COM5, model 5RH Pro selected: the 16-byte magic was answered e0 then 41, and the 8-byte command 4e ('N'), so the radio talks but refuses the 5RH Pro handshake. Owner reports UV-5RM PRO, firmware 1_0_94, hardware 1_0_0. Not in CHIRP. Next: OEM CPS REA.
+  Source: `email triage 2026-11-25` INBOX:978
 
 ### UV-82
 
@@ -496,6 +508,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261124-970b enhancement | released | normal:** PMR446 (Europe) table in the Frequency Reference
   16 analogue channels with ECC/DEC/(15)05 licence-free conditions and printable PDF
   Source: `email` INBOX:960
+- **#w-20261125-b6b9 enhancement | awaiting_user | normal:** Import CSV with No./Channel Name/Channel Type/RX Frequency[MHz] columns
+  Windows 11 (26300), 1.0.72, model 5RM: CSV from an associate rejected as not CHIRP format; columns No., Channel Name, Channel Type, RX Frequency[MHz], TX Frequency[MHz], Power, Band Width, Scan List (a vendor CPS export, likely DMR-style 'Channel Type'). Needs the file to identify the CPS and add an importer.
+  Source: `email triage 2026-11-25` INBOX:981
 
 ### Desktop app
 
@@ -581,6 +596,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Published a universal signed and notarized DMG from source commit d502504e. It adds the experimental Ferrite protocol driver for the RT-950 Pro, a PMR446 frequency reference, FT-60 clone-entry guidance, sibling-model selection guidance, safe reading of corrupt Baofeng tone words, 5RX tone handling, AnyTone USB-port guidance, and refused-channel plus live-write progress diagnostics. Verification: analyzer clean; 254 Flutter tests passed; 653 Python tests passed with 2 fixture-dependent skips; embedded version 1.0.72 / 72; arm64 and x86_64 Python 3.13.15; CHIRP 21e42e4518c167548af90ed7f9edf75e516c491a; 274 driver modules; 608 selectable models across 62 vendors; strict codesigning and Gatekeeper accepted; mounted-app launch passed; local/server/public SHA-256 matched. Artifact SHA-256: e3fb1bff88d84731222a4e54506bcf470bf1da48bd5324e6f06e1e246cbe812e. Apple notarization: 1fd6915b-24e2-40c2-927e-104e67879ff8. The live manifest reports macOS 1.0.72.
   Source: `release` desktop:d502504e
 
+### Website
+
+- **#w-20261125-daa3 bug | investigating | high:** myGMRS sign-in returns 503: server credentials missing
+  Desktop 1.0.72 report: Sign in to myGMRS shows 503 'not configured'. Live /api/mygmrs/oauth/start answers 503. /opt/newchirp/.env.mygmrs is missing and the running process (restarted 2026-11-20 15:29 EST) has empty MYGMRS_CLIENT_ID/SECRET. Newest backup holding the file: /root/newchirp-before-shirt-20261112111101.tgz.
+  Source: `email triage 2026-11-25` INBOX:983
+
 ## Quansheng
 
 ### UV-K1 & UV-K5 V3 (F4HWN)
@@ -594,6 +615,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261119-8c78 bug | fix_committed | normal:** Image from F4HWN's CHIRP module refused as unsupported model
   Linux 1.0.61: the F4HWN module (imports wx) cannot load, and an image saved by it ('UV-K1 & UV-K5 V3 (F4HWN)', 0xB190 bytes, f4hwn.chirp.v6.3.0.py sha256 a307886d...) was rejected as 'Unsupported model'. Same layout as the built-in profile, which was built from that module.
   Source: `email` INBOX:798
+
+### UV-K1 (F4HWN)
+
+- **#w-20261125-79f9 bug | awaiting_user | normal:** UV-K5 hello unanswered (0 bytes) on Windows COM4
+  Windows 11 (26300), 1.0.72, COM4: five UV-K5 hellos got 0 bytes, so no firmware version. Cable/port/seating.
+  Source: `email triage 2026-11-25` INBOX:977
 
 ### UV-K1 / UV-K5 V3 (F4HWN 6.3)
 
@@ -667,6 +694,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#45 maintenance | experimental | normal:** Current driver status
   Transport: OEM GS-5B Pro CPS v1.1.3 serial, 115200 8N1, DTR/RTS on. Read: 512 channels, offline-tested. Write: All mapped pages, offline-tested. Settings: Preserved, hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:69
+
+### UV-5G Plus
+
+- **#w-20261125-38b3 bug | awaiting_user | normal:** PROGRAMBFGMR unanswered on Windows COM3
+  Windows 11 (26300), 1.0.71, COM3: read got no reply at all to PROGRAMBFGMR within 1.5 s (no echo). Cable/port/seating.
+  Source: `email triage 2026-11-25` INBOX:976
 
 ### X1 Pro GMRS
 

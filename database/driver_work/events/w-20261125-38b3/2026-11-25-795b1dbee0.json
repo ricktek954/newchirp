@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:34:56",
+  "details": "Windows 11 (26300), 1.0.71, COM3: read got no reply at all to PROGRAMBFGMR within 1.5 s (no echo). Cable/port/seating.",
+  "event_type": "created",
+  "external_ref": "INBOX:976",
+  "item": "w-20261125-38b3",
+  "occurred_at": "2026-11-25",
+  "summary": "PROGRAMBFGMR unanswered on Windows COM3"
+}

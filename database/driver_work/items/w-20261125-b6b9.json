@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-25 09:34:56",
+  "kind": "enhancement",
+  "manufacturer": "NewChirp",
+  "model": "Desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email triage 2026-11-25",
+  "source_ref": "INBOX:981",
+  "status": "awaiting_user",
+  "summary": "Windows 11 (26300), 1.0.72, model 5RM: CSV from an associate rejected as not CHIRP format; columns No., Channel Name, Channel Type, RX Frequency[MHz], TX Frequency[MHz], Power, Band Width, Scan List (a vendor CPS export, likely DMR-style 'Channel Type'). Needs the file to identify the CPS and add an importer.",
+  "title": "Import CSV with No./Channel Name/Channel Type/RX Frequency[MHz] columns",
+  "uid": "w-20261125-b6b9"
+}

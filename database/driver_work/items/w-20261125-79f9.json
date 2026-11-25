@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-25 09:34:56",
+  "kind": "bug",
+  "manufacturer": "Quansheng",
+  "model": "UV-K1 (F4HWN)",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email triage 2026-11-25",
+  "source_ref": "INBOX:977",
+  "status": "awaiting_user",
+  "summary": "Windows 11 (26300), 1.0.72, COM4: five UV-K5 hellos got 0 bytes, so no firmware version. Cable/port/seating.",
+  "title": "UV-K5 hello unanswered (0 bytes) on Windows COM4",
+  "uid": "w-20261125-79f9"
+}

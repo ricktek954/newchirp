@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:34:42",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:6452c36c",
+  "item": "95",
+  "occurred_at": "2026-11-25",
+  "summary": "Completed: when the app round-trips a read channel, an undecodable extra arrives as None and crashed before repair_uninitialized_extras ran (5RX S-CODE 15, INBOX:980). The bridge now leaves None extras for the repair."
+}

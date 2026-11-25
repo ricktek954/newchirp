@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-25 09:34:56",
+  "kind": "bug",
+  "manufacturer": "Radioddity",
+  "model": "UV-5G Plus",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email triage 2026-11-25",
+  "source_ref": "INBOX:976",
+  "status": "awaiting_user",
+  "summary": "Windows 11 (26300), 1.0.71, COM3: read got no reply at all to PROGRAMBFGMR within 1.5 s (no echo). Cable/port/seating.",
+  "title": "PROGRAMBFGMR unanswered on Windows COM3",
+  "uid": "w-20261125-38b3"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:34:42",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:6452c36c",
+  "item": "w-20261124-c2eb",
+  "occurred_at": "2026-11-25",
+  "summary": "Bridge skips extras whose incoming value is None so repair_uninitialized_extras resets S-CODE to 1; regression test; full suite 654 OK"
+}

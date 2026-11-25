@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 09:34:42",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:975",
+  "item": "w-20261124-87c9",
+  "occurred_at": "2026-11-25",
+  "summary": "INBOX:975, likely the INBOX:973/974 owner after updating to 1.0.71 (Windows 10 Home 19045, COM3): read and write of a saved image both stop at the handshake; five PROGRAMCOLOR attempts each answered only with the 16-byte echo of the command, no ACK. The new handshake and echo message work; the radio itself never answers."
+}
