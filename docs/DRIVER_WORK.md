@@ -193,6 +193,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Windows 1.0.70 COM13: PROGRAMCOLORPROU got '02 24 00 03 00 10 00 03' x2, then silence; a retry got repeated 0x2D. Likely a Bluetooth serial port or other device, not the programming cable.
   Source: `email INBOX:951/952` 
 
+### UV-3R
+
+- **#w-20261125-e5ec bug | fix_committed | normal:** Silent radio reports a Python 'cannot access local variable e' error
+  Stock uv3r_prep re-raises e after the except block; Python 3 has cleared it. Seen in INBOX:985 while trying models.
+  Source: `email` INBOX:985
+
 ### UV-5G Mini
 
 - **#32 maintenance | experimental | normal:** Current driver status
@@ -216,6 +222,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261124-0d1e bug | awaiting_user | normal:** macOS 1.0.68: FTDI cable, no reply to any UV-5R magic
   All wake-up/ident commands got zero bytes back; cable seating or port. Sent plug/volume/port/update steps
   Source: `email` INBOX:959
+- **#w-20261125-6f0d bug | fix_committed | normal:** Read stops at settings block 0x1EC0 after the channels (radio refuses the jump back)
+  1.0.73 macOS. 50 BB FF 20 12 07 25 handshake, ident AA 30 76 04 00 05 20 DD. Version reads and channels 0x0000-0x17C0 answered; 0x1EC0 after the channels got no reply. Same as UV-5R, BF-F8HP, UV-5RX3. UV-5RX CPS never reads the settings block after the channels. Fix: read the settings block before the channels.
+  Source: `email` INBOX:985
 
 ### UV-5R Mini
 
