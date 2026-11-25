@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-24
+Last updated: 2026-11-25
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -151,6 +151,20 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.73` is live from source commit `5e734229` as a universal,
+  signed, and notarized DMG. It adds the experimental Ferrite RT-950 Pro
+  link-protocol driver and web profile, completes Ferrite empty-read and zone
+  ranges, preserves driver extras it cannot decode for safe repair, and
+  carries the corrupt Baofeng tone, 5RX S-CODE, refused-channel progress,
+  FT-60, sibling-model, AnyTone USB, XWayland, PMR446, TH-D7G, and UV-5R Mini
+  work. Verification: analyzer clean; 254 Flutter tests; 654 Python tests
+  with two fixture-dependent skips; embedded version `1.0.73` / `73`; arm64
+  and x86_64 Python `3.13.15`; CHIRP
+  `21e42e4518c167548af90ed7f9edf75e516c491a`; 274 driver modules; catalog
+  `list-models` returned 608 models across 62 vendors; strict codesigning
+  and Gatekeeper accepted; mounted-app launch smoke test passed; and matching
+  local, server, and public SHA-256. Notarization submission:
+  `83014a33-40e8-4065-abba-40cf4b8585f6`.
 - macOS `1.0.72` is live from source commit `d502504e` as a universal,
   signed, and notarized DMG. It adds the experimental Ferrite protocol driver
   for the RT-950 Pro, a PMR446 frequency reference, FT-60 clone-entry
@@ -1412,6 +1426,7 @@ release requirements.
 - Windows `1.0.62` artifact source commit: `d9b31864`
 - Windows `1.0.61` artifact source commit: `0e701b16`
 - Windows `1.0.60` artifact source commit: `488564b4`
+- macOS `1.0.73` artifact source commit: `5e734229`
 - macOS `1.0.72` artifact source commit: `d502504e`
 - macOS `1.0.71` artifact source commit: `876c765b`
 - macOS `1.0.70` artifact source commit: `b6fbc544`
@@ -1436,7 +1451,7 @@ release requirements.
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.74+74`
+- Checked-out source version: `1.0.75+75`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1450,7 +1465,7 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.72 |
+| macOS | 1.0.73 |
 | Windows | 1.0.70 |
 | Linux | 1.0.74 |
 
@@ -1673,6 +1688,25 @@ Linux `1.0.65` artifacts:
 - Public HTTP checks returned `200 OK`
 - Server checksums, sizes, and permissions matched the local artifacts
 - Linux platform manifest reports `1.0.65`
+
+macOS `1.0.73` artifact:
+
+- URL: `https://newchirp.net/downloads/NewChirp-1.0.73.dmg`
+- Version/build: `1.0.73` / `73`
+- Architectures: `arm64` and `x86_64`
+- SHA-256:
+  `cca9e2081060d0c389ed40e0c400a696bb7f76b13037929422d733321aa1659f`
+- Size: `87,684,759` bytes
+- Built from `5e734229`
+- Notarization submission:
+  `83014a33-40e8-4065-abba-40cf4b8585f6`
+- Apple notarization accepted and the stapled ticket validates
+- Mounted-app launch smoke test passed
+- Bundle contains the Ferrite RT-950 Pro driver, Ferrite range and repair
+  fixes, corrupt Baofeng tone handling, 5RX S-CODE handling, refused-channel
+  progress, FT-60 and sibling-model guidance, AnyTone USB guidance, XWayland,
+  PMR446, TH-D7G, and UV-5R Mini changes
+- Local, server, and public-download checksums matched the final stapled DMG
 
 macOS `1.0.72` artifact:
 
