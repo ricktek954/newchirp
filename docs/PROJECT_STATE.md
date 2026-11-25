@@ -8,6 +8,17 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.75` is live from source commit `79b693a5`. It fixes RT-950 Pro
+  Ferrite zone reads by ending `READ_MANY` cleanly when the radio returns an
+  empty non-advancing answer, and preserves undecodable Baofeng 5RX S-CODE
+  values for the repair step instead of stopping the write. Verification:
+  analyzer clean; all 254 Flutter tests with the bundled Python 3.13 runtime;
+  654 bundled Python tests with two fixture-dependent skips; Ubuntu 20.04 ABI
+  maximum GLIBC `2.18`; DEB, RPM, and Pacman metadata plus embedded version
+  `1.0.75`; DEB and AppImage Xvfb smoke tests; AppImage host launches under
+  Wayland and X11; package payloads include both fixes and omit
+  GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the
+  Linux platform manifest reports `1.0.75`.
 - **Linux Wayland freeze follow-up (2026-11-24):** the simulated write test
   in `docs/LINUX_WAYLAND_FREEZE_TEST.md` did not reproduce the freeze on the
   available Hyprland 0.56.2 Wayland host. Foreground, switch-away,
@@ -1443,6 +1454,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.75` artifact source commit: `79b693a5`
 - Linux `1.0.74` artifact source commit: `76519b2d`
 - Linux `1.0.73` artifact source commit: `b8dd8004`
 - Linux `1.0.72` artifact source commit: `6704d9bb`
@@ -1467,7 +1479,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.73 |
 | Windows | 1.0.70 |
-| Linux | 1.0.74 |
+| Linux | 1.0.75 |
+
+Linux `1.0.75` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.75.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.75.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.75.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.75.pkg.tar.zst`
+- DEB: `48,921,708` bytes, SHA-256
+  `05fb23dda2e7de0bee2c1166b2bea1c61590d0439ea714a9bf6628ac06d2b8b9`
+- RPM: `48,997,928` bytes, SHA-256
+  `7fa461d62bd8d4676a712abcf9ddb7a5933ba67258947c035bd8b96bbe66ee46`
+- AppImage: `49,198,272` bytes, SHA-256
+  `31ea654a6247256626d95140cbdc22ddf5c9428a10fe5aeed7e7c08085b9029d`
+- Pacman: `47,870,070` bytes, SHA-256
+  `49b6a837b90cf2b33899d0db2ab866e9a6a672cfee3ea807d039eb6599c72495`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.75`
 
 Linux `1.0.74` artifacts:
 

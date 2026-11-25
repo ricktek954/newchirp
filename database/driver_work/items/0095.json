@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:783",
-  "status": "fix_committed",
+  "status": "released",
   "summary": "macOS 1.0.58 CSV write: 'Failed to load pttid value 0: Value for 255 is out of range' then 'Could not prepare channel 7 (GMRS-21): None is not in list'. A programmed slot held PTT-ID 0xFF; the uninitialized extra made stock set_memory fail and blocked the whole upload.",
   "title": "Upload fails on a slot with an out-of-range extra (PTT-ID 0xFF)",
   "uid": "95"

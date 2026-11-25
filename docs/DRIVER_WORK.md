@@ -57,7 +57,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### 5RM
 
-- **#95 bug | fix_committed | high:** Upload fails on a slot with an out-of-range extra (PTT-ID 0xFF)
+- **#95 bug | released | high:** Upload fails on a slot with an out-of-range extra (PTT-ID 0xFF)
   macOS 1.0.58 CSV write: 'Failed to load pttid value 0: Value for 255 is out of range' then 'Could not prepare channel 7 (GMRS-21): None is not in list'. A programmed slot held PTT-ID 0xFF; the uninitialized extra made stock set_memory fail and blocked the whole upload.
   Source: `email` INBOX:783
 - **#96 bug | awaiting_user | normal:** Every action fails instantly with 'Reported error: 1' on macOS 12
@@ -562,6 +562,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261124-a1bc release | released | normal:** Linux 1.0.74 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 76519b2d. The release adds the experimental Ferrite RT-950 Pro link-protocol driver and web profile; renders corrupt Baofeng tone words as no tone; names the refused channel and write progress for live-radio refusals; adds FT-60 clone/cable guidance, sibling-model selection, and AnyTone USB guidance; prefers XWayland on Linux; adds the PMR446 frequency reference; and includes TH-D7G, UV-5R Mini, AT-D878UVII Plus, 5RX, and Wayland follow-up fixes. Verification: flutter analyze passed; all 254 Flutter tests passed with the bundled Python 3.13 runtime; 653 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.74 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include Ferrite, Baofeng tone handling, PMR446, and bridge updates and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.74. Package SHA-256 values: c07aade70cc9efb115336f5a09e78a4ed3b64bfa90feec8f2b5c07d986ddbe87, 06e3fa3c80c5ce7eb2fcde11dd5645cdfa53c1ebae087c85e3917597448008d5, 02658d6459f53b684bbe42f9b102980884e8cc1b99d64e4071c5a072f7c67978, and 294483a0c8f92ca825332cec669b6c21db239294b7f60e56ffadef931e2163a6.
   Source: `release` desktop:76519b2d
+- **#w-20261125-d644 release | released | normal:** Linux 1.0.75 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit 79b693a5. The release fixes RT-950 Pro Ferrite zone reads by ending READ_MANY cleanly when the radio returns an empty non-advancing answer, and preserves an undecodable Baofeng 5RX S-CODE value for the repair step instead of stopping the write. Verification: flutter analyze passed; all 254 Flutter tests passed with the bundled Python 3.13 runtime; 654 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.75 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include both fixes and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.75. Package SHA-256 values: 05fb23dda2e7de0bee2c1166b2bea1c61590d0439ea714a9bf6628ac06d2b8b9, 7fa461d62bd8d4676a712abcf9ddb7a5933ba67258947c035bd8b96bbe66ee46, 31ea654a6247256626d95140cbdc22ddf5c9428a10fe5aeed7e7c08085b9029d, and 49b6a837b90cf2b33899d0db2ab866e9a6a672cfee3ea807d039eb6599c72495.
+  Source: `release` desktop:79b693a5
 
 ### macOS desktop
 
