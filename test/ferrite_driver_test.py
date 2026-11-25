@@ -105,7 +105,12 @@ class FakeFerrite:
         elif kind == self.d.READ_MANY:
             what, first, count = struct.unpack("<BHH", payload)
             table = self.channels if what == 2 else self.zones
-            end = min(first + count, 4000 if what == 2 else 512)
+            # Appendix G: the count is cut at the last index. Zones are
+            # numbered densely ("the next one creates"), so the range ends
+            # after the last zone held and an ask past it answers next ==
+            # first with no records (2026-11-25 RT-950 Pro report).
+            last = 4000 if what == 2 else (max(table) + 1 if table else 0)
+            end = max(first, min(first + count, last))
             body, index = b"", first
             while index < end:
                 record = table.get(index)

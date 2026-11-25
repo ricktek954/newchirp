@@ -335,6 +335,11 @@ class FerriteLink:
                     raise FerriteError("Ferrite record list is cut short")
                 records[index] = bytes(record)
                 body = body[3 + length:]
+            if following == first and not rest[2:]:
+                # The range is cut at the last index held (appendix G
+                # READ_MANY: zones are numbered densely), so an empty answer
+                # that stays put means there is nothing more to read.
+                break
             if following <= first:
                 raise FerriteError("Ferrite READ_MANY did not advance")
             first = following
