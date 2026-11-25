@@ -53,6 +53,12 @@ When adding or changing a NewChirp-maintained radio driver, update
 read/write policy, evidence hashes, physical-radio validation, and the next
 milestone. Do not infer hardware-tested or released status from offline tests.
 
+Website deploys must never delete, move or overwrite the server-only
+secrets in `/opt/newchirp/.env.*` (myGMRS, DeepSeek moderation, RepeaterBook,
+App Store). Run `bash /opt/newchirp/scripts/check-production-env.sh` on the
+server before and after every deploy or restart, and follow "Production
+secrets" in `/Volumes/RICKEXT/web/newchirpweb/AGENTS.md`.
+
 Every new radio driver must also be exposed on the website before handoff:
 
 1. Add the exact radio to the local site's experimental catalog by updating
