@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 12:23:50",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "web:2e800b4",
+  "item": "w-20261125-6f0d",
+  "occurred_at": "2026-11-25",
+  "summary": "Web Programmer classic UV-5R read uses the same order; fake-radio test fails without it"
+}
