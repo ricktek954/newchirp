@@ -490,10 +490,10 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-d293 enhancement | fix_committed | normal:** Write settings to radio disabled after a write
   Owner programming several identical radios had to edit and revert a setting to re-enable the button. Button now stays enabled; with no edits it confirms writing the whole snapshot again.
   Source: `email:INBOX:931` <001f01dd7b6e$3f4d9150$bde8b3f0$@gmail.com>
-- **#w-20261124-8c3d enhancement | fix_committed | normal:** Write greyed out for a channel file opened before reading the radio; status text did not explain
+- **#w-20261124-8c3d enhancement | released | normal:** Write greyed out for a channel file opened before reading the radio; status text did not explain
   Read-first rule kept (avoids writing an old stored image's settings); status text now says to read the radio first
   Source: `email` INBOX:958
-- **#w-20261124-970b enhancement | fix_committed | normal:** PMR446 (Europe) table in the Frequency Reference
+- **#w-20261124-970b enhancement | released | normal:** PMR446 (Europe) table in the Frequency Reference
   16 analogue channels with ECC/DEC/(15)05 licence-free conditions and printable PDF
   Source: `email` INBOX:960
 

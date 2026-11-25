@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 08:40:47",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:d502504e",
+  "item": "w-20261124-c2eb",
+  "occurred_at": "2026-11-25",
+  "summary": "Fix shipped in macOS/Windows 1.0.72 and Linux 1.0.74"
+}

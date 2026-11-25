@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 08:40:48",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:76519b2d",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-25",
+  "summary": "XWayland preference shipped in Linux 1.0.74 (first Linux build with it; 1.0.73 predated e73b5584)"
+}
