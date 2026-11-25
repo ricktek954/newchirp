@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-25 08:59:34",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179559714628.10074.16957975637490049420@newchirp.net>",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-25",
+  "summary": "Told owner Linux 1.0.74 uses X11 automatically (drop GDK_BACKEND, NEWCHIRP_WAYLAND=1 opts out); asked for one write to confirm, plus last good version and pacman log"
+}
