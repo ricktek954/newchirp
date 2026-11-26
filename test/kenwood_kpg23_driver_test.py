@@ -242,12 +242,17 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         for radio_class in (self.tk350, self.tk359):
             prompts = radio_class.get_prompts()
             self.assertIn("experimental", prompts.experimental.lower())
-            self.assertIn("read-only", prompts.experimental.lower())
             radio = radio_class(FakeKpgSerial(_synthetic_image()))
-            # Writes stay gated until a physical write/read-back passes.
-            self.assertTrue(radio_class.NEWCHIRP_WRITE_DISABLED)
-            with self.assertRaisesRegex(Exception, "read-only"):
-                radio.sync_out()
+            if radio_class.MODEL == "TK-359":
+                # Writes stay gated until a physical write/read-back passes.
+                self.assertTrue(radio_class.NEWCHIRP_WRITE_DISABLED)
+                with self.assertRaisesRegex(Exception, "read-only"):
+                    radio.sync_out()
+            else:
+                # TK-350: enabled for the controlled owner test.
+                self.assertFalse(radio_class.NEWCHIRP_WRITE_DISABLED)
+                self.assertIn("backup", prompts.experimental)
+                self.assertIn("off and on", prompts.pre_upload)
 
     def test_tk350_channel_layout_and_frequency_decode(self):
         radio = self._radio_from_image(self.tk350, _synthetic_image())
@@ -535,6 +540,23 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         radio._mmap = self.memmap.MemoryMapBytes(self._tk350_image())
         with mock.patch("time.sleep", return_value=None):
             with self.assertRaisesRegex(Exception, "P3504.*P3501"):
+                radio.sync_out()
+        self.assertEqual(serial.written, [])
+
+    def test_tk350_write_waits_for_the_identity_ack(self):
+        class NoIdentityAck(FakeKpgSerial):
+            def write(self, data):
+                if bytes(data) == b"\x06":
+                    self.writes.append(bytes(data))
+                    return 1
+                return super().write(data)
+
+        serial = NoIdentityAck(self._tk350_image(), identity=b"P3501\x01")
+        radio = self._writable(self.tk350(serial))
+        radio._mmap = self.memmap.MemoryMapBytes(self._tk350_image())
+        with mock.patch.object(self.driver, "WRITE_REPLY_TIMEOUT", 0.05), \
+                mock.patch("time.sleep", return_value=None):
+            with self.assertRaisesRegex(Exception, "identity"):
                 radio.sync_out()
         self.assertEqual(serial.written, [])
 

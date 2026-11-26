@@ -174,6 +174,7 @@ def _open_session(radio):
                                timeout=0.2)
     except errors.RadioNoResponse:
         response = b""
+    radio._identity_ack = response
     if response not in (b"", ACK):
         LOG.warning(
             "Kenwood %s returned %s after the identity ACK; continuing "
@@ -473,6 +474,10 @@ def _kpg23_upload(radio):
     status.max = len(blocks)
     try:
         identity = _open_session(radio)
+        if radio._identity_ack != ACK:
+            # KPG-23D waits for this 06 before the first W frame; a late one
+            # must not be mistaken for block 0xF000's acknowledgement.
+            _expect_ack(radio, "acknowledging the radio identity")
         # KPG-23D compares the identity with the file's model/band record
         # and asks before overwriting a different one; NewChirp refuses.
         if identity[:5] != expected:
@@ -614,14 +619,26 @@ class _KenwoodKPG23Base(
     @classmethod
     def get_prompts(cls):
         prompts = chirp_common.RadioPrompts()
-        prompts.experimental = (
-            "%s support is experimental and read-only. NewChirp recovered "
-            "the KPG-family serial session and channel records from the OEM "
-            "programmer and supplied samples. The complete raw image is "
-            "kept, but physical read-back and the upload map have not been "
-            "validated. Uploads are disabled."
-            % cls.MODEL
-        )
+        if getattr(cls, "NEWCHIRP_WRITE_DISABLED", False):
+            prompts.experimental = (
+                "%s support is experimental and read-only. NewChirp "
+                "recovered the serial session and channel records from the "
+                "OEM programmer; writing stays off until a write has been "
+                "confirmed on a radio." % cls.MODEL)
+        else:
+            prompts.experimental = (
+                "%s support is experimental. Reads are confirmed on an "
+                "owner's radio; writing follows Kenwood's own programmer "
+                "exactly but has not yet been confirmed on a radio. Only "
+                "existing channels can be edited. Save a backup image before "
+                "writing." % cls.MODEL)
+            prompts.pre_upload = (
+                "1. Read this radio first and save the image as a backup.\n"
+                "2. Switch the radio off and on (it stays in programming "
+                "mode after a read), with the cable connected.\n"
+                "3. Close the OEM CPS and any other program using the port.\n"
+                "4. Click OK and leave the radio powered on until the write "
+                "finishes.")
         prompts.info = (
             "Use a Kenwood KPG-8 or KPG-22 compatible programming cable. "
             "Close the OEM CPS before starting the NewChirp read."
@@ -630,8 +647,8 @@ class _KenwoodKPG23Base(
             "1. Connect the programming cable and power the radio on.\n"
             "2. Close the OEM CPS and any other program using the port.\n"
             "3. Click OK and leave the radio powered on.\n\n"
-            "Save the complete image as a backup. This driver does not "
-            "write to the radio."
+            "Save the complete image as a backup. Switch the radio off and "
+            "on before reading it again."
         )
         return prompts
 
@@ -805,9 +822,11 @@ class KenwoodTK350Radio(_KenwoodKPG23Base):
     """Kenwood TK-350 stored by the Kenwood KPG-23D programmer."""
 
     MODEL = "TK-350"
-    # Read-only until a physical write/read-back is validated; the app
-    # explains this before a write starts (see chirp_bridge model-info).
-    NEWCHIRP_WRITE_DISABLED = True
+    # Writing enabled 2026-11-26 for a controlled owner test: reads are
+    # confirmed on hardware (116/120 channels match the owner's UK plan) and
+    # the write follows the traced KPG-23D session; graduate after a
+    # physical write/read-back passes.
+    NEWCHIRP_WRITE_DISABLED = False
 
     # KPG-23D 1.01 (KPG23D.EXE SHA-256 32973eac...8248) traced in QEMU with
     # serial_write/serial_read events against a simulated radio, TK-350

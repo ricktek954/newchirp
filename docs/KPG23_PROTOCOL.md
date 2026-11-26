@@ -177,9 +177,11 @@ block, range from two bytes of the CPS's channel table), then 0x5380, then
   TK-359: RX/TX frequencies only; renames and TX off are refused until the
   name length and TX-off encoding are confirmed. Every encode must decode
   back to the same value.
-- `NEWCHIRP_WRITE_DISABLED` stays set on both models until the channel
-  decode (including the TK-359 TX field) is confirmed against an owner's
-  saved image and one controlled write/read-back passes.
+- TK-350 writing is enabled (2026-11-26) after the owner's read matched his
+  channel plan; it graduates after one controlled write/read-back. The
+  write waits for the identity `06` (as KPG-23D does) so a late reply cannot
+  shift the block acknowledgements. `NEWCHIRP_WRITE_DISABLED` stays set on
+  the TK-359 until its TX field is confirmed.
 
 ## Memory size and records
 

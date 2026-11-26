@@ -47,7 +47,7 @@ Last updated: 2026-11-20
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
-| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes; full 28-block read completed on an owner's TK-350 (1.0.74, 2026-11-26); channel decode fixed afterwards, not yet confirmed on hardware | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes; owner's TK-350 reads 120 channels, 116 matching his UK 70 cm plan exactly (2026-11-26) | Experimental: traced KPG-23D write, existing channels only, awaiting a physical write/read-back | Hidden | Experimental |
 | Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N2, BIOS INT 14h lines, `PROGRAM`, 8-byte identity checked like the CPS, `S`/`X` blocks at 0x03AC00+offset with sum8 and NAK retry, `Z` + one fill byte for uniform blocks, `E` exit (KPG-32D 1.00 QEMU trace 2026-11-26) | Owner's TK-359 handshakes and answers with `Z` fill blocks (2026-11-26); `Z` handling and 32-byte records at 0x3400 added afterwards, not yet confirmed on hardware | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8N2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
@@ -1975,7 +1975,7 @@ Last updated: 2026-11-20
   - KPG-32D `SAMPLE.FDT`:
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
 - Driver SHA-256:
-  `26592d6f1d15054c0ee7dcc27d4e8cc0ff475278e6570a714c02bc63ef37c35c`
+  `f1f16fc8ba302b5408d986c53f80a7ac4216c79461a8a1f1b200ec08c923a6f3`
 - Ground-truth files saved by the OEM programmers in QEMU with known
   frequencies typed in (2026-11-26; hashes in `docs/KPG23_PROTOCOL.md`):
   `sample.u1f` (TK-350 450-470), `sample.u4f` (TK-350 400-430),
@@ -2024,7 +2024,9 @@ Last updated: 2026-11-20
   implemented (TK-350: 26 `W` blocks, never 0xFC00-0xFCFF, identity must
   match the image's `P350n`; TK-359: only blocks changed since the read, `Z`
   or `X` + `03` commit). Offline-tested against simulators of the traced
-  behaviour; still gated by `NEWCHIRP_WRITE_DISABLED`.
+  behaviour. TK-350 writing enabled 2026-11-26 (desktop and Web
+  Programmer) for a controlled owner test: edit one existing channel, write,
+  power-cycle, read back. The TK-359 stays gated.
 - Known limitations: TK-350 5 kHz-step channels are unverified (all KPG-23D
   UHF ground truth is 6.25 kHz); tones, power, scan and settings are not
   decoded; writing is disabled.
