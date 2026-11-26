@@ -201,6 +201,12 @@ the CPS's own sample files.
 - 160 channel records of 16 bytes from offset 0; name: four ASCII bytes at
   record offset `0x08` (KPG-23D pads with spaces on both sides, e.g. `  1 `).
 - Erased slot: RX/TX words `FFFF` (option byte 13 stays `E0`).
+- QT tones: little-endian words at record `+4` (Decode, receive) and `+6`
+  (Encode, transmit). Bits 15-14 set = CTCSS, bits 13-0 = Hz x 10
+  (`e8 c3` 100.0, `55 c4` 110.9, `07 c7` 179.9 in the KPG-23D samples);
+  `FFFF` = none. DQT encoding not yet identified. The owner's 2026-11-26
+  channel list (UK repeaters with 67.0-118.8 Hz access tones) is the check
+  for the next read.
 - Model/band record at `0x0D00`: `P350` + band digit — `1` 450-470, `2`
   470-490, `3` 490-520, `4` 400-430 MHz (TK-250 files carry `P250`).
 - Test frequencies (Edit > Test frequency): six RX/TX word pairs at

@@ -590,6 +590,24 @@ def _channel_record(image, number):
     return bytes(image[offset:offset + CHANNEL_SIZE])
 
 
+def _kpg23_tone(raw):
+    """QT tone word (little-endian) at record +4 (Decode) / +6 (Encode).
+
+    KPG-23D-saved values: e8 c3 = 100.0 Hz (SAMPLE.V1B), 55 c4 = 110.9 Hz
+    and 07 c7 = 179.9 Hz (VARFF.V1B), b8 cb = 300.0 (a bogus entry the CPS
+    showed as 300.0): bits 15-14 set mark CTCSS, bits 13-0 are Hz x 10.
+    FFFF is no tone. Anything else (DQT) is not decoded yet.
+    """
+    word = raw[0] | (raw[1] << 8)
+    if word == 0xFFFF:
+        return None
+    if word & 0xC000 == 0xC000:
+        tone = (word & 0x3FFF) / 10.0
+        if tone in chirp_common.TONES:
+            return tone
+    return False
+
+
 def _decode_name(raw):
     value = raw.split(b"\xff", 1)[0].split(b"\x00", 1)[0]
     value = value.strip(b" ")
@@ -671,6 +689,12 @@ class _KenwoodKPG23Base(
         rf.valid_modes = list(VALID_MODES)
         rf.valid_name_length = 4
         rf.valid_tmodes = [""]
+        if self._protocol == "kpg23":
+            # TK-350 QT tones are decoded (CTCSS only; see _kpg23_tone).
+            rf.valid_tmodes = ["", "Tone", "TSQL", "Cross"]
+            rf.valid_cross_modes = ["Tone->Tone", "->Tone"]
+            rf.has_ctone = True
+            rf.has_cross = True
         rf.valid_tuning_steps = []
         return rf
 
@@ -750,6 +774,7 @@ class _KenwoodKPG23Base(
             )
             return memory
 
+        self._decode_tones(memory, record)
         if tx_word == 0xFFFF:
             # KPG-23D shows these channels with an empty Transmit column.
             memory.duplex = "off"
@@ -771,6 +796,30 @@ class _KenwoodKPG23Base(
         memory.name = _decode_name(record[8:12])
         memory.mode = "NFM"
         return memory
+
+    @staticmethod
+    def _decode_tones(memory, record):
+        decode = _kpg23_tone(record[4:6])   # receive (QT decode)
+        encode = _kpg23_tone(record[6:8])   # transmit (QT encode)
+        if decode is False or encode is False:
+            LOG.info("TK-350 channel %i has a QT/DQT value NewChirp does "
+                     "not decode yet (%s)", memory.number, record[4:8].hex())
+            decode = None if decode is False else decode
+            encode = None if encode is False else encode
+        if encode and decode and encode == decode:
+            memory.tmode = "TSQL"
+            memory.ctone = memory.rtone = encode
+        elif encode and decode:
+            memory.tmode = "Cross"
+            memory.cross_mode = "Tone->Tone"
+            memory.rtone, memory.ctone = encode, decode
+        elif encode:
+            memory.tmode = "Tone"
+            memory.rtone = encode
+        elif decode:
+            memory.tmode = "Cross"
+            memory.cross_mode = "->Tone"
+            memory.ctone = decode
 
     def _check_edit(self, memory):
         """Only existing channels can be edited until more is traced."""
@@ -795,7 +844,16 @@ class _KenwoodKPG23Base(
         return memory.freq
 
     def set_memory(self, memory):
-        self._check_edit(memory)
+        current = self._check_edit(memory)
+        if (memory.tmode, memory.rtone if memory.tmode else None,
+                memory.ctone if memory.tmode in ("TSQL", "Cross") else None,
+                memory.cross_mode if memory.tmode == "Cross" else None) != (
+                current.tmode, current.rtone if current.tmode else None,
+                current.ctone if current.tmode in ("TSQL", "Cross") else None,
+                current.cross_mode if current.tmode == "Cross" else None):
+            raise errors.RadioError(
+                "Changing TK-350 tones is not supported yet; the channel's "
+                "existing tones are kept when you change its frequency.")
         for frequency in (memory.freq, self._tx_frequency(memory)):
             if frequency is not None and frequency % FREQUENCY_STEP:
                 raise errors.RadioError(

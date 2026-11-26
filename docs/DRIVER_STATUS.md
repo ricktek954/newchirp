@@ -1975,7 +1975,7 @@ Last updated: 2026-11-20
   - KPG-32D `SAMPLE.FDT`:
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
 - Driver SHA-256:
-  `f1f16fc8ba302b5408d986c53f80a7ac4216c79461a8a1f1b200ec08c923a6f3`
+  `5e4e8da43d82cbd19db8ab6ef7b452cffb70f64a98bc146503d5a19b63ce4072`
 - Ground-truth files saved by the OEM programmers in QEMU with known
   frequencies typed in (2026-11-26; hashes in `docs/KPG23_PROTOCOL.md`):
   `sample.u1f` (TK-350 450-470), `sample.u4f` (TK-350 400-430),
@@ -2027,9 +2027,12 @@ Last updated: 2026-11-20
   behaviour. TK-350 writing enabled 2026-11-26 (desktop and Web
   Programmer) for a controlled owner test: edit one existing channel, write,
   power-cycle, read back. The TK-359 stays gated.
-- Known limitations: TK-350 5 kHz-step channels are unverified (all KPG-23D
-  UHF ground truth is 6.25 kHz); tones, power, scan and settings are not
-  decoded; writing is disabled.
+- Known limitations: TK-350 CTCSS tones are decoded (QT words at record +4
+  decode / +6 encode, 0xC000 + Hz x 10) and kept on frequency edits, but
+  tone changes, DQT, power, scan and settings are not supported; the
+  owner's channels 111-120 are marked receive-only on his paper list while
+  NewChirp shows a TX offset, so the TK-350 receive-only flag is still
+  unknown; TK-359 writing is disabled.
 - Next milestone: the owner reads both radios with the Web Programmer or the
   next release and compares the channel list with the radio; the saved
   images confirm the band record and option bytes

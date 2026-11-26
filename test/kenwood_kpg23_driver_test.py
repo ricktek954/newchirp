@@ -510,6 +510,44 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         radio.status_fn = lambda _status: None
         return radio
 
+    def test_tk350_tones_decode_from_kpg23d_values(self):
+        image = bytearray(b"\xFF" * MEM_SIZE)
+        base = bytearray(self.TK350_U1F_CH1)
+        cases = {
+            1: ("e8c3", "e8c3"),   # SAMPLE.V1B: QT 100.0 / 100.0
+            2: ("55c4", "55c4"),   # VARFF.V1B: 110.9 / 110.9
+            3: ("ffff", "02c3"),   # encode only, 77.0 (owner's ch1 list)
+            4: ("e8c3", "55c4"),   # decode 100.0, encode 110.9
+            5: ("b8cb", "ffff"),   # 300.0: not a standard tone
+        }
+        for number, (decode, encode) in cases.items():
+            record = bytearray(base)
+            record[4:6] = bytes.fromhex(decode)
+            record[6:8] = bytes.fromhex(encode)
+            record[2:4] = record[0:2]   # give it a TX word
+            image[(number - 1) * 16:number * 16] = record
+        radio = self._radio_from_image(self.tk350, image)
+        one = radio.get_memory(1)
+        self.assertEqual((one.tmode, one.ctone), ("TSQL", 100.0))
+        self.assertEqual((radio.get_memory(2).tmode, radio.get_memory(2).ctone),
+                         ("TSQL", 110.9))
+        three = radio.get_memory(3)
+        self.assertEqual((three.tmode, three.rtone), ("Tone", 77.0))
+        four = radio.get_memory(4)
+        self.assertEqual((four.tmode, four.cross_mode, four.rtone, four.ctone),
+                         ("Cross", "Tone->Tone", 110.9, 100.0))
+        self.assertEqual(radio.get_memory(5).tmode, "")
+
+        # Frequency edits keep the tone bytes; tone edits are refused.
+        three.freq = 433_025_000
+        radio.set_memory(three)
+        self.assertEqual(radio.get_mmap().get_packed()[36:40],
+                         bytes.fromhex("ffff02c3"))
+        self.assertEqual(radio.get_memory(3).rtone, 77.0)
+        three.rtone = 88.5
+        with self.assertRaisesRegex(Exception, "tones"):
+            radio.set_memory(three)
+
     def test_tk350_write_matches_kpg23d_trace(self):
         image = self._tk350_image()
         serial = FakeKpgSerial(image, identity=b"P3501\x01", strict=True)
