@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 08:05:40",
+  "details": "",
+  "event_type": "contact",
+  "external_ref": "mailbox:<179568031601.25611.10459758218779768627@newchirp.net>",
+  "item": "71",
+  "occurred_at": "2026-11-26",
+  "summary": "Told owner the cause (9600 vs the radio's 4800 baud), fix in next build and live in the Web Programmer; asked for one more read"
+}
