@@ -1,8 +1,7 @@
 # KPG-23D / KPG-32D evidence (2026-11-26)
 
 Files saved by the OEM programmers running in QEMU, with known values
-typed in, and a byte log of a KPG-32D write against
-`tools/rea/simulators/` (the predecessor of `kpg32d_radio.py`). See
+typed in, and a byte log of a KPG-32D write against a simulated radio. See
 `docs/KPG23_PROTOCOL.md`.
 
 | File | What it is |
@@ -14,5 +13,4 @@ typed in, and a byte log of a KPG-32D write against
 
 The KPG-23D write log was overwritten during a follow-up NAK test; its
 results (26 blocks, 0xFC00-0xFCFF skipped, byte-identical) are recorded in
-`docs/KPG23_PROTOCOL.md` and the driver ledger, and the run can be repeated
-with `kpg23d_radio.py sample.u1f`.
+`docs/KPG23_PROTOCOL.md` and the driver ledger.
