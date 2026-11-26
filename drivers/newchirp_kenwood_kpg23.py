@@ -64,23 +64,49 @@ def _identity_matches(identity, model):
     return bool(text)
 
 
-def _open_session(radio):
+def _set_line(pipe, name, value):
+    try:
+        setattr(pipe, name, value)
+    except (AttributeError, ValueError, OSError):
+        pass
+
+
+def _configure_port(radio):
     pipe = radio.pipe
     pipe.baudrate = radio.BAUD_RATE
     pipe.bytesize = 8
     pipe.parity = "N"
     pipe.stopbits = radio._stop_bits
     pipe.timeout = 1
-    settings = [("rtscts", False), ("xonxoff", False)]
-    if radio._lines_off:
-        # KPG-23D never writes the UART modem-control register, so DTR and
-        # RTS stay off for the whole session (2026-11-26 QEMU trace).
-        settings += [("dtr", False), ("rts", False)]
-    for name, value in settings:
-        try:
-            setattr(pipe, name, value)
-        except (AttributeError, ValueError, OSError):
-            pass
+    _set_line(pipe, "rtscts", False)
+    _set_line(pipe, "xonxoff", False)
+    if radio._bios_lines:
+        # Both OEM programmers send with PC BIOS INT 14h AH=01 and receive
+        # with AH=02. An IBM-compatible BIOS raises DTR and RTS to send a
+        # byte and leaves only DTR raised to receive.
+        _set_line(pipe, "dtr", True)
+        _set_line(pipe, "rts", False)
+
+
+def _send(radio, data):
+    """Write like the OEM's INT 14h loop: RTS only while transmitting."""
+    pipe = radio.pipe
+    if not radio._bios_lines:
+        pipe.write(data)
+        return
+    _set_line(pipe, "rts", True)
+    try:
+        pipe.write(data)
+        flush = getattr(pipe, "flush", None)
+        if flush is not None:
+            flush()
+    finally:
+        _set_line(pipe, "rts", False)
+
+
+def _open_session(radio):
+    pipe = radio.pipe
+    _configure_port(radio)
 
     reset = getattr(pipe, "reset_input_buffer", None)
     if reset is not None:
@@ -89,7 +115,7 @@ def _open_session(radio):
     last_error = None
     identity = None
     for attempt in range(1, IDENTITY_ATTEMPTS + 1):
-        pipe.write(b"\x02")
+        _send(radio, b"\x02")
         try:
             identity = _read_exact(
                 radio,
@@ -125,7 +151,7 @@ def _open_session(radio):
 
     # KPG-23D acknowledges the identity and immediately begins addressed
     # reads.  It does not send the later NX-series checksum setup command.
-    pipe.write(ACK)
+    _send(radio, ACK)
     radio._session_open = True
     try:
         response = _read_exact(radio, 1, "acknowledging the radio identity",
@@ -160,7 +186,7 @@ def _read_exact(radio, count, context, timeout=READ_LIMIT):
 
 
 def _exchange_ack(radio, context):
-    radio.pipe.write(ACK)
+    _send(radio, ACK)
     response = _read_exact(radio, 1, context)
     if response != ACK:
         raise errors.RadioError(
@@ -173,10 +199,11 @@ def _read_block(radio, address, length):
     last_error = None
     for _attempt in range(1, 4):
         try:
-            radio.pipe.write(
+            _send(
+                radio,
                 READ_REQUEST
                 + struct.pack(">H", address)
-                + bytes((length,))
+                + bytes((length,)),
             )
             status = _read_exact(
                 radio, 1, "reading memory status at 0x%04X" % address
@@ -216,6 +243,8 @@ def _read_block(radio, address, length):
 
 
 def _download(radio):
+    if radio._protocol == "kpg32":
+        return _kpg32_download(radio)
     image = bytearray()
     try:
         identity = _open_session(radio)
@@ -243,7 +272,138 @@ def _download(radio):
             radio._session_open = False
         if getattr(radio, "_session_open", False):
             try:
-                radio.pipe.write(radio._exit_command)
+                _send(radio, radio._exit_command)
+                _read_exact(radio, 1, "leaving program mode")
+            except (errors.RadioError, OSError):
+                LOG.debug("Radio did not acknowledge mode exit")
+            finally:
+                radio._session_open = False
+    return memmap.MemoryMapBytes(bytes(image))
+
+
+# ---------------------------------------------------------------------------
+# KPG-32D (TK-259/TK-359) session, from KPG32D.EXE 1.00 (SHA-256
+# 5c1014f201b0dbb8887a4789cd6380878482c7bca109db9695f4fe570283e7fa), traced
+# in QEMU and run to "Done Reading" against a simulated radio, 2026-11-26.
+# Constants at DS:0x32CA: "PROGRAM", 02, 'S', 'X', 15, 06, 80, 'E', and
+# the INT 14h init byte E7 (9600 baud, no parity, 2 stop bits, 8 bits).
+KPG32_SYNC = b"PROGRAM"
+KPG32_READ = b"S"
+KPG32_REPLY = b"X"
+KPG32_EXIT = b"E"
+KPG32_ADDRESS_BASE = 0x03AC00
+KPG32_SKIP = range(0x0400, 0x0500)   # never requested by KPG-32D
+
+
+def _kpg32_address(offset):
+    # 03, (high + 0xAC) without carry, low  (0x162A0: ed51 = hi + 0xAC)
+    return bytes((0x03, ((offset >> 8) + 0xAC) & 0xFF, offset & 0xFF))
+
+
+def _kpg32_identity_ok(identity):
+    """0x15F1F: the 8 bytes are compared back to front."""
+    return (
+        len(identity) == 8
+        and identity[7:8] == b"P"
+        and identity[6:7] == b"0"
+        and identity[5:6] in (b"2", b"3")
+        and identity[4:5] == b"5"
+        and identity[3:4] == b"9"
+        and identity[2:3] in (b"1", b"2")
+        and identity[1] == 0x81
+    )
+
+
+def _kpg32_open(radio):
+    _configure_port(radio)
+    reset = getattr(radio.pipe, "reset_input_buffer", None)
+    last_error = None
+    for attempt in range(1, IDENTITY_ATTEMPTS + 1):
+        if reset is not None:
+            reset()
+        try:
+            _send(radio, KPG32_SYNC)
+            if _read_exact(radio, 1, "entering program mode") != ACK:
+                raise errors.RadioError("Radio refused program mode")
+            _send(radio, b"\x02")
+            identity = _read_exact(radio, 8, "reading the radio identity")
+            break
+        except errors.RadioError as exc:
+            last_error = exc
+            LOG.warning("Kenwood %s handshake attempt %i/%i failed: %s",
+                        radio.MODEL, attempt, IDENTITY_ATTEMPTS, exc)
+            time.sleep(0.15)
+    else:
+        raise errors.RadioNoResponse(
+            "Kenwood %s returned no identity after %i attempts; last result: %s"
+            % (radio.MODEL, IDENTITY_ATTEMPTS, last_error))
+    radio._session_open = True
+    if not _kpg32_identity_ok(identity):
+        _send(radio, NAK)
+        raise errors.RadioError(
+            "Connected radio is not a TK-259/TK-359 (KPG-32D) radio; "
+            "identity %s" % identity.hex(" "))
+    model = "TK-%s59" % identity[5:6].decode("ascii")
+    if model != radio.MODEL:
+        _send(radio, NAK)
+        raise errors.RadioError(
+            "Connected radio identifies as a %s, not a %s" % (model, radio.MODEL))
+    _exchange_ack(radio, "the radio identity")
+    return identity
+
+
+def _kpg32_read_block(radio, offset, length):
+    address = _kpg32_address(offset)
+    expected = KPG32_REPLY + address + bytes((length,))
+    last_error = None
+    for _attempt in range(3):
+        try:
+            _send(radio, KPG32_READ + address + bytes((length,)))
+            header = _read_exact(radio, 5, "reading the block header at 0x%04X" % offset)
+            if header != expected:
+                raise errors.RadioError(
+                    "Unexpected block header %s at 0x%04X" % (header.hex(" "), offset))
+            data = _read_exact(radio, length + 1,
+                               "reading memory at 0x%04X" % offset, timeout=3)
+            payload, checksum = data[:-1], data[-1]
+            if sum(payload) & 0xFF != checksum:
+                # 0x16384: NAK, the radio answers ACK, then the CPS retries.
+                _send(radio, NAK)
+                _read_exact(radio, 1, "acknowledging a checksum retry")
+                raise errors.RadioError("Checksum mismatch at 0x%04X" % offset)
+            _exchange_ack(radio, "memory block 0x%04X" % offset)
+            return payload
+        except errors.RadioError as exc:
+            last_error = exc
+            LOG.warning("KPG-32D block 0x%04X failed: %s", offset, exc)
+            reset = getattr(radio.pipe, "reset_input_buffer", None)
+            if reset is not None:
+                reset()
+            time.sleep(0.15)
+    raise errors.RadioNoResponse(
+        "Radio did not return memory at 0x%04X" % offset) from last_error
+
+
+def _kpg32_download(radio):
+    image = bytearray(b"\xff" * radio._memsize)
+    offsets = [offset for offset in range(0, radio._memsize, BLOCK_SIZE)
+               if offset not in KPG32_SKIP]
+    try:
+        _kpg32_open(radio)
+        status = chirp_common.Status()
+        status.msg = "Cloning from %s" % radio.MODEL
+        status.max = len(offsets)
+        for index, offset in enumerate(offsets, 1):
+            block = _kpg32_read_block(radio, offset, BLOCK_SIZE)
+            end = min(offset + BLOCK_SIZE, radio._memsize)
+            image[offset:end] = block[:end - offset]
+            status.cur = index
+            if radio.status_fn:
+                radio.status_fn(status)
+    finally:
+        if getattr(radio, "_session_open", False):
+            try:
+                _send(radio, KPG32_EXIT)
                 _read_exact(radio, 1, "leaving program mode")
             except (errors.RadioError, OSError):
                 LOG.debug("Radio did not acknowledge mode exit")
@@ -276,8 +436,11 @@ class _KenwoodKPG23Base(
 ):
     VENDOR = "Kenwood"
     BAUD_RATE = 9600
+    WANTS_DTR = True
+    WANTS_RTS = False
+    _protocol = "kpg23"
     _stop_bits = 1
-    _lines_off = False
+    _bios_lines = True
     _identity_length = 8
     _identity_checked = True
     _fill_reply = True
@@ -427,15 +590,13 @@ class KenwoodTK350Radio(_KenwoodKPG23Base):
     # KPG-23D 1.01 (KPG23D.EXE SHA-256 32973eac...8248) traced in QEMU with
     # serial_write/serial_read events against a simulated radio, TK-350
     # 160ch UHF selected (2026-11-26): divisor 0x18 = 4800 baud, LCR 0x07 =
-    # 8N2, no write to the modem-control register (DTR and RTS off), 0x02
-    # answered by a 6-byte identity that is not checked, ACK 06/06, 28 reads
-    # of R <hi> <lo> 80 from 0xF000 answered W <hi> <lo> 80 + 128 bytes with
-    # ACK 06/06 after each, and no exit command. A Z reply fails the read.
+    # 8N2, 0x02 answered by a 6-byte identity that is not checked, ACK
+    # 06/06, 28 reads of R <hi> <lo> 80 from 0xF000 answered W <hi> <lo> 80
+    # + 128 bytes with ACK 06/06 after each, and no exit command. A Z reply
+    # fails the read. Bytes go through BIOS INT 14h (AH=0/1/2), so on a PC
+    # DTR stays raised and RTS is raised only while sending.
     BAUD_RATE = 4800
-    WANTS_DTR = False
-    WANTS_RTS = False
     _stop_bits = 2
-    _lines_off = True
     _identity_length = 6
     _identity_checked = False
     _fill_reply = False
@@ -450,6 +611,12 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
     # Read-only until a physical write/read-back is validated; the app
     # explains this before a write starts (see chirp_bridge model-info).
     NEWCHIRP_WRITE_DISABLED = True
+    # KPG-32D 1.00: 9600 8N2 (INT 14h init E7), PROGRAM/06, 02 -> 8-byte
+    # identity checked back to front ("P0359" + band + 81), 06/06, then
+    # S 03 <hi+AC> <lo> 80 -> X <same> + 128 bytes + sum8, 06/06, E/06.
+    BAUD_RATE = 9600
+    _protocol = "kpg32"
+    _stop_bits = 2
     _memsize = 0x53FF
     _channel_count = 250
     _image_name = "KPG-32D"

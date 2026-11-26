@@ -45,10 +45,15 @@ UART set-up for every read (COM1, base 0x3F8):
 | LCR | `0x87`, then `0x07` | DLAB on; then 8 data bits, no parity, **2 stop bits** |
 | DLL/DLM | `0x18`, `0x00` | divisor 24 = **4,800 baud** |
 | IER | `0x00` | polled, no interrupts |
-| MCR | never written | **DTR and RTS stay off** |
+| MCR | never written by KPG-23D | see below |
 
-The program polls LSR for each byte and also reads MSR. The Setup menu only
-chooses COM1 or COM2; the speed is fixed.
+Bytes are sent and received through PC BIOS INT 14h (`int86(0x14)` with
+AH=00 init, AH=01 send, AH=02 receive; also AH=81). An IBM-compatible BIOS
+writes MCR=03 (DTR+RTS) to send a byte and MCR=01 (DTR only) to receive, so
+on a real PC **DTR stays raised and RTS is raised only while sending**.
+QEMU's SeaBIOS does not drive MCR in INT 14h, which is why the trace shows no
+MCR writes; do not read that as "lines off". The Setup menu only chooses
+COM1 or COM2; the speed is fixed.
 
 | Step | Host bytes | Radio response |
 | --- | --- | --- |
@@ -75,8 +80,45 @@ automatic entry into PC mode is not reliable: for a failed connection, switch
 the radio off, hold `[LMP]` and `[CALL]` while switching it on, and wait for
 `-PC-` on the display before starting the read.
 
-TK-359 (KPG-32D) has not been traced this way yet; its driver keeps the
-earlier 9600 8N1, 8-byte identity, `Z` and `E` assumptions until it is.
+## Serial session (TK-359, KPG-32D 1.00) — traced 2026-11-26
+
+Source: `KPG32D.EXE` 1.00 (07/09/1996), SHA-256
+`5c1014f201b0dbb8887a4789cd6380878482c7bca109db9695f4fe570283e7fa`, same
+QEMU method, model `TK-359`, band `UHF 450-470 MHz`, run to "Done Reading
+The Radio Data" against a simulated radio. Protocol constants sit at
+DS:0x32CA: `PROGRAM`, `02`, `S`, `X`, `15`, `06`, `80`, `E`, then the
+INT 14h init byte `E7` (9600 baud, no parity, 2 stop bits, 8 bits).
+
+- UART: 9600 baud, **8N2** (LCR `0x07`, divisor 12).
+- Lines: INT 14h send/receive as above (DTR raised, RTS only while
+  sending). KPG-32D also writes MCR itself: `(MCR & ~DTR) | RTS` on COM1 and
+  COM2 once before the session, and MCR=`01` (DTR only) after every byte.
+
+| Step | Host bytes | Radio response |
+| --- | --- | --- |
+| Wake | `PROGRAM` | `06` |
+| Identity | `02` | 8 bytes, checked back to front (0x15F1F): byte 7 `P`, 6 `0`, 5 `2`/`3` (TK-259/TK-359), 4 `5`, 3 `9`, 2 `1`/`2` (band), 1 `81`, byte 0 not checked. A mismatch is answered `15` and "Check Radio Type". |
+| Acknowledge identity | `06` | `06` |
+| Read block | `53 03 <high+0xAC> <low> 80` (24-bit address 0x03AC00 + offset, no carry into the top byte) | `58 03 <high+0xAC> <low> 80` + 128 data bytes + sum8 of the data |
+| Acknowledge block | `06` (bad checksum: `15`, radio `06`, retry up to 3) | `06` |
+| Leave | `45` (`E`) | `06` |
+
+The block list is data-driven: KPG-32D always reads 0x0000-0x03FF and
+0x0500-0x06FF, then 3 bytes at 0x3232, then the channel areas those bytes
+select, 0x3200-0x33FF, 0x3400 and 0x5380. It never reads 0x0400-0x04FF.
+With all-`FF` data it requested every block up to and past 0x5400.
+NewChirp reads every 0x80 block from 0x0000 to 0x53FF except 0x0400-0x04FF,
+a superset of the CPS reads; radio offsets equal `.FDT` file offsets (the
+served `SAMPLE.FDT` decoded to the same channels in KPG-32D).
+
+`SAMPLE.FDT` is a **TK-259 (VHF 150-174 MHz)** codeplug: KPG-32D shows
+channels 1-3 at 150.000, 151.000 and 152.000 MHz. The TK-359 (UHF) channel
+decoding in NewChirp was derived from it and is not yet validated against a
+UHF image.
+
+Earlier notes (2026-11-13) had the TK-359 on the TK-350 protocol (9600 8N1,
+bare `02`, `R`/`W` blocks from 0xF000). That was wrong; a TK-359 would not
+have answered.
 
 ## Memory size and records
 

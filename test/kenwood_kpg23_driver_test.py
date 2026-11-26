@@ -79,12 +79,14 @@ class FakeKpgSerial:
         self.xonxoff = False
         self._rx = bytearray()
         self.writes = []
+        self.rts_during_writes = []
         self.addresses = []
         self.block_lengths = []
 
     def write(self, data):
         data = bytes(data)
         self.writes.append(data)
+        self.rts_during_writes.append(self.rts)
         if self.strict and (self.baudrate, self.stopbits) != (4800, 2):
             return len(data)  # wrong framing: the radio hears nothing
         if data == b"\x02":
@@ -120,6 +122,65 @@ class FakeKpgSerial:
         pass
 
     def close(self):
+        pass
+
+
+class FakeKpg32Serial:
+    """TK-359 as KPG-32D 1.00 talks to it (2026-11-26 QEMU trace)."""
+
+    def __init__(self, image, identity=bytes.fromhex("00 81 31 39 35 33 30 50"),
+                 corrupt_first=False):
+        self.image = bytes(image)
+        self.identity = identity
+        self.corrupt_first = corrupt_first
+        self.timeout = 1
+        self.baudrate = 9600
+        self.bytesize = 8
+        self.parity = "N"
+        self.stopbits = 1
+        self.rtscts = False
+        self.xonxoff = False
+        self.dtr = False
+        self.rts = True
+        self._rx = bytearray()
+        self.writes = []
+        self.rts_during_writes = []
+        self.offsets = []
+
+    def write(self, data):
+        data = bytes(data)
+        self.writes.append(data)
+        self.rts_during_writes.append(self.rts)
+        if (self.baudrate, self.stopbits) != (9600, 2):
+            return len(data)
+        if data == b"PROGRAM":
+            self._rx.extend(b"\x06")
+        elif data == b"\x02":
+            self._rx.extend(self.identity)
+        elif data in (b"\x06", b"\x15", b"E"):
+            self._rx.extend(b"\x06")
+        elif len(data) == 5 and data[:1] == b"S":
+            offset = (((data[2] - 0xAC) & 0xFF) << 8) | data[3]
+            self.offsets.append(offset)
+            length = data[4]
+            payload = self.image[offset:offset + length].ljust(length, b"\xff")
+            checksum = sum(payload) & 0xFF
+            if self.corrupt_first:
+                checksum ^= 0xFF
+                self.corrupt_first = False
+            self._rx.extend(b"X" + data[1:] + payload + bytes((checksum,)))
+        return len(data)
+
+    def read(self, size=1):
+        count = min(size, len(self._rx))
+        data = bytes(self._rx[:count])
+        del self._rx[:count]
+        return data
+
+    def reset_input_buffer(self):
+        self._rx.clear()
+
+    def flush(self):
         pass
 
 
@@ -225,11 +286,13 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
 
         self.assertEqual((serial.baudrate, serial.bytesize, serial.parity,
                           serial.stopbits), (4800, 8, "N", 2))
-        self.assertFalse(serial.dtr)
+        # KPG-23D sends through BIOS INT 14h AH=01 and receives with AH=02:
+        # DTR stays raised, RTS is raised only while a byte is sent.
+        self.assertTrue(serial.dtr)
         self.assertFalse(serial.rts)
+        self.assertTrue(all(serial.rts_during_writes))
         self.assertEqual(self.tk350.BAUD_RATE, 4800)
-        # The bridge opens the port with these, before the session starts.
-        self.assertFalse(self.tk350.WANTS_DTR)
+        self.assertTrue(self.tk350.WANTS_DTR)
         self.assertFalse(self.tk350.WANTS_RTS)
         self.assertEqual(radio.get_mmap().get_packed(), image)
         self.assertEqual(len(serial.addresses), 28)
@@ -260,10 +323,62 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
             with self.assertRaisesRegex(Exception, "0xF000"):
                 radio.sync_in()
 
-    def test_tk359_session_is_unchanged(self):
-        self.assertEqual(self.tk359.BAUD_RATE, 9600)
-        self.assertEqual(self.tk359._identity_length, 8)
-        self.assertEqual(self.tk359._exit_command, b"E")
+    def test_tk359_session_matches_kpg32d_trace(self):
+        image = bytes((i * 7) & 0xFF for i in range(0x53FF))
+        serial = FakeKpg32Serial(image)
+        radio = self.tk359(serial)
+        radio.status_fn = lambda _status: None
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+
+        self.assertEqual((serial.baudrate, serial.stopbits), (9600, 2))
+        self.assertEqual(serial.writes[0], b"PROGRAM")
+        self.assertEqual(serial.writes[1], b"\x02")
+        self.assertEqual(serial.writes[-1], b"E")
+        self.assertTrue(all(serial.rts_during_writes))
+        self.assertTrue(serial.dtr)
+        self.assertFalse(serial.rts)
+        # Every 0x80 block except 0x0400-0x04FF, which KPG-32D never reads.
+        self.assertNotIn(0x0400, serial.offsets)
+        self.assertNotIn(0x0480, serial.offsets)
+        self.assertEqual(serial.offsets[0], 0x0000)
+        self.assertEqual(serial.offsets[-1], 0x5380)
+        got = radio.get_mmap().get_packed()
+        self.assertEqual(len(got), 0x53FF)
+        self.assertEqual(got[:0x400], image[:0x400])
+        self.assertEqual(got[0x500:], image[0x500:])
+        self.assertEqual(got[0x400:0x500], b"\xff" * 0x100)
+
+    def test_tk359_wire_address_is_base_plus_offset_without_carry(self):
+        serial = FakeKpg32Serial(bytes(0x53FF))
+        radio = self.tk359(serial)
+        radio.status_fn = lambda _status: None
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+        requests = [w for w in serial.writes if w[:1] == b"S"]
+        self.assertEqual(requests[0], bytes.fromhex("53 03 ac 00 80"))
+        self.assertEqual(requests[-1], bytes.fromhex("53 03 ff 80 80"))
+
+    def test_tk359_bad_checksum_is_naked_and_retried(self):
+        serial = FakeKpg32Serial(bytes(0x53FF), corrupt_first=True)
+        radio = self.tk359(serial)
+        radio.status_fn = lambda _status: None
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+        self.assertIn(b"\x15", serial.writes)
+        self.assertEqual(serial.offsets.count(0), 2)
+
+    def test_tk359_rejects_other_identities_like_kpg32d(self):
+        for identity, message in (
+                (bytes.fromhex("00 81 31 39 35 32 30 50"), "TK-259"),
+                (b"P359S\x00\xe2\x00", "not a TK-259/TK-359")):
+            serial = FakeKpg32Serial(bytes(0x53FF), identity=identity)
+            radio = self.tk359(serial)
+            radio.status_fn = lambda _status: None
+            with mock.patch("time.sleep", return_value=None):
+                with self.assertRaisesRegex(Exception, message):
+                    radio.sync_in()
+            self.assertIn(b"\x15", serial.writes)
 
     def test_short_block_is_retried_then_fails(self):
         class ShortSerial(FakeKpgSerial):

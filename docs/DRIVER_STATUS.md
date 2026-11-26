@@ -47,8 +47,8 @@ Last updated: 2026-11-20
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
-| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR/RTS off, 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU register trace 2026-11-26) | Yes, matches the OEM trace; not hardware-tested | Disabled | Hidden | Experimental read-only |
-| Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N1, 0xF000 addressed blocks | Yes, offline-tested | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes, matches the OEM trace; not hardware-tested | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N2, BIOS INT 14h lines, `PROGRAM`, 8-byte identity checked like the CPS, `S`/`X` blocks at 0x03AC00+offset with sum8 and NAK retry, `E` exit (KPG-32D 1.00 QEMU trace 2026-11-26) | Yes, matches the OEM trace; UHF channel decode unvalidated (sample is a TK-259); not hardware-tested | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8N2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
@@ -1970,15 +1970,21 @@ Last updated: 2026-11-20
 - Driver SHA-256:
   `4b0f2a04c8055c3b4aa7a7af1f5109f2e1e08a52e7aaad26d2a916fe22459f4d`
 - Transport, TK-350 (KPG-23D 1.01 QEMU register trace with a simulated
-  radio, 2026-11-26): 4,800 baud 8N2, DTR and RTS off (KPG-23D never writes
-  the modem-control register), `0x02` answered by a 6-byte identity that is
-  not checked, `06`/`06`, 28 `R <hi> <lo> 80` requests from 0xF000 answered
+  radio, 2026-11-26): 4,800 baud 8N2 through BIOS INT 14h (DTR raised, RTS
+  raised only while sending on a real PC), `0x02` answered by a 6-byte
+  identity that is not checked, `06`/`06`, 28 `R <hi> <lo> 80` requests from 0xF000 answered
   `W <hi> <lo> 80` + 128 bytes with `06`/`06` after each, no exit command;
   a `Z` reply fails the read. The 2026-11-13 notes (9,600 8N1, 8-byte
   identity, `Z`, `E`) came from the BIOS's boot-time COM1 set-up and were
   wrong; no TK-350 owner's radio ever answered them.
-- Transport, TK-359: still the 2026-11-13 assumptions (9,600 baud 8N1,
-  8-byte identity, `Z` fill, `E` exit) until KPG-32D is traced the same way
+- Transport, TK-359 (KPG-32D 1.00 QEMU trace, run to "Done Reading"
+  against a simulated radio, 2026-11-26): 9,600 baud 8N2, BIOS INT 14h lines,
+  `PROGRAM`/`06`, `02` -> 8-byte identity checked back to front ("P0359" +
+  band + `81`), `06`/`06`, `S 03 <hi+AC> <lo> 80` -> `X` echo + 128 bytes +
+  sum8, `06`/`06` (bad sum: `15`, retry), `E`/`06`. NewChirp reads every
+  0x80 block except 0x0400-0x04FF (a superset of the CPS's data-driven
+  reads). The bundled `SAMPLE.FDT` is a TK-259 (VHF) codeplug, so the UHF
+  channel decode is unvalidated.
 - Implemented: full raw-image retention, the 16-byte channel record
   layout, RX/TX frequency decoding for the 450-470 MHz band, and
   four-character channel names. The `0x02` identity request is retried up

@@ -174,9 +174,14 @@ documentation, a `MODE` command, or what the cable "usually" needs:
 - Windows programs: trace `SetCommState`/`BuildCommDCB`, `EscapeCommFunction`
   and `SetCommTimeouts` call sites, or capture with a serial monitor.
 
+If the program uses BIOS INT 14h (look for `int86(0x14, ...)`), the
+control lines come from the BIOS, not from the program: an IBM-compatible
+BIOS raises DTR+RTS to send and DTR only to receive. QEMU's SeaBIOS does not,
+so a QEMU trace showing no MCR writes does not mean the lines are off.
+
 Lesson (Kenwood TK-350, 2026-11-26): the 2026-11-13 analysis wrote down the
-BIOS's `9600,N,8,1` from boot. KPG-23D actually uses 4800 8N2, never raises
-DTR/RTS, reads a 6-byte identity and sends no exit command. Every owner's
+BIOS's `9600,N,8,1` from boot. KPG-23D actually uses 4800 8N2 through BIOS INT 14h,
+reads a 6-byte identity and sends no exit command. Every owner's
 radio stayed silent for two weeks. Driving the OEM program to "Done Reading"
 against a fake radio settles every one of these questions in one pass.
 
