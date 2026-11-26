@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 12:59:04",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:df73758fe",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-26",
+  "summary": "Write path implemented from the traced OEM sessions (gated; offline-tested)"
+}
