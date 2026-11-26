@@ -10,7 +10,7 @@ tags:
   - "domain:error_report_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:42:01Z"
+timestamp: "2026-11-26T13:56:22Z"
 concept_id: widgets/error_report_dialog/submit
 language: dart
 ---
@@ -24,7 +24,7 @@ Future_submit_submit
 ```
 
 ## Source
-Lines 44–44 in `widgets/error_report_dialog.dart`
+Lines 57–57 in `widgets/error_report_dialog.dart`
 
 ## Relationships
 

@@ -2372,4 +2372,13 @@ class AppLocalizationsFr extends AppLocalizations {
   String uiUndecodedChannelsBody(Object p0) {
     return 'NewChirp n\'a pas pu décoder le(s) canal/canaux $p0, ils ne figurent donc pas dans la liste. Ils restent tels quels dans la radio et les écritures ne les modifieront pas. Envoyez un rapport pour que le pilote puisse être corrigé ; il contient les données brutes du canal.';
   }
+
+  @override
+  String uiIncludeTheRadioImage(Object p0) {
+    return 'Joindre l\'image de la radio ($p0)';
+  }
+
+  @override
+  String get uiIncludeTheRadioImageHelp =>
+      'Elle contient les canaux et réglages de cette radio, pour que le développeur voie exactement ce que NewChirp a lu. Décochez-la si la radio contient des fréquences que vous ne pouvez pas partager.';
 }

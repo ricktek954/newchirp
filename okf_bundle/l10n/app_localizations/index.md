@@ -73,6 +73,7 @@
 - [uiDownloadingNewchirp](uiDownloadingNewchirp.md) — No description provided for @uiDownloadingNewchirp.
 - [uiFilterCounties](uiFilterCounties.md) — No description provided for @uiFilterCounties.
 - [uiGiveEveryEntryANameBefore](uiGiveEveryEntryANameBefore.md) — No description provided for @uiGiveEveryEntryANameBefore.
+- [uiIncludeTheRadioImage](uiIncludeTheRadioImage.md) — No description provided for @uiIncludeTheRadioImage.
 - [uiInsertedAnEmptySlotBeforeChannel](uiInsertedAnEmptySlotBeforeChannel.md) — No description provided for @uiInsertedAnEmptySlotBeforeChannel.
 - [uiLockedFieldSEverythingElseWas](uiLockedFieldSEverythingElseWas.md) — No description provided for @uiLockedFieldSEverythingElseWas.
 - [uiMacosBlockedNewchirpFromWritingTo](uiMacosBlockedNewchirpFromWritingTo.md) — No description provided for @uiMacosBlockedNewchirpFromWritingTo.

@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_es.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:33Z"
+timestamp: "2026-11-26T13:56:23Z"
 concept_id: l10n/app_localizations_es/repeaterFilterHint
 language: dart
 ---

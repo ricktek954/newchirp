@@ -64,6 +64,7 @@
 - [uiDownloadingNewchirp](uiDownloadingNewchirp.md)
 - [uiFilterCounties](uiFilterCounties.md)
 - [uiGiveEveryEntryANameBefore](uiGiveEveryEntryANameBefore.md)
+- [uiIncludeTheRadioImage](uiIncludeTheRadioImage.md)
 - [uiInsertedAnEmptySlotBeforeChannel](uiInsertedAnEmptySlotBeforeChannel.md)
 - [uiLockedFieldSEverythingElseWas](uiLockedFieldSEverythingElseWas.md)
 - [uiMacosBlockedNewchirpFromWritingTo](uiMacosBlockedNewchirpFromWritingTo.md)

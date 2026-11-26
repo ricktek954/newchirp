@@ -158,6 +158,7 @@
 - [_rememberChannelImageBaseline](rememberChannelImageBaseline.md)
 - [_removeEmptySlot](removeEmptySlot.md)
 - [_replaceText](replaceText.md)
+- [_reportImagePath](reportImagePath.md) — The radio image a report should offer: the one a failed read saved
 - [_reportTransferProgress](reportTransferProgress.md)
 - [_reportUndecodedChannels](reportUndecodedChannels.md) — Tells the user which slots the driver could not decode, logs the
 - [_restoreLibrary](restoreLibrary.md)

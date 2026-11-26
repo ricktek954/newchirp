@@ -10,7 +10,7 @@ tags:
   - "domain:error_report_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:42:01Z"
+timestamp: "2026-11-26T13:56:22Z"
 concept_id: widgets/error_report_dialog
 language: dart
 ---
@@ -23,6 +23,7 @@ language: dart
 |------|--------|
 | related | [ErrorReportDialog](/widgets/error_report_dialog/ErrorReportDialog.md) |
 | related | [_ErrorReportDialogState](/widgets/error_report_dialog/ErrorReportDialogState.md) |
+| related | [_formatBytes](/widgets/error_report_dialog/formatBytes.md) |
 | related | [createState](/widgets/error_report_dialog/createState.md) |
 | related | [dispose](/widgets/error_report_dialog/dispose.md) |
 | related | [_submit](/widgets/error_report_dialog/submit.md) |

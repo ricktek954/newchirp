@@ -10,7 +10,7 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:12:13Z"
+timestamp: "2026-11-26T13:56:11Z"
 concept_id: services/diagnostic_log/logDirectory
 language: dart
 ---
@@ -24,7 +24,7 @@ Directory_logDirectory()
 ```
 
 ## Source
-Lines 208–208 in `services/diagnostic_log.dart`
+Lines 229–229 in `services/diagnostic_log.dart`
 
 ## Relationships
 

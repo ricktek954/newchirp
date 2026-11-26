@@ -1813,8 +1813,25 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         firmware: _radioFirmware ?? 'Not available',
         version: _newChirpVersion,
         cable: _port == null ? 'No serial port selected' : 'Serial port $_port',
+        imagePath: _reportImagePath(summary, technical),
       ),
     );
+  }
+
+  /// The radio image a report should offer: the one a failed read saved
+  /// (its path is in the error text), else the current radio's stored image.
+  String? _reportImagePath(String summary, String? technical) {
+    final text = '$summary\n${technical ?? ''}';
+    for (final match in RegExp(
+      r'^\s*(.+\.img)\s*$',
+      multiLine: true,
+    ).allMatches(text)) {
+      final path = match.group(1)!.trim();
+      if (File(path).existsSync()) return path;
+    }
+    final stored = _radioImage;
+    if (stored != null && File(stored).existsSync()) return stored;
+    return null;
   }
 
   Future<void> _openLibraryFile() async {

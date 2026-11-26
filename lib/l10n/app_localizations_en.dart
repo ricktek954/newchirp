@@ -2333,4 +2333,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String uiUndecodedChannelsBody(Object p0) {
     return 'NewChirp couldn\'t decode channel(s) $p0, so they are not in the list. They are left exactly as they are in the radio, and writes will not change them. Please send a report so the driver can be fixed; it includes the raw channel data.';
   }
+
+  @override
+  String uiIncludeTheRadioImage(Object p0) {
+    return 'Include the radio image ($p0)';
+  }
+
+  @override
+  String get uiIncludeTheRadioImageHelp =>
+      'It holds this radio\'s channels and settings, so the developer can see exactly what NewChirp read. Untick it if the radio holds frequencies you can\'t share.';
 }

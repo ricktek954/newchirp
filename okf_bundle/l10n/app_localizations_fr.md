@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations_fr.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:33Z"
+timestamp: "2026-11-26T13:56:23Z"
 concept_id: l10n/app_localizations_fr
 language: dart
 ---
@@ -136,4 +136,5 @@ language: dart
 | related | [shortenNamesDuplicates](/l10n/app_localizations_fr/shortenNamesDuplicates.md) |
 | related | [shortenNamesAction](/l10n/app_localizations_fr/shortenNamesAction.md) |
 | related | [uiUndecodedChannelsBody](/l10n/app_localizations_fr/uiUndecodedChannelsBody.md) |
+| related | [uiIncludeTheRadioImage](/l10n/app_localizations_fr/uiIncludeTheRadioImage.md) |
 | related | [AppLocalizationsFr](/l10n/app_localizations_fr/AppLocalizationsFr.md) |

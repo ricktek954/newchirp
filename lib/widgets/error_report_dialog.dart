@@ -1,7 +1,13 @@
-import '../l10n/l10n.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
+import '../l10n/l10n.dart';
 import '../services/diagnostic_log.dart';
+
+String _formatBytes(int bytes) => bytes < 1024 * 1024
+    ? '${(bytes / 1024).toStringAsFixed(0)} KB'
+    : '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
 
 class ErrorReportDialog extends StatefulWidget {
   const ErrorReportDialog({
@@ -13,6 +19,7 @@ class ErrorReportDialog extends StatefulWidget {
     required this.firmware,
     required this.version,
     required this.cable,
+    this.imagePath,
   });
 
   final DiagnosticLog diagnosticLog;
@@ -22,6 +29,10 @@ class ErrorReportDialog extends StatefulWidget {
   final String firmware;
   final String version;
   final String cable;
+
+  /// Radio image offered as an attachment (a failed read's saved image, or
+  /// the current radio's stored image).
+  final String? imagePath;
 
   @override
   State<ErrorReportDialog> createState() => _ErrorReportDialogState();
@@ -33,6 +44,8 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
   bool _sending = false;
   bool _sent = false;
   String? _error;
+  late final File? _image = DiagnosticLog.reportImage(widget.imagePath);
+  late bool _includeImage = _image != null;
 
   @override
   void dispose() {
@@ -66,6 +79,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
         firmware: widget.firmware,
         version: widget.version,
         cable: widget.cable,
+        imagePath: _includeImage ? _image?.path : null,
       );
       widget.diagnosticLog.record(
         'report',
@@ -74,6 +88,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
           'radio': widget.radio,
           'firmware': widget.firmware,
           'version': widget.version,
+          'image': _includeImage && _image != null,
         },
       );
       if (mounted) setState(() => _sent = true);
@@ -156,6 +171,22 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
                       context.l10n.uiTheReportIncludesAppAndOperating2,
                       style: TextStyle(color: Colors.black54, height: 1.4),
                     ),
+                    if (_image != null)
+                      CheckboxListTile(
+                        contentPadding: EdgeInsets.zero,
+                        controlAffinity: ListTileControlAffinity.leading,
+                        value: _includeImage,
+                        onChanged: _sending
+                            ? null
+                            : (value) =>
+                                  setState(() => _includeImage = value == true),
+                        title: Text(
+                          context.l10n.uiIncludeTheRadioImage(
+                            _formatBytes(_image.lengthSync()),
+                          ),
+                        ),
+                        subtitle: Text(context.l10n.uiIncludeTheRadioImageHelp),
+                      ),
                     const SizedBox(height: 8),
                     ExpansionTile(
                       tilePadding: EdgeInsets.zero,

@@ -125,6 +125,19 @@ class DiagnosticLog {
     return report.substring(report.length - maxCharacters);
   }
 
+  /// Largest radio image a report carries (the server's limit).
+  static const int maxReportImageBytes = 4 * 1024 * 1024;
+
+  /// The image a report can attach, or null when there is none usable.
+  static File? reportImage(String? path) {
+    if (path == null || path.isEmpty) return null;
+    final file = File(path);
+    if (!file.existsSync()) return null;
+    final length = file.lengthSync();
+    if (length == 0 || length > maxReportImageBytes) return null;
+    return file;
+  }
+
   Future<void> submit({
     required String email,
     required String description,
@@ -132,7 +145,10 @@ class DiagnosticLog {
     required String firmware,
     required String version,
     required String cable,
+    String? imagePath,
   }) async {
+    final image = reportImage(imagePath);
+    final imageBytes = image == null ? null : await image.readAsBytes();
     final client = HttpClient()
       ..connectionTimeout = const Duration(seconds: 20);
     try {
@@ -153,6 +169,11 @@ class DiagnosticLog {
           'description': description.trim(),
           'debugLog': buildReport(),
           'source': 'newchirp-desktop',
+          if (image != null && imageBytes != null)
+            'image': {
+              'name': image.uri.pathSegments.last,
+              'data': base64Encode(imageBytes),
+            },
         }),
       );
       final response = await request.close().timeout(

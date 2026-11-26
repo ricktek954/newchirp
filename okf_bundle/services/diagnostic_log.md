@@ -10,7 +10,7 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-08T13:12:13Z"
+timestamp: "2026-11-26T13:56:11Z"
 concept_id: services/diagnostic_log
 language: dart
 ---
@@ -30,6 +30,7 @@ language: dart
 | related | [record](/services/diagnostic_log/record.md) |
 | related | [recordError](/services/diagnostic_log/recordError.md) |
 | related | [buildReport](/services/diagnostic_log/buildReport.md) |
+| related | [reportImage](/services/diagnostic_log/reportImage.md) |
 | related | [submit](/services/diagnostic_log/submit.md) |
 | related | [_redact](/services/diagnostic_log/redact.md) |
 | related | [_logDirectory](/services/diagnostic_log/logDirectory.md) |

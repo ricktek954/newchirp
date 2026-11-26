@@ -1537,5 +1537,14 @@
         "type": "Object"
       }
     }
+  },
+  "uiIncludeTheRadioImage": "Include the radio image ({p0})",
+  "uiIncludeTheRadioImageHelp": "It holds this radio's channels and settings, so the developer can see exactly what NewChirp read. Untick it if the radio holds frequencies you can't share.",
+  "@uiIncludeTheRadioImage": {
+    "placeholders": {
+      "p0": {
+        "type": "Object"
+      }
+    }
   }
 }

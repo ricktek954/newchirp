@@ -15,6 +15,7 @@
 - [initialize](initialize.md)
 - [record](record.md)
 - [recordError](recordError.md)
+- [reportImage](reportImage.md)
 - [submit](submit.md)
 - [toJson](toJson.md)
 - [toString](toString.md)

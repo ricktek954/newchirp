@@ -7,6 +7,7 @@
 
 ## Functions
 
+- [_formatBytes](formatBytes.md)
 - [_submit](submit.md)
 - [build](build.md)
 - [createState](createState.md)

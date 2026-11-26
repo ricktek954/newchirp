@@ -74,6 +74,57 @@ void main() {
     expect(received?['debugLog'], contains('"model":"Retevis_RT86S"'));
   });
 
+  test('diagnostic report attaches the radio image when asked', () async {
+    final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+    addTearDown(() => server.close(force: true));
+    final directory = await Directory.systemTemp.createTemp(
+      'newchirp-diagnostics-image-',
+    );
+    addTearDown(() => directory.delete(recursive: true));
+    final received = <Map<String, dynamic>>[];
+    server.listen((request) async {
+      received.add(
+        jsonDecode(await utf8.decoder.bind(request).join())
+            as Map<String, dynamic>,
+      );
+      request.response.headers.contentType = ContentType.json;
+      request.response.write('{"ok":true}');
+      await request.response.close();
+    });
+    final image = File('${directory.path}/newchirp-m_gw8h2n.img');
+    final bytes = List<int>.generate(11584, (index) => index & 0xff);
+    await image.writeAsBytes(bytes);
+    final log = DiagnosticLog(
+      endpoint: Uri.parse(
+        'http://${server.address.address}:${server.port}/api/bug-report',
+      ),
+      rootDirectory: directory,
+    );
+    await log.initialize();
+    Future<void> send(String? path) => log.submit(
+      email: 'operator@example.com',
+      description: 'Channel map could not be decoded.',
+      radio: 'Icom_IC-E90',
+      firmware: '',
+      version: '1.0.76',
+      cable: 'COM9',
+      imagePath: path,
+    );
+
+    await send(image.path);
+    await send(null);
+    await send('${directory.path}/missing.img');
+
+    final attached = received[0]['image'] as Map<String, dynamic>;
+    expect(attached['name'], 'newchirp-m_gw8h2n.img');
+    expect(base64Decode(attached['data'] as String), bytes);
+    expect(received[1].containsKey('image'), isFalse);
+    expect(received[2].containsKey('image'), isFalse);
+    expect(DiagnosticLog.reportImage(image.path), isNotNull);
+    await image.writeAsBytes(List<int>.filled(4 * 1024 * 1024 + 1, 0));
+    expect(DiagnosticLog.reportImage(image.path), isNull, reason: 'too big');
+  });
+
   test('diagnostic submission surfaces service errors', () async {
     final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
     addTearDown(() => server.close(force: true));
