@@ -82,6 +82,8 @@ class FakeKpgSerial:
         self.rts_during_writes = []
         self.addresses = []
         self.block_lengths = []
+        self.written = []
+        self.write_reply = b"\x06"
 
     def write(self, data):
         data = bytes(data)
@@ -95,6 +97,14 @@ class FakeKpgSerial:
             self._rx.extend(b"\x06")
         elif data == b"E":
             self._rx.extend(b"\x06")
+        elif len(data) == 132 and data[:1] == b"W":
+            address = struct.unpack(">H", data[1:3])[0]
+            self.written.append(address)
+            offset = address - 0xF000
+            image = bytearray(self.image)
+            image[offset:offset + 128] = data[4:]
+            self.image = bytes(image)
+            self._rx.extend(self.write_reply)
         elif len(data) == 4 and data[:1] == b"R":
             address = struct.unpack(">H", data[1:3])[0]
             length = data[3]
@@ -147,6 +157,12 @@ class FakeKpg32Serial:
         self.writes = []
         self.rts_during_writes = []
         self.offsets = []
+        self.frames = []
+
+    def _store(self, offset, data):
+        image = bytearray(self.image.ljust(0x5400, b"\xff"))
+        image[offset:offset + len(data)] = data
+        self.image = bytes(image)
 
     def write(self, data):
         data = bytes(data)
@@ -158,7 +174,18 @@ class FakeKpg32Serial:
             self._rx.extend(b"\x06")
         elif data == b"\x02":
             self._rx.extend(self.identity)
-        elif data in (b"\x06", b"\x15", b"E"):
+        elif data in (b"\x06", b"\x15", b"E", b"\x03"):
+            self._rx.extend(b"\x06")
+        elif len(data) == 6 and data[:1] == b"Z":
+            offset = (((data[2] - 0xAC) & 0xFF) << 8) | data[3]
+            self.frames.append(("Z", offset))
+            self._store(offset, data[5:6] * data[4])
+            self._rx.extend(b"\x06")
+        elif len(data) == 134 and data[:1] == b"X":
+            offset = (((data[2] - 0xAC) & 0xFF) << 8) | data[3]
+            assert sum(data[5:133]) & 0xFF == data[133]
+            self.frames.append(("X", offset))
+            self._store(offset, data[5:133])
             self._rx.extend(b"\x06")
         elif len(data) == 5 and data[:1] == b"S":
             offset = (((data[2] - 0xAC) & 0xFF) << 8) | data[3]
@@ -200,6 +227,7 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         )
         cls.tk350 = cls.directory.get_radio("Kenwood_TK-350")
         cls.tk359 = cls.directory.get_radio("Kenwood_TK-359")
+        cls.driver = sys.modules[cls.tk350.__module__]
         from chirp import memmap
 
         cls.memmap = memmap
@@ -216,10 +244,10 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
             self.assertIn("experimental", prompts.experimental.lower())
             self.assertIn("read-only", prompts.experimental.lower())
             radio = radio_class(FakeKpgSerial(_synthetic_image()))
+            # Writes stay gated until a physical write/read-back passes.
+            self.assertTrue(radio_class.NEWCHIRP_WRITE_DISABLED)
             with self.assertRaisesRegex(Exception, "read-only"):
                 radio.sync_out()
-            with self.assertRaisesRegex(Exception, "disabled"):
-                radio.set_memory(None)
 
     def test_tk350_channel_layout_and_frequency_decode(self):
         radio = self._radio_from_image(self.tk350, _synthetic_image())
@@ -461,6 +489,143 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         self.assertEqual(got, bytes(image))
         self.assertEqual(serial.offsets.count(0), 1, "no retries")
         self.assertEqual(radio.get_memory(1).freq, 460_012_500)
+
+    # --- writes (KPG-23D / KPG-32D write sessions traced 2026-11-26) ---
+
+    def _tk350_image(self):
+        image = bytearray(b"\xFF" * MEM_SIZE)
+        image[0:16] = self.TK350_U1F_CH1
+        image[16:32] = self.TK350_U1F_CH2
+        image[0x0D00:0x0D06] = b"P3501\x01"
+        image[0x0C00:0x0C10] = bytes(range(16))   # alignment area
+        return bytes(image)
+
+    def _writable(self, radio):
+        radio.NEWCHIRP_WRITE_DISABLED = False
+        radio.status_fn = lambda _status: None
+        return radio
+
+    def test_tk350_write_matches_kpg23d_trace(self):
+        image = self._tk350_image()
+        serial = FakeKpgSerial(image, identity=b"P3501\x01", strict=True)
+        radio = self._writable(self.tk350(serial))
+        radio._mmap = self.memmap.MemoryMapBytes(image)
+        radio.process_mmap()
+        memory = radio.get_memory(1)
+        memory.freq = 461_000_000
+        memory.name = "RPT"
+        radio.set_memory(memory)
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_out()
+        self.assertEqual(serial.writes[:2], [b"\x02", b"\x06"])
+        expected = [0xF000 + n * 0x80 for n in range(28)
+                    if not 0xFC00 <= 0xF000 + n * 0x80 < 0xFD00]
+        self.assertEqual(serial.written, expected)
+        self.assertEqual(len(serial.written), 26)
+        self.assertEqual(serial.writes[-1][:1], b"W", "no exit command")
+        self.assertEqual(serial.image[0x0C00:0x0C10], bytes(range(16)))
+        written = self._radio_from_image(self.tk350, serial.image)
+        self.assertEqual(written.get_memory(1).freq, 461_000_000)
+        self.assertEqual(written.get_memory(1).name, "RPT")
+        self.assertEqual(written.get_memory(2).freq, 462_562_500)
+
+    def test_tk350_write_refuses_a_different_model_or_band(self):
+        serial = FakeKpgSerial(self._tk350_image(), identity=b"P3504\x01")
+        radio = self._writable(self.tk350(serial))
+        radio._mmap = self.memmap.MemoryMapBytes(self._tk350_image())
+        with mock.patch("time.sleep", return_value=None):
+            with self.assertRaisesRegex(Exception, "P3504.*P3501"):
+                radio.sync_out()
+        self.assertEqual(serial.written, [])
+
+    def test_tk350_write_stops_on_a_refused_block(self):
+        serial = FakeKpgSerial(self._tk350_image(), identity=b"P3501\x01")
+        serial.write_reply = b"\x15"
+        radio = self._writable(self.tk350(serial))
+        radio._mmap = self.memmap.MemoryMapBytes(self._tk350_image())
+        with mock.patch("time.sleep", return_value=None):
+            with self.assertRaisesRegex(Exception, "0xF000"):
+                radio.sync_out()
+        self.assertEqual(serial.written, [0xF000])
+
+    def test_tk350_edits_are_limited_and_round_trip(self):
+        radio = self._radio_from_image(self.tk350, self._tk350_image())
+        # A blank TX word is KPG-23D's empty Transmit column.
+        self.assertEqual(radio.get_memory(1).duplex, "off")
+        memory = radio.get_memory(2)
+        memory.duplex = "+"
+        memory.offset = 5_000_000
+        radio.set_memory(memory)
+        again = radio.get_memory(2)
+        self.assertEqual((again.duplex, again.offset), ("+", 5_000_000))
+        empty = radio.get_memory(5)
+        empty.empty = False
+        empty.freq = 460_000_000
+        with self.assertRaisesRegex(Exception, "existing channels"):
+            radio.set_memory(empty)
+        memory.freq = 460_001_000
+        with self.assertRaisesRegex(Exception, "6.25 kHz"):
+            radio.set_memory(memory)
+
+    def _tk359_radio_after_read(self, fill_blank=True):
+        image = bytearray(b"\xFF" * 0x53FF)
+        image[0x0500:0x0508] = bytes.fromhex("00 81 31 39 35 33 30 50")
+        image[0x3400:0x3420] = self.TK359_CH1
+        image[0x3420:0x3440] = self.TK359_CH2
+        image[0x5390:0x5394] = b"TAIL"
+        serial = FakeKpg32Serial(bytes(image) + b"\x5a", fill_blank=fill_blank)
+        radio = self._writable(self.tk359(serial))
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+        serial.writes.clear()
+        serial.frames.clear()
+        return radio, serial
+
+    def test_tk359_write_sends_only_changed_blocks_like_kpg32d(self):
+        radio, serial = self._tk359_radio_after_read()
+        memory = radio.get_memory(2)
+        memory.freq = 456_000_000
+        radio.set_memory(memory)
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_out()
+        self.assertEqual(serial.frames, [("X", 0x3400)])
+        index = serial.writes.index(next(w for w in serial.writes if w[:1] == b"X"))
+        self.assertEqual(serial.writes[index + 1], b"\x03", "commit after X")
+        self.assertEqual(serial.writes[-1], b"E")
+        reread = self._radio_from_image(self.tk359, serial.image[:0x53FF])
+        self.assertEqual(reread.get_memory(2).freq, 456_000_000)
+        self.assertEqual(reread.get_memory(1).freq, 460_012_500)
+
+    def test_tk359_uniform_block_goes_as_z_and_tail_byte_is_kept(self):
+        radio, serial = self._tk359_radio_after_read()
+        self.assertEqual(radio._metadata["newchirp_kpg32_tail"], "5a")
+        with mock.patch("time.sleep", return_value=None):
+            self.driver._kpg32_open(radio)
+            self.driver._kpg32_write_block(radio, 0x0000, b"\xff" * 128)
+        self.assertEqual(serial.writes[-1], bytes.fromhex("5a 03 ac 00 80 ff"))
+        changed = self.driver._kpg32_changed_blocks(
+            radio, radio.get_mmap().get_packed()[:0x5390] + b"tail"
+            + radio.get_mmap().get_packed()[0x5394:])
+        self.assertEqual([offset for offset, _ in changed], [0x5380])
+        self.assertEqual(changed[0][1][-1], 0x5A)
+
+    def test_tk359_write_needs_a_read_from_this_version(self):
+        image = bytearray(b"\xFF" * 0x53FF)
+        image[0x3400:0x3420] = self.TK359_CH1
+        radio = self._writable(self._radio_from_image(self.tk359, image))
+        with self.assertRaisesRegex(Exception, "Read the radio"):
+            radio.sync_out()
+
+    def test_tk359_rejects_renames_and_tx_off_until_confirmed(self):
+        radio, _serial = self._tk359_radio_after_read()
+        memory = radio.get_memory(1)
+        memory.name = "NEW"
+        with self.assertRaisesRegex(Exception, "Renaming"):
+            radio.set_memory(memory)
+        memory = radio.get_memory(1)
+        memory.duplex = "off"
+        with self.assertRaisesRegex(Exception, "TX off"):
+            radio.set_memory(memory)
 
 
 if __name__ == "__main__":

@@ -160,15 +160,26 @@ block, range from two bytes of the CPS's channel table), then 0x5380, then
 0x0000-0x0380, 0x0500-0x0700, 0x1200, 0x2200-0x2300, 0x3200-0x3380, 0x3400,
 0x5380.
 
-### Write policy for NewChirp (not yet implemented)
+### Write policy for NewChirp (implemented 2026-11-26, still gated)
 
 - TK-350: refuse unless the radio's identity equals the image's 0x0D00
   record; write the same 26 blocks in the same order; never 0xFC00-0xFCFF.
 - TK-359: write only blocks inside the CPS's writable set that differ from
   the image just read from the radio, as `Z` when uniform and `X` + commit
   otherwise; never 0x0400-0x04FF.
-- Both stay disabled until the channel decode (including the TK-359 TX
-  field) is confirmed against an owner's saved image.
+- TK-359 reads now store the image as read (`newchirp_kpg32_baseline`) and
+  the 128th byte of the last block (`newchirp_kpg32_tail`, which the
+  0x53FF-byte image cannot hold) in the image metadata; a write without
+  them is refused.
+- Channel edits: existing channels only (no add/delete until the CPS
+  channel tables are traced). TK-350: RX/TX in 6.25 kHz steps, TX off as
+  word `FFFF` (KPG-23D's empty Transmit column), 4-character names.
+  TK-359: RX/TX frequencies only; renames and TX off are refused until the
+  name length and TX-off encoding are confirmed. Every encode must decode
+  back to the same value.
+- `NEWCHIRP_WRITE_DISABLED` stays set on both models until the channel
+  decode (including the TK-359 TX field) is confirmed against an owner's
+  saved image and one controlled write/read-back passes.
 
 ## Memory size and records
 

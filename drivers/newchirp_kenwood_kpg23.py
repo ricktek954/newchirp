@@ -23,6 +23,7 @@ Uploads remain disabled until a physical write/read-back is validated.
 
 from __future__ import annotations
 
+import base64
 import logging
 import struct
 import time
@@ -420,6 +421,10 @@ def _kpg32_download(radio):
             block = _kpg32_read_block(radio, offset, BLOCK_SIZE)
             end = min(offset + BLOCK_SIZE, radio._memsize)
             image[offset:end] = block[:end - offset]
+            if end - offset < len(block):
+                # The image is 0x53FF bytes but the radio's last block is
+                # 128; keep the byte the image cannot hold for writes.
+                radio._metadata["newchirp_kpg32_tail"] = block[end - offset:].hex()
             status.cur = index
             if radio.status_fn:
                 radio.status_fn(status)
@@ -432,7 +437,140 @@ def _kpg32_download(radio):
                 LOG.debug("Radio did not acknowledge mode exit")
             finally:
                 radio._session_open = False
+    # What the radio held when it was read: writes send only blocks that
+    # differ from it (see _kpg32_upload).
+    radio._metadata["newchirp_kpg32_baseline"] = base64.b64encode(
+        bytes(image)).decode("ascii")
     return memmap.MemoryMapBytes(bytes(image))
+
+
+# ---------------------------------------------------------------------------
+# Writes, traced from both OEM programmers in QEMU on 2026-11-26 (see
+# docs/KPG23_PROTOCOL.md, "Write sessions").
+
+TK350_WRITE_SKIP = range(0xFC00, 0xFD00)   # KPG-23D never writes this
+KPG32_COMMIT = b"\x03"                     # DS:0x32DE, after each X frame
+WRITE_REPLY_TIMEOUT = 3
+
+
+def _expect_ack(radio, context):
+    reply = _read_exact(radio, 1, context, timeout=WRITE_REPLY_TIMEOUT)
+    if reply != ACK:
+        raise errors.RadioError(
+            "Radio answered %s instead of 06 while %s; the write stopped "
+            "there, as KPG-23D/KPG-32D do" % (reply.hex(), context))
+
+
+def _kpg23_upload(radio):
+    """KPG-23D 1.01 write: 02/identity/06/06, then W frames, no exit."""
+    image = radio._mmap.get_packed()
+    expected = bytes(image[TK350_MODEL_OFFSET:TK350_MODEL_OFFSET + 5])
+    status = chirp_common.Status()
+    status.msg = "Cloning to %s" % radio.MODEL
+    blocks = [FIRST_ADDRESS + offset
+              for offset in range(0, radio._memsize, BLOCK_SIZE)
+              if FIRST_ADDRESS + offset not in TK350_WRITE_SKIP]
+    status.max = len(blocks)
+    try:
+        identity = _open_session(radio)
+        # KPG-23D compares the identity with the file's model/band record
+        # and asks before overwriting a different one; NewChirp refuses.
+        if identity[:5] != expected:
+            raise errors.RadioError(
+                "The connected radio reports %r, but this image is for %r "
+                "(model and band). Read this radio first and write that "
+                "image back." % (identity[:5].decode("ascii", "replace"),
+                                 expected.decode("ascii", "replace")))
+        for index, address in enumerate(blocks, 1):
+            offset = address - FIRST_ADDRESS
+            _send(radio, READ_DATA + struct.pack(">H", address)
+                  + bytes((BLOCK_SIZE,))
+                  + bytes(image[offset:offset + BLOCK_SIZE]))
+            _expect_ack(radio, "writing block 0x%04X" % address)
+            status.cur = index
+            if radio.status_fn:
+                radio.status_fn(status)
+    finally:
+        radio._session_open = False
+
+
+def _kpg32_write_block(radio, offset, block):
+    address = _kpg32_address(offset)
+    header = address + bytes((len(block),))
+    if block == block[:1] * len(block):
+        # 0x168a9: a uniform block goes as Z + header + the fill byte.
+        _send(radio, KPG32_FILL + header + block[:1])
+        _expect_ack(radio, "writing fill block 0x%04X" % offset)
+        return
+    _send(radio, KPG32_REPLY + header + block + bytes((sum(block) & 0xFF,)))
+    _expect_ack(radio, "writing block 0x%04X" % offset)
+    _send(radio, KPG32_COMMIT)
+    _expect_ack(radio, "committing block 0x%04X" % offset)
+
+
+def _kpg32_changed_blocks(radio, image):
+    encoded = radio._metadata.get("newchirp_kpg32_baseline")
+    if not encoded:
+        raise errors.RadioError(
+            "This %s image has no record of what the radio held when it was "
+            "read. Read the radio with this version of NewChirp, make the "
+            "changes, then write." % radio.MODEL)
+    baseline = base64.b64decode(encoded)
+    if len(baseline) != len(image):
+        raise errors.RadioError("The saved %s read does not match this "
+                                "image's size." % radio.MODEL)
+    tail = bytes.fromhex(radio._metadata.get("newchirp_kpg32_tail", ""))
+    changed = []
+    for offset in range(0, len(image), BLOCK_SIZE):
+        if offset in KPG32_SKIP:
+            continue
+        new = bytes(image[offset:offset + BLOCK_SIZE])
+        if new == baseline[offset:offset + BLOCK_SIZE]:
+            continue
+        if len(new) < BLOCK_SIZE:
+            if len(new) + len(tail) != BLOCK_SIZE:
+                raise errors.RadioError(
+                    "Block 0x%04X changed but its last byte was not kept "
+                    "from the read; read the radio again." % offset)
+            new += tail
+        changed.append((offset, new))
+    return changed
+
+
+def _kpg32_upload(radio):
+    """KPG-32D 1.00 write, limited to blocks changed since the read."""
+    image = radio._mmap.get_packed()
+    changed = _kpg32_changed_blocks(radio, image)
+    if not changed:
+        LOG.info("No %s blocks changed since the read; nothing to write",
+                 radio.MODEL)
+        return
+    status = chirp_common.Status()
+    status.msg = "Cloning to %s" % radio.MODEL
+    status.max = len(changed)
+    try:
+        identity = _kpg32_open(radio)
+        if identity != bytes(image[0x0500:0x0508]):
+            raise errors.RadioError(
+                "The connected radio's identity %s differs from the one in "
+                "this image (%s). Read this radio first and write that image "
+                "back." % (identity.hex(" "), image[0x0500:0x0508].hex(" ")))
+        for index, (offset, block) in enumerate(changed, 1):
+            _kpg32_write_block(radio, offset, block)
+            status.cur = index
+            if radio.status_fn:
+                radio.status_fn(status)
+    finally:
+        if getattr(radio, "_session_open", False):
+            try:
+                _send(radio, KPG32_EXIT)
+                _read_exact(radio, 1, "leaving program mode")
+            except (errors.RadioError, OSError):
+                LOG.debug("Radio did not acknowledge mode exit")
+            finally:
+                radio._session_open = False
+    radio._metadata["newchirp_kpg32_baseline"] = base64.b64encode(
+        bytes(image)).decode("ascii")
 
 
 def _frequency(word, anchor):
@@ -541,10 +679,21 @@ class _KenwoodKPG23Base(
             ) from exc
 
     def sync_out(self):
-        raise errors.RadioError(
-            "%s support is read-only until the OEM upload map and a "
-            "controlled physical read-back are validated." % self.MODEL
-        )
+        if getattr(self, "NEWCHIRP_WRITE_DISABLED", False):
+            raise errors.RadioError(
+                "%s support is read-only until a write has been tested and "
+                "read back on a real radio." % self.MODEL)
+        try:
+            if self._protocol == "kpg32":
+                _kpg32_upload(self)
+            else:
+                _kpg23_upload(self)
+        except errors.RadioError:
+            raise
+        except Exception as exc:
+            LOG.exception("%s write failed", self.MODEL)
+            raise errors.RadioError(
+                "Failed to write the %s: %s" % (self.MODEL, exc)) from exc
 
     def get_raw_memory(self, number):
         return _channel_record(
@@ -584,6 +733,13 @@ class _KenwoodKPG23Base(
             )
             return memory
 
+        if tx_word == 0xFFFF:
+            # KPG-23D shows these channels with an empty Transmit column.
+            memory.duplex = "off"
+            memory.offset = 0
+            memory.name = _decode_name(record[8:12])
+            memory.mode = "NFM"
+            return memory
         tx_frequency = _frequency(tx_word, TX_BASE_450)
         offset = tx_frequency - memory.freq
         if offset > 0:
@@ -599,11 +755,49 @@ class _KenwoodKPG23Base(
         memory.mode = "NFM"
         return memory
 
+    def _check_edit(self, memory):
+        """Only existing channels can be edited until more is traced."""
+        if memory is None:
+            raise errors.RadioError("%s channel edit is missing" % self.MODEL)
+        current = self.get_memory(memory.number)
+        if current.empty or memory.empty:
+            raise errors.RadioError(
+                "Adding or deleting %s channels is disabled until the CPS's "
+                "channel tables are traced; edit existing channels only."
+                % self.MODEL)
+        return current
+
+    @staticmethod
+    def _tx_frequency(memory):
+        if memory.duplex == "+":
+            return memory.freq + memory.offset
+        if memory.duplex == "-":
+            return memory.freq - memory.offset
+        if memory.duplex == "off":
+            return None
+        return memory.freq
+
     def set_memory(self, memory):
-        raise errors.RadioError(
-            "%s channel writes are disabled in the experimental read-only "
-            "driver." % self.MODEL
-        )
+        self._check_edit(memory)
+        for frequency in (memory.freq, self._tx_frequency(memory)):
+            if frequency is not None and frequency % FREQUENCY_STEP:
+                raise errors.RadioError(
+                    "%s frequencies must be multiples of 6.25 kHz"
+                    % self.MODEL)
+        rx_word = (RX_BASE_450 + (memory.freq - FREQUENCY_BASE)
+                   // FREQUENCY_STEP) & 0xFFFF
+        tx = self._tx_frequency(memory)
+        tx_word = 0xFFFF if tx is None else (
+            TX_BASE_450 + (tx - FREQUENCY_BASE) // FREQUENCY_STEP) & 0xFFFF
+        if _frequency(rx_word, RX_BASE_450) != memory.freq or (
+                tx is not None and _frequency(tx_word, TX_BASE_450) != tx):
+            raise errors.RadioError(
+                "%s cannot store %i Hz" % (self.MODEL, memory.freq))
+        offset = (memory.number - 1) * CHANNEL_SIZE
+        self._mmap[offset] = struct.pack("<HH", rx_word, tx_word)
+        # Names: four characters, space padded like KPG-23D ("CH1 ").
+        name = (memory.name or "").upper()[:4].ljust(4)
+        self._mmap[offset + 8] = name.encode("ascii", "replace")
 
 
 @directory.register
@@ -718,3 +912,45 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
         memory.name = name.decode("ascii").strip()
         memory.mode = "NFM"
         return memory
+
+    @staticmethod
+    def _kpg32_encode(frequency, flag):
+        """Flag byte and big-endian step count for a frequency."""
+        if frequency % 6_250 == 0:
+            flag |= 0x80
+            step = 6_250
+        elif frequency % 5_000 == 0:
+            flag &= ~0x80 & 0xFF
+            step = 5_000
+        else:
+            raise errors.RadioError(
+                "TK-359 frequencies must be multiples of 5 or 6.25 kHz")
+        steps = frequency // step
+        return flag, steps
+
+    def set_memory(self, memory):
+        current = self._check_edit(memory)
+        if (memory.name or "").strip() != current.name:
+            raise errors.RadioError(
+                "Renaming TK-359 channels is disabled until the name length "
+                "is confirmed on a radio; change frequencies only.")
+        record = bytearray(self._record(memory.number))
+        rx_flag, rx_steps = self._kpg32_encode(memory.freq, record[2])
+        rx_flag = (rx_flag & 0xFE) | ((rx_steps >> 16) & 0x01)
+        record[2:5] = bytes((rx_flag, (rx_steps >> 8) & 0xFF, rx_steps & 0xFF))
+        tx = self._tx_frequency(memory)
+        if tx is None:
+            raise errors.RadioError(
+                "Turning TX off on a TK-359 channel is disabled until the "
+                "KPG-32D encoding for it is confirmed.")
+        tx_flag, tx_steps = self._kpg32_encode(tx, record[10])
+        record[8:10] = bytes(((tx_steps >> 8) & 0xFF, tx_steps & 0xFF))
+        record[10] = tx_flag
+        if (self._kpg32_frequency(record[2], (record[3] << 8) | record[4],
+                                  record[2] & 0x01) != memory.freq or
+                self._kpg32_frequency(record[10], (record[8] << 8) | record[9],
+                                      False) != tx):
+            raise errors.RadioError(
+                "TK-359 cannot store RX %i / TX %i Hz" % (memory.freq, tx))
+        offset = self.CHANNEL_BASE + (memory.number - 1) * self.RECORD_SIZE
+        self._mmap[offset] = bytes(record)

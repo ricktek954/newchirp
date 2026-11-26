@@ -1975,7 +1975,7 @@ Last updated: 2026-11-20
   - KPG-32D `SAMPLE.FDT`:
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
 - Driver SHA-256:
-  `808e30da1db264c786d69046194c205e751469e4a43366dd77968a4d6d2c1952`
+  `26592d6f1d15054c0ee7dcc27d4e8cc0ff475278e6570a714c02bc63ef37c35c`
 - Ground-truth files saved by the OEM programmers in QEMU with known
   frequencies typed in (2026-11-26; hashes in `docs/KPG23_PROTOCOL.md`):
   `sample.u1f` (TK-350 450-470), `sample.u4f` (TK-350 400-430),
@@ -2020,6 +2020,11 @@ Last updated: 2026-11-20
   radio with 1.0.74 (2026-11-26, mailbox UIDs 1011-1016); channels not yet
   confirmed. TK-359 handshake and `Z` replies observed (UIDs 1014, 1015,
   1018); read not yet completed.
+- Write path (2026-11-26): both OEM write sessions traced in QEMU and
+  implemented (TK-350: 26 `W` blocks, never 0xFC00-0xFCFF, identity must
+  match the image's `P350n`; TK-359: only blocks changed since the read, `Z`
+  or `X` + `03` commit). Offline-tested against simulators of the traced
+  behaviour; still gated by `NEWCHIRP_WRITE_DISABLED`.
 - Known limitations: TK-350 5 kHz-step channels are unverified (all KPG-23D
   UHF ground truth is 6.25 kHz); tones, power, scan and settings are not
   decoded; writing is disabled.
