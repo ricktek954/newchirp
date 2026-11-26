@@ -162,7 +162,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-21Pro GPS
 
-- **#w-20261126-76d8 bug | investigating | normal:** No response from radio (triage)
+- **#w-20261126-76d8 bug | awaiting_user | normal:** No response from radio (triage)
   Win 1.0.73 COM7: PROGRAMCOLOR no reply; notes say radio is a 'uv1'; same cable read a UV-82; exact model needed
   Source: `email` INBOX:993
 
@@ -279,7 +279,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-17cf bug | awaiting_user | normal:** Radio stops answering after five successful writes
   Windows, 1.0.69, COM7: one read and five writes succeeded 14:40-16:24, then every ident attempt got no reply (write and read). Same port and session; points to plug seating, battery or the radio needing a power cycle.
   Source: `email:INBOX:928-930` <229ff3ec-97d4-953c-d854-ae317736d42b@newchirp.net>
-- **#w-20261126-7f13 bug | fix_committed | normal:** Writing an older saved image: 'Image not supported by radio' gives no way forward
+- **#w-20261126-7f13 bug | awaiting_user | normal:** Writing an older saved image: 'Image not supported by radio' gives no way forward
   Win 1.0.73: read radio (21 ch), then opened a saved .img (86 ch) and wrote it; stock uv5r refuses because the image's aux area differs from this dropped-byte radio. Correct safety behavior; message now explains the CSV route. FAQ #image-from-another-radio.
   Source: `email` INBOX:991
 
@@ -387,7 +387,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-6995 bug | fix_committed | normal:** Read fails: 'DTCS-T' is not in valid list
   Stock id5100.py decodes tone mode 8 as 'DTCS-T' (DTCS encode only) and 2/4 as '2??'/'4??' (pocket beep), none valid CHIRP tone modes, so one such channel aborts the whole channel decode. Override maps DTCS-T to Cross 'DTCS->', pocket-beep TSQL/DTCS to TSQL/DTCS (kept on unchanged write-back), undefined values to no tone, and offers TSQL-R/DTCS-R. Covers ID-4100 too. No image attached.
   Source: `email` INBOX:940 <64a8cf78-71ea-6553-ee6d-dbdeb1de4f93@newchirp.net>
-- **#w-20261126-fdb2 bug | investigating | normal:** No response from radio (triage)
+- **#w-20261126-fdb2 bug | awaiting_user | normal:** No response from radio (triage)
   Win 1.0.73 COM5: Icom identify got no reply; cable/clone-mode details needed
   Source: `email` INBOX:1002
 
@@ -639,7 +639,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TK11
 
-- **#w-20261126-bb70 bug | investigating | normal:** No response from radio (triage)
+- **#w-20261126-bb70 bug | awaiting_user | normal:** No response from radio (triage)
   Read on COM1 (likely the PC's built-in serial port, not the cable): UV-K5 hello got 0 bytes
   Source: `email` INBOX:995
 
@@ -842,7 +842,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### RT85
 
-- **#w-20261126-8c7c bug | investigating | normal:** No response from radio (triage)
+- **#w-20261126-8c7c bug | awaiting_user | normal:** No response from radio (triage)
   Owner selected RA85 (GA-510 family, PROGROMWLTU) for an RT85; CHIRP supports Retevis RT85 (th_uv88)
   Source: `email` INBOX:996
 
@@ -882,7 +882,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### MD-UV380
 
-- **#w-20261126-8502 bug | fix_committed | normal:** USB DFU identity reply of 32 bytes stops the read
+- **#w-20261126-8502 bug | awaiting_user | normal:** USB DFU identity reply of 32 bytes stops the read
   macOS 1.0.73: 'USB DFU transfer returned 32 of 64 bytes' on the 0xA2 identity upload. dmrconfig requests 64 and accepts any length; model name is in the first 32 bytes. Identity now accepts a short reply; memory reads stay strict.
   Source: `email` INBOX:986
 - **#36 maintenance | experimental | normal:** Current driver status
@@ -900,7 +900,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-8b91 bug | awaiting_user | normal:** COM3 not available on first read (Windows 11)
   Brand-new radio, first connection, 1.0.69 on Windows 11: Windows could not open COM3 before any radio traffic. Likely the cable driver (TH-9800 cables are usually Prolific PL2303, refused by current Windows drivers) or a wrong/stale port. User-side; FAQ #cable-driver and #which-port.
   Source: `email:INBOX:934` <503cda7b-824d-8942-b8fe-f0aa878fc509@newchirp.net>
-- **#w-20261126-f3d3 bug | investigating | normal:** No response from radio (triage)
+- **#w-20261126-f3d3 bug | awaiting_user | normal:** No response from radio (triage)
   macOS 1.0.73: no reply on usbserial-RTADM13B after a BF-F8HP read on another cable; cable and clone setup needed
   Source: `email` INBOX:1005
 - **#65 maintenance | experimental | normal:** Current driver status

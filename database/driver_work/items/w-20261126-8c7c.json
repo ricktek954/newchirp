@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:996",
-  "status": "investigating",
+  "status": "awaiting_user",
   "summary": "Owner selected RA85 (GA-510 family, PROGROMWLTU) for an RT85; CHIRP supports Retevis RT85 (th_uv88)",
   "title": "No response from radio (triage)",
   "uid": "w-20261126-8c7c"

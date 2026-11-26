@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:1002",
-  "status": "investigating",
+  "status": "awaiting_user",
   "summary": "Win 1.0.73 COM5: Icom identify got no reply; cable/clone-mode details needed",
   "title": "No response from radio (triage)",
   "uid": "w-20261126-fdb2"

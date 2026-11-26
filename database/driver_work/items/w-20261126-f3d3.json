@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:1005",
-  "status": "investigating",
+  "status": "awaiting_user",
   "summary": "macOS 1.0.73: no reply on usbserial-RTADM13B after a BF-F8HP read on another cable; cable and clone setup needed",
   "title": "No response from radio (triage)",
   "uid": "w-20261126-f3d3"

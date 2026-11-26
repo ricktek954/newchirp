@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:986",
-  "status": "fix_committed",
+  "status": "awaiting_user",
   "summary": "macOS 1.0.73: 'USB DFU transfer returned 32 of 64 bytes' on the 0xA2 identity upload. dmrconfig requests 64 and accepts any length; model name is in the first 32 bytes. Identity now accepts a short reply; memory reads stay strict.",
   "title": "USB DFU identity reply of 32 bytes stops the read",
   "uid": "w-20261126-8502"

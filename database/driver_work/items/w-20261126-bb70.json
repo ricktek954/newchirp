@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:995",
-  "status": "investigating",
+  "status": "awaiting_user",
   "summary": "Read on COM1 (likely the PC's built-in serial port, not the cable): UV-K5 hello got 0 bytes",
   "title": "No response from radio (triage)",
   "uid": "w-20261126-bb70"
