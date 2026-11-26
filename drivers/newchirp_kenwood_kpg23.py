@@ -66,15 +66,20 @@ def _identity_matches(identity, model):
 
 def _open_session(radio):
     pipe = radio.pipe
-    pipe.baudrate = 9600
+    pipe.baudrate = radio.BAUD_RATE
     pipe.bytesize = 8
     pipe.parity = "N"
-    pipe.stopbits = 1
+    pipe.stopbits = radio._stop_bits
     pipe.timeout = 1
-    for name, value in (("rtscts", False), ("xonxoff", False)):
+    settings = [("rtscts", False), ("xonxoff", False)]
+    if radio._lines_off:
+        # KPG-23D never writes the UART modem-control register, so DTR and
+        # RTS stay off for the whole session (2026-11-26 QEMU trace).
+        settings += [("dtr", False), ("rts", False)]
+    for name, value in settings:
         try:
             setattr(pipe, name, value)
-        except (AttributeError, ValueError):
+        except (AttributeError, ValueError, OSError):
             pass
 
     reset = getattr(pipe, "reset_input_buffer", None)
@@ -88,7 +93,7 @@ def _open_session(radio):
         try:
             identity = _read_exact(
                 radio,
-                8,
+                radio._identity_length,
                 "reading the radio identity",
             )
             break
@@ -110,7 +115,9 @@ def _open_session(radio):
             "Kenwood %s returned no identity after %i attempts; last result: %s"
             % (radio.MODEL, IDENTITY_ATTEMPTS, last_error)
         )
-    if not _identity_matches(identity, radio.MODEL):
+    if radio._identity_checked and not _identity_matches(
+            identity, radio.MODEL
+    ):
         raise errors.RadioError(
             "Connected Kenwood is not recognized as a %s: %s"
             % (radio.MODEL, identity.hex())
@@ -174,7 +181,7 @@ def _read_block(radio, address, length):
             status = _read_exact(
                 radio, 1, "reading memory status at 0x%04X" % address
             )
-            if status == FILL_DATA:
+            if status == FILL_DATA and radio._fill_reply:
                 payload = b"\xff" * length
             elif status == READ_DATA:
                 # The KPG-family reply is a three-byte record header followed
@@ -232,9 +239,11 @@ def _download(radio):
             if radio.status_fn:
                 radio.status_fn(status)
     finally:
+        if getattr(radio, "_session_open", False) and not radio._exit_command:
+            radio._session_open = False
         if getattr(radio, "_session_open", False):
             try:
-                radio.pipe.write(b"E")
+                radio.pipe.write(radio._exit_command)
                 _read_exact(radio, 1, "leaving program mode")
             except (errors.RadioError, OSError):
                 LOG.debug("Radio did not acknowledge mode exit")
@@ -267,6 +276,12 @@ class _KenwoodKPG23Base(
 ):
     VENDOR = "Kenwood"
     BAUD_RATE = 9600
+    _stop_bits = 1
+    _lines_off = False
+    _identity_length = 8
+    _identity_checked = True
+    _fill_reply = True
+    _exit_command = b"E"
     _memsize = IMAGE_SIZE
     _channel_count = MAX_CHANNELS
     _image_name = "KPG-23D"
@@ -408,6 +423,23 @@ class KenwoodTK350Radio(_KenwoodKPG23Base):
     # Read-only until a physical write/read-back is validated; the app
     # explains this before a write starts (see chirp_bridge model-info).
     NEWCHIRP_WRITE_DISABLED = True
+
+    # KPG-23D 1.01 (KPG23D.EXE SHA-256 32973eac...8248) traced in QEMU with
+    # serial_write/serial_read events against a simulated radio, TK-350
+    # 160ch UHF selected (2026-11-26): divisor 0x18 = 4800 baud, LCR 0x07 =
+    # 8N2, no write to the modem-control register (DTR and RTS off), 0x02
+    # answered by a 6-byte identity that is not checked, ACK 06/06, 28 reads
+    # of R <hi> <lo> 80 from 0xF000 answered W <hi> <lo> 80 + 128 bytes with
+    # ACK 06/06 after each, and no exit command. A Z reply fails the read.
+    BAUD_RATE = 4800
+    WANTS_DTR = False
+    WANTS_RTS = False
+    _stop_bits = 2
+    _lines_off = True
+    _identity_length = 6
+    _identity_checked = False
+    _fill_reply = False
+    _exit_command = b""
 
 
 @directory.register

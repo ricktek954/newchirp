@@ -160,6 +160,26 @@ Test at least:
 
 The fake transport must not simplify away the behavior under investigation.
 
+### 5a. Trace the UART set-up, not just the bytes
+
+Before writing a transport, record the exact serial configuration the OEM
+program sets: baud divisor, data/parity/stop bits, and every modem-control
+register write (DTR, RTS, OUT2), including the case where it never writes
+MCR and leaves both lines off. Get it from a register-level trace, not from
+documentation, a `MODE` command, or what the cable "usually" needs:
+
+- DOS programs: run them in QEMU with `-d trace:serial_write,trace:serial_read,trace:serial_update_parameters`
+  and put a scripted fake radio on `-serial chardev:socket` so the program
+  runs a complete read. Ignore the BIOS's own COM1 set-up at boot.
+- Windows programs: trace `SetCommState`/`BuildCommDCB`, `EscapeCommFunction`
+  and `SetCommTimeouts` call sites, or capture with a serial monitor.
+
+Lesson (Kenwood TK-350, 2026-11-26): the 2026-11-13 analysis wrote down the
+BIOS's `9600,N,8,1` from boot. KPG-23D actually uses 4800 8N2, never raises
+DTR/RTS, reads a 6-byte identity and sends no exit command. Every owner's
+radio stayed silent for two weeks. Driving the OEM program to "Done Reading"
+against a fake radio settles every one of these questions in one pass.
+
 ### 6. Capture the OEM application when possible
 
 A successful serial capture from the official CPS is the strongest oracle.

@@ -1,6 +1,6 @@
 # Kenwood KPG-23D / KPG-32D protocol notes
 
-Last updated: 2026-11-13
+Last updated: 2026-11-26
 
 ## Status
 
@@ -28,50 +28,55 @@ rule used for block data.
 The OEM executables were analyzed statically and run only inside an isolated
 FreeDOS/QEMU VM.
 
-## Serial session
+## Serial session (TK-350, KPG-23D 1.01) — traced 2026-11-26
 
-KPG-23D was observed using COM1 at `9600,N,8,1`.
+Source: `KPG23D.EXE` 1.01 (12/02/1994), SHA-256
+`32973eacc6db151f3cfb2fa10591d59653da028d78651776813c529415ba8248`, run in
+FreeDOS 1.4 under QEMU 11.1.3 with the `serial_write`, `serial_read` and
+`serial_update_parameters` trace events, first with no radio and then with a
+simulated radio on the serial socket. Model `TK-350 (160ch)`, band
+`UHF 450-470 MHz`, no voice scrambler. The same settings were seen with the
+program's default TK-250 file loaded.
+
+UART set-up for every read (COM1, base 0x3F8):
+
+| Register | Value | Meaning |
+| --- | --- | --- |
+| LCR | `0x87`, then `0x07` | DLAB on; then 8 data bits, no parity, **2 stop bits** |
+| DLL/DLM | `0x18`, `0x00` | divisor 24 = **4,800 baud** |
+| IER | `0x00` | polled, no interrupts |
+| MCR | never written | **DTR and RTS stay off** |
+
+The program polls LSR for each byte and also reads MSR. The Setup menu only
+chooses COM1 or COM2; the speed is fixed.
+
+| Step | Host bytes | Radio response |
+| --- | --- | --- |
+| Identity | `02` | 6 bytes (simulated `P350S 00`); content is not checked before reading (`P250S 00` read the same way) |
+| Acknowledge identity | `06` | `06` |
+| Read block | `52 <address:u16be> 80` | `57 <address:u16be> 80` + 128 data bytes, no checksum |
+| Acknowledge block | `06` | `06` |
+
+- 28 blocks, `0xF000` to `0xFD80` (0x0E00 bytes), strictly sequential.
+- No exit command: the session ends after the last block's `06`/`06`.
+- A `5A` (`Z`) reply, with or without data, makes KPG-23D show
+  "Check Connection. Retry or Cancel?". It is not part of this protocol.
+- Without a radio, one `02` is sent and the error appears after about six
+  seconds; Retry repeats the whole set-up and sends `02` again.
+
+Earlier notes (2026-11-13) recorded `9600,N,8,1`, an 8-byte identity, an `E`
+exit and a `Z` fill reply. The trace shows those were wrong for KPG-23D: the
+9600/8N1 lines are the PC BIOS initialising COM1 at boot, before KPG-23D runs.
+NewChirp used 9600 8N1 with DTR/RTS on, so a TK-350 never heard the request.
+This matches the 2026-11 reports (ledger 71), where no TK-350 ever answered.
 
 The KPG-32D manual specifies a KPG-8 or KPG-22 cable. It also warns that
 automatic entry into PC mode is not reliable: for a failed connection, switch
 the radio off, hold `[LMP]` and `[CALL]` while switching it on, and wait for
 `-PC-` on the display before starting the read.
 
-| Step | Host bytes | Radio response |
-| --- | --- | --- |
-| Identity | `02` | Eight-byte family identity |
-| Acknowledge identity | `06` | Optional `06` |
-| Read block | `52 <address:u16be> <length:u8>` | See below |
-| Leave mode | `45` (`E`) | `06` |
-
-The observed first request after selecting TK-350 and 450-470 MHz was:
-
-```text
-52 f0 00 80
-```
-
-This is `R`, address `0xF000`, and a 128-byte request. The identity accepted
-by the recovered TK-350 configuration was `P350S 00 e2 00`.
-
-## Block response
-
-The read-only implementation follows the shared Kenwood family framing:
-
-```text
-57 <3 header bytes> <length data bytes>
-```
-
-- `0x57` (`W`) indicates a data response.
-- `0x5A` (`Z`) indicates a uniform fill block and is expanded to `0xFF`.
-- The three response header bytes are retained by the OEM but are not part
-  of channel memory.
-- The host sends `0x06` and expects `0x06` after each accepted block.
-- A failed exchange is retried up to three times.
-
-The exact three header bytes could not be made to complete a full simulated
-block exchange before hardware became available. The driver therefore logs
-and preserves the family framing but must be validated by a physical read.
-Uploads remain disabled.
+TK-359 (KPG-32D) has not been traced this way yet; its driver keeps the
+earlier 9600 8N1, 8-byte identity, `Z` and `E` assumptions until it is.
 
 ## Memory size and records
 

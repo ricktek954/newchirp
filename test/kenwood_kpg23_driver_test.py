@@ -58,8 +58,17 @@ def _synthetic_image():
 
 
 class FakeKpgSerial:
-    def __init__(self, image, chunk_size=128):
+    """Radio as KPG-23D 1.01 was traced against (2026-11-26): it only
+    answers at the CPS's 4800 8N2 when ``strict`` is set, sends a 6-byte
+    identity and echoes the address in each W reply."""
+
+    def __init__(self, image, chunk_size=128, identity=b"P350S\x00",
+                 strict=False):
         self.image = bytes(image)
+        self.identity = identity
+        self.strict = strict
+        self.dtr = True
+        self.rts = True
         self.chunk_size = chunk_size
         self.timeout = 1
         self.baudrate = 9600
@@ -76,8 +85,10 @@ class FakeKpgSerial:
     def write(self, data):
         data = bytes(data)
         self.writes.append(data)
+        if self.strict and (self.baudrate, self.stopbits) != (4800, 2):
+            return len(data)  # wrong framing: the radio hears nothing
         if data == b"\x02":
-            self._rx.extend(b"P350S\x00\xe2\x00")
+            self._rx.extend(self.identity)
         elif data == b"\x06":
             self._rx.extend(b"\x06")
         elif data == b"E":
@@ -91,7 +102,7 @@ class FakeKpgSerial:
             payload = self.image[offset:offset + length].ljust(
                 length, b"\xff"
             )
-            self._rx.extend(b"W\x00\x00")
+            self._rx.extend(b"W" + data[1:3])
             self._rx.extend(bytes((length,)))
             self._rx.extend(payload)
         return len(data)
@@ -172,7 +183,9 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         self.assertEqual(serial.addresses[1], 0xF080)
         self.assertEqual(serial.addresses[-1], 0xF000 + 0x0D80)
         self.assertEqual(serial.writes[0], b"\x02")
-        self.assertEqual(serial.writes[-1], b"E")
+        # KPG-23D ends after the last block's ACK; it sends no exit command.
+        self.assertEqual(serial.writes[-1], b"\x06")
+        self.assertNotIn(b"E", serial.writes)
 
     def test_identity_request_is_retried_when_radio_enters_pc_mode_late(self):
         class SlowIdentitySerial(FakeKpgSerial):
@@ -185,7 +198,7 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
                     self.identity_requests += 1
                     self.writes.append(bytes(data))
                     if self.identity_requests >= 2:
-                        self._rx.extend(b"P350S\x00\xe2\x00")
+                        self._rx.extend(self.identity)
                     return len(data)
                 return super().write(data)
 
@@ -197,7 +210,60 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
             radio.sync_in()
 
         self.assertEqual(serial.identity_requests, 2)
-        self.assertEqual(serial.writes[-1], b"E")
+        self.assertEqual(serial.writes[-1], b"\x06")
+
+    def test_tk350_session_matches_kpg23d_trace(self):
+        """KPG-23D 1.01 in QEMU: 4800 8N2, DTR/RTS never raised, 6-byte
+        identity, 28 blocks from 0xF000, no exit command (2026-11-26)."""
+        image = _synthetic_image()
+        serial = FakeKpgSerial(image, strict=True)
+        radio = self.tk350(serial)
+        radio.status_fn = lambda _status: None
+
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+
+        self.assertEqual((serial.baudrate, serial.bytesize, serial.parity,
+                          serial.stopbits), (4800, 8, "N", 2))
+        self.assertFalse(serial.dtr)
+        self.assertFalse(serial.rts)
+        self.assertEqual(self.tk350.BAUD_RATE, 4800)
+        # The bridge opens the port with these, before the session starts.
+        self.assertFalse(self.tk350.WANTS_DTR)
+        self.assertFalse(self.tk350.WANTS_RTS)
+        self.assertEqual(radio.get_mmap().get_packed(), image)
+        self.assertEqual(len(serial.addresses), 28)
+        self.assertEqual(serial.addresses[-1], 0xFD80)
+
+    def test_tk350_reads_whatever_identity_the_radio_sends(self):
+        # KPG-23D read a simulated radio that sent "P250S" without
+        # complaint; it does not check the identity before reading.
+        serial = FakeKpgSerial(_synthetic_image(), identity=b"P250S\x00")
+        radio = self.tk350(serial)
+        radio.status_fn = lambda _status: None
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+        self.assertEqual(len(serial.addresses), 28)
+
+    def test_tk350_rejects_a_z_fill_reply_like_kpg23d(self):
+        class ZSerial(FakeKpgSerial):
+            def write(self, data):
+                if len(data) == 4 and data[:1] == b"R":
+                    self.writes.append(bytes(data))
+                    self._rx.extend(b"Z" + bytes(data[1:]))
+                    return len(data)
+                return super().write(data)
+
+        radio = self.tk350(ZSerial(_synthetic_image()))
+        radio.status_fn = lambda _status: None
+        with mock.patch("time.sleep", return_value=None):
+            with self.assertRaisesRegex(Exception, "0xF000"):
+                radio.sync_in()
+
+    def test_tk359_session_is_unchanged(self):
+        self.assertEqual(self.tk359.BAUD_RATE, 9600)
+        self.assertEqual(self.tk359._identity_length, 8)
+        self.assertEqual(self.tk359._exit_command, b"E")
 
     def test_short_block_is_retried_then_fails(self):
         class ShortSerial(FakeKpgSerial):

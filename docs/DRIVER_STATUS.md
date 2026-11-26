@@ -47,7 +47,7 @@ Last updated: 2026-11-20
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
-| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 9600 8N1, 0xF000 addressed blocks | Yes, offline-tested | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR/RTS off, 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU register trace 2026-11-26) | Yes, matches the OEM trace; not hardware-tested | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N1, 0xF000 addressed blocks | Yes, offline-tested | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8N2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
@@ -1969,9 +1969,16 @@ Last updated: 2026-11-20
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
 - Driver SHA-256:
   `4b0f2a04c8055c3b4aa7a7af1f5109f2e1e08a52e7aaad26d2a916fe22459f4d`
-- Transport: 9,600 baud, 8N1; `0x02` identity query, eight-byte
-  family identity, `R <address:u16be> <length:u8>` block requests, `W`
-  read-data status, `Z` fill status, and ACK/retry handling
+- Transport, TK-350 (KPG-23D 1.01 QEMU register trace with a simulated
+  radio, 2026-11-26): 4,800 baud 8N2, DTR and RTS off (KPG-23D never writes
+  the modem-control register), `0x02` answered by a 6-byte identity that is
+  not checked, `06`/`06`, 28 `R <hi> <lo> 80` requests from 0xF000 answered
+  `W <hi> <lo> 80` + 128 bytes with `06`/`06` after each, no exit command;
+  a `Z` reply fails the read. The 2026-11-13 notes (9,600 8N1, 8-byte
+  identity, `Z`, `E`) came from the BIOS's boot-time COM1 set-up and were
+  wrong; no TK-350 owner's radio ever answered them.
+- Transport, TK-359: still the 2026-11-13 assumptions (9,600 baud 8N1,
+  8-byte identity, `Z` fill, `E` exit) until KPG-32D is traced the same way
 - Implemented: full raw-image retention, the 16-byte channel record
   layout, RX/TX frequency decoding for the 450-470 MHz band, and
   four-character channel names. The `0x02` identity request is retried up
