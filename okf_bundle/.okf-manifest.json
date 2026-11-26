@@ -5,7 +5,7 @@
   "files": {
     "l10n/app_localizations.dart": {
       "path": "l10n/app_localizations.dart",
-      "mtime_ns": 1795600069118860922,
+      "mtime_ns": 1795680626735136872,
       "hash": "57e7f76f81f5d166efa0f3f2c0c8cacd8b3d34acf494a33bd5f0579a273700bf",
       "concept_ids": [
         "l10n/app_localizations/AppLocalizations",
@@ -133,7 +133,7 @@
     },
     "l10n/app_localizations_en.dart": {
       "path": "l10n/app_localizations_en.dart",
-      "mtime_ns": 1795600069083010881,
+      "mtime_ns": 1795680626689375308,
       "hash": "e3ade657a6d652927ef54cf5c57cd70bd33e1cb89b83d00d885a3c31f2318f1d",
       "concept_ids": [
         "l10n/app_localizations_en/AppLocalizationsEn",
@@ -255,7 +255,7 @@
     },
     "l10n/app_localizations_es.dart": {
       "path": "l10n/app_localizations_es.dart",
-      "mtime_ns": 1795600069094054535,
+      "mtime_ns": 1795680626706584753,
       "hash": "cdab76c9fb651cbdea4c1b01b1a30ff3b990357317fa76e1b4ab3c33c01d8188",
       "concept_ids": [
         "l10n/app_localizations_es/AppLocalizationsEs",
@@ -377,7 +377,7 @@
     },
     "l10n/app_localizations_fr.dart": {
       "path": "l10n/app_localizations_fr.dart",
-      "mtime_ns": 1795600069105328229,
+      "mtime_ns": 1795680626722204246,
       "hash": "4c3ea230b9c13beff45e070bcddc92a3ba8b9045ac74e4fce33d077ee43e34fd",
       "concept_ids": [
         "l10n/app_localizations_fr/AppLocalizationsFr",
@@ -1174,8 +1174,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795680583201840522,
-      "hash": "2e40a74badcf962b0541ad6d7b48f595c8f90d526189a5722dfc7f9562723771",
+      "mtime_ns": 1795692453703609411,
+      "hash": "ec7156ae7b4eb009da8bdd03ad87877ccffed2e7fc5638c0465323ebc38dd285",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -11115,5 +11115,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-26T08:09:45Z"
+  "generated_at": "2026-11-26T11:27:42Z"
 }
