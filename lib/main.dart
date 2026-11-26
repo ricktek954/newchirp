@@ -8796,6 +8796,10 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
   RepeaterSortOrder _sortOrder = RepeaterSortOrder.source;
   Size? _dialogSize;
   final MapController _mapController = MapController();
+  // The results list scrolls on its own inside the dialog's scrolling page;
+  // it needs its own controller and bar (2026-11-26 report: the visible
+  // scroll bar belonged to the page, so only Tab reached more repeaters).
+  final ScrollController _resultsScrollController = ScrollController();
   late final MyGmrsService _myGmrs;
   bool _myGmrsSigningIn = false;
   bool _myGmrsSignInCancelled = false;
@@ -9021,6 +9025,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     _resultFilterController.dispose();
     _countyFilterController.dispose();
     _mapController.dispose();
+    _resultsScrollController.dispose();
     if (_myGmrsSigningIn) _myGmrs.cancelSignIn();
     super.dispose();
   }
@@ -10068,42 +10073,60 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
                                   )
                                 : _mapView
                                 ? _buildResultsMap(context, visibleResults)
-                                : ListView.separated(
-                                    itemCount: visibleResults.length,
-                                    separatorBuilder: (_, _) =>
-                                        const Divider(height: 1),
-                                    itemBuilder: (context, index) {
-                                      final result = visibleResults[index];
-                                      return CheckboxListTile(
-                                        dense: true,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                              horizontal: 4,
-                                            ),
-                                        value: _selected.contains(result),
-                                        onChanged: (selected) {
-                                          setState(() {
-                                            if (selected == true) {
-                                              _selected.add(result);
-                                            } else {
-                                              _selected.remove(result);
-                                            }
-                                          });
-                                        },
-                                        title: Text(
-                                          result.callsign.isEmpty
-                                              ? result.channel.name
-                                              : '${result.callsign} — ${result.channel.name}',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
+                                : Padding(
+                                    // Keep this bar clear of the page's own
+                                    // scroll bar at the dialog edge, which
+                                    // otherwise caught the drag.
+                                    padding: const EdgeInsets.only(right: 16),
+                                    child: Scrollbar(
+                                      controller: _resultsScrollController,
+                                      thumbVisibility: true,
+                                      interactive: true,
+                                      child: ScrollConfiguration(
+                                        behavior: ScrollConfiguration.of(
+                                          context,
+                                        ).copyWith(scrollbars: false),
+                                        child: ListView.separated(
+                                          controller: _resultsScrollController,
+                                          itemCount: visibleResults.length,
+                                          separatorBuilder: (_, _) =>
+                                              const Divider(height: 1),
+                                          itemBuilder: (context, index) {
+                                            final result =
+                                                visibleResults[index];
+                                            return CheckboxListTile(
+                                              dense: true,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 4,
+                                                  ),
+                                              value: _selected.contains(result),
+                                              onChanged: (selected) {
+                                                setState(() {
+                                                  if (selected == true) {
+                                                    _selected.add(result);
+                                                  } else {
+                                                    _selected.remove(result);
+                                                  }
+                                                });
+                                              },
+                                              title: Text(
+                                                result.callsign.isEmpty
+                                                    ? result.channel.name
+                                                    : '${result.callsign} — ${result.channel.name}',
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                              subtitle: Text(
+                                                _channelDetail(result),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            );
+                                          },
                                         ),
-                                        subtitle: Text(
-                                          _channelDetail(result),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      );
-                                    },
+                                      ),
+                                    ),
                                   ),
                           ),
                         ],

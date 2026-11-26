@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 1170 concepts across 5 domains and 39 modul
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-26T13:56:27Z'
+timestamp: '2026-11-26T15:57:51Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
@@ -32,8 +32,8 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 ### [l10n](l10n/index.md) — 475 concepts
 
 - [l10n/app_localizations](l10n/app_localizations/index.md) (123 concepts)
-- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (117 concepts)
 - [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (117 concepts)
+- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (117 concepts)
 - [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (117 concepts)
 - [l10n/l10n](l10n/l10n/index.md) (1 concepts)
 
@@ -83,23 +83,23 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) | Class | `models/channel_image_baseline.dart` | Remembers the last library snapshot so search and row select… |
 | [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
 | [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
+| [uiTheDestinationRangeThroughContainsChannels](/l10n/app_localizations/uiTheDestinationRangeThroughContainsChannels.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiTheDestinationRangeThroughCon… |
 | [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
 | [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
 | [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
-| [uiTheDestinationRangeThroughContainsChannels](/l10n/app_localizations/uiTheDestinationRangeThroughContainsChannels.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiTheDestinationRangeThroughCon… |
+| [uiReferenceSourceVerifyCurrentNationalRules](/l10n/app_localizations/uiReferenceSourceVerifyCurrentNationalRules.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiReferenceSourceVerifyCurrentN… |
 | [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
 | [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
 | [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
-| [uiReferenceSourceVerifyCurrentNationalRules](/l10n/app_localizations/uiReferenceSourceVerifyCurrentNationalRules.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiReferenceSourceVerifyCurrentN… |
 | [clearedLocationsForUpload](/models/channel_image_baseline/clearedLocationsForUpload.md) | Function | `models/channel_image_baseline.dart` | All radio locations that must be blank for the current libra… |
 | [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
 | [receiveOnlyWriteNote](/models/radio_channel/receiveOnlyWriteNote.md) | Function | `models/radio_channel.dart` | Write-confirmation note naming the receive-only channels, or… |
 | [radioMappingsSignature](/models/radio_mapping/radioMappingsSignature.md) | Function | `models/radio_mapping.dart` | Fixed (non-editable) zone models are derived from channel nu… |
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
+| [uiNoMatchingRepeatersWereFoundCoordinates](/l10n/app_localizations/uiNoMatchingRepeatersWereFoundCoordinates.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiNoMatchingRepeatersWereFoundC… |
 | [UndecodedChannel](/services/radio_bridge/UndecodedChannel.md) | Class | `services/radio_bridge.dart` | A channel slot the driver could not decode. The bridge leave… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
-| [uiNoMatchingRepeatersWereFoundCoordinates](/l10n/app_localizations/uiNoMatchingRepeatersWereFoundCoordinates.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiNoMatchingRepeatersWereFoundC… |
 
 ## Usage with OpenCode
 

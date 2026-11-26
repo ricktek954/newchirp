@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -97,9 +97,14 @@ class _FakeUpdateInstaller extends UpdateInstaller {
 }
 
 class _FakeRepeaterBridge extends RadioBridge {
-  _FakeRepeaterBridge({this.emptyResults = false, this.error});
+  _FakeRepeaterBridge({
+    this.emptyResults = false,
+    this.error,
+    this.manyResults = 0,
+  });
 
   final bool emptyResults;
+  final int manyResults;
   final String? error;
   String? lastCountry;
   String? lastState;
@@ -134,6 +139,31 @@ class _FakeRepeaterBridge extends RadioBridge {
     lastDistance = distance;
     lastFmOnly = fmOnly;
     lastOpenOnly = openOnly;
+    if (manyResults > 0) {
+      return RepeaterSearchResults(
+        source: 'RepeaterBook',
+        sourceUrl: 'https://repeaterbook.com',
+        totalMatches: manyResults,
+        results: [
+          for (var i = 0; i < manyResults; i++)
+            RepeaterSearchResult(
+              channel: RadioChannel(
+                location: i + 1,
+                name: 'Repeater $i',
+                frequency: 146.01 + i * 0.015,
+              ),
+              callsign: 'K${i.toString().padLeft(3, '0')}',
+              city: 'Town $i',
+              county: 'Erie',
+              state: state,
+              use: 'OPEN',
+              service: 'Amateur',
+              latitude: 42.0 + i / 100,
+              longitude: -78.0,
+            ),
+        ],
+      );
+    }
     if (emptyResults) {
       return const RepeaterSearchResults(
         source: 'RepeaterBook',
@@ -522,6 +552,71 @@ void main() {
     await tester.pump();
     expect(value, isTrue);
   });
+
+  testWidgets('Repeater results scroll with their own scroll bar', (
+    tester,
+  ) async {
+    // 2026-11-26 report: on Windows the visible bar belonged to the dialog
+    // page, so dragging it did not move the results; only Tab reached more.
+    tester.view.physicalSize = const Size(1200, 720);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(
+      MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: TextButton(
+              onPressed: () => showDialog<List<RadioChannel>>(
+                context: context,
+                builder: (context) => RepeaterBookDialog(
+                  bridge: _FakeRepeaterBridge(manyResults: 60),
+                  preferencesStore: _FakeRepeaterSearchPreferencesStore(),
+                ),
+              ),
+              child: const Text('Open repeater search'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open repeater search'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Search'));
+    await tester.pumpAndSettle();
+
+    final list = find.byWidgetPredicate(
+      (widget) => widget is ListView && widget.controller != null,
+    );
+    expect(list, findsOneWidget);
+    final controller = tester.widget<ListView>(list).controller!;
+    final bars = find.ancestor(of: list, matching: find.byType(Scrollbar));
+    expect(
+      tester
+          .widgetList<Scrollbar>(bars)
+          .where((bar) => bar.controller == controller),
+      hasLength(1),
+      reason: 'the results list has its own scroll bar',
+    );
+    expect(controller.offset, 0);
+    expect(controller.position.maxScrollExtent, greaterThan(0));
+    await tester.ensureVisible(list);
+    await tester.pumpAndSettle();
+    final box = tester.getRect(list);
+    await tester.dragFrom(
+      Offset(box.right - 4, box.top + 8),
+      const Offset(0, 120),
+      kind: PointerDeviceKind.mouse,
+    );
+    await tester.pumpAndSettle();
+    expect(
+      controller.offset,
+      greaterThan(0),
+      reason: 'dragging the bar scrolls',
+    );
+  }, variant: TargetPlatformVariant.only(TargetPlatform.windows));
 
   testWidgets('RepeaterBook search previews and returns selected channels', (
     tester,
