@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 17:16:00",
+  "kind": "bug",
+  "manufacturer": "Quansheng",
+  "model": "TK11",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "mailbox:UID 1044",
+  "status": "fix_committed",
+  "summary": "1.0.75 Windows 10 (26100), TK11(8) firmware 5.00.18, COM3: read 16 channels, write's first 536-byte frame got no reply, retry got 16 unframed bytes. Stock do_upload skips the 0x1F4 connect; OEM CPS 2.19 connects before every write.",
+  "title": "Read works, write fails: upload never opens a session",
+  "uid": "w-20261126-0461"
+}

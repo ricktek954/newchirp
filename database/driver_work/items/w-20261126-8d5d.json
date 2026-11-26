@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 17:16:01",
+  "kind": "bug",
+  "manufacturer": "Radtel",
+  "model": "RT-950 Pro",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "mailbox:UID 1045",
+  "status": "awaiting_user",
+  "summary": "1.0.75 Windows 10 (19045), COM15, Radtel_RT-950_Pro_Ferrite: 03, 00 and the 23-byte HELLO all unanswered. Ferrite answers HELLO, so likely stock Radtel firmware, Ferrite Console holding the port, or wrong port.",
+  "title": "Ferrite read: no answer to wake bytes or HELLO",
+  "uid": "w-20261126-8d5d"
+}

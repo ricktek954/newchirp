@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 17:16:00",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:0839e00579907b14b69110edd9b865ec1a095653abe99a956412c0e4a325a843",
+  "item": "w-20261126-0461",
+  "occurred_at": "2026-11-26",
+  "summary": "OEM CPS TK11_EN(2.19) from Quansheng's official package recovered (Setup Factory: XOR 0x07 stub + PKWARE DCL streams) and decompiled: Login() connect 500/501 + model/password checks before every read/write; Write needs 510 per block; reboot 1501."
+}
