@@ -343,6 +343,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: Icom CI-V serial, 19200 8N1. Read: Corrected memory grammar. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:76
 
+### IC-7400
+
+- **#w-20261126-bfc0 bug | awaiting_user | normal:** Read times out: no CI-V echo, no radio reply
+  1.0.75 Windows COM3 (same cable as the reporter's IC-910): one stray byte, then no echo and no reply to 1a/00 at 66h. A CI-V interface that does not echo is usually not on a powered bus (radio off or cable not seated) or the USB adapter needs replugging. Asked for setup checks.
+  Source: `email` mailbox:UID 1031
+
 ### IC-746PRO
 
 - **#55 maintenance | experimental | normal:** Current driver status

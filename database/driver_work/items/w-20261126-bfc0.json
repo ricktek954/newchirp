@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 14:53:00",
+  "kind": "bug",
+  "manufacturer": "Icom",
+  "model": "IC-7400",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "mailbox:UID 1031",
+  "status": "awaiting_user",
+  "summary": "1.0.75 Windows COM3 (same cable as the reporter's IC-910): one stray byte, then no echo and no reply to 1a/00 at 66h. A CI-V interface that does not echo is usually not on a powered bus (radio off or cable not seated) or the USB adapter needs replugging. Asked for setup checks.",
+  "title": "Read times out: no CI-V echo, no radio reply",
+  "uid": "w-20261126-bfc0"
+}

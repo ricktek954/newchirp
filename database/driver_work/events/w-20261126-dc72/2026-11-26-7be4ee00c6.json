@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 14:53:00",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1028, 1030",
+  "item": "w-20261126-dc72",
+  "occurred_at": "2026-11-26",
+  "summary": "Owner's NewChirp CSV export of the read (120 channels): 116 match the UK 70 cm plan exactly (433.000-433.375 +1.6 MHz repeaters with callsign names, SU16-SU45 simplex, 430.850-430.950 +7.6 MHz), so the decode is right; outliers ch111-114 (427.475-427.65 +7.6, 524.125 +20.7625) may be what is stored (Sp tune allows up to 550 MHz). Asked what the radio displays on 111-114. Video shows only the app."
+}

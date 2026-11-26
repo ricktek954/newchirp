@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 14:52:59",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1029",
+  "item": "w-20261119-c2a9",
+  "occurred_at": "2026-11-26",
+  "summary": "1.0.75: IC-910 no longer answers at all (CI-V echo on every probe, no radio reply at any baud). It read on 1.0.60 (reached channel decode), and no CI-V transport change since, so likely radio CI-V address/baud setting or cable jack."
+}
