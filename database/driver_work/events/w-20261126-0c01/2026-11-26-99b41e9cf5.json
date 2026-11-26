@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 16:04:03",
+  "details": "1.0.75 Windows 11: the visible vertical bar belonged to the dialog page and sat over the results list's edge, so dragging it did not move the results; only Tab reached more. Results list now has its own interactive bar inset from the page bar; Windows-platform widget test drags it.",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1036",
+  "item": "w-20261126-0c01",
+  "occurred_at": "2026-11-26",
+  "summary": "Find Repeaters: results scroll bar does not scroll the list on Windows"
+}

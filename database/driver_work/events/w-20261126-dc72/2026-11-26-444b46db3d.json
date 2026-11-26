@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 16:04:03",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:d3ada3402",
+  "item": "w-20261126-dc72",
+  "occurred_at": "2026-11-26",
+  "summary": "CTCSS tone decode (desktop + web); tone bytes kept on frequency edits"
+}

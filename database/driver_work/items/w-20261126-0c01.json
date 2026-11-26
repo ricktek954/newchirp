@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 16:04:03",
+  "kind": "bug",
+  "manufacturer": "NewChirp",
+  "model": "Desktop app",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "mailbox:UID 1036",
+  "status": "fix_committed",
+  "summary": "1.0.75 Windows 11: the visible vertical bar belonged to the dialog page and sat over the results list's edge, so dragging it did not move the results; only Tab reached more. Results list now has its own interactive bar inset from the page bar; Windows-platform widget test drags it.",
+  "title": "Find Repeaters: results scroll bar does not scroll the list on Windows",
+  "uid": "w-20261126-0c01"
+}

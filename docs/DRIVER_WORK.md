@@ -564,6 +564,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Desktop app
 
+- **#w-20261126-0c01 bug | fix_committed | normal:** Find Repeaters: results scroll bar does not scroll the list on Windows
+  1.0.75 Windows 11: the visible vertical bar belonged to the dialog page and sat over the results list's edge, so dragging it did not move the results; only Tab reached more. Results list now has its own interactive bar inset from the page bar; Windows-platform widget test drags it.
+  Source: `email` mailbox:UID 1036
 - **#w-20261122-685e enhancement | released | low:** Print the channel list
   5RH Pro owner asked to print channels. The Print button only prints the GMRS/FRS reference; workaround: Save as... CSV and print from a spreadsheet.
   Source: `email` INBOX:889

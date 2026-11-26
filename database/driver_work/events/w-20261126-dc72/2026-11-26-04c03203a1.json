@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 16:04:02",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1037",
+  "item": "w-20261126-dc72",
+  "occurred_at": "2026-11-26",
+  "summary": "Owner's paper channel list matches NewChirp's read for ch1-110 (inputs 434.600+ = 433.000 + 1.6 MHz; SU16-SU45); shows CTCSS access tones (67.0-118.8) NewChirp did not decode; marks ch111-120 '? RX ONLY'."
+}
