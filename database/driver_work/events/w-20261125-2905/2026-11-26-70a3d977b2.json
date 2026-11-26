@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 12:26:16",
+  "details": "",
+  "event_type": "note",
+  "external_ref": "desktop:9f5784324",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-26",
+  "summary": "Rebased onto Linux 1.0.77: desktop fix commit is now 9f5784324 (was 23a898960)"
+}
