@@ -177,6 +177,16 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.75` is live from source commit `0407d809` as a universal,
+  signed, and notarized DMG. It adds the TK-350 all-UHF-band channel decode,
+  TK-359 `Z` fill-block handling and KPG-32D channel records, and the IC-E90
+  bounded decode. Verification: analyzer clean; 254 Flutter tests; 677
+  Python tests; embedded version `1.0.75` / `75`; arm64 and x86_64; 277
+  driver modules; bundled driver and bridge hashes match source; strict
+  codesigning and Gatekeeper accepted; matching local, server, and public
+  SHA-256 `45c4bb35…34337`. Notarization submission:
+  `83493bc5-6950-4b58-8f57-0fb76d591fd8`. Platform versions are
+  independent: macOS 1.0.75 follows macOS 1.0.74 regardless of Linux.
 - macOS `1.0.74` is live from source commit `e7a0fc5e` as a universal,
   signed, and notarized DMG. It adds the OEM-traced KPG-23D TK-350 and
   KPG-32D TK-359 sessions with BIOS DTR/RTS behavior, the UV-5R/UV-3R

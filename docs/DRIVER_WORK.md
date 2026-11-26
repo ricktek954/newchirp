@@ -455,7 +455,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#71 bug | released | high:** Identity request receives zero bytes
   Zero identity bytes were observed on COM3 and COM4. The driver now retries the bounded 0x02 identity request three times for late PC mode.
   Source: `email` INBOX:727-728
-- **#w-20261126-dc72 bug | fix_committed | high:** Full read completes but shows 0 channels
+- **#w-20261126-dc72 bug | released | high:** Full read completes but shows 0 channels
   1.0.74 read the whole image from the owner's TK-350 but every slot showed empty. The driver hid channels outside 450-470 MHz. KPG-23D files saved in QEMU for 450-470 (sample.u1f) and 400-430 MHz (sample.u4f) prove the word encoding is band-independent; the band digit sits at 0x0D05 (P350n). Fix decodes all UHF bands; Web Programmer updated.
   Source: `email` mailbox:UID 1011
 - **#15 maintenance | experimental | normal:** Current driver status
@@ -467,7 +467,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#79 bug | released | normal:** No identity response in PC mode
   Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.
   Source: `email` INBOX:699-700
-- **#w-20261126-95c9 bug | fix_committed | high:** Z fill reply rejected; channel records decoded from the wrong offset
+- **#w-20261126-95c9 bug | released | high:** Z fill reply rejected; channel records decoded from the wrong offset
   Real TK-359 answers uniform blocks with Z + echo + one fill byte (KPG32D.EXE 0x16468, Z at DS:0x32DF); 1.0.74 rejected it. Channel records are 32 bytes at 0x3400 with flag-byte frequencies (bit7 6.25 kHz, bit0 step bit 16), verified with uhf359.fdt saved by KPG-32D (460.0125/465.000, 455.500); the old decode read unused offset 0.
   Source: `email` mailbox:UID 1014
 - **#16 maintenance | experimental | normal:** Current driver status
@@ -643,6 +643,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261126-9868 release | released | normal:** macOS 1.0.74 published
   Published a universal signed and notarized DMG from source commit e7a0fc5e. It adds the OEM-traced KPG-23D TK-350 and KPG-32D TK-359 sessions with BIOS DTR/RTS behavior, the UV-5R/UV-3R aux-first download and UV-3R error reporting, the MD-UV380 short DFU identity read, the TK-863G memory-session retry, and the image-mismatch CSV guidance. Verification: analyzer clean; 254 Flutter tests passed; 672 Python tests passed; bridge upload tests passed; embedded version 1.0.74 / 74; arm64 and x86_64 Python 3.13.15; CHIRP 21e42e4518c167548af90ed7f9edf75e516c491a; 277 driver modules; 608 selectable models across 62 vendors; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: 631e58676db11984579fc0587417fde00cb366444127e8367aee99833141aa7d. Apple notarization: e999d8f9-3def-43fc-8596-cec6e8e91115. The live manifest reports macOS 1.0.74.
   Source: `release` desktop:e7a0fc5e
+- **#w-20261126-6e6d release | released | normal:** macOS 1.0.75 published
+  Published a universal signed and notarized DMG from source commit 0407d809. It adds the TK-350 all-UHF-band channel decode, TK-359 Z fill-block handling and KPG-32D channel records, and the IC-E90 bounded decode (one out-of-table value no longer stops the channel list). Verification: analyzer clean; 254 Flutter tests passed; 677 Python tests passed (2 fixture skips); bridge upload tests passed; embedded version 1.0.75 / 75; arm64 and x86_64; 277 driver modules; bundled kpg23, icx90 and bridge hashes match source; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: 45c4bb356db503ad51d77727e0202acaec093f94b904d05c8c6da8b274c34337. Apple notarization: 83493bc5-6950-4b58-8f57-0fb76d591fd8. The live manifest reports macOS 1.0.75.
+  Source: `release` desktop:0407d809
 
 ### Website
 

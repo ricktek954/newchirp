@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 11:35:17",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "macOS desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:0407d809",
+  "status": "released",
+  "summary": "Published a universal signed and notarized DMG from source commit 0407d809. It adds the TK-350 all-UHF-band channel decode, TK-359 Z fill-block handling and KPG-32D channel records, and the IC-E90 bounded decode (one out-of-table value no longer stops the channel list). Verification: analyzer clean; 254 Flutter tests passed; 677 Python tests passed (2 fixture skips); bridge upload tests passed; embedded version 1.0.75 / 75; arm64 and x86_64; 277 driver modules; bundled kpg23, icx90 and bridge hashes match source; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: 45c4bb356db503ad51d77727e0202acaec093f94b904d05c8c6da8b274c34337. Apple notarization: 83493bc5-6950-4b58-8f57-0fb76d591fd8. The live manifest reports macOS 1.0.75.",
+  "title": "macOS 1.0.75 published",
+  "uid": "w-20261126-6e6d"
+}
