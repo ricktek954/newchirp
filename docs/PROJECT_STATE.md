@@ -177,6 +177,19 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.74` is live from source commit `e7a0fc5e` as a universal,
+  signed, and notarized DMG. It adds the OEM-traced KPG-23D TK-350 and
+  KPG-32D TK-359 sessions with BIOS DTR/RTS behavior, the UV-5R/UV-3R
+  aux-first download and UV-3R error reporting, the MD-UV380 short DFU
+  identity read, the TK-863G memory-session retry, and image-mismatch CSV
+  guidance. Verification: analyzer clean; 254 Flutter tests; 672 Python
+  tests; embedded version `1.0.74` / `74`; arm64 and x86_64 Python
+  `3.13.15`; CHIRP `21e42e4518c167548af90ed7f9edf75e516c491a`; 277 driver
+  modules; catalog `list-models` returned 608 models across 62 vendors;
+  strict codesigning and Gatekeeper accepted; and matching local, server,
+  and public SHA-256 `631e5867…41aa7d`. Notarization submission:
+  `e999d8f9-3def-43fc-8596-cec6e8e91115`. Run `notarytool` outside the
+  Claude Code sandbox; inside it the `newchirp` keychain profile is not found.
 - macOS `1.0.73` is live from source commit `5e734229` as a universal,
   signed, and notarized DMG. It adds the experimental Ferrite RT-950 Pro
   link-protocol driver and web profile, completes Ferrite empty-read and zone
