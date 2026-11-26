@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 11:57:40",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:8a24cd2f",
+  "item": "w-20261126-7766",
+  "occurred_at": "2026-11-26",
+  "summary": "Linux 1.0.77 bounds IC-E90 tone, DTCS, mode, tone-mode, and step lookups so one out-of-table value cannot stop the channel list"
+}

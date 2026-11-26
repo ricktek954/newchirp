@@ -8,6 +8,18 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.77` is live from source commit `8a24cd2f`. It decodes TK-350
+  channels across all UHF bands, handles the TK-359 uniform `Z` plus fill-byte
+  block and KPG-32D 32-byte channel records with flag-byte frequencies, and
+  bounds IC-E90 tone, DTCS, mode, tone-mode, and step lookups so one
+  out-of-table value cannot stop the channel list. Verification: analyzer
+  clean; all 254 Flutter tests with the bundled Python 3.13 runtime; 677
+  bundled Python tests with two fixture-dependent skips; Ubuntu 20.04 ABI
+  maximum GLIBC `2.18`; DEB, RPM, and Pacman metadata plus embedded version
+  `1.0.77`; DEB and AppImage Xvfb smoke tests; AppImage host launches under
+  Wayland and X11; package payloads include the TK-350, TK-359, and IC-E90
+  decoder changes and omit GLVND/EGL/GLES loaders; all public downloads
+  returned HTTP 200; and the Linux platform manifest reports `1.0.77`.
 - Linux `1.0.76` is live from source commit `ab66c0d7`. It adds the
   KPG-23D TK-350 and KPG-32D TK-359 sessions with OEM DTR/RTS behavior,
   reads UV-5R settings before the channels for radios that refuse the jump
@@ -1492,6 +1504,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.77` artifact source commit: `8a24cd2f`
 - Linux `1.0.76` artifact source commit: `ab66c0d7`
 - Linux `1.0.75` artifact source commit: `79b693a5`
 - Linux `1.0.74` artifact source commit: `76519b2d`
@@ -1502,7 +1515,7 @@ release requirements.
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.74+74` (macOS `1.0.74`; Linux artifact is `1.0.76`)
+- Checked-out source version: `1.0.75+75` (macOS `1.0.75`; Linux artifact is `1.0.77`)
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1518,7 +1531,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.73 |
 | Windows | 1.0.70 |
-| Linux | 1.0.76 |
+| Linux | 1.0.77 |
+
+Linux `1.0.77` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.77.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.77.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.77.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.77.pkg.tar.zst`
+- DEB: `48,926,594` bytes, SHA-256
+  `aefe1289b33eeb5a9b998daa62dcfbef05c804855d1e908b1802e7a5b75cef5e`
+- RPM: `49,008,576` bytes, SHA-256
+  `5225239ab8b6a64065bafa629426dae4cee1b104d8cabe77143e20aac9c939d8`
+- AppImage: `49,206,464` bytes, SHA-256
+  `1e5b76ee86a5582ecff4f9d49e0ce54830ff2b2bff35b23596a87cabffb3de7d`
+- Pacman: `47,886,940` bytes, SHA-256
+  `919db7e723e3f47231f7758483b5014a48154c727f9382bd3d834faa4a46f485`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.77`
 
 Linux `1.0.76` artifacts:
 

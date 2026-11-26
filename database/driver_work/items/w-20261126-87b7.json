@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 11:57:31",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "Linux desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:8a24cd2f",
+  "status": "released",
+  "summary": "Published DEB, RPM, AppImage, and Pacman packages from source commit 8a24cd2f. The release decodes TK-350 channels across all UHF bands instead of hiding them, handles the TK-359 uniform Z-plus-fill block and uses the KPG-32D 32-byte channel records with flag-byte frequencies, and bounds IC-E90 table lookups so one out-of-table channel value cannot stop the channel list. Verification: flutter analyze passed; all 254 Flutter tests passed with the bundled Python 3.13 runtime; 677 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.77 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include the TK-350, TK-359, and IC-E90 decoder changes and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.77. Package SHA-256 values: aefe1289b33eeb5a9b998daa62dcfbef05c804855d1e908b1802e7a5b75cef5e, 5225239ab8b6a64065bafa629426dae4cee1b104d8cabe77143e20aac9c939d8, 1e5b76ee86a5582ecff4f9d49e0ce54830ff2b2bff35b23596a87cabffb3de7d, and 919db7e723e3f47231f7758483b5014a48154c727f9382bd3d834faa4a46f485.",
+  "title": "Linux 1.0.77 published",
+  "uid": "w-20261126-87b7"
+}
