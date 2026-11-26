@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 16:57:14",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:3d16733f",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-26",
+  "summary": "Linux 1.0.78 ships the plain-PROGRAM fallback for the UV-5RM Pro and first-gen 5RH Pro CPS protocol"
+}

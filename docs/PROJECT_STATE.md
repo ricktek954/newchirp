@@ -8,6 +8,20 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.78` is live from source commit `3d16733f`. It decodes channels
+  one at a time and reports undecodable slots instead of failing the entire
+  list, lets bug reports attach the radio image, enables the experimental
+  TK-350 desktop write path and decodes/preserves its CTCSS tones, adds the
+  UV-5RM Pro plain-`PROGRAM` synchronization fallback, and gives the Find
+  Repeaters results list its own scroll bar. Verification: analyzer clean;
+  all 257 Flutter tests with the bundled Python 3.13 runtime; 693 bundled
+  Python tests with two fixture-dependent skips; Ubuntu 20.04 ABI maximum
+  GLIBC `2.18`; DEB, RPM, and Pacman metadata plus embedded version `1.0.78`;
+  DEB and AppImage Xvfb smoke tests; AppImage host launches under Wayland and
+  X11; package payloads include the per-channel decode, image-report,
+  TK-350, UV-5RM Pro, and Repeater UI changes and omit GLVND/EGL/GLES
+  loaders; all public downloads returned HTTP 200; and the Linux platform
+  manifest reports `1.0.78`.
 - Linux `1.0.77` is live from source commit `8a24cd2f`. It decodes TK-350
   channels across all UHF bands, handles the TK-359 uniform `Z` plus fill-byte
   block and KPG-32D 32-byte channel records with flag-byte frequencies, and
@@ -1515,6 +1529,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.78` artifact source commit: `3d16733f`
 - Linux `1.0.77` artifact source commit: `8a24cd2f`
 - Linux `1.0.76` artifact source commit: `ab66c0d7`
 - Linux `1.0.75` artifact source commit: `79b693a5`
@@ -1526,7 +1541,7 @@ release requirements.
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.75+75` (macOS `1.0.75`; Linux artifact is `1.0.77`)
+- Checked-out source version: `1.0.76+76` (macOS `1.0.76`; Linux artifact is `1.0.78`)
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1542,7 +1557,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.73 |
 | Windows | 1.0.70 |
-| Linux | 1.0.77 |
+| Linux | 1.0.78 |
+
+Linux `1.0.78` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.78.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.78.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.78.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.78.pkg.tar.zst`
+- DEB: `48,938,920` bytes, SHA-256
+  `25bdf0a5781d8d773cc9404e84e2a890d8c11a543bf3b9557137224ffe13c60a`
+- RPM: `49,022,187` bytes, SHA-256
+  `b6faf0562f8d81e9190868fae5d92ef1f7d231b3dc37ecac28ac1fae3e1ce569`
+- AppImage: `49,218,752` bytes, SHA-256
+  `2ceb67a0294f180f582495d2c7c6db5d3c5529495a0aff47b81098159954756a`
+- Pacman: `47,871,603` bytes, SHA-256
+  `6d4f7c15b3e23b48f19033e354baa0c3c5c2e9c2e5d7cc1549af3f6fb3d6c013`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.78`
 
 Linux `1.0.77` artifacts:
 
