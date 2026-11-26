@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:43:38",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:988-990",
+  "item": "71",
+  "occurred_at": "2026-11-26",
+  "summary": "1.0.71, new FTDI cable on COM6: 0 identity bytes on all three tries, with normal power-on and with the display flashing (PROG/PC mode). Same as every earlier cable; KPG-23D recheck confirms the bare 0x02 identity at 9600 8N1 (docs/KPG23_PROTOCOL.md)"
+}

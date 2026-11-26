@@ -160,6 +160,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Transport: UV-17-family serial, 115200 8N1. Read: Malformed CTCSS values no longer abort channel decode. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:54
 
+### UV-21Pro GPS
+
+- **#w-20261126-76d8 bug | investigating | normal:** No response from radio (triage)
+  Win 1.0.73 COM7: PROGRAMCOLOR no reply; notes say radio is a 'uv1'; same cable read a UV-82; exact model needed
+  Source: `email` INBOX:993
+
 ### UV-21Pro V2
 
 - **#w-20261125-1eff bug | awaiting_user | normal:** PROGRAMBFNOR unanswered on COM1
@@ -273,6 +279,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-17cf bug | awaiting_user | normal:** Radio stops answering after five successful writes
   Windows, 1.0.69, COM7: one read and five writes succeeded 14:40-16:24, then every ident attempt got no reply (write and read). Same port and session; points to plug seating, battery or the radio needing a power cycle.
   Source: `email:INBOX:928-930` <229ff3ec-97d4-953c-d854-ae317736d42b@newchirp.net>
+- **#w-20261126-7f13 bug | fix_committed | normal:** Writing an older saved image: 'Image not supported by radio' gives no way forward
+  Win 1.0.73: read radio (21 ch), then opened a saved .img (86 ch) and wrote it; stock uv5r refuses because the image's aux area differs from this dropped-byte radio. Correct safety behavior; message now explains the CSV route. FAQ #image-from-another-radio.
+  Source: `email` INBOX:991
 
 ### UV-82WP
 
@@ -378,6 +387,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-6995 bug | fix_committed | normal:** Read fails: 'DTCS-T' is not in valid list
   Stock id5100.py decodes tone mode 8 as 'DTCS-T' (DTCS encode only) and 2/4 as '2??'/'4??' (pocket beep), none valid CHIRP tone modes, so one such channel aborts the whole channel decode. Override maps DTCS-T to Cross 'DTCS->', pocket-beep TSQL/DTCS to TSQL/DTCS (kept on unchanged write-back), undefined values to no tone, and offers TSQL-R/DTCS-R. Covers ID-4100 too. No image attached.
   Source: `email` INBOX:940 <64a8cf78-71ea-6553-ee6d-dbdeb1de4f93@newchirp.net>
+- **#w-20261126-fdb2 bug | investigating | normal:** No response from radio (triage)
+  Win 1.0.73 COM5: Icom identify got no reply; cable/clone-mode details needed
+  Source: `email` INBOX:1002
 
 ### ID-52
 
@@ -422,6 +434,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#60 maintenance | experimental | normal:** Current driver status
   Transport: Kenwood Series 60G clone serial, 9600 8E1. Read: NewChirp decode with raw-preserving invalid-index normalization. Write: NewChirp write path with bank-state validation and transient checksum retry; offline-tested. Settings: Stock driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:84
+
+### TK-3101
+
+- **#w-20261126-565d new_driver | open | normal:** Support the Kenwood TK-3101
+  Owner request; not in upstream CHIRP. Need the OEM programming software and a sample data file to REA.
+  Source: `email` INBOX:999
 
 ### TK-3401D
 
@@ -618,6 +636,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Source: `email triage 2026-11-25` INBOX:983
 
 ## Quansheng
+
+### TK11
+
+- **#w-20261126-bb70 bug | investigating | normal:** No response from radio (triage)
+  Read on COM1 (likely the PC's built-in serial port, not the cable): UV-K5 hello got 0 bytes
+  Source: `email` INBOX:995
 
 ### UV-K1 & UV-K5 V3 (F4HWN)
 
@@ -816,6 +840,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Older RT22s read; newer units ACK PROGRGS and return an 8-byte ID that matches none of RT22Radio._fileid (P32073, P3\0\0\03, P3207!, 00..F8FF). Trace hid the bytes. Same pattern as upstream CHIRP #6747 (open since 2019). Do not accept an unknown ID blindly: newer units may differ internally. Need the ID bytes and an OEM-software file from a newer unit.
   Source: `mailbox` INBOX:871 <c77a8516-ea89-dc83-e8ac-f177629e63c3@newchirp.net>
 
+### RT85
+
+- **#w-20261126-8c7c bug | investigating | normal:** No response from radio (triage)
+  Owner selected RA85 (GA-510 family, PROGROMWLTU) for an RT85; CHIRP supports Retevis RT85 (th_uv88)
+  Source: `email` INBOX:996
+
 ### RT97L
 
 - **#11 maintenance | experimental | normal:** Current driver status
@@ -852,6 +882,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### MD-UV380
 
+- **#w-20261126-8502 bug | fix_committed | normal:** USB DFU identity reply of 32 bytes stops the read
+  macOS 1.0.73: 'USB DFU transfer returned 32 of 64 bytes' on the 0xA2 identity upload. dmrconfig requests 64 and accepts any length; model name is in the first 32 bytes. Identity now accepts a short reply; memory reads stay strict.
+  Source: `email` INBOX:986
 - **#36 maintenance | experimental | normal:** Current driver status
   Transport: ST DfuSe USB 0483:DF11 + libusb. Read: 3000 channels + zones. Write: Yes, offline-tested. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:60
@@ -867,6 +900,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-8b91 bug | awaiting_user | normal:** COM3 not available on first read (Windows 11)
   Brand-new radio, first connection, 1.0.69 on Windows 11: Windows could not open COM3 before any radio traffic. Likely the cable driver (TH-9800 cables are usually Prolific PL2303, refused by current Windows drivers) or a wrong/stale port. User-side; FAQ #cable-driver and #which-port.
   Source: `email:INBOX:934` <503cda7b-824d-8942-b8fe-f0aa878fc509@newchirp.net>
+- **#w-20261126-f3d3 bug | investigating | normal:** No response from radio (triage)
+  macOS 1.0.73: no reply on usbserial-RTADM13B after a BF-F8HP read on another cable; cable and clone setup needed
+  Source: `email` INBOX:1005
 - **#65 maintenance | experimental | normal:** Current driver status
   Transport: TYT clone serial, 38400 8N1. Read: Reserved tone values no longer abort the read. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:89

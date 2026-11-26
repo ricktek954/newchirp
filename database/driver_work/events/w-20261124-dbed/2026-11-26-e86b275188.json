@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:43:37",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:2041afe2b14883ea1411d139227bb6c19ff4292c909c89599a812c475bafcfde",
+  "item": "w-20261124-dbed",
+  "occurred_at": "2026-11-26",
+  "summary": "KPG-76D 0x4037b0: a failed 0x403110 shows Retry/Cancel (0x402ff0, MessageBoxA 0x15) and Retry re-sends 0x7C in the same session; read helper 0x4015e0 requires the full count; timeout multiplier [obj+0x21]=0"
+}

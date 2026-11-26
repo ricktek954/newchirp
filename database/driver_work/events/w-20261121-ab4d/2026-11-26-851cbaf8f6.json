@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:43:38",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "mailbox:INBOX:987",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-26",
+  "summary": "Owner's pacman log: NVIDIA 620/KWin 6.8.2/Mesa 26.2.7 arrived 2026-11-23, after the first freeze report (INBOX:863, 11-21), so that update did not start it; owner suspects soon after 11-18. Points to the 11-15/16 Linux build changes (Ubuntu 20.04 base, Flutter 3.47.8) on KWin Wayland + NVIDIA; XWayland preference (1.0.74+) remains the fix. Still need one write on 1.0.74+"
+}

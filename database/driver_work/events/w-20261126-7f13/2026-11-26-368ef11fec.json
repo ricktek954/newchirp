@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:43:37",
+  "details": "Win 1.0.73: read radio (21 ch), then opened a saved .img (86 ch) and wrote it; stock uv5r refuses because the image's aux area differs from this dropped-byte radio. Correct safety behavior; message now explains the CSV route. FAQ #image-from-another-radio.",
+  "event_type": "created",
+  "external_ref": "INBOX:991",
+  "item": "w-20261126-7f13",
+  "occurred_at": "2026-11-26",
+  "summary": "Writing an older saved image: 'Image not supported by radio' gives no way forward"
+}

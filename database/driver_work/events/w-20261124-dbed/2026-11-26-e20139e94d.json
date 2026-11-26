@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:43:37",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:39bd302af",
+  "item": "w-20261124-dbed",
+  "occurred_at": "2026-11-26",
+  "summary": "0x7C retried up to three times; error shows received bytes; Web Programmer matched (web:4158f7c)"
+}

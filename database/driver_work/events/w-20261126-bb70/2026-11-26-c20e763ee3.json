@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:43:39",
+  "details": "Read on COM1 (likely the PC's built-in serial port, not the cable): UV-K5 hello got 0 bytes",
+  "event_type": "created",
+  "external_ref": "INBOX:995",
+  "item": "w-20261126-bb70",
+  "occurred_at": "2026-11-26",
+  "summary": "No response from radio (triage)"
+}

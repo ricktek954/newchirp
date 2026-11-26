@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 06:43:39",
+  "kind": "bug",
+  "manufacturer": "Baofeng",
+  "model": "UV-21Pro GPS",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "INBOX:993",
+  "status": "investigating",
+  "summary": "Win 1.0.73 COM7: PROGRAMCOLOR no reply; notes say radio is a 'uv1'; same cable read a UV-82; exact model needed",
+  "title": "No response from radio (triage)",
+  "uid": "w-20261126-76d8"
+}
