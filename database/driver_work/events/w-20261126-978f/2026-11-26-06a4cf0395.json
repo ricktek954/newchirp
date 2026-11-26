@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 16:37:49",
+  "details": "1.0.75 Windows 10 (26100): reads with UV-5RM Plus v2 and UV-5RM Plus on COM4 stayed at 1% for ~30 s each; a later try on COM3 failed because that port does not exist. Report was from the COM3 error, so no trace of the stalled reads. Asked for setup checks and a report from the failing COM4 read.",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1040",
+  "item": "w-20261126-978f",
+  "occurred_at": "2026-11-26",
+  "summary": "Read sits at the start on COM4 (v2 and stock profiles), then COM3 not available"
+}

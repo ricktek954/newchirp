@@ -266,6 +266,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261119-70d8 bug | fix_committed | normal:** v2-firmware radio selected as UV-5RM Plus reports only No response
   Linux 1.0.61 /dev/ttyUSB0: PROGRAMBFNORMALU answered 41, 03, 41, 03 then nothing. 0x41 ('A') is the v2 firmware announce reply (docs/BAOFENG_5RH_PRO_PROTOCOL.md), so the radio needs the UV-5RM Plus v2 model.
   Source: `email` INBOX:801
+- **#w-20261126-978f bug | awaiting_user | normal:** Read sits at the start on COM4 (v2 and stock profiles), then COM3 not available
+  1.0.75 Windows 10 (26100): reads with UV-5RM Plus v2 and UV-5RM Plus on COM4 stayed at 1% for ~30 s each; a later try on COM3 failed because that port does not exist. Report was from the COM3 error, so no trace of the stalled reads. Asked for setup checks and a report from the failing COM4 read.
+  Source: `email` mailbox:UID 1040
 - **#28 maintenance | experimental | normal:** Current driver status
   Transport: UV-17-family serial, 115200 8N1 + DTR/RTS. Read: OEM-style handshake retry; stock channel decode. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:52
