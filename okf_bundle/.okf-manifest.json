@@ -1,11 +1,11 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
+  "source_root": "/home/rlopez/newchirp.net/lib",
   "files": {
     "l10n/app_localizations.dart": {
       "path": "l10n/app_localizations.dart",
-      "mtime_ns": 1795701383302213956,
+      "mtime_ns": 1795711463943085025,
       "hash": "afec20e9c4a608bc8ccad6e5a2bd73832844c6de5218b2e174355bc514159490",
       "concept_ids": [
         "l10n/app_localizations/AppLocalizations",
@@ -135,7 +135,7 @@
     },
     "l10n/app_localizations_en.dart": {
       "path": "l10n/app_localizations_en.dart",
-      "mtime_ns": 1795701383258410264,
+      "mtime_ns": 1795711463943156832,
       "hash": "6dfc1e189bd85523f7ee3186af6d92a04c7627cc27347c5feffe47f9e3e61b1f",
       "concept_ids": [
         "l10n/app_localizations_en/AppLocalizationsEn",
@@ -259,7 +259,7 @@
     },
     "l10n/app_localizations_es.dart": {
       "path": "l10n/app_localizations_es.dart",
-      "mtime_ns": 1795701383272908203,
+      "mtime_ns": 1795711463943156832,
       "hash": "fb06d9e224b8aa88e51ba6bf079a1d629a433a80b7e83bc951447461fc2b2f1c",
       "concept_ids": [
         "l10n/app_localizations_es/AppLocalizationsEs",
@@ -383,7 +383,7 @@
     },
     "l10n/app_localizations_fr.dart": {
       "path": "l10n/app_localizations_fr.dart",
-      "mtime_ns": 1795701383290110972,
+      "mtime_ns": 1795711463943156832,
       "hash": "adf4b1012e73f5b5aacb60b05c83d8fed4d7508a3193fcdd5a62def472520135",
       "concept_ids": [
         "l10n/app_localizations_fr/AppLocalizationsFr",
@@ -507,7 +507,7 @@
     },
     "l10n/l10n.dart": {
       "path": "l10n/l10n.dart",
-      "mtime_ns": 1795460913382640241,
+      "mtime_ns": 1795516328953236490,
       "hash": "c4d277595d7ec9776bdea0688170a7b884a436dd2be6732934b1196e2e91f310",
       "concept_ids": [
         "l10n/l10n"
@@ -515,7 +515,7 @@
     },
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1795529636718017072,
+      "mtime_ns": 1795530135101231582,
       "hash": "a4e229d861fcb7a81b15a29195a421dc0f388f1e0e38b16deb2658d9909e3592",
       "concept_ids": [
         "models/channel_image_baseline/ChannelImageBaseline",
@@ -534,7 +534,7 @@
     },
     "models/frequency_reference.dart": {
       "path": "models/frequency_reference.dart",
-      "mtime_ns": 1795529783881193826,
+      "mtime_ns": 1795530135101231582,
       "hash": "2f323951afe453b32f22c0840fc39aba68fc99c393ad1cb60b3d4a9bfbc43092",
       "concept_ids": [
         "models/frequency_reference/FrequencyReferenceGroup",
@@ -550,7 +550,7 @@
     },
     "models/gm32_channel.dart": {
       "path": "models/gm32_channel.dart",
-      "mtime_ns": 1793017335031773185,
+      "mtime_ns": 1793018006929487856,
       "hash": "930587b2146e7df167512e071e8c2a52387e0aca8a87d54116de682213854a61",
       "concept_ids": [
         "models/gm32_channel/applyGm32Rules",
@@ -572,7 +572,7 @@
     },
     "models/marine_channels.dart": {
       "path": "models/marine_channels.dart",
-      "mtime_ns": 1794220301599184985,
+      "mtime_ns": 1794227692786598019,
       "hash": "6fe7afca765e6a7e7319910ca4aac1c7d616951e174d608dd7e63715e4f80389",
       "concept_ids": [
         "models/marine_channels/MarineChannelDefinition",
@@ -586,7 +586,7 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1795205428738274652,
+      "mtime_ns": 1795207517968070785,
       "hash": "a8d7e9aef976edf6335dcba11aace91aec82fabd5745f9d88b11324e9dc66570",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
@@ -638,7 +638,7 @@
     },
     "models/radio_mapping.dart": {
       "path": "models/radio_mapping.dart",
-      "mtime_ns": 1795123564359989360,
+      "mtime_ns": 1795125305223842947,
       "hash": "db152cf62c4ee2ff9f6fc4ce960a890410304f4ba9efd61891f2aeccc5cdf8d5",
       "concept_ids": [
         "models/radio_mapping/RadioMappingEntry",
@@ -657,7 +657,7 @@
     },
     "models/repeater_counties.dart": {
       "path": "models/repeater_counties.dart",
-      "mtime_ns": 1795461602946476506,
+      "mtime_ns": 1795516328959664703,
       "hash": "dde2fd355df6dac9d222848062eb45f77bacc5a24921f79b18571df95b838448",
       "concept_ids": [
         "models/repeater_counties"
@@ -665,7 +665,7 @@
     },
     "models/repeater_regions.dart": {
       "path": "models/repeater_regions.dart",
-      "mtime_ns": 1793439228906217312,
+      "mtime_ns": 1793443811322177379,
       "hash": "a142415518e9cbd2ac6ae88672a3827b0e37776fbe00112fe93e6ef123e448c6",
       "concept_ids": [
         "models/repeater_regions/normalizeRepeaterCounty",
@@ -677,7 +677,7 @@
     },
     "models/repeater_search.dart": {
       "path": "models/repeater_search.dart",
-      "mtime_ns": 1793463645017905451,
+      "mtime_ns": 1793464076655657436,
       "hash": "39452b3cc44dc30581c212251a0374201bae351b52707b5378ea8ae262bf9369",
       "concept_ids": [
         "models/repeater_search/RepeaterSearchResult",
@@ -691,7 +691,7 @@
     },
     "services/app_language.dart": {
       "path": "services/app_language.dart",
-      "mtime_ns": 1795460855343933738,
+      "mtime_ns": 1795516328959664703,
       "hash": "606e49edd7663578bb102379223c6e64a2042ef2e86ee504c31e270db3620b94",
       "concept_ids": [
         "services/app_language/AppLanguageStore",
@@ -704,7 +704,7 @@
     },
     "services/channel_list_pdf.dart": {
       "path": "services/channel_list_pdf.dart",
-      "mtime_ns": 1795344862917294456,
+      "mtime_ns": 1795357194038272489,
       "hash": "8e5dc95a1b5eaec465da44e993a9a6fa340e31a65c5c45a932b9bf09b8b71d2d",
       "concept_ids": [
         "services/channel_list_pdf/ChannelListColumn",
@@ -725,7 +725,7 @@
     },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
-      "mtime_ns": 1795164855609566210,
+      "mtime_ns": 1795166904165097739,
       "hash": "e85ec8ee10e0f0eb8984f97b3726e15319215904ebb8f0908d17ec3779690ff3",
       "concept_ids": [
         "services/chirp_csv/ChirpCsv",
@@ -749,7 +749,7 @@
     },
     "services/column_layout_store.dart": {
       "path": "services/column_layout_store.dart",
-      "mtime_ns": 1793096501033485563,
+      "mtime_ns": 1793109703288279614,
       "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
       "concept_ids": [
         "services/column_layout_store/ColumnLayout",
@@ -762,7 +762,7 @@
     },
     "services/diagnostic_log.dart": {
       "path": "services/diagnostic_log.dart",
-      "mtime_ns": 1795701371967977957,
+      "mtime_ns": 1795711463946638952,
       "hash": "216db91a6f4c97299fab1478e3916582d9f15375fe0a75fa903c5f71dce52ba2",
       "concept_ids": [
         "services/diagnostic_log/DiagnosticEntry",
@@ -784,7 +784,7 @@
     },
     "services/file_save_warning_store.dart": {
       "path": "services/file_save_warning_store.dart",
-      "mtime_ns": 1793017335032074140,
+      "mtime_ns": 1793018006929487856,
       "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
       "concept_ids": [
         "services/file_save_warning_store/FileSaveWarningStore",
@@ -796,7 +796,7 @@
     },
     "services/library_metrics_store.dart": {
       "path": "services/library_metrics_store.dart",
-      "mtime_ns": 1795165440046058218,
+      "mtime_ns": 1795166904165097739,
       "hash": "19f562a27a64783b23ba2dd5f6622d57addf4d796652e70608cb7e6acfdaedad",
       "concept_ids": [
         "services/library_metrics_store/LibraryMetricsStore",
@@ -808,7 +808,7 @@
     },
     "services/local_file_opener.dart": {
       "path": "services/local_file_opener.dart",
-      "mtime_ns": 1793272362273777794,
+      "mtime_ns": 1793355746085706779,
       "hash": "64762d56067019bad41ed7ab786cad3b638a9646245a57e9c88f2f3c984fdea5",
       "concept_ids": [
         "services/local_file_opener/LocalFilePlatform",
@@ -819,7 +819,7 @@
     },
     "services/module_sandbox.dart": {
       "path": "services/module_sandbox.dart",
-      "mtime_ns": 1794748425185339740,
+      "mtime_ns": 1794684549188277338,
       "hash": "3e654377596c0acdc5ffe89e9b935c6be23530c887d0a5cb51a7e666c959b7ca",
       "concept_ids": [
         "services/module_sandbox/ModuleSandbox",
@@ -862,7 +862,7 @@
     },
     "services/mototrbo_cps2_xml.dart": {
       "path": "services/mototrbo_cps2_xml.dart",
-      "mtime_ns": 1793094681555739212,
+      "mtime_ns": 1793109703288279614,
       "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
       "concept_ids": [
         "services/mototrbo_cps2_xml/CpsTone",
@@ -886,7 +886,7 @@
     },
     "services/mygmrs_client.dart": {
       "path": "services/mygmrs_client.dart",
-      "mtime_ns": 1793978410253437864,
+      "mtime_ns": 1793978671702776958,
       "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
       "concept_ids": [
         "services/mygmrs_client/JsonResponse",
@@ -915,7 +915,7 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1795701175630807263,
+      "mtime_ns": 1795711463946638952,
       "hash": "c2340ebd0541f8f16b6f74e6014d48ae74aa1ac96a3345b90ec3d9fa1e10a384",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
@@ -979,7 +979,7 @@
     },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
-      "mtime_ns": 1793187642181438904,
+      "mtime_ns": 1793355746085706779,
       "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
       "concept_ids": [
         "services/radio_image_store/RadioImageStore",
@@ -994,7 +994,7 @@
     },
     "services/radio_selection_store.dart": {
       "path": "services/radio_selection_store.dart",
-      "mtime_ns": 1787526889854243083,
+      "mtime_ns": 1791109641575292000,
       "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
       "concept_ids": [
         "services/radio_selection_store/RadioSelection",
@@ -1007,7 +1007,7 @@
     },
     "services/repeater_search_preferences_store.dart": {
       "path": "services/repeater_search_preferences_store.dart",
-      "mtime_ns": 1794065847464720490,
+      "mtime_ns": 1794086445114217730,
       "hash": "36b1360b1c97955db3fd4130e6d09c79586dc0982c591c6f993f0244fe4ed300",
       "concept_ids": [
         "services/repeater_search_preferences_store/RepeaterSearchPreferences",
@@ -1021,7 +1021,7 @@
     },
     "services/update_checker.dart": {
       "path": "services/update_checker.dart",
-      "mtime_ns": 1794662632996144606,
+      "mtime_ns": 1794684530212383504,
       "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
       "concept_ids": [
         "services/update_checker/PlatformRelease",
@@ -1045,7 +1045,7 @@
     },
     "services/update_installer.dart": {
       "path": "services/update_installer.dart",
-      "mtime_ns": 1793108770906624056,
+      "mtime_ns": 1793109703288928523,
       "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
       "concept_ids": [
         "services/update_installer/DownloadedUpdate",
@@ -1063,7 +1063,7 @@
     },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
-      "mtime_ns": 1794514612328193301,
+      "mtime_ns": 1794661579163291342,
       "hash": "970f41d7e6aa528d25df4bb3e4aa192055e8a9c60a276c09b7a383b6fedb2754",
       "concept_ids": [
         "services/window_state_store/WindowDisplayArea",
@@ -1079,7 +1079,7 @@
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1795462903441468416,
+      "mtime_ns": 1795516328962236434,
       "hash": "09391353f8151e7d09056b1a7eb2e17849a5bc2e3495b5292b95e91b84883335",
       "concept_ids": [
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
@@ -1089,7 +1089,7 @@
     },
     "widgets/error_report_dialog.dart": {
       "path": "widgets/error_report_dialog.dart",
-      "mtime_ns": 1795701382343129721,
+      "mtime_ns": 1795711463946638952,
       "hash": "ef84c62d0c75e7cdec9df140d3920a4d86385e98d088c3cd7203be189f9e3138",
       "concept_ids": [
         "widgets/error_report_dialog/ErrorReportDialog",
@@ -1104,7 +1104,7 @@
     },
     "widgets/file_save_warning_dialog.dart": {
       "path": "widgets/file_save_warning_dialog.dart",
-      "mtime_ns": 1795462985537578452,
+      "mtime_ns": 1795516328962236434,
       "hash": "80ab915533747a9b4024cc26678f1edac86fb6bcf11a4d23cfa9dd29089c1a8e",
       "concept_ids": [
         "widgets/file_save_warning_dialog/FileSaveWarningDialog",
@@ -1116,7 +1116,7 @@
     },
     "widgets/marine_template_dialog.dart": {
       "path": "widgets/marine_template_dialog.dart",
-      "mtime_ns": 1795462903442237918,
+      "mtime_ns": 1795516328962236434,
       "hash": "8dee4652df75d8acdf237274011d842c373feca87a3150b06fc766e92ed154a7",
       "concept_ids": [
         "widgets/marine_template_dialog/MarineTemplateDialog",
@@ -1128,7 +1128,7 @@
     },
     "widgets/radio_mapping_dialog.dart": {
       "path": "widgets/radio_mapping_dialog.dart",
-      "mtime_ns": 1795462921589013214,
+      "mtime_ns": 1795516328967236403,
       "hash": "4b0561fde77542df2856ce24b2198b814de0eaf455d6e10e2e012b16bcbc563d",
       "concept_ids": [
         "widgets/radio_mapping_dialog/RadioMappingDialog",
@@ -1150,7 +1150,7 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1795462602038172619,
+      "mtime_ns": 1795516328967236403,
       "hash": "4064ac37b3d6b3e54ef137335de395ed5f83be9caba1caba98476f0f50b3bbab",
       "concept_ids": [
         "widgets/radio_model_picker/ModelChoice",
@@ -1186,8 +1186,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795708669972212127,
-      "hash": "55c0e5dbffa398b9fba33c6ffba1258a0b038136bb7be26644a4ee6555da3c85",
+      "mtime_ns": 1795711481614020877,
+      "hash": "c8ade26a3e16662f987509392e1e7a89b423076c037558a9ab7e5af88adc371a",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -11241,5 +11241,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-26T15:57:51Z"
+  "generated_at": "2026-11-26T16:44:47Z"
 }
