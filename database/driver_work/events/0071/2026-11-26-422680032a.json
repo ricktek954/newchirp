@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 11:21:03",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1011, 1016",
+  "item": "71",
+  "occurred_at": "2026-11-26",
+  "summary": "Owner's TK-350 completes the full 28-block read with 1.0.74 (Windows, COM6): the KPG-23D 4800 8N2 DTR/RTS session works. Read showed 0 channels (separate item)."
+}

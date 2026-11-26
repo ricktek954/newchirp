@@ -366,6 +366,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### IC-E90 / IC-T90A
 
+- **#w-20261126-7766 bug | fix_committed | normal:** Read succeeds but channel map decode fails: list index out of range
+  1.0.74 Windows read the full image (28246 wire bytes) then the stock icx90 get_memory indexed a table with an out-of-range bitfield (mode 2 bits/3 values, tone mode 3/4, step 4/13, tones 6/50, DTCS 8/104). No image attached. Lookups are now bounded and logged so one channel cannot stop the list; the image is needed to identify the field.
+  Source: `email` mailbox:UID 1017
 - **#54 maintenance | experimental | normal:** Current driver status
   Transport: NewChirp ICF clone transport, 9600 8N1. Read: Four identity attempts; checksum-validated contiguous full image; invisible-slot guard. Write: NewChirp clone-in boundary, 362 32-byte blocks, required `E6 00`. Settings: Stock ICX90 decoder. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:78
@@ -449,18 +452,24 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TK-350
 
-- **#71 bug | awaiting_user | high:** Identity request receives zero bytes
+- **#71 bug | released | high:** Identity request receives zero bytes
   Zero identity bytes were observed on COM3 and COM4. The driver now retries the bounded 0x02 identity request three times for late PC mode.
   Source: `email` INBOX:727-728
+- **#w-20261126-dc72 bug | fix_committed | high:** Full read completes but shows 0 channels
+  1.0.74 read the whole image from the owner's TK-350 but every slot showed empty. The driver hid channels outside 450-470 MHz. KPG-23D files saved in QEMU for 450-470 (sample.u1f) and 400-430 MHz (sample.u4f) prove the word encoding is band-independent; the band digit sits at 0x0D05 (P350n). Fix decodes all UHF bands; Web Programmer updated.
+  Source: `email` mailbox:UID 1011
 - **#15 maintenance | experimental | normal:** Current driver status
   Transport: KPG-23D clone serial, 9600 8N1, 0xF000 addressed blocks. Read: Yes, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental read-only.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:39
 
 ### TK-359
 
-- **#79 bug | fix_committed | normal:** No identity response in PC mode
+- **#79 bug | released | normal:** No identity response in PC mode
   Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.
   Source: `email` INBOX:699-700
+- **#w-20261126-95c9 bug | fix_committed | high:** Z fill reply rejected; channel records decoded from the wrong offset
+  Real TK-359 answers uniform blocks with Z + echo + one fill byte (KPG32D.EXE 0x16468, Z at DS:0x32DF); 1.0.74 rejected it. Channel records are 32 bytes at 0x3400 with flag-byte frequencies (bit7 6.25 kHz, bit0 step bit 16), verified with uhf359.fdt saved by KPG-32D (460.0125/465.000, 455.500); the old decode read unused offset 0.
+  Source: `email` mailbox:UID 1014
 - **#16 maintenance | experimental | normal:** Current driver status
   Transport: KPG-32D clone serial, 9600 8N1, 0xF000 addressed blocks. Read: Yes, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental read-only.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:40

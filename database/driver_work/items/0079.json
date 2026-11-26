@@ -8,7 +8,7 @@
   "reporter": "",
   "source": "email",
   "source_ref": "INBOX:699-700",
-  "status": "fix_committed",
+  "status": "released",
   "summary": "Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.",
   "title": "No identity response in PC mode",
   "uid": "79"

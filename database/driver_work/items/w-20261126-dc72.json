@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-26 11:21:03",
+  "kind": "bug",
+  "manufacturer": "Kenwood",
+  "model": "TK-350",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "",
+  "source": "email",
+  "source_ref": "mailbox:UID 1011",
+  "status": "fix_committed",
+  "summary": "1.0.74 read the whole image from the owner's TK-350 but every slot showed empty. The driver hid channels outside 450-470 MHz. KPG-23D files saved in QEMU for 450-470 (sample.u1f) and 400-430 MHz (sample.u4f) prove the word encoding is band-independent; the band digit sits at 0x0D05 (P350n). Fix decodes all UHF bands; Web Programmer updated.",
+  "title": "Full read completes but shows 0 channels",
+  "uid": "w-20261126-dc72"
+}
