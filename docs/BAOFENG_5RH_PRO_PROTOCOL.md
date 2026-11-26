@@ -175,3 +175,30 @@ semantics and preserves undecoded bytes when editing an existing channel.
 - Unresolved: other password values, boot-image write validation on
   NewChirp, undocumented setting bits, and firmware revisions other than
   `v2_0_09`.
+
+## First-generation 5RH Pro GPS (firmware v1.0.x) and the UV-5RM Pro
+
+OEM-capture evidence, 2026-11-26 (desktop ledger `w-20261125-2905`):
+
+- CHIRP issue 11669 attachment `5RH Pro 001.pcapng` (SHA-256
+  `bc97258128166c001416741b33d776de3f1ffa006956639d99a27f9dcbe155ee`):
+  Baofeng "5RH Pro v1.14" CPS reading a first-generation 5RH Pro GPS over a
+  CH340-class cable. The session is the same as V1.17: `T_Info` announce
+  answered `41`, `PROGRAM` XOR seed plus the seed byte (seed `0x20`)
+  answered `41` XOR seed, eight `FF` XOR seed, `INFORMATION` XOR seed
+  answered with 16 bytes that decode to `BF-5RH`, then `52` XOR seed and
+  `[52 00 00 00]` XOR seed block reads.
+- Attachment `pcapng-3timesRow.zip` (SHA-256
+  `066065e5f0e8304576d910b6e70763d34940e3fdec24a6116bb6b11d47a770c9`):
+  three more v1 sessions over an FTDI cable (2-byte modem-status prefix on
+  each IN packet) with seeds `0x52`, `0x3B` and `0x35`; every one was
+  acknowledged. The v1 firmware therefore accepts random seeds, and the
+  V1.17 transport already matches it.
+- UV-5RM Pro (firmware 1_0_94, hardware 1_0_0; INBOX:978): the announce is
+  answered (`e0` at 115200, then `41` at 19200), but the seeded `PROGRAM`
+  sync is answered `4e` (`N`) on two tries with different seeds, so the
+  radio refuses the sync word itself rather than the seed. Its CPS probably
+  uses a different sync word or model stage. No official CPS exists
+  (baofengradio.com has no UV-5RM Pro product or download; BF Series CPS
+  1.5.1 does not cover it). Next: the owner's bundled CPS or a USB capture
+  of it.

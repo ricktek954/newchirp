@@ -270,7 +270,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-5RM Pro
 
-- **#w-20261125-2905 new_driver | open | normal:** Support the UV-5RM Pro (firmware 1.0.94)
+- **#w-20261125-2905 new_driver | awaiting_user | normal:** Support the UV-5RM Pro (firmware 1.0.94)
   Windows 11 (26300), 1.0.72, COM5, model 5RH Pro selected: the 16-byte magic was answered e0 then 41, and the 8-byte command 4e ('N'), so the radio talks but refuses the 5RH Pro handshake. Owner reports UV-5RM PRO, firmware 1_0_94, hardware 1_0_0. Not in CHIRP. Next: OEM CPS REA.
   Source: `email triage 2026-11-25` INBOX:978
 
@@ -437,7 +437,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TK-3101
 
-- **#w-20261126-565d new_driver | open | normal:** Support the Kenwood TK-3101
+- **#w-20261126-565d new_driver | awaiting_user | normal:** Support the Kenwood TK-3101
   Owner request; not in upstream CHIRP. Need the OEM programming software and a sample data file to REA.
   Source: `email` INBOX:999
 

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:52:30",
+  "details": "",
+  "event_type": "note",
+  "external_ref": "mailbox:<179567592644.94390.18027200944176079451@newchirp.net>",
+  "item": "w-20261126-565d",
+  "occurred_at": "2026-11-26",
+  "summary": "Correction: the KPG-54D request's Message-ID is <179567592644.94390.18027200944176079451@newchirp.net>; the previous event's reference was wrong"
+}

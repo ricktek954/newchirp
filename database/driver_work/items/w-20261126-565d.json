@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:999",
-  "status": "open",
+  "status": "awaiting_user",
   "summary": "Owner request; not in upstream CHIRP. Need the OEM programming software and a sample data file to REA.",
   "title": "Support the Kenwood TK-3101",
   "uid": "w-20261126-565d"

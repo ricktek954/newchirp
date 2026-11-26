@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 06:56:29",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:bc97258128166c001416741b33d776de3f1ffa006956639d99a27f9dcbe155ee",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-26",
+  "summary": "OEM captures from CHIRP #11669 (v1.14 CPS on first-gen 5RH Pro GPS): same seeded PROGRAM/INFORMATION/52 protocol as V1.17, random seeds accepted (0x20, 0x52, 0x3B, 0x35). UV-5RM Pro answers the announce but sends 4e ('N') to the seeded PROGRAM on two seeds, so it refuses the sync word, not the seed. No official UV-5RM Pro CPS (baofengradio.com 404; BF Series 1.5.1 doesn't cover it). Needs the owner's bundled CPS or a capture"
+}
