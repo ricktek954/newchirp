@@ -4,6 +4,14 @@ Generated from `database/driver_work/` by `python3 scripts/driver_work.py export
 
 Use `python3 scripts/driver_work.py show <id>` for event history.
 
+## Abbree
+
+### AR8118
+
+- **#w-20261126-044a new_driver | awaiting_user | normal:** Support request: Abbree AR8118
+  Requested via a Baofeng 5RM bug report (no other details). Not in CHIRP (Abbree AR-518/AR-63/AR-730/AR-869 are) and no public CPS found. Asked for label photo/FCC ID, firmware, and the programming software that came with it.
+  Source: `email` mailbox:UID 1035
+
 ## Alinco
 
 ### DR-735
