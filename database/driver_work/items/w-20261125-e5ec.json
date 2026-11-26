@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:985",
-  "status": "fix_committed",
+  "status": "released",
   "summary": "Stock uv3r_prep re-raises e after the except block; Python 3 has cleared it. Seen in INBOX:985 while trying models.",
   "title": "Silent radio reports a Python 'cannot access local variable e' error",
   "uid": "w-20261125-e5ec"

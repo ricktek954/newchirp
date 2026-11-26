@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 08:19:56",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:ab66c0d7",
+  "item": "79",
+  "occurred_at": "2026-11-26",
+  "summary": "Linux 1.0.76 ships the KPG-32D TK-359 session at 9600 8N2 with checked 8-byte identity, sum8 retries, and OEM DTR/RTS behavior"
+}

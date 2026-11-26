@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 08:20:11",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:ab66c0d7",
+  "item": "w-20261126-8502",
+  "occurred_at": "2026-11-26",
+  "summary": "Linux 1.0.76 accepts the MD-UV380 32-byte DFU identity while keeping memory transfers length-strict"
+}

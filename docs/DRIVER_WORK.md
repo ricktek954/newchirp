@@ -201,7 +201,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-3R
 
-- **#w-20261125-e5ec bug | fix_committed | normal:** Silent radio reports a Python 'cannot access local variable e' error
+- **#w-20261125-e5ec bug | released | normal:** Silent radio reports a Python 'cannot access local variable e' error
   Stock uv3r_prep re-raises e after the except block; Python 3 has cleared it. Seen in INBOX:985 while trying models.
   Source: `email` INBOX:985
 
@@ -592,6 +592,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261125-d644 release | released | normal:** Linux 1.0.75 published
   Published DEB, RPM, AppImage, and Pacman packages from source commit 79b693a5. The release fixes RT-950 Pro Ferrite zone reads by ending READ_MANY cleanly when the radio returns an empty non-advancing answer, and preserves an undecodable Baofeng 5RX S-CODE value for the repair step instead of stopping the write. Verification: flutter analyze passed; all 254 Flutter tests passed with the bundled Python 3.13 runtime; 654 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.75 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include both fixes and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.75. Package SHA-256 values: 05fb23dda2e7de0bee2c1166b2bea1c61590d0439ea714a9bf6628ac06d2b8b9, 7fa461d62bd8d4676a712abcf9ddb7a5933ba67258947c035bd8b96bbe66ee46, 31ea654a6247256626d95140cbdc22ddf5c9428a10fe5aeed7e7c08085b9029d, and 49b6a837b90cf2b33899d0db2ab866e9a6a672cfee3ea807d039eb6599c72495.
   Source: `release` desktop:79b693a5
+- **#w-20261126-83e1 release | released | normal:** Linux 1.0.76 published
+  Published DEB, RPM, AppImage, and Pacman packages from source commit ab66c0d7. The release adds the KPG-23D TK-350 session and KPG-32D TK-359 session with OEM DTR/RTS behavior; reads UV-5R settings before channels for radios that reject the jump back; reports the real UV-3R handshake error; accepts a 32-byte MD-UV380 DFU identity while keeping memory reads strict; retries the TK-863G 0x7C memory session like KPG-76D and reports received bytes; and explains the safe CSV route when a full image belongs to a different UV-5R radio. Verification: flutter analyze passed; all 254 Flutter tests passed with the bundled Python 3.13 runtime; 672 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; DEB, RPM, and Pacman metadata and embedded version 1.0.76 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads include the new KPG, UV-5R, UV-3R, DFU, bridge, and TK-863G changes and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.76. Package SHA-256 values: 3170f5a782647293747f5a93a64b2a297deb5b03a8d17be0b1edd2ca73cf6f49, 1aca797940d07b5949a188fde408b89fc22791f888c91cc2314c55230b83f73c, 467a9aa3a7032934dbcf982269fc73733e39088abe136a8bde5e13afa5a6a059, and 275d66593a360bc2702856a17e4a7f4ddf3744c1182b89a2241e418f7369f957.
+  Source: `release` desktop:ab66c0d7
 
 ### macOS desktop
 

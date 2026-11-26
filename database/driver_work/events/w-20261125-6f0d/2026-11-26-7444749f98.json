@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 08:19:59",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:ab66c0d7",
+  "item": "w-20261125-6f0d",
+  "occurred_at": "2026-11-26",
+  "summary": "Linux 1.0.76 reads the UV-5R settings block before the channels, matching the OEM session order for radios that refuse the jump back to 0x1EC0"
+}

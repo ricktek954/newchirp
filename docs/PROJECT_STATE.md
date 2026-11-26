@@ -1,6 +1,6 @@
 # NewChirp Project State
 
-Last updated: 2026-11-25
+Last updated: 2026-11-26
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
@@ -8,6 +8,21 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.76` is live from source commit `ab66c0d7`. It adds the
+  KPG-23D TK-350 and KPG-32D TK-359 sessions with OEM DTR/RTS behavior,
+  reads UV-5R settings before the channels for radios that refuse the jump
+  back, reports the real UV-3R handshake error, accepts a short MD-UV380 DFU
+  identity while keeping memory reads strict, and retries the TK-863G `0x7C`
+  memory session like KPG-76D. It also explains the safe CSV route when a
+  full image belongs to a different UV-5R radio. Verification: analyzer
+  clean; all 254 Flutter tests with the bundled Python 3.13 runtime; 672
+  bundled Python tests with two fixture-dependent skips; Ubuntu 20.04 ABI
+  maximum GLIBC `2.18`; DEB, RPM, and Pacman metadata plus embedded version
+  `1.0.76`; DEB and AppImage Xvfb smoke tests; AppImage host launches under
+  Wayland and X11; package payloads include the new KPG, UV-5R, UV-3R, DFU,
+  bridge, and TK-863G changes and omit GLVND/EGL/GLES loaders; all public
+  downloads returned HTTP 200; and the Linux platform manifest reports
+  `1.0.76`.
 - Linux `1.0.75` is live from source commit `79b693a5`. It fixes RT-950 Pro
   Ferrite zone reads by ending `READ_MANY` cleanly when the radio returns an
   empty non-advancing answer, and preserves undecodable Baofeng 5RX S-CODE
@@ -1454,6 +1469,7 @@ release requirements.
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.76` artifact source commit: `ab66c0d7`
 - Linux `1.0.75` artifact source commit: `79b693a5`
 - Linux `1.0.74` artifact source commit: `76519b2d`
 - Linux `1.0.73` artifact source commit: `b8dd8004`
@@ -1463,7 +1479,7 @@ release requirements.
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.75+75`
+- Checked-out source version: `1.0.74+74` (macOS `1.0.74`; Linux artifact is `1.0.76`)
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1479,7 +1495,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.73 |
 | Windows | 1.0.70 |
-| Linux | 1.0.75 |
+| Linux | 1.0.76 |
+
+Linux `1.0.76` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.76.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.76.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.76.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.76.pkg.tar.zst`
+- DEB: `48,923,388` bytes, SHA-256
+  `3170f5a782647293747f5a93a64b2a297deb5b03a8d17be0b1edd2ca73cf6f49`
+- RPM: `49,005,117` bytes, SHA-256
+  `1aca797940d07b5949a188fde408b89fc22791f888c91cc2314c55230b83f73c`
+- AppImage: `49,202,368` bytes, SHA-256
+  `467a9aa3a7032934dbcf982269fc73733e39088abe136a8bde5e13afa5a6a059`
+- Pacman: `47,885,354` bytes, SHA-256
+  `275d66593a360bc2702856a17e4a7f4ddf3744c1182b89a2241e418f7369f957`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.76`
 
 Linux `1.0.75` artifacts:
 
