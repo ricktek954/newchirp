@@ -366,7 +366,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### IC-E90 / IC-T90A
 
-- **#w-20261126-7766 bug | fix_committed | normal:** Read succeeds but channel map decode fails: list index out of range
+- **#w-20261126-7766 bug | awaiting_user | normal:** Read succeeds but channel map decode fails: list index out of range
   1.0.74 Windows read the full image (28246 wire bytes) then the stock icx90 get_memory indexed a table with an out-of-range bitfield (mode 2 bits/3 values, tone mode 3/4, step 4/13, tones 6/50, DTCS 8/104). No image attached. Lookups are now bounded and logged so one channel cannot stop the list; the image is needed to identify the field.
   Source: `email` mailbox:UID 1017
 - **#54 maintenance | experimental | normal:** Current driver status
