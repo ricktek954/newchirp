@@ -455,7 +455,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#71 bug | released | high:** Identity request receives zero bytes
   Zero identity bytes were observed on COM3 and COM4. The driver now retries the bounded 0x02 identity request three times for late PC mode.
   Source: `email` INBOX:727-728
-- **#w-20261126-dc72 bug | released | high:** Full read completes but shows 0 channels
+- **#w-20261126-dc72 bug | investigating | high:** Full read completes but shows 0 channels
   1.0.74 read the whole image from the owner's TK-350 but every slot showed empty. The driver hid channels outside 450-470 MHz. KPG-23D files saved in QEMU for 450-470 (sample.u1f) and 400-430 MHz (sample.u4f) prove the word encoding is band-independent; the band digit sits at 0x0D05 (P350n). Fix decodes all UHF bands; Web Programmer updated.
   Source: `email` mailbox:UID 1011
 - **#15 maintenance | experimental | normal:** Current driver status

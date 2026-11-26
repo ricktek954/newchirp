@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 13:31:19",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1023",
+  "item": "w-20261126-dc72",
+  "occurred_at": "2026-11-26",
+  "summary": "1.0.75 Windows: TK-350 read 120 channels twice; owner says frequencies are close but not exactly what the radio holds (likely step-size/5 kHz encoding). Third back-to-back read got no identity reply: KPG-23D has no exit command, so the radio likely needs a power cycle between sessions. TK-359 read returned 20 channels on the same PC."
+}
