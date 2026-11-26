@@ -189,6 +189,17 @@ release requirements.
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.76` is live from source commit `026cd8fc7` as a universal,
+  signed, and notarized DMG. Since 1.0.75: UV-5RM Pro plain-sync fallback;
+  TK-350 experimental write and CTCSS tone decode; TK-359 read baseline (write
+  still off); per-channel decode with an undecodable-channel notice; bug
+  reports can attach the radio image; a working scroll bar for Find Repeaters
+  results. Verification: analyzer clean; 257 Flutter tests; full Python suite;
+  embedded version `1.0.76` / `76`; arm64 and x86_64; 277 driver modules;
+  bundled driver and bridge hashes match source; strict codesigning and
+  Gatekeeper accepted; matching local, server, and public SHA-256
+  `a5f4841b…7869bf`. Notarization submission:
+  `a4f926ae-93ba-4438-ad7c-1e034f1c2c2c`.
 - macOS `1.0.75` is live from source commit `0407d809` as a universal,
   signed, and notarized DMG. It adds the TK-350 all-UHF-band channel decode,
   TK-359 `Z` fill-block handling and KPG-32D channel records, and the IC-E90

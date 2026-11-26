@@ -567,7 +567,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Desktop app
 
-- **#w-20261126-0c01 bug | fix_committed | normal:** Find Repeaters: results scroll bar does not scroll the list on Windows
+- **#w-20261126-0c01 bug | released | normal:** Find Repeaters: results scroll bar does not scroll the list on Windows
   1.0.75 Windows 11: the visible vertical bar belonged to the dialog page and sat over the results list's edge, so dragging it did not move the results; only Tab reached more. Results list now has its own interactive bar inset from the page bar; Windows-platform widget test drags it.
   Source: `email` mailbox:UID 1036
 - **#w-20261122-685e enhancement | released | low:** Print the channel list
@@ -669,6 +669,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261126-6e6d release | released | normal:** macOS 1.0.75 published
   Published a universal signed and notarized DMG from source commit 0407d809. It adds the TK-350 all-UHF-band channel decode, TK-359 Z fill-block handling and KPG-32D channel records, and the IC-E90 bounded decode (one out-of-table value no longer stops the channel list). Verification: analyzer clean; 254 Flutter tests passed; 677 Python tests passed (2 fixture skips); bridge upload tests passed; embedded version 1.0.75 / 75; arm64 and x86_64; 277 driver modules; bundled kpg23, icx90 and bridge hashes match source; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: 45c4bb356db503ad51d77727e0202acaec093f94b904d05c8c6da8b274c34337. Apple notarization: 83493bc5-6950-4b58-8f57-0fb76d591fd8. The live manifest reports macOS 1.0.75.
   Source: `release` desktop:0407d809
+- **#w-20261126-0e54 release | released | normal:** macOS 1.0.76 published
+  Published a universal signed and notarized DMG from source commit 026cd8fc7. Since 1.0.75: UV-5RM Pro plain-sync fallback and model entry; TK-350 experimental write (traced KPG-23D session, existing-channel edits, identity check, waits for identity ACK) and CTCSS tone decode; TK-359 read baseline for future writes (write still disabled); per-channel decode with an undecodable-channel notice; bug reports can attach the radio image; Find Repeaters results get their own working scroll bar. Verification: analyzer clean; 257 Flutter tests; full Python suite passed (2 fixture skips); bridge upload tests passed; embedded version 1.0.76 / 76; arm64 and x86_64; 277 driver modules; bundled kpg23, icx90, 5rh_pro and bridge hashes match source; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: a5f4841b88a874c81d0b9bd22fde2c43e1805b8a576529b0ec955af51c7869bf. Apple notarization: a4f926ae-93ba-4438-ad7c-1e034f1c2c2c. The live manifest reports macOS 1.0.76.
+  Source: `release` desktop:026cd8fc7
 
 ### Website
 

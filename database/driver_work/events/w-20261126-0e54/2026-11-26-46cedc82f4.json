@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 16:57:18",
+  "details": "Published a universal signed and notarized DMG from source commit 026cd8fc7. Since 1.0.75: UV-5RM Pro plain-sync fallback and model entry; TK-350 experimental write (traced KPG-23D session, existing-channel edits, identity check, waits for identity ACK) and CTCSS tone decode; TK-359 read baseline for future writes (write still disabled); per-channel decode with an undecodable-channel notice; bug reports can attach the radio image; Find Repeaters results get their own working scroll bar. Verification: analyzer clean; 257 Flutter tests; full Python suite passed (2 fixture skips); bridge upload tests passed; embedded version 1.0.76 / 76; arm64 and x86_64; 277 driver modules; bundled kpg23, icx90, 5rh_pro and bridge hashes match source; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: a5f4841b88a874c81d0b9bd22fde2c43e1805b8a576529b0ec955af51c7869bf. Apple notarization: a4f926ae-93ba-4438-ad7c-1e034f1c2c2c. The live manifest reports macOS 1.0.76.",
+  "event_type": "created",
+  "external_ref": "desktop:026cd8fc7",
+  "item": "w-20261126-0e54",
+  "occurred_at": "2026-11-26",
+  "summary": "macOS 1.0.76 published"
+}
