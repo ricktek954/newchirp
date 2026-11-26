@@ -202,3 +202,42 @@ OEM-capture evidence, 2026-11-26 (desktop ledger `w-20261125-2905`):
   (baofengradio.com has no UV-5RM Pro product or download; BF Series CPS
   1.5.1 does not cover it). Next: the owner's bundled CPS or a USB capture
   of it.
+
+### UV-5RM Pro: seller CPS "5RH Pro v1.12" (2026-11-26)
+
+The owner sent the seller's software (WeTransfer archive SHA-256
+`6d8d679bb55f4815f5845262a86f3a11bd1c64240735d6b2003135dcc27ec456`,
+archived in `~/Downloads/NewChirp-CPS/`). It holds two installers:
+
+- `5RH Pro v1.12 EN.exe` (Inno Setup 6.3, SHA-256
+  `0d717bd655060b11cb665d767859672a9c7b6056ea1951c28f5e82604c62c937`).
+  innoextract 1.9 cannot parse 6.3 headers, so the single `zlb\x1a` LZMA
+  chunk was carved and decompressed with Python's `lzma` (raw LZMA1), the
+  PE files were split by their headers, and Inno's
+  `TransformCallInstructions` (E8/E9 relative addresses, 64 KB buffers)
+  was reversed. Result: `CPS.exe` 1.0.1.2 ("Client Programming Software",
+  namespace `CPS_5RH`), SHA-256
+  `3e8f7c420594ff6a1da2d2acbe5298012e9dbf2dae174dbcdc09815a364acf6c`, which
+  decompiles without errors.
+- `T6UV Series EN CPS setup.exe` (SHA-256
+  `5ec618e8685cdc96be90fbf3551ee402d7a89796c37f16819405b7f835b65905`):
+  namespace `BF_H802_CPS`, 115200 baud, `PROGRAMBFNORMALU` + `SEND`
+  symbol-table session, i.e. the UV-17Pro family in CHIRP's
+  `baofeng_uv17Pro.py`. Not this radio (it talks at 19200).
+
+`DataProtocol.handShake` in CPS v1.12 differs from V1.14/V1.17 in one
+step: the sync is `PROGRAM` **in plain text** followed by the seed byte
+(`Header_SYNC[7] = seed`); V1.14/V1.17 XOR `PROGRAM` with the seed. The
+reply, password (eight `FF` XOR seed), `INFORMATION` XOR seed, `R`/`W`
+XOR seed, twelve 4,100-byte blocks (`R hi lo 00` XOR seed, data XOR seed),
+and `END\0` are identical. `VER_TYPE = 1`, so the seed is random
+(1-254). The memory map matches: channel-valid bits at 0x7A20 (`31264`),
+zones at 0x7A80/0x7A90 (`31360`/`31376`), VFOs at 0x7900. The UV-5RM Pro's
+`N` reply to the XORed sync is therefore the v1.12 radio rejecting the
+V1.17 sync form.
+
+NewChirp now sends the XORed sync first (known to work on the first- and
+second-generation radios) and, if refused, re-announces and sends the
+plain v1.12 sync, then keeps whichever form worked for the rest of the
+session. A "UV-5RM Pro" model entry (label FCC ID 2AJGM-5RHPRO) uses the
+same driver. Not yet confirmed on the owner's radio.

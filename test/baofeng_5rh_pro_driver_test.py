@@ -30,8 +30,10 @@ def _load_bridge():
 
 
 class FakeSessionSerial:
-    def __init__(self, announce_baud=19200):
+    def __init__(self, announce_baud=19200, plain_sync=False):
         self.announce_baud = announce_baud
+        # UV-5RM Pro (CPS 5RH Pro v1.12): only a plain-text "PROGRAM" works.
+        self.plain_sync = plain_sync
         self.baudrate = 115200
         self.timeout = 0.25
         self.seed = None
@@ -53,10 +55,18 @@ class FakeSessionSerial:
                 self.responses.append(b"A")
             return
 
+        if len(data) == 8 and data[:-1] == b"PROGRAM" and self.plain_sync:
+            self.seed = data[-1]
+            self.responses.append(bytes([self.seed ^ 0x41]))
+            return
+
         if (
             len(data) == 8
             and data[:-1] == self.module._xor_seed(b"PROGRAM", data[-1])
         ):
+            if self.plain_sync:
+                self.responses.append(b"N")   # 2026-11-24 UV-5RM Pro trace
+                return
             self.seed = data[-1]
             self.responses.append(bytes([self.seed ^ 0x41]))
             return
@@ -181,6 +191,34 @@ class Baofeng5RHProDriverTest(unittest.TestCase):
             self.driver._xor_seed(b"INFORMATION", seed),
         )
         self.assertEqual(serial.writes[5], bytes([seed ^ 0x52]))
+
+    def test_uv5rm_pro_plain_sync_fallback_like_cps_v112(self):
+        serial = FakeSessionSerial(announce_baud=19200, plain_sync=True)
+        radio = self.radio_class(serial)
+
+        seed = self.driver._handshake(radio, seed=0x5A)
+
+        syncs = [w for w in serial.writes if len(w) == 8 and w[-1] == seed]
+        self.assertEqual(syncs[0], self.driver._xor_seed(b"PROGRAM", seed) + b"\x5a")
+        self.assertEqual(syncs[1], b"PROGRAM\x5a")
+        self.assertTrue(radio._plain_sync)
+        self.assertEqual(serial.writes[-1], bytes([seed ^ 0x52]))
+
+        # The write in the same session goes straight to the plain sync.
+        serial.writes.clear()
+        self.driver._handshake(radio, is_write=True, seed=0x33)
+        syncs = [w for w in serial.writes if len(w) == 8 and w[-1] == 0x33]
+        self.assertEqual(syncs, [b"PROGRAM\x33"])
+
+    def test_xored_sync_radios_never_see_the_plain_form(self):
+        serial = FakeSessionSerial(announce_baud=115200)
+        radio = self.radio_class(serial)
+        self.driver._handshake(radio, seed=0x21)
+        self.assertNotIn(b"PROGRAM!", serial.writes)
+        self.assertFalse(radio._plain_sync)
+
+    def test_uv5rm_pro_is_listed(self):
+        self.assertIsNotNone(self.directory.get_radio("Baofeng_UV-5RM_Pro"))
 
     def test_stray_announce_reply_advises_a_power_cycle(self):
         """2026-11-19 report: after failed attempts with the older profile

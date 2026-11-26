@@ -266,6 +266,18 @@ def _announce(radio):
         'is on, and the correct port is selected, then try again.')
 
 
+def _sync_header(seed, plain):
+    """The 8-byte sync: "PROGRAM" and the session seed.
+
+    CPS 5RH Pro v1.14/V1.17 XOR "PROGRAM" with the seed. CPS 5RH Pro v1.12
+    (CPS.exe 1.0.1.2, DataProtocol.handShake) sends it in plain text and
+    XORs only what follows; a UV-5RM Pro (firmware 1.0.94, 2026-11-24
+    report) answers the XORed form with "N".
+    """
+    body = HEADER_SYNC if plain else _xor_seed(HEADER_SYNC, seed)
+    return body + bytes([seed])
+
+
 def _handshake(radio, is_write=False, seed=None):
     """Put the radio into clone mode.
 
@@ -275,11 +287,25 @@ def _handshake(radio, is_write=False, seed=None):
     port = radio.pipe
     seed = seed if seed is not None else _session_seed()
 
-    _announce(radio)
-
-    port.write(_xor_seed(HEADER_SYNC, seed) + bytes([seed]))
-    if port.read(1) != bytes([seed ^ 0x41]):
-        raise errors.RadioError('Radio did not agree to program mode')
+    # Try the sync form that worked last for this radio object first.
+    forms = [False, True]
+    if getattr(radio, '_plain_sync', False):
+        forms.reverse()
+    refused = []
+    for attempt, plain in enumerate(forms):
+        _announce(radio)
+        port.write(_sync_header(seed, plain))
+        reply = port.read(1)
+        if reply == bytes([seed ^ 0x41]):
+            radio._plain_sync = plain
+            break
+        refused.append(reply and '0x%02X' % reply[0] or 'nothing')
+        LOG.info('Radio refused the %s sync (reply %s)',
+                 'plain' if plain else 'XORed', refused[-1])
+    else:
+        raise errors.RadioError(
+            'Radio did not agree to program mode (replies: %s)'
+            % ', '.join(refused))
 
     port.write(bytes([seed ^ 0xFF] * 8))
     if port.read(1) != bytes([seed ^ 0x41]):
@@ -1024,6 +1050,14 @@ class BaofengUV5RHPro(Baofeng5RHPro):
 @directory.register
 class BaofengUV5RHPlus(Baofeng5RHPro):
     MODEL = "UV-5RH Plus"
+
+
+@directory.register
+class BaofengUV5RMPro(Baofeng5RHPro):
+    # Label "UV-5RM PRO", FCC ID 2AJGM-5RHPRO (2026-11-26 owner photos).
+    # The seller's CPS is "5RH Pro v1.12" with the same memory map; the
+    # radio wants that CPS's plain-text sync (see _sync_header).
+    MODEL = "UV-5RM Pro"
 
 
 @directory.register

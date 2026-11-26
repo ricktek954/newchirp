@@ -59,7 +59,7 @@ Last updated: 2026-11-20
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver; receive-only airband accepted | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng BF-V12D | `drivers/newchirp_baofeng_bfv12d.py` | CPS-derived P3107 clone serial, 9600 8N1 | Original-firmware sequence traced; hardware pending | Stock image/upload path | Stock channel decoder | Experimental |
 | Baofeng K67 Pro | `drivers/newchirp_baofeng_k67pro.py` | Shared K6/K63 CPS serial, 115200 8N1 + DTR/RTS | 1,000 channels + sparse full image, offline-tested | Disabled | Hidden | Experimental read-only |
-| Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1 | 640 channels + 10 zones, offline-tested | Full image, offline-tested | Basic settings and zone names | Experimental |
+| Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 / UV-5RM Pro | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1; XORed (V1.17) then plain (v1.12) `PROGRAM` sync | 640 channels + 10 zones, offline-tested | Full image, offline-tested | Basic settings and zone names | Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5RH | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-17ProGPS | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv17progps_compat.py` | UV-17-family serial, 115200 8N1 | Malformed CTCSS values no longer abort channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -146,6 +146,13 @@ Last updated: 2026-11-20
   zone 2 edit at channel 65 correctly, so the radio's image and what it
   shows are needed to find the cause. The desktop app still discards edits
   when switching zones before a write.
+- UV-5RM Pro (2026-11-26, ledger `w-20261125-2905`): the seller's CPS
+  "5RH Pro v1.12" sends `PROGRAM` in plain text before the seed; the radio
+  answers the V1.17 XORed form with `N`. The driver falls back to the plain
+  sync, and a "UV-5RM Pro" entry was added. Web Programmer profiles for the
+  whole family (5RH Pro, UV-5RH Pro, UV-5RH Plus, UV-5RM Pro) were added the
+  same day with the same read/write policy and zone rebuild. Not yet
+  confirmed on hardware.
 - Next milestone: the 2026-11-06 UV-5RH Pro reporter completes a read,
   compares channels with the radio, edits one unused channel, uploads it,
   reads it back, and verifies it on the radio.
