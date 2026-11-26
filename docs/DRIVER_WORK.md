@@ -467,7 +467,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#79 bug | released | normal:** No identity response in PC mode
   Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.
   Source: `email` INBOX:699-700
-- **#w-20261126-95c9 bug | released | high:** Z fill reply rejected; channel records decoded from the wrong offset
+- **#w-20261126-95c9 bug | awaiting_user | high:** Z fill reply rejected; channel records decoded from the wrong offset
   Real TK-359 answers uniform blocks with Z + echo + one fill byte (KPG32D.EXE 0x16468, Z at DS:0x32DF); 1.0.74 rejected it. Channel records are 32 bytes at 0x3400 with flag-byte frequencies (bit7 6.25 kHz, bit0 step bit 16), verified with uhf359.fdt saved by KPG-32D (460.0125/465.000, 455.500); the old decode read unused offset 0.
   Source: `email` mailbox:UID 1014
 - **#16 maintenance | experimental | normal:** Current driver status
