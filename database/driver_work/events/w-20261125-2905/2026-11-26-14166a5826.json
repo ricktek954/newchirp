@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 12:25:45",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:3e8f7c420594ff6a1da2d2acbe5298012e9dbf2dae174dbcdc09815a364acf6c",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-26",
+  "summary": "CPS.exe 1.0.1.2 recovered (LZMA chunk carve + Inno call-transform reversal) and decompiled cleanly: handShake sends plain 'PROGRAM'+seed, V1.14/V1.17 XOR it; rest of session and memory map identical. Explains the radio's 'N' reply."
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 12:25:44",
+  "details": "",
+  "event_type": "evidence",
+  "external_ref": "artifact:sha256:6d8d679bb55f4815f5845262a86f3a11bd1c64240735d6b2003135dcc27ec456",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-26",
+  "summary": "Owner sent seller CPS (WeTransfer): '5RH Pro v1.12 EN.exe' (Inno 6.3) and 'T6UV Series EN CPS setup.exe' (UV-17Pro family, 115200, not this radio). Label photo: UV-5RM PRO, FCC ID 2AJGM-5RHPRO. Archive copied to ~/Downloads/NewChirp-CPS."
+}
