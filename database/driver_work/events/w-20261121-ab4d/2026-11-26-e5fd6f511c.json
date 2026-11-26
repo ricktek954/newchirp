@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 11:22:59",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1010",
+  "item": "w-20261121-ab4d",
+  "occurred_at": "2026-11-26",
+  "summary": "Reporter confirms Linux 1.0.76 (X11 by default): DM-32UV read and 44-channel write complete and the window keeps updating to the end and closes properly."
+}

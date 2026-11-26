@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email triage 2026-11-21",
   "source_ref": "INBOX:863",
-  "status": "awaiting_user",
+  "status": "released",
   "summary": "Linux (Manjaro, KDE Wayland) 1.0.64: inserting a channel, or moving a channel added at the end up, then writing leaves a blank slot above the inserted channel; the write froze partway and needed a force quit; the radio rebooted and recovered. CPS cleanup restored the radio.",
   "title": "Write after inserting/moving a channel: blank channel left above it, write froze mid-upload",
   "uid": "w-20261121-ab4d"
