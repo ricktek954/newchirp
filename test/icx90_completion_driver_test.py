@@ -300,6 +300,35 @@ class Icx90CompletionTest(unittest.TestCase):
         radio.memobj.banks[1].invisible_channel = 0
         self.assertFalse(radio.get_memory(1).empty)
 
+    def test_out_of_table_values_do_not_stop_the_channel_list(self):
+        # 2026-11-26 report (mailbox UID 1017): a full read, then "could not
+        # decode the Icom_IC-E90 channel map: list index out of range".
+        from chirp import memmap
+
+        image = bytes(IMAGE_SIZE)
+        radio = self.radio_class(memmap.MemoryMapBytes(image))
+        radio.process_mmap()
+        radio.get_features()
+        item = radio.memobj.memory[5]
+        item.freq = 29_000
+        item.tone_mode = 4
+        item.mode = 3
+        item.tune_step = 15
+        item.rx_tone = 60
+        radio.memobj.banks[5].invisible_channel = 0
+        before = radio.get_mmap().get_packed()
+
+        with self.assertLogs(self.driver_module.LOG, "WARNING") as logs:
+            memory = radio.get_memory(5)
+
+        self.assertFalse(memory.empty)
+        self.assertEqual(memory.tmode, "")
+        self.assertEqual(memory.mode, "FM")
+        self.assertEqual(memory.tuning_step, 5.0)
+        self.assertEqual(memory.ctone, 67.0)
+        self.assertTrue(any("tone mode value 4" in line for line in logs.output))
+        self.assertEqual(radio.get_mmap().get_packed(), before)
+
 
 if __name__ == "__main__":
     unittest.main()

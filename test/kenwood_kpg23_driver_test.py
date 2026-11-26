@@ -129,8 +129,9 @@ class FakeKpg32Serial:
     """TK-359 as KPG-32D 1.00 talks to it (2026-11-26 QEMU trace)."""
 
     def __init__(self, image, identity=bytes.fromhex("00 81 31 39 35 33 30 50"),
-                 corrupt_first=False):
+                 corrupt_first=False, fill_blank=False):
         self.image = bytes(image)
+        self.fill_blank = fill_blank
         self.identity = identity
         self.corrupt_first = corrupt_first
         self.timeout = 1
@@ -164,6 +165,11 @@ class FakeKpg32Serial:
             self.offsets.append(offset)
             length = data[4]
             payload = self.image[offset:offset + length].ljust(length, b"\xff")
+            if self.fill_blank and payload == payload[:1] * length:
+                # A real TK-359 answers a uniform block with Z + one byte
+                # (2026-11-26 owner reports: "5a 03 ac 00 80" then "ff").
+                self._rx.extend(b"Z" + data[1:] + payload[:1])
+                return len(data)
             checksum = sum(payload) & 0xFF
             if self.corrupt_first:
                 checksum ^= 0xFF
@@ -394,6 +400,67 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         with mock.patch("time.sleep", return_value=None):
             with self.assertRaisesRegex(Exception, "0xF000"):
                 radio.sync_in()
+
+    # Records saved by the OEM programmers in QEMU with known frequencies
+    # typed in (2026-11-26); see docs/KPG23_PROTOCOL.md.
+    TK350_U1F_CH1 = bytes.fromhex("5a53ffffb8cbffff20203120ffe0ffff")   # RX 460.0125
+    TK350_U1F_CH2 = bytes.fromhex("f254ffffb8cbffff20203220ffe0ffff")   # RX 462.5625
+    TK350_U4F_TEST1 = bytes.fromhex("28394055ffffffffffffffffffffffff")  # 418.1 / 418.0 (400-430)
+    TK359_CH1 = bytes.fromhex(
+        "ffffef1f82f0ffff22a0801fffffffff" "ffff20312001ffffffffffffffffffff")  # 460.0125 / 465.000
+    TK359_CH2 = bytes.fromhex(
+        "ffffef1cb0f0ffff1cb0801fffffffff" "ffff20322001ffffffffffffffffffff")  # 455.5 simplex
+
+    def test_tk350_decodes_kpg23d_saved_records_in_any_uhf_band(self):
+        image = bytearray(b"\xFF" * MEM_SIZE)
+        image[0:16] = self.TK350_U1F_CH1
+        image[16:32] = self.TK350_U1F_CH2
+        image[32:48] = self.TK350_U4F_TEST1
+        image[0x0D00:0x0D05] = b"P3504"
+        radio = self._radio_from_image(self.tk350, image)
+        self.assertEqual(radio.get_memory(1).freq, 460_012_500)
+        self.assertEqual(radio.get_memory(1).name, "1")
+        self.assertEqual(radio.get_memory(2).freq, 462_562_500)
+        low = radio.get_memory(3)
+        self.assertFalse(low.empty, "400-430 MHz channels must not be hidden")
+        self.assertEqual(low.freq, 418_100_000)
+        self.assertEqual((low.duplex, low.offset), ("-", 100_000))
+        # KPG-23D leaves erased slots as FF words with an E0 option byte.
+        self.assertTrue(radio.get_memory(4).empty)
+
+    def test_tk359_decodes_kpg32d_channel_records(self):
+        image = bytearray(b"\xFF" * 0x53FF)
+        image[0x3400:0x3420] = self.TK359_CH1
+        image[0x3420:0x3440] = self.TK359_CH2
+        radio = self._radio_from_image(self.tk359, image)
+        first = radio.get_memory(1)
+        self.assertEqual(first.freq, 460_012_500)
+        self.assertEqual((first.duplex, first.offset), ("+", 4_987_500))
+        self.assertEqual(first.name, "1")
+        second = radio.get_memory(2)
+        self.assertEqual((second.freq, second.duplex), (455_500_000, ""))
+        self.assertTrue(radio.get_memory(3).empty)
+        self.assertTrue(radio.get_memory(250).empty)
+
+    def test_tk359_frequency_flags(self):
+        decode = self.tk359._kpg32_frequency
+        self.assertEqual(decode(0x81, 0x1F90, True), 460_100_000)   # test freq 1
+        self.assertEqual(decode(0x00, 0x6760, False), 460_000_000)  # 5 kHz step
+        self.assertEqual(decode(0x01, 0x6760, True), 460_000_000)
+        self.assertEqual(decode(0x80, 0xFDC0, False), 406_000_000)  # below bit 16
+
+    def test_tk359_accepts_z_fill_blocks_like_kpg32d(self):
+        image = bytearray(b"\xFF" * 0x53FF)
+        image[0x3400:0x3420] = self.TK359_CH1
+        serial = FakeKpg32Serial(image, fill_blank=True)
+        radio = self.tk359(serial)
+        radio.status_fn = lambda _status: None
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+        got = radio.get_mmap().get_packed()
+        self.assertEqual(got, bytes(image))
+        self.assertEqual(serial.offsets.count(0), 1, "no retries")
+        self.assertEqual(radio.get_memory(1).freq, 460_012_500)
 
 
 if __name__ == "__main__":

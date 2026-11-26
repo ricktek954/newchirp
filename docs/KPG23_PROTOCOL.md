@@ -1,6 +1,6 @@
 # Kenwood KPG-23D / KPG-32D protocol notes
 
-Last updated: 2026-11-26
+Last updated: 2026-11-26 (channel layouts)
 
 ## Status
 
@@ -100,6 +100,7 @@ INT 14h init byte `E7` (9600 baud, no parity, 2 stop bits, 8 bits).
 | Identity | `02` | 8 bytes, checked back to front (0x15F1F): byte 7 `P`, 6 `0`, 5 `2`/`3` (TK-259/TK-359), 4 `5`, 3 `9`, 2 `1`/`2` (band), 1 `81`, byte 0 not checked. A mismatch is answered `15` and "Check Radio Type". |
 | Acknowledge identity | `06` | `06` |
 | Read block | `53 03 <high+0xAC> <low> 80` (24-bit address 0x03AC00 + offset, no carry into the top byte) | `58 03 <high+0xAC> <low> 80` + 128 data bytes + sum8 of the data |
+| Fill reply | (same request) | `5A 03 <high+0xAC> <low> 80` + **one** fill byte, no checksum; the whole block is that value (0x16468, `Z` at DS:0x32DF). Real TK-359s send it for blank blocks (owner reports 2026-11-26: `5a 03 ac 00 80`, then `ff`). |
 | Acknowledge block | `06` (bad checksum: `15`, radio `06`, retry up to 3) | `06` |
 | Leave | `45` (`E`) | `06` |
 
@@ -122,10 +123,29 @@ have answered.
 
 ## Memory size and records
 
-- TK-350 image: `0x0E00` bytes, 160 channel slots.
-- TK-359 image: `0x53FF` bytes, 250 channel slots.
-- Channel record size: 16 bytes.
-- Names: four ASCII bytes at record offset `0x08`.
+Checked 2026-11-26 by saving files from the OEM programmers in QEMU with
+known frequencies typed in (kept as evidence, SHA-256 below), and by loading
+the CPS's own sample files.
+
+| File | Made with | SHA-256 |
+| --- | --- | --- |
+| `sample.u1f` | KPG-23D, TK-350 160ch, 450-470 MHz, RX 460.0125 / 462.5625 | `6c0c8bcf21297cf84925580085251d8649a981f2082ad6bab4844310443001b4` |
+| `sample.u4f` | KPG-23D, TK-350 160ch, 400-430 MHz, default test frequencies | `377e8389aa852648e273318d3826c29d3805dc4dbefd5bbac14c0168b964c04a` |
+| `uhf359.fdt` | KPG-32D, TK-359, 450-470 MHz, 460.0125/465.000 and 455.500 | `5129af7f5b2bc8cdd7c804a04d4c0768182961a235b727764360bb67623a9dd4` |
+
+### TK-350 (KPG-23D)
+
+- Image: `0x0E00` bytes (radio 0xF000-0xFDFF = file offsets 0-0xDFF).
+- 160 channel records of 16 bytes from offset 0; name: four ASCII bytes at
+  record offset `0x08` (KPG-23D pads with spaces on both sides, e.g. `  1 `).
+- Erased slot: RX/TX words `FFFF` (option byte 13 stays `E0`).
+- Model/band record at `0x0D00`: `P350` + band digit — `1` 450-470, `2`
+  470-490, `3` 490-520, `4` 400-430 MHz (TK-250 files carry `P250`).
+- Test frequencies (Edit > Test frequency): six RX/TX word pairs at
+  `0x0B00`, 16-byte stride.
+- The `.V1B` samples shipped with KPG-23D (`SAMPLE`, `KPG23D`, `POLICPLU`,
+  `VARFF`, `KGRUDAI`) are TK-250 VHF files: TX word × 5 kHz or × 6.25 kHz,
+  RX = TX + 45.05 MHz. They do not use the UHF anchors below.
 
 Each channel begins with a 16-bit RX word and 16-bit TX word:
 
@@ -134,7 +154,8 @@ rx_word = u16le(record[0:2])
 tx_word = u16le(record[2:4])
 ```
 
-For the 450-470 MHz band, the words encode frequency in 6.25 kHz steps:
+The words encode frequency in 6.25 kHz steps, the same for every UHF band
+(450-470 and 400-430 MHz files both decode with these anchors):
 
 ```text
 RX steps = signed16(rx_word - 0x4D18)
@@ -142,14 +163,38 @@ TX steps = signed16(tx_word - 0x6940)
 frequency = 450000000 + steps * 6250
 ```
 
-The supplied UHF data demonstrates the mapping:
+KPG-23D-saved values:
 
-| Frequency | RX word | TX word |
+| Source | Frequency | Word |
 | --- | --- | --- |
-| 430.000 MHz | `4098` | `5CC0` |
-| 450.000 MHz | `4D18` | `6940` |
-| 460.000 MHz | `5358` | `6F80` |
-| 470.000 MHz | `5998` | `75C0` |
+| u1f ch1 RX | 460.0125 MHz | `535A` |
+| u1f ch2 RX | 462.5625 MHz | `54F2` |
+| u1f test 2 | RX 450.1 / TX 450.0 | `4D28` / `6940` |
+| u1f test 3 | RX 469.975 / TX 469.9875 | `5994` / `75BE` |
+| u4f test 1 | RX 418.1 / TX 418.0 | `3928` / `5540` |
+| u4f test 2 | RX 406.1 / TX 406.0 | `31A8` / `4DC0` |
+
+### TK-359 (KPG-32D)
+
+- Image: `0x53FF` bytes; radio offsets equal `.FDT` file offsets.
+- Identity copy at `0x0500` (`00 81 31 39 35 33 30 50`; byte 2 is the band,
+  `1` 450-470, `2` 406-430 MHz).
+- 250 channel records of 32 bytes from `0x3400` (offset 0 is unused `FF`).
+- Record: `+02` RX flag, `+03..04` RX step count (big-endian), `+08..09` TX
+  step count (big-endian), `+0A` TX flag, `+12` name (printable ASCII).
+- Flag bit 7: 6.25 kHz steps, else 5 kHz. RX flag bit 0: step-count bit 16.
+  For TX, NewChirp sets bit 16 when the count would decode below 300 MHz
+  (true for every TK-359 frequency except 406-409.6 MHz at 6.25 kHz).
+- Erased slot: `FF FF FF` at `+02`.
+- Test frequencies: 3-byte flag + big-endian count entries at `0x3300`
+  (`81 1F 90` = 460.100 MHz).
+
+| Source | Bytes | Frequency |
+| --- | --- | --- |
+| uhf359 ch1 RX | `EF 1F 82` | 460.0125 MHz |
+| uhf359 ch1 TX | `22 A0`, flag `80` | 465.000 MHz |
+| uhf359 ch2 RX/TX | `EF 1C B0` / `1C B0 80` | 455.500 MHz |
+| SAMPLE.FDT ch1 (TK-259) | `EC 5D C0` | 150.000 MHz |
 
 The remaining record bytes contain signalling and channel options. They are
 preserved but not exposed until their UI labels and bit meanings are traced.
@@ -157,10 +202,12 @@ preserved but not exposed until their UI labels and bit meanings are traced.
 ## Driver policy
 
 - Read and retain the complete image.
-- Accept a matching eight-byte family identity.
-- Decode RX/TX frequency and four-character name records.
+- Decode RX/TX frequency and name records as laid out above.
 - Preserve all option bytes.
-- Hide records whose RX frequency is outside 450-470 MHz.
+- Show every channel in any UHF band; treat only erased slots, or values
+  decoding outside 300-600 MHz, as blank. (Before 2026-11-26 the TK-350
+  hid everything outside 450-470 MHz, and the TK-359 read 16-byte records
+  from offset 0, which is unused.)
 - Reject all uploads and channel mutations.
 
 ## Remaining work

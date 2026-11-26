@@ -47,8 +47,8 @@ Last updated: 2026-11-20
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
-| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes, matches the OEM trace; not hardware-tested | Disabled | Hidden | Experimental read-only |
-| Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N2, BIOS INT 14h lines, `PROGRAM`, 8-byte identity checked like the CPS, `S`/`X` blocks at 0x03AC00+offset with sum8 and NAK retry, `E` exit (KPG-32D 1.00 QEMU trace 2026-11-26) | Yes, matches the OEM trace; UHF channel decode unvalidated (sample is a TK-259); not hardware-tested | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes; full 28-block read completed on an owner's TK-350 (1.0.74, 2026-11-26); channel decode fixed afterwards, not yet confirmed on hardware | Disabled | Hidden | Experimental read-only |
+| Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N2, BIOS INT 14h lines, `PROGRAM`, 8-byte identity checked like the CPS, `S`/`X` blocks at 0x03AC00+offset with sum8 and NAK retry, `Z` + one fill byte for uniform blocks, `E` exit (KPG-32D 1.00 QEMU trace 2026-11-26) | Owner's TK-359 handshakes and answers with `Z` fill blocks (2026-11-26); `Z` handling and 32-byte records at 0x3400 added afterwards, not yet confirmed on hardware | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8N2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
@@ -1968,26 +1968,35 @@ Last updated: 2026-11-20
   - KPG-32D `SAMPLE.FDT`:
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
 - Driver SHA-256:
-  `4b0f2a04c8055c3b4aa7a7af1f5109f2e1e08a52e7aaad26d2a916fe22459f4d`
+  `808e30da1db264c786d69046194c205e751469e4a43366dd77968a4d6d2c1952`
+- Ground-truth files saved by the OEM programmers in QEMU with known
+  frequencies typed in (2026-11-26; hashes in `docs/KPG23_PROTOCOL.md`):
+  `sample.u1f` (TK-350 450-470), `sample.u4f` (TK-350 400-430),
+  `uhf359.fdt` (TK-359 450-470). The bundled `.V1B` samples are TK-250 VHF
+  files.
 - Transport, TK-350 (KPG-23D 1.01 QEMU register trace with a simulated
   radio, 2026-11-26): 4,800 baud 8N2 through BIOS INT 14h (DTR raised, RTS
   raised only while sending on a real PC), `0x02` answered by a 6-byte
   identity that is not checked, `06`/`06`, 28 `R <hi> <lo> 80` requests from 0xF000 answered
   `W <hi> <lo> 80` + 128 bytes with `06`/`06` after each, no exit command;
-  a `Z` reply fails the read. The 2026-11-13 notes (9,600 8N1, 8-byte
+  a `Z` reply fails the read (KPG-23D). The 2026-11-13 notes (9,600 8N1, 8-byte
   identity, `Z`, `E`) came from the BIOS's boot-time COM1 set-up and were
   wrong; no TK-350 owner's radio ever answered them.
 - Transport, TK-359 (KPG-32D 1.00 QEMU trace, run to "Done Reading"
   against a simulated radio, 2026-11-26): 9,600 baud 8N2, BIOS INT 14h lines,
   `PROGRAM`/`06`, `02` -> 8-byte identity checked back to front ("P0359" +
   band + `81`), `06`/`06`, `S 03 <hi+AC> <lo> 80` -> `X` echo + 128 bytes +
-  sum8, `06`/`06` (bad sum: `15`, retry), `E`/`06`. NewChirp reads every
+  sum8, `06`/`06` (bad sum: `15`, retry), `E`/`06`. A uniform block comes
+  back as `Z` echo + one fill byte with no checksum (0x16468); a real TK-359
+  sends it for blank blocks, and NewChirp 1.0.74 rejected it as a bad header. NewChirp reads every
   0x80 block except 0x0400-0x04FF (a superset of the CPS's data-driven
-  reads). The bundled `SAMPLE.FDT` is a TK-259 (VHF) codeplug, so the UHF
-  channel decode is unvalidated.
-- Implemented: full raw-image retention, the 16-byte channel record
-  layout, RX/TX frequency decoding for the 450-470 MHz band, and
-  four-character channel names. The `0x02` identity request is retried up
+  reads).
+- Implemented: full raw-image retention; TK-350 16-byte records with RX/TX
+  decode in every KPG-23D UHF band (band digit at 0x0D05) and names;
+  TK-359 32-byte records at 0x3400 with flag-byte frequencies (6.25/5 kHz,
+  bit 16) and names. Before 2026-11-26 the TK-350 hid channels outside
+  450-470 MHz and the TK-359 decoded unused offset 0; an owner's TK-350
+  read showed 0 channels. The `0x02` identity request is retried up
   to three times when the radio enters PC mode late or the first reply is
   fragmented.
 - Read/write policy: read-only. Uploads remain disabled because the
@@ -2000,10 +2009,16 @@ Last updated: 2026-11-20
   [redacted-email] reported zero identity bytes on both COM3 and COM4
   with NewChirp 1.0.56 and TK-350 selected; the bounded retry covers a
   late-ready radio without retrying memory writes.
-- NewChirp hardware validation: none
-- Next milestone: the requester performs complete reads on a TK-350 and
-  TK-359, saves both images, and compares frequencies, names, power, and
-  tone fields with the OEM CPS
+- NewChirp hardware validation: TK-350 full read completed on the owner's
+  radio with 1.0.74 (2026-11-26, mailbox UIDs 1011-1016); channels not yet
+  confirmed. TK-359 handshake and `Z` replies observed (UIDs 1014, 1015,
+  1018); read not yet completed.
+- Known limitations: TK-350 5 kHz-step channels are unverified (all KPG-23D
+  UHF ground truth is 6.25 kHz); tones, power, scan and settings are not
+  decoded; writing is disabled.
+- Next milestone: the owner reads both radios with the Web Programmer or the
+  next release and compares the channel list with the radio; the saved
+  images confirm the band record and option bytes
 
 ### Kenwood TK-863G
 

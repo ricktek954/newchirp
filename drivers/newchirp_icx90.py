@@ -56,7 +56,67 @@ WRITE_RESULT_TIMEOUT = 15.0
 
 directory.enable_reregistrations()
 
-_UPSTREAM_GET_MEMORY = icx90.ICx90Radio.get_memory
+
+def _lookup(table, index, field, number):
+    """Table lookup that survives a value the stock tables do not list.
+
+    The stock decoder indexes six tables with raw bitfields, so one channel
+    holding a value outside a table stopped the whole channel list ("list
+    index out of range", 2026-11-26 IC-E90 report, mailbox UID 1017). The
+    channel now loads with that field at its first table value and the raw
+    value is logged; the image bytes are untouched until the channel is
+    edited.
+    """
+    try:
+        return table[int(index)]
+    except IndexError:
+        LOG.warning(
+            "IC-E90 channel %s: %s value %s is not in the stock table; "
+            "showing %r", number, field, int(index), table[0])
+        return table[0]
+
+
+def _decode_memory(self, number):
+    """icx90.ICx90Radio.get_memory with bounded table lookups."""
+    mem = chirp_common.Memory()
+    (mem_item, special, unique_idx) = self.get_mem_item(number)
+    freq = self.freq_icom2chirp(mem_item.freq, mem_item.freq_mult)
+    if freq == 0:
+        mem.empty = True
+    else:
+        mem.empty = False
+        mem.freq = freq
+        if special:
+            mem.name = " " * icx90.NAME_LENGTH
+        else:
+            mem.name = str(mem_item.name).rstrip("\x00 ")
+        mem.rtone = _lookup(
+            chirp_common.TONES,
+            (mem_item.tx_tone_hi << 4) + mem_item.tx_tone_lo,
+            "TX tone", number)
+        mem.ctone = _lookup(
+            chirp_common.TONES, mem_item.rx_tone, "RX tone", number)
+        mem.dtcs = _lookup(
+            chirp_common.DTCS_CODES, mem_item.dtcs, "DTCS code", number)
+        mem.dtcs_polarity = _lookup(
+            icx90.DTCS_POLARITY, mem_item.dtcs_polarity, "DTCS polarity",
+            number)
+        mem.offset = self.freq_icom2chirp(
+            mem_item.offset_freq, mem_item.offset_freq_mult)
+        mem.duplex = _lookup(icx90.DUPLEX, mem_item.duplex, "duplex", number)
+        mem.tmode = _lookup(
+            icx90.TONE_MODE, mem_item.tone_mode, "tone mode", number)
+        mem.tuning_step = _lookup(
+            icx90.TUNE_STEP, mem_item.tune_step, "tuning step", number)
+        mem.mode = _lookup(icx90.MODE, mem_item.mode, "mode", number)
+        if not special:
+            mem.skip = self.get_skip(number)
+    if special:
+        mem.extd_number = number
+        mem.number = -len(self.special) + unique_idx
+    else:
+        mem.number = number
+    return mem
 
 
 def _get_memory_with_invisible_guard(self, number):
@@ -69,7 +129,7 @@ def _get_memory_with_invisible_guard(self, number):
         memory.number = number
         memory.empty = True
         return memory
-    return _UPSTREAM_GET_MEMORY(self, number)
+    return _decode_memory(self, number)
 
 
 _get_memory_with_invisible_guard.newchirp_invisible_guard = True

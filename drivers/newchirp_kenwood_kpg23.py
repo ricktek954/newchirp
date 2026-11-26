@@ -7,14 +7,18 @@
 
 """Experimental read-only drivers for Kenwood KPG-23D/KPG-32D radios.
 
-The OEM CPS traces establish a 9,600-baud 8N1 serial session, an eight-byte
-identity response to 0x02, and an ``R`` command carrying a 16-bit address and
-an eight-bit block length.  The supplied data files show 16-byte channel
-records containing RX and TX frequency words followed by a four-character
-name.
+Both sessions were traced from the OEM DOS programmers in QEMU (see
+docs/KPG23_PROTOCOL.md).  Channel layouts were checked against files saved by
+the same programmers with known frequencies typed in (2026-11-26):
 
-Uploads remain disabled.  The reply header after ``W`` and the complete
-settings/option map still need physical-radio validation.
+- TK-350 (KPG-23D): 16-byte records from offset 0, RX/TX words in 6.25 kHz
+  steps, four-character name at +8, model/band record ``P350<band>`` at
+  0x0D00.
+- TK-359 (KPG-32D): 32-byte records from 0x3400; each frequency is a flag
+  byte (bit 7 = 6.25 kHz steps, else 5 kHz; bit 0 = step bit 16) and a
+  big-endian 16-bit step count; name at +0x12.
+
+Uploads remain disabled until a physical write/read-back is validated.
 """
 
 from __future__ import annotations
@@ -46,7 +50,18 @@ TX_BASE_450 = 0x6940
 FREQUENCY_BASE = 450_000_000
 FREQUENCY_STEP = 6_250
 
-VALID_BANDS = [(450_000_000, 470_000_000)]
+# KPG-23D UHF band choices for the TK-350, keyed by the digit after "P350"
+# at image offset 0x0D00 (sample.u1f = "P3501", sample.u4f = "P3504").
+TK350_BANDS = {
+    b"1": (450_000_000, 470_000_000),
+    b"2": (470_000_000, 490_000_000),
+    b"3": (490_000_000, 520_000_000),
+    b"4": (400_000_000, 430_000_000),
+}
+TK350_MODEL_OFFSET = 0x0D00
+VALID_BANDS = [(400_000_000, 520_000_000)]
+# Anything decoding outside this is not a channel (erased or unknown data).
+PLAUSIBLE_UHF = (300_000_000, 600_000_000)
 VALID_MODES = ["NFM", "FM"]
 VALID_CHARS = chirp_common.CHARSET_UPPER_NUMERIC + " -_/\\*()"
 
@@ -285,11 +300,13 @@ def _download(radio):
 # KPG-32D (TK-259/TK-359) session, from KPG32D.EXE 1.00 (SHA-256
 # 5c1014f201b0dbb8887a4789cd6380878482c7bca109db9695f4fe570283e7fa), traced
 # in QEMU and run to "Done Reading" against a simulated radio, 2026-11-26.
-# Constants at DS:0x32CA: "PROGRAM", 02, 'S', 'X', 15, 06, 80, 'E', and
-# the INT 14h init byte E7 (9600 baud, no parity, 2 stop bits, 8 bits).
+# Constants at DS:0x32CA: "PROGRAM", 02, 'S', 'X', 15, 06, 80, 'E', the
+# INT 14h init byte E7 (9600 baud, no parity, 2 stop bits, 8 bits), and at
+# DS:0x32DF 'Z', the fill reply real TK-359s send for blank blocks.
 KPG32_SYNC = b"PROGRAM"
 KPG32_READ = b"S"
 KPG32_REPLY = b"X"
+KPG32_FILL = b"Z"       # DS:0x32DF, the radio's "whole block is one value" reply
 KPG32_EXIT = b"E"
 KPG32_ADDRESS_BASE = 0x03AC00
 KPG32_SKIP = range(0x0400, 0x0500)   # never requested by KPG-32D
@@ -360,6 +377,12 @@ def _kpg32_read_block(radio, offset, length):
         try:
             _send(radio, KPG32_READ + address + bytes((length,)))
             header = _read_exact(radio, 5, "reading the block header at 0x%04X" % offset)
+            if header == KPG32_FILL + expected[1:]:
+                # 0x16468: Z <same address and length> + one fill byte, no
+                # checksum; KPG-32D answers 06/06 and fills the whole block.
+                fill = _read_exact(radio, 1, "reading the fill byte at 0x%04X" % offset)
+                _exchange_ack(radio, "memory block 0x%04X" % offset)
+                return fill * length
             if header != expected:
                 raise errors.RadioError(
                     "Unexpected block header %s at 0x%04X" % (header.hex(" "), offset))
@@ -426,7 +449,7 @@ def _channel_record(image, number):
 
 def _decode_name(raw):
     value = raw.split(b"\xff", 1)[0].split(b"\x00", 1)[0]
-    value = value.rstrip(b" ")
+    value = value.strip(b" ")
     return value.decode("ascii", "replace")
 
 
@@ -543,13 +566,18 @@ class _KenwoodKPG23Base(
 
         rx_word = record[0] | (record[1] << 8)
         tx_word = record[2] | (record[3] << 8)
+        if rx_word == 0xFFFF:
+            memory.empty = True
+            return memory
+        # The encoding is the same for every UHF band (checked against
+        # KPG-23D files for 450-470 and 400-430 MHz), so channels are shown
+        # whatever band the radio is.
         memory.freq = _frequency(rx_word, RX_BASE_450)
-        if not any(
-            low <= memory.freq < high for low, high in VALID_BANDS
-        ):
+        low, high = PLAUSIBLE_UHF
+        if not low <= memory.freq < high:
             memory.empty = True
             LOG.info(
-                "%s channel %i has an unsupported frequency %i",
+                "%s channel %i decodes to %i Hz; treating it as blank",
                 self.MODEL,
                 number,
                 memory.freq,
@@ -620,3 +648,73 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
     _memsize = 0x53FF
     _channel_count = 250
     _image_name = "KPG-32D"
+
+    # KPG-32D channel records (checked 2026-11-26 against SAMPLE.FDT, a
+    # TK-259 file showing 150/151/152 MHz, and a TK-359 450-470 MHz file
+    # saved by KPG-32D with 460.0125/465.000 and 455.500/455.500 typed in):
+    #   +0x02 RX flag, +0x03 RX step count (big-endian)
+    #   +0x08 TX step count (big-endian), +0x0A TX flag
+    #   +0x12 name
+    # Flag bit 7 = 6.25 kHz steps (else 5 kHz); RX flag bit 0 = step bit 16.
+    CHANNEL_BASE = 0x3400
+    RECORD_SIZE = 0x20
+    NAME_OFFSET = 0x12
+    NAME_LENGTH = 4
+
+    def get_features(self):
+        rf = super().get_features()
+        rf.valid_bands = [(406_000_000, 470_000_000)]
+        return rf
+
+    def _record(self, number):
+        offset = self.CHANNEL_BASE + (number - 1) * self.RECORD_SIZE
+        return bytes(self._mmap.get_packed()[offset:offset + self.RECORD_SIZE])
+
+    def get_raw_memory(self, number):
+        return self._record(number).hex(" ")
+
+    @staticmethod
+    def _kpg32_frequency(flag, word, high_bit):
+        step = 6_250 if flag & 0x80 else 5_000
+        steps = word | (0x10000 if high_bit else 0)
+        if not high_bit and steps * step < 300_000_000:
+            # UHF counts all exceed 16 bits except 406-409.6 MHz at 6.25 kHz.
+            steps |= 0x10000
+        return steps * step
+
+    def get_memory(self, number):
+        if not 1 <= number <= self._channel_count:
+            raise errors.InvalidMemoryLocation(
+                "%s channel must be between 1 and %i"
+                % (self.MODEL, self._channel_count))
+        record = self._record(number)
+        memory = chirp_common.Memory()
+        memory.number = number
+        if record[2:5] == b"\xff\xff\xff":
+            memory.empty = True
+            return memory
+        rx_flag = record[2]
+        memory.freq = self._kpg32_frequency(
+            rx_flag, (record[3] << 8) | record[4], rx_flag & 0x01)
+        low, high = PLAUSIBLE_UHF
+        if not low <= memory.freq < high:
+            LOG.info("%s channel %i decodes to %i Hz; treating it as blank",
+                     self.MODEL, number, memory.freq)
+            memory.empty = True
+            return memory
+        tx_frequency = memory.freq
+        if record[8:11] != b"\xff\xff\xff":
+            tx_frequency = self._kpg32_frequency(
+                record[10], (record[8] << 8) | record[9], False)
+        offset = tx_frequency - memory.freq
+        memory.duplex = "+" if offset > 0 else "-" if offset < 0 else ""
+        memory.offset = abs(offset)
+        raw_name = record[self.NAME_OFFSET:self.NAME_OFFSET + self.NAME_LENGTH]
+        name = bytearray()
+        for byte in raw_name:
+            if not 0x20 <= byte < 0x7F:
+                break
+            name.append(byte)
+        memory.name = name.decode("ascii").strip()
+        memory.mode = "NFM"
+        return memory
