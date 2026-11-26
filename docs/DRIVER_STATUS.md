@@ -50,6 +50,7 @@ Last updated: 2026-11-20
 | Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes; owner's TK-350 reads 120 channels, 116 matching his UK 70 cm plan exactly (2026-11-26) | Experimental: traced KPG-23D write, existing channels only, awaiting a physical write/read-back | Hidden | Experimental |
 | Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N2, BIOS INT 14h lines, `PROGRAM`, 8-byte identity checked like the CPS, `S`/`X` blocks at 0x03AC00+offset with sum8 and NAK retry, `Z` + one fill byte for uniform blocks, `E` exit (KPG-32D 1.00 QEMU trace 2026-11-26) | Owner's TK-359 handshakes and answers with `Z` fill blocks (2026-11-26); `Z` handling and 32-byte records at 0x3400 added afterwards, not yet confirmed on hardware | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8N2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
+| Quansheng TK11 / TK11(8) | Pinned CHIRP `tk11.py` with `drivers/newchirp_tk11_upload.py` | Quansheng framed serial, 38400 8N1 | Stock CHIRP decode; owner read on firmware 5.00.18 | Upload opens its own session like the CPS, checks each block, reboots | Stock CHIRP policy | Stock driver with NewChirp upload fix; write not yet confirmed |
 | Quansheng UV-K5 family | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Yes, firmware-ID retry | Stock CHIRP policy | Stock CHIRP policy | Experimental |
 | Quansheng UV-K1 / UV-K5 V3 (F4HWN 6.3) | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | 1,024 channels + 14 VFOs, offline-tested | Program/configuration region only, offline-tested | Hidden | Experimental |
 | KSUN UV-K60 rebrand | `drivers/newchirp_uvk5.py` | UV-K5 framed serial, 38400 8N1 | Stock UV-K5-family profile | Stock UV-K5-family policy | Stock UV-K5-family policy | Experimental |
@@ -1740,6 +1741,27 @@ Last updated: 2026-11-20
 - Next milestone: obtain a physical read and compare the identity, multiple
   channels, and saved CPS image before reviewing any separate write
   implementation.
+
+### Quansheng TK11 / TK11(8) upload
+
+- Stock driver: pinned CHIRP `tk11.py`; NewChirp overlay
+  `drivers/newchirp_tk11_upload.py` (SHA-256 `d28fcf14e037d9e4ca7e0501e742733cb919bf0f019c852911e6fc9853caaf68`).
+- Problem (2026-11-26, 1.0.75, firmware 5.00.18, mailbox UID 1044): reads
+  work, but the write got no reply, then an unframed one. Stock `do_upload`
+  never sends the connection request (0x1F4) that registers the session's
+  magic code, and ignores each block's response.
+- OEM evidence: Quansheng's official package "TK11 Firmware+CPS+Upgrade
+  Tool 2025.10.17" (zip SHA-256 `c14118ad...dfdd6`), `TK11_EN(2.19).exe`, a
+  Setup Factory installer whose payload is XOR 0x07 + PKWARE DCL; the
+  recovered `TK11.exe` (.NET, SHA-256 `0839e005...a843`) runs `main.Login()`
+  (connect 500 -> 501, model and password checks) before every read and
+  write, stops at the first block not answered with 510, and reboots (1501).
+- Fix: connect first (3 tries), refuse a radio with a programming password,
+  check every block, reboot. Offline-tested against a radio model that only
+  accepts writes inside a session; not yet confirmed on hardware.
+- Known differences from the CPS: CHIRP writes the whole 0x23000 image; the
+  CPS writes region by region (channels, VFO, FM, settings, scan, DTMF,
+  5-tone, NOAA, password, picture).
 
 ### Quansheng UV-K5 family
 
