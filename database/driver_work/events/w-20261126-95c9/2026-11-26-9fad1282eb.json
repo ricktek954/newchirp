@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 12:30:01",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1021",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-26",
+  "summary": "Owner's TK-359 reads: 3 channels CH-1 449.3125, CH2 449.325, CH-3 449.375 with names. All three show duplex 'off', so the TX field on the real radio likely decodes outside 406-470 MHz; need the saved image to check the TX layout."
+}
