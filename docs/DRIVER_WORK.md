@@ -449,7 +449,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TK-350
 
-- **#71 bug | awaiting_user | high:** Identity request receives zero bytes
+- **#71 bug | blocked | high:** Identity request receives zero bytes
   Zero identity bytes were observed on COM3 and COM4. The driver now retries the bounded 0x02 identity request three times for late PC mode.
   Source: `email` INBOX:727-728
 - **#15 maintenance | experimental | normal:** Current driver status

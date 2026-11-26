@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 07:13:42",
+  "details": "",
+  "event_type": "report",
+  "external_ref": "mailbox:INBOX:1007",
+  "item": "71",
+  "occurred_at": "2026-11-26",
+  "summary": "Owner: already tried all the suggested checks; giving up. No identity byte ever received on any cable; cause unresolved (radio or plug side most likely)"
+}
