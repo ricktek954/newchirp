@@ -1,12 +1,12 @@
 {
   "okf_version": "0.2",
   "manifest_version": 2,
-  "source_root": "/home/rlopez/newchirp.net/lib",
+  "source_root": "/Volumes/RICKEXT/desktop/newchirp/lib",
   "files": {
     "l10n/app_localizations.dart": {
       "path": "l10n/app_localizations.dart",
-      "mtime_ns": 1795529891074534553,
-      "hash": "57e7f76f81f5d166efa0f3f2c0c8cacd8b3d34acf494a33bd5f0579a273700bf",
+      "mtime_ns": 1795701153851635716,
+      "hash": "f142569a40a031976be44213f7666fac68e9792c43c5f45cbc45e7085f65dd91",
       "concept_ids": [
         "l10n/app_localizations/AppLocalizations",
         "l10n/app_localizations/AppLocalizationsDelegate",
@@ -112,6 +112,7 @@
         "l10n/app_localizations/uiThePdfWasOpenedInYour",
         "l10n/app_localizations/uiTheWriteFinishedChannelsWereAdjusted",
         "l10n/app_localizations/uiThisSettingTypeIsNotSupported",
+        "l10n/app_localizations/uiUndecodedChannelsBody",
         "l10n/app_localizations/uiUpdatedSelectedChannels",
         "l10n/app_localizations/uiUseAtLeastCharacters",
         "l10n/app_localizations/uiUseAtMostCharacters",
@@ -133,8 +134,8 @@
     },
     "l10n/app_localizations_en.dart": {
       "path": "l10n/app_localizations_en.dart",
-      "mtime_ns": 1795529890991534746,
-      "hash": "e3ade657a6d652927ef54cf5c57cd70bd33e1cb89b83d00d885a3c31f2318f1d",
+      "mtime_ns": 1795701153774489860,
+      "hash": "3ec304a6c81a549d1b56d2d0532987aa980268e9b1c0acf18d39bcfeffb17b21",
       "concept_ids": [
         "l10n/app_localizations_en/AppLocalizationsEn",
         "l10n/app_localizations_en/aboutTagline",
@@ -234,6 +235,7 @@
         "l10n/app_localizations_en/uiThePdfWasOpenedInYour",
         "l10n/app_localizations_en/uiTheWriteFinishedChannelsWereAdjusted",
         "l10n/app_localizations_en/uiThisSettingTypeIsNotSupported",
+        "l10n/app_localizations_en/uiUndecodedChannelsBody",
         "l10n/app_localizations_en/uiUpdatedSelectedChannels",
         "l10n/app_localizations_en/uiUseAtLeastCharacters",
         "l10n/app_localizations_en/uiUseAtMostCharacters",
@@ -255,8 +257,8 @@
     },
     "l10n/app_localizations_es.dart": {
       "path": "l10n/app_localizations_es.dart",
-      "mtime_ns": 1795529891016534688,
-      "hash": "cdab76c9fb651cbdea4c1b01b1a30ff3b990357317fa76e1b4ab3c33c01d8188",
+      "mtime_ns": 1795701153801115491,
+      "hash": "5627b2fcbee8c484e0168f4ba41d51cc7332d0d34b954342657f93d0205ed6a9",
       "concept_ids": [
         "l10n/app_localizations_es/AppLocalizationsEs",
         "l10n/app_localizations_es/aboutTagline",
@@ -356,6 +358,7 @@
         "l10n/app_localizations_es/uiThePdfWasOpenedInYour",
         "l10n/app_localizations_es/uiTheWriteFinishedChannelsWereAdjusted",
         "l10n/app_localizations_es/uiThisSettingTypeIsNotSupported",
+        "l10n/app_localizations_es/uiUndecodedChannelsBody",
         "l10n/app_localizations_es/uiUpdatedSelectedChannels",
         "l10n/app_localizations_es/uiUseAtLeastCharacters",
         "l10n/app_localizations_es/uiUseAtMostCharacters",
@@ -377,8 +380,8 @@
     },
     "l10n/app_localizations_fr.dart": {
       "path": "l10n/app_localizations_fr.dart",
-      "mtime_ns": 1795529891047534616,
-      "hash": "4c3ea230b9c13beff45e070bcddc92a3ba8b9045ac74e4fce33d077ee43e34fd",
+      "mtime_ns": 1795701153825708167,
+      "hash": "2e5f87daf20075f350c803c3527f57518adc814df2c15541265378bed4bdb2e8",
       "concept_ids": [
         "l10n/app_localizations_fr/AppLocalizationsFr",
         "l10n/app_localizations_fr/aboutTagline",
@@ -478,6 +481,7 @@
         "l10n/app_localizations_fr/uiThePdfWasOpenedInYour",
         "l10n/app_localizations_fr/uiTheWriteFinishedChannelsWereAdjusted",
         "l10n/app_localizations_fr/uiThisSettingTypeIsNotSupported",
+        "l10n/app_localizations_fr/uiUndecodedChannelsBody",
         "l10n/app_localizations_fr/uiUpdatedSelectedChannels",
         "l10n/app_localizations_fr/uiUseAtLeastCharacters",
         "l10n/app_localizations_fr/uiUseAtMostCharacters",
@@ -499,7 +503,7 @@
     },
     "l10n/l10n.dart": {
       "path": "l10n/l10n.dart",
-      "mtime_ns": 1795516328953236490,
+      "mtime_ns": 1795460913382640241,
       "hash": "c4d277595d7ec9776bdea0688170a7b884a436dd2be6732934b1196e2e91f310",
       "concept_ids": [
         "l10n/l10n"
@@ -507,7 +511,7 @@
     },
     "models/channel_image_baseline.dart": {
       "path": "models/channel_image_baseline.dart",
-      "mtime_ns": 1795530135101231582,
+      "mtime_ns": 1795529636718017072,
       "hash": "a4e229d861fcb7a81b15a29195a421dc0f388f1e0e38b16deb2658d9909e3592",
       "concept_ids": [
         "models/channel_image_baseline/ChannelImageBaseline",
@@ -526,7 +530,7 @@
     },
     "models/frequency_reference.dart": {
       "path": "models/frequency_reference.dart",
-      "mtime_ns": 1795530135101231582,
+      "mtime_ns": 1795529783881193826,
       "hash": "2f323951afe453b32f22c0840fc39aba68fc99c393ad1cb60b3d4a9bfbc43092",
       "concept_ids": [
         "models/frequency_reference/FrequencyReferenceGroup",
@@ -542,7 +546,7 @@
     },
     "models/gm32_channel.dart": {
       "path": "models/gm32_channel.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335031773185,
       "hash": "930587b2146e7df167512e071e8c2a52387e0aca8a87d54116de682213854a61",
       "concept_ids": [
         "models/gm32_channel/applyGm32Rules",
@@ -564,7 +568,7 @@
     },
     "models/marine_channels.dart": {
       "path": "models/marine_channels.dart",
-      "mtime_ns": 1794227692786598019,
+      "mtime_ns": 1794220301599184985,
       "hash": "6fe7afca765e6a7e7319910ca4aac1c7d616951e174d608dd7e63715e4f80389",
       "concept_ids": [
         "models/marine_channels/MarineChannelDefinition",
@@ -578,7 +582,7 @@
     },
     "models/radio_channel.dart": {
       "path": "models/radio_channel.dart",
-      "mtime_ns": 1795207517968070785,
+      "mtime_ns": 1795205428738274652,
       "hash": "a8d7e9aef976edf6335dcba11aace91aec82fabd5745f9d88b11324e9dc66570",
       "concept_ids": [
         "models/radio_channel/ChannelExtraField",
@@ -630,7 +634,7 @@
     },
     "models/radio_mapping.dart": {
       "path": "models/radio_mapping.dart",
-      "mtime_ns": 1795125305223842947,
+      "mtime_ns": 1795123564359989360,
       "hash": "db152cf62c4ee2ff9f6fc4ce960a890410304f4ba9efd61891f2aeccc5cdf8d5",
       "concept_ids": [
         "models/radio_mapping/RadioMappingEntry",
@@ -649,7 +653,7 @@
     },
     "models/repeater_counties.dart": {
       "path": "models/repeater_counties.dart",
-      "mtime_ns": 1795516328959664703,
+      "mtime_ns": 1795461602946476506,
       "hash": "dde2fd355df6dac9d222848062eb45f77bacc5a24921f79b18571df95b838448",
       "concept_ids": [
         "models/repeater_counties"
@@ -657,7 +661,7 @@
     },
     "models/repeater_regions.dart": {
       "path": "models/repeater_regions.dart",
-      "mtime_ns": 1793443811322177379,
+      "mtime_ns": 1793439228906217312,
       "hash": "a142415518e9cbd2ac6ae88672a3827b0e37776fbe00112fe93e6ef123e448c6",
       "concept_ids": [
         "models/repeater_regions/normalizeRepeaterCounty",
@@ -669,7 +673,7 @@
     },
     "models/repeater_search.dart": {
       "path": "models/repeater_search.dart",
-      "mtime_ns": 1793464076655657436,
+      "mtime_ns": 1793463645017905451,
       "hash": "39452b3cc44dc30581c212251a0374201bae351b52707b5378ea8ae262bf9369",
       "concept_ids": [
         "models/repeater_search/RepeaterSearchResult",
@@ -683,7 +687,7 @@
     },
     "services/app_language.dart": {
       "path": "services/app_language.dart",
-      "mtime_ns": 1795516328959664703,
+      "mtime_ns": 1795460855343933738,
       "hash": "606e49edd7663578bb102379223c6e64a2042ef2e86ee504c31e270db3620b94",
       "concept_ids": [
         "services/app_language/AppLanguageStore",
@@ -696,7 +700,7 @@
     },
     "services/channel_list_pdf.dart": {
       "path": "services/channel_list_pdf.dart",
-      "mtime_ns": 1795357194038272489,
+      "mtime_ns": 1795344862917294456,
       "hash": "8e5dc95a1b5eaec465da44e993a9a6fa340e31a65c5c45a932b9bf09b8b71d2d",
       "concept_ids": [
         "services/channel_list_pdf/ChannelListColumn",
@@ -717,7 +721,7 @@
     },
     "services/chirp_csv.dart": {
       "path": "services/chirp_csv.dart",
-      "mtime_ns": 1795166904165097739,
+      "mtime_ns": 1795164855609566210,
       "hash": "e85ec8ee10e0f0eb8984f97b3726e15319215904ebb8f0908d17ec3779690ff3",
       "concept_ids": [
         "services/chirp_csv/ChirpCsv",
@@ -741,7 +745,7 @@
     },
     "services/column_layout_store.dart": {
       "path": "services/column_layout_store.dart",
-      "mtime_ns": 1793109703288279614,
+      "mtime_ns": 1793096501033485563,
       "hash": "812cb21369ce6be6d05037236ba5f2275ca98d4f6290bff92b3183096ad2869b",
       "concept_ids": [
         "services/column_layout_store/ColumnLayout",
@@ -754,7 +758,7 @@
     },
     "services/diagnostic_log.dart": {
       "path": "services/diagnostic_log.dart",
-      "mtime_ns": 1794143895927283992,
+      "mtime_ns": 1794143533122102970,
       "hash": "41eb61d1613eeca0e3345d314f8787997095648725d64b71f6dc88d21bb71bc0",
       "concept_ids": [
         "services/diagnostic_log/DiagnosticEntry",
@@ -775,7 +779,7 @@
     },
     "services/file_save_warning_store.dart": {
       "path": "services/file_save_warning_store.dart",
-      "mtime_ns": 1793018006929487856,
+      "mtime_ns": 1793017335032074140,
       "hash": "920b51f15dc35ceab3c8a585373162f5db029d93852c1e9db93ee0b04c915458",
       "concept_ids": [
         "services/file_save_warning_store/FileSaveWarningStore",
@@ -787,7 +791,7 @@
     },
     "services/library_metrics_store.dart": {
       "path": "services/library_metrics_store.dart",
-      "mtime_ns": 1795166904165097739,
+      "mtime_ns": 1795165440046058218,
       "hash": "19f562a27a64783b23ba2dd5f6622d57addf4d796652e70608cb7e6acfdaedad",
       "concept_ids": [
         "services/library_metrics_store/LibraryMetricsStore",
@@ -799,7 +803,7 @@
     },
     "services/local_file_opener.dart": {
       "path": "services/local_file_opener.dart",
-      "mtime_ns": 1793355746085706779,
+      "mtime_ns": 1793272362273777794,
       "hash": "64762d56067019bad41ed7ab786cad3b638a9646245a57e9c88f2f3c984fdea5",
       "concept_ids": [
         "services/local_file_opener/LocalFilePlatform",
@@ -810,7 +814,7 @@
     },
     "services/module_sandbox.dart": {
       "path": "services/module_sandbox.dart",
-      "mtime_ns": 1794684549188277338,
+      "mtime_ns": 1794748425185339740,
       "hash": "3e654377596c0acdc5ffe89e9b935c6be23530c887d0a5cb51a7e666c959b7ca",
       "concept_ids": [
         "services/module_sandbox/ModuleSandbox",
@@ -853,7 +857,7 @@
     },
     "services/mototrbo_cps2_xml.dart": {
       "path": "services/mototrbo_cps2_xml.dart",
-      "mtime_ns": 1793109703288279614,
+      "mtime_ns": 1793094681555739212,
       "hash": "02a181dc43298e1f8b0e21ed0bcf7ff46383f890d97e56860e42201e6ef59b2c",
       "concept_ids": [
         "services/mototrbo_cps2_xml/CpsTone",
@@ -877,7 +881,7 @@
     },
     "services/mygmrs_client.dart": {
       "path": "services/mygmrs_client.dart",
-      "mtime_ns": 1793978671702776958,
+      "mtime_ns": 1793978410253437864,
       "hash": "77fada61fc3162f117459cc37abc0579f232f77e732d511a9891f2c69b99beab",
       "concept_ids": [
         "services/mygmrs_client/JsonResponse",
@@ -906,8 +910,8 @@
     },
     "services/radio_bridge.dart": {
       "path": "services/radio_bridge.dart",
-      "mtime_ns": 1795357194038459069,
-      "hash": "9f6f28f1d7df93572a960bf05189fe6a1f0be1b2c4fd4e2cd8e5a35b2134c4b4",
+      "mtime_ns": 1795701175630807263,
+      "hash": "c2340ebd0541f8f16b6f74e6014d48ae74aa1ac96a3345b90ec3d9fa1e10a384",
       "concept_ids": [
         "services/radio_bridge/RadioBridge",
         "services/radio_bridge/RadioBridgeException",
@@ -920,6 +924,7 @@
         "services/radio_bridge/RadioSettings",
         "services/radio_bridge/RadioZone",
         "services/radio_bridge/SerialPortInfo",
+        "services/radio_bridge/UndecodedChannel",
         "services/radio_bridge/bundledAssetCandidates",
         "services/radio_bridge/bundledResourcesDirectory",
         "services/radio_bridge/cancelActive",
@@ -958,6 +963,7 @@
         "services/radio_bridge/strings",
         "services/radio_bridge/toChangeJson",
         "services/radio_bridge/toString",
+        "services/radio_bridge/undecodedChannelsFromJson",
         "services/radio_bridge/unloadModule",
         "services/radio_bridge/upload",
         "services/radio_bridge/windowsSerialPortDetails",
@@ -968,7 +974,7 @@
     },
     "services/radio_image_store.dart": {
       "path": "services/radio_image_store.dart",
-      "mtime_ns": 1793355746085706779,
+      "mtime_ns": 1793187642181438904,
       "hash": "cabc47461f4153fc3261af25daec434560f854d099fb24f7358dc152c1c7ee14",
       "concept_ids": [
         "services/radio_image_store/RadioImageStore",
@@ -983,7 +989,7 @@
     },
     "services/radio_selection_store.dart": {
       "path": "services/radio_selection_store.dart",
-      "mtime_ns": 1791109641575292000,
+      "mtime_ns": 1787526889854243083,
       "hash": "aefeaa9ad666caf79e256acf1d1af15cf468495cde4e4dd3515b715ba57bd97c",
       "concept_ids": [
         "services/radio_selection_store/RadioSelection",
@@ -996,7 +1002,7 @@
     },
     "services/repeater_search_preferences_store.dart": {
       "path": "services/repeater_search_preferences_store.dart",
-      "mtime_ns": 1794086445114217730,
+      "mtime_ns": 1794065847464720490,
       "hash": "36b1360b1c97955db3fd4130e6d09c79586dc0982c591c6f993f0244fe4ed300",
       "concept_ids": [
         "services/repeater_search_preferences_store/RepeaterSearchPreferences",
@@ -1010,7 +1016,7 @@
     },
     "services/update_checker.dart": {
       "path": "services/update_checker.dart",
-      "mtime_ns": 1794684530212383504,
+      "mtime_ns": 1794662632996144606,
       "hash": "b43cd88c3cf8e1f4a6948db0a70644bb613eedf9bcf7329c57d31c69869f0a52",
       "concept_ids": [
         "services/update_checker/PlatformRelease",
@@ -1034,7 +1040,7 @@
     },
     "services/update_installer.dart": {
       "path": "services/update_installer.dart",
-      "mtime_ns": 1793109703288928523,
+      "mtime_ns": 1793108770906624056,
       "hash": "726cc75cab25aa8058200bb1232846a31f0413b60ec3b3702729119dabea3a1c",
       "concept_ids": [
         "services/update_installer/DownloadedUpdate",
@@ -1052,7 +1058,7 @@
     },
     "services/window_state_store.dart": {
       "path": "services/window_state_store.dart",
-      "mtime_ns": 1794661579163291342,
+      "mtime_ns": 1794514612328193301,
       "hash": "970f41d7e6aa528d25df4bb3e4aa192055e8a9c60a276c09b7a383b6fedb2754",
       "concept_ids": [
         "services/window_state_store/WindowDisplayArea",
@@ -1068,7 +1074,7 @@
     },
     "widgets/channel_library_image_bar.dart": {
       "path": "widgets/channel_library_image_bar.dart",
-      "mtime_ns": 1795516328962236434,
+      "mtime_ns": 1795462903441468416,
       "hash": "09391353f8151e7d09056b1a7eb2e17849a5bc2e3495b5292b95e91b84883335",
       "concept_ids": [
         "widgets/channel_library_image_bar/ChannelLibraryImageBar",
@@ -1078,7 +1084,7 @@
     },
     "widgets/error_report_dialog.dart": {
       "path": "widgets/error_report_dialog.dart",
-      "mtime_ns": 1795516328962236434,
+      "mtime_ns": 1795462921577733070,
       "hash": "ff2d648ac35ddbaee9527045aac7984d1b8d25f893a50daf6af83b9fa679a9dc",
       "concept_ids": [
         "widgets/error_report_dialog/ErrorReportDialog",
@@ -1092,7 +1098,7 @@
     },
     "widgets/file_save_warning_dialog.dart": {
       "path": "widgets/file_save_warning_dialog.dart",
-      "mtime_ns": 1795516328962236434,
+      "mtime_ns": 1795462985537578452,
       "hash": "80ab915533747a9b4024cc26678f1edac86fb6bcf11a4d23cfa9dd29089c1a8e",
       "concept_ids": [
         "widgets/file_save_warning_dialog/FileSaveWarningDialog",
@@ -1104,7 +1110,7 @@
     },
     "widgets/marine_template_dialog.dart": {
       "path": "widgets/marine_template_dialog.dart",
-      "mtime_ns": 1795516328962236434,
+      "mtime_ns": 1795462903442237918,
       "hash": "8dee4652df75d8acdf237274011d842c373feca87a3150b06fc766e92ed154a7",
       "concept_ids": [
         "widgets/marine_template_dialog/MarineTemplateDialog",
@@ -1116,7 +1122,7 @@
     },
     "widgets/radio_mapping_dialog.dart": {
       "path": "widgets/radio_mapping_dialog.dart",
-      "mtime_ns": 1795516328967236403,
+      "mtime_ns": 1795462921589013214,
       "hash": "4b0561fde77542df2856ce24b2198b814de0eaf455d6e10e2e012b16bcbc563d",
       "concept_ids": [
         "widgets/radio_mapping_dialog/RadioMappingDialog",
@@ -1138,7 +1144,7 @@
     },
     "widgets/radio_model_picker.dart": {
       "path": "widgets/radio_model_picker.dart",
-      "mtime_ns": 1795516328967236403,
+      "mtime_ns": 1795462602038172619,
       "hash": "4064ac37b3d6b3e54ef137335de395ed5f83be9caba1caba98476f0f50b3bbab",
       "concept_ids": [
         "widgets/radio_model_picker/ModelChoice",
@@ -1174,8 +1180,8 @@
     },
     "main.dart": {
       "path": "main.dart",
-      "mtime_ns": 1795693529687719555,
-      "hash": "3e3dc2fcbd413694d417f9f506121271df60ecec5159968eda9f2a7f283fc18c",
+      "mtime_ns": 1795701191350667305,
+      "hash": "46791854720f474235febff210b200b1f7e075b854173e8ec3ac9c7b9c95188e",
       "concept_ids": [
         "main",
         "main/WindowStateManager",
@@ -1379,6 +1385,7 @@
         "main/downloadAndInstallUpdate",
         "main/exitForUpdate",
         "main/openDownloadPage",
+        "main/reportUndecodedChannels",
         "main/showUpToDate",
         "main/buildAbout",
         "main/showChannelEditorAtLocation",
@@ -1439,7 +1446,7 @@
       "type": "Module",
       "resource": "services/radio_bridge.dart",
       "render_hash": "stale",
-      "edge_hash": "4ce74ae02e937fe45b7815ff677d582159c6322590ebcd19ccbb30226d8d1edd",
+      "edge_hash": "cc00842d0c01b0902137706bea59b36e76e713f8827eb306a7ad4e84e248560b",
       "enriched": false
     },
     "services/radio_bridge/RadioBridgeException": {
@@ -2079,7 +2086,7 @@
       "type": "Module",
       "resource": "main.dart",
       "render_hash": "stale",
-      "edge_hash": "02a0dd364c34d581a0345e582efcb12451ff95ad854b7898f1585e76ae138c70",
+      "edge_hash": "198a7bf2b5bf22bb70b90eeae4a56a17125557b04671670d6b3bd11e386c09f7",
       "enriched": false
     },
     "main/WindowStateManager": {
@@ -7287,7 +7294,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations.dart",
       "render_hash": "stale",
-      "edge_hash": "8409ca9cb482db0b8862a7e07eeef016ef6463dea668cd2b88a7516969d1de72",
+      "edge_hash": "464820106d0247daef40a4be722f6b2f6bd26c287c107c84f11740101350574a",
       "enriched": false
     },
     "l10n/app_localizations/AppLocalizations": {
@@ -7463,7 +7470,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_es.dart",
       "render_hash": "stale",
-      "edge_hash": "63387b39fe30493298ca13a13bdfc30adbae710150f1e98ffc6bf82880a79fe2",
+      "edge_hash": "d809bbe5b8844c7759c63720e8116d0d1513868cc0bb4f0a5fc898bc75994463",
       "enriched": false
     },
     "l10n/app_localizations_es/AppLocalizationsEs": {
@@ -7591,7 +7598,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_en.dart",
       "render_hash": "stale",
-      "edge_hash": "400dfac6317ddb0ade31b6189623bd601cb0e0932fab4a9f4d675f97368ac2f6",
+      "edge_hash": "ddf3278a4b19c107e8be3953b122c3217849f5576c90783aa53f6122a8267632",
       "enriched": false
     },
     "l10n/app_localizations_en/AppLocalizationsEn": {
@@ -7719,7 +7726,7 @@
       "type": "Module",
       "resource": "l10n/app_localizations_fr.dart",
       "render_hash": "stale",
-      "edge_hash": "b3d82f72144bf0b83b7611c718ac890be854404313a55c80f10d19c2bdd371b8",
+      "edge_hash": "18ee77ecf796f8a68d6d10618920cf75f80a676e1e839db352e1fa6756c7b42d",
       "enriched": false
     },
     "l10n/app_localizations_fr/AppLocalizationsFr": {
@@ -11113,7 +11120,63 @@
       "render_hash": "stale",
       "edge_hash": "1d5d77e5b9c0256113850f101cda91de4272c9686b1964cb9e0422b6ff1ef463",
       "enriched": false
+    },
+    "services/radio_bridge/UndecodedChannel": {
+      "concept_id": "services/radio_bridge/UndecodedChannel",
+      "type": "Class",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "services/radio_bridge/undecodedChannelsFromJson": {
+      "concept_id": "services/radio_bridge/undecodedChannelsFromJson",
+      "type": "Function",
+      "resource": "services/radio_bridge.dart",
+      "render_hash": "stale",
+      "edge_hash": "6833dfaf2aa53628ffbb361a89079471aa02a71f43c5a1916aedb0c89d6f478b",
+      "enriched": false
+    },
+    "l10n/app_localizations_en/uiUndecodedChannelsBody": {
+      "concept_id": "l10n/app_localizations_en/uiUndecodedChannelsBody",
+      "type": "Function",
+      "resource": "l10n/app_localizations_en.dart",
+      "render_hash": "stale",
+      "edge_hash": "f4a032cd6b75912a244dfdcffedbacbbf3f449c501976c61d52aaf27a6194513",
+      "enriched": false
+    },
+    "l10n/app_localizations/uiUndecodedChannelsBody": {
+      "concept_id": "l10n/app_localizations/uiUndecodedChannelsBody",
+      "type": "Function",
+      "resource": "l10n/app_localizations.dart",
+      "render_hash": "stale",
+      "edge_hash": "e2ba1adeb8c808921c5a26de137a17e97c1f4456d46493f6bec3e4b49e11f874",
+      "enriched": false
+    },
+    "l10n/app_localizations_es/uiUndecodedChannelsBody": {
+      "concept_id": "l10n/app_localizations_es/uiUndecodedChannelsBody",
+      "type": "Function",
+      "resource": "l10n/app_localizations_es.dart",
+      "render_hash": "stale",
+      "edge_hash": "d897dbebbf2a619454c377a2eebcc9874d160d9497242793e0732d44d6824628",
+      "enriched": false
+    },
+    "l10n/app_localizations_fr/uiUndecodedChannelsBody": {
+      "concept_id": "l10n/app_localizations_fr/uiUndecodedChannelsBody",
+      "type": "Function",
+      "resource": "l10n/app_localizations_fr.dart",
+      "render_hash": "stale",
+      "edge_hash": "4ee97c29eb544879b3274832fc86f134c876400fc940430ef27661f3692780cf",
+      "enriched": false
+    },
+    "main/reportUndecodedChannels": {
+      "concept_id": "main/reportUndecodedChannels",
+      "type": "Function",
+      "resource": "main.dart",
+      "render_hash": "stale",
+      "edge_hash": "0d6e4079e36703ebd37c00722f5891d28b0e2811dc114b129215123adcce3605",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-26T11:45:36Z"
+  "generated_at": "2026-11-26T13:53:13Z"
 }

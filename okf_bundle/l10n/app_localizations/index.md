@@ -109,6 +109,7 @@
 - [uiThePdfWasOpenedInYour](uiThePdfWasOpenedInYour.md) — No description provided for @uiThePdfWasOpenedInYour.
 - [uiTheWriteFinishedChannelsWereAdjusted](uiTheWriteFinishedChannelsWereAdjusted.md) — No description provided for @uiTheWriteFinishedChannelsWereAdjusted.
 - [uiThisSettingTypeIsNotSupported](uiThisSettingTypeIsNotSupported.md) — No description provided for @uiThisSettingTypeIsNotSupported.
+- [uiUndecodedChannelsBody](uiUndecodedChannelsBody.md) — No description provided for @uiUndecodedChannelsBody.
 - [uiUpdatedSelectedChannels](uiUpdatedSelectedChannels.md) — No description provided for @uiUpdatedSelectedChannels.
 - [uiUseAtLeastCharacters](uiUseAtLeastCharacters.md) — No description provided for @uiUseAtLeastCharacters.
 - [uiUseAtMostCharacters](uiUseAtMostCharacters.md) — No description provided for @uiUseAtMostCharacters.

@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:38:24Z"
+timestamp: "2026-11-26T13:50:32Z"
 concept_id: chirp_bridge/memory_json
 language: python
 ---
@@ -37,6 +37,6 @@ Lines 1217–1237 in `chirp_bridge.py`
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
 | calls | [extra_fields_json](/chirp_bridge/extra_fields_json.md) |
-| called_by | [main](/chirp_bridge/main.md) |
+| called_by | [list_channels](/chirp_bridge/list_channels.md) |
 | called_by | [repeaterbook_api_result_to_channel](/chirp_bridge/repeaterbook_api_result_to_channel.md) |
 | called_by | [repeaterbook_item_to_channel](/chirp_bridge/repeaterbook_item_to_channel.md) |

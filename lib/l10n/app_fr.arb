@@ -620,5 +620,7 @@
   "shortenNamesBody": "{count, plural, =1{1 nom de canal dépasse la longueur permise par la radio. NewChirp gardera ses {limit} premiers caractères.} other{{count} noms de canal dépassent la longueur permise par la radio. NewChirp gardera les {limit} premiers caractères de chacun.}} Vous pourrez annuler.",
   "shortenNamesMore": "{count, plural, =1{et 1 de plus} other{et {count} de plus}}",
   "shortenNamesDuplicates": "{count, plural, =1{1 nom raccourci sera identique à celui d'un autre canal. Vérifiez-le avant l'écriture.} other{{count} noms raccourcis seront identiques à ceux d'autres canaux. Vérifiez-les avant l'écriture.}}",
-  "shortenNamesAction": "{count, plural, =1{Raccourcir 1 nom} other{Raccourcir {count} noms}}"
+  "shortenNamesAction": "{count, plural, =1{Raccourcir 1 nom} other{Raccourcir {count} noms}}",
+  "uiUndecodedChannelsTitle": "Certains canaux n'ont pas pu être décodés",
+  "uiUndecodedChannelsBody": "NewChirp n'a pas pu décoder le(s) canal/canaux {p0}, ils ne figurent donc pas dans la liste. Ils restent tels quels dans la radio et les écritures ne les modifieront pas. Envoyez un rapport pour que le pilote puisse être corrigé ; il contient les données brutes du canal."
 }

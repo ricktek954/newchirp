@@ -191,6 +191,36 @@ class RadioModelCatalog {
   }
 }
 
+/// A channel slot the driver could not decode. The bridge leaves it out of
+/// the channel list, the radio's bytes stay untouched, and uploads refuse
+/// to write that slot (2026-11-26 IC-E90 report, mailbox UID 1017).
+class UndecodedChannel {
+  const UndecodedChannel({
+    required this.location,
+    required this.error,
+    this.raw = '',
+  });
+
+  factory UndecodedChannel.fromJson(Map<String, dynamic> json) =>
+      UndecodedChannel(
+        location: (json['location'] as num).toInt(),
+        error: '${json['error'] ?? ''}',
+        raw: '${json['raw'] ?? ''}',
+      );
+
+  final int location;
+  final String error;
+  final String raw;
+}
+
+List<UndecodedChannel> undecodedChannelsFromJson(Object? value) =>
+    (value as List? ?? const [])
+        .map(
+          (entry) =>
+              UndecodedChannel.fromJson((entry as Map).cast<String, dynamic>()),
+        )
+        .toList();
+
 class RadioInstructions {
   const RadioInstructions({
     required this.info,
@@ -455,6 +485,9 @@ class RadioBridge {
   Process? _activeProcess;
   bool _cancelRequested = false;
 
+  /// Slots the last [download] or [readImage] could not decode.
+  List<UndecodedChannel> lastUndecodedChannels = const [];
+
   static Future<List<int>> _loadRootBundleAsset(String key) async {
     final data = await rootBundle.load(key);
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -685,12 +718,16 @@ class RadioBridge {
     })
   >
   readImage(String imagePath, {int? zone}) async {
+    lastUndecodedChannels = const [];
     final data = await _run([
       'read-image',
       '--image',
       imagePath,
       if (zone != null) ...['--zone', '$zone'],
     ]);
+    lastUndecodedChannels = undecodedChannelsFromJson(
+      data['undecodedChannels'],
+    );
     return (
       channels: (data['channels'] as List)
           .map(
@@ -767,6 +804,7 @@ class RadioBridge {
     int? zone,
     void Function(RadioProgress)? onProgress,
   }) async {
+    lastUndecodedChannels = const [];
     final data = await _run([
       'download',
       '--model',
@@ -775,6 +813,9 @@ class RadioBridge {
       port,
       if (zone != null) ...['--zone', '$zone'],
     ], onProgress: onProgress);
+    lastUndecodedChannels = undecodedChannelsFromJson(
+      data['undecodedChannels'],
+    );
     return (
       channels: (data['channels'] as List)
           .map((e) => RadioChannel.fromJson((e as Map).cast<String, dynamic>()))

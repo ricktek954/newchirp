@@ -10,7 +10,7 @@ tags:
   - "domain:app_localizations.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T23:18:34Z"
+timestamp: "2026-11-26T13:52:33Z"
 concept_id: l10n/app_localizations
 language: dart
 ---
@@ -136,6 +136,7 @@ language: dart
 | related | [shortenNamesMore](/l10n/app_localizations/shortenNamesMore.md) |
 | related | [shortenNamesDuplicates](/l10n/app_localizations/shortenNamesDuplicates.md) |
 | related | [shortenNamesAction](/l10n/app_localizations/shortenNamesAction.md) |
+| related | [uiUndecodedChannelsBody](/l10n/app_localizations/uiUndecodedChannelsBody.md) |
 | related | [lookupAppLocalizations](/l10n/app_localizations/lookupAppLocalizations.md) |
 | related | [of](/l10n/app_localizations/of.md) |
 | related | [sidebarVersion](/l10n/app_localizations/sidebarVersion.md) |
@@ -251,6 +252,7 @@ language: dart
 | related | [shortenNamesMore](/l10n/app_localizations/shortenNamesMore.md) |
 | related | [shortenNamesDuplicates](/l10n/app_localizations/shortenNamesDuplicates.md) |
 | related | [shortenNamesAction](/l10n/app_localizations/shortenNamesAction.md) |
+| related | [uiUndecodedChannelsBody](/l10n/app_localizations/uiUndecodedChannelsBody.md) |
 | related | [AppLocalizations](/l10n/app_localizations/AppLocalizations.md) |
 | related | [load](/l10n/app_localizations/load.md) |
 | related | [isSupported](/l10n/app_localizations/isSupported.md) |

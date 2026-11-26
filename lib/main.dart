@@ -2044,6 +2044,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       });
       unawaited(_saveRadioSelection());
     });
+    await _reportUndecodedChannels();
   }
 
   Future<_ChannelApplyMode?> _chooseChannelApplyMode({
@@ -3685,6 +3686,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         },
       );
     });
+    await _reportUndecodedChannels();
   }
 
   Future<bool> _confirmRadioInstructions(
@@ -4673,6 +4675,54 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         ],
       ),
     );
+  }
+
+  /// Tells the user which slots the driver could not decode, logs the
+  /// details for the bug report, and offers to send one.
+  Future<void> _reportUndecodedChannels() async {
+    final undecoded = _bridge.lastUndecodedChannels;
+    if (undecoded.isEmpty || !mounted) return;
+    for (final channel in undecoded) {
+      _diagnosticLog.record(
+        'radio',
+        'Channel could not be decoded',
+        context: {
+          'model': _model ?? '',
+          'location': channel.location,
+          'error': channel.error,
+        },
+      );
+    }
+    final locations = undecoded.map((channel) => channel.location).join(', ');
+    final technical = undecoded
+        .map(
+          (channel) =>
+              'Channel ${channel.location}: ${channel.error}\n${channel.raw}',
+        )
+        .join('\n\n');
+    final send = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(context.l10n.uiUndecodedChannelsTitle),
+        content: Text(context.l10n.uiUndecodedChannelsBody(locations)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(context.l10n.close),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(context.l10n.uiSendReport),
+          ),
+        ],
+      ),
+    );
+    if (send == true && mounted) {
+      await _showErrorReport(
+        summary: context.l10n.uiUndecodedChannelsTitle,
+        technical: technical,
+      );
+    }
   }
 
   Future<void> _showUpToDate(UpdateCheckResult result) => showDialog<void>(

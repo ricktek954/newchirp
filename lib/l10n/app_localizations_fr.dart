@@ -2363,4 +2363,13 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get uiUndecodedChannelsTitle =>
+      'Certains canaux n\'ont pas pu être décodés';
+
+  @override
+  String uiUndecodedChannelsBody(Object p0) {
+    return 'NewChirp n\'a pas pu décoder le(s) canal/canaux $p0, ils ne figurent donc pas dans la liste. Ils restent tels quels dans la radio et les écritures ne les modifieront pas. Envoyez un rapport pour que le pilote puisse être corrigé ; il contient les données brutes du canal.';
+  }
 }

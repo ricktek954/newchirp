@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T11:45:29Z"
+timestamp: "2026-11-26T13:53:11Z"
 concept_id: main/channelsWithLongNames
 language: dart
 ---
@@ -23,7 +23,7 @@ List_channelsWithLongNames_channelsWithLongNames
 ```
 
 ## Source
-Lines 2167–2167 in `main.dart`
+Lines 2168–2168 in `main.dart`
 
 ## Relationships
 

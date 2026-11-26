@@ -100,6 +100,7 @@
 - [uiThePdfWasOpenedInYour](uiThePdfWasOpenedInYour.md)
 - [uiTheWriteFinishedChannelsWereAdjusted](uiTheWriteFinishedChannelsWereAdjusted.md)
 - [uiThisSettingTypeIsNotSupported](uiThisSettingTypeIsNotSupported.md)
+- [uiUndecodedChannelsBody](uiUndecodedChannelsBody.md)
 - [uiUpdatedSelectedChannels](uiUpdatedSelectedChannels.md)
 - [uiUseAtLeastCharacters](uiUseAtLeastCharacters.md)
 - [uiUseAtMostCharacters](uiUseAtMostCharacters.md)

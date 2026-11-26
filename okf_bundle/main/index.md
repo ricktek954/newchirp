@@ -159,6 +159,7 @@
 - [_removeEmptySlot](removeEmptySlot.md)
 - [_replaceText](replaceText.md)
 - [_reportTransferProgress](reportTransferProgress.md)
+- [_reportUndecodedChannels](reportUndecodedChannels.md) — Tells the user which slots the driver could not decode, logs the
 - [_restoreLibrary](restoreLibrary.md)
 - [_restoreMappingMembershipsAt](restoreMappingMembershipsAt.md)
 - [_restoreStockChannels](restoreStockChannels.md)

@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T11:45:29Z"
+timestamp: "2026-11-26T13:53:11Z"
 concept_id: main/printChannelList
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_printChannelList_printChannelList
 ```
 
 ## Source
-Lines 5794–5794 in `main.dart`
+Lines 5844–5844 in `main.dart`
 
 ## Relationships
 

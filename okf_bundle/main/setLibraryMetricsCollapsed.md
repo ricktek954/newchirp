@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T11:45:29Z"
+timestamp: "2026-11-26T13:53:11Z"
 concept_id: main/setLibraryMetricsCollapsed
 language: dart
 ---
@@ -23,7 +23,7 @@ void_setLibraryMetricsCollapsed(bool collapsed)
 ```
 
 ## Source
-Lines 5166–5166 in `main.dart`
+Lines 5216–5216 in `main.dart`
 
 ## Relationships
 

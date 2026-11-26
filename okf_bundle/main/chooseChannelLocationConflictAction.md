@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T11:45:29Z"
+timestamp: "2026-11-26T13:53:11Z"
 concept_id: main/chooseChannelLocationConflictAction
 language: dart
 ---
@@ -23,7 +23,7 @@ Future_chooseChannelLocationConflictAction_chooseChannelLocationConflictAction
 ```
 
 ## Source
-Lines 4951–4954 in `main.dart`
+Lines 5001–5004 in `main.dart`
 
 ## Relationships
 

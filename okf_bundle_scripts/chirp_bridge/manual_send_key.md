@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:38:24Z"
+timestamp: "2026-11-26T13:50:32Z"
 concept_id: chirp_bridge/manual_send_key
 language: python
 ---
@@ -40,7 +40,7 @@ gives "the send key".
 | `pre_download` | `—` | `—` |
 
 ## Source
-Lines 2336–2354 in `chirp_bridge.py`
+Lines 2382–2400 in `chirp_bridge.py`
 
 ## Relationships
 

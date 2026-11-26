@@ -1263,6 +1263,52 @@ def memory_with_extras(radio, number):
     return memory
 
 
+def list_channels(radio, progress=None):
+    """Decode every channel, one at a time.
+
+    A driver that cannot decode one slot (a value outside its tables, a
+    record written by other software) used to stop the whole channel list
+    with "could not decode the channel map" (2026-11-26 IC-E90 report,
+    mailbox UID 1017). Each slot is now decoded on its own: failures are
+    returned separately with the raw record so the app can say which
+    channels were left untouched, and the bug report carries the details.
+    Upload already refuses a slot that cannot be loaded, so those channels
+    are protected from writes. If no slot decodes at all, the decoder
+    itself is wrong and the first error is raised as before.
+    """
+    start, end = radio.get_features().memory_bounds
+    locations = list(range(start, end + 1))
+    channels = []
+    undecoded = []
+    first_error = None
+    for index, location in enumerate(locations):
+        try:
+            mem = memory_with_extras(radio, location)
+        except Exception as exc:
+            if first_error is None:
+                first_error = exc
+            try:
+                raw = str(radio.get_raw_memory(location))
+            except Exception:
+                raw = ""
+            detail = str(exc).strip() or exc.__class__.__name__
+            print("Channel %s could not be decoded: %s" % (location, detail),
+                  file=sys.stderr)
+            undecoded.append({
+                "location": location,
+                "error": detail,
+                "raw": raw[:512],
+            })
+        else:
+            if not mem.empty:
+                channels.append(memory_json(mem))
+        if progress is not None:
+            progress(index, len(locations))
+    if locations and len(undecoded) == len(locations):
+        raise first_error
+    return channels, undecoded
+
+
 def repair_uninitialized_extras(memory):
     """Give extras that failed to load a valid default before writing.
 
@@ -3243,16 +3289,14 @@ def main():
                 model = directory.radio_class_id(radio.__class__)
             channel_radio, zones, selected_zone = channel_context(radio, args.zone)
             channels = []
+            undecoded = []
             if not args.metadata_only:
-                start, end = channel_radio.get_features().memory_bounds
-                for location in range(start, end + 1):
-                    mem = memory_with_extras(channel_radio, location)
-                    if not mem.empty:
-                        channels.append(memory_json(mem))
+                channels, undecoded = list_channels(channel_radio)
             print(json.dumps({
                 "model": model,
                 "firmware": radio_firmware(radio),
                 "channels": channels,
+                "undecodedChannels": undecoded,
                 "imagePath": image_path,
                 "zones": zones,
                 "zone": selected_zone,
@@ -3328,20 +3372,16 @@ def main():
                     channel_radio, zones, selected_zone = channel_context(
                         radio, args.zone
                     )
-                    start, end = channel_radio.get_features().memory_bounds
-                    locations = list(range(start, end + 1))
-                    channels = []
-                    for index, location in enumerate(locations):
-                        mem = memory_with_extras(channel_radio, location)
-                        if not mem.empty:
-                            channels.append(memory_json(mem))
-                        if locations and (
-                            index % 20 == 0 or index == len(locations) - 1
-                        ):
+                    def channel_progress(index, total):
+                        if index % 20 == 0 or index == total - 1:
                             emit_progress(
                                 "Building the channel list...",
-                                0.94 + 0.05 * (index + 1) / len(locations),
+                                0.94 + 0.05 * (index + 1) / total,
                             )
+
+                    channels, undecoded = list_channels(
+                        channel_radio, channel_progress
+                    )
                 except Exception as exc:
                     raise RuntimeError(
                         download_decode_error_message(
@@ -3354,6 +3394,7 @@ def main():
                 print(json.dumps({
                     "firmware": radio_firmware(radio),
                     "channels": channels,
+                    "undecodedChannels": undecoded,
                     "imagePath": image,
                     "zones": zones,
                     "zone": selected_zone,

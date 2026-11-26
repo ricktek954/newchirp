@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T11:45:29Z"
+timestamp: "2026-11-26T13:53:11Z"
 concept_id: main/invoke
 language: dart
 ---
@@ -23,7 +23,7 @@ Objectinvokeinvoke
 ```
 
 ## Source
-Lines 10342–10342 in `main.dart`
+Lines 10392–10392 in `main.dart`
 
 ## Relationships
 

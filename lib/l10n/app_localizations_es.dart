@@ -2354,4 +2354,13 @@ class AppLocalizationsEs extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get uiUndecodedChannelsTitle =>
+      'No se pudieron decodificar algunos canales';
+
+  @override
+  String uiUndecodedChannelsBody(Object p0) {
+    return 'NewChirp no pudo decodificar el/los canal(es) $p0, por lo que no aparecen en la lista. Se mantienen tal como están en la radio y las escrituras no los modificarán. Envíe un informe para que se pueda corregir el controlador; incluye los datos sin procesar del canal.';
+  }
 }

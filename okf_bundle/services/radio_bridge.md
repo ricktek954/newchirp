@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-26T13:52:55Z"
 concept_id: services/radio_bridge
 language: dart
 ---
@@ -24,6 +24,7 @@ language: dart
 | related | [RadioBridgeException](/services/radio_bridge/RadioBridgeException.md) |
 | related | [RadioModelGroup](/services/radio_bridge/RadioModelGroup.md) |
 | related | [RadioModelCatalog](/services/radio_bridge/RadioModelCatalog.md) |
+| related | [UndecodedChannel](/services/radio_bridge/UndecodedChannel.md) |
 | related | [RadioInstructions](/services/radio_bridge/RadioInstructions.md) |
 | related | [RadioCapabilities](/services/radio_bridge/RadioCapabilities.md) |
 | related | [RadioZone](/services/radio_bridge/RadioZone.md) |
@@ -36,6 +37,7 @@ language: dart
 | related | [isBenignBridgeStderrLine](/services/radio_bridge/isBenignBridgeStderrLine.md) |
 | related | [radioBridgeFailureMessage](/services/radio_bridge/radioBridgeFailureMessage.md) |
 | related | [resolvePythonExecutable](/services/radio_bridge/resolvePythonExecutable.md) |
+| related | [undecodedChannelsFromJson](/services/radio_bridge/undecodedChannelsFromJson.md) |
 | related | [strings](/services/radio_bridge/strings.md) |
 | related | [toString](/services/radio_bridge/toString.md) |
 | related | [RadioBridgeException](/services/radio_bridge/RadioBridgeException.md) |

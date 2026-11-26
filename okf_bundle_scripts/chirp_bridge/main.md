@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:38:24Z"
+timestamp: "2026-11-26T13:50:32Z"
 concept_id: chirp_bridge/main
 language: python
 ---
@@ -23,7 +23,7 @@ def main()
 ```
 
 ## Source
-Lines 3102–3481 in `chirp_bridge.py`
+Lines 3148–3522 in `chirp_bridge.py`
 
 ## Relationships
 
@@ -37,13 +37,13 @@ Lines 3102–3481 in `chirp_bridge.py`
 | calls | [emit_progress](/chirp_bridge/emit_progress.md) |
 | calls | [channel_context](/chirp_bridge/channel_context.md) |
 | calls | [close](/chirp_bridge/close.md) |
+| calls | [list_channels](/chirp_bridge/list_channels.md) |
 | calls | [radio_from_image](/chirp_bridge/radio_from_image.md) |
 | calls | [settings_payload](/chirp_bridge/settings_payload.md) |
 | calls | [radio_firmware](/chirp_bridge/radio_firmware.md) |
 | calls | [emit_read_ready](/chirp_bridge/emit_read_ready.md) |
 | calls | [bridge_error_message](/chirp_bridge/bridge_error_message.md) |
 | calls | [search_repeaterbook](/chirp_bridge/search_repeaterbook.md) |
-| calls | [memory_with_extras](/chirp_bridge/memory_with_extras.md) |
 | calls | [prepare_upload_channels](/chirp_bridge/prepare_upload_channels.md) |
 | calls | [start_write_watchdog](/chirp_bridge/start_write_watchdog.md) |
 | calls | [preserve_unloadable_settings](/chirp_bridge/preserve_unloadable_settings.md) |
@@ -52,6 +52,5 @@ Lines 3102–3481 in `chirp_bridge.py`
 | calls | [features_json](/chirp_bridge/features_json.md) |
 | calls | [has_global_settings](/chirp_bridge/has_global_settings.md) |
 | calls | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) |
-| calls | [memory_json](/chirp_bridge/memory_json.md) |
 | calls | [download_decode_error_message](/chirp_bridge/download_decode_error_message.md) |
 | calls | [erase_memory_with_extras](/chirp_bridge/erase_memory_with_extras.md) |

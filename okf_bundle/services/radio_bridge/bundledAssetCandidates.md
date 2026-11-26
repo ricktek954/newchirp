@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-26T13:52:55Z"
 concept_id: services/radio_bridge/bundledAssetCandidates
 language: dart
 ---
@@ -24,7 +24,7 @@ Iterable_bundledAssetCandidates_bundledAssetCandidates
 ```
 
 ## Source
-Lines 1162–1162 in `services/radio_bridge.dart`
+Lines 1203–1203 in `services/radio_bridge.dart`
 
 ## Relationships
 

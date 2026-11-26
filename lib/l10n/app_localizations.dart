@@ -3829,6 +3829,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =1{Shorten 1 name} other{Shorten {count} names}}'**
   String shortenNamesAction(int count);
+
+  /// No description provided for @uiUndecodedChannelsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Some channels couldn\'t be decoded'**
+  String get uiUndecodedChannelsTitle;
+
+  /// No description provided for @uiUndecodedChannelsBody.
+  ///
+  /// In en, this message translates to:
+  /// **'NewChirp couldn\'t decode channel(s) {p0}, so they are not in the list. They are left exactly as they are in the radio, and writes will not change them. Please send a report so the driver can be fixed; it includes the raw channel data.'**
+  String uiUndecodedChannelsBody(Object p0);
 }
 
 class _AppLocalizationsDelegate

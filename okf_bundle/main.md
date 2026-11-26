@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T11:45:29Z"
+timestamp: "2026-11-26T13:53:11Z"
 concept_id: main
 language: dart
 ---
@@ -232,6 +232,7 @@ language: dart
 | related | [_downloadAndInstallUpdate](/main/downloadAndInstallUpdate.md) |
 | related | [_exitForUpdate](/main/exitForUpdate.md) |
 | related | [_openDownloadPage](/main/openDownloadPage.md) |
+| related | [_reportUndecodedChannels](/main/reportUndecodedChannels.md) |
 | related | [_showUpToDate](/main/showUpToDate.md) |
 | related | [_buildAbout](/main/buildAbout.md) |
 | related | [_showChannelEditorAtLocation](/main/showChannelEditorAtLocation.md) |

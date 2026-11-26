@@ -47,6 +47,7 @@
 - [has_global_settings](has_global_settings.md)
 - [headless_live_adapter](headless_live_adapter.md) — Give a live radio the file-backed interfaces NewChirp requires.
 - [last_reply_was_echo_only](last_reply_was_echo_only.md) — True when the last exchange returned only the command's echo.
+- [list_channels](list_channels.md) — Decode every channel, one at a time.
 - [live_channel_context](live_channel_context.md) — Choose a live-radio subdevice without probing every memory slot.
 - [live_memory_matches](live_memory_matches.md) — Compare fields that every live radio must retain after a write.
 - [live_models_by_vendor](live_models_by_vendor.md) — Return selectable serial/transport radios, excluding file-only models.

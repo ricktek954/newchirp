@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 216 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 217 concepts across 10 domains and 10 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-26T06:38:25Z'
+timestamp: '2026-11-26T13:50:34Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 216 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 217 concepts | 10 domains | 10 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 192 |
+| Function | 193 |
 | Class | 14 |
 | Module | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 216 |
+| python | 217 |
 
 ## Domain Map
 
@@ -40,9 +40,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [check_private_data](check_private_data/index.md) (4 concepts) — Fail when private email addresses or local build paths are tracked.
 
-### [chirp_bridge.py](chirp_bridge.py/index.md) — 91 concepts
+### [chirp_bridge.py](chirp_bridge.py/index.md) — 92 concepts
 
-- [chirp_bridge](chirp_bridge/index.md) (91 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
+- [chirp_bridge](chirp_bridge/index.md) (92 concepts) — Small JSON boundary between NewChirp and the audited CHIRP driver tree.
 
 ### [driver_work.py](driver_work.py/index.md) — 32 concepts
 

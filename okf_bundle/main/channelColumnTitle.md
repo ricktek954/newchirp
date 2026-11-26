@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T11:45:29Z"
+timestamp: "2026-11-26T13:53:11Z"
 concept_id: main/channelColumnTitle
 language: dart
 ---
@@ -30,7 +30,7 @@ String_channelColumnTitle(AppLocalizations l10n, _ChannelColumn column)
 Column ids stay English: saved column layouts and filters key on them.
 
 ## Source
-Lines 10359–10359 in `main.dart`
+Lines 10409–10409 in `main.dart`
 
 ## Relationships
 

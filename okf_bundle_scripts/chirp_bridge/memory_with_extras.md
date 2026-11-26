@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:38:24Z"
+timestamp: "2026-11-26T13:50:32Z"
 concept_id: chirp_bridge/memory_with_extras
 language: python
 ---
@@ -46,4 +46,4 @@ Lines 1257–1263 in `chirp_bridge.py`
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
 | calls | [external_memory_owner](/chirp_bridge/external_memory_owner.md) |
-| called_by | [main](/chirp_bridge/main.md) |
+| called_by | [list_channels](/chirp_bridge/list_channels.md) |

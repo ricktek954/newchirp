@@ -1,45 +1,45 @@
 ---
-description: 'Top-level OKF summary: 1156 concepts across 5 domains and 39 modules'
+description: 'Top-level OKF summary: 1163 concepts across 5 domains and 39 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-26T11:45:36Z'
+timestamp: '2026-11-26T13:53:13Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 1,156 concepts | 5 domains | 39 modules
+> OKF v0.2 bundle | 1,163 concepts | 5 domains | 39 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 1,001 |
-| Class | 106 |
+| Function | 1,007 |
+| Class | 107 |
 | Module | 39 |
 | Enum | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 1,156 |
+| dart | 1,163 |
 
 ## Domain Map
 
 Use these links to navigate the bundle or prime an AI agent with focused context.
 
-### [l10n](l10n/index.md) — 467 concepts
+### [l10n](l10n/index.md) — 471 concepts
 
-- [l10n/app_localizations](l10n/app_localizations/index.md) (121 concepts)
-- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (115 concepts)
-- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (115 concepts)
-- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (115 concepts)
+- [l10n/app_localizations](l10n/app_localizations/index.md) (122 concepts)
+- [l10n/app_localizations_en](l10n/app_localizations_en/index.md) (116 concepts)
+- [l10n/app_localizations_es](l10n/app_localizations_es/index.md) (116 concepts)
+- [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (116 concepts)
 - [l10n/l10n](l10n/l10n/index.md) (1 concepts)
 
-### [main.dart](main.dart/index.md) — 253 concepts
+### [main.dart](main.dart/index.md) — 254 concepts
 
-- [main](main/index.md) (253 concepts)
+- [main](main/index.md) (254 concepts)
 
 ### [models](models/index.md) — 113 concepts
 
@@ -53,9 +53,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [models/repeater_regions](models/repeater_regions/index.md) (5 concepts)
 - *…and 1 more modules*
 
-### [services](services/index.md) — 259 concepts
+### [services](services/index.md) — 261 concepts
 
-- [services/radio_bridge](services/radio_bridge/index.md) (55 concepts)
+- [services/radio_bridge](services/radio_bridge/index.md) (57 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/mygmrs_client](services/mygmrs_client/index.md) (22 concepts)
 - [services/chirp_csv](services/chirp_csv/index.md) (17 concepts)
@@ -97,9 +97,9 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [radioMappingsSignature](/models/radio_mapping/radioMappingsSignature.md) | Function | `models/radio_mapping.dart` | Fixed (non-editable) zone models are derived from channel nu… |
 | [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
 | [uiNoMatchingRepeatersWereFoundCoordinates](/l10n/app_localizations/uiNoMatchingRepeatersWereFoundCoordinates.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiNoMatchingRepeatersWereFoundC… |
+| [UndecodedChannel](/services/radio_bridge/UndecodedChannel.md) | Class | `services/radio_bridge.dart` | A channel slot the driver could not decode. The bridge leave… |
 | [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
 | [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
-| [gmrsChannelForHz](/models/radio_channel/gmrsChannelForHz.md) | Function | `models/radio_channel.dart` | GMRS channel 1-22 for a receive frequency, or null when it i… |
 
 ## Usage with OpenCode
 

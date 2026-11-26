@@ -2053,6 +2053,67 @@ class FrequencyPrecisionTest(unittest.TestCase):
 
 
 
+class PerChannelDecodeTest(unittest.TestCase):
+    """One undecodable channel must not hide the others (UID 1017)."""
+
+    @classmethod
+    def setUpClass(cls):
+        bridge.load_chirp(str(SOURCE), str(VENDOR))
+        from chirp import chirp_common
+        cls.chirp_common = chirp_common
+
+    def _radio(self, broken):
+        chirp_common = self.chirp_common
+
+        class Radio:
+            def get_features(self):
+                features = chirp_common.RadioFeatures()
+                features.memory_bounds = (1, 5)
+                return features
+
+            def get_memory(self, number):
+                if number in broken:
+                    raise IndexError("list index out of range")
+                memory = chirp_common.Memory()
+                memory.number = number
+                memory.freq = 146_520_000 + number * 10_000
+                memory.empty = number == 5
+                return memory
+
+            def get_raw_memory(self, number):
+                return "raw-%d" % number
+
+        return Radio()
+
+    def test_failures_are_reported_and_other_channels_load(self):
+        progress = []
+        channels, undecoded = bridge.list_channels(
+            self._radio({2, 4}), lambda i, n: progress.append((i, n)))
+        self.assertEqual([c["location"] for c in channels], [1, 3])
+        self.assertEqual(
+            undecoded,
+            [{"location": 2, "error": "list index out of range", "raw": "raw-2"},
+             {"location": 4, "error": "list index out of range", "raw": "raw-4"}])
+        self.assertEqual(progress[-1], (4, 5))
+
+    def test_only_channel_undecodable_among_empty_slots_is_reported(self):
+        radio = self._radio({1})
+        get_memory = radio.get_memory
+
+        def mostly_empty(number):
+            memory = get_memory(number)
+            memory.empty = True
+            return memory
+
+        radio.get_memory = mostly_empty
+        channels, undecoded = bridge.list_channels(radio)
+        self.assertEqual((channels, [u["location"] for u in undecoded]), ([], [1]))
+
+    def test_a_decoder_that_fails_everywhere_still_raises(self):
+        with self.assertRaisesRegex(IndexError, "out of range"):
+            bridge.list_channels(self._radio({1, 2, 3, 4, 5}))
+
+
 class ImageMismatchMessageTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

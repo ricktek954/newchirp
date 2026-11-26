@@ -10,6 +10,7 @@
 - [RadioSettings](RadioSettings.md)
 - [RadioZone](RadioZone.md)
 - [SerialPortInfo](SerialPortInfo.md)
+- [UndecodedChannel](UndecodedChannel.md) — A channel slot the driver could not decode. The bridge leaves it out of
 
 ## Functions
 
@@ -56,6 +57,7 @@
 - [strings](strings.md)
 - [toChangeJson](toChangeJson.md)
 - [toString](toString.md)
+- [undecodedChannelsFromJson](undecodedChannelsFromJson.md)
 - [unloadModule](unloadModule.md)
 - [upload](upload.md)
 - [writeSettings](writeSettings.md)

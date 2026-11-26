@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-26T13:52:55Z"
 concept_id: services/radio_bridge/toChangeJson
 language: dart
 ---
@@ -24,7 +24,7 @@ MaptoChangeJsontoChangeJson
 ```
 
 ## Source
-Lines 411–411 in `services/radio_bridge.dart`
+Lines 441–441 in `services/radio_bridge.dart`
 
 ## Relationships
 

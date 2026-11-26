@@ -2325,4 +2325,12 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get uiUndecodedChannelsTitle => 'Some channels couldn\'t be decoded';
+
+  @override
+  String uiUndecodedChannelsBody(Object p0) {
+    return 'NewChirp couldn\'t decode channel(s) $p0, so they are not in the list. They are left exactly as they are in the radio, and writes will not change them. Please send a report so the driver can be fixed; it includes the raw channel data.';
+  }
 }

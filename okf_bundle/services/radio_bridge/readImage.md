@@ -10,7 +10,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T09:18:47Z"
+timestamp: "2026-11-26T13:52:55Z"
 concept_id: services/radio_bridge/readImage
 language: dart
 ---
@@ -24,7 +24,7 @@ FuturereadImagereadImage
 ```
 
 ## Source
-Lines 675–687 in `services/radio_bridge.dart`
+Lines 708–720 in `services/radio_bridge.dart`
 
 ## Relationships
 
