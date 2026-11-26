@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 07:38:57",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:32973eacc6db151f3cfb2fa10591d59653da028d78651776813c529415ba8248",
+  "item": "71",
+  "occurred_at": "2026-11-26",
+  "summary": "KPG23D.EXE 1.01 traced in QEMU (serial_write/read/update_parameters) and driven to 'Done Reading' against a simulated radio: 4800 8N2, MCR never written (DTR/RTS off), 6-byte identity not checked, W <addr> 80 + 128 bytes with 06/06, no Z, no exit command. 2026-11-13 notes recorded the BIOS's boot-time 9600 8N1; NewChirp's 9600 8N1 with DTR/RTS on explains why no TK-350 ever answered"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 07:38:57",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:bbafba3f6",
+  "item": "71",
+  "occurred_at": "2026-11-26",
+  "summary": "TK-350 session now matches KPG-23D; Web Programmer matched (web:e53b008); TK-359 unchanged pending a KPG-32D trace"
+}
