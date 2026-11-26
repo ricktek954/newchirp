@@ -458,7 +458,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### TK-359
 
-- **#79 bug | awaiting_user | normal:** No identity response in PC mode
+- **#79 bug | fix_committed | normal:** No identity response in PC mode
   Support diagnostics sent; waiting for cable, COM-port, and OEM programmer comparison.
   Source: `email` INBOX:699-700
 - **#16 maintenance | experimental | normal:** Current driver status

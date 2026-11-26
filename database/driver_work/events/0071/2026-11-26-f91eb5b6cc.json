@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 08:03:35",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:32973eacc6db151f3cfb2fa10591d59653da028d78651776813c529415ba8248",
+  "item": "71",
+  "occurred_at": "2026-11-26",
+  "summary": "Correction: KPG-23D sends/receives via BIOS INT 14h (AH=00/01/02); an IBM-compatible BIOS raises DTR+RTS to send and DTR to receive, and QEMU's SeaBIOS does not drive MCR. So the lines are DTR on / RTS while sending, not off. 4800 8N2, 6-byte identity, no E stand"
+}

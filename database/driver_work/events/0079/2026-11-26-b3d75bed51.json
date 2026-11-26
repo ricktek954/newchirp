@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 08:03:34",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:5c1014f201b0dbb8887a4789cd6380878482c7bca109db9695f4fe570283e7fa",
+  "item": "79",
+  "occurred_at": "2026-11-26",
+  "summary": "KPG32D.EXE 1.00 traced in QEMU and run to 'Done Reading' against a simulated radio: 9600 8N2 via BIOS INT 14h, PROGRAM/06, 02 -> 8-byte identity checked back to front (P0359 + band + 0x81), S 03 <hi+AC> <lo> 80 -> X echo + 128 bytes + sum8, 06/06, E. NewChirp's TK-359 transport (9600 8N1, bare 02, R/W from 0xF000) was never what the CPS sends, which explains no identity response. SAMPLE.FDT is a TK-259 (VHF) codeplug"
+}
