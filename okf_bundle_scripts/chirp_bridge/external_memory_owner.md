@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-25T09:30:41Z"
+timestamp: "2026-11-26T06:38:24Z"
 concept_id: chirp_bridge/external_memory_owner
 language: python
 ---
@@ -36,7 +36,7 @@ Return the object that owns metadata for a radio or channel subdevice.
 | `radio` | `—` | `—` |
 
 ## Source
-Lines 1224–1238 in `chirp_bridge.py`
+Lines 1240–1254 in `chirp_bridge.py`
 
 ## Relationships
 

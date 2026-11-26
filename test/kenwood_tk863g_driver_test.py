@@ -83,8 +83,10 @@ def _dat_image():
 
 class FakeKpg76Serial:
     def __init__(self, image, chunk_size=1024, corrupt_first=False,
-                 session_delay=0.0):
+                 session_delay=0.0, short_sessions=0):
         self.image = bytearray(image)
+        # Number of 0x7C requests answered with only one byte (INBOX:1000).
+        self.short_sessions = short_sessions
         # Seconds the radio takes to answer 0x7C; bytes are released only
         # when the read timeout in force is long enough to wait for them.
         self.session_delay = session_delay
@@ -117,6 +119,9 @@ class FakeKpg76Serial:
             self._rx.extend(b"M0863\x06\xff\xf2")
         elif data == b"NRK":
             self._rx.extend(self._tuning_record())
+        elif data == b"\x7c" and self.short_sessions:
+            self.short_sessions -= 1
+            self._rx.extend(b"\x12")
         elif data == b"\x7c":
             if self.session_delay:
                 self._held = b"\x12\x34"
@@ -263,6 +268,30 @@ class KenwoodTK863GDriverTest(unittest.TestCase):
         self.assertEqual(serial.parity, "N")
         nrk = serial.writes.index(b"NRK")
         self.assertEqual(serial.writes[nrk + 1], b"\x7c")
+
+    def test_short_memory_session_reply_is_retried_like_cps(self):
+        """INBOX:1000: 1 of 2 bytes to 0x7C; KPG-76D offers Retry."""
+        image = _synthetic_image()
+        serial = FakeKpg76Serial(image, short_sessions=2)
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+
+        with mock.patch("time.sleep", return_value=None):
+            radio.sync_in()
+
+        self.assertEqual(radio.get_mmap().get_packed(), image)
+        self.assertEqual(serial.writes.count(b"\x7c"), 3)
+
+    def test_memory_session_gives_up_after_three_tries_with_the_bytes(self):
+        serial = FakeKpg76Serial(_synthetic_image(), short_sessions=99)
+        radio = self.radio_class(serial)
+        radio.status_fn = lambda _status: None
+
+        with mock.patch("time.sleep", return_value=None):
+            with self.assertRaisesRegex(
+                    Exception, r"1 of 2 bytes \(12\) while starting"):
+                radio.sync_in()
+        self.assertEqual(serial.writes.count(b"\x7c"), 3)
 
     def test_bad_block_checksum_is_retried(self):
         image = _synthetic_image()

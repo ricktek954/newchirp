@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-25T09:30:41Z"
+timestamp: "2026-11-26T06:38:24Z"
 concept_id: chirp_bridge/memory_with_new_extras
 language: python
 ---
@@ -48,7 +48,7 @@ the slot's kind; the reloaded memory then lists the matching choices.
 | `item` | `—` | `—` |
 
 ## Source
-Lines 1805–1819 in `chirp_bridge.py`
+Lines 1821–1835 in `chirp_bridge.py`
 
 ## Relationships
 

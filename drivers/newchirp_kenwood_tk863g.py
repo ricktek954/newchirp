@@ -52,6 +52,10 @@ NAME_LENGTH = 8
 AUTODETECT_BAUDS = (9600, 19200, 4800, 2400, 1200)
 # KPG-76D sets a 3,000 ms read timeout for the 0x7C memory-session reply.
 MEMORY_SESSION_TIMEOUT = 3.0
+# KPG-76D 0x4037b0: when 0x403110 (the 0x7C step) fails it shows a
+# Retry/Cancel box (0x402ff0, MessageBoxA flags 0x15) and Retry runs the same
+# step again in the same session. NewChirp retries automatically.
+MEMORY_SESSION_ATTEMPTS = 3
 
 VALID_MODES = ["NFM", "FM"]
 VALID_TMODES = ["", "Tone", "TSQL", "DTCS", "Cross"]
@@ -90,9 +94,10 @@ def _read_exact(radio, count, context, timeout=None):
         if timeout is not None:
             radio.pipe.timeout = previous
     if len(data) != count:
+        received = (" (%s)" % data.hex(" ")) if data else ""
         raise errors.RadioNoResponse(
-            "Radio returned %i of %i bytes while %s"
-            % (len(data), count, context)
+            "Radio returned %i of %i bytes%s while %s"
+            % (len(data), count, received, context)
         )
     return bytes(data)
 
@@ -200,12 +205,24 @@ def _open_clone_session(radio):
     # 0x7C goes out right after the tuning record and the radio gets up to
     # three seconds to answer. (Earlier builds slept 3 s and then allowed
     # only 1 s; a 2026-11-23 TK-863G read got no reply to 0x7C. INBOX:943)
-    _reset_input(radio)
-    radio.pipe.write(b"\x7c")
-    readiness = _read_exact(
-        radio, 2, "starting the memory session",
-        timeout=MEMORY_SESSION_TIMEOUT,
-    )
+    # A 2026-11-25 Linux read on 1.0.75 (INBOX:1000) got 1 of the 2 bytes;
+    # the owner reports KPG-76D works, where a failure here offers Retry.
+    for attempt in range(1, MEMORY_SESSION_ATTEMPTS + 1):
+        _reset_input(radio)
+        radio.pipe.write(b"\x7c")
+        try:
+            readiness = _read_exact(
+                radio, 2, "starting the memory session",
+                timeout=MEMORY_SESSION_TIMEOUT,
+            )
+            break
+        except errors.RadioError as exc:
+            if attempt == MEMORY_SESSION_ATTEMPTS:
+                raise
+            LOG.warning(
+                "TK-863G memory session attempt %i/%i failed: %s",
+                attempt, MEMORY_SESSION_ATTEMPTS, exc,
+            )
     _exchange_ack(radio, "starting the memory session")
     return identity, tuning, readiness
 

@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:36:21Z"
+timestamp: "2026-11-26T06:35:35Z"
 concept_id: newchirp_usb_dfu/erase
 language: python
 ---
@@ -33,7 +33,7 @@ def erase(self, start, size)
 | `size` | `—` | `—` |
 
 ## Source
-Lines 394–401 in `newchirp_usb_dfu.py`
+Lines 398–405 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

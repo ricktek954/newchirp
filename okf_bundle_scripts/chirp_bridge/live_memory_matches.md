@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-25T09:30:41Z"
+timestamp: "2026-11-26T06:38:24Z"
 concept_id: chirp_bridge/live_memory_matches
 language: python
 ---
@@ -38,7 +38,7 @@ Compare fields that every live radio must retain after a write.
 | `actual` | `—` | `—` |
 
 ## Source
-Lines 2134–2166 in `chirp_bridge.py`
+Lines 2150–2182 in `chirp_bridge.py`
 
 ## Relationships
 

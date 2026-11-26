@@ -160,8 +160,8 @@
     },
     "newchirp_usb_dfu.py": {
       "path": "newchirp_usb_dfu.py",
-      "mtime_ns": 1793532981625641026,
-      "hash": "3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c",
+      "mtime_ns": 1795674949886207898,
+      "hash": "6410dc274c9bc6e434cb585ea9600b583ae7a528159a1f61c7cedd8fda70abdb",
       "concept_ids": [
         "newchirp_usb_dfu/DeviceDescriptor",
         "newchirp_usb_dfu/DfuError",
@@ -193,8 +193,8 @@
     },
     "chirp_bridge.py": {
       "path": "chirp_bridge.py",
-      "mtime_ns": 1795599041099622972,
-      "hash": "da14def0820453fbcf0f4f7ac79993838e9043272d4a548bd4c86dff0a0aabf3",
+      "mtime_ns": 1795675104961906254,
+      "hash": "2dc71fc39d01ba72e1ec530191eead672d8e153c2220de1f2b09655d25b07b6a",
       "concept_ids": [
         "chirp_bridge",
         "chirp_bridge/uvk5_firmware_from_hello",
@@ -2060,5 +2060,5 @@
       "enriched": false
     }
   },
-  "generated_at": "2026-11-25T09:30:41Z"
+  "generated_at": "2026-11-26T06:38:25Z"
 }

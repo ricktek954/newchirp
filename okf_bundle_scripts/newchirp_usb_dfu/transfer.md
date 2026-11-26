@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:36:21Z"
+timestamp: "2026-11-26T06:35:35Z"
 concept_id: newchirp_usb_dfu/transfer
 language: python
 ---
@@ -19,7 +19,7 @@ language: python
 ## Signature
 
 ```python
-def _transfer(self, request_type, request, value, data_or_length, timeout = 2000)
+def _transfer(self, request_type, request, value, data_or_length, timeout = 2000, allow_short = False)
 ```
 
 ## Parameters
@@ -37,6 +37,8 @@ def _transfer(self, request_type, request, value, data_or_length, timeout = 2000
 | `data_or_length` | `—` | `—` |
 
 | `timeout` | `—` | `2000` |
+
+| `allow_short` | `—` | `False` |
 
 ## Source
 Lines 291–320 in `newchirp_usb_dfu.py`

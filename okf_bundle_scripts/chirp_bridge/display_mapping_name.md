@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-25T09:30:41Z"
+timestamp: "2026-11-26T06:38:24Z"
 concept_id: chirp_bridge/display_mapping_name
 language: python
 ---
@@ -36,7 +36,7 @@ Return a safe display name for a CHIRP bank or zone.
 | `value` | `—` | `—` |
 
 ## Source
-Lines 2421–2426 in `chirp_bridge.py`
+Lines 2437–2442 in `chirp_bridge.py`
 
 ## Relationships
 

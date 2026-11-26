@@ -591,6 +591,10 @@ Last updated: 2026-11-20
 - Hardware validation: none
 - Next milestone: physical identify/read/edit/write/read-back test and
   libusb-runtime validation in native platform release builds
+- Identity: the 0xA2 identity upload asks for 64 bytes and accepts a shorter
+  reply, as dmrconfig's identify() does; the model name is in the first 32
+  bytes. A 2026-11-25 macOS report (INBOX:986) got 32 bytes and stock-strict
+  handling stopped the read. Memory reads still require full blocks.
 
 ### Retevis RT22
 
@@ -2003,6 +2007,10 @@ Last updated: 2026-11-20
   9600/19200/4800/2400/1200 fallback order, `M0863` identity, `NRK`
   tuning record, `0x7C` memory-session request, 256-byte `R` blocks,
   additive checksums, fill responses, three-attempt recovery, and `E` exit
+- 0x7C memory session: 3 s read timeout per try (KPG-76D 0x403110) and up to
+  three tries in the same session, as KPG-76D's Retry button does
+  (0x4037b0 -> 0x402ff0, MessageBoxA 0x15). 2026-11-25 Linux 1.0.75 report
+  (INBOX:1000) got 1 of the 2 bytes; the error now shows the bytes received.
 - Implemented: complete 32 KiB image read, OEM DAT unwrapping, model
   validation, 128 channel records, RX/TX frequency, offset, name,
   wide/narrow, CTCSS, DTCS, and cross-tone decode. All unknown channel bytes

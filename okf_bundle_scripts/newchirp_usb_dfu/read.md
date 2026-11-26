@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:36:21Z"
+timestamp: "2026-11-26T06:35:35Z"
 concept_id: newchirp_usb_dfu/read
 language: python
 ---
@@ -33,7 +33,7 @@ def read(self, address, length)
 | `length` | `—` | `—` |
 
 ## Source
-Lines 403–410 in `newchirp_usb_dfu.py`
+Lines 407–414 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

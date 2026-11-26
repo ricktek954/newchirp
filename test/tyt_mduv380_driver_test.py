@@ -116,6 +116,59 @@ class FakeDfuTransport:
         self.closed = True
 
 
+class ShortIdentityLibusb:
+    """libusb stand-in: GET_STATE says idle, GET_STATUS is OK, the identity
+    upload (block 0) returns only 32 bytes as in INBOX:986, and memory
+    uploads return a chosen length."""
+
+    def __init__(self, memory_reply=1024):
+        self.memory_reply = memory_reply
+
+    def libusb_control_transfer(self, _handle, request_type, request, value,
+                                _index, buffer, length, _timeout):
+        import ctypes
+        if request_type == 0x21:
+            return length
+        if request == 5:  # GET_STATE
+            buffer[0] = 2  # dfuIDLE
+            return 1
+        if request == 3:  # GET_STATUS
+            ctypes.memset(buffer, 0, 6)
+            buffer[4] = 2
+            return 6
+        if request == 2 and value == 0:  # identity upload
+            ident = b"MD-UV380".ljust(32, b"\x00")
+            ctypes.memmove(buffer, ident, len(ident))
+            return len(ident)
+        return min(self.memory_reply, length)
+
+
+class DfuShortReplyTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location(
+            "newchirp_usb_dfu_short_test", ROOT / "scripts/newchirp_usb_dfu.py")
+        cls.dfu = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.dfu)
+
+    def _transport(self, lib):
+        transport = object.__new__(self.dfu.DfuTransport)
+        transport.lib = lib
+        transport.handle = None
+        return transport
+
+    def test_identity_accepts_a_32_byte_reply(self):
+        transport = self._transport(ShortIdentityLibusb())
+        with mock.patch.object(self.dfu.time, "sleep"):
+            identity = transport.identity()
+        self.assertEqual(identity, b"MD-UV380".ljust(32, b"\x00"))
+
+    def test_memory_reads_still_require_the_full_block(self):
+        transport = self._transport(ShortIdentityLibusb(memory_reply=512))
+        with self.assertRaisesRegex(self.dfu.DfuError, "returned 512 of 1024"):
+            transport.read(0x2000, 1024)
+
+
 class TYTMDUV380Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

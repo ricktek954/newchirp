@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:36:21Z"
+timestamp: "2026-11-26T06:35:35Z"
 concept_id: newchirp_usb_dfu/write
 language: python
 ---
@@ -33,7 +33,7 @@ def write(self, address, data)
 | `data` | `—` | `—` |
 
 ## Source
-Lines 412–420 in `newchirp_usb_dfu.py`
+Lines 416–424 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

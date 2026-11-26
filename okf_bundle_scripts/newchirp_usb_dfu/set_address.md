@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:36:21Z"
+timestamp: "2026-11-26T06:35:35Z"
 concept_id: newchirp_usb_dfu/set_address
 language: python
 ---
@@ -31,7 +31,7 @@ def set_address(self, address)
 | `address` | `—` | `—` |
 
 ## Source
-Lines 388–392 in `newchirp_usb_dfu.py`
+Lines 392–396 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

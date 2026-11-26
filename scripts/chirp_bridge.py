@@ -610,6 +610,22 @@ def bridge_error_message(exc, command=None, model=None, port=None):
                 "If the error continues, reinstall the adapter's CH340, "
                 "CP210x, or FTDI driver or try a different cable." % port
             )
+    elif "image not supported by radio" in lowered_message:
+        # Stock uv5r.py refuses to upload a whole image whose settings area
+        # (band limits, squelch calibration) differs from this radio's,
+        # because these radios garble that area. 2026-11-25 UV-82 report
+        # (INBOX:991/994): read the radio, then wrote an older saved file.
+        message = (
+            "This file was saved from a different radio, or before a "
+            "firmware change, so its settings area doesn't match this %s. "
+            "Writing it whole could overwrite this radio's band limits and "
+            "calibration, so the write was stopped and nothing was changed. "
+            "To copy its channels: open the file and save it as CSV, read "
+            "this radio, open the CSV and choose to replace the channels, "
+            "then write." % (
+            model.split("_", 1)[-1] if model else "radio"
+        )
+        )
     elif (
         "permissionerror(13" in lowered_message
         or "access is denied" in lowered_message

@@ -289,7 +289,7 @@ class DfuTransport:
             self.context = ctypes.c_void_p()
 
     def _transfer(self, request_type, request, value, data_or_length,
-                  timeout=2000):
+                  timeout=2000, allow_short=False):
         if isinstance(data_or_length, int):
             length = data_or_length
             buffer = (ctypes.c_ubyte * length)()
@@ -311,11 +311,11 @@ class DfuTransport:
         )
         if result < 0:
             raise DfuError(_error_text(self.lib, result))
-        if result != length:
+        if result != length and not (allow_short and result > 0):
             raise DfuError(
                 "USB DFU transfer returned %i of %i bytes" % (result, length)
             )
-        return bytes(buffer[:length]) if isinstance(
+        return bytes(buffer[:result]) if isinstance(
             data_or_length, int
         ) else b""
 
@@ -362,9 +362,10 @@ class DfuTransport:
         )
         self._status()
 
-    def _upload(self, block, length):
+    def _upload(self, block, length, allow_short=False):
         data = self._transfer(
-            REQUEST_TO_HOST, REQUEST_UPLOAD, block, length
+            REQUEST_TO_HOST, REQUEST_UPLOAD, block, length,
+            allow_short=allow_short,
         )
         self._status()
         return data
@@ -382,8 +383,11 @@ class DfuTransport:
         return identity
 
     def identity(self):
+        # The radio may answer with fewer than 64 bytes: a 2026-11-25 macOS
+        # report (INBOX:986) got 32. dmrconfig's identify() also requests 64
+        # and accepts any length; the model name sits in the first 32 bytes.
         self.command(b"\xA2\x01")
-        return self._upload(0, 64)
+        return self._upload(0, 64, allow_short=True)
 
     def set_address(self, address):
         self.command(

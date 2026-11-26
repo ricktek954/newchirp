@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-25T09:30:41Z"
+timestamp: "2026-11-26T06:38:24Z"
 concept_id: chirp_bridge/preserve_unloadable_settings
 language: python
 ---
@@ -46,7 +46,7 @@ Returns the names of preserved settings.
 | `settings` | `—` | `—` |
 
 ## Source
-Lines 1606–1642 in `chirp_bridge.py`
+Lines 1622–1658 in `chirp_bridge.py`
 
 ## Relationships
 

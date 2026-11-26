@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-01T11:36:21Z"
+timestamp: "2026-11-26T06:35:35Z"
 concept_id: newchirp_usb_dfu/command
 language: python
 ---
@@ -31,7 +31,7 @@ def command(self, command)
 | `command` | `—` | `—` |
 
 ## Source
-Lines 372–375 in `newchirp_usb_dfu.py`
+Lines 373–376 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

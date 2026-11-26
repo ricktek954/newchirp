@@ -2052,5 +2052,23 @@ class FrequencyPrecisionTest(unittest.TestCase):
         self.assertIn("Mode AM not supported", str(errors[0]))
 
 
+
+class ImageMismatchMessageTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        bridge.load_chirp(str(SOURCE), str(VENDOR))
+
+    def test_uv82_image_refusal_explains_the_csv_route(self):
+        from chirp import errors
+        message = bridge.bridge_error_message(
+            errors.RadioError(
+                "Image not supported by radio. You must...\n"
+                "1. Download from radio.\n2. Make changes.\n"
+                "3. Upload back to same radio."),
+            command="upload", model="Baofeng_UV-82")
+        self.assertIn("doesn't match this UV-82", message)
+        self.assertIn("save it as CSV", message)
+        self.assertIn("nothing was changed", message)
+
 if __name__ == "__main__":
     unittest.main()
