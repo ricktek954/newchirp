@@ -121,6 +121,55 @@ Earlier notes (2026-11-13) had the TK-359 on the TK-350 protocol (9600 8N1,
 bare `02`, `R`/`W` blocks from 0xF000). That was wrong; a TK-359 would not
 have answered.
 
+## Write sessions — traced 2026-11-26
+
+Same QEMU method as the reads, with "Program > Write to radio" against a
+simulated radio that logs every byte. Each CPS wrote the loaded test file
+(`sample.u1f`, `uhf359.fdt`) and ended with "Done Writing The PC Data.";
+the simulated memory afterwards was byte-identical to the file.
+
+### TK-350 (KPG-23D 1.01)
+
+| Step | Host bytes | Radio response |
+| --- | --- | --- |
+| Identity | `02` | 6 bytes. **Checked on write** (not on read): it must equal the file's model/band record at 0x0D00 (`P3501 01`); `P350S 00` or a different band (`P3504 01`) gives "Model Type is wrong. Overwrite ?" (the user can override). |
+| Acknowledge | `06` | `06` |
+| Write block | `57 <address:u16be> 80` + 128 bytes, no checksum | `06`; anything else (e.g. `15`) aborts with "Check Connection", no per-block retry |
+
+- 26 blocks, ascending: 0xF000-0xFB80 and 0xFD00-0xFD80. **0xFC00-0xFCFF is
+  never written** (read, but never written: likely factory alignment).
+- No host `06` after a block's `06`, no exit command; the next frame
+  follows the radio's `06` within ~5 ms.
+
+### TK-359 (KPG-32D 1.00)
+
+| Step | Host bytes | Radio response |
+| --- | --- | --- |
+| Wake / identity / ack | `PROGRAM`, `02`, `06` | `06`, 8-byte identity (checked as on read), `06` |
+| Uniform block | `5A 03 <hi+AC> <lo> 80 <fill>` (`Z`, 0x168a9) | `06` |
+| Data block | `58 03 <hi+AC> <lo> 80` + 128 bytes + sum8 (`X`, 0x168ae) | `06`, then host sends `03` (DS:0x32DE, commit) and the radio answers `06` |
+| Leave | `45` (`E`, DS:0x32D8) | `06` |
+
+Block order (top-level routine 0x16542): 0x0000-0x03FF (all `FF` here, sent
+as `Z`), skip 0x0400-0x04FF, 0x0500-0x06FF, then from 0x0700 the
+signalling sections at 0x0700, 0x1200 and 0x2200 sized by their entry
+counts (0x16634), then 0x3200-0x33FF, then only the channel blocks that
+cover the used channel range (0x16782: four 32-byte channels per 0x80
+block, range from two bytes of the CPS's channel table), then 0x5380, then
+`E`. For `uhf359.fdt` that was 23 frames (10 `Z`, 13 `X` with 13 commits):
+0x0000-0x0380, 0x0500-0x0700, 0x1200, 0x2200-0x2300, 0x3200-0x3380, 0x3400,
+0x5380.
+
+### Write policy for NewChirp (not yet implemented)
+
+- TK-350: refuse unless the radio's identity equals the image's 0x0D00
+  record; write the same 26 blocks in the same order; never 0xFC00-0xFCFF.
+- TK-359: write only blocks inside the CPS's writable set that differ from
+  the image just read from the radio, as `Z` when uniform and `X` + commit
+  otherwise; never 0x0400-0x04FF.
+- Both stay disabled until the channel decode (including the TK-359 TX
+  field) is confirmed against an owner's saved image.
+
 ## Memory size and records
 
 Checked 2026-11-26 by saving files from the OEM programmers in QEMU with

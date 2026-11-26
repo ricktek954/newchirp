@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-26 12:49:08",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "docs/KPG23_PROTOCOL.md",
+  "item": "w-20261126-dc72",
+  "occurred_at": "2026-11-26",
+  "summary": "KPG-23D write traced in QEMU: 02/identity checked against image 0x0D00 (band mismatch warns), 06/06, 26 x W hi lo 80+128 each ACKed 06 (15 aborts), never 0xFC00-0xFCFF, no exit. Simulated memory byte-identical to file."
+}
