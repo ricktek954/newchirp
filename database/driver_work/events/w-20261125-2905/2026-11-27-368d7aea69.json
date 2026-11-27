@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 09:44:52",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:d1665f13",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-27",
+  "summary": "Linux 1.0.79 ships the UV-5RM Pro/5RH Pro 19200-first announce and stray-byte-tolerant sync acknowledgement"
+}

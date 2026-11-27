@@ -8,6 +8,19 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.79` is live from source commit `d1665f13`. It adds the
+  Quansheng TK11 OEM login/session flow before uploads, decodes and writes
+  TK-350 5 kHz channels by their step bits and writes CTCSS tones, and makes
+  UV-5RM Pro/5RH Pro announce at 19200 first while skipping stray bytes
+  before the sync acknowledgement like the v1.12 CPS. Verification: analyzer
+  clean; all 257 Flutter tests with the bundled Python 3.13 runtime; 701
+  bundled Python tests with two fixture-dependent skips; Ubuntu 20.04 ABI
+  maximum GLIBC `2.18`; DEB, RPM, and Pacman metadata plus embedded version
+  `1.0.79`; DEB and AppImage Xvfb smoke tests; AppImage host launches under
+  Wayland and X11; package payloads include the TK11, TK-350, and UV-5RM Pro
+  changes and omit GLVND/EGL/GLES loaders; all public downloads returned
+  HTTP 200; and the Linux platform manifest reports `1.0.79`.
+
 ### macOS session handoff, 2026-11-27 (before a reboot)
 
 Released: macOS `1.0.77` (2026-11-27), Windows `1.0.76`, Linux `1.0.79`. The website matches
@@ -15,8 +28,8 @@ Released: macOS `1.0.77` (2026-11-27), Windows `1.0.76`, Linux `1.0.79`. The web
 `03:39`. Desktop and web are committed and pushed. All support mail has been
 answered except one forum notification (UID 1048).
 
-Fixed since 1.0.76. These are in `main`, the Web Programmer and macOS
-1.0.77 (Windows needs its next build):
+Fixed since 1.0.76. These are in `main`, the Web Programmer, macOS 1.0.77, and
+Linux 1.0.79 (Windows needs its next build):
 
 - TK-350 5 kHz channels, item `w-20261127-edf2`, commit `a029606e7`.
   - The step size is set by record byte 13: bit 5 for RX and bit 6 for TX.
@@ -1623,6 +1636,7 @@ Session tools:
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.79` artifact source commit: `d1665f13`
 - Linux `1.0.78` artifact source commit: `3d16733f`
 - Linux `1.0.77` artifact source commit: `8a24cd2f`
 - Linux `1.0.76` artifact source commit: `ab66c0d7`
@@ -1635,7 +1649,7 @@ Session tools:
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.76+76` (macOS `1.0.76`; Linux artifact is `1.0.78`)
+- Checked-out source version: `1.0.77+77` (macOS `1.0.77`; Linux artifact is `1.0.79`)
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1651,7 +1665,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.73 |
 | Windows | 1.0.70 |
-| Linux | 1.0.78 |
+| Linux | 1.0.79 |
+
+Linux `1.0.79` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.79.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.79.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.79.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.79.pkg.tar.zst`
+- DEB: `48,942,988` bytes, SHA-256
+  `a6864bd263e2b32b15cc66dd76f164c86ee2bb7426a62fb069e65f8290a6f64f`
+- RPM: `49,027,853` bytes, SHA-256
+  `3e349d34dbcf5ccf185e6ac6baf201bdfde4f3f96e9da87cef4299c3bfd7e50f`
+- AppImage: `49,218,752` bytes, SHA-256
+  `306aecb74cff4af8c3d4b3df2170a3928b9689fa8eeb68e35de0eecb729353a6`
+- Pacman: `47,876,783` bytes, SHA-256
+  `6190fa6a17e928b68b4de5b15f00fe44c30c24c782cf1bcbc46c64c8d9bd0804`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.79`
 
 Linux `1.0.78` artifacts:
 

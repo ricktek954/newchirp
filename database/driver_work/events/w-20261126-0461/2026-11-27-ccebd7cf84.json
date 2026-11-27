@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 09:44:45",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:d1665f13",
+  "item": "w-20261126-0461",
+  "occurred_at": "2026-11-27",
+  "summary": "Linux 1.0.79 ships the TK11 OEM-style login/session before upload, block checks, and reboot handling"
+}
