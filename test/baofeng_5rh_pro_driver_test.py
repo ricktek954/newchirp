@@ -210,6 +210,29 @@ class Baofeng5RHProDriverTest(unittest.TestCase):
         syncs = [w for w in serial.writes if len(w) == 8 and w[-1] == 0x33]
         self.assertEqual(syncs, [b"PROGRAM\x33"])
 
+    def test_stray_byte_before_the_sync_ack_is_skipped_like_cps_v112(self):
+        """CPS v1.12 keeps reading after a byte that is not seed ^ 'A'; a
+        UV-5RM Pro answers the sync with "N" first (2026-11-26, UID 1046)."""
+
+        class NThenAck(FakeSessionSerial):
+            def write(self, data):
+                data = bytes(data)
+                if len(data) == 8 and data[:-1] == self.module._xor_seed(
+                        b"PROGRAM", data[-1]):
+                    self.writes.append(data)
+                    self.seed = data[-1]
+                    self.responses.append(b"N" + bytes([self.seed ^ 0x41]))
+                    return
+                return super().write(data)
+
+        serial = NThenAck(announce_baud=19200)
+        radio = self.radio_class(serial)
+        seed = self.driver._handshake(radio, seed=0x5A)
+        self.assertEqual(seed, 0x5A)
+        syncs = [w for w in serial.writes if len(w) == 8 and w[-1] == seed]
+        self.assertEqual(len(syncs), 1, "no second sync form needed")
+        self.assertFalse(radio._plain_sync)
+
     def test_xored_sync_radios_never_see_the_plain_form(self):
         serial = FakeSessionSerial(announce_baud=115200)
         radio = self.radio_class(serial)

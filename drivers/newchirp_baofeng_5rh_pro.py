@@ -23,6 +23,7 @@ cross-check. The v2 firmware replaced the older UV-17-family plaintext
 
 import logging
 import secrets
+import time
 
 from chirp import bitwise
 from chirp import chirp_common
@@ -278,6 +279,30 @@ def _sync_header(seed, plain):
     return body + bytes([seed])
 
 
+# CPS v1.12 DataProtocol.handShake polls the port every 50 ms in states
+# HANDSHAKE3 (sync) and HANDSHAKE6 (direction) and skips any byte that is
+# not seed ^ 'A' until its 200 ms timer has expired four times. A UV-5RM
+# Pro answers the sync with "N" (0x4E) first, so one byte is not enough.
+ACK_WAIT = 1.0
+
+
+def _await_ack(port, seed, wait=ACK_WAIT):
+    """Read until seed ^ 'A', skipping other bytes like the CPS.
+
+    Returns (acked, stray bytes)."""
+    ack = seed ^ 0x41
+    stray = bytearray()
+    deadline = time.monotonic() + wait
+    while True:
+        byte = port.read(1)
+        if byte:
+            if byte[0] == ack:
+                return True, bytes(stray)
+            stray += byte
+        if time.monotonic() >= deadline or len(stray) >= 32:
+            return False, bytes(stray)
+
+
 def _handshake(radio, is_write=False, seed=None):
     """Put the radio into clone mode.
 
@@ -295,11 +320,14 @@ def _handshake(radio, is_write=False, seed=None):
     for attempt, plain in enumerate(forms):
         _announce(radio)
         port.write(_sync_header(seed, plain))
-        reply = port.read(1)
-        if reply == bytes([seed ^ 0x41]):
+        acked, stray = _await_ack(port, seed)
+        if acked:
+            if stray:
+                LOG.info('Radio sent %s before the sync ACK', stray.hex())
             radio._plain_sync = plain
             break
-        refused.append(reply and '0x%02X' % reply[0] or 'nothing')
+        refused.append(stray and ' '.join(
+            '0x%02X' % b for b in stray[:4]) or 'nothing')
         LOG.info('Radio refused the %s sync (reply %s)',
                  'plain' if plain else 'XORed', refused[-1])
     else:
@@ -320,7 +348,7 @@ def _handshake(radio, is_write=False, seed=None):
 
     # 0x52 == 'R' to read from the radio, 0x57 == 'W' to write to it
     port.write(bytes([seed ^ (0x57 if is_write else 0x52)]))
-    if port.read(1) != bytes([seed ^ 0x41]):
+    if not _await_ack(port, seed)[0]:
         raise errors.RadioError('Radio refused the clone direction')
     return seed
 
