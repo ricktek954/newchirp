@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 09:25:44",
+  "details": "",
+  "event_type": "email",
+  "external_ref": "msgid:<179577153125.22171.8288826770825577372@newchirp.net>",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-27",
+  "summary": "Asked owner to power-cycle, hard-reload and retry; if it fails, CPS BaudRate setting and a serial capture of one CPS read"
+}
