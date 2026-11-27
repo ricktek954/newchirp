@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:32:02",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:3e8f7c420594ff6a1da2d2acbe5298012e9dbf2dae174dbcdc09815a364acf6c",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-27",
+  "summary": "CPS v1.12 handShake HANDSHAKE3/6 ignore bytes that are not seed^'A' and keep polling ~800 ms; NewChirp failed on the first byte. Likely the radio sends 'N' before the ACK."
+}

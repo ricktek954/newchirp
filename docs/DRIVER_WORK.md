@@ -356,7 +356,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### IC-7400
 
-- **#w-20261126-bfc0 bug | awaiting_user | normal:** Read times out: no CI-V echo, no radio reply
+- **#w-20261126-bfc0 bug | closed | normal:** Read times out: no CI-V echo, no radio reply
   1.0.75 Windows COM3 (same cable as the reporter's IC-910): one stray byte, then no echo and no reply to 1a/00 at 66h. A CI-V interface that does not echo is usually not on a powered bus (radio off or cable not seated) or the USB adapter needs replugging. Asked for setup checks.
   Source: `email` mailbox:UID 1031
 
@@ -368,7 +368,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### IC-910
 
-- **#w-20261119-c2a9 bug | awaiting_user | high:** Read stops on unset CTCSS tone (rtone 0.0)
+- **#w-20261119-c2a9 bug | closed | high:** Read stops on unset CTCSS tone (rtone 0.0)
   Live CI-V read aborted with '0.0' is not a valid value for 'rtone' (1.0.60, IC-910H; reporter also has an IC-740). CHIRP's GUI isolates the bad channel; NewChirp's single-pass read stopped. drivers/newchirp_icomciv_tone_compat.py makes non-standard tone values read as 88.5 Hz for every CI-V memory frame.
   Source: `email` INBOX:810
 
@@ -916,6 +916,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ## TIDRADIO
 
+### TD-BL1 adapter
+
+- **#w-20261127-31d2 bug | awaiting_user | normal:** Android app does not list the adapter after it was paired in Android settings
+  UV-5R owner: Android Bluetooth sees and pairs the Tidradio adapter, but NewChirp's scan never shows it. The app only lists advertising devices (service filter, then unfiltered after 4 s); an adapter already connected by the system usually stops advertising. Workaround: forget it in Android settings and connect from the app. Possible fix: also list system-connected devices (UniversalBle.getSystemDevices).
+  Source: `email` mailbox:UID 1053
+
 ### TD-H3 family
 
 - **#39 maintenance | experimental | normal:** Current driver status
@@ -1026,6 +1032,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#5 maintenance | experimental | normal:** Current driver status
   Transport: CHIRP Yaesu clone serial, 38400 8N1. Read: Completion-safe timeout; multi-bank mappings. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:29
+
+### FT-2900R
+
+- **#w-20261127-b76c bug | awaiting_user | normal:** Read stops after 'press MHz' with a header error
+  Forum topic 56 post 218: FT-2900 read reaches the 'press SET MHz' step then fails with a header error. Stock ft2900 requires the 10-byte ID to equal one IDBLOCK; FT-2900E (41 02) and TX-modified (C7 01) radios send others, and CHIRP keeps the E class unregistered. Need the received header (in-app report) and the radio's label variant.
+  Source: `forum` forum:topic/56#post-218
 
 ### FT-50
 

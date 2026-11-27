@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "INBOX:810",
-  "status": "awaiting_user",
+  "status": "closed",
   "summary": "Live CI-V read aborted with '0.0' is not a valid value for 'rtone' (1.0.60, IC-910H; reporter also has an IC-740). CHIRP's GUI isolates the bad channel; NewChirp's single-pass read stopped. drivers/newchirp_icomciv_tone_compat.py makes non-standard tone values read as 88.5 Hz for every CI-V memory frame.",
   "title": "Read stops on unset CTCSS tone (rtone 0.0)",
   "uid": "w-20261119-c2a9"

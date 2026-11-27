@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:34:40",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1049",
+  "item": "w-20261126-bfc0",
+  "occurred_at": "2026-11-27",
+  "summary": "IC-7400 reads correctly after the owner reseated his homebrew CI-V cable (user-side cause); FAQ #icom-civ now covers the REMOTE jack, address and baud (web:8805788)"
+}

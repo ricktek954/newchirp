@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:35:28",
+  "details": "Forum topic 56 post 218: FT-2900 read reaches the 'press SET MHz' step then fails with a header error. Stock ft2900 requires the 10-byte ID to equal one IDBLOCK; FT-2900E (41 02) and TX-modified (C7 01) radios send others, and CHIRP keeps the E class unregistered. Need the received header (in-app report) and the radio's label variant.",
+  "event_type": "created",
+  "external_ref": "forum:topic/56#post-218",
+  "item": "w-20261127-b76c",
+  "occurred_at": "2026-11-27",
+  "summary": "Read stops after 'press MHz' with a header error"
+}

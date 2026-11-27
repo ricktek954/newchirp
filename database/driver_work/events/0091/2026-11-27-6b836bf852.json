@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:34:53",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1052",
+  "item": "91",
+  "occurred_at": "2026-11-27",
+  "summary": "Same owner: SmartScreen still blocks the 1.0.76 download; FAQ #windows-smartscreen added (web:8805788)"
+}

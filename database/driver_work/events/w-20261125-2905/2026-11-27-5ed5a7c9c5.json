@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:32:02",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1046",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-27",
+  "summary": "Web Programmer UV-5RM Pro: 'did not agree to program mode (replies 0x4e, 0x4e)' on both sync forms; seller CPS v1.12 works right after on the same cable"
+}

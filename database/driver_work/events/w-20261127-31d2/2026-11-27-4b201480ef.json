@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:35:32",
+  "details": "UV-5R owner: Android Bluetooth sees and pairs the Tidradio adapter, but NewChirp's scan never shows it. The app only lists advertising devices (service filter, then unfiltered after 4 s); an adapter already connected by the system usually stops advertising. Workaround: forget it in Android settings and connect from the app. Possible fix: also list system-connected devices (UniversalBle.getSystemDevices).",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1053",
+  "item": "w-20261127-31d2",
+  "occurred_at": "2026-11-27",
+  "summary": "Android app does not list the adapter after it was paired in Android settings"
+}

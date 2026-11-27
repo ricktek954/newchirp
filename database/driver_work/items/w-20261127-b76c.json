@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-27 08:35:28",
+  "kind": "bug",
+  "manufacturer": "Yaesu",
+  "model": "FT-2900R",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "forum",
+  "source_ref": "forum:topic/56#post-218",
+  "status": "awaiting_user",
+  "summary": "Forum topic 56 post 218: FT-2900 read reaches the 'press SET MHz' step then fails with a header error. Stock ft2900 requires the 10-byte ID to equal one IDBLOCK; FT-2900E (41 02) and TX-modified (C7 01) radios send others, and CHIRP keeps the E class unregistered. Need the received header (in-app report) and the radio's label variant.",
+  "title": "Read stops after 'press MHz' with a header error",
+  "uid": "w-20261127-b76c"
+}
