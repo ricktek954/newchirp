@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 09:14:27",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:3e8f7c420594ff6a1da2d2acbe5298012e9dbf2dae174dbcdc09815a364acf6c",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-27",
+  "summary": "v1.12 installer ships Setting.ini baudrate=19200 (com=COM13, freqband=3): the CPS announces at 19200 first and never at 115200. NewChirp announced at 115200 first, got a stray E0, then 'N'. Hypothesis: the wrong-rate announce desynchronizes the radio."
+}

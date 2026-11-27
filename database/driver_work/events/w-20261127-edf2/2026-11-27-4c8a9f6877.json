@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 09:14:26",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:b6c240d56",
+  "item": "w-20261127-edf2",
+  "occurred_at": "2026-11-27",
+  "summary": "CTCSS tone writes (0xC000|Hz*10 at +4/+6), rewritten only on real tone changes; removes the tone-equality refusal that also blocked frequency-only edits (web:191842e)"
+}
