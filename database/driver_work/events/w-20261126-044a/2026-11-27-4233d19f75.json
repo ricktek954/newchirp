@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 15:19:23",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "web:967e597",
+  "item": "w-20261126-044a",
+  "occurred_at": "2026-11-27",
+  "summary": "Web Programmer AR-8118 profile (read-only, WebHID raw reports; picks the HID device and checks product name ASER-471; refuses a programming password); offline simulated-radio tests pass; not deployed yet"
+}

@@ -8,7 +8,7 @@
   "reporter": "",
   "source": "email",
   "source_ref": "mailbox:UID 1035",
-  "status": "investigating",
+  "status": "fix_committed",
   "summary": "Requested via a Baofeng 5RM bug report (no other details). Not in CHIRP (Abbree AR-518/AR-63/AR-730/AR-869 are) and no public CPS found. Asked for label photo/FCC ID, firmware, and the programming software that came with it.",
   "title": "Support request: Abbree AR8118",
   "uid": "w-20261126-044a"
