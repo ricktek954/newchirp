@@ -604,15 +604,46 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
                          ("Cross", "Tone->Tone", 110.9, 100.0))
         self.assertEqual(radio.get_memory(5).tmode, "")
 
-        # Frequency edits keep the tone bytes; tone edits are refused.
+        # Frequency edits keep the tone bytes exactly.
         three.freq = 433_025_000
         radio.set_memory(three)
         self.assertEqual(radio.get_mmap().get_packed()[36:40],
                          bytes.fromhex("ffff02c3"))
         self.assertEqual(radio.get_memory(3).rtone, 77.0)
+
+        # Tone edits write 0xC000 | Hz x 10 (little-endian), decode at +4 and
+        # encode at +6, in the same form as the KPG-23D-saved values above.
         three.rtone = 88.5
-        with self.assertRaisesRegex(Exception, "tones"):
-            radio.set_memory(three)
+        radio.set_memory(three)
+        self.assertEqual(radio.get_mmap().get_packed()[36:40],
+                         bytes.fromhex("ffff75c3"))   # 885 = 0x375
+        three = radio.get_memory(3)
+        three.tmode, three.ctone = "TSQL", 100.0
+        radio.set_memory(three)
+        self.assertEqual(radio.get_mmap().get_packed()[36:40],
+                         bytes.fromhex("e8c3e8c3"))   # same as SAMPLE.V1B
+        three = radio.get_memory(3)
+        three.tmode, three.cross_mode, three.ctone = "Cross", "->Tone", 110.9
+        radio.set_memory(three)
+        self.assertEqual(radio.get_mmap().get_packed()[36:40],
+                         bytes.fromhex("55c4ffff"))
+        three = radio.get_memory(3)
+        three.tmode = ""
+        radio.set_memory(three)
+        self.assertEqual(radio.get_mmap().get_packed()[36:40],
+                         bytes.fromhex("ffffffff"))
+        self.assertEqual(radio.get_memory(3).tmode, "")
+
+        # An undecoded QT value (here 300.0) survives a frequency-only edit.
+        five = radio.get_memory(5)
+        five.freq = 433_050_000
+        radio.set_memory(five)
+        self.assertEqual(radio.get_mmap().get_packed()[68:72],
+                         bytes.fromhex("b8cbffff"))
+        five = radio.get_memory(5)
+        five.tmode, five.cross_mode = "DTCS", "Tone->Tone"
+        with self.assertRaisesRegex(Exception, "CTCSS tones only"):
+            radio.set_memory(five)
 
     def test_tk350_write_matches_kpg23d_trace(self):
         image = self._tk350_image()

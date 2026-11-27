@@ -238,7 +238,7 @@ def _announce(radio):
         # The reply takes about 110ms, so a short timeout here keeps the
         # retry cheap for the radios that need the other rate.
         port.timeout = 1
-        for baudrate in (115200, 19200):
+        for baudrate in getattr(radio, 'ANNOUNCE_BAUDS', (115200, 19200)):
             port.baudrate = baudrate
             port.reset_input_buffer()
             port.write(bytes(T_INFO))
@@ -1086,6 +1086,12 @@ class BaofengUV5RMPro(Baofeng5RHPro):
     # The seller's CPS is "5RH Pro v1.12" with the same memory map; the
     # radio wants that CPS's plain-text sync (see _sync_header).
     MODEL = "UV-5RM Pro"
+    # The v1.12 installer ships Setting.ini with baudrate=19200, so its CPS
+    # announces at 19200 and never sends anything at 115200 first. This
+    # radio answered NewChirp's 115200 announce with a stray 0xE0 and then
+    # refused every sync with "N" (mailbox UIDs 978, 1046, 1058); 16 bytes
+    # at the wrong rate may leave its parser out of step. Follow the CPS.
+    ANNOUNCE_BAUDS = (19200, 115200)
 
 
 @directory.register

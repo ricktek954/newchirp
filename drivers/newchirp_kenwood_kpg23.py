@@ -645,6 +645,15 @@ def _kpg23_tone(raw):
     return False
 
 
+def _kpg23_tone_word(tone):
+    """QT word for a CTCSS tone in Hz (inverse of _kpg23_tone); FFFF = none."""
+    if tone is None:
+        return 0xFFFF
+    if tone not in chirp_common.TONES:
+        raise errors.RadioError("%.1f Hz is not a standard CTCSS tone" % tone)
+    return 0xC000 | int(round(tone * 10))
+
+
 def _decode_name(raw):
     value = raw.split(b"\xff", 1)[0].split(b"\x00", 1)[0]
     value = value.strip(b" ")
@@ -845,6 +854,29 @@ class _KenwoodKPG23Base(
     def _tx_step(options):
         return _tk350_step(options, TX_STEP_BIT, TX_BASE_450, TX_BASE_450_5K)
 
+    @classmethod
+    def _tone_pair(cls, memory):
+        """(transmit/encode Hz, receive/decode Hz) for a channel; None = no tone.
+
+        Mirrors _decode_tones: Tone = encode only, TSQL = the same tone both
+        ways, Cross "Tone->Tone" = encode rtone / decode ctone, "->Tone" =
+        decode only.
+        """
+        mode = memory.tmode
+        if mode == "":
+            return None, None
+        if mode == "Tone":
+            return memory.rtone, None
+        if mode == "TSQL":
+            return memory.ctone, memory.ctone
+        if mode == "Cross" and memory.cross_mode == "Tone->Tone":
+            return memory.rtone, memory.ctone
+        if mode == "Cross" and memory.cross_mode == "->Tone":
+            return None, memory.ctone
+        raise errors.RadioError(
+            "%s channels support CTCSS tones only (Tone, TSQL, or Cross "
+            "Tone->Tone / ->Tone)" % cls.MODEL)
+
     @staticmethod
     def _decode_tones(memory, record):
         decode = _kpg23_tone(record[4:6])   # receive (QT decode)
@@ -893,16 +925,14 @@ class _KenwoodKPG23Base(
 
     def set_memory(self, memory):
         current = self._check_edit(memory)
-        if (memory.tmode, memory.rtone if memory.tmode else None,
-                memory.ctone if memory.tmode in ("TSQL", "Cross") else None,
-                memory.cross_mode if memory.tmode == "Cross" else None) != (
-                current.tmode, current.rtone if current.tmode else None,
-                current.ctone if current.tmode in ("TSQL", "Cross") else None,
-                current.cross_mode if current.tmode == "Cross" else None):
-            raise errors.RadioError(
-                "Changing TK-350 tones is not supported yet; the channel's "
-                "existing tones are kept when you change its frequency.")
         offset = (memory.number - 1) * CHANNEL_SIZE
+        wanted = self._tone_pair(memory)
+        if wanted != self._tone_pair(current):
+            # Only rewrite the QT words when the tones really changed, so an
+            # undecoded DQT value survives a frequency-only edit.
+            encode, decode = wanted
+            self._mmap[offset + 4] = struct.pack(
+                "<HH", _kpg23_tone_word(decode), _kpg23_tone_word(encode))
         options = self._mmap.get_packed()[offset + STEP_OPTION_OFFSET]
         rx_word, rx_625 = _tk350_word(
             memory.freq, bool(options & RX_STEP_BIT),

@@ -240,6 +240,15 @@ class Baofeng5RHProDriverTest(unittest.TestCase):
         self.assertNotIn(b"PROGRAM!", serial.writes)
         self.assertFalse(radio._plain_sync)
 
+    def test_uv5rm_pro_announces_at_19200_first_like_cps_v112(self):
+        """CPS v1.12 ships Setting.ini baudrate=19200 and starts there."""
+        pro = self.directory.get_radio("Baofeng_UV-5RM_Pro")
+        serial = FakeSessionSerial(announce_baud=19200, plain_sync=True)
+        radio = pro(serial)
+        self.driver._handshake(radio, seed=0x5A)
+        self.assertEqual(serial.baudrates[0], 19200)
+        self.assertNotIn(115200, serial.baudrates[:2])
+
     def test_uv5rm_pro_is_listed(self):
         self.assertIsNotNone(self.directory.get_radio("Baofeng_UV-5RM_Pro"))
 
