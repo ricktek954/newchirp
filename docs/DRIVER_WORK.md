@@ -478,6 +478,15 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261127-edf2 bug | awaiting_user | high:** 5 kHz channels decoded and written as 6.25 kHz (edited ch114 will not transmit)
   Owner's 1.0.76 write of ch114 to 430.0125 left the radio on 353.020/344.010: record byte 13 bits 5 (RX) / 6 (TX) select 6.25 vs 5 kHz steps and ch114 is a 5 kHz channel (80). NewChirp ignored the bits. Channel 121 add refused as designed; CSV re-import refused (no tones).
   Source: `email` mailbox:UID 1055,1056
+- **#w-20261127-eff6 bug | investigating | high:** Edited ch1 (430.0875/433.0875/431.0875 simplex) has no RX or TX
+  1.0.77 Windows: ch1 changed from 433.000/434.600 tone 77.0 to simplex 430.0875 + Tone 114.8, then 433.0875 no tone, then 431.0875 + 114.8; owner reports no RX/TX. Records (a6 40 ce 5c / 86 42 ae 5e / 46 41 6e 5d, byte13 E0) use the same encoding as the radio's own working simplex ch81-110; only ch1 and ch114 bytes differ from the original image; frequencies inside the radio's original 427.475-438.55 span. Cause not found offline; controlled test requested.
+  Source: `email` mailbox:UID 1060
+- **#w-20261127-dc5d enhancement | open | normal:** DQT (DCS) tone read/write
+  Owner requests DCS/DQT tones. QT words with bits 15-14 != 11 are DQT and not decoded; needs KPG-23D trace of the DQT word encoding before writes.
+  Source: `email` mailbox:UID 1067
+- **#w-20261127-75b5 enhancement | open | normal:** Add channels to empty slots (ch121+, 15-channel radio ch16)
+  Owner tried adding ch121/122 on the 120-channel radio and importing a 24-row CSV into a second TK-350 (P350S 00, 15 channels, 449 MHz); both refused by design. Needs the CPS channel/scan tables (0x0D40 bitmap, channel count) traced. Owner also asks for the CPS's 'Full 160ch UHF 327-550 MHz' range (driver allows 400-520).
+  Source: `email` mailbox:UID 1066
 - **#15 maintenance | experimental | normal:** Current driver status
   Transport: KPG-23D clone serial, 9600 8N1, 0xF000 addressed blocks. Read: Yes, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental read-only.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:39

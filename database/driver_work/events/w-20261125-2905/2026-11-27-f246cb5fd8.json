@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 14:43:37",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1065",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-27",
+  "summary": "Owner: Web Programmer UV-5RM Pro now connects and 'seems to be working' after the 19200-first announce + stray-byte skip; asks for it in the Windows desktop build. Write + power-cycled read-back not yet confirmed."
+}

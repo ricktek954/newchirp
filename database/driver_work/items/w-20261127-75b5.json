@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-27 14:43:37",
+  "kind": "enhancement",
+  "manufacturer": "Kenwood",
+  "model": "TK-350",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1066",
+  "status": "open",
+  "summary": "Owner tried adding ch121/122 on the 120-channel radio and importing a 24-row CSV into a second TK-350 (P350S 00, 15 channels, 449 MHz); both refused by design. Needs the CPS channel/scan tables (0x0D40 bitmap, channel count) traced. Owner also asks for the CPS's 'Full 160ch UHF 327-550 MHz' range (driver allows 400-520).",
+  "title": "Add channels to empty slots (ch121+, 15-channel radio ch16)",
+  "uid": "w-20261127-75b5"
+}

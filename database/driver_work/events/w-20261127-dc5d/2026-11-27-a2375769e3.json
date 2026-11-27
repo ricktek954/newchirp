@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 14:43:36",
+  "details": "Owner requests DCS/DQT tones. QT words with bits 15-14 != 11 are DQT and not decoded; needs KPG-23D trace of the DQT word encoding before writes.",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1067",
+  "item": "w-20261127-dc5d",
+  "occurred_at": "2026-11-27",
+  "summary": "DQT (DCS) tone read/write"
+}
