@@ -10,13 +10,13 @@ release requirements.
 
 ### macOS session handoff, 2026-11-27 (before a reboot)
 
-Released: macOS `1.0.76` and Windows `1.0.76`. The website matches
+Released: macOS `1.0.77` (2026-11-27), Windows `1.0.76`, Linux `1.0.79`. The website matches
 `022980f`; the bundle `index-UeTE45j-.js` went live at
 `03:39`. Desktop and web are committed and pushed. All support mail has been
 answered except one forum notification (UID 1048).
 
-Fixed since 1.0.76. These are in `main` and the Web Programmer, but not yet
-in a desktop build:
+Fixed since 1.0.76. These are in `main`, the Web Programmer and macOS
+1.0.77 (Windows needs its next build):
 
 - TK-350 5 kHz channels, item `w-20261127-edf2`, commit `a029606e7`.
   - The step size is set by record byte 13: bit 5 for RX and bit 6 for TX.
@@ -286,6 +286,17 @@ Session tools:
   XWayland; package payloads include the IC-F50V/F60V and KG-689E drivers and
   omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
   the Linux platform manifest reports `1.0.65`.
+- macOS `1.0.77` is live from source commit `0e9a4242b` as a universal,
+  signed, and notarized DMG. Since 1.0.76: TK-350 5 kHz step bits, CTCSS
+  tone writes and frequency edits no longer refused by the tone check;
+  UV-5RM Pro handshake follows CPS v1.12 (19200 first, stray bytes skipped);
+  TK11 upload opens its own session. Verification: analyzer clean; 257
+  Flutter tests; 701 Python tests (2 fixture skips); embedded `1.0.77` /
+  `77`; arm64 and x86_64; 278 driver modules; bundled drivers and bridge
+  match source; Gatekeeper accepted DMG and mounted app; local, server and
+  public SHA-256 `1feead82…cad7d879c`. Notarization:
+  `8e4766d8-b1ba-48ba-b9db-81f3fdab5206`. The commit sits on top of Linux
+  `1.0.79` (`d1665f133`); platform versions are independent.
 - macOS `1.0.76` is live from source commit `026cd8fc7` as a universal,
   signed, and notarized DMG. Since 1.0.75: UV-5RM Pro plain-sync fallback;
   TK-350 experimental write and CTCSS tone decode; TK-359 read baseline (write
