@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 15:06:57",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "desktop:docs/ABBREE_AR8118_PROTOCOL.md",
+  "item": "w-20261126-044a",
+  "occurred_at": "2026-11-27",
+  "summary": "Fetched both Abbree AR-8118 CPS packages (UV dual band + GMRS); outer 8118.exe in the dual-band RAR is Synaptics/XRed-infected (not run; clean inner copy used). Static Ghidra REA: USB HID (product ASER-471 / vendor 'ASER _HID'), PROGR81 handshake, P3207 identity, R/W 0x10/0x1A frames with 06 ACK, E end; channel-used bitmap 0x0000, 26-byte records at 0x1000+(n//31)*0x1000+(n%31)*0x1A, Hz u32 freqs, CTCSS Hz*10 / DCS 0x2800+octal. Desktop has no HID transport yet; Web Programmer has WebHID. Static evidence only."
+}
