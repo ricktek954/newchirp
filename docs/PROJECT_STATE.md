@@ -1,12 +1,95 @@
 # NewChirp Project State
 
-Last updated: 2026-11-26
+Last updated: 2026-11-27
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
 release requirements.
 
 ## Resume here
+
+### macOS session handoff, 2026-11-27 (before a reboot)
+
+Released: macOS `1.0.76` and Windows `1.0.76`. The website matches
+`022980f`; the bundle `index-UeTE45j-.js` went live at
+`03:39`. Desktop and web are committed and pushed. All support mail has been
+answered except one forum notification (UID 1048).
+
+Fixed since 1.0.76. These are in `main` and the Web Programmer, but not yet
+in a desktop build:
+
+- TK-350 5 kHz channels, item `w-20261127-edf2`, commit `a029606e7`.
+  - The step size is set by record byte 13: bit 5 for RX and bit 6 for TX.
+    Set means 6.25 kHz; clear means 5 kHz, with anchors `8C5E` (RX) and
+    `AF90` (TX). This was confirmed by loading records into KPG-23D in QEMU.
+  - Owner Paul's channel 114 was a 5 kHz channel. NewChirp 1.0.76 wrote
+    6.25 kHz words into it, so the radio sits on 353.020 / 344.010 and will
+    not transmit.
+  - He has been sent the steps to repair it in the Web Programmer.
+  - His other writes worked: about 12 writes on 1.0.76, and the radio
+    receives and transmits.
+  - Graduate the TK-350 when he confirms channel 114 reads back and
+    transmits after a power cycle (`docs/DRIVER_STATUS.md` row).
+- UV-5RM Pro handshake, item `w-20261125-2905`, commit `3287cf9d4`.
+  - CPS v1.12 skips bytes that are not seed^'A' after the sync. The radio
+    answered "N" (0x4E) to both sync forms.
+  - NewChirp now waits up to 1 s for the acknowledgement and skips stray
+    bytes. This is still a hypothesis; Kaloyan has been asked to retest in
+    the Web Programmer.
+- Quansheng TK11 upload opens its own session (`e1d4ce671`). Earlier fixes in
+  `main` after 1.0.76 include the per-channel decode and the image-attach
+  work; check `git log` since `026cd8fc7`.
+
+Waiting on owners:
+
+- Paul (TK-350): repair and read-back of channel 114.
+- Paul (TK-359): his image is in the ledger (`w-20261126-95c9`, image SHA
+  `2c3bb88f...`). Writing stays off. The image has 22 site channels whose
+  names look byte-reversed (NEPO = OPEN). Next step: compare these records
+  with the decoder.
+- Kaloyan: UV-5RM Pro retest.
+- TK11 owner (`w-20261126-0461`) and Ferrite owner (`w-20261126-8d5d`).
+- Mike: Abbree AR8118 label and cable when the radio arrives
+  (`w-20261126-044a`). The OEM CPS is on abbree.com/pages/abbree and has not
+  been fetched yet.
+- Bill: KPG-49 software is coming by another mail account; not received yet
+  (`w-20261126-565d`).
+- Milan: Windows SmartScreen download (#91). FAQ `#windows-smartscreen` was
+  added.
+- Del: Android app cannot see his Tidradio Bluetooth adapter after pairing
+  it in Android settings (`w-20261127-31d2`). He was told to forget the
+  adapter in Android settings and connect from the app.
+  - Proposed mobile fix, not started: also list devices the system already
+  has connected (`UniversalBle.getSystemDevices`) in
+  `lib/services/ble_radio_service.dart`.
+
+Open tasks:
+
+- Forum topic 56, post 218 (emmett, Yaesu FT-2900 "header" error,
+  `w-20261127-b76c`): the reply is drafted but not posted, because there is
+  no posting tool and production `data/` must not be written. Rick posts it.
+  Draft text: ask whether the label says FT-2900R or FT-2900E and whether the
+  radio is TX-modified (try "FT-2900R/1900R(TXMod)"), then ask for the
+  report from the error's "Submit Bug Report" button.
+  - Stock `ft2900` accepts only one 10-byte ID. CHIRP leaves the FT-2900E
+    class (`...41 02...`) unregistered. A possible NewChirp overlay would
+    accept the R, E and Mod IDs and reuse the received ID on upload.
+- TK-350: adding channels to empty slots is still refused. Trace the
+  KPG-23D defaults for a new channel; the scan bitmap is near `0x0D40`.
+  - Byte 12 options are known: power bits 7-6, shift bit 5, busy bit 4.
+  - Typing into an empty row in KPG-23D under QEMU kept going to the
+    Transmit column. Crafting `.U1F` files and loading them works better
+    (the VM must be restarted to see new files).
+- Next macOS release is `1.0.77` (platform versions are independent). Build
+  it when Rick asks, to ship the fixes above to desktop users.
+
+Session tools:
+
+- Mail scripts are in the session scratchpad and in web `ops/support/`.
+  Reply drafts used this session are in the scratchpad `replies/` folder,
+  which a reboot may clear.
+- KPG-23D test files are in the scratchpad `k3/`. The QEMU harness is in
+  `tools/rea/qemu_dos/` (local only).
 
 - Linux `1.0.78` is live from source commit `3d16733f`. It decodes channels
   one at a time and reports undecodable slots instead of failing the entire
