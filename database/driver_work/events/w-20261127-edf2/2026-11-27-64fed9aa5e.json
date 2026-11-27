@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:28:38",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:a029606e7",
+  "item": "w-20261127-edf2",
+  "occurred_at": "2026-11-27",
+  "summary": "Decode/encode TK-350 RX/TX by byte 13 step bits; edits keep or set the step the frequency needs (desktop + Web Programmer, offline-tested)"
+}

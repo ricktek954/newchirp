@@ -475,6 +475,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261126-dc72 bug | pending_validation | high:** Full read completes but shows 0 channels
   1.0.74 read the whole image from the owner's TK-350 but every slot showed empty. The driver hid channels outside 450-470 MHz. KPG-23D files saved in QEMU for 450-470 (sample.u1f) and 400-430 MHz (sample.u4f) prove the word encoding is band-independent; the band digit sits at 0x0D05 (P350n). Fix decodes all UHF bands; Web Programmer updated.
   Source: `email` mailbox:UID 1011
+- **#w-20261127-edf2 bug | fix_committed | high:** 5 kHz channels decoded and written as 6.25 kHz (edited ch114 will not transmit)
+  Owner's 1.0.76 write of ch114 to 430.0125 left the radio on 353.020/344.010: record byte 13 bits 5 (RX) / 6 (TX) select 6.25 vs 5 kHz steps and ch114 is a 5 kHz channel (80). NewChirp ignored the bits. Channel 121 add refused as designed; CSV re-import refused (no tones).
+  Source: `email` mailbox:UID 1055,1056
 - **#15 maintenance | experimental | normal:** Current driver status
   Transport: KPG-23D clone serial, 9600 8N1, 0xF000 addressed blocks. Read: Yes, offline-tested. Write: Disabled. Settings: Hidden. Ledger status: Experimental read-only.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:39
