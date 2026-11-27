@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-27 08:28:18",
+  "kind": "bug",
+  "manufacturer": "Kenwood",
+  "model": "TK-350",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1055,1056",
+  "status": "investigating",
+  "summary": "Owner's 1.0.76 write of ch114 to 430.0125 left the radio on 353.020/344.010: record byte 13 bits 5 (RX) / 6 (TX) select 6.25 vs 5 kHz steps and ch114 is a 5 kHz channel (80). NewChirp ignored the bits. Channel 121 add refused as designed; CSV re-import refused (no tones).",
+  "title": "5 kHz channels decoded and written as 6.25 kHz (edited ch114 will not transmit)",
+  "uid": "w-20261127-edf2"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:28:24",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1056",
+  "item": "w-20261127-edf2",
+  "occurred_at": "2026-11-27",
+  "summary": "1.0.76 Windows: ~12 TK-350 writes completed; radio works, other channels RX and TX; edited ch114 (430.0125) does not transmit; ch121 add refused; CSV import refused on tones; two writes got no identity until retried (radio needs power cycle between sessions)"
+}

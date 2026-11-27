@@ -510,6 +510,72 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         radio.status_fn = lambda _status: None
         return radio
 
+    def _tk350_records(self, *records):
+        image = bytearray(self._tk350_image())
+        image[0:CHANNEL_SIZE * 2] = b"\xFF" * (CHANNEL_SIZE * 2)
+        for number, record in enumerate(records, 1):
+            image[(number - 1) * CHANNEL_SIZE:number * CHANNEL_SIZE] = (
+                bytes.fromhex(record))
+        return self._radio_from_image(self.tk350, bytes(image))
+
+    def test_tk350_step_bits_match_kpg23d_display(self):
+        # Records loaded into KPG-23D 1.01 (QEMU, 2026-11-27) and read off
+        # its channel screen: byte 13 bit 5 = RX 6.25 kHz, bit 6 = TX.
+        radio = self._tk350_records(
+            "5a534069ffffffff20204120ffe0ffff",   # 460.01250 450.00000
+            "5a534069ffffffff20204220ffa0ffff",   # 460.01250 360.00000
+            "5a534069ffffffff20204320ffc0ffff",   # 377.02000 450.00000
+            "5a534069ffffffff20204420ff80ffff",   # 377.02000 360.00000
+            # Owner's ch114 as first read (mailbox UID 1055 history):
+            "6c7b8ea4ffffffff4f323020ff80ffff",   # 428.31000 435.91000
+            # ... after the 1.0.76 edit wrote 6.25 kHz words (UID 1056):
+            "9a40c25cffffffff34393920ff80ffff",   # 353.02000 344.01000
+            "9a40c25cffffffff34393920ffe0ffff",   # 430.01250 430.01250
+        )
+        expected = [(460_012_500, 450_000_000), (460_012_500, 360_000_000),
+                    (377_020_000, 450_000_000), (377_020_000, 360_000_000),
+                    (428_310_000, 435_910_000), (353_020_000, 344_010_000),
+                    (430_012_500, 430_012_500)]
+        for number, (rx, tx) in enumerate(expected, 1):
+            memory = radio.get_memory(number)
+            shown_tx = memory.freq + {"+": 1, "-": -1, "": 0}[
+                memory.duplex] * memory.offset
+            self.assertEqual((memory.freq, shown_tx), (rx, tx), number)
+
+    def test_tk350_edit_sets_the_step_bits_the_frequency_needs(self):
+        radio = self._tk350_records(
+            "6c7b8ea4ffffffff4f323020ff80ffff",   # 5 kHz both, 428.31/435.91
+            "78420000ffffffff53553136ffe0ffff",   # 6.25 kHz both
+        )
+        radio.get_memory(2)  # decodes
+        # 430.0125 only fits 6.25 kHz: both bits get set (the owner's bug).
+        memory = radio.get_memory(1)
+        memory.freq, memory.duplex, memory.offset = 430_012_500, "", 0
+        radio.set_memory(memory)
+        record = radio._mmap.get_packed()[0:16]
+        self.assertEqual(record[13], 0xE0)
+        self.assertEqual(record[0:4].hex(), "9a40c25c")
+        self.assertEqual(radio.get_memory(1).freq, 430_012_500)
+        # 428.310 only fits 5 kHz: both bits cleared, other bits kept.
+        memory = radio.get_memory(1)
+        memory.freq, memory.duplex, memory.offset = (
+            428_310_000, "+", 7_600_000)
+        radio.set_memory(memory)
+        record = radio._mmap.get_packed()[0:16]
+        self.assertEqual(record[13], 0x80)
+        self.assertEqual(record[0:4].hex(), "6c7b8ea4")
+        # 433.000 fits both: a 5 kHz channel stays 5 kHz.
+        memory = radio.get_memory(1)
+        memory.freq, memory.duplex, memory.offset = 433_000_000, "", 0
+        radio.set_memory(memory)
+        record = radio._mmap.get_packed()[0:16]
+        self.assertEqual(record[13], 0x80)
+        self.assertEqual(radio.get_memory(1).freq, 433_000_000)
+        # A frequency fitting neither step is refused.
+        memory.freq = 433_001_000
+        with self.assertRaisesRegex(Exception, "5 or 6.25 kHz"):
+            radio.set_memory(memory)
+
     def test_tk350_tones_decode_from_kpg23d_values(self):
         image = bytearray(b"\xFF" * MEM_SIZE)
         base = bytearray(self.TK350_U1F_CH1)

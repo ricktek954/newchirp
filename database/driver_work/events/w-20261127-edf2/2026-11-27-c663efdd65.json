@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-27 08:28:25",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "docs/KPG23_PROTOCOL.md",
+  "item": "w-20261127-edf2",
+  "occurred_at": "2026-11-27",
+  "summary": "KPG-23D 1.01 in QEMU: records with byte 13 E0/A0/C0/80 display RX 535A as 460.0125/377.020 and TX 6940 as 450.000/360.000; owner's original ch114 = 428.310/435.910 (+7.6, like ch111-113), edited = 353.020/344.010. Byte 12: power bits 7-6, shift bit 5, busy bit 4; scan bitmap near 0x0D40"
+}

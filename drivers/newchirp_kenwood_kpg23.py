@@ -50,6 +50,16 @@ RX_BASE_450 = 0x4D18
 TX_BASE_450 = 0x6940
 FREQUENCY_BASE = 450_000_000
 FREQUENCY_STEP = 6_250
+# TK-350 record byte 13: bit 5 set = RX word counts 6.25 kHz steps, clear =
+# 5 kHz; bit 6 is the same for TX (KPG-23D 1.01 shows RX 535A as 460.0125
+# with the bit set and 377.020 with it clear; TX 6940 as 450.000 / 360.000).
+# The 5 kHz words use their own 450 MHz anchors.
+STEP_OPTION_OFFSET = 13
+RX_STEP_BIT = 0x20
+TX_STEP_BIT = 0x40
+RX_BASE_450_5K = 0x8C5E
+TX_BASE_450_5K = 0xAF90
+STEP_5K = 5_000
 
 # KPG-23D UHF band choices for the TK-350, keyed by the digit after "P350"
 # at image offset 0x0D00 (sample.u1f = "P3501", sample.u4f = "P3504").
@@ -578,11 +588,38 @@ def _kpg32_upload(radio):
         bytes(image)).decode("ascii")
 
 
-def _frequency(word, anchor):
+def _frequency(word, anchor, step=FREQUENCY_STEP):
     steps = (word - anchor) & 0xFFFF
     if steps & 0x8000:
         steps -= 0x10000
-    return FREQUENCY_BASE + steps * FREQUENCY_STEP
+    return FREQUENCY_BASE + steps * step
+
+
+def _tk350_step(options, bit, base_625, base_5k):
+    """(step, anchor) for a TK-350 RX or TX word from record byte 13."""
+    if options & bit:
+        return FREQUENCY_STEP, base_625
+    return STEP_5K, base_5k
+
+
+def _tk350_word(frequency, prefer_625, base_625, base_5k):
+    """Encode a frequency, keeping the channel's step when it fits.
+
+    Returns (word, uses_625). A frequency that is a multiple of both steps
+    keeps the step the channel already had, so untouched bytes stay the
+    same; otherwise the step that can hold it is chosen.
+    """
+    fits_625 = frequency % FREQUENCY_STEP == 0
+    fits_5k = frequency % STEP_5K == 0
+    if not (fits_625 or fits_5k):
+        return None, None
+    use_625 = fits_625 and (prefer_625 or not fits_5k)
+    step, anchor = ((FREQUENCY_STEP, base_625) if use_625
+                    else (STEP_5K, base_5k))
+    word = (anchor + (frequency - FREQUENCY_BASE) // step) & 0xFFFF
+    if _frequency(word, anchor, step) != frequency:
+        return None, None
+    return word, use_625
 
 
 def _channel_record(image, number):
@@ -762,7 +799,9 @@ class _KenwoodKPG23Base(
         # The encoding is the same for every UHF band (checked against
         # KPG-23D files for 450-470 and 400-430 MHz), so channels are shown
         # whatever band the radio is.
-        memory.freq = _frequency(rx_word, RX_BASE_450)
+        options = record[STEP_OPTION_OFFSET]
+        rx_step, rx_anchor = self._rx_step(options)
+        memory.freq = _frequency(rx_word, rx_anchor, rx_step)
         low, high = PLAUSIBLE_UHF
         if not low <= memory.freq < high:
             memory.empty = True
@@ -782,7 +821,8 @@ class _KenwoodKPG23Base(
             memory.name = _decode_name(record[8:12])
             memory.mode = "NFM"
             return memory
-        tx_frequency = _frequency(tx_word, TX_BASE_450)
+        tx_step, tx_anchor = self._tx_step(options)
+        tx_frequency = _frequency(tx_word, tx_anchor, tx_step)
         offset = tx_frequency - memory.freq
         if offset > 0:
             memory.duplex = "+"
@@ -796,6 +836,14 @@ class _KenwoodKPG23Base(
         memory.name = _decode_name(record[8:12])
         memory.mode = "NFM"
         return memory
+
+    @staticmethod
+    def _rx_step(options):
+        return _tk350_step(options, RX_STEP_BIT, RX_BASE_450, RX_BASE_450_5K)
+
+    @staticmethod
+    def _tx_step(options):
+        return _tk350_step(options, TX_STEP_BIT, TX_BASE_450, TX_BASE_450_5K)
 
     @staticmethod
     def _decode_tones(memory, record):
@@ -854,22 +902,27 @@ class _KenwoodKPG23Base(
             raise errors.RadioError(
                 "Changing TK-350 tones is not supported yet; the channel's "
                 "existing tones are kept when you change its frequency.")
-        for frequency in (memory.freq, self._tx_frequency(memory)):
-            if frequency is not None and frequency % FREQUENCY_STEP:
-                raise errors.RadioError(
-                    "%s frequencies must be multiples of 6.25 kHz"
-                    % self.MODEL)
-        rx_word = (RX_BASE_450 + (memory.freq - FREQUENCY_BASE)
-                   // FREQUENCY_STEP) & 0xFFFF
-        tx = self._tx_frequency(memory)
-        tx_word = 0xFFFF if tx is None else (
-            TX_BASE_450 + (tx - FREQUENCY_BASE) // FREQUENCY_STEP) & 0xFFFF
-        if _frequency(rx_word, RX_BASE_450) != memory.freq or (
-                tx is not None and _frequency(tx_word, TX_BASE_450) != tx):
-            raise errors.RadioError(
-                "%s cannot store %i Hz" % (self.MODEL, memory.freq))
         offset = (memory.number - 1) * CHANNEL_SIZE
+        options = self._mmap.get_packed()[offset + STEP_OPTION_OFFSET]
+        rx_word, rx_625 = _tk350_word(
+            memory.freq, bool(options & RX_STEP_BIT),
+            RX_BASE_450, RX_BASE_450_5K)
+        tx = self._tx_frequency(memory)
+        tx_word, tx_625 = 0xFFFF, bool(options & TX_STEP_BIT)
+        if tx is not None:
+            tx_word, tx_625 = _tk350_word(
+                tx, tx_625, TX_BASE_450, TX_BASE_450_5K)
+        for frequency, word in ((memory.freq, rx_word), (tx, tx_word)):
+            if frequency is not None and word is None:
+                raise errors.RadioError(
+                    "%s cannot store %.4f MHz: frequencies must be "
+                    "multiples of 5 or 6.25 kHz"
+                    % (self.MODEL, frequency / 1e6))
+        options &= ~(RX_STEP_BIT | TX_STEP_BIT) & 0xFF
+        options |= (RX_STEP_BIT if rx_625 else 0) | (
+            TX_STEP_BIT if tx_625 else 0)
         self._mmap[offset] = struct.pack("<HH", rx_word, tx_word)
+        self._mmap[offset + STEP_OPTION_OFFSET] = bytes([options])
         # Names: four characters, space padded like KPG-23D ("CH1 ").
         name = (memory.name or "").upper()[:4].ljust(4)
         self._mmap[offset + 8] = name.encode("ascii", "replace")

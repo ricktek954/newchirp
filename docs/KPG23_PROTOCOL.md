@@ -201,6 +201,18 @@ the CPS's own sample files.
 - 160 channel records of 16 bytes from offset 0; name: four ASCII bytes at
   record offset `0x08` (KPG-23D pads with spaces on both sides, e.g. `  1 `).
 - Erased slot: RX/TX words `FFFF` (option byte 13 stays `E0`).
+- Option byte 12 (KPG-23D 1.01, options toggled and saved in QEMU
+  2026-11-27): `FF` default; Power Med clears bit 6; Busy lockout Yes
+  clears bit 4; Shift Yes clears bit 5. Signal DTMF clears bit 15 of the
+  decode QT word. Scan Del is a bitmap near `0x0D40` (ch1 = bit 0 of
+  `0x0D40`), not in the record.
+- Option byte 13, step size: bit 5 set = RX word counts 6.25 kHz steps,
+  clear = 5 kHz; bit 6 the same for TX; bit 7 always set. Records loaded
+  into KPG-23D show RX `535A` as 460.0125 (bit set) / 377.020 (clear) and
+  TX `6940` as 450.000 / 360.000, so the 5 kHz anchors at 450 MHz are RX
+  `8C5E` and TX `AF90`. An owner's TK-350 had channel 114 at `80`
+  (428.310 / 435.910); NewChirp 1.0.76 wrote 6.25 kHz words into it and the
+  radio received/transmitted on 353.020 / 344.010 instead of 430.0125.
 - QT tones: little-endian words at record `+4` (Decode, receive) and `+6`
   (Encode, transmit). Bits 15-14 set = CTCSS, bits 13-0 = Hz x 10
   (`e8 c3` 100.0, `55 c4` 110.9, `07 c7` 179.9 in the KPG-23D samples);
@@ -222,7 +234,7 @@ rx_word = u16le(record[0:2])
 tx_word = u16le(record[2:4])
 ```
 
-The words encode frequency in 6.25 kHz steps, the same for every UHF band
+With byte 13 bits 5/6 set, the words encode frequency in 6.25 kHz steps, the same for every UHF band
 (450-470 and 400-430 MHz files both decode with these anchors):
 
 ```text
@@ -230,6 +242,9 @@ RX steps = signed16(rx_word - 0x4D18)
 TX steps = signed16(tx_word - 0x6940)
 frequency = 450000000 + steps * 6250
 ```
+
+With the bit clear (5 kHz): `steps = signed16(word - 0x8C5E)` (RX) or
+`signed16(word - 0xAF90)` (TX), `frequency = 450000000 + steps * 5000`.
 
 KPG-23D-saved values:
 

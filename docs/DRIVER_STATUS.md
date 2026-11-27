@@ -47,7 +47,7 @@ Last updated: 2026-11-20
 | Kenwood TS-2000 | `drivers/newchirp_ts2000.py` | Kenwood live CAT serial, 9600 8N1 + RTS | Yes | Yes, longer write timeout | Standard | Hardware read verified; write retest pending |
 | Kenwood TH-D75 | `drivers/newchirp_thd75.py` | Kenwood clone CAT serial, 9600-57,600 baud | Yes, echo-tolerant | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Kenwood TK-3401D | `drivers/newchirp_kenwood_tk3401d.py` | KPG-171D clone serial, 9600 then 19200 baud | Yes, provisional record scan | Disabled | Hidden | Experimental |
-| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes; owner's TK-350 reads 120 channels, 116 matching his UK 70 cm plan exactly (2026-11-26) | Experimental: traced KPG-23D write, existing channels only, awaiting a physical write/read-back | Hidden | Experimental |
+| Kenwood TK-350 | `drivers/newchirp_kenwood_kpg23.py` | KPG-23D clone serial, 4800 8N2, DTR on and RTS only while sending (BIOS INT 14h), 6-byte identity, 28 × 128-byte blocks from 0xF000, no exit command (KPG-23D 1.01 QEMU trace 2026-11-26) | Yes; owner's TK-350 reads 120 channels, 116 matching his UK 70 cm plan exactly (2026-11-26) | Experimental: traced KPG-23D write, existing channels only; owner's 1.0.76 writes completed on the radio (2026-11-27), 5 kHz channel encoding fixed after, awaiting a read-back of the fix | Hidden | Experimental |
 | Kenwood TK-359 | `drivers/newchirp_kenwood_kpg23.py` | KPG-32D clone serial, 9600 8N2, BIOS INT 14h lines, `PROGRAM`, 8-byte identity checked like the CPS, `S`/`X` blocks at 0x03AC00+offset with sum8 and NAK retry, `Z` + one fill byte for uniform blocks, `E` exit (KPG-32D 1.00 QEMU trace 2026-11-26) | Owner's TK-359 handshakes and answers with `Z` fill blocks (2026-11-26); `Z` handling and 32-byte records at 0x3400 added afterwards, not yet confirmed on hardware | Disabled | Hidden | Experimental read-only |
 | Kenwood TK-863G | `drivers/newchirp_kenwood_tk863g.py` | KPG-76D clone serial, 9600 8N2 with OEM baud fallback | 128 channels + full 32 KiB image, offline-tested | Disabled | Hidden | Experimental read-only |
 | Quansheng TK11 / TK11(8) | Pinned CHIRP `tk11.py` with `drivers/newchirp_tk11_upload.py` | Quansheng framed serial, 38400 8N1 | Stock CHIRP decode; owner read on firmware 5.00.18 | Upload opens its own session like the CPS, checks each block, reboots | Stock CHIRP policy | Stock driver with NewChirp upload fix; write not yet confirmed |
@@ -2049,12 +2049,22 @@ Last updated: 2026-11-20
   behaviour. TK-350 writing enabled 2026-11-26 (desktop and Web
   Programmer) for a controlled owner test: edit one existing channel, write,
   power-cycle, read back. The TK-359 stays gated.
+- Hardware (2026-11-27, desktop 1.0.76, mailbox UIDs 1055/1056): the owner
+  wrote his TK-350 about a dozen times; the radio kept working and the other
+  channels receive and transmit. His edited channel 114 did not transmit:
+  it is a 5 kHz channel (record byte 13 = `80`), which NewChirp decoded and
+  re-encoded as 6.25 kHz. KPG-23D 1.01 (records loaded in QEMU) shows byte
+  13 bit 5 = RX 6.25 kHz / clear 5 kHz and bit 6 the same for TX, with 5 kHz
+  anchors `8C5E` (RX) and `AF90` (TX) at 450 MHz; channel 114 was 428.310 /
+  435.910 and the edit stored 353.020 / 344.010. Fixed in desktop and Web
+  Programmer: decode by the bits, encode keeping the channel's step when the
+  frequency fits it, otherwise setting the bits for the step it needs.
 - Known limitations: TK-350 CTCSS tones are decoded (QT words at record +4
   decode / +6 encode, 0xC000 + Hz x 10) and kept on frequency edits, but
-  tone changes, DQT, power, scan and settings are not supported; the
-  owner's channels 111-120 are marked receive-only on his paper list while
-  NewChirp shows a TX offset, so the TK-350 receive-only flag is still
-  unknown; TK-359 writing is disabled.
+  tone changes, DQT, power (byte 12 bits 7-6), busy lockout (byte 12 bit 4),
+  shift (byte 12 bit 5), signalling, scan (bitmap near 0x0D40) and settings
+  are not supported; adding channels to empty slots is refused until the
+  CPS's new-channel defaults are traced; TK-359 writing is disabled.
 - Next milestone: the owner reads both radios with the Web Programmer or the
   next release and compares the channel list with the radio; the saved
   images confirm the band record and option bytes
