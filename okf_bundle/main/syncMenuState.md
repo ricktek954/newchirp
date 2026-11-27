@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _syncMenuState
+description: Tells the native menu whether Undo and Redo are available.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/syncMenuState
 language: dart
 ---
 
 # _syncMenuState
+
+Tells the native menu whether Undo and Redo are available.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_syncMenuState()
 ```
 
+## Docstring
+
+Tells the native menu whether Undo and Redo are available.
+
 ## Source
-Lines 1321–1321 in `main.dart`
+Lines 1376–1376 in `main.dart`
 
 ## Relationships
 

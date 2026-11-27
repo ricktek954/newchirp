@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _handleFocusChange
+description: "On leaving the box, puts back the formatted value if the text isn't that number."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/handleFocusChange
 language: dart
 ---
 
 # _handleFocusChange
+
+On leaving the box, puts back the formatted value if the text isn't that number.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_handleFocusChange()
 ```
 
+## Docstring
+
+On leaving the box, puts back the formatted value if the text isn't that number.
+
 ## Source
-Lines 12128–12128 in `main.dart`
+Lines 12391–12391 in `main.dart`
 
 ## Relationships
 

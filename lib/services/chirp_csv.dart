@@ -27,6 +27,7 @@ class ChirpCsv {
     'DVCODE',
   ];
 
+  /// CHIRP-format CSV text for [channels] (CHIRP's column names and order).
   static String encode(List<RadioChannel> channels) {
     final rows = <List<Object?>>[
       headers,
@@ -65,6 +66,9 @@ class ChirpCsv {
   static List<RadioChannel> decodeBytes(List<int> bytes) =>
       decode(decodeText(bytes));
 
+  /// Turns file bytes into text. Honors a UTF-16 or UTF-8 byte-order mark (BOM,
+  /// the first bytes FF FE / FE FF / EF BB BF); otherwise tries UTF-8 and falls back
+  /// to Windows-1252 (what Excel often saves).
   static String decodeText(List<int> bytes) {
     if (bytes.length >= 2 && bytes[0] == 0xFF && bytes[1] == 0xFE) {
       return _utf16(bytes.sublist(2), littleEndian: true);
@@ -85,6 +89,7 @@ class ChirpCsv {
     }
   }
 
+  /// Decodes UTF-16 by joining byte pairs in the given byte order.
   static String _utf16(List<int> bytes, {required bool littleEndian}) {
     final units = <int>[];
     for (var i = 0; i + 1 < bytes.length; i += 2) {
@@ -105,10 +110,14 @@ class ChirpCsv {
     0x02DC, 0x2122, 0x0161, 0x203A, 0x0153, 0x9D, 0x017E, 0x0178, //
   ];
 
+  /// Windows-1252: like Latin-1 except bytes 0x80-0x9F, which map to characters
+  /// such as curly quotes and the euro sign (table [_cp1252High]).
   static String _windows1252(List<int> bytes) => String.fromCharCodes(
     bytes.map((b) => b >= 0x80 && b <= 0x9F ? _cp1252High[b - 0x80] : b),
   );
 
+  /// Parses CHIRP-style CSV text into channels. Needs a "Frequency" column; other
+  /// columns are optional and get CHIRP's defaults.
   static List<RadioChannel> decode(String source) {
     if (source.startsWith('\uFEFF')) source = source.substring(1);
     final rows = _parse(source, _delimiter(source));
@@ -124,17 +133,22 @@ class ChirpCsv {
       );
     }
     int col(String name) => names.indexOf(name);
+    /// Trimmed cell [name] of [row], or [fallback] when the column is missing.
     String value(List<String> row, String name, [String fallback = '']) {
       final index = col(name);
       return index >= 0 && index < row.length ? row[index].trim() : fallback;
     }
 
+    /// Cell as a number, or [fallback] if empty or not a number.
     double number(List<String> row, String name, double fallback) =>
         double.tryParse(value(row, name)) ?? fallback;
+    /// Cell as an integer, or [fallback] if empty or not an integer.
     int integer(List<String> row, String name, int fallback) =>
         int.tryParse(value(row, name)) ?? fallback;
+    /// [text], or [fallback] when it is empty.
     String nonEmpty(String text, String fallback) =>
         text.isEmpty ? fallback : text;
+    /// DTCS polarity ("NN", "NR", ...); defaults to "NN" (normal both ways).
     String dtcsPolarity(List<String> row) {
       final polarity = value(row, 'DtcsPolarity', 'NN').toUpperCase();
       return polarity.isEmpty ? 'NN' : polarity;
@@ -165,6 +179,7 @@ class ChirpCsv {
     }).toList();
   }
 
+  /// Quotes a CSV field when it holds a comma, quote or line break (quotes are doubled).
   static String _escape(Object? value) {
     final text = value?.toString() ?? '';
     if (!text.contains(RegExp('[,"\r\n]'))) return text;
@@ -182,6 +197,8 @@ class ChirpCsv {
     return ',';
   }
 
+  /// Splits CSV text into rows and fields, handling quoted fields with embedded
+  /// separators, doubled quotes and line breaks.
   static List<List<String>> _parse(String source, [String delimiter = ',']) {
     final rows = <List<String>>[];
     var row = <String>[];

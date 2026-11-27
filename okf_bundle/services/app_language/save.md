@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: save
+description: "Saves the choice. Failures are ignored: the language just won't be remembered."
 resource: services/app_language.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:app_language.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:07:35Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/app_language/save
 language: dart
 ---
 
 # save
+
+Saves the choice. Failures are ignored: the language just won't be remembered.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Futuresavesave
 ```
 
+## Docstring
+
+Saves the choice. Failures are ignored: the language just won't be remembered.
+
 ## Source
-Lines 46–46 in `services/app_language.dart`
+Lines 49–49 in `services/app_language.dart`
 
 ## Relationships
 

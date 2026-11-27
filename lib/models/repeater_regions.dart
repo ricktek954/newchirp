@@ -222,6 +222,7 @@ const repeaterMexicoRegions = <String>[
   'Zacatecas',
 ];
 
+/// States/provinces offered for a country, or just "All" where the search has no regions.
 List<String> repeaterRegionsForCountry(String country) {
   return switch (country) {
     'United States' => repeaterUnitedStatesRegions,
@@ -231,6 +232,7 @@ List<String> repeaterRegionsForCountry(String country) {
   };
 }
 
+/// County name without suffixes like " County" or " census area", so different sources match.
 String normalizeRepeaterCounty(String county) {
   var normalized = county.trim();
   for (final suffix in const [
@@ -255,6 +257,7 @@ String normalizeRepeaterCounty(String county) {
   return normalized;
 }
 
+/// Counties to offer for [region]: the built-in list plus any counties found in loaded results.
 List<String> repeaterCountiesForRegion(
   String country,
   String region,

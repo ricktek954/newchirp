@@ -10,7 +10,7 @@ tags:
   - "domain:channel_list_pdf.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:22Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: services/channel_list_pdf/write
 language: dart
 ---
@@ -24,7 +24,7 @@ voidwrite(String text)
 ```
 
 ## Source
-Lines 412–412 in `services/channel_list_pdf.dart`
+Lines 422–422 in `services/channel_list_pdf.dart`
 
 ## Relationships
 

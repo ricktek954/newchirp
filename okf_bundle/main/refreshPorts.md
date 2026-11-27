@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _refreshPorts
+description: Refreshes the list of serial ports and USB radios.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/refreshPorts
 language: dart
 ---
 
 # _refreshPorts
+
+Refreshes the list of serial ports and USB radios.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_refreshPorts_refreshPorts
 ```
 
+## Docstring
+
+Refreshes the list of serial ports and USB radios.
+
 ## Source
-Lines 1535–1535 in `main.dart`
+Lines 1601–1601 in `main.dart`
 
 ## Relationships
 

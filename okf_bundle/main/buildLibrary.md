@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildLibrary
+description: "Channel library page: metrics, image status, toolbar and the channel table."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildLibrary
 language: dart
 ---
 
 # _buildLibrary
+
+Channel library page: metrics, image status, toolbar and the channel table.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_buildLibrary()
 ```
 
+## Docstring
+
+Channel library page: metrics, image status, toolbar and the channel table.
+
 ## Source
-Lines 5238–5238 in `main.dart`
+Lines 5403–5403 in `main.dart`
 
 ## Relationships
 

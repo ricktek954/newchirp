@@ -11,7 +11,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:13:56Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/clearedLocationsAfterReplacement
 language: dart
 ---
@@ -35,7 +35,7 @@ list must be erased from the radio on upload. Explicit clears remain unless
 the replacement puts a channel in that slot.
 
 ## Source
-Lines 52–56 in `models/channel_image_baseline.dart`
+Lines 54–58 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

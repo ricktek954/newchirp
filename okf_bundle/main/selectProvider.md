@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _selectProvider
+description: "Switches between RepeaterBook and myGMRS, cancelling a pending sign-in."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/selectProvider
 language: dart
 ---
 
 # _selectProvider
+
+Switches between RepeaterBook and myGMRS, cancelling a pending sign-in.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_selectProvider(_RepeaterProvider provider)
 ```
 
+## Docstring
+
+Switches between RepeaterBook and myGMRS, cancelling a pending sign-in.
+
 ## Source
-Lines 8930–8930 in `main.dart`
+Lines 9151–9151 in `main.dart`
 
 ## Relationships
 

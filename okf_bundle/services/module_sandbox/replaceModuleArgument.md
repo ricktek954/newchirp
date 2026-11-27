@@ -2,20 +2,23 @@
 okf_version: "0.2"
 type: Function
 title: replaceModuleArgument
+description: "Copy of the helper's arguments with the --module path replaced by [modulePath]."
 resource: services/module_sandbox.dart
 tags:
   - "lang:dart"
   - "type:Function"
   - "module:services"
   - "domain:module_sandbox.dart"
-  - "git:branch:release/1.0.55"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T12:28:35Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: services/module_sandbox/replaceModuleArgument
 language: dart
 ---
 
 # replaceModuleArgument
+
+Copy of the helper's arguments with the --module path replaced by [modulePath].
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 ListreplaceModuleArgumentreplaceModuleArgument
 ```
 
+## Docstring
+
+Copy of the helper's arguments with the --module path replaced by [modulePath].
+
 ## Source
-Lines 198–198 in `services/module_sandbox.dart`
+Lines 210–210 in `services/module_sandbox.dart`
 
 ## Relationships
 

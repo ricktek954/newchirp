@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _printChannelList
+description: Builds a PDF of the channel list and sends it to the printer (or a PDF viewer).
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/printChannelList
 language: dart
 ---
 
 # _printChannelList
+
+Builds a PDF of the channel list and sends it to the printer (or a PDF viewer).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_printChannelList_printChannelList
 ```
 
+## Docstring
+
+Builds a PDF of the channel list and sends it to the printer (or a PDF viewer).
+
 ## Source
-Lines 5861–5861 in `main.dart`
+Lines 6028–6028 in `main.dart`
 
 ## Relationships
 

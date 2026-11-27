@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:module_sandbox.dart"
-  - "git:branch:release/1.0.55"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T12:28:35Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: services/module_sandbox/isSafeAllowRoot
 language: dart
 ---
@@ -34,7 +34,7 @@ The home folder, its parents, and whole disks are never allow-roots.
 One file under home can still be allowed on its own.
 
 ## Source
-Lines 142–142 in `services/module_sandbox.dart`
+Lines 148–148 in `services/module_sandbox.dart`
 
 ## Relationships
 

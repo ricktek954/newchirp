@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _useGmrsStarter
+description: Loads the 22 GMRS starter channels.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/useGmrsStarter
 language: dart
 ---
 
 # _useGmrsStarter
+
+Loads the 22 GMRS starter channels.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_useGmrsStarter_useGmrsStarter
 ```
 
+## Docstring
+
+Loads the 22 GMRS starter channels.
+
 ## Source
-Lines 2746–2746 in `main.dart`
+Lines 2850–2850 in `main.dart`
 
 ## Relationships
 

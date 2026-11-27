@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: channelLibraryWriteReady
+description: "True when Write may be enabled: not busy, no invalid channels, a port,"
 resource: models/channel_image_baseline.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:13:56Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/channelLibraryWriteReady
 language: dart
 ---
 
 # channelLibraryWriteReady
+
+True when Write may be enabled: not busy, no invalid channels, a port,
 
 ## Signature
 
@@ -30,8 +33,13 @@ boolchannelLibraryWriteReady({
 })
 ```
 
+## Docstring
+
+True when Write may be enabled: not busy, no invalid channels, a port,
+a radio model and an image that was loaded this session.
+
 ## Source
-Lines 139–146 in `models/channel_image_baseline.dart`
+Lines 146–153 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

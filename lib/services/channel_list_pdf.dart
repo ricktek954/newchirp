@@ -25,6 +25,7 @@ const channelListColumns = [
   ChannelListColumn('Comment', 1.95),
 ];
 
+/// Frequency text for the PDF: up to six decimals, never fewer than three.
 String _mhz(double value) {
   // Six decimals, trimmed to at least three: 146.520, 462.5625.
   var text = value.toStringAsFixed(6);
@@ -34,6 +35,7 @@ String _mhz(double value) {
   return text;
 }
 
+/// DCS code as printed, e.g. "D023N".
 String _dcs(int code, String polarity) =>
     'D${code.toString().padLeft(3, '0')}$polarity';
 
@@ -59,6 +61,7 @@ String channelToneSummary(RadioChannel channel) {
   };
 }
 
+/// Tone text for a Cross-mode channel, e.g. "TX 100.0 / RX D023N".
 String _crossSummary(
   RadioChannel channel,
   double? tx,
@@ -69,6 +72,7 @@ String _crossSummary(
   final parts = channel.crossMode.split('->');
   final txKind = parts.isNotEmpty ? parts.first : '';
   final rxKind = parts.length > 1 ? parts.last : '';
+  /// Tone text for one side (transmit or receive) of a Cross mode.
   String side(String kind, {required bool transmit}) => switch (kind) {
     'Tone' =>
       (transmit ? tx : rx)?.toStringAsFixed(1) ??
@@ -128,6 +132,8 @@ const _margin = 36.0;
 const _fontSize = 8.0;
 const _rowHeight = 12.0;
 
+/// Escapes text for a PDF string: backslash and parentheses are escaped,
+/// control characters become spaces, and characters outside Latin-1 become "?".
 String _pdfText(String value) {
   final buffer = StringBuffer();
   for (final rune in value.runes) {
@@ -242,6 +248,8 @@ const _helveticaWidths = [
   584,
 ];
 
+/// Width of [text] in points using Helvetica's built-in metrics (1/1000 em per
+/// character; 556 for characters outside the table). Bold is approximated as 6% wider.
 double _textWidth(String text, double size, {bool bold = false}) {
   var total = 0.0;
   for (final rune in text.runes) {
@@ -251,6 +259,7 @@ double _textWidth(String text, double size, {bool bold = false}) {
   return total * size / 1000;
 }
 
+/// Shortens [text] with "..." until it fits [maxWidth] points.
 String _fit(String text, double maxWidth, {bool bold = false}) {
   if (_textWidth(text, _fontSize, bold: bold) <= maxWidth) return text;
   // A plain "..." because the Unicode ellipsis is outside WinAnsi here.
@@ -283,6 +292,7 @@ Uint8List buildChannelListPdf({
           .floor();
   final pageCount = rows.isEmpty ? 1 : (rows.length / rowsPerPage).ceil();
 
+  /// PDF drawing commands for one table cell (left- or right-aligned text).
   String cellOps(
     String text,
     double x,

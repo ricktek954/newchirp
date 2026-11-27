@@ -18,6 +18,7 @@ class ColumnLayoutStore {
 
   final String _path;
 
+  /// Reads the saved channel-table column order and widths; null when missing or unreadable.
   Future<ColumnLayout?> load() async {
     final file = File(_path);
     if (!await file.exists()) return null;
@@ -45,6 +46,7 @@ class ColumnLayoutStore {
     }
   }
 
+  /// Saves the channel-table column order and widths (file format version 2).
   Future<void> save(ColumnLayout layout) async {
     final file = File(_path);
     await file.parent.create(recursive: true);
@@ -59,6 +61,7 @@ class ColumnLayoutStore {
     );
   }
 
+  /// Settings file in the per-user app data folder for this platform.
   static String _defaultPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';

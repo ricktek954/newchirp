@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:module_sandbox.dart"
-  - "git:branch:release/1.0.55"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-15T12:28:35Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: services/module_sandbox/moduleSandboxRefusal
 language: dart
 ---
@@ -32,7 +32,7 @@ A message when this operating system cannot sandbox a module at all.
 Linux bubblewrap is checked separately because the OS itself can do it.
 
 ## Source
-Lines 96–96 in `services/module_sandbox.dart`
+Lines 97–97 in `services/module_sandbox.dart`
 
 ## Relationships
 

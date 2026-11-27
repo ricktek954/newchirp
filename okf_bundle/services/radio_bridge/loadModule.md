@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: loadModule
+description: Loads a user-supplied CHIRP driver (.py or .mod); it then runs in the module
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/loadModule
 language: dart
 ---
 
 # loadModule
+
+Loads a user-supplied CHIRP driver (.py or .mod); it then runs in the module
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 FutureloadModuleloadModule
 ```
 
+## Docstring
+
+Loads a user-supplied CHIRP driver (.py or .mod); it then runs in the module
+sandbox. Returns the models it adds.
+
 ## Source
-Lines 670–670 in `services/radio_bridge.dart`
+Lines 695–695 in `services/radio_bridge.dart`
 
 ## Relationships
 

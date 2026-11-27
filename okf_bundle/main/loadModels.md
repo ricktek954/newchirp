@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _loadModels
+description: "Loads the radio model catalog from the bridge, after the saved selection is restored."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/loadModels
 language: dart
 ---
 
 # _loadModels
+
+Loads the radio model catalog from the bridge, after the saved selection is restored.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_loadModels_loadModels
 ```
 
+## Docstring
+
+Loads the radio model catalog from the bridge, after the saved selection is restored.
+
 ## Source
-Lines 1546–1546 in `main.dart`
+Lines 1613–1613 in `main.dart`
 
 ## Relationships
 

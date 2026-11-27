@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: record
+description: Adds an entry to memory and appends it to the log file.
 resource: services/diagnostic_log.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:11Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/diagnostic_log/record
 language: dart
 ---
 
 # record
+
+Adds an entry to memory and appends it to the log file.
 
 ## Signature
 
@@ -27,8 +30,12 @@ voidrecord(
   })
 ```
 
+## Docstring
+
+Adds an entry to memory and appends it to the log file.
+
 ## Source
-Lines 67–71 in `services/diagnostic_log.dart`
+Lines 72–76 in `services/diagnostic_log.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _replaceText
+description: Replaces the text and puts the cursor at the end.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/replaceText
 language: dart
 ---
 
 # _replaceText
+
+Replaces the text and puts the cursor at the end.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_replaceText(String text)
 ```
 
+## Docstring
+
+Replaces the text and puts the cursor at the end.
+
 ## Source
-Lines 12135–12135 in `main.dart`
+Lines 12399–12399 in `main.dart`
 
 ## Relationships
 

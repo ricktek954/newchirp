@@ -10,7 +10,7 @@ tags:
   - "domain:app_language.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:07:35Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/app_language
 language: dart
 ---

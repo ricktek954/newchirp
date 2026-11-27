@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: copyWith
+description: Copy with a new list of mappings (zones/banks).
 resource: models/radio_mapping.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:21:35Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/radio_mapping/copyWith
 language: dart
 ---
 
 # copyWith
+
+Copy with a new list of mappings (zones/banks).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 RadioMappingModelcopyWith({List<RadioMappingEntry>? mappings})
 ```
 
+## Docstring
+
+Copy with a new list of mappings (zones/banks).
+
 ## Source
-Lines 72–72 in `models/radio_mapping.dart`
+Lines 75–75 in `models/radio_mapping.dart`
 
 ## Relationships
 

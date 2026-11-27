@@ -11,7 +11,7 @@ tags:
   - "domain:channel_list_pdf.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:22Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: services/channel_list_pdf/buildChannelListPdf
 language: dart
 ---
@@ -37,7 +37,7 @@ Uint8ListbuildChannelListPdf({
 Build a landscape PDF listing [rows] under [title] and [subtitle].
 
 ## Source
-Lines 266–272 in `services/channel_list_pdf.dart`
+Lines 275–281 in `services/channel_list_pdf.dart`
 
 ## Relationships
 

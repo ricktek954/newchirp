@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: normalizeRepeaterCounty
+description: "County name without suffixes like \" County\" or \" census area\", so different sources match."
 resource: models/repeater_regions.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:repeater_regions.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:33:48Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/repeater_regions/normalizeRepeaterCounty
 language: dart
 ---
 
 # normalizeRepeaterCounty
+
+County name without suffixes like " County" or " census area", so different sources match.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 StringnormalizeRepeaterCounty(String county)
 ```
 
+## Docstring
+
+County name without suffixes like " County" or " census area", so different sources match.
+
 ## Source
-Lines 234–234 in `models/repeater_regions.dart`
+Lines 236–236 in `models/repeater_regions.dart`
 
 ## Relationships
 

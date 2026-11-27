@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: number
+description: "Cell as a number, or [fallback] if empty or not a number."
 resource: services/chirp_csv.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:53:43Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: services/chirp_csv/number
 language: dart
 ---
 
 # number
+
+Cell as a number, or [fallback] if empty or not a number.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 doublenumber(List<String> row, String name, double fallback)
 ```
 
+## Docstring
+
+Cell as a number, or [fallback] if empty or not a number.
+
 ## Source
-Lines 132–132 in `services/chirp_csv.dart`
+Lines 143–143 in `services/chirp_csv.dart`
 
 ## Relationships
 

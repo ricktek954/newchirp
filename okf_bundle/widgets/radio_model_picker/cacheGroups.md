@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _cacheGroups
+description: "Stores [groups] as the cached result for [query] and the current vendor."
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/cacheGroups
 language: dart
 ---
 
 # _cacheGroups
+
+Stores [groups] as the cached result for [query] and the current vendor.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 List_cacheGroups_cacheGroups
 ```
 
+## Docstring
+
+Stores [groups] as the cached result for [query] and the current vendor.
+
 ## Source
-Lines 322–322 in `widgets/radio_model_picker.dart`
+Lines 338–338 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

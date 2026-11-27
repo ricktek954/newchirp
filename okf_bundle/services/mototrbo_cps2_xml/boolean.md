@@ -10,7 +10,7 @@ tags:
   - "domain:mototrbo_cps2_xml.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T09:51:21Z"
+timestamp: "2026-11-27T09:05:28Z"
 concept_id: services/mototrbo_cps2_xml/boolean
 language: dart
 ---
@@ -24,7 +24,7 @@ bool_boolean(XmlElement? element)
 ```
 
 ## Source
-Lines 324–324 in `services/mototrbo_cps2_xml.dart`
+Lines 338–338 in `services/mototrbo_cps2_xml.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _channelFromDefinition
+description: "One marine channel as a radio channel. Receive-only channels (or all, if transmit is off) get duplex \"off\"."
 resource: models/marine_channels.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:marine_channels.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T10:31:41Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/marine_channels/channelFromDefinition
 language: dart
 ---
 
 # _channelFromDefinition
+
+One marine channel as a radio channel. Receive-only channels (or all, if transmit is off) get duplex "off".
 
 ## Signature
 
@@ -28,8 +31,12 @@ RadioChannel_channelFromDefinition(
 })
 ```
 
+## Docstring
+
+One marine channel as a radio channel. Receive-only channels (or all, if transmit is off) get duplex "off".
+
 ## Source
-Lines 72–77 in `models/marine_channels.dart`
+Lines 74–79 in `models/marine_channels.dart`
 
 ## Relationships
 

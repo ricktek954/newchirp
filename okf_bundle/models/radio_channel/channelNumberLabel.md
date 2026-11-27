@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/channelNumberLabel
 language: dart
 ---
@@ -35,7 +35,7 @@ matches the Midland screen: channels 1-99, with RPTR 15-22 between them.
 Other radios show the slot number unchanged.
 
 ## Source
-Lines 261–261 in `models/radio_channel.dart`
+Lines 264–264 in `models/radio_channel.dart`
 
 ## Relationships
 

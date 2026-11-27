@@ -8,9 +8,9 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:radio_selection_store.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/radio_selection_store/defaultPath
 language: dart
 ---
@@ -24,7 +24,7 @@ String_defaultPath()
 ```
 
 ## Source
-Lines 47–47 in `services/radio_selection_store.dart`
+Lines 50–50 in `services/radio_selection_store.dart`
 
 ## Relationships
 

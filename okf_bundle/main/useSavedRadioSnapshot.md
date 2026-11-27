@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _useSavedRadioSnapshot
+description: "Reloads settings from the saved image, asking first if there are unsaved changes."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/useSavedRadioSnapshot
 language: dart
 ---
 
 # _useSavedRadioSnapshot
+
+Reloads settings from the saved image, asking first if there are unsaved changes.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_useSavedRadioSnapshot_useSavedRadioSnapshot
 ```
 
+## Docstring
+
+Reloads settings from the saved image, asking first if there are unsaved changes.
+
 ## Source
-Lines 2877–2877 in `main.dart`
+Lines 2988–2988 in `main.dart`
 
 ## Relationships
 

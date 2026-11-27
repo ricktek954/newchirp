@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: imageCapabilities
+description: Just the capabilities of an image.
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/imageCapabilities
 language: dart
 ---
 
 # imageCapabilities
+
+Just the capabilities of an image.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 FutureimageCapabilitiesimageCapabilities
 ```
 
+## Docstring
+
+Just the capabilities of an image.
+
 ## Source
-Lines 787–787 in `services/radio_bridge.dart`
+Lines 819–819 in `services/radio_bridge.dart`
 
 ## Relationships
 

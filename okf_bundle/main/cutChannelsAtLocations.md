@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _cutChannelsAtLocations
+description: "Copies channels to the clipboard, then clears them (Midland repeater rows"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/cutChannelsAtLocations
 language: dart
 ---
 
 # _cutChannelsAtLocations
+
+Copies channels to the clipboard, then clears them (Midland repeater rows
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 void_cutChannelsAtLocations(Iterable<int> locations)
 ```
 
+## Docstring
+
+Copies channels to the clipboard, then clears them (Midland repeater rows
+are reset instead of cleared).
+
 ## Source
-Lines 3299–3299 in `main.dart`
+Lines 3427–3427 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _pmr446Rows
+description: "PMR446: 16 channels from 446.00625 MHz, 12.5 kHz apart."
 resource: models/frequency_reference.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:frequency_reference.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:16:23Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/frequency_reference/pmr446Rows
 language: dart
 ---
 
 # _pmr446Rows
+
+PMR446: 16 channels from 446.00625 MHz, 12.5 kHz apart.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 List_pmr446Rows_pmr446Rows
 ```
 
+## Docstring
+
+PMR446: 16 channels from 446.00625 MHz, 12.5 kHz apart.
+
 ## Source
-Lines 516–516 in `models/frequency_reference.dart`
+Lines 522–522 in `models/frequency_reference.dart`
 
 ## Relationships
 

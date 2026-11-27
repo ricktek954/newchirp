@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: by
+description: Case-insensitive text comparison used as a tie-breaker.
 resource: models/repeater_search.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:repeater_search.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T15:12:55Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/repeater_search/by
 language: dart
 ---
 
 # by
+
+Case-insensitive text comparison used as a tie-breaker.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 intby(String left, String right)
 ```
 
+## Docstring
+
+Case-insensitive text comparison used as a tie-breaker.
+
 ## Source
-Lines 11–11 in `models/repeater_search.dart`
+Lines 13–13 in `models/repeater_search.dart`
 
 ## Relationships
 

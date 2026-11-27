@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _submit
+description: "Validates the email address, then sends the report and shows the result."
 resource: widgets/error_report_dialog.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:error_report_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:22Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: widgets/error_report_dialog/submit
 language: dart
 ---
 
 # _submit
+
+Validates the email address, then sends the report and shows the result.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_submit_submit
 ```
 
+## Docstring
+
+Validates the email address, then sends the report and shows the result.
+
 ## Source
-Lines 57–57 in `widgets/error_report_dialog.dart`
+Lines 59–59 in `widgets/error_report_dialog.dart`
 
 ## Relationships
 

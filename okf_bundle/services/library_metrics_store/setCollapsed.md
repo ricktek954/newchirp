@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: setCollapsed
+description: Remembers whether the library metrics panel is collapsed. Errors are ignored.
 resource: services/library_metrics_store.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:library_metrics_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T09:04:00Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/library_metrics_store/setCollapsed
 language: dart
 ---
 
 # setCollapsed
+
+Remembers whether the library metrics panel is collapsed. Errors are ignored.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 FuturesetCollapsedsetCollapsed
 ```
 
+## Docstring
+
+Remembers whether the library metrics panel is collapsed. Errors are ignored.
+
 ## Source
-Lines 26–26 in `services/library_metrics_store.dart`
+Lines 28–28 in `services/library_metrics_store.dart`
 
 ## Relationships
 

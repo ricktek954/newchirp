@@ -40,6 +40,8 @@ class FrequencyReferencePlan {
   final List<FrequencyReferenceGroup> groups;
 }
 
+/// Australian UHF CB, 80 channels. 1-40: 476.425-477.400 MHz in 25 kHz
+/// steps; 41-80 sit 12.5 kHz above them (476.4375-477.4125 MHz).
 List<FrequencyReferenceRow> _australianUhfRows() {
   return [
     for (var channel = 1; channel <= 80; channel++)
@@ -55,6 +57,7 @@ List<FrequencyReferenceRow> _australianUhfRows() {
   ];
 }
 
+/// Usage note for an Australian UHF CB channel (repeater outputs/inputs, emergency, telemetry).
 String _australianUhfNote(int channel) {
   if (channel >= 1 && channel <= 8) {
     return channel == 5
@@ -93,6 +96,7 @@ String _australianUhfNote(int channel) {
   };
 }
 
+/// US/international 40-channel CB (26.965-27.405 MHz; the list is irregular, so it is spelled out).
 List<FrequencyReferenceRow> _standardCbRows() {
   const mhz = [
     26.965,
@@ -152,6 +156,7 @@ List<FrequencyReferenceRow> _standardCbRows() {
   ];
 }
 
+/// UK 27/81 CB: 40 channels from 27.60125 MHz, 10 kHz apart.
 List<FrequencyReferenceRow> _ukCbRows() {
   return [
     for (var channel = 1; channel <= 40; channel++)
@@ -513,6 +518,7 @@ final australianUhfCbReferencePlan = FrequencyReferencePlan(
   ],
 );
 
+/// PMR446: 16 channels from 446.00625 MHz, 12.5 kHz apart.
 List<FrequencyReferenceRow> _pmr446Rows() {
   return [
     for (var channel = 1; channel <= 16; channel++)

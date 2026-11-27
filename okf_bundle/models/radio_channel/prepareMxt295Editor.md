@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/prepareMxt295Editor
 language: dart
 ---
@@ -34,7 +34,7 @@ Channels 23 through 99 keep their frequency. An illegal duplex on
 those rows is left in place so the editor can explain it.
 
 ## Source
-Lines 644–644 in `models/radio_channel.dart`
+Lines 649–649 in `models/radio_channel.dart`
 
 ## Relationships
 

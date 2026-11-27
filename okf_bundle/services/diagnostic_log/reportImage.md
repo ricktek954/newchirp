@@ -10,7 +10,7 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:11Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/diagnostic_log/reportImage
 language: dart
 ---
@@ -24,7 +24,7 @@ FilereportImagereportImage
 ```
 
 ## Source
-Lines 132–132 in `services/diagnostic_log.dart`
+Lines 139–139 in `services/diagnostic_log.dart`
 
 ## Relationships
 

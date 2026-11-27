@@ -23,6 +23,7 @@ class RadioMappingEntry {
         nameEditable: json['nameEditable'] as bool? ?? false,
       );
 
+  /// Copy with a new name and/or channel list.
   RadioMappingEntry copyWith({String? name, List<int>? channelLocations}) =>
       RadioMappingEntry(
         index: index,
@@ -31,6 +32,7 @@ class RadioMappingEntry {
         nameEditable: nameEditable,
       );
 
+  /// Serialized form sent to and from the Python bridge.
   Map<String, Object?> toJson() => {
     'index': index,
     'name': name,
@@ -69,6 +71,7 @@ class RadioMappingModel {
             .toList(),
       );
 
+  /// Copy with a new list of mappings (zones/banks).
   RadioMappingModel copyWith({List<RadioMappingEntry>? mappings}) =>
       RadioMappingModel(
         index: index,
@@ -78,6 +81,7 @@ class RadioMappingModel {
         mappings: List.of(mappings ?? this.mappings),
       );
 
+  /// Copy that keeps only channels still present in [activeLocations].
   RadioMappingModel retainingChannels(Set<int> activeLocations) => copyWith(
     mappings: [
       for (final mapping in mappings)
@@ -89,6 +93,7 @@ class RadioMappingModel {
     ],
   );
 
+  /// Serialized form sent to and from the Python bridge.
   Map<String, Object?> toJson() => {
     'index': index,
     'name': name,
@@ -98,11 +103,13 @@ class RadioMappingModel {
   };
 }
 
+/// Parses the bridge's mapping list, skipping entries that aren't objects.
 List<RadioMappingModel> radioMappingsFromJson(List<dynamic> values) => values
     .whereType<Map>()
     .map((entry) => RadioMappingModel.fromJson(entry.cast<String, dynamic>()))
     .toList();
 
+/// Mapping models as JSON for the bridge.
 List<Map<String, Object?>> radioMappingsToJson(
   Iterable<RadioMappingModel> models,
 ) => models.map((model) => model.toJson()).toList();
@@ -134,6 +141,8 @@ String radioMappingsSignature(Iterable<RadioMappingModel> models) =>
   return best;
 }
 
+/// Updates zone/bank membership after channels move. [locations] maps old ->
+/// new location (null = channel deleted).
 List<RadioMappingModel> remapRadioMappingLocations(
   Iterable<RadioMappingModel> models,
   Map<int, int?> locations,
@@ -159,6 +168,7 @@ List<RadioMappingModel> remapRadioMappingLocations(
       .toList();
 }
 
+/// Applies [locations] to a list of channel numbers, dropping deleted ones and duplicates.
 List<int> _remapLocations(Iterable<int> source, Map<int, int?> locations) {
   final seen = <int>{};
   final remapped = <int>[];

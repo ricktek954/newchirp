@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _chooseAddChannelPlacement
+description: "Asks where a new channel goes: at the end, or before/after the selected one."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/chooseAddChannelPlacement
 language: dart
 ---
 
 # _chooseAddChannelPlacement
+
+Asks where a new channel goes: at the end, or before/after the selected one.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_chooseAddChannelPlacement_chooseAddChannelPlacement
 ```
 
+## Docstring
+
+Asks where a new channel goes: at the end, or before/after the selected one.
+
 ## Source
-Lines 3088–3088 in `main.dart`
+Lines 3208–3208 in `main.dart`
 
 ## Relationships
 

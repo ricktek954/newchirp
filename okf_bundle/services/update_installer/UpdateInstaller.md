@@ -11,7 +11,7 @@ tags:
   - "domain:update_installer.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T13:46:10Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/update_installer/UpdateInstaller
 language: dart
 ---
@@ -42,7 +42,7 @@ replaces the application, and relaunches NewChirp.
 - `_installLinuxUpdate`
 
 ## Source
-Lines 51–297 in `services/update_installer.dart`
+Lines 51–305 in `services/update_installer.dart`
 
 ## Relationships
 

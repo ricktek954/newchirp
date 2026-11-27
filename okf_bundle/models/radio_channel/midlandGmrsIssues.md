@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: midlandGmrsIssues
+description: Why this MXT295 channel is not legal. Empty for every other radio.
 resource: models/radio_channel.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/midlandGmrsIssues
 language: dart
 ---
 
 # midlandGmrsIssues
+
+Why this MXT295 channel is not legal. Empty for every other radio.
 
 ## Signature
 
@@ -23,8 +26,14 @@ language: dart
 ListmidlandGmrsIssuesmidlandGmrsIssues
 ```
 
+## Docstring
+
+Why this MXT295 channel is not legal. Empty for every other radio.
+
+The driver enforces the same rules in drivers/newchirp_mxt295.py.
+
 ## Source
-Lines 495–495 in `models/radio_channel.dart`
+Lines 499–499 in `models/radio_channel.dart`
 
 ## Relationships
 

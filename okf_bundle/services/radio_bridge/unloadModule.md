@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: unloadModule
+description: Stops using the loaded module and deletes its sandbox work folder.
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/unloadModule
 language: dart
 ---
 
 # unloadModule
+
+Stops using the loaded module and deletes its sandbox work folder.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 voidunloadModule()
 ```
 
+## Docstring
+
+Stops using the loaded module and deletes its sandbox work folder.
+
 ## Source
-Lines 691–691 in `services/radio_bridge.dart`
+Lines 717–717 in `services/radio_bridge.dart`
 
 ## Relationships
 

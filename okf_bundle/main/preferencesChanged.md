@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _preferencesChanged
+description: Saves the search settings 250 ms after the last change.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/preferencesChanged
 language: dart
 ---
 
 # _preferencesChanged
+
+Saves the search settings 250 ms after the last change.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_preferencesChanged()
 ```
 
+## Docstring
+
+Saves the search settings 250 ms after the last change.
+
 ## Source
-Lines 8905–8905 in `main.dart`
+Lines 9124–9124 in `main.dart`
 
 ## Relationships
 

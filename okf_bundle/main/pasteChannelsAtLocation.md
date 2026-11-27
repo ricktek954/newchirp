@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _pasteChannelsAtLocation
+description: "Pastes the clipboard starting at [location], asking before overwriting"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/pasteChannelsAtLocation
 language: dart
 ---
 
 # _pasteChannelsAtLocation
+
+Pastes the clipboard starting at [location], asking before overwriting
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_pasteChannelsAtLocation_pasteChannelsAtLocation
 ```
 
+## Docstring
+
+Pastes the clipboard starting at [location], asking before overwriting
+channels and refusing to go past the radio's last slot.
+
 ## Source
-Lines 3342–3342 in `main.dart`
+Lines 3472–3472 in `main.dart`
 
 ## Relationships
 

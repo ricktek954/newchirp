@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _showRowMenu
+description: "Right-click menu for a row (copy, cut, paste, insert, delete...)."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/showRowMenu
 language: dart
 ---
 
 # _showRowMenu
+
+Right-click menu for a row (copy, cut, paste, insert, delete...).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_showRowMenu(BuildContext context, int index, Offset position)
 ```
 
+## Docstring
+
+Right-click menu for a row (copy, cut, paste, insert, delete...).
+
 ## Source
-Lines 10635–10635 in `main.dart`
+Lines 10880–10880 in `main.dart`
 
 ## Relationships
 

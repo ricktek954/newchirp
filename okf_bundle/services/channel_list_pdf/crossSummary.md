@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _crossSummary
+description: "Tone text for a Cross-mode channel, e.g. \"TX 100.0 / RX D023N\"."
 resource: services/channel_list_pdf.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:channel_list_pdf.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:22Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: services/channel_list_pdf/crossSummary
 language: dart
 ---
 
 # _crossSummary
+
+Tone text for a Cross-mode channel, e.g. "TX 100.0 / RX D023N".
 
 ## Signature
 
@@ -29,8 +32,12 @@ String_crossSummary(
 )
 ```
 
+## Docstring
+
+Tone text for a Cross-mode channel, e.g. "TX 100.0 / RX D023N".
+
 ## Source
-Lines 62–68 in `services/channel_list_pdf.dart`
+Lines 65–71 in `services/channel_list_pdf.dart`
 
 ## Relationships
 

@@ -23,6 +23,7 @@ class FileSaveWarningStore {
     }
   }
 
+  /// Records "don't show this again" for the file-save warning.
   Future<void> hide() async {
     final file = File(_path);
     await file.parent.create(recursive: true);
@@ -32,6 +33,7 @@ class FileSaveWarningStore {
     );
   }
 
+  /// Settings file in the per-user app data folder for this platform.
   static String _defaultPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';

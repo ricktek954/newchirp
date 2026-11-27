@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _confirmOverwriteChannels
+description: Asks before overwriting several channels (one channel uses the single-channel dialog).
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/confirmOverwriteChannels
 language: dart
 ---
 
 # _confirmOverwriteChannels
+
+Asks before overwriting several channels (one channel uses the single-channel dialog).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_confirmOverwriteChannels_confirmOverwriteChannels
 ```
 
+## Docstring
+
+Asks before overwriting several channels (one channel uses the single-channel dialog).
+
 ## Source
-Lines 3420–3420 in `main.dart`
+Lines 3551–3551 in `main.dart`
 
 ## Relationships
 

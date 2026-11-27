@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _saveCsvNow
+description: "Asks for a path when needed, writes the CSV and marks the list as saved."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/saveCsvNow
 language: dart
 ---
 
 # _saveCsvNow
+
+Asks for a path when needed, writes the CSV and marks the list as saved.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_saveCsvNow_saveCsvNow
 ```
 
+## Docstring
+
+Asks for a path when needed, writes the CSV and marks the list as saved.
+
 ## Source
-Lines 2603–2603 in `main.dart`
+Lines 2704–2704 in `main.dart`
 
 ## Relationships
 

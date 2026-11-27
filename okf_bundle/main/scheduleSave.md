@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _scheduleSave
+description: "Saves the window state 400 ms after the last move/resize, not on every pixel."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/scheduleSave
 language: dart
 ---
 
 # _scheduleSave
+
+Saves the window state 400 ms after the last move/resize, not on every pixel.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_scheduleSave()
 ```
 
+## Docstring
+
+Saves the window state 400 ms after the last move/resize, not on every pixel.
+
 ## Source
-Lines 279–279 in `main.dart`
+Lines 297–297 in `main.dart`
 
 ## Relationships
 

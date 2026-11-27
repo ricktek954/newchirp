@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _replaceMapping
+description: "Replaces the selected zone/bank with [updated] in the working copy."
 resource: widgets/radio_mapping_dialog.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:42:01Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: widgets/radio_mapping_dialog/replaceMapping
 language: dart
 ---
 
 # _replaceMapping
+
+Replaces the selected zone/bank with [updated] in the working copy.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 void_replaceMapping(RadioMappingEntry updated)
 ```
 
+## Docstring
+
+Replaces the selected zone/bank with [updated] in the working copy.
+
 ## Source
-Lines 95–95 in `widgets/radio_mapping_dialog.dart`
+Lines 100–100 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

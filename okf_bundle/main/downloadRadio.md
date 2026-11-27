@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _downloadRadio
+description: "Reads the radio (optionally one zone of a live radio), asking before replacing"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/downloadRadio
 language: dart
 ---
 
 # _downloadRadio
+
+Reads the radio (optionally one zone of a live radio), asking before replacing
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_downloadRadio_downloadRadio
 ```
 
+## Docstring
+
+Reads the radio (optionally one zone of a live radio), asking before replacing
+an open channel list.
+
 ## Source
-Lines 3618–3618 in `main.dart`
+Lines 3756–3756 in `main.dart`
 
 ## Relationships
 

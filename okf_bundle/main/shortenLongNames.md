@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/shortenLongNames
 language: dart
 ---
@@ -31,7 +31,7 @@ Cut every channel name that is longer than the radio allows, after the
 operator confirms a preview. One undo step restores all of them.
 
 ## Source
-Lines 2195–2195 in `main.dart`
+Lines 2283–2283 in `main.dart`
 
 ## Relationships
 

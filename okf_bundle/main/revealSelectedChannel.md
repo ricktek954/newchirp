@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: revealSelectedChannel
+description: Scrolls so the selected channel is visible.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/revealSelectedChannel
 language: dart
 ---
 
 # revealSelectedChannel
+
+Scrolls so the selected channel is visible.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 voidrevealSelectedChannel()
 ```
 
+## Docstring
+
+Scrolls so the selected channel is visible.
+
 ## Source
-Lines 10598–10598 in `main.dart`
+Lines 10841–10841 in `main.dart`
 
 ## Relationships
 

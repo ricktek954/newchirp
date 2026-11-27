@@ -13,6 +13,7 @@ class RadioSelectionStore {
 
   final String _path;
 
+  /// Reads the last selected radio model and port; null when missing or unreadable.
   Future<RadioSelection?> load() async {
     final file = File(_path);
     if (!await file.exists()) return null;
@@ -31,6 +32,7 @@ class RadioSelectionStore {
     }
   }
 
+  /// Remembers the selected radio model and port for the next launch.
   Future<void> save(RadioSelection selection) async {
     final file = File(_path);
     await file.parent.create(recursive: true);
@@ -44,6 +46,7 @@ class RadioSelectionStore {
     );
   }
 
+  /// Settings file in the per-user app data folder for this platform.
   static String _defaultPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';

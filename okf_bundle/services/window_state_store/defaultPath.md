@@ -10,7 +10,7 @@ tags:
   - "domain:window_state_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:52:36Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/window_state_store/defaultPath
 language: dart
 ---
@@ -24,7 +24,7 @@ String_defaultPath()
 ```
 
 ## Source
-Lines 131–131 in `services/window_state_store.dart`
+Lines 135–135 in `services/window_state_store.dart`
 
 ## Relationships
 

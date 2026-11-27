@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildFrequencyReference
+description: "Frequency Reference page: plan picker plus the US or international chart."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildFrequencyReference
 language: dart
 ---
 
 # _buildFrequencyReference
+
+Frequency Reference page: plan picker plus the US or international chart.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_buildFrequencyReference()
 ```
 
+## Docstring
+
+Frequency Reference page: plan picker plus the US or international chart.
+
 ## Source
-Lines 6063–6063 in `main.dart`
+Lines 6234–6234 in `main.dart`
 
 ## Relationships
 

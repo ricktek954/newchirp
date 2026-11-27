@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _noteRepeaterRowKept
+description: Explains that a Midland repeater row was kept because the radio needs it.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/noteRepeaterRowKept
 language: dart
 ---
 
 # _noteRepeaterRowKept
+
+Explains that a Midland repeater row was kept because the radio needs it.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_noteRepeaterRowKept(RadioChannel channel)
 ```
 
+## Docstring
+
+Explains that a Midland repeater row was kept because the radio needs it.
+
 ## Source
-Lines 3605–3605 in `main.dart`
+Lines 3741–3741 in `main.dart`
 
 ## Relationships
 

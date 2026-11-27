@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _showChannelEditorAtLocation
+description: "Opens the channel editor for [location] (an empty slot creates a new channel)."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/showChannelEditorAtLocation
 language: dart
 ---
 
 # _showChannelEditorAtLocation
+
+Opens the channel editor for [location] (an empty slot creates a new channel).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_showChannelEditorAtLocation_showChannelEditorAtLocation
 ```
 
+## Docstring
+
+Opens the channel editor for [location] (an empty slot creates a new channel).
+
 ## Source
-Lines 4925–4925 in `main.dart`
+Lines 5082–5082 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _openSystemBrowser
+description: "Opens [uri] in the default browser (open / rundll32 / xdg-open)."
 resource: services/mygmrs_client.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T15:24:31Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: services/mygmrs_client/openSystemBrowser
 language: dart
 ---
 
 # _openSystemBrowser
+
+Opens [uri] in the default browser (open / rundll32 / xdg-open).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_openSystemBrowser_openSystemBrowser
 ```
 
+## Docstring
+
+Opens [uri] in the default browser (open / rundll32 / xdg-open).
+
 ## Source
-Lines 462–462 in `services/mygmrs_client.dart`
+Lines 485–485 in `services/mygmrs_client.dart`
 
 ## Relationships
 

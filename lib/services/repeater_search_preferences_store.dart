@@ -31,6 +31,7 @@ class RepeaterSearchPreferences {
   final bool fmOnly;
   final bool mapView;
 
+  /// Serialized form written to the preferences file.
   Map<String, dynamic> toJson() => {
     'provider': provider,
     'country': country,
@@ -53,6 +54,7 @@ class RepeaterSearchPreferencesStore {
 
   final String _path;
 
+  /// Reads the saved search settings; defaults when missing or unreadable.
   Future<RepeaterSearchPreferences> load() async {
     final file = File(_path);
     if (!await file.exists()) return const RepeaterSearchPreferences();
@@ -90,6 +92,7 @@ class RepeaterSearchPreferencesStore {
     }
   }
 
+  /// Writes the search settings (file format version 2).
   Future<void> save(RepeaterSearchPreferences preferences) async {
     final file = File(_path);
     await file.parent.create(recursive: true);
@@ -99,6 +102,7 @@ class RepeaterSearchPreferencesStore {
     );
   }
 
+  /// Settings file in the per-user app data folder for this platform.
   static String _defaultPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';

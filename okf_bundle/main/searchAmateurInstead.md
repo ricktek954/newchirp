@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _searchAmateurInstead
+description: Switches the search to RepeaterBook amateur repeaters.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/searchAmateurInstead
 language: dart
 ---
 
 # _searchAmateurInstead
+
+Switches the search to RepeaterBook amateur repeaters.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_searchAmateurInstead()
 ```
 
+## Docstring
+
+Switches the search to RepeaterBook amateur repeaters.
+
 ## Source
-Lines 9310–9310 in `main.dart`
+Lines 9540–9540 in `main.dart`
 
 ## Relationships
 

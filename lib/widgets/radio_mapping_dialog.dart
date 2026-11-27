@@ -40,6 +40,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     return _model.mappings[_mappingIndex];
   }
 
+  /// Works on a deep copy of the models so Cancel discards every change.
   @override
   void initState() {
     super.initState();
@@ -59,6 +60,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     _selectInitialMapping();
   }
 
+  /// Shows the selected zone/bank name in the name field.
   void _selectInitialMapping() {
     final mapping = _mapping;
     if (mapping != null) _nameController.text = mapping.name;
@@ -71,6 +73,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     super.dispose();
   }
 
+  /// Switches to another mapping type (e.g. zones vs banks) and resets the selection.
   void _selectModel(int index) {
     setState(() {
       _modelIndex = index;
@@ -83,6 +86,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     });
   }
 
+  /// Selects one zone/bank and shows its name.
   void _selectMapping(int index) {
     setState(() {
       _mappingIndex = index;
@@ -92,6 +96,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     });
   }
 
+  /// Replaces the selected zone/bank with [updated] in the working copy.
   void _replaceMapping(RadioMappingEntry updated) {
     final mappings = List<RadioMappingEntry>.of(_model.mappings);
     mappings[_mappingIndex] = updated;
@@ -103,12 +108,14 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     });
   }
 
+  /// Renames the selected zone/bank.
   void _renameMapping(String value) {
     final mapping = _mapping;
     if (mapping == null) return;
     _replaceMapping(mapping.copyWith(name: value));
   }
 
+  /// Adds or removes channel [location] from the selected zone/bank (editable types only).
   void _setMembership(int location, bool selected) {
     final mapping = _mapping;
     if (mapping == null || !_model.editable) return;
@@ -142,6 +149,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     });
   }
 
+  /// Requires a name for every zone/bank that has channels, then returns the edited models.
   void _save() {
     for (final model in _models) {
       for (final mapping in model.mappings) {
@@ -159,6 +167,8 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     Navigator.pop(context, _models);
   }
 
+  /// Two-pane dialog: zone/bank list on the left, channel checklist on the right.
+  /// Sized to the window minus 40 px each side, within 360x320 and 940x700.
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
@@ -347,6 +357,7 @@ class _RadioMappingDialogState extends State<RadioMappingDialog> {
     );
   }
 
+  /// Right pane: name field, channel search and a checkbox per channel.
   Widget _buildMappingEditor(BuildContext context) {
     final mapping = _mapping!;
     final channels = [...widget.channels]

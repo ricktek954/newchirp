@@ -10,7 +10,7 @@ tags:
   - "domain:file_save_warning_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:43:05Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: widgets/file_save_warning_dialog/FileSaveWarningDialogState
 language: dart
 ---
@@ -28,7 +28,7 @@ class _FileSaveWarningDialogState
 - `build`
 
 ## Source
-Lines 19–61 in `widgets/file_save_warning_dialog.dart`
+Lines 19–62 in `widgets/file_save_warning_dialog.dart`
 
 ## Relationships
 

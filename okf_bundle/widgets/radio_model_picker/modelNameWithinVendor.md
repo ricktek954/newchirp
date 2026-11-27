@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _modelNameWithinVendor
+description: "Model name without the vendor prefix, for rows listed under that vendor."
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/modelNameWithinVendor
 language: dart
 ---
 
 # _modelNameWithinVendor
+
+Model name without the vendor prefix, for rows listed under that vendor.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 String_modelNameWithinVendor(String model, String vendor)
 ```
 
+## Docstring
+
+Model name without the vendor prefix, for rows listed under that vendor.
+
 ## Source
-Lines 51–51 in `widgets/radio_model_picker.dart`
+Lines 56–56 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

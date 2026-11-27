@@ -51,8 +51,11 @@ typedef UpdateProgressCallback = void Function(UpdateDownloadProgress progress);
 class UpdateInstaller {
   const UpdateInstaller();
 
-  static const _maxDownloadBytes = 1024 * 1024 * 1024;
+  static const _maxDownloadBytes = 1024 * 1024 * 1024; // 1 GB upper bound for a download
 
+  /// Downloads this platform's installer for [update] into a temp folder.
+  /// Only trusted newchirp.net URLs are used; the size is capped and the
+  /// SHA-256 is checked when the release publishes one.
   Future<DownloadedUpdate> download(
     UpdateCheckResult update, {
     UpdateProgressCallback? onProgress,
@@ -216,6 +219,8 @@ class UpdateInstaller {
     }
   }
 
+  /// Finds the running .app bundle and starts a detached helper script that
+  /// waits for this process ([pid]) to quit, then installs the app from [dmg].
   Future<void> _installMacUpdate(File dmg) async {
     final executable = Platform.resolvedExecutable;
     const marker = '/Contents/MacOS/';
@@ -246,6 +251,8 @@ class UpdateInstaller {
     ], mode: ProcessStartMode.detached);
   }
 
+  /// Refuses an installer whose Authenticode signature isn't valid (PowerShell
+  /// exit code 7), then starts it detached.
   Future<void> _installWindowsUpdate(File installer) async {
     final signature = await Process.run(
       'powershell.exe',
@@ -280,6 +287,7 @@ class UpdateInstaller {
     ], mode: ProcessStartMode.detached);
   }
 
+  /// Installs the downloaded .deb/.rpm/etc. through a small helper script run with /bin/sh; output goes to a log file.
   Future<void> _installLinuxUpdate(File package) async {
     final directory = Directory.systemTemp.createTempSync('newchirp-install-');
     final helper = File('${directory.path}/install-update.sh');

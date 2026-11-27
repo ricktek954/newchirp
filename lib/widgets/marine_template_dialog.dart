@@ -17,6 +17,8 @@ class _MarineTemplateDialogState extends State<MarineTemplateDialog> {
       widget.initialPlan ?? MarineChannelPlan.unitedStates;
   bool _programTransmit = false;
 
+  /// Dialog to pick a marine plan (US/international) and whether to program ship
+  /// transmit frequencies (off by default: receive-only is the safe choice).
   @override
   Widget build(BuildContext context) {
     final definitions = marineChannelDefinitionsFor(_plan);

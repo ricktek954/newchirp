@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _confirmOverwriteChannel
+description: Asks before overwriting one channel.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/confirmOverwriteChannel
 language: dart
 ---
 
 # _confirmOverwriteChannel
+
+Asks before overwriting one channel.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_confirmOverwriteChannel_confirmOverwriteChannel
 ```
 
+## Docstring
+
+Asks before overwriting one channel.
+
 ## Source
-Lines 3452–3452 in `main.dart`
+Lines 3584–3584 in `main.dart`
 
 ## Relationships
 

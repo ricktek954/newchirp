@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: save
+description: "Saves the draft, asking what to do if its new location is already used."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/save
 language: dart
 ---
 
 # save
+
+Saves the draft, asking what to do if its new location is already used.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Futuresavesave
 ```
 
+## Docstring
+
+Saves the draft, asking what to do if its new location is already used.
+
 ## Source
-Lines 4948–4948 in `main.dart`
+Lines 5106–5106 in `main.dart`
 
 ## Relationships
 

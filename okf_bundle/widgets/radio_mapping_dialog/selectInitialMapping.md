@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _selectInitialMapping
+description: Shows the selected zone/bank name in the name field.
 resource: widgets/radio_mapping_dialog.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:42:01Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: widgets/radio_mapping_dialog/selectInitialMapping
 language: dart
 ---
 
 # _selectInitialMapping
+
+Shows the selected zone/bank name in the name field.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 void_selectInitialMapping()
 ```
 
+## Docstring
+
+Shows the selected zone/bank name in the name field.
+
 ## Source
-Lines 62–62 in `widgets/radio_mapping_dialog.dart`
+Lines 64–64 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

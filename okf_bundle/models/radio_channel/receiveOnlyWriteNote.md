@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/receiveOnlyWriteNote
 language: dart
 ---
@@ -34,7 +34,7 @@ StringreceiveOnlyWriteNote(
 Write-confirmation note naming the receive-only channels, or '' if none.
 
 ## Source
-Lines 476–479 in `models/radio_channel.dart`
+Lines 477–480 in `models/radio_channel.dart`
 
 ## Relationships
 

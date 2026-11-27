@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _channelColumnFilterValue
+description: "The text a column filter compares against for [channel] in column [columnId]."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/channelColumnFilterValue
 language: dart
 ---
 
 # _channelColumnFilterValue
+
+The text a column filter compares against for [channel] in column [columnId].
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 String_channelColumnFilterValue(RadioChannel channel, String columnId)
 ```
 
+## Docstring
+
+The text a column filter compares against for [channel] in column [columnId].
+
 ## Source
-Lines 657–657 in `main.dart`
+Lines 684–684 in `main.dart`
 
 ## Relationships
 

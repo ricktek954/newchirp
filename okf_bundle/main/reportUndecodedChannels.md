@@ -10,7 +10,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/reportUndecodedChannels
 language: dart
 ---
@@ -31,7 +31,7 @@ Tells the user which slots the driver could not decode, logs the
 details for the bug report, and offers to send one.
 
 ## Source
-Lines 4699–4699 in `main.dart`
+Lines 4853–4853 in `main.dart`
 
 ## Relationships
 

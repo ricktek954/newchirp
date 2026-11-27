@@ -31,6 +31,8 @@ enum ChannelImageMatch {
   differs,
 }
 
+/// Fingerprint (JSON text) of a channel list plus its cleared slots, sorted by
+/// location so the same channels always give the same string.
 String channelListSignature(
   List<RadioChannel> channels,
   Iterable<int> cleared,
@@ -92,6 +94,8 @@ Set<int> clearedLocationsForUpload({
   return cleared;
 }
 
+/// How the on-screen channel list relates to the stored radio image: no image,
+/// not loaded this session, identical to it, or edited since.
 ChannelImageMatch channelImageMatch({
   required String? imagePath,
   required int? zone,
@@ -119,6 +123,7 @@ ChannelImageMatch channelImageMatch({
       : ChannelImageMatch.matchesImage;
 }
 
+/// Status-bar sentence explaining [match] to the user.
 String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.noImage =>
     'No stored radio image. Read the radio before writing channels.',
@@ -136,6 +141,8 @@ String channelImageStatusText(ChannelImageMatch match) => switch (match) {
   ChannelImageMatch.differs => 'Unsaved radio changes',
 };
 
+/// True when Write may be enabled: not busy, no invalid channels, a port,
+/// a radio model and an image that was loaded this session.
 bool channelLibraryWriteReady({
   required ChannelImageMatch match,
   required bool busy,
@@ -180,6 +187,7 @@ class ChannelLibrarySnapshot {
   final int scanEnabledCount;
 }
 
+/// Counts channels and compares with the radio image for one library refresh.
 ChannelLibrarySnapshot channelLibrarySnapshot({
   required String? imagePath,
   required int? zone,
@@ -263,10 +271,12 @@ class ChannelLibraryStatsCache {
   int _validToneModesHash = 0;
   int _validCrossModesHash = 0;
 
+  /// Forces the next [read] to recompute (after editing a channel in place).
   void markDirty() {
     _dirty = true;
   }
 
+  /// The cached snapshot, recomputed only when an input changed or [markDirty] was called.
   ChannelLibrarySnapshot read({
     required String? imagePath,
     required int? zone,

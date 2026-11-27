@@ -24,6 +24,7 @@ class ChannelLibraryImageBar extends StatelessWidget {
   final VoidCallback onWrite;
   final VoidCallback onConnect;
 
+  /// Card showing whether the channel list matches the radio image, with its action buttons.
   @override
   Widget build(BuildContext context) {
     final differs = match == ChannelImageMatch.differs;

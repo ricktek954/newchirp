@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _radioSettingChanges
+description: "The changed settings as {name, value} entries for the bridge."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/radioSettingChanges
 language: dart
 ---
 
 # _radioSettingChanges
+
+The changed settings as {name, value} entries for the bridge.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 List_radioSettingChanges_radioSettingChanges
 ```
 
+## Docstring
+
+The changed settings as {name, value} entries for the bridge.
+
 ## Source
-Lines 2977–2977 in `main.dart`
+Lines 3091–3091 in `main.dart`
 
 ## Relationships
 

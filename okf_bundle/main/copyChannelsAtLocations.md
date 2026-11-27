@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _copyChannelsAtLocations
+description: "Copies channels to NewChirp's own clipboard."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/copyChannelsAtLocations
 language: dart
 ---
 
 # _copyChannelsAtLocations
+
+Copies channels to NewChirp's own clipboard.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_copyChannelsAtLocations(Iterable<int> locations)
 ```
 
+## Docstring
+
+Copies channels to NewChirp's own clipboard.
+
 ## Source
-Lines 3288–3288 in `main.dart`
+Lines 3414–3414 in `main.dart`
 
 ## Relationships
 

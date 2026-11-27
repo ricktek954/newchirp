@@ -9,9 +9,9 @@
 
 ## Functions
 
-- [_installLinuxUpdate](installLinuxUpdate.md)
-- [_installMacUpdate](installMacUpdate.md)
-- [_installWindowsUpdate](installWindowsUpdate.md)
-- [download](download.md)
+- [_installLinuxUpdate](installLinuxUpdate.md) — Installs the downloaded .deb/.rpm/etc. through a small helper script run with /bin/sh; output goes to a log file.
+- [_installMacUpdate](installMacUpdate.md) — Finds the running .app bundle and starts a detached helper script that
+- [_installWindowsUpdate](installWindowsUpdate.md) — Refuses an installer whose Authenticode signature isn't valid (PowerShell
+- [download](download.md) — Downloads this platform's installer for [update] into a temp folder.
 - [install](install.md) — Starts the detached native helper that will install after the app exits.
-- [toString](toString.md)
+- [toString](toString.md) — Installs the downloaded .deb/.rpm/etc. through a small helper script run with /bin/sh; output goes to a log file.

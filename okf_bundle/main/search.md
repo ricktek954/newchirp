@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _search
+description: Runs the search with the chosen provider (a ZIP code in the filter box
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/search
 language: dart
 ---
 
 # _search
+
+Runs the search with the chosen provider (a ZIP code in the filter box
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_search_search
 ```
 
+## Docstring
+
+Runs the search with the chosen provider (a ZIP code in the filter box
+searches near that ZIP code).
+
 ## Source
-Lines 9033–9033 in `main.dart`
+Lines 9260–9260 in `main.dart`
 
 ## Relationships
 

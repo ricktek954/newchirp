@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: markDirty
+description: "Forces the next [read] to recompute (after editing a channel in place)."
 resource: models/channel_image_baseline.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:13:56Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/markDirty
 language: dart
 ---
 
 # markDirty
+
+Forces the next [read] to recompute (after editing a channel in place).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 voidmarkDirty()
 ```
 
+## Docstring
+
+Forces the next [read] to recompute (after editing a channel in place).
+
 ## Source
-Lines 266–266 in `models/channel_image_baseline.dart`
+Lines 275–275 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

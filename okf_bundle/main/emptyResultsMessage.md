@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _emptyResultsMessage
+description: "Message for an empty result list, with a hint when filters hid the matches."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/emptyResultsMessage
 language: dart
 ---
 
 # _emptyResultsMessage
+
+Message for an empty result list, with a hint when filters hid the matches.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 String_emptyResultsMessage(int totalMatches)
 ```
 
+## Docstring
+
+Message for an empty result list, with a hint when filters hid the matches.
+
 ## Source
-Lines 9123–9123 in `main.dart`
+Lines 9351–9351 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: adaptRadioPromptButton
+description: "Rewrites a CHIRP driver prompt for NewChirp's dialog: strips HTML, turns"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/adaptRadioPromptButton
 language: dart
 ---
 
 # adaptRadioPromptButton
+
+Rewrites a CHIRP driver prompt for NewChirp's dialog: strips HTML, turns
 
 ## Signature
 
@@ -22,8 +25,14 @@ language: dart
 StringadaptRadioPromptButton(String message, String buttonLabel)
 ```
 
+## Docstring
+
+Rewrites a CHIRP driver prompt for NewChirp's dialog: strips HTML, turns
+"Click OK" into "Click "[buttonLabel]"", and for radios sent with [PTT] (or
+their own key) tells the user to wait for the transfer window's ready message.
+
 ## Source
-Lines 76–76 in `main.dart`
+Lines 82–82 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildResultsMap
+description: Map of the visible results (repeaters with coordinates).
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildResultsMap
 language: dart
 ---
 
 # _buildResultsMap
+
+Map of the visible results (repeaters with coordinates).
 
 ## Signature
 
@@ -25,8 +28,12 @@ Widget_buildResultsMap(
   )
 ```
 
+## Docstring
+
+Map of the visible results (repeaters with coordinates).
+
 ## Source
-Lines 9341–9344 in `main.dart`
+Lines 9574–9577 in `main.dart`
 
 ## Relationships
 

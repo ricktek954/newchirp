@@ -32,9 +32,13 @@ const Map<String, String> officialRadioModelNames = {
   'Alinco_DR735T': 'Alinco DR-735T',
 };
 
+/// Name shown to people: the manufacturer's official spelling (e.g. "DR-735T")
+/// when known, otherwise the CHIRP id with underscores as spaces.
 String displayRadioModelName(String model) =>
     officialRadioModelNames[model] ?? model.replaceAll('_', ' ');
 
+/// Everything the picker search matches against: official name, CHIRP spelling,
+/// vendor and any hint words.
 String _modelSearchText(String model, String vendor) {
   final hint = _modelPickerHints[model];
   // Keep the CHIRP spelling searchable alongside the official name.
@@ -48,6 +52,7 @@ String _modelSearchText(String model, String vendor) {
 
 String _vendorSlug(String vendor) => vendor.replaceAll(' ', '_');
 
+/// Model name without the vendor prefix, for rows listed under that vendor.
 String _modelNameWithinVendor(String model, String vendor) {
   final official = officialRadioModelNames[model];
   if (official != null && official.startsWith('$vendor ')) {
@@ -66,6 +71,7 @@ class _VendorModels {
   final List<String> models;
 }
 
+/// Groups models by vendor (from CHIRP's vendor list when available), sorted.
 List<_VendorModels> _groupModels(
   List<String> models,
   Map<String, List<String>> vendorModels,
@@ -130,12 +136,14 @@ class RadioModelPicker extends StatefulWidget {
 class _RadioModelPickerState extends State<RadioModelPicker> {
   final List<String> _recentModels = [];
 
+  /// Adds the initially selected model to the recent list.
   @override
   void initState() {
     super.initState();
     _remember(widget.selectedModel);
   }
 
+  /// Adds a newly selected model to the recent list.
   @override
   void didUpdateWidget(RadioModelPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -144,6 +152,7 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     }
   }
 
+  /// Moves [model] to the front of the recent list, keeping at most [_maxRecentModels].
   void _remember(String? model) {
     if (model == null || model.isEmpty) return;
     _recentModels
@@ -154,6 +163,7 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     }
   }
 
+  /// Opens the full model catalog dialog and reports the choice.
   Future<void> _openPicker() async {
     final selected = await showDialog<String>(
       context: context,
@@ -170,6 +180,7 @@ class _RadioModelPickerState extends State<RadioModelPicker> {
     widget.onSelected(selected);
   }
 
+  /// Button showing the selected model; opens the catalog when clicked.
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -244,6 +255,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
   String? _cachedVendor;
   List<_VendorModels>? _cachedGroups;
 
+  /// Sets up search, groups the catalog and opens on the selected model's vendor.
   @override
   void initState() {
     super.initState();
@@ -256,6 +268,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
         .firstOrNull;
   }
 
+  /// Releases the search field's controller and focus node.
   @override
   void dispose() {
     _searchController.dispose();
@@ -263,6 +276,8 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
     super.dispose();
   }
 
+  /// Groups to show for the current search text and vendor filter (cached while
+  /// neither changes, so typing stays fast on the large catalog).
   List<_VendorModels> _matchingGroups() {
     final query = _searchController.text.trim().toLowerCase();
     if (_cachedGroups != null &&
@@ -319,6 +334,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
     return _cacheGroups(query, matches);
   }
 
+  /// Stores [groups] as the cached result for [query] and the current vendor.
   List<_VendorModels> _cacheGroups(String query, List<_VendorModels> groups) {
     _cachedQuery = query;
     _cachedVendor = _vendor;
@@ -326,6 +342,7 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
     return groups;
   }
 
+  /// Filters the catalog to one vendor (null = all) and clears the search.
   void _selectVendor(String? vendor) {
     setState(() {
       _vendor = vendor;
@@ -334,12 +351,14 @@ class _RadioModelDialogState extends State<_RadioModelDialog> {
     _searchFocus.requestFocus();
   }
 
+  /// Enter in the search box picks the first matching model.
   void _submitSearch() {
     final matches = _matchingGroups();
     if (matches.isEmpty || matches.first.models.isEmpty) return;
     Navigator.pop(context, matches.first.models.first);
   }
 
+  /// Catalog dialog: vendor list, search box and the matching models.
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -526,6 +545,7 @@ class _VendorChoice extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
+  /// One vendor row in the vendor list.
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -567,12 +587,14 @@ class _ModelResultsList extends StatefulWidget {
 class _ModelResultsListState extends State<_ModelResultsList> {
   final ScrollController _scrollController = ScrollController();
 
+  /// Releases the list's scroll controller.
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
 
+  /// Scrolling list of models with a heading per vendor.
   @override
   Widget build(BuildContext context) {
     final rows = <Object>[];
@@ -633,6 +655,7 @@ class _SectionHeader extends StatelessWidget {
 
   final String label;
 
+  /// Vendor heading ("RECENT" for the recent-models group).
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -665,6 +688,7 @@ class _ModelChoice extends StatelessWidget {
   final bool selected;
   final VoidCallback onTap;
 
+  /// One model row: model name plus any hint text.
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _firmwareFromPayload
+description: "Firmware version reported by the bridge, or null when it sent none."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/firmwareFromPayload
 language: dart
 ---
 
 # _firmwareFromPayload
+
+Firmware version reported by the bridge, or null when it sent none.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 String_firmwareFromPayload_firmwareFromPayload
 ```
 
+## Docstring
+
+Firmware version reported by the bridge, or null when it sent none.
+
 ## Source
-Lines 20–20 in `services/radio_bridge.dart`
+Lines 21–21 in `services/radio_bridge.dart`
 
 ## Relationships
 

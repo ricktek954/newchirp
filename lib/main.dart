@@ -53,10 +53,12 @@ const _menuChannel = MethodChannel('newchirp/menu');
 const String _newChirpVersion = '1.0.76';
 const bool _enableMyGmrsDirectory = true;
 
+/// True when a model is chosen and it exists in the loaded catalog.
 bool radioModelSelectionReady(List<String> models, String? model) {
   return model != null && models.contains(model);
 }
 
+/// True when a remembered model was restored but the model catalog isn't loaded yet.
 bool shouldLoadRadioCatalogForRestoredSelection(
   List<String> models,
   String? model,
@@ -64,6 +66,7 @@ bool shouldLoadRadioCatalogForRestoredSelection(
   return model != null && models.isEmpty;
 }
 
+/// Human-readable size: B, KB, MB or GB (1 KB = 1024 bytes).
 String _formatBytes(int bytes) {
   if (bytes < 1024) return '$bytes B';
   final kilobytes = bytes / 1024;
@@ -73,6 +76,9 @@ String _formatBytes(int bytes) {
   return '${(megabytes / 1024).toStringAsFixed(2)} GB';
 }
 
+/// Rewrites a CHIRP driver prompt for NewChirp's dialog: strips HTML, turns
+/// "Click OK" into "Click "[buttonLabel]"", and for radios sent with [PTT] (or
+/// their own key) tells the user to wait for the transfer window's ready message.
 String adaptRadioPromptButton(String message, String buttonLabel) {
   final normalized = message
       .replaceAll(RegExp(r'<br\s*/?>', caseSensitive: false), '\n')
@@ -114,6 +120,8 @@ String adaptRadioPromptButton(String message, String buttonLabel) {
 /// with [_sendKeyCuePrefix].
 const _sendKeyCuePrefix = 'Radio is ready - press';
 
+/// Inserts "wait until the transfer window says ..." before the step where the
+/// user presses the radio's own key (only for the "Radio is ready" button).
 String _waitForSendKeyCue(String message, String buttonLabel) {
   if (buttonLabel != 'Radio is ready') return message;
   final label = RegExp.escape(buttonLabel);
@@ -133,6 +141,8 @@ String _waitForSendKeyCue(String message, String buttonLabel) {
   );
 }
 
+/// App entry point: starts logging, registers licenses, restores language and
+/// window position, then runs the app.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final diagnosticLog = DiagnosticLog();
@@ -202,6 +212,8 @@ Future<void> main() async {
   runApp(NewChirpApp(diagnosticLog: diagnosticLog));
 }
 
+/// Keeps a saved window position on a display that still exists (screens may
+/// have been unplugged since the last run).
 Future<WindowState?> _clampWindowState(WindowState? state) async {
   if (state == null) return null;
   try {
@@ -219,6 +231,7 @@ Future<WindowState?> _clampWindowState(WindowState? state) async {
   }
 }
 
+/// A display's usable area (without menu bar/taskbar) for window placement.
 WindowDisplayArea _windowDisplayArea(Display display) {
   return WindowDisplayArea(
     left: display.visiblePosition?.dx ?? 0.0,
@@ -238,6 +251,7 @@ class _WindowStateManager with WindowListener {
   bool _maximized = false;
   Timer? _saveTimer;
 
+  /// Starts tracking window changes, beginning from the restored bounds.
   void start() {
     final initial = _initial;
     if (initial != null) {
@@ -258,29 +272,34 @@ class _WindowStateManager with WindowListener {
   @override
   void onWindowMoved() => _scheduleSave();
 
+  /// Remembers the window was maximized.
   @override
   void onWindowMaximize() {
     _maximized = true;
     _scheduleSave();
   }
 
+  /// Remembers the window is no longer maximized.
   @override
   void onWindowUnmaximize() {
     _maximized = false;
     _scheduleSave();
   }
 
+  /// Saves the window state immediately when the window closes.
   @override
   void onWindowClose() {
     _saveTimer?.cancel();
     unawaited(_save());
   }
 
+  /// Saves the window state 400 ms after the last move/resize, not on every pixel.
   void _scheduleSave() {
     _saveTimer?.cancel();
     _saveTimer = Timer(const Duration(milliseconds: 400), _save);
   }
 
+  /// Writes the window's size, position and maximized state.
   Future<void> _save() async {
     try {
       final maximized = await windowManager.isMaximized();
@@ -331,6 +350,7 @@ class NewChirpApp extends StatelessWidget {
   final DiagnosticLog? diagnosticLog;
   final bool checkForUpdatesOnStartup;
 
+  /// Rebuilds the app whenever the chosen language changes.
   @override
   Widget build(BuildContext context) {
     const ink = Color(0xFF15211D);
@@ -341,6 +361,7 @@ class NewChirpApp extends StatelessWidget {
     );
   }
 
+  /// The MaterialApp: theme colors, localization and the home screen.
   Widget _buildApp(Locale? locale, Color ink, Color green) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -552,8 +573,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   List<RadioChannel> get _activeChannels =>
       _channels.where((channel) => !channel.cleared).toList();
 
+  /// Rows of the channel table after the search box and column filters, as
+  /// (index in [_channels], channel) pairs.
   List<MapEntry<int, RadioChannel>> _channelTableRows() {
     final needle = _query.trim().toLowerCase();
+    /// True when the channel passes every column filter.
     bool matchesColumnFilters(RadioChannel channel) {
       for (final filter in _columnFilters.entries) {
         final value = filter.value.trim();
@@ -571,6 +595,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       return true;
     }
 
+    /// True when the search text matches the channel's name, comment, number or frequency.
     bool matchesQuery(RadioChannel channel) {
       if (needle.isEmpty) return true;
       if (channel.name.toLowerCase().contains(needle) ||
@@ -651,9 +676,11 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     ];
   }
 
+  /// Columns whose filter compares numbers (frequency) rather than text.
   bool _numericColumnFilter(String columnId) =>
       columnId == 'RX FREQUENCY' || columnId == 'OFFSET / TX FREQ';
 
+  /// The text a column filter compares against for [channel] in column [columnId].
   String _channelColumnFilterValue(RadioChannel channel, String columnId) {
     if (columnId == 'BANK') {
       return _bankLabelsByLocation()[channel.location] ?? '';
@@ -691,6 +718,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     };
   }
 
+  /// Zone/bank names per channel location, comma-joined, for the BANK column.
   Map<int, String> _bankLabelsByLocation() {
     final labels = <int, Set<String>>{};
     for (final model in _radioMappings) {
@@ -718,6 +746,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return focusContext.findAncestorWidgetOfExactType<EditableText>() == null;
   }
 
+  /// Selects every visible (filtered) non-empty channel.
   void _selectAllChannels() {
     final locations = [
       for (final row in _channelTableRows())
@@ -736,6 +765,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Handles a click on a channel row: single select, Ctrl/Cmd toggle, or
+  /// Shift range from the anchor row (in the table's visible order).
   void _selectChannelAtLocation(int location, _ChannelSelectionMode mode) {
     final index = _channels.indexWhere(
       (channel) => channel.location == location,
@@ -803,6 +834,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Opens the bulk editor for two or more selected channels and applies the
+  /// fields the user changed to all of them (one undo step).
   Future<void> _showBulkChannelEditor() async {
     final selectedLocations = _selectedChannelLocations;
     if (selectedLocations.length < 2) return;
@@ -926,6 +959,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// True when the bulk-edit draft differs from the starting values in any field.
   bool _bulkChannelDraftChanged(RadioChannel initial, RadioChannel draft) {
     if (initial.name != draft.name ||
         initial.frequency != draft.frequency ||
@@ -960,6 +994,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return false;
   }
 
+  /// Copies only the fields changed in the bulk draft onto [target].
   void _applyBulkChannelDraft(
     RadioChannel initial,
     RadioChannel draft,
@@ -1030,15 +1065,18 @@ class _NewChirpHomeState extends State<NewChirpHome> {
 
   ChannelImageMatch get _channelImageMatch => _channelLibrarySnapshot.match;
 
+  /// Forces the channel statistics to be recomputed on the next build.
   void _markChannelLibraryDirty() {
     _channelStats.markDirty();
   }
 
+  /// Updates zone/bank membership after channels move ([changes] = old -> new location).
   void _remapRadioMappingChannels(Map<int, int?> changes) {
     if (_radioMappings.isEmpty || changes.isEmpty) return;
     _radioMappings = remapRadioMappingLocations(_radioMappings, changes);
   }
 
+  /// Which editable zones/banks contain channel [location] (to restore on undo).
   List<_ChannelMappingMembership> _mappingMembershipsAt(int location) {
     return [
       for (var modelIndex = 0; modelIndex < _radioMappings.length; modelIndex++)
@@ -1052,6 +1090,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return mappingRangeAt(_radioMappings, location);
   }
 
+  /// Puts channel [location] back into the given zones/banks.
   void _restoreMappingMembershipsAt(
     int location,
     List<_ChannelMappingMembership> memberships,
@@ -1085,6 +1124,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     ];
   }
 
+  /// Records the current channel list as matching the radio image (after a read,
+  /// write or image import), so later edits can be detected.
   void _rememberChannelImageBaseline({required bool fromRadio}) {
     _markChannelLibraryDirty();
     final image = _radioImage;
@@ -1102,6 +1143,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }
 
   bool get _settingsHaveInvalidValues {
+    /// True when this setting (or any setting in this group) has an invalid value.
     bool invalid(RadioSettingNode node) {
       if (node.isGroup) return node.children.any(invalid);
       return node.invalid;
@@ -1110,6 +1152,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return _radioSettings?.items.any(invalid) ?? false;
   }
 
+  /// Connects the native menu (Undo, Redo, ...) to the app and loads saved
+  /// preferences (columns, last radio, warnings).
   @override
   void initState() {
     super.initState();
@@ -1144,6 +1188,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// While a transfer runs, logs a heartbeat every 5 s (elapsed time, frames drawn,
+  /// memory use, progress) so a frozen UI or stalled transfer shows in bug reports.
   void _startTransferHeartbeat(String label) {
     if (!_frameCounterInstalled) {
       _frameCounterInstalled = true;
@@ -1171,6 +1217,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Stops the transfer heartbeat.
   void _stopTransferHeartbeat() {
     _transferHeartbeat?.cancel();
     _transferHeartbeat = null;
@@ -1233,6 +1280,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Applies the saved column order and widths unless the user already changed them.
   Future<void> _loadColumnLayout() async {
     final layout = await _columnLayoutStore.load();
     if (!mounted || layout == null || _columnLayoutTouched) return;
@@ -1245,6 +1293,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Saves the current column order and widths.
   Future<void> _saveColumnLayout() async {
     try {
       await _columnLayoutStore.save(
@@ -1259,6 +1308,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Deep copy of the channel list and selection, for undo/redo.
   _LibraryState _snapshotLibrary() => _LibraryState(
     channels: _channels.map((channel) => channel.copy()).toList(),
     selected: _selected,
@@ -1273,6 +1323,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     clearedLocations: Set.of(_clearedLocations),
   );
 
+  /// Restores an undo/redo snapshot.
   void _restoreLibrary(_LibraryState state) {
     setState(() {
       _channels = state.channels.map((channel) => channel.copy()).toList();
@@ -1294,6 +1345,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Pushes the current state onto the undo stack (max 200 steps) and clears redo.
   void _recordHistory({bool preserveMultiSelection = false}) {
     if (!preserveMultiSelection) {
       _extraSelectedLocations.clear();
@@ -1304,6 +1356,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _syncMenuState();
   }
 
+  /// Undoes the last change.
   void _undo() {
     if (_undoStack.isEmpty) return;
     _redoStack.add(_snapshotLibrary());
@@ -1311,6 +1364,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _syncMenuState();
   }
 
+  /// Redoes the last undone change.
   void _redo() {
     if (_redoStack.isEmpty) return;
     _undoStack.add(_snapshotLibrary());
@@ -1318,6 +1372,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _syncMenuState();
   }
 
+  /// Tells the native menu whether Undo and Redo are available.
   void _syncMenuState() {
     unawaited(
       _menuChannel
@@ -1329,6 +1384,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Restores the last radio model and port, and that model's stored image if any.
   Future<void> _loadRadioSelection() async {
     final selection = await _radioSelectionStore.load();
     if (!mounted || selection == null) return;
@@ -1353,6 +1409,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Loads the stored image's capabilities (limits, zones) without its channels.
   Future<void> _loadImageCapabilities(String imagePath) async {
     try {
       final info = await _bridge.imageInfo(imagePath);
@@ -1370,6 +1427,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Switches to another zone/band of the radio image, asking first if there are
+  /// unsaved edits. Live-read radios (e.g. IC-9700) re-read the band from the radio.
   Future<void> _switchRadioZone(int zoneIndex) async {
     final image = _radioImage;
     final model = _model;
@@ -1455,6 +1514,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Opens the zone/bank editor and applies the result (one undo step).
   Future<void> _editRadioMappings() async {
     if (_busy || _radioMappings.isEmpty) return;
     final edited = await showDialog<List<RadioMappingModel>>(
@@ -1490,6 +1550,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
   }
 
+  /// Remembers the chosen radio model and port. Errors are ignored.
   Future<void> _saveRadioSelection() async {
     try {
       await _radioSelectionStore.save(
@@ -1500,6 +1561,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Sets the column order from a drag in the table header (saved for next launch).
   void _setColumnOrder(List<String> order) {
     setState(() {
       _columnLayoutTouched = true;
@@ -1508,6 +1570,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     unawaited(_saveColumnLayout());
   }
 
+  /// Sets one column's width (saved for next launch).
   void _setColumnWidth(String id, double width) {
     setState(() {
       _columnLayoutTouched = true;
@@ -1516,6 +1579,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     unawaited(_saveColumnLayout());
   }
 
+  /// Shows or hides empty memory slots in the table.
   void _setShowEmptySlots(bool show) {
     setState(() {
       _columnLayoutTouched = true;
@@ -1524,6 +1588,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     unawaited(_saveColumnLayout());
   }
 
+  /// Stops timers and frees controllers when the screen closes.
   @override
   void dispose() {
     _stopTransferHeartbeat();
@@ -1532,6 +1597,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     super.dispose();
   }
 
+  /// Refreshes the list of serial ports and USB radios.
   Future<void> _refreshPorts() async {
     final ports = await _bridge.serialPortDetails();
     if (!mounted) return;
@@ -1543,6 +1609,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Loads the radio model catalog from the bridge, after the saved selection is restored.
   Future<void> _loadModels() async {
     final radioSelectionLoad = _radioSelectionLoad;
     if (radioSelectionLoad != null) await radioSelectionLoad;
@@ -1575,6 +1642,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// After a restored selection: refreshes ports and loads that model's details.
   Future<void> _prepareRestoredRadio() async {
     final radioSelectionLoad = _radioSelectionLoad;
     if (radioSelectionLoad != null) await radioSelectionLoad;
@@ -1586,6 +1654,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Selects a radio model: clears the old model's image info and loads the new
+  /// model's stored image, if any.
   void _selectRadioModel(String model) {
     _diagnosticLog.record(
       'radio',
@@ -1618,6 +1688,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     unawaited(_saveRadioSelection());
   }
 
+  /// Runs [action] with the busy indicator and [label] as the status; any error
+  /// is shown to the user, and the status returns to Ready.
   Future<void> _task(String label, Future<void> Function() action) async {
     setState(() {
       _busy = true;
@@ -1636,6 +1708,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Error text with platform advice for common causes: macOS privacy blocks on a
+  /// folder, or Linux serial-port permission (dialout group).
   String _friendlyActionError(Object error) {
     final message = error.toString();
     if (Platform.isMacOS &&
@@ -1696,6 +1770,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return (summary: summary, technical: message == summary ? null : message);
   }
 
+  /// Logs [error] and shows it in a dialog with a "Submit Bug Report" button.
   Future<void> _showActionError(Object error) {
     final presentation = _actionErrorPresentation(error);
     _diagnosticLog.recordError(
@@ -1793,6 +1868,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Opens the bug report dialog, offering to attach a radio image (one named in the
+  /// error, else the stored image).
   Future<void> _showErrorReport({required String summary, String? technical}) {
     _diagnosticLog.record(
       'report',
@@ -1834,6 +1911,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return null;
   }
 
+  /// Open dialog for a CHIRP image, CSV or MOTOTRBO XML file; loads it as the channel list.
   Future<void> _openLibraryFile() async {
     const type = XTypeGroup(
       label: 'CHIRP images, CSV, or MOTOTRBO XML',
@@ -1896,6 +1974,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Loads a user-supplied CHIRP driver module (after a warning), if this OS can sandbox it.
   Future<void> _loadChirpModule() async {
     final blocker = await moduleSandboxBlocker();
     if (!mounted) return;
@@ -1968,6 +2047,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Unloads the CHIRP module and reloads the normal model catalog.
   Future<void> _unloadChirpModule() async {
     _bridge.unloadModule();
     await _task(context.l10n.uiRefreshingRadioCatalog, () async {
@@ -1999,6 +2079,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Imports channels from a CHIRP .img file and stores it as the model's radio image.
   Future<void> _importChirpImage(XFile file) async {
     late final ({
       List<RadioChannel> channels,
@@ -2064,6 +2145,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _reportUndecodedChannels();
   }
 
+  /// Asks whether incoming channels replace the list or are added to it.
   Future<_ChannelApplyMode?> _chooseChannelApplyMode({
     required String label,
     required int count,
@@ -2091,6 +2173,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   bool get _keepsRadioZoneOnReplace =>
       _radioImage != null && _selectedZone != null;
 
+  /// Puts [incoming] channels into the list, replacing everything or adding them
+  /// to free slots, and records the change for undo.
   void _applyChannels(
     List<RadioChannel> incoming,
     _ChannelApplyMode mode, {
@@ -2152,12 +2236,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// First free memory slot within the radio's range, or null when full.
   int? _nextChannelLocation() => RadioChannel.nextAvailableLocation(
     _channels,
     minimum: _capabilities?.memoryStart ?? 1,
     maximum: _capabilities?.memoryEnd,
   );
 
+  /// Problems that would stop [channel] being written to the selected radio.
   List<String> _channelIssues(RadioChannel channel) => channel.validate(
     minimumLocation: _capabilities?.memoryStart,
     maximumLocation: _capabilities?.memoryEnd,
@@ -2171,6 +2257,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     hasTuningStep: _capabilities?.hasTuningStep ?? true,
   );
 
+  /// Selects [channel] and scrolls to it so its problems can be fixed.
   Future<void> _reviewChannelIssues(RadioChannel channel) async {
     final index = _channels.indexOf(channel);
     if (index < 0) return;
@@ -2182,6 +2269,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _showChannelEditorAtLocation(channel.location);
   }
 
+  /// Channels whose names are longer than the radio allows (they would be cut).
   List<RadioChannel> _channelsWithLongNames() {
     final limit = _capabilities?.nameLength;
     if (limit == null || limit <= 0) return const [];
@@ -2270,10 +2358,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Sorts the channel list by memory location.
   void _sortChannelsByLocation() {
     _channels.sort((left, right) => left.location.compareTo(right.location));
   }
 
+  /// Drag-and-drop reorder: moves a channel in the list, and channels keep the
+  /// slot numbers in their new order (zones follow). Disabled while searching.
   void _moveChannel(int fromIndex, int toIndex) {
     if (_query.isNotEmpty ||
         fromIndex == toIndex ||
@@ -2334,6 +2425,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Moves a channel to [targetLocation], replacing an empty slot there.
   void _moveChannelToLocation(int fromIndex, int targetLocation) {
     if (_query.isNotEmpty ||
         fromIndex < 0 ||
@@ -2383,6 +2475,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Inserts an empty slot at [location], shifting later channels down by one
+  /// (within the bank if the radio has fixed banks). Not for fixed-slot radios.
   void _insertEmptySlotBefore(int location) {
     if (_query.isNotEmpty) return;
     if (showsMidlandChannelNumbers(_model)) {
@@ -2464,6 +2558,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
   }
 
+  /// Removes the empty slot at [location], shifting later channels up by one.
   void _removeEmptySlot(int location) {
     if (_query.isNotEmpty) return;
     if (showsMidlandChannelNumbers(_model)) {
@@ -2524,6 +2619,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
   }
 
+  /// Opens Find Repeaters and adds the chosen repeaters as channels.
   Future<void> _findRepeaters() async {
     final channels = await showDialog<List<RadioChannel>>(
       context: context,
@@ -2545,6 +2641,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _applyChannels(channels, mode, libraryName: 'RepeaterBook Repeaters');
   }
 
+  /// Tells the user there is no empty memory slot left.
   void _showNoEmptyChannelSlot() {
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
@@ -2561,12 +2658,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
   }
 
+  /// Loads the "don't show again" setting for the file-save warning.
   Future<void> _loadFileSaveWarning() async {
     final hidden = await _fileSaveWarningStore.isHidden();
     if (!mounted) return;
     _hideFileSaveWarning = hidden;
   }
 
+  /// Warns that saving a file doesn't write the radio (unless hidden); false if cancelled.
   Future<bool> _confirmFileSaveDoesNotWriteRadio() async {
     await _fileSaveWarningLoad;
     if (!mounted || _hideFileSaveWarning) {
@@ -2590,6 +2689,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return mounted;
   }
 
+  /// Saves the channel list as CSV (one save at a time).
   Future<void> _saveCsv({bool saveAs = false}) async {
     if (_savingLibrary) return;
     _savingLibrary = true;
@@ -2600,6 +2700,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Asks for a path when needed, writes the CSV and marks the list as saved.
   Future<void> _saveCsvNow({required bool saveAs}) async {
     if (!await _confirmFileSaveDoesNotWriteRadio()) return;
     if (!mounted) return;
@@ -2691,6 +2792,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Asks before replacing an edited channel list; true when it may be replaced.
   Future<bool> _confirmReplaceLibrary({required String destination}) async {
     if (!_libraryOpen) return true;
     final discard = await showDialog<bool>(
@@ -2719,6 +2821,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return discard == true && mounted;
   }
 
+  /// Starts a new, empty channel list.
   Future<void> _newLibrary() async {
     if (!await _confirmReplaceLibrary(
       destination: context.l10n.uiANewBlankConfiguration,
@@ -2743,6 +2846,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Loads the 22 GMRS starter channels.
   Future<void> _useGmrsStarter() async {
     final template = gmrsStarterChannels();
     final mode = _libraryOpen && _channels.isNotEmpty
@@ -2756,6 +2860,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _applyChannels(template, mode, libraryName: 'GMRS Starter Library');
   }
 
+  /// Loads a marine VHF channel plan chosen in the template dialog.
   Future<void> _useMarineTemplate() async {
     final selection = await showDialog<MarineTemplateSelection>(
       context: context,
@@ -2774,6 +2879,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _applyChannels(template, mode, libraryName: selection.plan.libraryName);
   }
 
+  /// Loads CHIRP's stock "US FRS and GMRS Channels" list.
   Future<void> _restoreStockChannels() async {
     final source = _bridge.chirpSource;
     final stockFile = File(
@@ -2817,11 +2923,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _applyChannels(channels, mode, libraryName: 'Stock Channels');
   }
 
+  /// Opens the Radio Connection page and loads the model catalog if needed.
   void _openRadioConnection() {
     setState(() => _page = 1);
     if (_models.isEmpty) unawaited(_loadModels());
   }
 
+  /// Switches sidebar page; the Radio Settings page (4) also loads settings.
   void _selectPage(int page) {
     if (page == 4) {
       unawaited(_openRadioSettings());
@@ -2830,6 +2938,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     setState(() => _page = page);
   }
 
+  /// Opens Radio Settings and loads them from the stored image.
   Future<void> _openRadioSettings() async {
     setState(() => _page = 4);
     final selectionLoad = _radioSelectionLoad;
@@ -2837,6 +2946,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     if (_models.isEmpty) await _loadModels();
   }
 
+  /// Loads the radio's settings from the stored image (again if [force]).
   Future<void> _loadRadioSettings({bool force = false}) async {
     final model = _model;
     final image = _radioImage;
@@ -2874,6 +2984,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Reloads settings from the saved image, asking first if there are unsaved changes.
   Future<void> _useSavedRadioSnapshot() async {
     if (_settingsLoading || _busy) return;
     if (_settingsDirty) {
@@ -2900,6 +3011,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _loadRadioSettings(force: true);
   }
 
+  /// Reads the settings straight from the radio on the selected port.
   Future<void> _readRadioSettings() async {
     final model = _model;
     final port = _port;
@@ -2969,13 +3081,16 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Marks a setting as changed so it is included in the next write.
   void _markRadioSettingsChanged(RadioSettingNode node) {
     node.changed = true;
     setState(() => _settingsDirty = true);
   }
 
+  /// The changed settings as {name, value} entries for the bridge.
   List<Map<String, Object?>> _radioSettingChanges() {
     final changes = <Map<String, Object?>>[];
+    /// Collects changed leaf settings, descending into groups.
     void walk(RadioSettingNode node) {
       if (node.isGroup) {
         for (final child in node.children) {
@@ -2992,6 +3107,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return changes;
   }
 
+  /// Writes the changed settings to the radio (blocked for read-only drivers).
   Future<void> _writeRadioSettings() async {
     if (await _writeBlockedByDriver() || !mounted) return;
     final model = _model;
@@ -3058,6 +3174,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _loadRadioSettings(force: true);
   }
 
+  /// A blank channel at [location] with the radio's defaults (Midland and GM-32
+  /// radios get their fixed receive settings).
   RadioChannel _newChannelAt(int location) {
     final midland = showsMidlandChannelNumbers(_model);
     final gm32 = isBaofengGm32(_model);
@@ -3071,6 +3189,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Slot after the last channel, or null when that is past the radio's last slot.
   int? _endInsertionLocation() {
     final minimum = _capabilities?.memoryStart ?? 1;
     final maximum = _capabilities?.memoryEnd;
@@ -3085,6 +3204,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return location;
   }
 
+  /// Asks where a new channel goes: at the end, or before/after the selected one.
   Future<_AddChannelPlacement?> _chooseAddChannelPlacement() {
     final selected = _current;
     final endLocation = _endInsertionLocation();
@@ -3149,6 +3269,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Inserts a new channel at [location], shifting later channels down if needed.
   void _insertChannelAt(int location) {
     final minimum = _capabilities?.memoryStart;
     final maximum = _capabilities?.memoryEnd;
@@ -3218,6 +3339,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Adds a channel where the user chooses and opens it in the editor.
   Future<void> _addChannel() async {
     final placement = await _chooseAddChannelPlacement();
     if (!mounted || placement == null) return;
@@ -3247,11 +3369,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _insertChannelAt(location);
   }
 
+  /// Duplicates the selected channel.
   void _duplicateChannel() {
     if (_selected < 0 || _selected >= _channels.length) return;
     _duplicateChannelAt(_selected);
   }
 
+  /// Copies the channel at [index] into the next free slot.
   void _duplicateChannelAt(int index) {
     if (index < 0 || index >= _channels.length) return;
     if (_channels[index].cleared) return;
@@ -3275,6 +3399,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Non-empty channels at the given locations.
   List<RadioChannel> _channelsAtLocations(Iterable<int> locations) {
     final wanted = locations.toSet();
     return _channels
@@ -3285,6 +3410,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ..sort((left, right) => left.location.compareTo(right.location));
   }
 
+  /// Copies channels to NewChirp's own clipboard.
   void _copyChannelsAtLocations(Iterable<int> locations) {
     final channels = _channelsAtLocations(locations);
     if (channels.isEmpty) return;
@@ -3296,6 +3422,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Copies channels to the clipboard, then clears them (Midland repeater rows
+  /// are reset instead of cleared).
   void _cutChannelsAtLocations(Iterable<int> locations) {
     final channels = _channelsAtLocations(locations);
     if (channels.isEmpty) return;
@@ -3339,6 +3467,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Pastes the clipboard starting at [location], asking before overwriting
+  /// channels and refusing to go past the radio's last slot.
   Future<void> _pasteChannelsAtLocation(int location) async {
     if (_channelClipboard.isEmpty) return;
     final finalLocation = location + _channelClipboard.length - 1;
@@ -3417,6 +3547,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Asks before overwriting several channels (one channel uses the single-channel dialog).
   Future<bool> _confirmOverwriteChannels(List<RadioChannel> channels) async {
     if (channels.length == 1) return _confirmOverwriteChannel(channels.single);
     final first = channels.first;
@@ -3449,6 +3580,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return confirmed == true;
   }
 
+  /// Asks before overwriting one channel.
   Future<bool> _confirmOverwriteChannel(RadioChannel channel) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -3480,6 +3612,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return confirmed == true;
   }
 
+  /// Deletes the channel at [index] (Midland repeater rows are reset instead).
   void _deleteChannelAt(int index) {
     if (index < 0 || index >= _channels.length) return;
     final channel = _channels[index];
@@ -3510,6 +3643,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Clears the channels at [locations] in one undo step (Midland repeater rows are reset).
   void _clearChannelsAtLocations(Iterable<int> locations) {
     final channels = _channelsAtLocations(locations);
     if (channels.isEmpty) return;
@@ -3597,11 +3731,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Resets a Midland repeater row to its plain fixed channel instead of deleting it.
   void _keepMidlandRepeater(RadioChannel channel) {
     channel.restorePlainMidlandRepeater();
     _clearedLocations.remove(channel.location);
   }
 
+  /// Explains that a Midland repeater row was kept because the radio needs it.
   void _noteRepeaterRowKept(RadioChannel channel) {
     final label = channelNumberLabel(_model, channel.location);
     ScaffoldMessenger.of(context)
@@ -3615,6 +3751,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
   }
 
+  /// Reads the radio (optionally one zone of a live radio), asking before replacing
+  /// an open channel list.
   Future<void> _downloadRadio({int? liveZone}) async {
     if (_port == null || !_radioModelSelectedForTransfer) return;
     // A live-radio zone switch has already confirmed replacing the list.
@@ -3706,6 +3844,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     await _reportUndecodedChannels();
   }
 
+  /// Shows the driver's instructions before a read or write; true when the user continues.
   Future<bool> _confirmRadioInstructions(
     RadioInstructions instructions, {
     required bool writing,
@@ -3756,6 +3895,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return ready == true && mounted;
   }
 
+  /// Loads the selected driver's instructions, with the busy indicator.
   Future<RadioInstructions?> _loadRadioInstructions() async {
     setState(() {
       _busy = true;
@@ -3774,6 +3914,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Discards edits by reloading the channel list from the stored radio image.
   Future<void> _discardChannelLibraryChanges() async {
     final image = _radioImage;
     if (_busy ||
@@ -3831,6 +3972,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return true;
   }
 
+  /// Writes the channel list to the radio after checks (invalid channels, long
+  /// names, receive-only channels, driver instructions).
   Future<void> _uploadRadio() async {
     if (_port == null ||
         !_radioModelSelectedForTransfer ||
@@ -4109,6 +4252,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Like [_task] for radio transfers: shows progress, allows cancel, starts the
+  /// heartbeat log. Returns true when the transfer succeeded.
   Future<bool> _transferTask(
     String label,
     Future<void> Function() action,
@@ -4153,6 +4298,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return succeeded;
   }
 
+  /// Shows a progress update from the bridge.
   void _reportTransferProgress(RadioProgress progress) {
     if (!mounted) return;
     setState(() {
@@ -4163,6 +4309,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Cancels a transfer. During a write it asks first, since stopping mid-write can
+  /// leave the radio's memory half-written.
   Future<void> _cancelTransfer() async {
     if (!_transferActive || _transferCancelling) return;
     if (_transferWriting) {
@@ -4200,6 +4348,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     _bridge.cancelActive();
   }
 
+  /// Main window: keyboard shortcuts, sidebar and the current page.
   @override
   Widget build(BuildContext context) {
     return Shortcuts(
@@ -4331,6 +4480,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Welcome page.
   Widget _buildWelcome() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(28),
@@ -4419,6 +4569,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Checks for a newer version (quietly at startup, with a result dialog otherwise).
   Future<void> _checkForUpdates({bool startup = false}) async {
     if (_checkingForUpdates) return;
     setState(() => _checkingForUpdates = true);
@@ -4452,6 +4603,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Dialog offering the new version (install now or open the download page).
   Future<void> _showUpdateAvailable(UpdateCheckResult result) {
     final installerUrl = trustedUpdateArtifactUrl(result.downloadUrl);
     final downloadPageUrl = trustedDownloadUrl(result.releaseUrl);
@@ -4502,6 +4654,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Downloads and installs an update, unless a transfer or save is running.
   Future<void> _downloadAndInstallUpdate(UpdateCheckResult result) async {
     final l10n = context.l10n;
     if (_busy || _transferActive || _savingLibrary) {
@@ -4663,6 +4816,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Quits so the installer can replace the app.
   Future<void> _exitForUpdate() async {
     exit(0);
   }
@@ -4742,6 +4896,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Dialog saying this is the latest version.
   Future<void> _showUpToDate(UpdateCheckResult result) => showDialog<void>(
     context: context,
     builder: (context) => AlertDialog(
@@ -4758,6 +4913,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     ),
   );
 
+  /// About page: version, credits and licenses.
   Widget _buildAbout() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(28),
@@ -4922,6 +5078,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Opens the channel editor for [location] (an empty slot creates a new channel).
   Future<void> _showChannelEditorAtLocation(int location) async {
     final initialIndex = _channels.indexWhere(
       (channel) => channel.location == location,
@@ -4945,6 +5102,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
         builder: (context, setDialogState) {
           void changed(VoidCallback update) => setDialogState(() => update());
 
+          /// Saves the draft, asking what to do if its new location is already used.
           Future<void> save() async {
             final saved = draft.copy()..cleared = false;
             final occupied = saved.location == location
@@ -5015,6 +5173,8 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Asks what to do when an edited channel's new location is taken: move the
+  /// other channel, swap the two, or replace it (null = cancel).
   Future<_ChannelLocationConflictAction?> _chooseChannelLocationConflictAction({
     required int sourceLocation,
     required RadioChannel target,
@@ -5065,6 +5225,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Puts an edited channel into the list, applying the chosen location-conflict action.
   void _saveEditedChannel(
     RadioChannel saved, {
     required int originalLocation,
@@ -5178,6 +5339,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     });
   }
 
+  /// Asks before deleting a channel (Midland repeater rows are reset instead).
   Future<bool> _confirmDeleteChannel(RadioChannel channel) async {
     final kept = isMidlandRepeaterRow(_model, channel.location);
     final label = channelNumberLabel(_model, channel.location);
@@ -5223,6 +5385,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     return confirmed == true;
   }
 
+  /// Restores whether the library metrics panel was collapsed.
   Future<void> _loadLibraryMetricsCollapsed() async {
     final collapsed = await _libraryMetricsStore.isCollapsed();
     if (mounted && collapsed != _libraryMetricsCollapsed) {
@@ -5230,11 +5393,13 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Collapses or expands the library metrics panel and remembers it.
   void _setLibraryMetricsCollapsed(bool collapsed) {
     setState(() => _libraryMetricsCollapsed = collapsed);
     unawaited(_libraryMetricsStore.setCollapsed(collapsed));
   }
 
+  /// Channel library page: metrics, image status, toolbar and the channel table.
   Widget _buildLibrary() {
     final visible = _channelTableRows();
     final selectedChannelCount = _selectedChannelLocations.length;
@@ -5832,6 +5997,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Prints the selected frequency reference chart (a bundled PDF).
   Future<void> _printFrequencyReference() async {
     final temp = File(
       '${Directory.systemTemp.path}/newchirp-frequency-reference.pdf',
@@ -5858,6 +6024,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Builds a PDF of the channel list and sends it to the printer (or a PDF viewer).
   Future<void> _printChannelList() async {
     final rows = channelListRows(_channels, radioModel: _model);
     final title = _model == null
@@ -5901,6 +6068,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
   }) async {
     final temp = pdf;
 
+    /// Opens the PDF in the default viewer when printing isn't possible.
     Future<void> openInPdfViewer({required bool noPrinters}) async {
       try {
         await openLocalFile(temp.path);
@@ -6033,6 +6201,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Printer names from `lpstat -p` (macOS/Linux CUPS); empty if none or on error.
   Future<List<String>> _systemPrinters() async {
     try {
       final result = await Process.run('/usr/bin/lpstat', ['-p']);
@@ -6047,6 +6216,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// The default printer from `lpstat -d`, or null.
   Future<String?> _defaultPrinterName() async {
     try {
       final result = await Process.run('/usr/bin/lpstat', ['-d']);
@@ -6060,6 +6230,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     }
   }
 
+  /// Frequency Reference page: plan picker plus the US or international chart.
   Widget _buildFrequencyReference() {
     final plan = _frequencyReferenceIndex < 0
         ? null
@@ -6108,12 +6279,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Table for one international plan (channel, frequency, notes).
   Widget _buildInternationalFrequencyReference(FrequencyReferencePlan plan) {
     const green = Color(0xFF1F7455);
     const ink = Color(0xFF15211D);
     const muted = Color(0xFF56615B);
     const grid = Color(0xFFD8DEDA);
 
+    /// One table cell (bold header style when [header]).
     Widget cell(String text, {bool header = false}) => Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
       child: Text(
@@ -6207,6 +6380,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// US GMRS/FRS chart with color bands and a legend.
   Widget _buildUsFrequencyReference() {
     const green = Color(0xFF1F7455);
     const ink = Color(0xFF15211D);
@@ -6429,12 +6603,14 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       ['RPT22', '467.7250', '462.7250'],
     ];
 
+    /// Row color by channel group: 1-7, 8-14, then 15-22.
     Color rowColor(int channel) {
       if (channel <= 7) return band1;
       if (channel <= 14) return band2;
       return band3;
     }
 
+    /// One chart cell.
     Widget cell(
       String text, {
       Color color = ink,
@@ -6451,6 +6627,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
     }
 
+    /// One chart header cell.
     Widget headerCell(String text, {TextAlign align = TextAlign.left}) {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -6466,6 +6643,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
       );
     }
 
+    /// One color swatch with its label in the legend.
     Widget legendItem(Color color, String label) {
       return Padding(
         padding: const EdgeInsets.only(right: 18, bottom: 6),
@@ -6663,6 +6841,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Centered icon, title, text and optional button for the settings page's empty/error states.
   Widget _settingsMessage({
     required IconData icon,
     required String title,
@@ -6697,6 +6876,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Radio Settings page: source buttons (saved image or radio) and the settings tree.
   Widget _buildRadioSettings() {
     final model = _model;
     final hasImage = model != null && _radioImage != null;
@@ -6913,6 +7093,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// One settings group as a card; nested groups are indented.
   Widget _buildRadioSettingsGroup(
     RadioSettingNode group, {
     bool nested = false,
@@ -6988,6 +7169,7 @@ class _NewChirpHomeState extends State<NewChirpHome> {
     );
   }
 
+  /// Radio Connection page: model picker, port, stored image and Read/Write buttons.
   Widget _buildRadio() {
     final storedImageReady =
         _model != null &&
@@ -7264,6 +7446,7 @@ class _Sidebar extends StatelessWidget {
   final ValueChanged<int> onPage;
   final VoidCallback onFindRepeaters;
 
+  /// Left sidebar with the logo, page list and language menu.
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -7362,6 +7545,7 @@ class _Sidebar extends StatelessWidget {
 class _LanguageMenu extends StatelessWidget {
   const _LanguageMenu();
 
+  /// Language menu (System or a specific language), saved for next launch.
   @override
   Widget build(BuildContext context) {
     final current = appLocale.value?.languageCode ?? 'system';
@@ -7416,6 +7600,7 @@ class _ProgrammerCredit extends StatelessWidget {
   final String roleLine;
   final String email;
 
+  /// Credit line on the About page.
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -7436,6 +7621,7 @@ class _ProgrammerCredit extends StatelessWidget {
 
 class _Logo extends StatelessWidget {
   const _Logo();
+  /// App logo tile.
   @override
   Widget build(BuildContext context) => Container(
     width: 36,
@@ -7459,6 +7645,7 @@ class _NavItem extends StatelessWidget {
   final IconData icon;
   final bool selected;
   final VoidCallback onTap;
+  /// One sidebar page button (highlighted when selected).
   @override
   Widget build(BuildContext context) => Material(
     color: selected ? const Color(0xFF29493D) : Colors.transparent,
@@ -7516,6 +7703,7 @@ class _TransferOverlayState extends State<_TransferOverlay> {
   final Stopwatch _elapsed = Stopwatch();
   Timer? _ticker;
 
+  /// Starts the 1-second ticker that updates the elapsed time.
   @override
   void initState() {
     super.initState();
@@ -7525,6 +7713,7 @@ class _TransferOverlayState extends State<_TransferOverlay> {
     });
   }
 
+  /// Stops the elapsed-time ticker.
   @override
   void dispose() {
     _ticker?.cancel();
@@ -7540,6 +7729,8 @@ class _TransferOverlayState extends State<_TransferOverlay> {
         : '${remainder}s';
   }
 
+  /// Full-window overlay during a transfer: label, progress bar/percent,
+  /// elapsed time and Cancel.
   @override
   Widget build(BuildContext context) {
     final fraction = widget.fraction;
@@ -7651,6 +7842,7 @@ class RadioSettingsSourceActions extends StatelessWidget {
   final VoidCallback onReadRadio;
   final VoidCallback onUseSavedSnapshot;
 
+  /// Buttons to load settings from the saved image or read them from the radio.
   @override
   Widget build(BuildContext context) {
     return Wrap(
@@ -7696,6 +7888,7 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
 
   String get _textValue => '${widget.node.value ?? ''}';
 
+  /// Creates the text controller and focus node for this setting.
   @override
   void initState() {
     super.initState();
@@ -7703,6 +7896,7 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
     _focusNode = FocusNode();
   }
 
+  /// Shows the new value when the field is reused for another setting.
   @override
   void didUpdateWidget(covariant _RadioSettingField oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -7712,6 +7906,7 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
     }
   }
 
+  /// Frees the text controller and focus node.
   @override
   void dispose() {
     _controller.dispose();
@@ -7725,6 +7920,7 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
     return '${node.min} - ${node.max}';
   }
 
+  /// Validates typed text against the setting's type and range, and stores it if valid.
   void _changed(String text) {
     final node = widget.node;
     String? error;
@@ -7765,6 +7961,7 @@ class _RadioSettingFieldState extends State<_RadioSettingField> {
     widget.onChanged(node);
   }
 
+  /// The right control for the setting's kind: switch, dropdown or text field.
   @override
   Widget build(BuildContext context) {
     final node = widget.node;
@@ -7862,6 +8059,7 @@ List<(String, String)> _glossaryTerms(AppLocalizations l10n) => [
   ('S-CODE', l10n.glossSCode),
 ];
 
+/// Opens the abbreviation glossary (CTCSS, DCS, ...).
 Future<void> _showAbbreviationGlossary(BuildContext context) {
   return showDialog<void>(
     context: context,
@@ -7880,12 +8078,14 @@ class _GlossaryDialogState extends State<_GlossaryDialog> {
   final _controller = TextEditingController();
   String _query = '';
 
+  /// Frees the search controller.
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
+  /// Searchable list of radio abbreviations and their meanings.
   @override
   Widget build(BuildContext context) {
     final query = _query.trim().toLowerCase();
@@ -8001,6 +8201,7 @@ class _TopBar extends StatelessWidget {
   final String minimalSubtitle;
   final bool showPrint;
   final VoidCallback onPrint;
+  /// Top toolbar: file, radio and help menus; buttons collapse to icons on narrow windows.
   @override
   Widget build(BuildContext context) {
     if (minimalMode) {
@@ -8110,6 +8311,7 @@ class _TopBar extends StatelessWidget {
               ),
               MenuAnchor(
                 builder: (context, controller, child) {
+                  /// Opens or closes this menu.
                   void toggle() => controller.isOpen
                       ? controller.close()
                       : controller.open();
@@ -8204,6 +8406,7 @@ class _TopBar extends StatelessWidget {
                   ),
               MenuAnchor(
                 builder: (context, controller, child) {
+                  /// Opens or closes this menu.
                   void toggle() => controller.isOpen
                       ? controller.close()
                       : controller.open();
@@ -8246,9 +8449,11 @@ class _TopBar extends StatelessWidget {
     );
   }
 
+  /// Help menu: abbreviation glossary, report a problem, check for updates.
   Widget _buildHelpMenu(BuildContext context, {required bool iconOnly}) {
     return MenuAnchor(
       builder: (context, controller, child) {
+        /// Opens or closes this menu.
         void toggle() =>
             controller.isOpen ? controller.close() : controller.open();
         if (iconOnly) {
@@ -8360,6 +8565,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
   bool _sent = false;
   String? _error;
 
+  /// Frees the text controllers.
   @override
   void dispose() {
     _emailController.dispose();
@@ -8367,6 +8573,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
     super.dispose();
   }
 
+  /// Validates the email address, then sends the report.
   Future<void> _submit() async {
     final email = _emailController.text.trim();
     if (!email.contains('@') || email.startsWith('@') || email.endsWith('@')) {
@@ -8414,6 +8621,7 @@ class _ErrorReportDialogState extends State<_ErrorReportDialog> {
     }
   }
 
+  /// Bug report form with a preview of the diagnostic log that will be sent.
   @override
   Widget build(BuildContext context) {
     final diagnosticPreview = widget.diagnosticLog.buildReport(
@@ -8569,18 +8777,21 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
   bool _replaceAll = true;
   String? _startError;
 
+  /// Creates the "start at" field with the suggested first location.
   @override
   void initState() {
     super.initState();
     _startController = TextEditingController(text: '${widget.initialStart}');
   }
 
+  /// Frees the "start at" field controller.
   @override
   void dispose() {
     _startController.dispose();
     super.dispose();
   }
 
+  /// Dialog: replace all channels, or add them starting at a chosen location.
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -8646,6 +8857,7 @@ class _ChannelApplyDialogState extends State<_ChannelApplyDialog> {
     );
   }
 
+  /// Returns the chosen mode (validating the start location when adding).
   void _apply() {
     if (_replaceAll) {
       Navigator.pop(
@@ -8685,6 +8897,7 @@ class _SearchableRegionField extends StatelessWidget {
   final bool enabled;
   final ValueChanged<String> onSelected;
 
+  /// Region text field with autocomplete from the country's region list.
   @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(
@@ -8808,6 +9021,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
 
   bool get _supportsGmrs => repeaterCountrySupportsGmrs(_country);
 
+  /// Sets up the myGMRS client and loads saved search preferences.
   @override
   void initState() {
     super.initState();
@@ -8815,6 +9029,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     _preferencesLoad = _loadPreferences();
   }
 
+  /// Applies saved search settings unless the user already changed something.
   Future<void> _loadPreferences() async {
     final preferences = await widget.preferencesStore.load();
     if (!mounted) return;
@@ -8866,6 +9081,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     });
   }
 
+  /// Enum value named [name], or [fallback] (for values read from the preferences file).
   T _enumByName<T extends Enum>(List<T> values, String name, T fallback) {
     for (final value in values) {
       if (value.name == name) return value;
@@ -8873,6 +9089,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     return fallback;
   }
 
+  /// The dialog's current search settings.
   RepeaterSearchPreferences _currentPreferences() {
     return RepeaterSearchPreferences(
       provider: _provider.name,
@@ -8890,6 +9107,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     );
   }
 
+  /// Saves the search settings now, queued after any save already running.
   Future<void> _savePreferencesNow() {
     final preferences = _currentPreferences();
     _preferencesSave = _preferencesSave.then((_) async {
@@ -8902,6 +9120,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     return _preferencesSave;
   }
 
+  /// Saves the search settings 250 ms after the last change.
   void _preferencesChanged() {
     _preferencesTouched = true;
     if (!_preferencesLoaded) return;
@@ -8911,6 +9130,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     });
   }
 
+  /// Selects a country and resets the region to one that exists there.
   void _selectCountry(String country) {
     final regions = repeaterRegionsForCountry(country);
     setState(() {
@@ -8927,6 +9147,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     _preferencesChanged();
   }
 
+  /// Switches between RepeaterBook and myGMRS, cancelling a pending sign-in.
   void _selectProvider(_RepeaterProvider provider) {
     if (_myGmrsSigningIn) {
       _myGmrs.cancelSignIn();
@@ -8949,6 +9170,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     _preferencesChanged();
   }
 
+  /// Signs in to myGMRS (via the browser), showing progress in the dialog.
   Future<void> _signInMyGmrs() async {
     _myGmrsSignInCancelled = false;
     setState(() {
@@ -8976,6 +9198,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
   }
 
+  /// Cancels a pending myGMRS sign-in.
   void _cancelMyGmrsSignIn() {
     _myGmrsSignInCancelled = true;
     _myGmrs.cancelSignIn();
@@ -8989,6 +9212,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
   }
 
+  /// Signs out of myGMRS.
   Future<void> _signOutMyGmrs() async {
     setState(() {
       _loading = true;
@@ -9014,6 +9238,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
   }
 
+  /// Saves pending preferences and frees controllers.
   @override
   void dispose() {
     _preferencesSaveTimer?.cancel();
@@ -9030,6 +9255,8 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     super.dispose();
   }
 
+  /// Runs the search with the chosen provider (a ZIP code in the filter box
+  /// searches near that ZIP code).
   Future<void> _search() async {
     await _preferencesLoad;
     if (!mounted) return;
@@ -9120,6 +9347,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     }
   }
 
+  /// Message for an empty result list, with a hint when filters hid the matches.
   String _emptyResultsMessage(int totalMatches) {
     final source = _provider == _RepeaterProvider.myGmrs
         ? 'myGMRS'
@@ -9204,6 +9432,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     return repeaterCountiesForRegion(_country, _state, loadedCounties);
   }
 
+  /// Lets the user pick counties to filter the results.
   Future<void> _chooseCounties() async {
     final counties = _availableCounties;
     if (counties.isEmpty) return;
@@ -9307,6 +9536,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     });
   }
 
+  /// Switches the search to RepeaterBook amateur repeaters.
   void _searchAmateurInstead() {
     setState(() {
       _preferencesTouched = true;
@@ -9317,6 +9547,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     _search();
   }
 
+  /// One-line summary of a result: frequency, tone, distance and location.
   String _channelDetail(RepeaterSearchResult result) {
     final channel = result.channel;
     final frequency = '${channel.frequency.toStringAsFixed(4)} MHz';
@@ -9328,6 +9559,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         '${result.location.isEmpty ? '' : ' • ${result.location}'}';
   }
 
+  /// Ticks or unticks a result for adding.
   void _setResultSelected(RepeaterSearchResult result, bool selected) {
     setState(() {
       if (selected) {
@@ -9338,6 +9570,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     });
   }
 
+  /// Map of the visible results (repeaters with coordinates).
   Widget _buildResultsMap(
     BuildContext context,
     List<RepeaterSearchResult> visibleResults,
@@ -9375,6 +9608,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
           ),
     ];
     final fallback = points.isEmpty ? const LatLng(39.5, -98.35) : points.first;
+    /// Zooms the map to show every result, after the frame is drawn.
     void fitAllPoints() {
       if (!mounted || points.isEmpty) return;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -9474,6 +9708,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
     );
   }
 
+  /// Resizable search dialog: provider, region, filters, results list and map.
   @override
   Widget build(BuildContext context) {
     final results = _results;
@@ -9497,6 +9732,7 @@ class _RepeaterBookDialogState extends State<RepeaterBookDialog> {
         .clamp(minHeight, maxHeight)
         .toDouble();
     final resultsHeight = dialogHeight > 480 ? dialogHeight - 300 : 180.0;
+    /// Resizes the dialog by a drag, within the screen-based limits.
     void resizeBy(double dx, double dy) {
       setState(() {
         _dialogSize = Size(
@@ -10267,6 +10503,7 @@ class _HelpButton extends StatelessWidget {
   final String title;
   final String details;
 
+  /// Small help icon showing [details] as a tooltip.
   @override
   Widget build(BuildContext context) {
     return Tooltip(
@@ -10315,6 +10552,7 @@ class _WelcomeAction extends StatelessWidget {
   final VoidCallback onPressed;
   final String? help;
 
+  /// Clickable card on the Welcome page.
   @override
   Widget build(BuildContext context) => SizedBox(
     width: width,
@@ -10367,6 +10605,7 @@ class _Metric extends StatelessWidget {
   final String label;
   final String value;
   final IconData icon;
+  /// One number-and-label card in the library metrics row.
   @override
   Widget build(BuildContext context) => Expanded(
     child: Card(
@@ -10428,6 +10667,7 @@ class _SelectAllChannelsAction extends Action<_SelectAllChannelsIntent> {
   @override
   bool isEnabled(_SelectAllChannelsIntent intent) => enabled();
 
+  /// Runs select-all for the Cmd/Ctrl+A shortcut.
   @override
   Object? invoke(_SelectAllChannelsIntent intent) {
     onInvoke();
@@ -10468,6 +10708,7 @@ String _channelColumnTitle(AppLocalizations l10n, _ChannelColumn column) =>
       _ => column.label,
     };
 
+/// Translated help text for a column (matched on its English help string).
 String? _channelColumnHelp(AppLocalizations l10n, _ChannelColumn column) {
   final help = column.help;
   if (help == null) return null;
@@ -10579,6 +10820,7 @@ class _ChannelTableState extends State<_ChannelTable> {
   final Map<String, double> _resizeStartWidth = {};
   final Map<String, TextEditingController> _filterControllers = {};
 
+  /// Keeps the filter text boxes in sync with the filter values from the parent.
   @override
   void didUpdateWidget(covariant _ChannelTable oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -10595,6 +10837,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     }
   }
 
+  /// Scrolls so the selected channel is visible.
   void revealSelectedChannel() {
     if (!_verticalController.hasClients) return;
     final position = _verticalController.position;
@@ -10622,6 +10865,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     );
   }
 
+  /// Frees the scroll and filter controllers.
   @override
   void dispose() {
     _horizontalController.dispose();
@@ -10632,6 +10876,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     super.dispose();
   }
 
+  /// Right-click menu for a row (copy, cut, paste, insert, delete...).
   void _showRowMenu(BuildContext context, int index, Offset position) {
     final isCleared = widget.entries.any(
       (entry) => entry.key == index && entry.value.cleared,
@@ -10749,6 +10994,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     });
   }
 
+  /// Column definitions for the channel table, based on what the radio supports.
   List<_ChannelColumn> _columns() {
     String inactive(bool active, Object value) => active ? '$value' : '—';
     final showStep = widget.capabilities?.hasTuningStep ?? true;
@@ -10939,6 +11185,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     return columns;
   }
 
+  /// Moves a column to where it was dropped and reports the new order.
   void _moveColumn(
     String draggedId,
     String targetId,
@@ -10952,7 +11199,9 @@ class _ChannelTableState extends State<_ChannelTable> {
     widget.onColumnOrderChanged(order);
   }
 
+  /// Header cell: draggable label, filter box and resize handle.
   Widget _headerCell(_ChannelColumn column, List<_ChannelColumn> columns) {
+    /// The header label.
     Widget label({Color? color}) => Container(
       color: color,
       alignment: Alignment.centerLeft,
@@ -11049,6 +11298,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     );
   }
 
+  /// One table row: drag handle plus a cell per column, highlighted when selected.
   Widget _channelRow(
     BuildContext context,
     MapEntry<int, RadioChannel> entry,
@@ -11218,6 +11468,7 @@ class _ChannelTableState extends State<_ChannelTable> {
     );
   }
 
+  /// The channel table with horizontal and vertical scrolling and a fixed header.
   @override
   Widget build(BuildContext context) {
     const dragHandleWidth = 30.0;
@@ -11396,6 +11647,8 @@ class _ChannelEditor extends StatelessWidget {
   final bool canDelete;
   final bool Function()? canSave;
 
+  /// Channel editor form: frequency, duplex, tones, mode, power and extra fields,
+  /// with this radio's validation messages.
   @override
   Widget build(BuildContext context) {
     final gm32 = isBaofengGm32(radioModel);
@@ -11438,6 +11691,7 @@ class _ChannelEditor extends StatelessWidget {
       if (midland) ...midlandGmrsIssues(radioModel, channel),
       if (gm32) ...gm32ChannelIssues(radioModel, channel),
     ];
+    /// Dropdown choices from the radio's list, or [fallback] when it has none.
     Map<String, String> choices(
       List<String>? values,
       Map<String, String> fallback, {
@@ -11967,12 +12221,14 @@ class _TextField extends StatefulWidget {
 
 class _TextFieldState extends State<_TextField> {
   late final TextEditingController controller;
+  /// Creates the controller with the starting text.
   @override
   void initState() {
     super.initState();
     controller = TextEditingController(text: widget.value);
   }
 
+  /// Updates the text when the value changes from outside.
   @override
   void didUpdateWidget(covariant _TextField oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -11981,12 +12237,14 @@ class _TextFieldState extends State<_TextField> {
     }
   }
 
+  /// Frees the controller.
   @override
   void dispose() {
     controller.dispose();
     super.dispose();
   }
 
+  /// The text box.
   @override
   Widget build(BuildContext context) => TextField(
     controller: controller,
@@ -12013,6 +12271,7 @@ class ExtraFieldEditor extends StatelessWidget {
   final ChannelExtraField field;
   final ValueChanged<dynamic> onChanged;
 
+  /// Editor for one driver-specific extra field (switch, dropdown or text).
   @override
   Widget build(BuildContext context) {
     final documentation = field.documentation?.trim();
@@ -12076,6 +12335,7 @@ class _ExtraFieldHelp extends StatelessWidget {
 
   final String documentation;
 
+  /// Info icon showing the field's documentation as a tooltip.
   @override
   Widget build(BuildContext context) => Tooltip(
     message: documentation,
@@ -12110,6 +12370,7 @@ class _NumberFieldState extends State<_NumberField> {
 
   String get _formattedValue => widget.value.toStringAsFixed(widget.decimals);
 
+  /// Creates the controller with the formatted value and watches focus.
   @override
   void initState() {
     super.initState();
@@ -12117,6 +12378,7 @@ class _NumberFieldState extends State<_NumberField> {
     _focusNode = FocusNode()..addListener(_handleFocusChange);
   }
 
+  /// Shows a new value from outside, unless the box already holds the same number.
   @override
   void didUpdateWidget(covariant _NumberField oldWidget) {
     super.didUpdateWidget(oldWidget);
@@ -12125,6 +12387,7 @@ class _NumberFieldState extends State<_NumberField> {
     _replaceText(_formattedValue);
   }
 
+  /// On leaving the box, puts back the formatted value if the text isn't that number.
   void _handleFocusChange() {
     if (!_focusNode.hasFocus &&
         double.tryParse(_controller.text) != widget.value) {
@@ -12132,6 +12395,7 @@ class _NumberFieldState extends State<_NumberField> {
     }
   }
 
+  /// Replaces the text and puts the cursor at the end.
   void _replaceText(String text) {
     _controller.value = TextEditingValue(
       text: text,
@@ -12139,6 +12403,7 @@ class _NumberFieldState extends State<_NumberField> {
     );
   }
 
+  /// Frees the focus node and controller.
   @override
   void dispose() {
     _focusNode.dispose();
@@ -12146,6 +12411,7 @@ class _NumberFieldState extends State<_NumberField> {
     super.dispose();
   }
 
+  /// Number box (decimals allowed).
   @override
   Widget build(BuildContext context) => TextFormField(
     controller: _controller,
@@ -12183,6 +12449,7 @@ class _ChoiceField extends StatelessWidget {
   final Map<String, String> choices;
   final ValueChanged<String> onValue;
   final bool enabled;
+  /// Dropdown; an unknown value falls back to the first choice.
   @override
   Widget build(BuildContext context) {
     final safeValue = choices.containsKey(value) ? value : choices.keys.first;
@@ -12214,6 +12481,7 @@ class _ChoiceField extends StatelessWidget {
 
 class _EmptyLibrary extends StatelessWidget {
   const _EmptyLibrary();
+  /// Placeholder shown when the channel list is empty.
   @override
   Widget build(BuildContext context) => Center(
     child: Column(
@@ -12235,6 +12503,7 @@ class _StepTitle extends StatelessWidget {
   final String number;
   final String title;
   final String? help;
+  /// Numbered step heading.
   @override
   Widget build(BuildContext context) => Row(
     children: [

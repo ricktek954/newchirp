@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _reviewChannelIssues
+description: "Selects [channel] and scrolls to it so its problems can be fixed."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/reviewChannelIssues
 language: dart
 ---
 
 # _reviewChannelIssues
+
+Selects [channel] and scrolls to it so its problems can be fixed.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_reviewChannelIssues_reviewChannelIssues
 ```
 
+## Docstring
+
+Selects [channel] and scrolls to it so its problems can be fixed.
+
 ## Source
-Lines 2174–2174 in `main.dart`
+Lines 2261–2261 in `main.dart`
 
 ## Relationships
 

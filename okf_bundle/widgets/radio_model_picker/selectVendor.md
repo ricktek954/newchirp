@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _selectVendor
+description: Filters the catalog to one vendor (null = all) and clears the search.
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/selectVendor
 language: dart
 ---
 
 # _selectVendor
+
+Filters the catalog to one vendor (null = all) and clears the search.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 void_selectVendor(String? vendor)
 ```
 
+## Docstring
+
+Filters the catalog to one vendor (null = all) and clears the search.
+
 ## Source
-Lines 329–329 in `widgets/radio_model_picker.dart`
+Lines 346–346 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

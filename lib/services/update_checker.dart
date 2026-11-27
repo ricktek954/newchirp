@@ -70,6 +70,7 @@ class UpdateChecker {
   final String? _platform;
   final Duration _timeout;
 
+  /// Asks the website for this platform's latest release and compares it with [currentVersion].
   Future<UpdateCheckResult> check(String currentVersion) async {
     final client = HttpClient()..connectionTimeout = _timeout;
     try {
@@ -115,6 +116,7 @@ class UpdateChecker {
     }
   }
 
+  /// Parses the release JSON ({"version", "download_url", ...}); throws FormatException on bad data.
   static _PlatformRelease _parsePlatformRelease(String body) {
     final decoded = jsonDecode(body);
     if (decoded is! Map) {
@@ -156,6 +158,7 @@ class _PlatformRelease {
   final String? releaseUrl;
 }
 
+/// Platform name used by the release API: windows, macos, linux, android, or "" if unsupported.
 String currentUpdatePlatform() {
   if (Platform.isWindows) return 'windows';
   if (Platform.isMacOS) return 'macos';
@@ -180,6 +183,8 @@ int compareVersions(String a, String b) {
   return 0;
 }
 
+/// Numeric parts of a version for comparison: "1.0.76+5" -> [1, 0, 76].
+/// Build (+...) and pre-release (-...) suffixes are ignored.
 List<int> _versionParts(String version) {
   final core = version.split('+').first.split('-').first.trim();
   return core

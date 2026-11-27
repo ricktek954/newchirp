@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:21:35Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/radio_mapping/mappingRangeAt
 language: dart
 ---
@@ -24,7 +24,7 @@ language: dart
 ```
 
 ## Source
-Lines 115–118 in `models/radio_mapping.dart`
+Lines 122–125 in `models/radio_mapping.dart`
 
 ## Relationships
 

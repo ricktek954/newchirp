@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _openLibraryFile
+description: "Open dialog for a CHIRP image, CSV or MOTOTRBO XML file; loads it as the channel list."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/openLibraryFile
 language: dart
 ---
 
 # _openLibraryFile
+
+Open dialog for a CHIRP image, CSV or MOTOTRBO XML file; loads it as the channel list.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_openLibraryFile_openLibraryFile
 ```
 
+## Docstring
+
+Open dialog for a CHIRP image, CSV or MOTOTRBO XML file; loads it as the channel list.
+
 ## Source
-Lines 1837–1837 in `main.dart`
+Lines 1915–1915 in `main.dart`
 
 ## Relationships
 

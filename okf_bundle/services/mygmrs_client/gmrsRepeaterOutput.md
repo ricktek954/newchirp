@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _gmrsRepeaterOutput
+description: True for the GMRS repeater output channels 462.550-462.725 MHz (inputs are +5 MHz).
 resource: services/mygmrs_client.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T15:24:31Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: services/mygmrs_client/gmrsRepeaterOutput
 language: dart
 ---
 
 # _gmrsRepeaterOutput
+
+True for the GMRS repeater output channels 462.550-462.725 MHz (inputs are +5 MHz).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 bool_gmrsRepeaterOutput(double frequency)
 ```
 
+## Docstring
+
+True for the GMRS repeater output channels 462.550-462.725 MHz (inputs are +5 MHz).
+
 ## Source
-Lines 433–433 in `services/mygmrs_client.dart`
+Lines 453–453 in `services/mygmrs_client.dart`
 
 ## Relationships
 

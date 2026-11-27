@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildHelpMenu
+description: "Help menu: abbreviation glossary, report a problem, check for updates."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildHelpMenu
 language: dart
 ---
 
 # _buildHelpMenu
+
+Help menu: abbreviation glossary, report a problem, check for updates.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_buildHelpMenu(BuildContext context, {required bool iconOnly})
 ```
 
+## Docstring
+
+Help menu: abbreviation glossary, report a problem, check for updates.
+
 ## Source
-Lines 8249–8249 in `main.dart`
+Lines 8453–8453 in `main.dart`
 
 ## Relationships
 

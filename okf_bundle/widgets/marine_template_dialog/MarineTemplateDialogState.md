@@ -10,7 +10,7 @@ tags:
   - "domain:marine_template_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:37:19Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: widgets/marine_template_dialog/MarineTemplateDialogState
 language: dart
 ---
@@ -28,7 +28,7 @@ class _MarineTemplateDialogState
 - `build`
 
 ## Source
-Lines 15–158 in `widgets/marine_template_dialog.dart`
+Lines 15–160 in `widgets/marine_template_dialog.dart`
 
 ## Relationships
 

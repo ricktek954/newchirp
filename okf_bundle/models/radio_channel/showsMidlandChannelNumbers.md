@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/showsMidlandChannelNumbers
 language: dart
 ---
@@ -31,7 +31,7 @@ boolshowsMidlandChannelNumbers(String? model)
 This radio's list uses Midland's channel numbers instead of raw slots.
 
 ## Source
-Lines 254–254 in `models/radio_channel.dart`
+Lines 257–257 in `models/radio_channel.dart`
 
 ## Relationships
 

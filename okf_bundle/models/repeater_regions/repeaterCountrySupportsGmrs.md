@@ -10,7 +10,7 @@ tags:
   - "domain:repeater_regions.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T09:33:48Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/repeater_regions/repeaterCountrySupportsGmrs
 language: dart
 ---
@@ -24,7 +24,7 @@ boolrepeaterCountrySupportsGmrs(String country)
 ```
 
 ## Source
-Lines 282–282 in `models/repeater_regions.dart`
+Lines 285–285 in `models/repeater_regions.dart`
 
 ## Relationships
 

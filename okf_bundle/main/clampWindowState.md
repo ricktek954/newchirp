@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _clampWindowState
+description: Keeps a saved window position on a display that still exists (screens may
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/clampWindowState
 language: dart
 ---
 
 # _clampWindowState
+
+Keeps a saved window position on a display that still exists (screens may
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_clampWindowState_clampWindowState
 ```
 
+## Docstring
+
+Keeps a saved window position on a display that still exists (screens may
+have been unplugged since the last run).
+
 ## Source
-Lines 205–205 in `main.dart`
+Lines 217–217 in `main.dart`
 
 ## Relationships
 

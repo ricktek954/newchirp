@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _fit
+description: "Shortens [text] with \"...\" until it fits [maxWidth] points."
 resource: services/channel_list_pdf.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:channel_list_pdf.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:22Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: services/channel_list_pdf/fit
 language: dart
 ---
 
 # _fit
+
+Shortens [text] with "..." until it fits [maxWidth] points.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 String_fit(String text, double maxWidth, {bool bold = false})
 ```
 
+## Docstring
+
+Shortens [text] with "..." until it fits [maxWidth] points.
+
 ## Source
-Lines 254–254 in `services/channel_list_pdf.dart`
+Lines 263–263 in `services/channel_list_pdf.dart`
 
 ## Relationships
 

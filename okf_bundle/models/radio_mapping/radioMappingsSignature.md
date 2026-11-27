@@ -11,7 +11,7 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:21:35Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/radio_mapping/radioMappingsSignature
 language: dart
 ---
@@ -32,7 +32,7 @@ Fixed (non-editable) zone models are derived from channel numbers by the
 radio, so they never count as a user change.
 
 ## Source
-Lines 112–112 in `models/radio_mapping.dart`
+Lines 119–119 in `models/radio_mapping.dart`
 
 ## Relationships
 

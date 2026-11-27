@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _channelColumnHelp
+description: Translated help text for a column (matched on its English help string).
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/channelColumnHelp
 language: dart
 ---
 
 # _channelColumnHelp
+
+Translated help text for a column (matched on its English help string).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 String_channelColumnHelp_channelColumnHelp
 ```
 
+## Docstring
+
+Translated help text for a column (matched on its English help string).
+
 ## Source
-Lines 10471–10471 in `main.dart`
+Lines 10712–10712 in `main.dart`
 
 ## Relationships
 

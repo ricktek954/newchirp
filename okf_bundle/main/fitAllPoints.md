@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: fitAllPoints
+description: "Zooms the map to show every result, after the frame is drawn."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/fitAllPoints
 language: dart
 ---
 
 # fitAllPoints
+
+Zooms the map to show every result, after the frame is drawn.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 voidfitAllPoints()
 ```
 
+## Docstring
+
+Zooms the map to show every result, after the frame is drawn.
+
 ## Source
-Lines 9378–9378 in `main.dart`
+Lines 9612–9612 in `main.dart`
 
 ## Relationships
 

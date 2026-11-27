@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _restoreMappingMembershipsAt
+description: "Puts channel [location] back into the given zones/banks."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/restoreMappingMembershipsAt
 language: dart
 ---
 
 # _restoreMappingMembershipsAt
+
+Puts channel [location] back into the given zones/banks.
 
 ## Signature
 
@@ -25,8 +28,12 @@ void_restoreMappingMembershipsAt(
   )
 ```
 
+## Docstring
+
+Puts channel [location] back into the given zones/banks.
+
 ## Source
-Lines 1055–1058 in `main.dart`
+Lines 1094–1097 in `main.dart`
 
 ## Relationships
 

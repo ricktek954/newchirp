@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _bundledAssetCandidates
+description: "Places an asset file may be on disk: the working folder, then this platform's"
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/bundledAssetCandidates
 language: dart
 ---
 
 # _bundledAssetCandidates
+
+Places an asset file may be on disk: the working folder, then this platform's
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 Iterable_bundledAssetCandidates_bundledAssetCandidates
 ```
 
+## Docstring
+
+Places an asset file may be on disk: the working folder, then this platform's
+Flutter assets folder.
+
 ## Source
-Lines 1203–1203 in `services/radio_bridge.dart`
+Lines 1252–1252 in `services/radio_bridge.dart`
 
 ## Relationships
 

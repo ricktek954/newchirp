@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildRadioSettings
+description: "Radio Settings page: source buttons (saved image or radio) and the settings tree."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildRadioSettings
 language: dart
 ---
 
 # _buildRadioSettings
+
+Radio Settings page: source buttons (saved image or radio) and the settings tree.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_buildRadioSettings()
 ```
 
+## Docstring
+
+Radio Settings page: source buttons (saved image or radio) and the settings tree.
+
 ## Source
-Lines 6700–6700 in `main.dart`
+Lines 6880–6880 in `main.dart`
 
 ## Relationships
 

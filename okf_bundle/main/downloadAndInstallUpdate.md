@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _downloadAndInstallUpdate
+description: "Downloads and installs an update, unless a transfer or save is running."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/downloadAndInstallUpdate
 language: dart
 ---
 
 # _downloadAndInstallUpdate
+
+Downloads and installs an update, unless a transfer or save is running.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_downloadAndInstallUpdate_downloadAndInstallUpdate
 ```
 
+## Docstring
+
+Downloads and installs an update, unless a transfer or save is running.
+
 ## Source
-Lines 4505–4505 in `main.dart`
+Lines 4658–4658 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _loadColumnLayout
+description: Applies the saved column order and widths unless the user already changed them.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/loadColumnLayout
 language: dart
 ---
 
 # _loadColumnLayout
+
+Applies the saved column order and widths unless the user already changed them.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_loadColumnLayout_loadColumnLayout
 ```
 
+## Docstring
+
+Applies the saved column order and widths unless the user already changed them.
+
 ## Source
-Lines 1236–1236 in `main.dart`
+Lines 1284–1284 in `main.dart`
 
 ## Relationships
 

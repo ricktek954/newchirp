@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: cell
+description: One chart cell.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/cell
 language: dart
 ---
 
 # cell
+
+One chart cell.
 
 ## Signature
 
@@ -27,8 +30,12 @@ Widgetcell(
     })
 ```
 
+## Docstring
+
+One chart cell.
+
 ## Source
-Lines 6438–6443 in `main.dart`
+Lines 6614–6619 in `main.dart`
 
 ## Relationships
 

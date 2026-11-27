@@ -10,7 +10,7 @@ tags:
   - "domain:error_report_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:22Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: widgets/error_report_dialog/ErrorReportDialogState
 language: dart
 ---
@@ -30,7 +30,7 @@ class _ErrorReportDialogState
 - `build`
 
 ## Source
-Lines 41–255 in `widgets/error_report_dialog.dart`
+Lines 42–257 in `widgets/error_report_dialog.dart`
 
 ## Relationships
 

@@ -8,6 +8,8 @@ import '../models/radio_channel.dart';
 /// `ConventionalPersonality` entry per channel and also carries DMR fields
 /// such as color code, timeslot, contact, RX group list, and privacy key.
 class MototrboCps2Xml {
+  /// Reads channels from MOTOTRBO CPS 2.0 zone XML (copied or saved from the CPS).
+  /// Channels are numbered in zone order; throws FormatException for bad files.
   static List<RadioChannel> decode(String source) {
     if (source.trim().isEmpty) {
       throw const FormatException('The MOTOTRBO XML file is empty.');
@@ -60,6 +62,9 @@ class MototrboCps2Xml {
     return channels;
   }
 
+  /// One CPS "personality" (channel) as a NewChirp channel. Receive-only channels
+  /// get duplex "off"; a TX/RX gap over 100 MHz becomes "split"; digital settings
+  /// (color code etc.) are kept as extra fields.
   static RadioChannel? _channel(
     XmlElement personality,
     Map<String, XmlElement> fields, {
@@ -187,6 +192,7 @@ class MototrboCps2Xml {
     return channel;
   }
 
+  /// Sets the channel's tone mode from the CPS transmit/receive squelch types.
   static void _applyAnalogTones(
     RadioChannel channel,
     Map<String, XmlElement> fields,
@@ -255,6 +261,8 @@ class MototrboCps2Xml {
     };
   }
 
+  /// Reads one side's squelch: TPL = CTCSS tone (Hz), DPL = DCS code (leading
+  /// zeros dropped, optionally inverted), anything else = none.
   static _CpsTone _tone(
     XmlElement? typeElement,
     XmlElement? toneElement,
@@ -276,6 +284,7 @@ class MototrboCps2Xml {
     return const _CpsTone(_ToneKind.none);
   }
 
+  /// First child element called [localName] (and, if given, with name="[name]").
   static XmlElement? _child(
     XmlElement parent,
     String localName, {
@@ -288,6 +297,7 @@ class MototrboCps2Xml {
     return null;
   }
 
+  /// The personality's `<field name="...">` elements, keyed by name.
   static Map<String, XmlElement> _fields(XmlElement personality) {
     final fields = <String, XmlElement>{};
     for (final child in personality.childElements) {
@@ -302,6 +312,7 @@ class MototrboCps2Xml {
 
   static String _value(XmlElement? element) => _text(element).trim();
 
+  /// Display text of a field: its Name attribute, else its value; "NONE" counts as empty.
   static String _display(XmlElement? element) {
     if (element == null) return '';
     final display = element.getAttribute('Name')?.trim();
@@ -314,13 +325,16 @@ class MototrboCps2Xml {
     return value.toUpperCase() == 'NONE' ? '' : value;
   }
 
+  /// Field value as a number, or [fallback] (0 by default) when missing or not numeric.
   static double _number(XmlElement? element, {double? fallback = 0}) {
     return double.tryParse(_value(element)) ?? fallback ?? 0;
   }
 
+  /// Field value as a number, or null when missing or not numeric.
   static double? _numberOrNull(XmlElement? element) =>
       double.tryParse(_value(element));
 
+  /// True for TRUE / ON / 1 / YES (any case).
   static bool _boolean(XmlElement? element) {
     return const {
       'TRUE',
@@ -330,6 +344,7 @@ class MototrboCps2Xml {
     }.contains(_value(element).toUpperCase());
   }
 
+  /// Adds a CPS setting NewChirp doesn't edit as an extra (read-only) field, if it has a value.
   static void _addExtra(
     List<ChannelExtraField> extras,
     String name,

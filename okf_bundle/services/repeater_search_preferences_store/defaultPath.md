@@ -10,7 +10,7 @@ tags:
   - "domain:repeater_search_preferences_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:37:27Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/repeater_search_preferences_store/defaultPath
 language: dart
 ---
@@ -24,7 +24,7 @@ String_defaultPath()
 ```
 
 ## Source
-Lines 102–102 in `services/repeater_search_preferences_store.dart`
+Lines 106–106 in `services/repeater_search_preferences_store.dart`
 
 ## Relationships
 

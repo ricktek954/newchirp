@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _loadRootBundleAsset
+description: "The bundled libusb library (for USB radios), if found."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/loadRootBundleAsset
 language: dart
 ---
 
 # _loadRootBundleAsset
+
+The bundled libusb library (for USB radios), if found.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_loadRootBundleAsset_loadRootBundleAsset
 ```
 
+## Docstring
+
+The bundled libusb library (for USB radios), if found.
+
 ## Source
-Lines 491–491 in `services/radio_bridge.dart`
+Lines 501–501 in `services/radio_bridge.dart`
 
 ## Relationships
 

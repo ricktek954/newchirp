@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _channelsWithLongNames
+description: Channels whose names are longer than the radio allows (they would be cut).
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/channelsWithLongNames
 language: dart
 ---
 
 # _channelsWithLongNames
+
+Channels whose names are longer than the radio allows (they would be cut).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 List_channelsWithLongNames_channelsWithLongNames
 ```
 
+## Docstring
+
+Channels whose names are longer than the radio allows (they would be cut).
+
 ## Source
-Lines 2185–2185 in `main.dart`
+Lines 2273–2273 in `main.dart`
 
 ## Relationships
 

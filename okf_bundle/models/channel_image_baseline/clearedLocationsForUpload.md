@@ -11,7 +11,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:13:56Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/clearedLocationsForUpload
 language: dart
 ---
@@ -35,7 +35,7 @@ external data, or moving channels between views. For a full-image upload,
 any in-range location not present as an active channel is empty.
 
 ## Source
-Lines 76–81 in `models/channel_image_baseline.dart`
+Lines 78–83 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

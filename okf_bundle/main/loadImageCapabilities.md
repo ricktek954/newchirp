@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _loadImageCapabilities
+description: "Loads the stored image's capabilities (limits, zones) without its channels."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/loadImageCapabilities
 language: dart
 ---
 
 # _loadImageCapabilities
+
+Loads the stored image's capabilities (limits, zones) without its channels.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_loadImageCapabilities_loadImageCapabilities
 ```
 
+## Docstring
+
+Loads the stored image's capabilities (limits, zones) without its channels.
+
 ## Source
-Lines 1356–1356 in `main.dart`
+Lines 1413–1413 in `main.dart`
 
 ## Relationships
 

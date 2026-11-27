@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _applyChannels
+description: "Puts [incoming] channels into the list, replacing everything or adding them"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/applyChannels
 language: dart
 ---
 
 # _applyChannels
+
+Puts [incoming] channels into the list, replacing everything or adding them
 
 ## Signature
 
@@ -28,8 +31,13 @@ void_applyChannels(
   })
 ```
 
+## Docstring
+
+Puts [incoming] channels into the list, replacing everything or adding them
+to free slots, and records the change for undo.
+
 ## Source
-Lines 2094–2100 in `main.dart`
+Lines 2178–2184 in `main.dart`
 
 ## Relationships
 

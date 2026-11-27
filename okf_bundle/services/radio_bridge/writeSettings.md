@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: writeSettings
+description: "Applies setting [changes] to the image and writes it to the radio."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/writeSettings
 language: dart
 ---
 
 # writeSettings
+
+Applies setting [changes] to the image and writes it to the radio.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 FuturewriteSettingswriteSettings
 ```
 
+## Docstring
+
+Applies setting [changes] to the image and writes it to the radio.
+
 ## Source
-Lines 923–929 in `services/radio_bridge.dart`
+Lines 961–967 in `services/radio_bridge.dart`
 
 ## Relationships
 

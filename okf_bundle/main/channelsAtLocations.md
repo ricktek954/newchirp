@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _channelsAtLocations
+description: Non-empty channels at the given locations.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/channelsAtLocations
 language: dart
 ---
 
 # _channelsAtLocations
+
+Non-empty channels at the given locations.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 List_channelsAtLocations_channelsAtLocations
 ```
 
+## Docstring
+
+Non-empty channels at the given locations.
+
 ## Source
-Lines 3278–3278 in `main.dart`
+Lines 3403–3403 in `main.dart`
 
 ## Relationships
 

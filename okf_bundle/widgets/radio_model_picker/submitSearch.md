@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _submitSearch
+description: Enter in the search box picks the first matching model.
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/submitSearch
 language: dart
 ---
 
 # _submitSearch
+
+Enter in the search box picks the first matching model.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 void_submitSearch()
 ```
 
+## Docstring
+
+Enter in the search box picks the first matching model.
+
 ## Source
-Lines 337–337 in `widgets/radio_model_picker.dart`
+Lines 355–355 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

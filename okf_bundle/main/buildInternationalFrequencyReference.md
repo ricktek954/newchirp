@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildInternationalFrequencyReference
+description: "Table for one international plan (channel, frequency, notes)."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildInternationalFrequencyReference
 language: dart
 ---
 
 # _buildInternationalFrequencyReference
+
+Table for one international plan (channel, frequency, notes).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_buildInternationalFrequencyReference(FrequencyReferencePlan plan)
 ```
 
+## Docstring
+
+Table for one international plan (channel, frequency, notes).
+
 ## Source
-Lines 6111–6111 in `main.dart`
+Lines 6283–6283 in `main.dart`
 
 ## Relationships
 

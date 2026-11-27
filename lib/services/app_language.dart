@@ -18,6 +18,7 @@ const languageNativeNames = {
 /// The chosen interface language; null follows the computer's language.
 final appLocale = ValueNotifier<Locale?>(null);
 
+/// The [Locale] for a supported language code, or null for "system" or an unknown code.
 Locale? localeForLanguageCode(String code) =>
     supportedLanguageCodes.contains(code) ? Locale(code) : null;
 
@@ -27,6 +28,7 @@ class AppLanguageStore {
 
   final String _path;
 
+  /// Reads the saved choice; returns "system" when nothing is saved or the file is unreadable.
   Future<String> load() async {
     try {
       final file = File(_path);
@@ -43,6 +45,7 @@ class AppLanguageStore {
     }
   }
 
+  /// Saves the choice. Failures are ignored: the language just won't be remembered.
   Future<void> save(String code) async {
     try {
       final file = File(_path);
@@ -56,6 +59,7 @@ class AppLanguageStore {
     }
   }
 
+  /// Settings file in the per-user app data folder for this platform.
   static String _defaultPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';

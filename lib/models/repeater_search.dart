@@ -2,12 +2,14 @@ import 'radio_channel.dart';
 
 enum RepeaterSortOrder { source, frequency, callsignName, city, county }
 
+/// Results in the chosen order; "source" keeps the provider's order.
 List<RepeaterSearchResult> sortRepeaterResults(
   Iterable<RepeaterSearchResult> results,
   RepeaterSortOrder order,
 ) {
   final sorted = results.toList();
   if (order == RepeaterSortOrder.source) return sorted;
+  /// Case-insensitive text comparison used as a tie-breaker.
   int by(String left, String right) =>
       left.toLowerCase().compareTo(right.toLowerCase());
   sorted.sort((left, right) {
@@ -41,6 +43,7 @@ List<RepeaterSearchResult> sortRepeaterResults(
   return sorted;
 }
 
+/// Results matching the search text and, if any are chosen, the selected counties.
 List<RepeaterSearchResult> filterRepeaterResults(
   Iterable<RepeaterSearchResult> results,
   String query, {

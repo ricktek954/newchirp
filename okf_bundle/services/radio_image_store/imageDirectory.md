@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _imageDirectory
+description: "The images folder: the test override, or the per-user app data folder."
 resource: services/radio_image_store.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_image_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:17:10Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/radio_image_store/imageDirectory
 language: dart
 ---
 
 # _imageDirectory
+
+The images folder: the test override, or the per-user app data folder.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Directory_imageDirectory()
 ```
 
+## Docstring
+
+The images folder: the test override, or the per-user app data folder.
+
 ## Source
-Lines 38–38 in `services/radio_image_store.dart`
+Lines 43–43 in `services/radio_image_store.dart`
 
 ## Relationships
 

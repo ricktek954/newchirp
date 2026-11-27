@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _unloadChirpModule
+description: Unloads the CHIRP module and reloads the normal model catalog.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/unloadChirpModule
 language: dart
 ---
 
 # _unloadChirpModule
+
+Unloads the CHIRP module and reloads the normal model catalog.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_unloadChirpModule_unloadChirpModule
 ```
 
+## Docstring
+
+Unloads the CHIRP module and reloads the normal model catalog.
+
 ## Source
-Lines 1971–1971 in `main.dart`
+Lines 2051–2051 in `main.dart`
 
 ## Relationships
 

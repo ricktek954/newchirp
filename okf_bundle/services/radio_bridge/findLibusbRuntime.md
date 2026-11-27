@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _findLibusbRuntime
+description: "The bundled libusb library (for USB radios), if found."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/findLibusbRuntime
 language: dart
 ---
 
 # _findLibusbRuntime
+
+The bundled libusb library (for USB radios), if found.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 String_findLibusbRuntime_findLibusbRuntime
 ```
 
+## Docstring
+
+The bundled libusb library (for USB radios), if found.
+
 ## Source
-Lines 1274–1274 in `services/radio_bridge.dart`
+Lines 1328–1328 in `services/radio_bridge.dart`
 
 ## Relationships
 

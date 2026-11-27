@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: recordError
+description: Records an error with its stack trace.
 resource: services/diagnostic_log.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:11Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/diagnostic_log/recordError
 language: dart
 ---
 
 # recordError
+
+Records an error with its stack trace.
 
 ## Signature
 
@@ -28,8 +31,12 @@ voidrecordError(
   })
 ```
 
+## Docstring
+
+Records an error with its stack trace.
+
 ## Source
-Lines 103–108 in `services/diagnostic_log.dart`
+Lines 109–114 in `services/diagnostic_log.dart`
 
 ## Relationships
 

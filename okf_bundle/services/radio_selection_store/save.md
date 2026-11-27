@@ -2,20 +2,23 @@
 okf_version: "0.2"
 type: Function
 title: save
+description: Remembers the selected radio model and port for the next launch.
 resource: services/radio_selection_store.dart
 tags:
   - "lang:dart"
   - "type:Function"
   - "module:services"
   - "domain:radio_selection_store.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/radio_selection_store/save
 language: dart
 ---
 
 # save
+
+Remembers the selected radio model and port for the next launch.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Futuresavesave
 ```
 
+## Docstring
+
+Remembers the selected radio model and port for the next launch.
+
 ## Source
-Lines 34–34 in `services/radio_selection_store.dart`
+Lines 36–36 in `services/radio_selection_store.dart`
 
 ## Relationships
 

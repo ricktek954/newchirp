@@ -2,7 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: check
-description: Starts the platform browser for an already validated address.
+description: "Asks the website for this platform's latest release and compares it with [currentVersion]."
 resource: services/update_checker.dart
 tags:
   - "lang:dart"
@@ -11,14 +11,14 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T13:23:52Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/update_checker/check
 language: dart
 ---
 
 # check
 
-Starts the platform browser for an already validated address.
+Asks the website for this platform's latest release and compares it with [currentVersion].
 
 ## Signature
 
@@ -28,17 +28,10 @@ Futurecheckcheck
 
 ## Docstring
 
-Starts the platform browser for an already validated address.
-
-Windows hands the address to Explorer, the shell entry point a user reaches
-by clicking a link. Earlier builds shelled out to
-`rundll32 url.dll,FileProtocolHandler`, which endpoint protection software
-blocks by policy and which reports no error at all when it does nothing.
-Explorer exits with a non-zero code even when it opens the page, so only a
-failure to start the process counts as a failed launch.
+Asks the website for this platform's latest release and compares it with [currentVersion].
 
 ## Source
-Lines 73–73 in `services/update_checker.dart`
+Lines 74–74 in `services/update_checker.dart`
 
 ## Relationships
 

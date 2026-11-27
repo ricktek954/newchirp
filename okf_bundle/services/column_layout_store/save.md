@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: save
+description: Saves the channel-table column order and widths (file format version 2).
 resource: services/column_layout_store.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:column_layout_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T10:21:41Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/column_layout_store/save
 language: dart
 ---
 
 # save
+
+Saves the channel-table column order and widths (file format version 2).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Futuresavesave
 ```
 
+## Docstring
+
+Saves the channel-table column order and widths (file format version 2).
+
 ## Source
-Lines 48–48 in `services/column_layout_store.dart`
+Lines 50–50 in `services/column_layout_store.dart`
 
 ## Relationships
 

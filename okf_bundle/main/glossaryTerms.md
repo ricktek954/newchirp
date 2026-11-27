@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/glossaryTerms
 language: dart
 ---
@@ -23,7 +23,7 @@ List_glossaryTerms_glossaryTerms
 ```
 
 ## Source
-Lines 7842–7842 in `main.dart`
+Lines 8039–8039 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildUsFrequencyReference
+description: US GMRS/FRS chart with color bands and a legend.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildUsFrequencyReference
 language: dart
 ---
 
 # _buildUsFrequencyReference
+
+US GMRS/FRS chart with color bands and a legend.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_buildUsFrequencyReference()
 ```
 
+## Docstring
+
+US GMRS/FRS chart with color bands and a legend.
+
 ## Source
-Lines 6210–6210 in `main.dart`
+Lines 6384–6384 in `main.dart`
 
 ## Relationships
 

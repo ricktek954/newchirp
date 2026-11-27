@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _channelIssues
+description: "Problems that would stop [channel] being written to the selected radio."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/channelIssues
 language: dart
 ---
 
 # _channelIssues
+
+Problems that would stop [channel] being written to the selected radio.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 List_channelIssues_channelIssues
 ```
 
+## Docstring
+
+Problems that would stop [channel] being written to the selected radio.
+
 ## Source
-Lines 2161–2161 in `main.dart`
+Lines 2247–2247 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _bundledResourcesDirectory
+description: "The app bundle's resources folder (macOS Contents/Resources), or null elsewhere."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/bundledResourcesDirectory
 language: dart
 ---
 
 # _bundledResourcesDirectory
+
+The app bundle's resources folder (macOS Contents/Resources), or null elsewhere.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Directory_bundledResourcesDirectory_bundledResourcesDirectory
 ```
 
+## Docstring
+
+The app bundle's resources folder (macOS Contents/Resources), or null elsewhere.
+
 ## Source
-Lines 1145–1145 in `services/radio_bridge.dart`
+Lines 1189–1189 in `services/radio_bridge.dart`
 
 ## Relationships
 

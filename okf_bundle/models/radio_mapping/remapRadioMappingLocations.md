@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: remapRadioMappingLocations
+description: "Updates zone/bank membership after channels move. [locations] maps old ->"
 resource: models/radio_mapping.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:21:35Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/radio_mapping/remapRadioMappingLocations
 language: dart
 ---
 
 # remapRadioMappingLocations
+
+Updates zone/bank membership after channels move. [locations] maps old ->
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 ListremapRadioMappingLocationsremapRadioMappingLocations
 ```
 
+## Docstring
+
+Updates zone/bank membership after channels move. [locations] maps old ->
+new location (null = channel deleted).
+
 ## Source
-Lines 137–140 in `models/radio_mapping.dart`
+Lines 146–149 in `models/radio_mapping.dart`
 
 ## Relationships
 

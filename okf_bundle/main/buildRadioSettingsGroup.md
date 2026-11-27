@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildRadioSettingsGroup
+description: One settings group as a card; nested groups are indented.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildRadioSettingsGroup
 language: dart
 ---
 
 # _buildRadioSettingsGroup
+
+One settings group as a card; nested groups are indented.
 
 ## Signature
 
@@ -25,8 +28,12 @@ Widget_buildRadioSettingsGroup(
   })
 ```
 
+## Docstring
+
+One settings group as a card; nested groups are indented.
+
 ## Source
-Lines 6916–6919 in `main.dart`
+Lines 7097–7100 in `main.dart`
 
 ## Relationships
 

@@ -11,7 +11,7 @@ tags:
   - "domain:channel_list_pdf.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:22Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: services/channel_list_pdf/channelListRows
 language: dart
 ---
@@ -31,7 +31,7 @@ ListchannelListRowschannelListRows
 The printed cells for each active channel, in location order.
 
 ## Source
-Lines 87–90 in `services/channel_list_pdf.dart`
+Lines 91–94 in `services/channel_list_pdf.dart`
 
 ## Relationships
 

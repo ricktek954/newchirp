@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _numericColumnFilter
+description: Columns whose filter compares numbers (frequency) rather than text.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/numericColumnFilter
 language: dart
 ---
 
 # _numericColumnFilter
+
+Columns whose filter compares numbers (frequency) rather than text.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 bool_numericColumnFilter(String columnId)
 ```
 
+## Docstring
+
+Columns whose filter compares numbers (frequency) rather than text.
+
 ## Source
-Lines 654–654 in `main.dart`
+Lines 680–680 in `main.dart`
 
 ## Relationships
 

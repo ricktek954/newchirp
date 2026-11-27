@@ -11,7 +11,7 @@ tags:
   - "domain:channel_library_image_bar.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:36:42Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: widgets/channel_library_image_bar/ChannelLibraryImageBar
 language: dart
 ---
@@ -35,7 +35,7 @@ Bottom bar on the Channel Library, matching the Radio settings image bar.
 - `build`
 
 ## Source
-Lines 7–70 in `widgets/channel_library_image_bar.dart`
+Lines 7–71 in `widgets/channel_library_image_bar.dart`
 
 ## Relationships
 

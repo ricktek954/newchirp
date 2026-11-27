@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: isBenignBridgeStderrLine
+description: "True for harmless stderr lines (CHIRP's \"Replacing existing driver id\" notice"
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/isBenignBridgeStderrLine
 language: dart
 ---
 
 # isBenignBridgeStderrLine
+
+True for harmless stderr lines (CHIRP's "Replacing existing driver id" notice
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 boolisBenignBridgeStderrLine(String line)
 ```
 
+## Docstring
+
+True for harmless stderr lines (CHIRP's "Replacing existing driver id" notice
+when NewChirp's drivers override stock ones), which are not errors.
+
 ## Source
-Lines 54–54 in `services/radio_bridge.dart`
+Lines 57–57 in `services/radio_bridge.dart`
 
 ## Relationships
 

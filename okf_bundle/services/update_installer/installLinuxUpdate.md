@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _installLinuxUpdate
+description: Installs the downloaded .deb/.rpm/etc. through a small helper script run with /bin/sh; output goes to a log file.
 resource: services/update_installer.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:update_installer.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T13:46:10Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/update_installer/installLinuxUpdate
 language: dart
 ---
 
 # _installLinuxUpdate
+
+Installs the downloaded .deb/.rpm/etc. through a small helper script run with /bin/sh; output goes to a log file.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_installLinuxUpdate_installLinuxUpdate
 ```
 
+## Docstring
+
+Installs the downloaded .deb/.rpm/etc. through a small helper script run with /bin/sh; output goes to a log file.
+
 ## Source
-Lines 283–283 in `services/update_installer.dart`
+Lines 291–291 in `services/update_installer.dart`
 
 ## Relationships
 

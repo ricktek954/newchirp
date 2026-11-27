@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _useMarineTemplate
+description: Loads a marine VHF channel plan chosen in the template dialog.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/useMarineTemplate
 language: dart
 ---
 
 # _useMarineTemplate
+
+Loads a marine VHF channel plan chosen in the template dialog.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_useMarineTemplate_useMarineTemplate
 ```
 
+## Docstring
+
+Loads a marine VHF channel plan chosen in the template dialog.
+
 ## Source
-Lines 2759–2759 in `main.dart`
+Lines 2864–2864 in `main.dart`
 
 ## Relationships
 

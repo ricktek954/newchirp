@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _modelSearchText
+description: "Everything the picker search matches against: official name, CHIRP spelling,"
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/modelSearchText
 language: dart
 ---
 
 # _modelSearchText
+
+Everything the picker search matches against: official name, CHIRP spelling,
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 String_modelSearchText(String model, String vendor)
 ```
 
+## Docstring
+
+Everything the picker search matches against: official name, CHIRP spelling,
+vendor and any hint words.
+
 ## Source
-Lines 38–38 in `widgets/radio_model_picker.dart`
+Lines 42–42 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

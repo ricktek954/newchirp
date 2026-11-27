@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: walk
+description: "Collects changed leaf settings, descending into groups."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/walk
 language: dart
 ---
 
 # walk
+
+Collects changed leaf settings, descending into groups.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 voidwalk(RadioSettingNode node)
 ```
 
+## Docstring
+
+Collects changed leaf settings, descending into groups.
+
 ## Source
-Lines 2979–2979 in `main.dart`
+Lines 3094–3094 in `main.dart`
 
 ## Relationships
 

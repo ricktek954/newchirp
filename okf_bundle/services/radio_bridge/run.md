@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _run
+description: Runs one bridge command in a fresh temp folder that is deleted afterwards.
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/run
 language: dart
 ---
 
 # _run
+
+Runs one bridge command in a fresh temp folder that is deleted afterwards.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_run_run
 ```
 
+## Docstring
+
+Runs one bridge command in a fresh temp folder that is deleted afterwards.
+
 ## Source
-Lines 952–955 in `services/radio_bridge.dart`
+Lines 991–994 in `services/radio_bridge.dart`
 
 ## Relationships
 

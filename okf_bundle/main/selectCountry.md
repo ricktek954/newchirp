@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _selectCountry
+description: Selects a country and resets the region to one that exists there.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/selectCountry
 language: dart
 ---
 
 # _selectCountry
+
+Selects a country and resets the region to one that exists there.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_selectCountry(String country)
 ```
 
+## Docstring
+
+Selects a country and resets the region to one that exists there.
+
 ## Source
-Lines 8914–8914 in `main.dart`
+Lines 9134–9134 in `main.dart`
 
 ## Relationships
 

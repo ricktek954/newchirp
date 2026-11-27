@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: buildReport
+description: "Text of recent entries for a bug report, newest last, cut to [maxCharacters] and with personal paths removed."
 resource: services/diagnostic_log.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:11Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/diagnostic_log/buildReport
 language: dart
 ---
 
 # buildReport
+
+Text of recent entries for a bug report, newest last, cut to [maxCharacters] and with personal paths removed.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 StringbuildReport({int maxCharacters = 48000})
 ```
 
+## Docstring
+
+Text of recent entries for a bug report, newest last, cut to [maxCharacters] and with personal paths removed.
+
 ## Source
-Lines 112–112 in `services/diagnostic_log.dart`
+Lines 119–119 in `services/diagnostic_log.dart`
 
 ## Relationships
 

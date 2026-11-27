@@ -10,6 +10,7 @@ class LibraryMetricsStore {
 
   final String _path;
 
+  /// Whether the library metrics panel was left collapsed (false if unknown).
   Future<bool> isCollapsed() async {
     final file = File(_path);
     try {
@@ -23,6 +24,7 @@ class LibraryMetricsStore {
     }
   }
 
+  /// Remembers whether the library metrics panel is collapsed. Errors are ignored.
   Future<void> setCollapsed(bool collapsed) async {
     try {
       final file = File(_path);
@@ -36,6 +38,7 @@ class LibraryMetricsStore {
     }
   }
 
+  /// Settings file in the per-user app data folder for this platform.
   static String _defaultPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _selectAllChannels
+description: Selects every visible (filtered) non-empty channel.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/selectAllChannels
 language: dart
 ---
 
 # _selectAllChannels
+
+Selects every visible (filtered) non-empty channel.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_selectAllChannels()
 ```
 
+## Docstring
+
+Selects every visible (filtered) non-empty channel.
+
 ## Source
-Lines 721–721 in `main.dart`
+Lines 750–750 in `main.dart`
 
 ## Relationships
 

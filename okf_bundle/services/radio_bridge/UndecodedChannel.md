@@ -11,7 +11,7 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/UndecodedChannel
 language: dart
 ---
@@ -33,7 +33,7 @@ the channel list, the radio's bytes stay untouched, and uploads refuse
 to write that slot (2026-11-26 IC-E90 report, mailbox UID 1017).
 
 ## Source
-Lines 197–214 in `services/radio_bridge.dart`
+Lines 204–221 in `services/radio_bridge.dart`
 
 ## Relationships
 

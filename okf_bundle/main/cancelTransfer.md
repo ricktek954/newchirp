@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _cancelTransfer
+description: "Cancels a transfer. During a write it asks first, since stopping mid-write can"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/cancelTransfer
 language: dart
 ---
 
 # _cancelTransfer
+
+Cancels a transfer. During a write it asks first, since stopping mid-write can
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_cancelTransfer_cancelTransfer
 ```
 
+## Docstring
+
+Cancels a transfer. During a write it asks first, since stopping mid-write can
+leave the radio's memory half-written.
+
 ## Source
-Lines 4166–4166 in `main.dart`
+Lines 4314–4314 in `main.dart`
 
 ## Relationships
 

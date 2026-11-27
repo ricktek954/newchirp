@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/gmrsChannelMenuLabel
 language: dart
 ---
@@ -31,7 +31,7 @@ StringgmrsChannelMenuLabel(int channel)
 Menu line for the receive-channel dropdown.
 
 ## Source
-Lines 328–328 in `models/radio_channel.dart`
+Lines 331–331 in `models/radio_channel.dart`
 
 ## Relationships
 

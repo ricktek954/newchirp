@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _restoreStockChannels
+description: "Loads CHIRP's stock \"US FRS and GMRS Channels\" list."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/restoreStockChannels
 language: dart
 ---
 
 # _restoreStockChannels
+
+Loads CHIRP's stock "US FRS and GMRS Channels" list.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_restoreStockChannels_restoreStockChannels
 ```
 
+## Docstring
+
+Loads CHIRP's stock "US FRS and GMRS Channels" list.
+
 ## Source
-Lines 2777–2777 in `main.dart`
+Lines 2883–2883 in `main.dart`
 
 ## Relationships
 

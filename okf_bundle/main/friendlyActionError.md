@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _friendlyActionError
+description: "Error text with platform advice for common causes: macOS privacy blocks on a"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/friendlyActionError
 language: dart
 ---
 
 # _friendlyActionError
+
+Error text with platform advice for common causes: macOS privacy blocks on a
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 String_friendlyActionError(Object error)
 ```
 
+## Docstring
+
+Error text with platform advice for common causes: macOS privacy blocks on a
+folder, or Linux serial-port permission (dialout group).
+
 ## Source
-Lines 1639–1639 in `main.dart`
+Lines 1713–1713 in `main.dart`
 
 ## Relationships
 

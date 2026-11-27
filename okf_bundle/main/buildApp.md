@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildApp
+description: "The MaterialApp: theme colors, localization and the home screen."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/buildApp
 language: dart
 ---
 
 # _buildApp
+
+The MaterialApp: theme colors, localization and the home screen.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_buildApp(Locale? locale, Color ink, Color green)
 ```
 
+## Docstring
+
+The MaterialApp: theme colors, localization and the home screen.
+
 ## Source
-Lines 344–344 in `main.dart`
+Lines 365–365 in `main.dart`
 
 ## Relationships
 

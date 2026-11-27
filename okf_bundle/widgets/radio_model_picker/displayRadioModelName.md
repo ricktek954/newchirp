@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: displayRadioModelName
+description: "Name shown to people: the manufacturer's official spelling (e.g. \"DR-735T\")"
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/displayRadioModelName
 language: dart
 ---
 
 # displayRadioModelName
+
+Name shown to people: the manufacturer's official spelling (e.g. "DR-735T")
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 StringdisplayRadioModelName(String model)
 ```
 
+## Docstring
+
+Name shown to people: the manufacturer's official spelling (e.g. "DR-735T")
+when known, otherwise the CHIRP id with underscores as spaces.
+
 ## Source
-Lines 35–35 in `widgets/radio_model_picker.dart`
+Lines 37–37 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

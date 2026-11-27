@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _setColumnOrder
+description: Sets the column order from a drag in the table header (saved for next launch).
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/setColumnOrder
 language: dart
 ---
 
 # _setColumnOrder
+
+Sets the column order from a drag in the table header (saved for next launch).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_setColumnOrder(List<String> order)
 ```
 
+## Docstring
+
+Sets the column order from a drag in the table header (saved for next launch).
+
 ## Source
-Lines 1503–1503 in `main.dart`
+Lines 1565–1565 in `main.dart`
 
 ## Relationships
 

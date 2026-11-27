@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _switchRadioZone
+description: "Switches to another zone/band of the radio image, asking first if there are"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/switchRadioZone
 language: dart
 ---
 
 # _switchRadioZone
+
+Switches to another zone/band of the radio image, asking first if there are
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_switchRadioZone_switchRadioZone
 ```
 
+## Docstring
+
+Switches to another zone/band of the radio image, asking first if there are
+unsaved edits. Live-read radios (e.g. IC-9700) re-read the band from the radio.
+
 ## Source
-Lines 1373–1373 in `main.dart`
+Lines 1432–1432 in `main.dart`
 
 ## Relationships
 

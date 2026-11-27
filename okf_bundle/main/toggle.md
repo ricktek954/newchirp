@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: toggle
+description: Opens or closes this menu.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/toggle
 language: dart
 ---
 
 # toggle
+
+Opens or closes this menu.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 voidtoggle()
 ```
 
+## Docstring
+
+Opens or closes this menu.
+
 ## Source
-Lines 8252–8252 in `main.dart`
+Lines 8457–8457 in `main.dart`
 
 ## Relationships
 

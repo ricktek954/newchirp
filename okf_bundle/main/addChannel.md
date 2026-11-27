@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _addChannel
+description: Adds a channel where the user chooses and opens it in the editor.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/addChannel
 language: dart
 ---
 
 # _addChannel
+
+Adds a channel where the user chooses and opens it in the editor.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_addChannel_addChannel
 ```
 
+## Docstring
+
+Adds a channel where the user chooses and opens it in the editor.
+
 ## Source
-Lines 3221–3221 in `main.dart`
+Lines 3343–3343 in `main.dart`
 
 ## Relationships
 

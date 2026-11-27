@@ -10,7 +10,7 @@ tags:
   - "domain:mototrbo_cps2_xml.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T09:51:21Z"
+timestamp: "2026-11-27T09:05:28Z"
 concept_id: services/mototrbo_cps2_xml/number
 language: dart
 ---
@@ -24,7 +24,7 @@ double_number(XmlElement? element, {double? fallback = 0})
 ```
 
 ## Source
-Lines 317–317 in `services/mototrbo_cps2_xml.dart`
+Lines 329–329 in `services/mototrbo_cps2_xml.dart`
 
 ## Relationships
 

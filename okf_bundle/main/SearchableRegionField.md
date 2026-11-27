@@ -9,7 +9,7 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/SearchableRegionField
 language: dart
 ---
@@ -27,7 +27,7 @@ class _SearchableRegionField
 - `build`
 
 ## Source
-Lines 8675–8753 in `main.dart`
+Lines 8887–8966 in `main.dart`
 
 ## Relationships
 

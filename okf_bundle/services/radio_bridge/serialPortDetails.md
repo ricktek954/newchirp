@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: serialPortDetails
+description: Serial ports (with device names where the OS gives them) plus USB mass-storage
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/serialPortDetails
 language: dart
 ---
 
 # serialPortDetails
+
+Serial ports (with device names where the OS gives them) plus USB mass-storage
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 FutureserialPortDetailsserialPortDetails
 ```
 
+## Docstring
+
+Serial ports (with device names where the OS gives them) plus USB mass-storage
+radio interfaces, without duplicates.
+
 ## Source
-Lines 507–507 in `services/radio_bridge.dart`
+Lines 521–521 in `services/radio_bridge.dart`
 
 ## Relationships
 

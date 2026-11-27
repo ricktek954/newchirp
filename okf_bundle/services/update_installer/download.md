@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: download
+description: "Downloads this platform's installer for [update] into a temp folder."
 resource: services/update_installer.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:update_installer.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T13:46:10Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/update_installer/download
 language: dart
 ---
 
 # download
+
+Downloads this platform's installer for [update] into a temp folder.
 
 ## Signature
 
@@ -23,8 +26,14 @@ language: dart
 Futuredownloaddownload
 ```
 
+## Docstring
+
+Downloads this platform's installer for [update] into a temp folder.
+Only trusted newchirp.net URLs are used; the size is capped and the
+SHA-256 is checked when the release publishes one.
+
 ## Source
-Lines 56–59 in `services/update_installer.dart`
+Lines 59–62 in `services/update_installer.dart`
 
 ## Relationships
 

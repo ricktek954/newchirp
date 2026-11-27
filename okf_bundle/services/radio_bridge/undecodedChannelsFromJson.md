@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: undecodedChannelsFromJson
+description: "Parses the bridge's list of channel slots it could not decode."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/undecodedChannelsFromJson
 language: dart
 ---
 
 # undecodedChannelsFromJson
+
+Parses the bridge's list of channel slots it could not decode.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 ListundecodedChannelsFromJsonundecodedChannelsFromJson
 ```
 
+## Docstring
+
+Parses the bridge's list of channel slots it could not decode.
+
 ## Source
-Lines 216–216 in `services/radio_bridge.dart`
+Lines 224–224 in `services/radio_bridge.dart`
 
 ## Relationships
 

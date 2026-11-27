@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: toJson
+description: Serialized form sent to the Python bridge.
 resource: models/radio_channel.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/toJson
 language: dart
 ---
 
 # toJson
+
+Serialized form sent to the Python bridge.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 MaptoJsontoJson
 ```
 
+## Docstring
+
+Serialized form sent to the Python bridge.
+
 ## Source
-Lines 947–947 in `models/radio_channel.dart`
+Lines 962–962 in `models/radio_channel.dart`
 
 ## Relationships
 

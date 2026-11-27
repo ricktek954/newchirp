@@ -10,7 +10,7 @@ tags:
   - "domain:library_metrics_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T09:04:00Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/library_metrics_store/defaultPath
 language: dart
 ---
@@ -24,7 +24,7 @@ String_defaultPath()
 ```
 
 ## Source
-Lines 39–39 in `services/library_metrics_store.dart`
+Lines 42–42 in `services/library_metrics_store.dart`
 
 ## Relationships
 

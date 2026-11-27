@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _textWidth
+description: "Width of [text] in points using Helvetica's built-in metrics (1/1000 em per"
 resource: services/channel_list_pdf.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:channel_list_pdf.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:22Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: services/channel_list_pdf/textWidth
 language: dart
 ---
 
 # _textWidth
+
+Width of [text] in points using Helvetica's built-in metrics (1/1000 em per
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 double_textWidth(String text, double size, {bool bold = false})
 ```
 
+## Docstring
+
+Width of [text] in points using Helvetica's built-in metrics (1/1000 em per
+character; 556 for characters outside the table). Bold is approximated as 6% wider.
+
 ## Source
-Lines 245–245 in `services/channel_list_pdf.dart`
+Lines 253–253 in `services/channel_list_pdf.dart`
 
 ## Relationships
 

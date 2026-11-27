@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/midlandReceiveGmrsChannel
 language: dart
 ---
@@ -32,7 +32,7 @@ GMRS channel shown for this row. Fixed rows use the slot. Other rows
 use the stored receive frequency.
 
 ## Source
-Lines 346–346 in `models/radio_channel.dart`
+Lines 349–349 in `models/radio_channel.dart`
 
 ## Relationships
 

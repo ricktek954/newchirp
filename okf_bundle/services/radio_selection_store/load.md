@@ -2,20 +2,23 @@
 okf_version: "0.2"
 type: Function
 title: load
+description: Reads the last selected radio model and port; null when missing or unreadable.
 resource: services/radio_selection_store.dart
 tags:
   - "lang:dart"
   - "type:Function"
   - "module:services"
   - "domain:radio_selection_store.dart"
-  - "git:branch:HEAD"
+  - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-08-23T23:14:49Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/radio_selection_store/load
 language: dart
 ---
 
 # load
+
+Reads the last selected radio model and port; null when missing or unreadable.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Futureloadload
 ```
 
+## Docstring
+
+Reads the last selected radio model and port; null when missing or unreadable.
+
 ## Source
-Lines 16–16 in `services/radio_selection_store.dart`
+Lines 17–17 in `services/radio_selection_store.dart`
 
 ## Relationships
 

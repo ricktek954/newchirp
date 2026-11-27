@@ -10,7 +10,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:53:43Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: services/chirp_csv/col
 language: dart
 ---
@@ -24,7 +24,7 @@ intcol(String name)
 ```
 
 ## Source
-Lines 126–126 in `services/chirp_csv.dart`
+Lines 135–135 in `services/chirp_csv.dart`
 
 ## Relationships
 

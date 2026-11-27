@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _channelRow
+description: "One table row: drag handle plus a cell per column, highlighted when selected."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/channelRow
 language: dart
 ---
 
 # _channelRow
+
+One table row: drag handle plus a cell per column, highlighted when selected.
 
 ## Signature
 
@@ -30,8 +33,12 @@ Widget_channelRow(
   })
 ```
 
+## Docstring
+
+One table row: drag handle plus a cell per column, highlighted when selected.
+
 ## Source
-Lines 11052–11060 in `main.dart`
+Lines 11302–11310 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _applyBulkChannelDraft
+description: "Copies only the fields changed in the bulk draft onto [target]."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/applyBulkChannelDraft
 language: dart
 ---
 
 # _applyBulkChannelDraft
+
+Copies only the fields changed in the bulk draft onto [target].
 
 ## Signature
 
@@ -26,8 +29,12 @@ void_applyBulkChannelDraft(
   )
 ```
 
+## Docstring
+
+Copies only the fields changed in the bulk draft onto [target].
+
 ## Source
-Lines 963–967 in `main.dart`
+Lines 998–1002 in `main.dart`
 
 ## Relationships
 

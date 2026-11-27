@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: convertRepeaterResponse
+description: "Converts the website's JSON into channels: repeater outputs get +5 MHz duplex,"
 resource: services/mygmrs_client.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T15:24:31Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: services/mygmrs_client/convertRepeaterResponse
 language: dart
 ---
 
 # convertRepeaterResponse
+
+Converts the website's JSON into channels: repeater outputs get +5 MHz duplex,
 
 ## Signature
 
@@ -26,8 +29,13 @@ RepeaterSearchResultsconvertRepeaterResponse(
   })
 ```
 
+## Docstring
+
+Converts the website's JSON into channels: repeater outputs get +5 MHz duplex,
+tones are applied, and closed repeaters are dropped when [openOnly] is set.
+
 ## Source
-Lines 208–211 in `services/mygmrs_client.dart`
+Lines 221–224 in `services/mygmrs_client.dart`
 
 ## Relationships
 

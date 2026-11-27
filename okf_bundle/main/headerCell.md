@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _headerCell
+description: "Header cell: draggable label, filter box and resize handle."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/headerCell
 language: dart
 ---
 
 # _headerCell
+
+Header cell: draggable label, filter box and resize handle.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Widget_headerCell(_ChannelColumn column, List<_ChannelColumn> columns)
 ```
 
+## Docstring
+
+Header cell: draggable label, filter box and resize handle.
+
 ## Source
-Lines 10955–10955 in `main.dart`
+Lines 11203–11203 in `main.dart`
 
 ## Relationships
 

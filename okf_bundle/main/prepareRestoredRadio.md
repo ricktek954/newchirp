@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _prepareRestoredRadio
+description: "After a restored selection: refreshes ports and loads that model's details."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/prepareRestoredRadio
 language: dart
 ---
 
 # _prepareRestoredRadio
+
+After a restored selection: refreshes ports and loads that model's details.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_prepareRestoredRadio_prepareRestoredRadio
 ```
 
+## Docstring
+
+After a restored selection: refreshes ports and loads that model's details.
+
 ## Source
-Lines 1578–1578 in `main.dart`
+Lines 1646–1646 in `main.dart`
 
 ## Relationships
 

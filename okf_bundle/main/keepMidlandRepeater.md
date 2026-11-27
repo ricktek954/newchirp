@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _keepMidlandRepeater
+description: Resets a Midland repeater row to its plain fixed channel instead of deleting it.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/keepMidlandRepeater
 language: dart
 ---
 
 # _keepMidlandRepeater
+
+Resets a Midland repeater row to its plain fixed channel instead of deleting it.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_keepMidlandRepeater(RadioChannel channel)
 ```
 
+## Docstring
+
+Resets a Midland repeater row to its plain fixed channel instead of deleting it.
+
 ## Source
-Lines 3600–3600 in `main.dart`
+Lines 3735–3735 in `main.dart`
 
 ## Relationships
 

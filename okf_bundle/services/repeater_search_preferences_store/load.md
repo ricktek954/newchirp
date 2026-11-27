@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: load
+description: Reads the saved search settings; defaults when missing or unreadable.
 resource: services/repeater_search_preferences_store.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:repeater_search_preferences_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-07T15:37:27Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/repeater_search_preferences_store/load
 language: dart
 ---
 
 # load
+
+Reads the saved search settings; defaults when missing or unreadable.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Futureloadload
 ```
 
+## Docstring
+
+Reads the saved search settings; defaults when missing or unreadable.
+
 ## Source
-Lines 56–56 in `services/repeater_search_preferences_store.dart`
+Lines 58–58 in `services/repeater_search_preferences_store.dart`
 
 ## Relationships
 

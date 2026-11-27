@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _savePreferencesNow
+description: "Saves the search settings now, queued after any save already running."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/savePreferencesNow
 language: dart
 ---
 
 # _savePreferencesNow
+
+Saves the search settings now, queued after any save already running.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_savePreferencesNow_savePreferencesNow
 ```
 
+## Docstring
+
+Saves the search settings now, queued after any save already running.
+
 ## Source
-Lines 8893–8893 in `main.dart`
+Lines 9111–9111 in `main.dart`
 
 ## Relationships
 

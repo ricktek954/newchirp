@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: nonEmpty
+description: "[text], or [fallback] when it is empty."
 resource: services/chirp_csv.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T08:53:43Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: services/chirp_csv/nonEmpty
 language: dart
 ---
 
 # nonEmpty
+
+[text], or [fallback] when it is empty.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 StringnonEmpty(String text, String fallback)
 ```
 
+## Docstring
+
+[text], or [fallback] when it is empty.
+
 ## Source
-Lines 136–136 in `services/chirp_csv.dart`
+Lines 149–149 in `services/chirp_csv.dart`
 
 ## Relationships
 

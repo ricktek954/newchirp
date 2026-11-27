@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _task
+description: "Runs [action] with the busy indicator and [label] as the status; any error"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/task
 language: dart
 ---
 
 # _task
+
+Runs [action] with the busy indicator and [label] as the status; any error
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_task_task
 ```
 
+## Docstring
+
+Runs [action] with the busy indicator and [label] as the status; any error
+is shown to the user, and the status returns to Ready.
+
 ## Source
-Lines 1621–1621 in `main.dart`
+Lines 1693–1693 in `main.dart`
 
 ## Relationships
 

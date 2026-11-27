@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _australianUhfNote
+description: "Usage note for an Australian UHF CB channel (repeater outputs/inputs, emergency, telemetry)."
 resource: models/frequency_reference.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:frequency_reference.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:16:23Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/frequency_reference/australianUhfNote
 language: dart
 ---
 
 # _australianUhfNote
+
+Usage note for an Australian UHF CB channel (repeater outputs/inputs, emergency, telemetry).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 String_australianUhfNote(int channel)
 ```
 
+## Docstring
+
+Usage note for an Australian UHF CB channel (repeater outputs/inputs, emergency, telemetry).
+
 ## Source
-Lines 58–58 in `models/frequency_reference.dart`
+Lines 61–61 in `models/frequency_reference.dart`
 
 ## Relationships
 

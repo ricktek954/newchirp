@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: filterRepeaterResults
+description: "Results matching the search text and, if any are chosen, the selected counties."
 resource: models/repeater_search.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:repeater_search.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T15:12:55Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/repeater_search/filterRepeaterResults
 language: dart
 ---
 
 # filterRepeaterResults
+
+Results matching the search text and, if any are chosen, the selected counties.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 ListfilterRepeaterResultsfilterRepeaterResults
 ```
 
+## Docstring
+
+Results matching the search text and, if any are chosen, the selected counties.
+
 ## Source
-Lines 44–48 in `models/repeater_search.dart`
+Lines 47–51 in `models/repeater_search.dart`
 
 ## Relationships
 

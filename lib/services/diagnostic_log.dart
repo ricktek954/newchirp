@@ -16,6 +16,7 @@ class DiagnosticEntry {
   final String message;
   final Map<String, Object?> context;
 
+  /// Serialized form: one JSON line per entry in diagnostics.jsonl.
   Map<String, Object?> toJson() => {
     'timestamp': timestamp.toUtc().toIso8601String(),
     'category': category,
@@ -48,13 +49,16 @@ class DiagnosticLog {
 
   Future<void> flush() => _pendingWrite;
 
+  /// Opens diagnostics.jsonl. Over 2 MB it is renamed to
+  /// diagnostics.previous.jsonl (one old copy kept) and a new log starts.
+  /// Errors are swallowed: logging must never stop the app from starting.
   Future<void> initialize() async {
     try {
       final directory = _logDirectory();
       await directory.create(recursive: true);
       _logFile = File('${directory.path}/diagnostics.jsonl');
       if (await _logFile!.exists() &&
-          await _logFile!.length() > 2 * 1024 * 1024) {
+          await _logFile!.length() > 2 * 1024 * 1024) { // 2 MB
         final previous = File('${directory.path}/diagnostics.previous.jsonl');
         if (await previous.exists()) await previous.delete();
         await _logFile!.rename(previous.path);
@@ -64,6 +68,7 @@ class DiagnosticLog {
     }
   }
 
+  /// Adds an entry to memory and appends it to the log file.
   void record(
     String category,
     String message, {
@@ -100,6 +105,7 @@ class DiagnosticLog {
     });
   }
 
+  /// Records an error with its stack trace.
   void recordError(
     String category,
     Object error,
@@ -109,6 +115,7 @@ class DiagnosticLog {
     record(category, '$error\n\n$stackTrace', context: context);
   }
 
+  /// Text of recent entries for a bug report, newest last, cut to [maxCharacters] and with personal paths removed.
   String buildReport({int maxCharacters = 48000}) {
     final lines = <String>[];
     for (final entry in _entries) {
@@ -126,7 +133,7 @@ class DiagnosticLog {
   }
 
   /// Largest radio image a report carries (the server's limit).
-  static const int maxReportImageBytes = 4 * 1024 * 1024;
+  static const int maxReportImageBytes = 4 * 1024 * 1024; // 4 MB
 
   /// The image a report can attach, or null when there is none usable.
   static File? reportImage(String? path) {
@@ -138,6 +145,7 @@ class DiagnosticLog {
     return file;
   }
 
+  /// Sends a bug report (with the diagnostic log and, optionally, the radio image) to the NewChirp website.
   Future<void> submit({
     required String email,
     required String description,
@@ -214,6 +222,7 @@ class DiagnosticLog {
     }
   }
 
+  /// Replaces the user's home folder with "~" so reports don't reveal the account name.
   String _redact(String value) {
     var redacted = value;
     final home =
@@ -226,6 +235,7 @@ class DiagnosticLog {
         : '${redacted.substring(0, 8000)}\n… truncated …';
   }
 
+  /// The log folder: the test override, or the platform's usual per-user log folder.
   Directory _logDirectory() {
     if (_rootDirectory != null) return _rootDirectory;
     if (Platform.isMacOS) {

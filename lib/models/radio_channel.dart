@@ -213,6 +213,9 @@ List<RadioChannel> compatibleChannelsForUpload(
   List<String> Function(RadioChannel channel) issuesFor,
 ) => channels.where((channel) => issuesFor(channel).isEmpty).toList();
 
+/// Cleared-slot set after deleting the empty slot at [location]: later cleared
+/// slots move down by one, and the old highest slot (within [rangeEnd], if given)
+/// becomes cleared because everything after it shifted up.
 Set<int> clearedLocationsAfterEmptySlotRemoval({
   required Iterable<RadioChannel> channels,
   required Set<int> clearedLocations,
@@ -402,6 +405,7 @@ bool isGmrsRepeaterOutputMhz(double mhz) {
   return (hz - 462550000) % 25000 == 0;
 }
 
+/// "462.562500"-style MHz text from Hz, with exact integer math (no float rounding).
 String mhzLabelFromHz(int hz) {
   final whole = hz ~/ 1000000;
   final fraction = (hz % 1000000).toString().padLeft(6, '0');
@@ -462,9 +466,6 @@ bool midlandCanSelectOffset(int location, double frequencyMhz) {
   return gmrs != null && gmrs >= 15 && gmrs <= 22;
 }
 
-/// Why this MXT295 channel is not legal. Empty for every other radio.
-///
-/// The driver enforces the same rules in drivers/newchirp_mxt295.py.
 /// True when the channel has no transmit frequency (duplex "off"). Radios
 /// store such channels without a TX frequency and refuse PTT on them, which
 /// owners can mistake for a failed write (RT-950 Pro report, 2026-11-20:
@@ -492,6 +493,9 @@ String receiveOnlyWriteNote(
       'an offset before writing.';
 }
 
+/// Why this MXT295 channel is not legal. Empty for every other radio.
+///
+/// The driver enforces the same rules in drivers/newchirp_mxt295.py.
 List<String> midlandGmrsIssues(String? model, RadioChannel channel) {
   if (!showsMidlandChannelNumbers(model) || channel.cleared) return const [];
   final issues = <String>[];
@@ -603,6 +607,7 @@ class RadioChannel {
 
   RadioChannel copy() => RadioChannel.fromJson(toJson());
 
+  /// Empties this slot: marks it cleared and resets every field to its default.
   void clear() {
     cleared = true;
     name = '';
@@ -701,6 +706,7 @@ class RadioChannel {
     extras.clear();
   }
 
+  /// Serialized form sent to the Python bridge and saved in documents.
   Map<String, dynamic> toJson() => {
     'location': location,
     'cleared': cleared,
@@ -750,6 +756,8 @@ class RadioChannel {
         .toList(),
   );
 
+  /// Slot for a new channel: the one after the highest used slot if it fits,
+  /// otherwise the first free slot from [minimum]; null when the range is full.
   static int? nextAvailableLocation(
     Iterable<RadioChannel> channels, {
     int minimum = 1,
@@ -777,6 +785,8 @@ class RadioChannel {
     return null;
   }
 
+  /// Problems that would stop this channel being written to the selected radio
+  /// (location range, name length, band, mode, step, tones...). Empty = OK.
   List<String> validate({
     int? minimumLocation,
     int? maximumLocation,
@@ -899,6 +909,8 @@ class RadioChannel {
   }
 }
 
+/// True when [frequencyHz] lies on the [stepKhz] grid. 8.33 kHz (airband) is
+/// special: its channels repeat every 25 kHz at offsets 0, 8.33 and 16.67 kHz.
 bool _frequencyFitsStep(int frequencyHz, double stepKhz) {
   final stepHz = (stepKhz * 1000).round();
   if (stepHz <= 0) return false;
@@ -908,6 +920,8 @@ bool _frequencyFitsStep(int frequencyHz, double stepKhz) {
   return frequencyHz % stepHz == 0;
 }
 
+/// Closest frequency on any of [steps] (8.33 kHz skipped), for "did you mean"
+/// hints. `1 << 62` just means "very large" as a starting distance.
 int? _nearestFrequencyForSteps(int frequencyHz, List<double> steps) {
   int? nearest;
   var nearestDistance = 1 << 62;
@@ -944,6 +958,7 @@ class ChannelExtraField {
   final bool mutable;
   final String? documentation;
 
+  /// Serialized form sent to the Python bridge.
   Map<String, dynamic> toJson() => {
     'name': name,
     'label': label,
@@ -968,6 +983,7 @@ class ChannelExtraField {
       );
 }
 
+/// The 22 standard GMRS channels as a starter list (repeater channels 15-22 with +5 MHz).
 List<RadioChannel> gmrsStarterChannels() {
   const frequencies = <double>[
     462.5625,

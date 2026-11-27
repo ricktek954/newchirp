@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _newLibrary
+description: "Starts a new, empty channel list."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/newLibrary
 language: dart
 ---
 
 # _newLibrary
+
+Starts a new, empty channel list.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_newLibrary_newLibrary
 ```
 
+## Docstring
+
+Starts a new, empty channel list.
+
 ## Source
-Lines 2722–2722 in `main.dart`
+Lines 2825–2825 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: side
+description: Tone text for one side (transmit or receive) of a Cross mode.
 resource: services/channel_list_pdf.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:channel_list_pdf.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-22T10:54:22Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: services/channel_list_pdf/side
 language: dart
 ---
 
 # side
+
+Tone text for one side (transmit or receive) of a Cross mode.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Stringside(String kind, {required bool transmit})
 ```
 
+## Docstring
+
+Tone text for one side (transmit or receive) of a Cross mode.
+
 ## Source
-Lines 72–72 in `services/channel_list_pdf.dart`
+Lines 76–76 in `services/channel_list_pdf.dart`
 
 ## Relationships
 

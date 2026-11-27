@@ -9,10 +9,10 @@
 
 - [_launchExternalUrl](launchExternalUrl.md) — Starts the platform browser for an already validated address.
 - [_parsePlatformRelease](parsePlatformRelease.md) — Starts the platform browser for an already validated address.
-- [_versionParts](versionParts.md)
-- [check](check.md) — Starts the platform browser for an already validated address.
+- [_versionParts](versionParts.md) — Numeric parts of a version for comparison: "1.0.76+5" -> [1, 0, 76].
+- [check](check.md) — Asks the website for this platform's latest release and compares it with [currentVersion].
 - [compareVersions](compareVersions.md) — Compares two dotted version strings, ignoring any `+build` metadata.
-- [currentUpdatePlatform](currentUpdatePlatform.md)
+- [currentUpdatePlatform](currentUpdatePlatform.md) — Platform name used by the release API: windows, macos, linux, android, or "" if unsupported.
 - [isAllowedDownloadUrl](isAllowedDownloadUrl.md) — True when [url] is an https link on newchirp.net, with no login or odd port.
 - [openExternalUrl](openExternalUrl.md) — Opens a newchirp.net download page in the default browser.
 - [toString](toString.md) — Starts the platform browser for an already validated address.

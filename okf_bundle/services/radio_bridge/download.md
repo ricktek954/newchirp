@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: download
+description: "Reads the radio on [port] and saves its image; returns the channels and the"
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/download
 language: dart
 ---
 
 # download
+
+Reads the radio on [port] and saves its image; returns the channels and the
 
 ## Signature
 
@@ -23,8 +26,13 @@ language: dart
 Futuredownloaddownload
 ```
 
+## Docstring
+
+Reads the radio on [port] and saves its image; returns the channels and the
+image path. Progress comes through [onProgress].
+
 ## Source
-Lines 790–806 in `services/radio_bridge.dart`
+Lines 824–840 in `services/radio_bridge.dart`
 
 ## Relationships
 

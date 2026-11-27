@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _currentPreferences
+description: "The dialog's current search settings."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/currentPreferences
 language: dart
 ---
 
 # _currentPreferences
+
+The dialog's current search settings.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 RepeaterSearchPreferences_currentPreferences()
 ```
 
+## Docstring
+
+The dialog's current search settings.
+
 ## Source
-Lines 8876–8876 in `main.dart`
+Lines 9093–9093 in `main.dart`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "domain:app_language.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:07:35Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/app_language/AppLanguageStore
 language: dart
 ---
@@ -24,7 +24,7 @@ AppLanguageStore({String? path})
 ```
 
 ## Source
-Lines 26–26 in `services/app_language.dart`
+Lines 27–27 in `services/app_language.dart`
 
 ## Relationships
 

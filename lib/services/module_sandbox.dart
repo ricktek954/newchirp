@@ -84,6 +84,7 @@ class SandboxFiles {
   final String? port;
 }
 
+/// Which sandbox technology this OS uses (macOS Seatbelt, Linux bubblewrap, or none).
 SandboxPlatform currentSandboxPlatform() {
   if (Platform.isMacOS) return SandboxPlatform.macos;
   if (Platform.isLinux) return SandboxPlatform.linux;
@@ -105,10 +106,13 @@ String? moduleSandboxRefusal(SandboxPlatform platform) {
   }
 }
 
+/// True when this OS can sandbox a user-loaded CHIRP module at all.
 bool canLoadChirpModules(SandboxPlatform platform) {
   return moduleSandboxRefusal(platform) == null;
 }
 
+/// Why a module can't be loaded right now, or null if it can. On Linux this
+/// also checks that bubblewrap (bwrap) is installed.
 Future<String?> moduleSandboxBlocker() async {
   final platform = currentSandboxPlatform();
   final refusal = moduleSandboxRefusal(platform);
@@ -123,6 +127,8 @@ Future<String?> moduleSandboxBlocker() async {
   return null;
 }
 
+/// True for an absolute path that is safe to put in a sandbox profile: no quotes,
+/// backslashes, parentheses, line breaks, NUL or ".." parts, and not "/".
 bool isSafeSandboxPath(String path) {
   if (path.isEmpty || path == '/') return false;
   if (!path.startsWith('/')) return false;
@@ -170,6 +176,9 @@ bool isSafeAllowRoot(String path, {String? home}) {
   return true;
 }
 
+/// True for a serial port name of the usual form (/dev/cu.* or /dev/tty.* on macOS,
+/// /dev/ttyUSB0, ttyACM0 or ttyS0 on Linux), so nothing else is passed in as a
+/// "port". Always false where modules can't be sandboxed (Windows).
 bool isSafeSerialPort(SandboxPlatform platform, String port) {
   switch (platform) {
     case SandboxPlatform.macos:
@@ -182,6 +191,8 @@ bool isSafeSerialPort(SandboxPlatform platform, String port) {
   }
 }
 
+/// Environment for the sandboxed helper: home and temp folders point at its
+/// private work folder, and Python ignores user site-packages.
 Map<String, String> moduleSandboxEnvironment(String workDir) {
   return {
     'HOME': workDir,
@@ -195,6 +206,7 @@ Map<String, String> moduleSandboxEnvironment(String workDir) {
   };
 }
 
+/// Copy of the helper's arguments with the --module path replaced by [modulePath].
 List<String> replaceModuleArgument(List<String> arguments, String modulePath) {
   final copy = [...arguments];
   var found = false;
@@ -207,6 +219,7 @@ List<String> replaceModuleArgument(List<String> arguments, String modulePath) {
   return copy;
 }
 
+/// The image, channels, settings and port files named in the helper's arguments.
 SandboxFiles sandboxFilesIn(List<String> arguments) {
   String? image;
   String? channels;
@@ -236,6 +249,9 @@ SandboxFiles sandboxFilesIn(List<String> arguments) {
   );
 }
 
+/// macOS Seatbelt (sandbox-exec) profile. It starts from "allow default" ("deny
+/// default" crashes sandbox-exec), denies home folders, other drives, temp and the
+/// network, then re-allows Python, CHIRP, the listed files, the work folder and the port.
 String macosSeatbeltProfile({
   required String workDir,
   required String python,
@@ -250,6 +266,7 @@ String macosSeatbeltProfile({
 }) {
   final reads = <String>[];
   final execRoots = <String>[];
+  /// Allows executing/reading under [path] after checking it is a safe allow-root.
   void addRoot(String path) {
     if (!isSafeAllowRoot(path, home: home)) {
       throw ModuleSandboxException(_unsafePathMessage);
@@ -340,6 +357,8 @@ String macosSeatbeltProfile({
   return buffer.toString();
 }
 
+/// Linux bubblewrap (bwrap) arguments: an empty root with read-only system and
+/// Python folders, the work folder writable, and the serial port if one is used.
 List<String> linuxBubblewrapArguments({
   required String workDir,
   required String python,
@@ -354,12 +373,14 @@ List<String> linuxBubblewrapArguments({
   required bool hasBin,
   String? home,
 }) {
+  /// Throws unless [path] is an acceptable folder to expose.
   void requireRoot(String path) {
     if (!isSafeAllowRoot(path, home: home)) {
       throw ModuleSandboxException(_unsafePathMessage);
     }
   }
 
+  /// Throws unless [path] is a safe file path to expose.
   void requireFile(String path) {
     if (!isSafeSandboxPath(path)) {
       throw ModuleSandboxException(_unsafePathMessage);
@@ -428,6 +449,8 @@ List<String> linuxBubblewrapArguments({
   final created = <String>{...covered};
   final bound = <String>{...covered};
 
+  /// Bind-mounts [source] at the same path ([mode] = --bind or --ro-bind),
+  /// creating parent folders first; skipped if a parent is already mounted.
   void mount(String source, String mode) {
     if (_isInside(source, bound)) return;
     _bubblewrapParents(args, created, covered, source);
@@ -468,6 +491,8 @@ List<String> linuxBubblewrapArguments({
 class ModuleSandbox {
   Directory? _workDir;
 
+  /// Prepares a sandboxed launch: private work folder, copies of the module and
+  /// input files, then the sandbox-exec or bwrap command line to run.
   Future<SandboxLaunch> prepare({
     required String python,
     required String chirpSource,
@@ -552,6 +577,7 @@ class ModuleSandbox {
     );
   }
 
+  /// Deletes the private work folder.
   Future<void> dispose() async {
     final directory = _workDir;
     _workDir = null;
@@ -566,6 +592,7 @@ class ModuleSandbox {
     }
   }
 
+  /// The private work folder (mode 700 = only this user), created on first use.
   Future<Directory> _ensureWork() async {
     final existing = _workDir;
     if (existing != null && await existing.exists()) return existing;
@@ -586,6 +613,7 @@ class ModuleSandbox {
     return directory;
   }
 
+  /// Copies the user's module into the work folder as module.py / module.mod.
   Future<String> _copyModule(Directory work, String modulePath) async {
     final lower = modulePath.toLowerCase();
     final extension = lower.endsWith('.mod') ? 'mod' : 'py';
@@ -601,6 +629,7 @@ class ModuleSandbox {
     return destination.path;
   }
 
+  /// Full path of the Python to run ("python3" is looked up with `which`).
   Future<String> _resolvePython(String python) async {
     var candidate = python.trim();
     if (candidate.isEmpty) throw ModuleSandboxException(_pythonMessage);
@@ -618,6 +647,8 @@ class ModuleSandbox {
     return resolved;
   }
 
+  /// Folders the Python install lives in (sys.prefix and friends), resolved
+  /// through symlinks, so the sandbox can expose them read-only.
   Future<List<String>> _pythonRoots(String python) async {
     final result = await Process.run(python, [
       '-c',
@@ -626,6 +657,7 @@ class ModuleSandbox {
     if (result.exitCode != 0) throw ModuleSandboxException(_pythonMessage);
     final prefix = '${result.stdout}'.trim();
     final roots = <String>[];
+    /// Adds a folder (and its symlink target) once; ignores "" and "/".
     void add(String path) {
       if (path.isEmpty || path == '/') return;
       final entity = Directory(path);
@@ -648,6 +680,7 @@ class ModuleSandbox {
     return roots;
   }
 
+  /// The serial port to expose, or null if none; throws for unexpected names.
   String? _serialPort(SandboxPlatform platform, String? port) {
     if (port == null || port.isEmpty || !port.startsWith('/')) return null;
     if (!isSafeSerialPort(platform, port)) {

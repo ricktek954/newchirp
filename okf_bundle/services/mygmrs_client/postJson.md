@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _postJson
+description: "POSTs [payload] as JSON to the website and returns the JSON reply; throws on HTTP errors."
 resource: services/mygmrs_client.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T15:24:31Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: services/mygmrs_client/postJson
 language: dart
 ---
 
 # _postJson
+
+POSTs [payload] as JSON to the website and returns the JSON reply; throws on HTTP errors.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_postJson_postJson
 ```
 
+## Docstring
+
+POSTs [payload] as JSON to the website and returns the JSON reply; throws on HTTP errors.
+
 ## Source
-Lines 284–287 in `services/mygmrs_client.dart`
+Lines 298–301 in `services/mygmrs_client.dart`
 
 ## Relationships
 

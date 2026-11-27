@@ -11,7 +11,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:13:56Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/ChannelImageBaseline
 language: dart
 ---

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _loadRadioInstructions
+description: "Loads the selected driver's instructions, with the busy indicator."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/loadRadioInstructions
 language: dart
 ---
 
 # _loadRadioInstructions
+
+Loads the selected driver's instructions, with the busy indicator.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_loadRadioInstructions_loadRadioInstructions
 ```
 
+## Docstring
+
+Loads the selected driver's instructions, with the busy indicator.
+
 ## Source
-Lines 3759–3759 in `main.dart`
+Lines 3899–3899 in `main.dart`
 
 ## Relationships
 

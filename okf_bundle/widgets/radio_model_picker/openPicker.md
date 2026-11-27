@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _openPicker
+description: Opens the full model catalog dialog and reports the choice.
 resource: widgets/radio_model_picker.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/openPicker
 language: dart
 ---
 
 # _openPicker
+
+Opens the full model catalog dialog and reports the choice.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_openPicker_openPicker
 ```
 
+## Docstring
+
+Opens the full model catalog dialog and reports the choice.
+
 ## Source
-Lines 157–157 in `widgets/radio_model_picker.dart`
+Lines 167–167 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

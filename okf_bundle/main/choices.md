@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: choices
+description: "Dropdown choices from the radio's list, or [fallback] when it has none."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/choices
 language: dart
 ---
 
 # choices
+
+Dropdown choices from the radio's list, or [fallback] when it has none.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Mapchoiceschoices
 ```
 
+## Docstring
+
+Dropdown choices from the radio's list, or [fallback] when it has none.
+
 ## Source
-Lines 11441–11445 in `main.dart`
+Lines 11695–11699 in `main.dart`
 
 ## Relationships
 

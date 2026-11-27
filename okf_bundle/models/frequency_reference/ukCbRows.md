@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _ukCbRows
+description: "UK 27/81 CB: 40 channels from 27.60125 MHz, 10 kHz apart."
 resource: models/frequency_reference.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:frequency_reference.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:16:23Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/frequency_reference/ukCbRows
 language: dart
 ---
 
 # _ukCbRows
+
+UK 27/81 CB: 40 channels from 27.60125 MHz, 10 kHz apart.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 List_ukCbRows_ukCbRows
 ```
 
+## Docstring
+
+UK 27/81 CB: 40 channels from 27.60125 MHz, 10 kHz apart.
+
 ## Source
-Lines 155–155 in `models/frequency_reference.dart`
+Lines 160–160 in `models/frequency_reference.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _remapRadioMappingChannels
+description: "Updates zone/bank membership after channels move ([changes] = old -> new location)."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/remapRadioMappingChannels
 language: dart
 ---
 
 # _remapRadioMappingChannels
+
+Updates zone/bank membership after channels move ([changes] = old -> new location).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_remapRadioMappingChannels(Map<int, int?> changes)
 ```
 
+## Docstring
+
+Updates zone/bank membership after channels move ([changes] = old -> new location).
+
 ## Source
-Lines 1037–1037 in `main.dart`
+Lines 1074–1074 in `main.dart`
 
 ## Relationships
 

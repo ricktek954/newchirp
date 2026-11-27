@@ -10,7 +10,7 @@ tags:
   - "domain:repeater_search.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-31T15:12:55Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/repeater_search/RepeaterSearchResult
 language: dart
 ---
@@ -24,7 +24,7 @@ class RepeaterSearchResult
 ```
 
 ## Source
-Lines 82–129 in `models/repeater_search.dart`
+Lines 85–132 in `models/repeater_search.dart`
 
 ## Relationships
 

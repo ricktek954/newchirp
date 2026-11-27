@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _loadAssetBytes
+description: "Asset bytes, cached; falls back to reading the file from known install locations."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/loadAssetBytes
 language: dart
 ---
 
 # _loadAssetBytes
+
+Asset bytes, cached; falls back to reading the file from known install locations.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Future_loadAssetBytes_loadAssetBytes
 ```
 
+## Docstring
+
+Asset bytes, cached; falls back to reading the file from known install locations.
+
 ## Source
-Lines 1180–1180 in `services/radio_bridge.dart`
+Lines 1227–1227 in `services/radio_bridge.dart`
 
 ## Relationships
 

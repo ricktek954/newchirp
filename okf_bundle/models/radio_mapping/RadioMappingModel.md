@@ -10,7 +10,7 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:21:35Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/radio_mapping/RadioMappingModel
 language: dart
 ---
@@ -30,7 +30,7 @@ class RadioMappingModel
 - `toJson`
 
 ## Source
-Lines 42–99 in `models/radio_mapping.dart`
+Lines 44–104 in `models/radio_mapping.dart`
 
 ## Relationships
 

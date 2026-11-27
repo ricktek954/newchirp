@@ -11,7 +11,7 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:13:56Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/ChannelLibraryStatsCache
 language: dart
 ---
@@ -40,7 +40,7 @@ limits, channel list, or cleared-slot count changes.
 - `read`
 
 ## Source
-Lines 245–358 in `models/channel_image_baseline.dart`
+Lines 253–368 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

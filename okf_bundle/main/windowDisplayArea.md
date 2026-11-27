@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _windowDisplayArea
+description: "A display's usable area (without menu bar/taskbar) for window placement."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/windowDisplayArea
 language: dart
 ---
 
 # _windowDisplayArea
+
+A display's usable area (without menu bar/taskbar) for window placement.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 WindowDisplayArea_windowDisplayArea(Display display)
 ```
 
+## Docstring
+
+A display's usable area (without menu bar/taskbar) for window placement.
+
 ## Source
-Lines 222–222 in `main.dart`
+Lines 235–235 in `main.dart`
 
 ## Relationships
 

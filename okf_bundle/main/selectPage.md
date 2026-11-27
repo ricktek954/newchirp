@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _selectPage
+description: Switches sidebar page; the Radio Settings page (4) also loads settings.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/selectPage
 language: dart
 ---
 
 # _selectPage
+
+Switches sidebar page; the Radio Settings page (4) also loads settings.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_selectPage(int page)
 ```
 
+## Docstring
+
+Switches sidebar page; the Radio Settings page (4) also loads settings.
+
 ## Source
-Lines 2825–2825 in `main.dart`
+Lines 2933–2933 in `main.dart`
 
 ## Relationships
 

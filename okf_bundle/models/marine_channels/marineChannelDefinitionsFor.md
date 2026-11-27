@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: marineChannelDefinitionsFor
+description: The channel table for a US or international marine plan.
 resource: models/marine_channels.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:marine_channels.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T10:31:41Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/marine_channels/marineChannelDefinitionsFor
 language: dart
 ---
 
 # marineChannelDefinitionsFor
+
+The channel table for a US or international marine plan.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 ListmarineChannelDefinitionsFormarineChannelDefinitionsFor
 ```
 
+## Docstring
+
+The channel table for a US or international marine plan.
+
 ## Source
-Lines 102–104 in `models/marine_channels.dart`
+Lines 105–107 in `models/marine_channels.dart`
 
 ## Relationships
 

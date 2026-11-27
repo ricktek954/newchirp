@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _clearChannelsAtLocations
+description: "Clears the channels at [locations] in one undo step (Midland repeater rows are reset)."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/clearChannelsAtLocations
 language: dart
 ---
 
 # _clearChannelsAtLocations
+
+Clears the channels at [locations] in one undo step (Midland repeater rows are reset).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_clearChannelsAtLocations(Iterable<int> locations)
 ```
 
+## Docstring
+
+Clears the channels at [locations] in one undo step (Midland repeater rows are reset).
+
 ## Source
-Lines 3513–3513 in `main.dart`
+Lines 3647–3647 in `main.dart`
 
 ## Relationships
 

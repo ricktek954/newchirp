@@ -7,6 +7,6 @@
 
 ## Functions
 
-- [by](by.md)
-- [filterRepeaterResults](filterRepeaterResults.md)
-- [sortRepeaterResults](sortRepeaterResults.md)
+- [by](by.md) — Case-insensitive text comparison used as a tie-breaker.
+- [filterRepeaterResults](filterRepeaterResults.md) — Results matching the search text and, if any are chosen, the selected counties.
+- [sortRepeaterResults](sortRepeaterResults.md) — Results in the chosen order; "source" keeps the provider's order.

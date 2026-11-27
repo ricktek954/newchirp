@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: toJson
+description: Serialized form written to the window-state file.
 resource: services/window_state_store.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:window_state_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:52:36Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/window_state_store/toJson
 language: dart
 ---
 
 # toJson
+
+Serialized form written to the window-state file.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 MaptoJsontoJson
 ```
 
+## Docstring
+
+Serialized form written to the window-state file.
+
 ## Source
-Lines 20–20 in `services/window_state_store.dart`
+Lines 21–21 in `services/window_state_store.dart`
 
 ## Relationships
 

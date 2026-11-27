@@ -19,6 +19,7 @@ class FileSaveWarningDialog extends StatefulWidget {
 class _FileSaveWarningDialogState extends State<FileSaveWarningDialog> {
   bool _hide = false;
 
+  /// Warning that saving a file doesn't change the radio, with a "don't show again" option.
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

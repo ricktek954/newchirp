@@ -11,7 +11,7 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:11Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/diagnostic_log/DiagnosticEntry
 language: dart
 ---
@@ -35,7 +35,7 @@ One bounded, privacy-conscious diagnostic event.
 - `toJson`
 
 ## Source
-Lines 6–25 in `services/diagnostic_log.dart`
+Lines 6–26 in `services/diagnostic_log.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _submit
+description: "Validates the email address, then sends the report."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/submit
 language: dart
 ---
 
 # _submit
+
+Validates the email address, then sends the report.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_submit_submit
 ```
 
+## Docstring
+
+Validates the email address, then sends the report.
+
 ## Source
-Lines 8370–8370 in `main.dart`
+Lines 8577–8577 in `main.dart`
 
 ## Relationships
 

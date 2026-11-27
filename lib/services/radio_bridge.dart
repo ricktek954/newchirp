@@ -17,6 +17,7 @@ const _progressPrefix = '__NEWCHIRP_PROGRESS__ ';
 /// Keep those bytes from aborting an otherwise valid radio operation.
 const bridgeProcessDecoder = Utf8Decoder(allowMalformed: true);
 
+/// Firmware version reported by the bridge, or null when it sent none.
 String? _firmwareFromPayload(Map<String, dynamic> data) {
   final firmware = '${data['firmware'] ?? ''}'.trim();
   return firmware.isEmpty ? null : firmware;
@@ -51,6 +52,8 @@ class RadioBridgeException implements Exception {
   String toString() => message;
 }
 
+/// True for harmless stderr lines (CHIRP's "Replacing existing driver id" notice
+/// when NewChirp's drivers override stock ones), which are not errors.
 bool isBenignBridgeStderrLine(String line) {
   final trimmed = line.trim();
   return trimmed.startsWith("Replacing existing driver id '") ||
@@ -58,6 +61,8 @@ bool isBenignBridgeStderrLine(String line) {
       trimmed.startsWith('Replacing existing driver id `');
 }
 
+/// User-facing message for a bridge process that exited with [exitCode];
+/// recognizes a few known failures and otherwise shows [details].
 String radioBridgeFailureMessage({
   required int exitCode,
   required String details,
@@ -73,6 +78,8 @@ String radioBridgeFailureMessage({
         'your Linux administrator to allow unprivileged bubblewrap network '
         'namespaces, then try loading the module again.';
   }
+  // Windows exit codes are unsigned 32-bit values; Dart may report them as
+  // negative, so mask to 32 bits. 0xC0000005 = STATUS_ACCESS_VIOLATION (crash).
   if ((exitCode & 0xFFFFFFFF) == 0xC0000005) {
     return 'NewChirp\u2019s radio helper crashed while communicating with the '
         'radio (Windows access violation, exit code 0xC0000005).\n\n'
@@ -213,6 +220,7 @@ class UndecodedChannel {
   final String raw;
 }
 
+/// Parses the bridge's list of channel slots it could not decode.
 List<UndecodedChannel> undecodedChannelsFromJson(Object? value) =>
     (value as List? ?? const [])
         .map(
@@ -296,6 +304,7 @@ class RadioCapabilities {
       validCharacters == validCharacters.toUpperCase();
 
   factory RadioCapabilities.fromJson(Map<String, dynamic> json) {
+    /// The JSON list [key] as strings (empty when missing).
     List<String> strings(String key) => (json[key] as List? ?? const [])
         .map((item) => item.toString())
         .toList();
@@ -488,6 +497,7 @@ class RadioBridge {
   /// Slots the last [download] or [readImage] could not decode.
   List<UndecodedChannel> lastUndecodedChannels = const [];
 
+  /// Loads an asset from the app bundle (the default [assetLoader]).
   static Future<List<int>> _loadRootBundleAsset(String key) async {
     final data = await rootBundle.load(key);
     return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
@@ -498,12 +508,16 @@ class RadioBridge {
   String get chirpSource => _findChirpSource();
   String? get loadedModulePath => _loadedModulePath;
 
+  /// Asks the running bridge process to stop (SIGTERM). True when nothing is running
+  /// or the signal was sent.
   bool cancelActive() {
     _cancelRequested = true;
     final process = _activeProcess;
     return process == null || process.kill(ProcessSignal.sigterm);
   }
 
+  /// Serial ports (with device names where the OS gives them) plus USB mass-storage
+  /// radio interfaces, without duplicates.
   Future<List<SerialPortInfo>> serialPortDetails() async {
     final interfaces = await _massStoragePortDetails();
     if (Platform.isWindows) {
@@ -529,6 +543,8 @@ class RadioBridge {
     ]);
   }
 
+  /// Radios that appear as USB mass-storage devices, as reported by the bridge;
+  /// empty if the bridge can't list them.
   Future<List<SerialPortInfo>> _massStoragePortDetails() async {
     try {
       final data = await _run(['list-interfaces']);
@@ -549,11 +565,13 @@ class RadioBridge {
     }
   }
 
+  /// Drops repeated port names, keeping the first.
   List<SerialPortInfo> _deduplicatePorts(List<SerialPortInfo> ports) {
     final seen = <String>{};
     return ports.where((entry) => seen.add(entry.port)).toList();
   }
 
+  /// Just the port names from [serialPortDetails].
   Future<List<String>> serialPorts() async {
     final ports = await serialPortDetails();
     return ports.map((port) => port.port).toList();
@@ -587,6 +605,7 @@ class RadioBridge {
     return const [];
   }
 
+  /// Windows COM ports with their device names (looked up with PowerShell).
   Future<List<SerialPortInfo>> _windowsSerialPortDetails() async {
     final ports = await _windowsSerialPortNames();
     if (ports.isEmpty) return const [];
@@ -604,6 +623,7 @@ class RadioBridge {
     return parseWindowsSerialPortDetails(deviceOutput, ports);
   }
 
+  /// Pairs each live COM port with its device name from the PowerShell JSON output.
   static List<SerialPortInfo> parseWindowsSerialPortDetails(
     String output,
     Iterable<String> livePorts,
@@ -641,6 +661,7 @@ class RadioBridge {
         .toList();
   }
 
+  /// COM port names (COM1, COM12...) found at the end of each output line.
   List<String> _parseComPorts(String output) {
     final ports = <String>{};
     for (final line in output.split('\n')) {
@@ -658,15 +679,19 @@ class RadioBridge {
     return list;
   }
 
+  /// CHIRP model ids the bridge can program.
   Future<List<String>> models() async {
     return (await modelCatalog()).models;
   }
 
+  /// Model ids plus vendor groups, from the bridge's list-models command.
   Future<RadioModelCatalog> modelCatalog() async {
     final data = await _run(['list-models']);
     return RadioModelCatalog.fromJson(data);
   }
 
+  /// Loads a user-supplied CHIRP driver (.py or .mod); it then runs in the module
+  /// sandbox. Returns the models it adds.
   Future<List<String>> loadModule(String path) async {
     final extension = path.toLowerCase();
     if (!extension.endsWith('.py') && !extension.endsWith('.mod')) {
@@ -688,11 +713,14 @@ class RadioBridge {
     }
   }
 
+  /// Stops using the loaded module and deletes its sandbox work folder.
   void unloadModule() {
     _loadedModulePath = null;
     unawaited(_moduleSandbox.dispose());
   }
 
+  /// Driver instructions for [model] (info, experimental warning, steps before
+  /// download/upload) from the bridge's model-info command.
   Future<RadioInstructions> instructions(String model) async {
     final data = await _run(['model-info', '--model', model]);
     return RadioInstructions(
@@ -705,6 +733,8 @@ class RadioBridge {
     );
   }
 
+  /// Channels, capabilities and zones/banks from a saved radio image (optionally
+  /// one [zone]). Slots that can't be decoded go to [lastUndecodedChannels].
   Future<
     ({
       List<RadioChannel> channels,
@@ -752,6 +782,7 @@ class RadioBridge {
     );
   }
 
+  /// Capabilities, model and zone list of an image without decoding its channels.
   Future<
     ({
       RadioCapabilities capabilities,
@@ -784,9 +815,12 @@ class RadioBridge {
     );
   }
 
+  /// Just the capabilities of an image.
   Future<RadioCapabilities> imageCapabilities(String imagePath) async =>
       (await imageInfo(imagePath)).capabilities;
 
+  /// Reads the radio on [port] and saves its image; returns the channels and the
+  /// image path. Progress comes through [onProgress].
   Future<
     ({
       List<RadioChannel> channels,
@@ -836,6 +870,8 @@ class RadioBridge {
     );
   }
 
+  /// Writes [channels] (and cleared slots and zone changes) into the image and
+  /// uploads it to the radio. The channel list goes to the bridge in a temp JSON file.
   Future<
     ({List<Map<String, dynamic>> adjustments, List<RadioMappingModel> mappings})
   >
@@ -900,6 +936,7 @@ class RadioBridge {
     }
   }
 
+  /// Reads the radio's settings from an image or a port (exactly one of the two).
   Future<RadioSettings> readSettings({
     required String model,
     String? imagePath,
@@ -920,6 +957,7 @@ class RadioBridge {
     return RadioSettings.fromJson(data);
   }
 
+  /// Applies setting [changes] to the image and writes it to the radio.
   Future<void> writeSettings({
     required String model,
     required String port,
@@ -949,6 +987,7 @@ class RadioBridge {
     }
   }
 
+  /// Runs one bridge command in a fresh temp folder that is deleted afterwards.
   Future<Map<String, dynamic>> _run(
     List<String> args, {
     void Function(RadioProgress)? onProgress,
@@ -961,6 +1000,7 @@ class RadioBridge {
     }
   }
 
+  /// RepeaterBook search through the bridge.
   Future<RepeaterSearchResults> searchRepeaters({
     required String country,
     required String state,
@@ -994,6 +1034,9 @@ class RadioBridge {
     return RepeaterSearchResults.fromJson(data);
   }
 
+  /// Starts the Python bridge with CHIRP and NewChirp's drivers, streams progress
+  /// lines from stderr to [onProgress], and returns the JSON from stdout. A non-zero
+  /// exit becomes a RadioBridgeException with a readable message.
   Future<Map<String, dynamic>> _runWithRuntime(
     List<String> args,
     Directory runtime, {
@@ -1142,6 +1185,7 @@ class RadioBridge {
     );
   }
 
+  /// The app bundle's resources folder (macOS Contents/Resources), or null elsewhere.
   Directory? _bundledResourcesDirectory() {
     final executable = File(Platform.resolvedExecutable);
     if (Platform.isMacOS) {
@@ -1153,6 +1197,7 @@ class RadioBridge {
     return executable.parent;
   }
 
+  /// Writes chirp_bridge.py and its helper scripts from the app's assets into [runtime].
   Future<String> _materializeBridge(Directory runtime) async {
     final file = File('${runtime.path}/chirp_bridge.py');
     final data = await _loadAssetBytes('scripts/chirp_bridge.py');
@@ -1168,6 +1213,7 @@ class RadioBridge {
     return file.path;
   }
 
+  /// Writes the bundled pyserial wheel into [runtime] (Python imports it from there).
   Future<String> _materializePythonDependencies(Directory runtime) async {
     final file = File('${runtime.path}/pyserial-3.5-py2.py3-none-any.whl');
     final data = await _loadAssetBytes(
@@ -1177,6 +1223,7 @@ class RadioBridge {
     return file.path;
   }
 
+  /// Asset bytes, cached; falls back to reading the file from known install locations.
   Future<List<int>> _loadAssetBytes(String key) async {
     final cached = _assetCache[key];
     if (cached != null) return cached;
@@ -1200,6 +1247,8 @@ class RadioBridge {
     }
   }
 
+  /// Places an asset file may be on disk: the working folder, then this platform's
+  /// Flutter assets folder.
   Iterable<File> _bundledAssetCandidates(String key) sync* {
     if (!key.contains('..') && !key.startsWith('/')) {
       yield File(key);
@@ -1217,6 +1266,8 @@ class RadioBridge {
     }
   }
 
+  /// CHIRP source folder: the configured path or CHIRP_SOURCE, else the copy
+  /// bundled with the app, else a development checkout.
   String _findChirpSource() {
     final configured = sourcePath ?? Platform.environment['CHIRP_SOURCE'];
     if (configured != null && Directory(configured).existsSync()) {
@@ -1247,6 +1298,7 @@ class RadioBridge {
     );
   }
 
+  /// NewChirp's own drivers folder from the settings or NEWCHIRP_DRIVERS, if it exists.
   String? _findNewChirpDrivers() {
     final configured =
         newDriversPath ?? Platform.environment['NEWCHIRP_DRIVERS'];
@@ -1256,6 +1308,7 @@ class RadioBridge {
     return directory.absolute.path;
   }
 
+  /// The SCSI helper used for USB mass-storage radios on macOS, if found.
   String? _findScsiHelper() {
     final configured = Platform.environment['NEWCHIRP_SCSI_HELPER'];
     final resources = _bundledResourcesDirectory();
@@ -1271,6 +1324,7 @@ class RadioBridge {
     return null;
   }
 
+  /// The bundled libusb library (for USB radios), if found.
   String? _findLibusbRuntime() {
     final configured = Platform.environment['NEWCHIRP_LIBUSB'];
     final resources = _bundledResourcesDirectory();

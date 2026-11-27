@@ -10,7 +10,7 @@ tags:
   - "domain:radio_model_picker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:20:03Z"
+timestamp: "2026-11-27T09:02:23Z"
 concept_id: widgets/radio_model_picker/dispose
 language: dart
 ---
@@ -24,7 +24,7 @@ voiddispose()
 ```
 
 ## Source
-Lines 571–571 in `widgets/radio_model_picker.dart`
+Lines 592–592 in `widgets/radio_model_picker.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: save
+description: "Saves the window size, position and maximized state."
 resource: services/window_state_store.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:window_state_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-12T14:52:36Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/window_state_store/save
 language: dart
 ---
 
 # save
+
+Saves the window size, position and maximized state.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Futuresavesave
 ```
 
+## Docstring
+
+Saves the window size, position and maximized state.
+
 ## Source
-Lines 122–122 in `services/window_state_store.dart`
+Lines 125–125 in `services/window_state_store.dart`
 
 ## Relationships
 

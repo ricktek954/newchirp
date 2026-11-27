@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _setMembership
+description: "Adds or removes channel [location] from the selected zone/bank (editable types only)."
 resource: widgets/radio_mapping_dialog.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:42:01Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: widgets/radio_mapping_dialog/setMembership
 language: dart
 ---
 
 # _setMembership
+
+Adds or removes channel [location] from the selected zone/bank (editable types only).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 void_setMembership(int location, bool selected)
 ```
 
+## Docstring
+
+Adds or removes channel [location] from the selected zone/bank (editable types only).
+
 ## Source
-Lines 112–112 in `widgets/radio_mapping_dialog.dart`
+Lines 119–119 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

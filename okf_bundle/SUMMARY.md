@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 1170 concepts across 5 domains and 39 modul
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-26T16:48:19Z'
+timestamp: '2026-11-27T09:07:46Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
@@ -80,26 +80,26 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
-| [ChannelLibraryStatsCache](/models/channel_image_baseline/ChannelLibraryStatsCache.md) | Class | `models/channel_image_baseline.dart` | Remembers the last library snapshot so search and row select… |
-| [isAllowedDownloadUrl](/services/update_checker/isAllowedDownloadUrl.md) | Function | `services/update_checker.dart` | True when [url] is an https link on newchirp.net, with no lo… |
-| [trustedUpdateArtifactUrl](/services/update_checker/trustedUpdateArtifactUrl.md) | Function | `services/update_checker.dart` | Validated installer URL for [platform], or null when it is n… |
-| [uiTheDestinationRangeThroughContainsChannels](/l10n/app_localizations/uiTheDestinationRangeThroughContainsChannels.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiTheDestinationRangeThroughCon… |
-| [MototrboCps2Xml](/services/mototrbo_cps2_xml/MototrboCps2Xml.md) | Class | `services/mototrbo_cps2_xml.dart` | Read-only importer for conventional channels copied from MOT… |
-| [trustedDownloadUrl](/services/update_checker/trustedDownloadUrl.md) | Function | `services/update_checker.dart` | Address the Update button may open. Untrusted links use the … |
-| [UpdateInstaller](/services/update_installer/UpdateInstaller.md) | Class | `services/update_installer.dart` | Downloads a direct NewChirp installer and starts the native … |
-| [uiReferenceSourceVerifyCurrentNationalRules](/l10n/app_localizations/uiReferenceSourceVerifyCurrentNationalRules.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiReferenceSourceVerifyCurrentN… |
-| [ChannelImageBaseline](/models/channel_image_baseline/ChannelImageBaseline.md) | Class | `models/channel_image_baseline.dart` | Fingerprint of the channel list last read from, imported fro… |
-| [_resolvePython](/services/radio_bridge/resolvePython.md) | Function | `services/radio_bridge.dart` | The bundled CHIRP tree uses Python 3.10+ syntax, so prefer a… |
-| [ChannelLibraryImageBar](/widgets/channel_library_image_bar/ChannelLibraryImageBar.md) | Class | `widgets/channel_library_image_bar.dart` | Bottom bar on the Channel Library, matching the Radio settin… |
-| [clearedLocationsForUpload](/models/channel_image_baseline/clearedLocationsForUpload.md) | Function | `models/channel_image_baseline.dart` | All radio locations that must be blank for the current libra… |
-| [midlandReceiveChannelIsUnset](/models/radio_channel/midlandReceiveChannelIsUnset.md) | Function | `models/radio_channel.dart` | A new row has no receive channel yet. 146.52 MHz is the old … |
-| [receiveOnlyWriteNote](/models/radio_channel/receiveOnlyWriteNote.md) | Function | `models/radio_channel.dart` | Write-confirmation note naming the receive-only channels, or… |
-| [radioMappingsSignature](/models/radio_mapping/radioMappingsSignature.md) | Function | `models/radio_mapping.dart` | Fixed (non-editable) zone models are derived from channel nu… |
-| [install](/services/update_installer/install.md) | Function | `services/update_installer.dart` | Starts the detached native helper that will install after th… |
-| [uiNoMatchingRepeatersWereFoundCoordinates](/l10n/app_localizations/uiNoMatchingRepeatersWereFoundCoordinates.md) | Function | `l10n/app_localizations.dart` | No description provided for @uiNoMatchingRepeatersWereFoundC… |
-| [UndecodedChannel](/services/radio_bridge/UndecodedChannel.md) | Class | `services/radio_bridge.dart` | A channel slot the driver could not decode. The bridge leave… |
-| [_windowsSerialPortNames](/services/radio_bridge/windowsSerialPortNames.md) | Function | `services/radio_bridge.dart` | Windows: read the live COM ports from the SERIALCOMM registr… |
-| [UpdateCheckResult](/services/update_checker/UpdateCheckResult.md) | Class | `services/update_checker.dart` | Outcome of comparing the installed NewChirp version against … |
+| [_installLinuxUpdate](/services/update_installer/installLinuxUpdate.md) | Function | `services/update_installer.dart` | Installs the downloaded .deb/.rpm/etc. through a small helpe… |
+| [toString](/services/update_installer/toString.md) | Function | `services/update_installer.dart` | Installs the downloaded .deb/.rpm/etc. through a small helpe… |
+| [buildReport](/services/diagnostic_log/buildReport.md) | Function | `services/diagnostic_log.dart` | Text of recent entries for a bug report, newest last, cut to… |
+| [_channelFromDefinition](/models/marine_channels/channelFromDefinition.md) | Function | `models/marine_channels.dart` | One marine channel as a radio channel. Receive-only channels… |
+| [submit](/services/diagnostic_log/submit.md) | Function | `services/diagnostic_log.dart` | Sends a bug report (with the diagnostic log and, optionally,… |
+| [saveForModel](/services/radio_image_store/saveForModel.md) | Function | `services/radio_image_store.dart` | Copies a radio image into the app's image folder as the mode… |
+| [_standardCbRows](/models/frequency_reference/standardCbRows.md) | Function | `models/frequency_reference.dart` | US/international 40-channel CB (26.965-27.405 MHz; the list … |
+| [_australianUhfNote](/models/frequency_reference/australianUhfNote.md) | Function | `models/frequency_reference.dart` | Usage note for an Australian UHF CB channel (repeater output… |
+| [repeaterCountiesForRegion](/models/repeater_regions/repeaterCountiesForRegion.md) | Function | `models/repeater_regions.dart` | Counties to offer for [region]: the built-in list plus any c… |
+| [currentUpdatePlatform](/services/update_checker/currentUpdatePlatform.md) | Function | `services/update_checker.dart` | Platform name used by the release API: windows, macos, linux… |
+| [normalizeRepeaterCounty](/models/repeater_regions/normalizeRepeaterCounty.md) | Function | `models/repeater_regions.dart` | County name without suffixes like " County" or " census area… |
+| [check](/services/update_checker/check.md) | Function | `services/update_checker.dart` | Asks the website for this platform's latest release and comp… |
+| [_settingsMessage](/main/settingsMessage.md) | Function | `main.dart` | Centered icon, title, text and optional button for the setti… |
+| [load](/services/app_language/load.md) | Function | `services/app_language.dart` | Reads the saved choice; returns "system" when nothing is sav… |
+| [_postJson](/services/mygmrs_client/postJson.md) | Function | `services/mygmrs_client.dart` | POSTs [payload] as JSON to the website and returns the JSON … |
+| [_remapLocations](/models/radio_mapping/remapLocations.md) | Function | `models/radio_mapping.dart` | Applies [locations] to a list of channel numbers, dropping d… |
+| [load](/services/column_layout_store/load.md) | Function | `services/column_layout_store.dart` | Reads the saved channel-table column order and widths; null … |
+| [_loadChirpModule](/main/loadChirpModule.md) | Function | `main.dart` | Loads a user-supplied CHIRP driver module (after a warning),… |
+| [copy](/models/radio_channel/copy.md) | Function | `models/radio_channel.dart` | The 22 standard GMRS channels as a starter list (repeater ch… |
+| [gmrsStarterChannels](/models/radio_channel/gmrsStarterChannels.md) | Function | `models/radio_channel.dart` | The 22 standard GMRS channels as a starter list (repeater ch… |
 
 ## Usage with OpenCode
 

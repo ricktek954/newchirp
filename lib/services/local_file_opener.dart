@@ -16,6 +16,7 @@ enum LocalFilePlatform { windows, macos, linux }
   };
 }
 
+/// Opens [path] in the system's default app (Explorer/open/xdg-open).
 Future<void> openLocalFile(String path) async {
   final platform = Platform.isWindows
       ? LocalFilePlatform.windows

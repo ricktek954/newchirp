@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _renameMapping
+description: Renames the selected zone/bank.
 resource: widgets/radio_mapping_dialog.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:42:01Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: widgets/radio_mapping_dialog/renameMapping
 language: dart
 ---
 
 # _renameMapping
+
+Renames the selected zone/bank.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 void_renameMapping(String value)
 ```
 
+## Docstring
+
+Renames the selected zone/bank.
+
 ## Source
-Lines 106–106 in `widgets/radio_mapping_dialog.dart`
+Lines 112–112 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

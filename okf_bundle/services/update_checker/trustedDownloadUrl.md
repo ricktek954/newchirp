@@ -11,7 +11,7 @@ tags:
   - "domain:update_checker.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-14T13:23:52Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/update_checker/trustedDownloadUrl
 language: dart
 ---
@@ -31,7 +31,7 @@ StringtrustedDownloadUrl(String? raw)
 Address the Update button may open. Untrusted links use the official page.
 
 ## Source
-Lines 213–213 in `services/update_checker.dart`
+Lines 218–218 in `services/update_checker.dart`
 
 ## Relationships
 

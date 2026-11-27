@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: pathForDocument
+description: "Where one document's image is kept (model name plus document number)."
 resource: services/radio_image_store.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_image_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-28T11:17:10Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/radio_image_store/pathForDocument
 language: dart
 ---
 
 # pathForDocument
+
+Where one document's image is kept (model name plus document number).
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 StringpathForDocument(String model, int documentId)
 ```
 
+## Docstring
+
+Where one document's image is kept (model name plus document number).
+
 ## Source
-Lines 33–33 in `services/radio_image_store.dart`
+Lines 37–37 in `services/radio_image_store.dart`
 
 ## Relationships
 

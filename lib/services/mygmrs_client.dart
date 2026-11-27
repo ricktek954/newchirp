@@ -18,6 +18,7 @@ abstract interface class MyGmrsService {
 
   Future<void> signOut();
 
+  /// Repeaters in [state] (optionally near a point, or open ones only).
   Future<RepeaterSearchResults> searchRepeaters({
     required String state,
     String query = '',
@@ -64,6 +65,9 @@ class MyGmrsClient implements MyGmrsService {
       _sessionToken != null &&
       _sessionExpiresAt?.isAfter(DateTime.now()) == true;
 
+  /// Signs in to myGMRS through newchirp.net: opens the browser to myGMRS's login
+  /// page, then polls the website until the login finishes, fails or times out.
+  /// Only the newest attempt may finish (an older one is cancelled).
   @override
   Future<void> signIn() async {
     final attempt = ++_signInAttempt;
@@ -108,15 +112,19 @@ class MyGmrsClient implements MyGmrsService {
     );
   }
 
+  /// Throws the "sign-in was cancelled" error.
   void _throwSignInCancelled() {
     throw const MyGmrsException('myGMRS sign-in was cancelled.');
   }
 
+  /// Cancels a pending sign-in: bumping the attempt number makes its poll loop stop.
   @override
   void cancelSignIn() {
     _signInAttempt++;
   }
 
+  /// Keeps the session token from the website. It expires after `expiresIn`
+  /// seconds (default 43200 = 12 hours).
   void _storeSession(Map<String, dynamic> response) {
     final sessionToken = '${response['sessionToken'] ?? ''}';
     if (sessionToken.isEmpty) {
@@ -129,6 +137,7 @@ class MyGmrsClient implements MyGmrsService {
     _sessionExpiresAt = DateTime.now().add(Duration(seconds: expiresIn));
   }
 
+  /// Forgets the session locally, then asks the website to log it out (errors ignored).
   @override
   Future<void> signOut() async {
     _signInAttempt++;
@@ -149,6 +158,7 @@ class MyGmrsClient implements MyGmrsService {
     }
   }
 
+  /// Signs in only if there is no unexpired session.
   Future<void> ensureSignedIn() async {
     if (signedIn) return;
     _sessionToken = null;
@@ -156,6 +166,7 @@ class MyGmrsClient implements MyGmrsService {
     await signIn();
   }
 
+  /// Searches myGMRS repeaters through the website (signing in first if needed).
   @override
   Future<RepeaterSearchResults> searchRepeaters({
     required String state,
@@ -205,6 +216,8 @@ class MyGmrsClient implements MyGmrsService {
     return convertRepeaterResponse(response.body, openOnly: openOnly);
   }
 
+  /// Converts the website's JSON into channels: repeater outputs get +5 MHz duplex,
+  /// tones are applied, and closed repeaters are dropped when [openOnly] is set.
   RepeaterSearchResults convertRepeaterResponse(
     Map<String, dynamic> payload, {
     bool openOnly = false,
@@ -281,6 +294,7 @@ class MyGmrsClient implements MyGmrsService {
     );
   }
 
+  /// POSTs [payload] as JSON to the website and returns the JSON reply; throws on HTTP errors.
   Future<Map<String, dynamic>> _postJson(
     String path,
     Map<String, dynamic> payload,
@@ -297,6 +311,8 @@ class MyGmrsClient implements MyGmrsService {
     return response.body;
   }
 
+  /// One HTTP request to the website with a 20-second connect timeout; returns
+  /// status, parsed JSON body and raw text.
   Future<_JsonResponse> _jsonRequest(
     String method,
     Uri uri, {
@@ -339,6 +355,7 @@ class MyGmrsClient implements MyGmrsService {
     }
   }
 
+  /// Readable error text from a failed reply (its error field, or a message per status code).
   static String _apiError(_JsonResponse response) {
     final message =
         '${response.body['error_description'] ?? response.body['error'] ?? response.body['message'] ?? ''}'
@@ -365,11 +382,13 @@ class _JsonResponse {
   final String rawBody;
 }
 
+/// First number in a tone value such as "141.3 Hz" or "PL 100.0".
 double? _ctcssTone(Object? raw) {
   final match = RegExp(r'(\d+(?:\.\d+)?)').firstMatch('${raw ?? ''}');
   return match == null ? null : double.tryParse(match.group(1)!);
 }
 
+/// Two-letter code for a US state name (myGMRS searches by code).
 String _stateCode(String state) {
   const codes = <String, String>{
     'Alabama': 'AL',
@@ -430,9 +449,12 @@ String _stateCode(String state) {
   return codes[state] ?? state;
 }
 
+/// True for the GMRS repeater output channels 462.550-462.725 MHz (inputs are +5 MHz).
 bool _gmrsRepeaterOutput(double frequency) =>
     frequency >= 462.550 && frequency <= 462.725;
 
+/// Sets tone mode: same tone both ways = TSQL, transmit only = Tone,
+/// otherwise Cross (88.5 Hz fills a missing side, as CHIRP does).
 void _applyTones(RadioChannel channel, double? txTone, double? rxTone) {
   if (txTone == null && rxTone == null) return;
   if (txTone != null && rxTone != null && txTone == rxTone) {
@@ -459,6 +481,7 @@ void _applyTones(RadioChannel channel, double? txTone, double? rxTone) {
     };
 }
 
+/// Opens [uri] in the default browser (open / rundll32 / xdg-open).
 Future<void> _openSystemBrowser(Uri uri) async {
   final ProcessResult result;
   if (Platform.isMacOS) {

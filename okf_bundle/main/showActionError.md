@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _showActionError
+description: "Logs [error] and shows it in a dialog with a \"Submit Bug Report\" button."
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/showActionError
 language: dart
 ---
 
 # _showActionError
+
+Logs [error] and shows it in a dialog with a "Submit Bug Report" button.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_showActionError_showActionError
 ```
 
+## Docstring
+
+Logs [error] and shows it in a dialog with a "Submit Bug Report" button.
+
 ## Source
-Lines 1699–1699 in `main.dart`
+Lines 1774–1774 in `main.dart`
 
 ## Relationships
 

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _sortChannelsByLocation
+description: Sorts the channel list by memory location.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/sortChannelsByLocation
 language: dart
 ---
 
 # _sortChannelsByLocation
+
+Sorts the channel list by memory location.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_sortChannelsByLocation()
 ```
 
+## Docstring
+
+Sorts the channel list by memory location.
+
 ## Source
-Lines 2273–2273 in `main.dart`
+Lines 2362–2362 in `main.dart`
 
 ## Relationships
 

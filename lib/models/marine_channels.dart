@@ -56,6 +56,7 @@ class MarineTemplateSelection {
   final bool programTransmit;
 }
 
+/// Channels for the chosen marine plan, numbered from 1.
 List<RadioChannel> marineTemplateChannels(MarineTemplateSelection selection) {
   final definitions = marineChannelDefinitionsFor(selection.plan);
   return [
@@ -69,6 +70,7 @@ List<RadioChannel> marineTemplateChannels(MarineTemplateSelection selection) {
   ];
 }
 
+/// One marine channel as a radio channel. Receive-only channels (or all, if transmit is off) get duplex "off".
 RadioChannel _channelFromDefinition(
   int location,
   MarineChannelDefinition definition, {
@@ -99,6 +101,7 @@ RadioChannel _channelFromDefinition(
   );
 }
 
+/// The channel table for a US or international marine plan.
 List<MarineChannelDefinition> marineChannelDefinitionsFor(
   MarineChannelPlan plan,
 ) => switch (plan) {

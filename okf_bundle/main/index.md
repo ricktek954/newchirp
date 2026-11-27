@@ -47,211 +47,211 @@
 ## Functions
 
 - [_actionErrorPresentation](actionErrorPresentation.md)
-- [_addChannel](addChannel.md)
-- [_apply](apply.md)
-- [_applyBulkChannelDraft](applyBulkChannelDraft.md)
-- [_applyChannels](applyChannels.md)
-- [_bankLabelsByLocation](bankLabelsByLocation.md)
+- [_addChannel](addChannel.md) — Adds a channel where the user chooses and opens it in the editor.
+- [_apply](apply.md) — Returns the chosen mode (validating the start location when adding).
+- [_applyBulkChannelDraft](applyBulkChannelDraft.md) — Copies only the fields changed in the bulk draft onto [target].
+- [_applyChannels](applyChannels.md) — Puts [incoming] channels into the list, replacing everything or adding them
+- [_bankLabelsByLocation](bankLabelsByLocation.md) — Zone/bank names per channel location, comma-joined, for the BANK column.
 - [_bankRangeAt](bankRangeAt.md)
-- [_buildAbout](buildAbout.md)
-- [_buildApp](buildApp.md)
-- [_buildFrequencyReference](buildFrequencyReference.md)
-- [_buildHelpMenu](buildHelpMenu.md)
-- [_buildInternationalFrequencyReference](buildInternationalFrequencyReference.md)
-- [_buildLibrary](buildLibrary.md)
-- [_buildRadio](buildRadio.md)
-- [_buildRadioSettings](buildRadioSettings.md)
-- [_buildRadioSettingsGroup](buildRadioSettingsGroup.md)
-- [_buildResultsMap](buildResultsMap.md)
-- [_buildUsFrequencyReference](buildUsFrequencyReference.md)
-- [_buildWelcome](buildWelcome.md)
-- [_bulkChannelDraftChanged](bulkChannelDraftChanged.md)
-- [_cancelMyGmrsSignIn](cancelMyGmrsSignIn.md)
-- [_cancelTransfer](cancelTransfer.md)
-- [_changed](changed.md)
+- [_buildAbout](buildAbout.md) — About page: version, credits and licenses.
+- [_buildApp](buildApp.md) — The MaterialApp: theme colors, localization and the home screen.
+- [_buildFrequencyReference](buildFrequencyReference.md) — Frequency Reference page: plan picker plus the US or international chart.
+- [_buildHelpMenu](buildHelpMenu.md) — Help menu: abbreviation glossary, report a problem, check for updates.
+- [_buildInternationalFrequencyReference](buildInternationalFrequencyReference.md) — Table for one international plan (channel, frequency, notes).
+- [_buildLibrary](buildLibrary.md) — Channel library page: metrics, image status, toolbar and the channel table.
+- [_buildRadio](buildRadio.md) — Radio Connection page: model picker, port, stored image and Read/Write buttons.
+- [_buildRadioSettings](buildRadioSettings.md) — Radio Settings page: source buttons (saved image or radio) and the settings tree.
+- [_buildRadioSettingsGroup](buildRadioSettingsGroup.md) — One settings group as a card; nested groups are indented.
+- [_buildResultsMap](buildResultsMap.md) — Map of the visible results (repeaters with coordinates).
+- [_buildUsFrequencyReference](buildUsFrequencyReference.md) — US GMRS/FRS chart with color bands and a legend.
+- [_buildWelcome](buildWelcome.md) — Welcome page.
+- [_bulkChannelDraftChanged](bulkChannelDraftChanged.md) — True when the bulk-edit draft differs from the starting values in any field.
+- [_cancelMyGmrsSignIn](cancelMyGmrsSignIn.md) — Cancels a pending myGMRS sign-in.
+- [_cancelTransfer](cancelTransfer.md) — Cancels a transfer. During a write it asks first, since stopping mid-write can
+- [_changed](changed.md) — Validates typed text against the setting's type and range, and stores it if valid.
 - [_ChannelColumn](ChannelColumn.md)
-- [_channelColumnFilterValue](channelColumnFilterValue.md)
-- [_channelColumnHelp](channelColumnHelp.md)
+- [_channelColumnFilterValue](channelColumnFilterValue.md) — The text a column filter compares against for [channel] in column [columnId].
+- [_channelColumnHelp](channelColumnHelp.md) — Translated help text for a column (matched on its English help string).
 - [_channelColumnTitle](channelColumnTitle.md) — Column ids stay English: saved column layouts and filters key on them.
-- [_channelDetail](channelDetail.md)
-- [_channelIssues](channelIssues.md)
-- [_channelRow](channelRow.md)
-- [_channelsAtLocations](channelsAtLocations.md)
-- [_channelsWithLongNames](channelsWithLongNames.md)
-- [_channelTableRows](channelTableRows.md)
-- [_checkForUpdates](checkForUpdates.md)
-- [_chooseAddChannelPlacement](chooseAddChannelPlacement.md)
-- [_chooseChannelApplyMode](chooseChannelApplyMode.md)
-- [_chooseChannelLocationConflictAction](chooseChannelLocationConflictAction.md)
-- [_chooseCounties](chooseCounties.md)
-- [_clampWindowState](clampWindowState.md)
-- [_clearChannelsAtLocations](clearChannelsAtLocations.md)
-- [_columns](columns.md)
-- [_confirmDeleteChannel](confirmDeleteChannel.md)
-- [_confirmFileSaveDoesNotWriteRadio](confirmFileSaveDoesNotWriteRadio.md)
-- [_confirmOverwriteChannel](confirmOverwriteChannel.md)
-- [_confirmOverwriteChannels](confirmOverwriteChannels.md)
-- [_confirmRadioInstructions](confirmRadioInstructions.md)
-- [_confirmReplaceLibrary](confirmReplaceLibrary.md)
-- [_copyChannelsAtLocations](copyChannelsAtLocations.md)
-- [_currentPreferences](currentPreferences.md)
-- [_cutChannelsAtLocations](cutChannelsAtLocations.md)
-- [_defaultPrinterName](defaultPrinterName.md)
-- [_deleteChannelAt](deleteChannelAt.md)
-- [_discardChannelLibraryChanges](discardChannelLibraryChanges.md)
-- [_downloadAndInstallUpdate](downloadAndInstallUpdate.md)
-- [_downloadRadio](downloadRadio.md)
-- [_duplicateChannel](duplicateChannel.md)
-- [_duplicateChannelAt](duplicateChannelAt.md)
-- [_editRadioMappings](editRadioMappings.md)
-- [_emptyResultsMessage](emptyResultsMessage.md)
-- [_endInsertionLocation](endInsertionLocation.md)
-- [_enumByName](enumByName.md)
-- [_exitForUpdate](exitForUpdate.md)
-- [_findRepeaters](findRepeaters.md)
-- [_formatBytes](formatBytes.md)
-- [_friendlyActionError](friendlyActionError.md)
+- [_channelDetail](channelDetail.md) — One-line summary of a result: frequency, tone, distance and location.
+- [_channelIssues](channelIssues.md) — Problems that would stop [channel] being written to the selected radio.
+- [_channelRow](channelRow.md) — One table row: drag handle plus a cell per column, highlighted when selected.
+- [_channelsAtLocations](channelsAtLocations.md) — Non-empty channels at the given locations.
+- [_channelsWithLongNames](channelsWithLongNames.md) — Channels whose names are longer than the radio allows (they would be cut).
+- [_channelTableRows](channelTableRows.md) — Rows of the channel table after the search box and column filters, as
+- [_checkForUpdates](checkForUpdates.md) — Checks for a newer version (quietly at startup, with a result dialog otherwise).
+- [_chooseAddChannelPlacement](chooseAddChannelPlacement.md) — Asks where a new channel goes: at the end, or before/after the selected one.
+- [_chooseChannelApplyMode](chooseChannelApplyMode.md) — Asks whether incoming channels replace the list or are added to it.
+- [_chooseChannelLocationConflictAction](chooseChannelLocationConflictAction.md) — Asks what to do when an edited channel's new location is taken: move the
+- [_chooseCounties](chooseCounties.md) — Lets the user pick counties to filter the results.
+- [_clampWindowState](clampWindowState.md) — Keeps a saved window position on a display that still exists (screens may
+- [_clearChannelsAtLocations](clearChannelsAtLocations.md) — Clears the channels at [locations] in one undo step (Midland repeater rows are reset).
+- [_columns](columns.md) — Column definitions for the channel table, based on what the radio supports.
+- [_confirmDeleteChannel](confirmDeleteChannel.md) — Asks before deleting a channel (Midland repeater rows are reset instead).
+- [_confirmFileSaveDoesNotWriteRadio](confirmFileSaveDoesNotWriteRadio.md) — Warns that saving a file doesn't write the radio (unless hidden); false if cancelled.
+- [_confirmOverwriteChannel](confirmOverwriteChannel.md) — Asks before overwriting one channel.
+- [_confirmOverwriteChannels](confirmOverwriteChannels.md) — Asks before overwriting several channels (one channel uses the single-channel dialog).
+- [_confirmRadioInstructions](confirmRadioInstructions.md) — Shows the driver's instructions before a read or write; true when the user continues.
+- [_confirmReplaceLibrary](confirmReplaceLibrary.md) — Asks before replacing an edited channel list; true when it may be replaced.
+- [_copyChannelsAtLocations](copyChannelsAtLocations.md) — Copies channels to NewChirp's own clipboard.
+- [_currentPreferences](currentPreferences.md) — The dialog's current search settings.
+- [_cutChannelsAtLocations](cutChannelsAtLocations.md) — Copies channels to the clipboard, then clears them (Midland repeater rows
+- [_defaultPrinterName](defaultPrinterName.md) — The default printer from `lpstat -d`, or null.
+- [_deleteChannelAt](deleteChannelAt.md) — Deletes the channel at [index] (Midland repeater rows are reset instead).
+- [_discardChannelLibraryChanges](discardChannelLibraryChanges.md) — Discards edits by reloading the channel list from the stored radio image.
+- [_downloadAndInstallUpdate](downloadAndInstallUpdate.md) — Downloads and installs an update, unless a transfer or save is running.
+- [_downloadRadio](downloadRadio.md) — Reads the radio (optionally one zone of a live radio), asking before replacing
+- [_duplicateChannel](duplicateChannel.md) — Duplicates the selected channel.
+- [_duplicateChannelAt](duplicateChannelAt.md) — Copies the channel at [index] into the next free slot.
+- [_editRadioMappings](editRadioMappings.md) — Opens the zone/bank editor and applies the result (one undo step).
+- [_emptyResultsMessage](emptyResultsMessage.md) — Message for an empty result list, with a hint when filters hid the matches.
+- [_endInsertionLocation](endInsertionLocation.md) — Slot after the last channel, or null when that is past the radio's last slot.
+- [_enumByName](enumByName.md) — Enum value named [name], or [fallback] (for values read from the preferences file).
+- [_exitForUpdate](exitForUpdate.md) — Quits so the installer can replace the app.
+- [_findRepeaters](findRepeaters.md) — Opens Find Repeaters and adds the chosen repeaters as channels.
+- [_formatBytes](formatBytes.md) — Human-readable size: B, KB, MB or GB (1 KB = 1024 bytes).
+- [_friendlyActionError](friendlyActionError.md) — Error text with platform advice for common causes: macOS privacy blocks on a
 - [_glossaryTerms](glossaryTerms.md)
-- [_handleFocusChange](handleFocusChange.md)
-- [_headerCell](headerCell.md)
-- [_importChirpImage](importChirpImage.md)
-- [_insertChannelAt](insertChannelAt.md)
-- [_insertEmptySlotBefore](insertEmptySlotBefore.md)
-- [_keepMidlandRepeater](keepMidlandRepeater.md)
-- [_loadChirpModule](loadChirpModule.md)
-- [_loadColumnLayout](loadColumnLayout.md)
-- [_loadFileSaveWarning](loadFileSaveWarning.md)
-- [_loadImageCapabilities](loadImageCapabilities.md)
-- [_loadLibraryMetricsCollapsed](loadLibraryMetricsCollapsed.md)
-- [_loadModels](loadModels.md)
-- [_loadPreferences](loadPreferences.md)
-- [_loadRadioInstructions](loadRadioInstructions.md)
-- [_loadRadioSelection](loadRadioSelection.md)
-- [_loadRadioSettings](loadRadioSettings.md)
-- [_mappingMembershipsAt](mappingMembershipsAt.md)
-- [_markChannelLibraryDirty](markChannelLibraryDirty.md)
-- [_markRadioSettingsChanged](markRadioSettingsChanged.md)
-- [_moveChannel](moveChannel.md)
-- [_moveChannelToLocation](moveChannelToLocation.md)
-- [_moveColumn](moveColumn.md)
-- [_newChannelAt](newChannelAt.md)
-- [_newLibrary](newLibrary.md)
-- [_nextChannelLocation](nextChannelLocation.md)
-- [_noteRepeaterRowKept](noteRepeaterRowKept.md)
-- [_numericColumnFilter](numericColumnFilter.md)
+- [_handleFocusChange](handleFocusChange.md) — On leaving the box, puts back the formatted value if the text isn't that number.
+- [_headerCell](headerCell.md) — Header cell: draggable label, filter box and resize handle.
+- [_importChirpImage](importChirpImage.md) — Imports channels from a CHIRP .img file and stores it as the model's radio image.
+- [_insertChannelAt](insertChannelAt.md) — Inserts a new channel at [location], shifting later channels down if needed.
+- [_insertEmptySlotBefore](insertEmptySlotBefore.md) — Inserts an empty slot at [location], shifting later channels down by one
+- [_keepMidlandRepeater](keepMidlandRepeater.md) — Resets a Midland repeater row to its plain fixed channel instead of deleting it.
+- [_loadChirpModule](loadChirpModule.md) — Loads a user-supplied CHIRP driver module (after a warning), if this OS can sandbox it.
+- [_loadColumnLayout](loadColumnLayout.md) — Applies the saved column order and widths unless the user already changed them.
+- [_loadFileSaveWarning](loadFileSaveWarning.md) — Loads the "don't show again" setting for the file-save warning.
+- [_loadImageCapabilities](loadImageCapabilities.md) — Loads the stored image's capabilities (limits, zones) without its channels.
+- [_loadLibraryMetricsCollapsed](loadLibraryMetricsCollapsed.md) — Restores whether the library metrics panel was collapsed.
+- [_loadModels](loadModels.md) — Loads the radio model catalog from the bridge, after the saved selection is restored.
+- [_loadPreferences](loadPreferences.md) — Applies saved search settings unless the user already changed something.
+- [_loadRadioInstructions](loadRadioInstructions.md) — Loads the selected driver's instructions, with the busy indicator.
+- [_loadRadioSelection](loadRadioSelection.md) — Restores the last radio model and port, and that model's stored image if any.
+- [_loadRadioSettings](loadRadioSettings.md) — Loads the radio's settings from the stored image (again if [force]).
+- [_mappingMembershipsAt](mappingMembershipsAt.md) — Which editable zones/banks contain channel [location] (to restore on undo).
+- [_markChannelLibraryDirty](markChannelLibraryDirty.md) — Forces the channel statistics to be recomputed on the next build.
+- [_markRadioSettingsChanged](markRadioSettingsChanged.md) — Marks a setting as changed so it is included in the next write.
+- [_moveChannel](moveChannel.md) — Drag-and-drop reorder: moves a channel in the list, and channels keep the
+- [_moveChannelToLocation](moveChannelToLocation.md) — Moves a channel to [targetLocation], replacing an empty slot there.
+- [_moveColumn](moveColumn.md) — Moves a column to where it was dropped and reports the new order.
+- [_newChannelAt](newChannelAt.md) — A blank channel at [location] with the radio's defaults (Midland and GM-32
+- [_newLibrary](newLibrary.md) — Starts a new, empty channel list.
+- [_nextChannelLocation](nextChannelLocation.md) — First free memory slot within the radio's range, or null when full.
+- [_noteRepeaterRowKept](noteRepeaterRowKept.md) — Explains that a Midland repeater row was kept because the radio needs it.
+- [_numericColumnFilter](numericColumnFilter.md) — Columns whose filter compares numbers (frequency) rather than text.
 - [_openDownloadPage](openDownloadPage.md) — Opens [url] in the browser and keeps the link reachable if that fails.
-- [_openLibraryFile](openLibraryFile.md)
-- [_openRadioConnection](openRadioConnection.md)
-- [_openRadioSettings](openRadioSettings.md)
-- [_pasteChannelsAtLocation](pasteChannelsAtLocation.md)
-- [_preferencesChanged](preferencesChanged.md)
-- [_prepareRestoredRadio](prepareRestoredRadio.md)
-- [_printChannelList](printChannelList.md)
-- [_printFrequencyReference](printFrequencyReference.md)
+- [_openLibraryFile](openLibraryFile.md) — Open dialog for a CHIRP image, CSV or MOTOTRBO XML file; loads it as the channel list.
+- [_openRadioConnection](openRadioConnection.md) — Opens the Radio Connection page and loads the model catalog if needed.
+- [_openRadioSettings](openRadioSettings.md) — Opens Radio Settings and loads them from the stored image.
+- [_pasteChannelsAtLocation](pasteChannelsAtLocation.md) — Pastes the clipboard starting at [location], asking before overwriting
+- [_preferencesChanged](preferencesChanged.md) — Saves the search settings 250 ms after the last change.
+- [_prepareRestoredRadio](prepareRestoredRadio.md) — After a restored selection: refreshes ports and loads that model's details.
+- [_printChannelList](printChannelList.md) — Builds a PDF of the channel list and sends it to the printer (or a PDF viewer).
+- [_printFrequencyReference](printFrequencyReference.md) — Prints the selected frequency reference chart (a bundled PDF).
 - [_printPdfFile](printPdfFile.md) — Open [pdf] in the PDF viewer (Windows, or no printers) or send it to a
-- [_radioSettingChanges](radioSettingChanges.md)
-- [_readRadioSettings](readRadioSettings.md)
-- [_recordHistory](recordHistory.md)
-- [_redo](redo.md)
-- [_refreshPorts](refreshPorts.md)
-- [_remapRadioMappingChannels](remapRadioMappingChannels.md)
-- [_rememberChannelImageBaseline](rememberChannelImageBaseline.md)
-- [_removeEmptySlot](removeEmptySlot.md)
-- [_replaceText](replaceText.md)
+- [_radioSettingChanges](radioSettingChanges.md) — The changed settings as {name, value} entries for the bridge.
+- [_readRadioSettings](readRadioSettings.md) — Reads the settings straight from the radio on the selected port.
+- [_recordHistory](recordHistory.md) — Pushes the current state onto the undo stack (max 200 steps) and clears redo.
+- [_redo](redo.md) — Redoes the last undone change.
+- [_refreshPorts](refreshPorts.md) — Refreshes the list of serial ports and USB radios.
+- [_remapRadioMappingChannels](remapRadioMappingChannels.md) — Updates zone/bank membership after channels move ([changes] = old -> new location).
+- [_rememberChannelImageBaseline](rememberChannelImageBaseline.md) — Records the current channel list as matching the radio image (after a read,
+- [_removeEmptySlot](removeEmptySlot.md) — Removes the empty slot at [location], shifting later channels up by one.
+- [_replaceText](replaceText.md) — Replaces the text and puts the cursor at the end.
 - [_reportImagePath](reportImagePath.md) — The radio image a report should offer: the one a failed read saved
-- [_reportTransferProgress](reportTransferProgress.md)
+- [_reportTransferProgress](reportTransferProgress.md) — Shows a progress update from the bridge.
 - [_reportUndecodedChannels](reportUndecodedChannels.md) — Tells the user which slots the driver could not decode, logs the
-- [_restoreLibrary](restoreLibrary.md)
-- [_restoreMappingMembershipsAt](restoreMappingMembershipsAt.md)
-- [_restoreStockChannels](restoreStockChannels.md)
-- [_reviewChannelIssues](reviewChannelIssues.md)
-- [_saveColumnLayout](saveColumnLayout.md)
-- [_saveCsv](saveCsv.md)
-- [_saveCsvNow](saveCsvNow.md)
-- [_saveEditedChannel](saveEditedChannel.md)
-- [_savePreferencesNow](savePreferencesNow.md)
-- [_saveRadioSelection](saveRadioSelection.md)
-- [_scheduleSave](scheduleSave.md)
-- [_search](search.md)
-- [_searchAmateurInstead](searchAmateurInstead.md)
-- [_selectAllChannels](selectAllChannels.md)
+- [_restoreLibrary](restoreLibrary.md) — Restores an undo/redo snapshot.
+- [_restoreMappingMembershipsAt](restoreMappingMembershipsAt.md) — Puts channel [location] back into the given zones/banks.
+- [_restoreStockChannels](restoreStockChannels.md) — Loads CHIRP's stock "US FRS and GMRS Channels" list.
+- [_reviewChannelIssues](reviewChannelIssues.md) — Selects [channel] and scrolls to it so its problems can be fixed.
+- [_saveColumnLayout](saveColumnLayout.md) — Saves the current column order and widths.
+- [_saveCsv](saveCsv.md) — Saves the channel list as CSV (one save at a time).
+- [_saveCsvNow](saveCsvNow.md) — Asks for a path when needed, writes the CSV and marks the list as saved.
+- [_saveEditedChannel](saveEditedChannel.md) — Puts an edited channel into the list, applying the chosen location-conflict action.
+- [_savePreferencesNow](savePreferencesNow.md) — Saves the search settings now, queued after any save already running.
+- [_saveRadioSelection](saveRadioSelection.md) — Remembers the chosen radio model and port. Errors are ignored.
+- [_scheduleSave](scheduleSave.md) — Saves the window state 400 ms after the last move/resize, not on every pixel.
+- [_search](search.md) — Runs the search with the chosen provider (a ZIP code in the filter box
+- [_searchAmateurInstead](searchAmateurInstead.md) — Switches the search to RepeaterBook amateur repeaters.
+- [_selectAllChannels](selectAllChannels.md) — Selects every visible (filtered) non-empty channel.
 - [_SelectAllChannelsAction](SelectAllChannelsAction.md)
-- [_selectChannelAtLocation](selectChannelAtLocation.md)
-- [_selectCountry](selectCountry.md)
-- [_selectPage](selectPage.md)
-- [_selectProvider](selectProvider.md)
-- [_selectRadioModel](selectRadioModel.md)
-- [_setColumnOrder](setColumnOrder.md)
-- [_setColumnWidth](setColumnWidth.md)
-- [_setLibraryMetricsCollapsed](setLibraryMetricsCollapsed.md)
-- [_setResultSelected](setResultSelected.md)
-- [_setShowEmptySlots](setShowEmptySlots.md)
-- [_settingsMessage](settingsMessage.md)
+- [_selectChannelAtLocation](selectChannelAtLocation.md) — Handles a click on a channel row: single select, Ctrl/Cmd toggle, or
+- [_selectCountry](selectCountry.md) — Selects a country and resets the region to one that exists there.
+- [_selectPage](selectPage.md) — Switches sidebar page; the Radio Settings page (4) also loads settings.
+- [_selectProvider](selectProvider.md) — Switches between RepeaterBook and myGMRS, cancelling a pending sign-in.
+- [_selectRadioModel](selectRadioModel.md) — Selects a radio model: clears the old model's image info and loads the new
+- [_setColumnOrder](setColumnOrder.md) — Sets the column order from a drag in the table header (saved for next launch).
+- [_setColumnWidth](setColumnWidth.md) — Sets one column's width (saved for next launch).
+- [_setLibraryMetricsCollapsed](setLibraryMetricsCollapsed.md) — Collapses or expands the library metrics panel and remembers it.
+- [_setResultSelected](setResultSelected.md) — Ticks or unticks a result for adding.
+- [_setShowEmptySlots](setShowEmptySlots.md) — Shows or hides empty memory slots in the table.
+- [_settingsMessage](settingsMessage.md) — Centered icon, title, text and optional button for the settings page's empty/error states.
 - [_shortenLongNames](shortenLongNames.md) — Cut every channel name that is longer than the radio allows, after the
-- [_showAbbreviationGlossary](showAbbreviationGlossary.md)
-- [_showActionError](showActionError.md)
-- [_showBulkChannelEditor](showBulkChannelEditor.md)
-- [_showChannelEditorAtLocation](showChannelEditorAtLocation.md)
-- [_showErrorReport](showErrorReport.md)
-- [_showNoEmptyChannelSlot](showNoEmptyChannelSlot.md)
-- [_showRowMenu](showRowMenu.md)
-- [_showUpdateAvailable](showUpdateAvailable.md)
-- [_showUpToDate](showUpToDate.md)
-- [_signInMyGmrs](signInMyGmrs.md)
-- [_signOutMyGmrs](signOutMyGmrs.md)
+- [_showAbbreviationGlossary](showAbbreviationGlossary.md) — Opens the abbreviation glossary (CTCSS, DCS, ...).
+- [_showActionError](showActionError.md) — Logs [error] and shows it in a dialog with a "Submit Bug Report" button.
+- [_showBulkChannelEditor](showBulkChannelEditor.md) — Opens the bulk editor for two or more selected channels and applies the
+- [_showChannelEditorAtLocation](showChannelEditorAtLocation.md) — Opens the channel editor for [location] (an empty slot creates a new channel).
+- [_showErrorReport](showErrorReport.md) — Opens the bug report dialog, offering to attach a radio image (one named in the
+- [_showNoEmptyChannelSlot](showNoEmptyChannelSlot.md) — Tells the user there is no empty memory slot left.
+- [_showRowMenu](showRowMenu.md) — Right-click menu for a row (copy, cut, paste, insert, delete...).
+- [_showUpdateAvailable](showUpdateAvailable.md) — Dialog offering the new version (install now or open the download page).
+- [_showUpToDate](showUpToDate.md) — Dialog saying this is the latest version.
+- [_signInMyGmrs](signInMyGmrs.md) — Signs in to myGMRS (via the browser), showing progress in the dialog.
+- [_signOutMyGmrs](signOutMyGmrs.md) — Signs out of myGMRS.
 - [_simulateWrite](simulateWrite.md) — Debug aid: `NEWCHIRP_SIMULATE_WRITE=<seconds>` runs the write progress
-- [_snapshotLibrary](snapshotLibrary.md)
-- [_sortChannelsByLocation](sortChannelsByLocation.md)
-- [_startTransferHeartbeat](startTransferHeartbeat.md)
-- [_stopTransferHeartbeat](stopTransferHeartbeat.md)
-- [_submit](submit.md)
-- [_switchRadioZone](switchRadioZone.md)
-- [_syncMenuState](syncMenuState.md)
-- [_systemPrinters](systemPrinters.md)
-- [_task](task.md)
-- [_transferTask](transferTask.md)
-- [_undo](undo.md)
-- [_unloadChirpModule](unloadChirpModule.md)
-- [_uploadRadio](uploadRadio.md)
-- [_useGmrsStarter](useGmrsStarter.md)
-- [_useMarineTemplate](useMarineTemplate.md)
-- [_useSavedRadioSnapshot](useSavedRadioSnapshot.md)
-- [_waitForSendKeyCue](waitForSendKeyCue.md)
-- [_windowDisplayArea](windowDisplayArea.md)
+- [_snapshotLibrary](snapshotLibrary.md) — Deep copy of the channel list and selection, for undo/redo.
+- [_sortChannelsByLocation](sortChannelsByLocation.md) — Sorts the channel list by memory location.
+- [_startTransferHeartbeat](startTransferHeartbeat.md) — While a transfer runs, logs a heartbeat every 5 s (elapsed time, frames drawn,
+- [_stopTransferHeartbeat](stopTransferHeartbeat.md) — Stops the transfer heartbeat.
+- [_submit](submit.md) — Validates the email address, then sends the report.
+- [_switchRadioZone](switchRadioZone.md) — Switches to another zone/band of the radio image, asking first if there are
+- [_syncMenuState](syncMenuState.md) — Tells the native menu whether Undo and Redo are available.
+- [_systemPrinters](systemPrinters.md) — Printer names from `lpstat -p` (macOS/Linux CUPS); empty if none or on error.
+- [_task](task.md) — Runs [action] with the busy indicator and [label] as the status; any error
+- [_transferTask](transferTask.md) — Like [_task] for radio transfers: shows progress, allows cancel, starts the
+- [_undo](undo.md) — Undoes the last change.
+- [_unloadChirpModule](unloadChirpModule.md) — Unloads the CHIRP module and reloads the normal model catalog.
+- [_uploadRadio](uploadRadio.md) — Writes the channel list to the radio after checks (invalid channels, long
+- [_useGmrsStarter](useGmrsStarter.md) — Loads the 22 GMRS starter channels.
+- [_useMarineTemplate](useMarineTemplate.md) — Loads a marine VHF channel plan chosen in the template dialog.
+- [_useSavedRadioSnapshot](useSavedRadioSnapshot.md) — Reloads settings from the saved image, asking first if there are unsaved changes.
+- [_waitForSendKeyCue](waitForSendKeyCue.md) — Inserts "wait until the transfer window says ..." before the step where the
+- [_windowDisplayArea](windowDisplayArea.md) — A display's usable area (without menu bar/taskbar) for window placement.
 - [_WindowStateManager](WindowStateManager.md)
 - [_writeBlockedByDriver](writeBlockedByDriver.md) — Explains, before any write work starts, that this radio is read-only.
-- [_writeRadioSettings](writeRadioSettings.md)
-- [adaptRadioPromptButton](adaptRadioPromptButton.md)
+- [_writeRadioSettings](writeRadioSettings.md) — Writes the changed settings to the radio (blocked for read-only drivers).
+- [adaptRadioPromptButton](adaptRadioPromptButton.md) — Rewrites a CHIRP driver prompt for NewChirp's dialog: strips HTML, turns
 - [build](build.md)
-- [cell](cell.md)
-- [choices](choices.md)
+- [cell](cell.md) — One chart cell.
+- [choices](choices.md) — Dropdown choices from the radio's list, or [fallback] when it has none.
 - [createState](createState.md)
 - [didUpdateWidget](didUpdateWidget.md)
 - [dispose](dispose.md)
-- [fitAllPoints](fitAllPoints.md)
+- [fitAllPoints](fitAllPoints.md) — Zooms the map to show every result, after the frame is drawn.
 - [inactive](inactive.md)
 - [initState](initState.md)
-- [invalid](invalid.md)
+- [invalid](invalid.md) — True when this setting (or any setting in this group) has an invalid value.
 - [invoke](invoke.md)
 - [isEnabled](isEnabled.md)
-- [label](label.md)
-- [legendItem](legendItem.md)
-- [main](main.md)
-- [matchesColumnFilters](matchesColumnFilters.md)
-- [matchesQuery](matchesQuery.md)
+- [label](label.md) — The header label.
+- [legendItem](legendItem.md) — One color swatch with its label in the legend.
+- [main](main.md) — App entry point: starts logging, registers licenses, restores language and
+- [matchesColumnFilters](matchesColumnFilters.md) — True when the channel passes every column filter.
+- [matchesQuery](matchesQuery.md) — True when the search text matches the channel's name, comment, number or frequency.
 - [onWindowClose](onWindowClose.md)
 - [onWindowMaximize](onWindowMaximize.md)
 - [onWindowMoved](onWindowMoved.md)
 - [onWindowResized](onWindowResized.md)
 - [onWindowUnmaximize](onWindowUnmaximize.md)
-- [openInPdfViewer](openInPdfViewer.md)
-- [radioModelSelectionReady](radioModelSelectionReady.md)
-- [resizeBy](resizeBy.md)
-- [revealSelectedChannel](revealSelectedChannel.md)
-- [rowColor](rowColor.md)
-- [save](save.md)
+- [openInPdfViewer](openInPdfViewer.md) — Opens the PDF in the default viewer when printing isn't possible.
+- [radioModelSelectionReady](radioModelSelectionReady.md) — True when a model is chosen and it exists in the loaded catalog.
+- [resizeBy](resizeBy.md) — Resizes the dialog by a drag, within the screen-based limits.
+- [revealSelectedChannel](revealSelectedChannel.md) — Scrolls so the selected channel is visible.
+- [rowColor](rowColor.md) — Row color by channel group: 1-7, 8-14, then 15-22.
+- [save](save.md) — Saves the draft, asking what to do if its new location is already used.
 - [shortened](shortened.md)
-- [shouldLoadRadioCatalogForRestoredSelection](shouldLoadRadioCatalogForRestoredSelection.md)
-- [start](start.md)
-- [toggle](toggle.md)
-- [walk](walk.md)
+- [shouldLoadRadioCatalogForRestoredSelection](shouldLoadRadioCatalogForRestoredSelection.md) — True when a remembered model was restored but the model catalog isn't loaded yet.
+- [start](start.md) — Starts tracking window changes, beginning from the restored bounds.
+- [toggle](toggle.md) — Opens or closes this menu.
+- [walk](walk.md) — Collects changed leaf settings, descending into groups.

@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: ensureSignedIn
+description: Signs in only if there is no unexpired session.
 resource: services/mygmrs_client.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:mygmrs_client.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-06T15:24:31Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: services/mygmrs_client/ensureSignedIn
 language: dart
 ---
 
 # ensureSignedIn
+
+Signs in only if there is no unexpired session.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 FutureensureSignedInensureSignedIn
 ```
 
+## Docstring
+
+Signs in only if there is no unexpired session.
+
 ## Source
-Lines 152–152 in `services/mygmrs_client.dart`
+Lines 162–162 in `services/mygmrs_client.dart`
 
 ## Relationships
 

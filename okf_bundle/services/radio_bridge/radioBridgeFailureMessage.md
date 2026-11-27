@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: radioBridgeFailureMessage
+description: "User-facing message for a bridge process that exited with [exitCode];"
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/radioBridgeFailureMessage
 language: dart
 ---
 
 # radioBridgeFailureMessage
+
+User-facing message for a bridge process that exited with [exitCode];
 
 ## Signature
 
@@ -27,8 +30,13 @@ StringradioBridgeFailureMessage({
 })
 ```
 
+## Docstring
+
+User-facing message for a bridge process that exited with [exitCode];
+recognizes a few known failures and otherwise shows [details].
+
 ## Source
-Lines 61–65 in `services/radio_bridge.dart`
+Lines 66–70 in `services/radio_bridge.dart`
 
 ## Relationships
 

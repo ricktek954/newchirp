@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: read
+description: "The cached snapshot, recomputed only when an input changed or [markDirty] was called."
 resource: models/channel_image_baseline.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:channel_image_baseline.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-24T14:13:56Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/read
 language: dart
 ---
 
 # read
+
+The cached snapshot, recomputed only when an input changed or [markDirty] was called.
 
 ## Signature
 
@@ -40,8 +43,12 @@ ChannelLibrarySnapshotread({
   })
 ```
 
+## Docstring
+
+The cached snapshot, recomputed only when an input changed or [markDirty] was called.
+
 ## Source
-Lines 270–287 in `models/channel_image_baseline.dart`
+Lines 280–297 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

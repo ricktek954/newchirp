@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _formatBytes
+description: "\"512 KB\" / \"3.4 MB\" for the image-size label."
 resource: widgets/error_report_dialog.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:error_report_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:22Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: widgets/error_report_dialog/formatBytes
 language: dart
 ---
 
 # _formatBytes
+
+"512 KB" / "3.4 MB" for the image-size label.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 String_formatBytes(int bytes)
 ```
 
+## Docstring
+
+"512 KB" / "3.4 MB" for the image-size label.
+
 ## Source
-Lines 8–8 in `widgets/error_report_dialog.dart`
+Lines 9–9 in `widgets/error_report_dialog.dart`
 
 ## Relationships
 

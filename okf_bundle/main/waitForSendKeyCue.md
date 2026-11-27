@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _waitForSendKeyCue
+description: "Inserts \"wait until the transfer window says ...\" before the step where the"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/waitForSendKeyCue
 language: dart
 ---
 
 # _waitForSendKeyCue
+
+Inserts "wait until the transfer window says ..." before the step where the
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 String_waitForSendKeyCue(String message, String buttonLabel)
 ```
 
+## Docstring
+
+Inserts "wait until the transfer window says ..." before the step where the
+user presses the radio's own key (only for the "Radio is ready" button).
+
 ## Source
-Lines 117–117 in `main.dart`
+Lines 125–125 in `main.dart`
 
 ## Relationships
 

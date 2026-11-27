@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: submit
+description: "Sends a bug report (with the diagnostic log and, optionally, the radio image) to the NewChirp website."
 resource: services/diagnostic_log.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:diagnostic_log.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:11Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: services/diagnostic_log/submit
 language: dart
 ---
 
 # submit
+
+Sends a bug report (with the diagnostic log and, optionally, the radio image) to the NewChirp website.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Futuresubmitsubmit
 ```
 
+## Docstring
+
+Sends a bug report (with the diagnostic log and, optionally, the radio image) to the NewChirp website.
+
 ## Source
-Lines 141–149 in `services/diagnostic_log.dart`
+Lines 149–157 in `services/diagnostic_log.dart`
 
 ## Relationships
 

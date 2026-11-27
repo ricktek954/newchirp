@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../l10n/l10n.dart';
 import '../services/diagnostic_log.dart';
 
+/// "512 KB" / "3.4 MB" for the image-size label.
 String _formatBytes(int bytes) => bytes < 1024 * 1024
     ? '${(bytes / 1024).toStringAsFixed(0)} KB'
     : '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
@@ -54,6 +55,7 @@ class _ErrorReportDialogState extends State<ErrorReportDialog> {
     super.dispose();
   }
 
+  /// Validates the email address, then sends the report and shows the result.
   Future<void> _submit() async {
     final email = _emailController.text.trim();
     if (!email.contains('@') || email.startsWith('@') || email.endsWith('@')) {

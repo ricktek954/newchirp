@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _confirmReplaceLibrary
+description: Asks before replacing an edited channel list; true when it may be replaced.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/confirmReplaceLibrary
 language: dart
 ---
 
 # _confirmReplaceLibrary
+
+Asks before replacing an edited channel list; true when it may be replaced.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_confirmReplaceLibrary_confirmReplaceLibrary
 ```
 
+## Docstring
+
+Asks before replacing an edited channel list; true when it may be replaced.
+
 ## Source
-Lines 2694–2694 in `main.dart`
+Lines 2796–2796 in `main.dart`
 
 ## Relationships
 

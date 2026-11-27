@@ -17,6 +17,7 @@ class WindowState {
   final double y;
   final bool maximized;
 
+  /// Serialized form written to the window-state file.
   Map<String, dynamic> toJson() => {
     'width': width,
     'height': height,
@@ -90,6 +91,7 @@ class WindowStateStore {
 
   final String _path;
 
+  /// Reads the last window size and position; null when missing or unreadable.
   Future<WindowState?> load() async {
     final file = File(_path);
     if (!await file.exists()) return null;
@@ -119,6 +121,7 @@ class WindowStateStore {
     }
   }
 
+  /// Saves the window size, position and maximized state.
   Future<void> save(WindowState state) async {
     final file = File(_path);
     await file.parent.create(recursive: true);
@@ -128,6 +131,7 @@ class WindowStateStore {
     );
   }
 
+  /// Settings file in the per-user app data folder for this platform.
   static String _defaultPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'] ?? '.';

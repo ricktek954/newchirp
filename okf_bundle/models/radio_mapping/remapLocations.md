@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _remapLocations
+description: "Applies [locations] to a list of channel numbers, dropping deleted ones and duplicates."
 resource: models/radio_mapping.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-19T21:21:35Z"
+timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/radio_mapping/remapLocations
 language: dart
 ---
 
 # _remapLocations
+
+Applies [locations] to a list of channel numbers, dropping deleted ones and duplicates.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 List_remapLocations_remapLocations
 ```
 
+## Docstring
+
+Applies [locations] to a list of channel numbers, dropping deleted ones and duplicates.
+
 ## Source
-Lines 162–162 in `models/radio_mapping.dart`
+Lines 172–172 in `models/radio_mapping.dart`
 
 ## Relationships
 

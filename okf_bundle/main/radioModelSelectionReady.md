@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: radioModelSelectionReady
+description: True when a model is chosen and it exists in the loaded catalog.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/radioModelSelectionReady
 language: dart
 ---
 
 # radioModelSelectionReady
+
+True when a model is chosen and it exists in the loaded catalog.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 boolradioModelSelectionReady(List<String> models, String? model)
 ```
 
+## Docstring
+
+True when a model is chosen and it exists in the loaded catalog.
+
 ## Source
-Lines 56–56 in `main.dart`
+Lines 57–57 in `main.dart`
 
 ## Relationships
 

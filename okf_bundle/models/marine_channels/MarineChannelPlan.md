@@ -11,7 +11,7 @@ tags:
   - "domain:marine_channels.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-09T10:31:41Z"
+timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/marine_channels/MarineChannelPlan
 language: dart
 ---

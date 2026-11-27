@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _buildMappingEditor
+description: "Right pane: name field, channel search and a checkbox per channel."
 resource: widgets/radio_mapping_dialog.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_mapping_dialog.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-23T19:42:01Z"
+timestamp: "2026-11-27T09:00:50Z"
 concept_id: widgets/radio_mapping_dialog/buildMappingEditor
 language: dart
 ---
 
 # _buildMappingEditor
+
+Right pane: name field, channel search and a checkbox per channel.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 Widget_buildMappingEditor(BuildContext context)
 ```
 
+## Docstring
+
+Right pane: name field, channel search and a checkbox per channel.
+
 ## Source
-Lines 350–350 in `widgets/radio_mapping_dialog.dart`
+Lines 361–361 in `widgets/radio_mapping_dialog.dart`
 
 ## Relationships
 

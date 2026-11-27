@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _deduplicatePorts
+description: "Drops repeated port names, keeping the first."
 resource: services/radio_bridge.dart
 tags:
   - "lang:dart"
@@ -10,12 +11,14 @@ tags:
   - "domain:radio_bridge.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:52:55Z"
+timestamp: "2026-11-27T09:03:04Z"
 concept_id: services/radio_bridge/deduplicatePorts
 language: dart
 ---
 
 # _deduplicatePorts
+
+Drops repeated port names, keeping the first.
 
 ## Signature
 
@@ -23,8 +26,12 @@ language: dart
 List_deduplicatePorts_deduplicatePorts
 ```
 
+## Docstring
+
+Drops repeated port names, keeping the first.
+
 ## Source
-Lines 552–552 in `services/radio_bridge.dart`
+Lines 569–569 in `services/radio_bridge.dart`
 
 ## Relationships
 

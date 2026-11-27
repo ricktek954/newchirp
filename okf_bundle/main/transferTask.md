@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _transferTask
+description: "Like [_task] for radio transfers: shows progress, allows cancel, starts the"
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/transferTask
 language: dart
 ---
 
 # _transferTask
+
+Like [_task] for radio transfers: shows progress, allows cancel, starts the
 
 ## Signature
 
@@ -22,8 +25,13 @@ language: dart
 Future_transferTask_transferTask
 ```
 
+## Docstring
+
+Like [_task] for radio transfers: shows progress, allows cancel, starts the
+heartbeat log. Returns true when the transfer succeeded.
+
 ## Source
-Lines 4112–4115 in `main.dart`
+Lines 4257–4260 in `main.dart`
 
 ## Relationships
 

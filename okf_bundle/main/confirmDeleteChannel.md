@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _confirmDeleteChannel
+description: Asks before deleting a channel (Midland repeater rows are reset instead).
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/confirmDeleteChannel
 language: dart
 ---
 
 # _confirmDeleteChannel
+
+Asks before deleting a channel (Midland repeater rows are reset instead).
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 Future_confirmDeleteChannel_confirmDeleteChannel
 ```
 
+## Docstring
+
+Asks before deleting a channel (Midland repeater rows are reset instead).
+
 ## Source
-Lines 5181–5181 in `main.dart`
+Lines 5343–5343 in `main.dart`
 
 ## Relationships
 

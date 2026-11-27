@@ -11,7 +11,7 @@ tags:
   - "domain:radio_channel.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-20T20:10:28Z"
+timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/midlandReceiveChannelChoices
 language: dart
 ---
@@ -34,7 +34,7 @@ An unset row starts with a blank line so the box does not show a
 placeholder frequency.
 
 ## Source
-Lines 362–365 in `models/radio_channel.dart`
+Lines 365–368 in `models/radio_channel.dart`
 
 ## Relationships
 

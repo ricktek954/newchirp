@@ -2,6 +2,7 @@
 okf_version: "0.2"
 type: Function
 title: _stopTransferHeartbeat
+description: Stops the transfer heartbeat.
 resource: main.dart
 tags:
   - "lang:dart"
@@ -9,12 +10,14 @@ tags:
   - "module:main.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T16:48:14Z"
+timestamp: "2026-11-27T09:07:44Z"
 concept_id: main/stopTransferHeartbeat
 language: dart
 ---
 
 # _stopTransferHeartbeat
+
+Stops the transfer heartbeat.
 
 ## Signature
 
@@ -22,8 +25,12 @@ language: dart
 void_stopTransferHeartbeat()
 ```
 
+## Docstring
+
+Stops the transfer heartbeat.
+
 ## Source
-Lines 1174–1174 in `main.dart`
+Lines 1221–1221 in `main.dart`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "domain:column_layout_store.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-10-27T10:21:41Z"
+timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/column_layout_store/defaultPath
 language: dart
 ---
@@ -24,7 +24,7 @@ String_defaultPath()
 ```
 
 ## Source
-Lines 62–62 in `services/column_layout_store.dart`
+Lines 65–65 in `services/column_layout_store.dart`
 
 ## Relationships
 
