@@ -1663,8 +1663,8 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.73 |
-| Windows | 1.0.70 |
+| macOS | 1.0.77 |
+| Windows | 1.0.76 |
 | Linux | 1.0.79 |
 
 Linux `1.0.79` artifacts:
