@@ -8,7 +8,7 @@
   "reporter": "reporter",
   "source": "email",
   "source_ref": "mailbox:UID 1060",
-  "status": "investigating",
+  "status": "awaiting_user",
   "summary": "1.0.77 Windows: ch1 changed from 433.000/434.600 tone 77.0 to simplex 430.0875 + Tone 114.8, then 433.0875 no tone, then 431.0875 + 114.8; owner reports no RX/TX. Records (a6 40 ce 5c / 86 42 ae 5e / 46 41 6e 5d, byte13 E0) use the same encoding as the radio's own working simplex ch81-110; only ch1 and ch114 bytes differ from the original image; frequencies inside the radio's original 427.475-438.55 span. Cause not found offline; controlled test requested.",
   "title": "Edited ch1 (430.0875/433.0875/431.0875 simplex) has no RX or TX",
   "uid": "w-20261127-eff6"

@@ -478,7 +478,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261127-edf2 bug | awaiting_user | high:** 5 kHz channels decoded and written as 6.25 kHz (edited ch114 will not transmit)
   Owner's 1.0.76 write of ch114 to 430.0125 left the radio on 353.020/344.010: record byte 13 bits 5 (RX) / 6 (TX) select 6.25 vs 5 kHz steps and ch114 is a 5 kHz channel (80). NewChirp ignored the bits. Channel 121 add refused as designed; CSV re-import refused (no tones).
   Source: `email` mailbox:UID 1055,1056
-- **#w-20261127-eff6 bug | investigating | high:** Edited ch1 (430.0875/433.0875/431.0875 simplex) has no RX or TX
+- **#w-20261127-eff6 bug | awaiting_user | high:** Edited ch1 (430.0875/433.0875/431.0875 simplex) has no RX or TX
   1.0.77 Windows: ch1 changed from 433.000/434.600 tone 77.0 to simplex 430.0875 + Tone 114.8, then 433.0875 no tone, then 431.0875 + 114.8; owner reports no RX/TX. Records (a6 40 ce 5c / 86 42 ae 5e / 46 41 6e 5d, byte13 E0) use the same encoding as the radio's own working simplex ch81-110; only ch1 and ch114 bytes differ from the original image; frequencies inside the radio's original 427.475-438.55 span. Cause not found offline; controlled test requested.
   Source: `email` mailbox:UID 1060
 - **#w-20261127-dc5d enhancement | open | normal:** DQT (DCS) tone read/write
