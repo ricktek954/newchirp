@@ -8,6 +8,20 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.80` is live from source commit `35d6776a`. It adopts upstream
+  CHIRP `f28d9202` with 99 upstream commits and adds the upstream-review and
+  pinned-catalog export tooling while preserving NewChirp driver precedence.
+  It also fixes TK-359 6.25 kHz decoding/name order/TX display, aligns
+  MD-UV380 DFU writes with dmrconfig/QDMR, retries short DM-32UV flash reads,
+  and accepts CSV files whose rows are each wrapped as one quoted field.
+  Verification: analyzer clean; all 258 Flutter tests with the bundled
+  Python 3.13 runtime; 722 bundled Python tests with two fixture-dependent
+  skips; Ubuntu 20.04 ABI maximum GLIBC `2.18`; DEB, RPM, and Pacman
+  metadata plus embedded version `1.0.80`; DEB and AppImage Xvfb smoke
+  tests; AppImage host launches under Wayland and X11; package payloads
+  include the new CHIRP pin, TK-359, MD-UV380, DM-32UV, and CSV changes and
+  omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
+  the Linux platform manifest reports `1.0.80`.
 - CHIRP pin moved 2026-11-28 from `21e42e45` to upstream master
   `f28d9202f98118af16706b3f1a8d89458da1fa1c` (99 commits, archive SHA-256
   `0c291cad...a8c7`) after the first upstream review
@@ -1649,6 +1663,7 @@ Session tools:
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.80` artifact source commit: `35d6776a`
 - Linux `1.0.79` artifact source commit: `d1665f13`
 - Linux `1.0.78` artifact source commit: `3d16733f`
 - Linux `1.0.77` artifact source commit: `8a24cd2f`
@@ -1662,7 +1677,7 @@ Session tools:
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.77+77` (macOS `1.0.77`; Linux artifact is `1.0.79`)
+- Checked-out source version: `1.0.80+80`
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1678,7 +1693,29 @@ Latest public artifacts reported by
 |---|---:|
 | macOS | 1.0.77 |
 | Windows | 1.0.76 |
-| Linux | 1.0.79 |
+| Linux | 1.0.80 |
+
+Linux `1.0.80` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.80.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.80.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.80.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.80.pkg.tar.zst`
+- DEB: `49,104,592` bytes, SHA-256
+  `99f674f668593f80018e8b0ade7319e5b6dd4139909de0271672d2a137430c85`
+- RPM: `49,189,841` bytes, SHA-256
+  `e84f7f06660edbcd060c2219d58eeb71e500d1b3a1df9349485c4e6282c71764`
+- AppImage: `49,394,880` bytes, SHA-256
+  `08b83b009d6cef8e809f4940a45431c0f4927f65b4a32fbbda7462e9ffbe82eb`
+- Pacman: `48,014,226` bytes, SHA-256
+  `cba2d247e5f505818554568d8a0410f3e36c9a5b7f18fc6e47f959cd11ae1c37`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.80`
 
 Linux `1.0.79` artifacts:
 
