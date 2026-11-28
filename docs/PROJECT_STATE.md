@@ -8,6 +8,18 @@ release requirements.
 
 ## Resume here
 
+- macOS `1.0.79` is live from source commit `e568a752b` as a universal,
+  signed, notarized and stapled DMG. It ships the separated driver layout:
+  `chirp/drivers` holds no NewChirp files and all 80 NewChirp drivers load
+  from `newchirp_drivers/` after CHIRP's. Verification: analyzer clean; 259
+  Flutter tests; all 87 Python test files; embedded `1.0.79` / `79`; arm64
+  and x86_64; CHIRP `f28d9202`; release gate `check_bundle_drivers.py` ok on
+  both runtimes (75 NewChirp driver IDs, none lost; 621 models / 64
+  vendors); Gatekeeper accepted DMG and mounted app; launch from the mounted
+  image; local, server and public SHA-256
+  `6170206440c3c8cf765136fe62188ed659e921e60236b58d8649642a01913d6b`.
+  Notarization: `1d52c383-e5b5-46c5-b73a-5eb3cb966644`.
+
 - macOS `1.0.78` is live from source commit `11391df2f` as a universal,
   signed, notarized and stapled DMG. Since 1.0.77: CHIRP pin `f28d9202`
   (99 upstream commits; BTECH UV-PRO, Kenwood TH-K20 / TM-D750, Zastone
@@ -79,7 +91,7 @@ release requirements.
 
 ### macOS session handoff, 2026-11-27 (before a reboot)
 
-Released: macOS `1.0.78` (2026-11-28), Windows `1.0.76`, Linux `1.0.80`. The website matches
+Released: macOS `1.0.79` (2026-11-28), Windows `1.0.76`, Linux `1.0.81`. The website matches
 `022980f`; the bundle `index-UeTE45j-.js` went live at
 `03:39`. Desktop and web are committed and pushed. All support mail has been
 answered except one forum notification (UID 1048).

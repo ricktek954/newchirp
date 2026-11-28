@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 11:43:28",
+  "details": "Published a universal signed, notarized and stapled DMG from source commit e568a752b. Since 1.0.78: NewChirp drivers bundled in their own newchirp_drivers/ folder and loaded after CHIRP's (structural precedence; chirp/drivers holds no NewChirp files), the app finds that folder, the bridge skips stale newchirp files in chirp/drivers, and user modules load last. Verification: analyzer clean; 259 Flutter tests; 87/87 Python test files; embedded 1.0.79 / 79; arm64 and x86_64; CHIRP f28d9202; release gate check_bundle_drivers.py ok on both runtimes (75 NewChirp driver IDs, none lost; 621 models / 64 vendors); Gatekeeper (Notarized Developer ID) accepted DMG and mounted app; mounted-app launch passed; local/server/public SHA-256 matched. Artifact SHA-256: 6170206440c3c8cf765136fe62188ed659e921e60236b58d8649642a01913d6b. Apple notarization: 1d52c383-e5b5-46c5-b73a-5eb3cb966644. The live manifest reports macOS 1.0.79.",
+  "event_type": "created",
+  "external_ref": "desktop:e568a752b",
+  "item": "w-20261128-6ebc",
+  "occurred_at": "2026-11-28",
+  "summary": "macOS 1.0.79 published"
+}
