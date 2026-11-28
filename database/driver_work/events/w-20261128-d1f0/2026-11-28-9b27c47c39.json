@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 09:52:08",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:dfac2dd88",
+  "item": "w-20261128-d1f0",
+  "occurred_at": "2026-11-28",
+  "summary": "Blockers cleared: DM-32UV link layer independent of upstream xfer signature; FTM-150E and FTX-1 IDs resolve to NewChirp drivers (precedence test); review shows 87/87 Python, 12/12 Dart passing on f28d9202"
+}
