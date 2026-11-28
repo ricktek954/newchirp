@@ -8,6 +8,7 @@
 """DM-32UV override with bounded retries for the password-state query."""
 
 import logging
+import struct
 import time
 
 from chirp import chirp_common, directory, errors
@@ -38,10 +39,16 @@ def _link_init_with_fixed_timeout(self, pipe):
     # FTDI adapters on Windows can misbehave when timeout is changed before
     # every read. Use one short platform-supported timeout and enforce the
     # command deadline in recv() instead.
-    self.pipe.timeout = 0.05
+    self.pipe.timeout = READ_TIMEOUT
 
 
-def _recv_with_deadline(self, length, timeout=0.5):
+READ_TIMEOUT = 0.05
+TRANSFER_TIMEOUT = 5.0
+
+
+def _recv_with_deadline(self, length, timeout=None):
+    if timeout is None:
+        timeout = TRANSFER_TIMEOUT
     deadline = time.monotonic() + timeout
     response = bytearray()
     while len(response) < length:
@@ -54,13 +61,34 @@ def _recv_with_deadline(self, length, timeout=0.5):
     return bytes(response)
 
 
+def _plain_xfer(self, data, length, timeout=0.5):
+    self.send(data)
+    response = self.recv(length, timeout)
+    if len(response) != length:
+        raise errors.RadioError("No reply from radio to %r" % data[:7])
+    return response
+
+
+def _plain_read_block(self, addr, length, timeout=TRANSFER_TIMEOUT):
+    command = (b"R" + struct.pack("<I", addr)[:3]
+               + struct.pack("<H", length))
+    self.send(command)
+    response = self.recv(6 + length, timeout)
+    expected = b"W" + command[1:6]
+    if len(response) != 6 + length or response[:6] != expected:
+        raise baofeng_dm32uv._bad_reply(
+            "Bad reply reading flash at %06x" % addr,
+            response[:6], expected)
+    return response[6:]
+
+
 def _xfer_with_passsta_retry(self, data, length, timeout=0.5):
     if data == b"SYSINFO" and length == 1:
         last_reply = b""
         last_error = None
         for attempt in range(3):
             try:
-                response = _original_xfer(self, data, length, timeout)
+                response = _plain_xfer(self, data, length, timeout)
             except errors.RadioError as exc:
                 last_error = exc
             else:
@@ -82,13 +110,13 @@ def _xfer_with_passsta_retry(self, data, length, timeout=0.5):
         )
 
     if data != b"PASSSTA" or length != 3:
-        return _original_xfer(self, data, length, timeout)
+        return _plain_xfer(self, data, length, timeout)
 
     last_reply = b""
     last_error = None
     for attempt in range(3):
         try:
-            response = _original_xfer(self, data, length, timeout)
+            response = _plain_xfer(self, data, length, timeout)
         except errors.RadioError as exc:
             last_error = exc
         else:
@@ -158,10 +186,10 @@ _original_read_block = getattr(
 )
 
 
-def _read_block_with_retry(self, addr, length, timeout=5.0):
+def _read_block_with_retry(self, addr, length, timeout=TRANSFER_TIMEOUT):
     for attempt in range(3):
         try:
-            return _original_read_block(self, addr, length, timeout)
+            return _plain_read_block(self, addr, length, timeout)
         except errors.RadioError as exc:
             if attempt == 2:
                 raise
@@ -185,6 +213,8 @@ if not getattr(
     False,
 ):
     baofeng_dm32uv._Link.read_block = _read_block_with_retry
+if hasattr(baofeng_dm32uv, "LINK_TIMEOUT"):
+    baofeng_dm32uv.LINK_TIMEOUT = READ_TIMEOUT
 if not getattr(baofeng_dm32uv._Link.__init__, "newchirp_fixed_timeout", False):
     baofeng_dm32uv._Link.__init__ = _link_init_with_fixed_timeout
 if not getattr(baofeng_dm32uv._Link.recv, "newchirp_deadline_read", False):

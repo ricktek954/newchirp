@@ -548,12 +548,17 @@ Last updated: 2026-11-20
 - Evidence: Yaesu FTX-1 CAT reference and public `cat-ftx1` commit
   `e77b599dbb27eff5b4bd49c01a689989cfcc9495`
 - Driver SHA-256:
-  `273e6a444854e8fcc6cb6a07d0faed021aa2a0957421d98eddbaa8101666a176`
+  `8fbbb8ab75fff780f5aec34e61fbba07fc8eca737ea3358c0c30bfe6ec3985d5`
 - Hardware validation: none
 - 1.0.48 field correction: active-channel selection now reads with `MC0;`
   and sends `MC0nnnnn;` without waiting for a nonexistent response.
 - Next milestone: physical empty-memory behavior, one controlled memory write,
   read-back, tone comparison, and repeater-shift verification
+- Precedence (2026-11-28): upstream CHIRP after the pin adds a clone-mode
+  `Yaesu_FTX-1` driver with the same ID. NewChirp's live CAT driver keeps
+  the ID and replaces it on any pin (`test/newchirp_precedence_test.py`).
+  Upstream FTX-1 image files cannot be opened by the CAT driver; opening
+  one now explains that instead of failing with a NoneType error.
 
 ### Yaesu FT-991A
 
@@ -788,6 +793,11 @@ Last updated: 2026-11-20
   upload, then restore from a microSD ALL backup
 - Current gap: no repository record yet confirms hardware validation of this
   NewChirp-maintained layout
+- Precedence (2026-11-28): upstream CHIRP after the pin adds its own
+  `Yaesu_FTM-150E` driver. NewChirp's driver is also registered as
+  FTM-150E (same AH086 radio), so ours replaces upstream's on any pin
+  (`test/newchirp_precedence_test.py`). Web Programmer profile
+  `yaesu-ftm-150e` added with the same read/write policy.
 
 ### Yaesu FT-1D/2D/3D/5D clone-read timing
 
@@ -1663,7 +1673,7 @@ Last updated: 2026-11-20
   A second report from [redacted-email] reached a slow, retried PSEARCH
   sequence and received a non-ACK SYSINFO reply.
 - Driver SHA-256:
-  `40b73c7b64123f32e683d6409952f0cfa3c9b759ee2d423fcb7d8f0231541108`
+  `fc20250e8b8b8a890e87f94e504fcfbabc3f6595cf0b277b8ccf0bbc2e20f204`
 - Hardware validation: the upstream driver completed read and write tests on
   firmware DM32.01.01.047. This NewChirp timing and retry override has
   synthetic serial coverage but no physical revalidation. The NewChirp
@@ -1681,6 +1691,14 @@ Last updated: 2026-11-20
   with "Bad reply reading flash at 020000". Block reads are idempotent, so
   `_Link.read_block` now retries up to 3 times (0.3 s apart) before
   failing. Writes are not retried.
+- Upstream compatibility (2026-11-28, ledger `w-20261128-d1f0`): upstream
+  CHIRP after the pin drops the timeout arguments from `_Link.xfer`,
+  `recv` and `read_block` and sets one port timeout per transfer
+  (`LINK_TIMEOUT`). NewChirp's link layer no longer calls upstream's
+  `xfer`/`read_block`: it sends and checks replies itself, keeps its 0.05 s
+  port timeout (and sets `LINK_TIMEOUT` to it when present), and gives
+  calls without a timeout a 5 s deadline. Tests pass on the pinned and the
+  reviewed upstream CHIRP.
 
 ### Baofeng BF-V12D
 

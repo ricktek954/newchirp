@@ -80,3 +80,14 @@ class FTM150Radio(ftm300d.FTM300Radio,
     def set_settings(self, settings):
         return None
 
+
+
+@directory.register
+class FTM150ERadio(FTM150Radio):
+    """Yaesu FTM-150E: the same AH086 radio as the FTM-150R.
+
+    Registered under upstream CHIRP's Yaesu_FTM-150E driver ID so that
+    NewChirp's driver is used for it on every CHIRP pin.
+    """
+
+    MODEL = "FTM-150E"

@@ -9,7 +9,7 @@ tags:
   - "module:upstream_review.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T08:54:17Z"
+timestamp: "2026-11-28T09:47:28Z"
 concept_id: upstream_review/write_report
 language: python
 ---
@@ -31,7 +31,7 @@ def write_report(report, path)
 | `path` | `—` | `—` |
 
 ## Source
-Lines 278–446 in `upstream_review.py`
+Lines 286–458 in `upstream_review.py`
 
 ## Relationships
 

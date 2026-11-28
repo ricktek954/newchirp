@@ -9,7 +9,7 @@ tags:
   - "module:upstream_review.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T08:54:17Z"
+timestamp: "2026-11-28T09:47:28Z"
 concept_id: upstream_review/maintained_collisions
 language: python
 ---
@@ -29,7 +29,7 @@ def maintained_collisions(models_added)
 | `models_added` | `—` | `—` |
 
 ## Source
-Lines 269–275 in `upstream_review.py`
+Lines 269–283 in `upstream_review.py`
 
 ## Relationships
 

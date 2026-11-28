@@ -92,7 +92,7 @@ class DM32UVDriverTest(unittest.TestCase):
         stock = sys.modules[self.radio_class.__mro__[1].__module__]
         driver = self.driver
         messages = []
-        radio = self.radio_class(None)
+        radio = self.radio_class(mock.Mock(timeout=None))
         radio.status_fn = lambda status: messages.append(status.msg)
 
         def fake_upload(radio_):
@@ -198,6 +198,17 @@ class DM32UVDriverTest(unittest.TestCase):
 
         self.assertEqual(reply, b"P\x00\x00")
         self.assertEqual(serial.writes, [b"PASSSTA", b"PASSSTA"])
+
+    def test_link_keeps_newchirp_timeouts_on_any_chirp(self):
+        stock = self.driver.baofeng_dm32uv
+        if hasattr(stock, "LINK_TIMEOUT"):
+            self.assertEqual(stock.LINK_TIMEOUT, self.driver.READ_TIMEOUT)
+        serial = _SequenceSerial([b"\x06"])
+        link = stock._Link(serial)
+        self.assertEqual(link.recv(1), b"\x06")
+        self.assertEqual(serial.timeout, self.driver.READ_TIMEOUT)
+        self.assertEqual(
+            self.driver._recv_with_deadline.__defaults__, (None,))
 
     def test_flash_read_retries_a_damaged_block(self):
         command = b"R\x00\x00\x02\x08\x00"

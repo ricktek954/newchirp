@@ -151,6 +151,12 @@ class YaesuFTX1Radio(
         )
 
     def __init__(self, pipe):
+        if pipe is None:
+            raise errors.RadioError(
+                "NewChirp programs the FTX-1 live over its CAT port, so it "
+                "cannot open saved FTX-1 image files. Connect the radio and "
+                "read it instead."
+            )
         super().__init__(pipe)
         if self._detected_baud:
             pipe.baudrate = self._detected_baud

@@ -77,7 +77,7 @@ class StaticZoneTest(unittest.TestCase):
         checked = 0
         for ident, cls in sorted(self.directory.DRV_TO_RADIO.items()):
             image = SOURCE / "tests/images" / (ident + ".img")
-            if not image.exists():
+            if not image.exists() or issubclass(cls, chirp_common.LiveRadio):
                 continue
             radio = cls(None)
             radio.load_mmap(str(image))

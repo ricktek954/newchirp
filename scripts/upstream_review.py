@@ -270,8 +270,16 @@ def maintained_collisions(models_added):
     ours = newchirp_models()
     hits = []
     for vendor, model in models_added:
-        for our_model, path in sorted(ours.get(_family(model), ())):
-            hits.append((vendor, model, our_model, path))
+        matches = sorted(ours.get(_family(model), ()))
+        if not matches:
+            continue
+        plain = model.replace(" *", "")
+        exact = [item for item in matches if item[0] == plain]
+        if exact:
+            hits.append((vendor, model, exact[0][0], exact[0][1], True))
+        else:
+            for our_model, path in matches:
+                hits.append((vendor, model, our_model, path, False))
     return hits
 
 
@@ -332,12 +340,16 @@ def write_report(report, path):
     add("## New upstream radios NewChirp already maintains")
     add("")
     if report["collisions"]:
-        add("Upstream added a driver for a radio NewChirp maintains. Decide "
-            "which driver wins and check the registration order.")
+        add("A working NewChirp driver always takes precedence. Where "
+            "NewChirp registers the same driver ID, its driver replaces "
+            "upstream's (`test/newchirp_precedence_test.py` checks this). "
+            "Otherwise register NewChirp's driver under upstream's ID too.")
         add("")
-        for vendor, model, ours, where in report["collisions"]:
-            add("- Upstream %s %s vs NewChirp %s (`%s`)" % (
-                vendor, model, ours, where))
+        for vendor, model, ours, where, resolved in report["collisions"]:
+            add("- Upstream %s %s vs NewChirp %s (`%s`): %s" % (
+                vendor, model, ours, where,
+                "NewChirp's driver wins (same driver ID)" if resolved
+                else "**different ID; NewChirp must claim it**"))
     else:
         add("None.")
     add("")
@@ -521,16 +533,18 @@ def main():
     else:
         verdict.append("All tests that were run pass against the target.")
     collisions = maintained_collisions(models_added)
+    open_collisions = [item for item in collisions if not item[4]]
     if collisions:
-        verdict.append("%i new upstream radio(s) collide with NewChirp-"
-                       "maintained drivers." % len(collisions))
+        verdict.append("%i new upstream radio(s) overlap NewChirp-maintained "
+                       "drivers; %i still need NewChirp to claim them."
+                       % (len(collisions), len(open_collisions)))
     verdict.append("%i changed upstream driver(s) are used by NewChirp code "
                    "and need review; %i core module(s) changed."
                    % (len(overlaps), len(core)))
     verdict.append("%i radio model(s) would be added and %i removed."
                    % (len(models_added), len(models_removed)))
     if (not patch_warnings and python_tests is not None and not failed
-            and not collisions):
+            and not open_collisions):
         verdict.append("No blocker found automatically; adopt only after "
                        "reviewing the overlaps.")
     else:
