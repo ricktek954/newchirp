@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 11:32:53",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "desktop:87c931bf9",
+  "item": "90",
+  "occurred_at": "2026-11-28",
+  "summary": "Likely cause found: installed builds mixed NewChirp drivers into chirp/drivers, and released macOS 1.0.77 resolved Retevis_RA89 to upstream th_uv88 (TYT handshake), not newchirp_ra89 (RA89 CPS handshake). The report quotes the TYT handshake, so the owner was probably running the upstream driver."
+}
