@@ -131,7 +131,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-9a28 bug | closed | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
   Read completed; decode failed with 30000000.0 not valid for rtone. 0x3E08 is not BCD; stock formats it as '3e08' and parses scientific notation. CPS v1.60 offers CHIRP's 50 tones; OEM data from another radio stores BCD. Image not attached.
   Source: `email` INBOX:907
-- **#w-20261128-5455 bug | fix_committed | normal:** Write stops on one short 4 KiB flash read ("Bad reply reading flash at 020000")
+- **#w-20261128-5455 bug | released | normal:** Write stops on one short 4 KiB flash read ("Bad reply reading flash at 020000")
   macOS 1.0.77, firmware DM32.NRF.01.049, CH340-style /dev/cu.usbserial: two full reads succeeded, then during the write one 0x1000-byte flash read returned 4007 of 4102 bytes after 5 s and the stock driver stopped. Reads are idempotent; the block read is now retried up to 3 times.
   Source: `email` mailbox:UID 1087
 - **#24 maintenance | experimental | normal:** Current driver status
@@ -570,7 +570,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Desktop
 
-- **#w-20261128-2bb1 bug | fix_committed | normal:** CSV with every line wrapped in quotes rejected as having no Frequency column
+- **#w-20261128-2bb1 bug | released | normal:** CSV with every line wrapped in quotes rejected as having no Frequency column
   Windows 1.0.66: a GMRS-provided CHIRP.csv failed with "no Frequency column (columns found: Location,Name,Frequency,...)". The columns are listed without spaces, so the whole header was one quoted cell: the file has each line wrapped in quotes (a spreadsheet that kept each line in column A). Decode now re-splits one-field rows.
   Source: `email` mailbox:UID 1084
 - **#w-20261120-393e enhancement | fix_committed | normal:** Collapsible Channel Library summary cards
@@ -708,10 +708,13 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261127-a334 release | released | normal:** macOS 1.0.77 published
   Published a universal signed and notarized DMG from source commit 0e9a4242b. Since 1.0.76: TK-350 5 kHz channels decoded and written by their byte-13 step bits, CTCSS tone writes, and frequency edits no longer refused by the tone check; UV-5RM Pro handshake follows CPS v1.12 (19200 announce first, stray bytes before the ACK skipped); Quansheng TK11 upload opens its own session and checks every block; every lib/ function documented. Verification: analyzer clean; 257 Flutter tests; 701 Python tests passed (2 fixture skips); embedded version 1.0.77 / 77; arm64 and x86_64; 278 driver modules; bundled kpg23, 5rh_pro, tk11_upload and bridge match source; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: 1feead825b8d8a9e2fc5c3ec5181139babc2d17008007ed908a2718cad7d879c. Apple notarization: 8e4766d8-b1ba-48ba-b9db-81f3fdab5206. The live manifest reports macOS 1.0.77.
   Source: `release` desktop:0e9a4242b
+- **#w-20261128-5f92 release | released | normal:** macOS 1.0.78 published
+  Published a universal signed, notarized and stapled DMG from source commit 11391df2f. Since 1.0.77: CHIRP pin f28d9202 (99 upstream commits, new radios incl. BTECH UV-PRO, Kenwood TH-K20/TM-D750, Zastone ZT-D9000); NewChirp drivers keep precedence in packaged builds (FTX-1, FTM-150E, RA89 had resolved to upstream in the built app); UV-5RM Pro graduated; TK-359 6.25 kHz decode and name order; MD-UV380 DFU write aligned with dmrconfig/QDMR; DM-32UV short-read retry; quoted-line CSV import; IC-41S prompts; FTM-150E entry. Verification: analyzer clean; 258 Flutter tests; 87/87 Python test files; embedded 1.0.78 / 78; arm64 and x86_64 runtimes load 621 models / 64 vendors with no NewChirp ID lost; bundled drivers and bridge match source; Gatekeeper (Notarized Developer ID) accepted DMG and mounted app; mounted-app launch passed; local/server/public SHA-256 matched. Artifact SHA-256: fdc039f4223b1b1cfe664d16f24ea5ddcc02f38502ebf89a4310594e50482055. Apple notarization: 007ae547-cc4a-4b30-8f31-960b866f2ac1. The live manifest reports macOS 1.0.78.
+  Source: `release` desktop:11391df2f
 
 ### Upstream CHIRP
 
-- **#w-20261128-d1f0 maintenance | fix_committed | normal:** Adopt upstream CHIRP f28d9202 (99 commits past pin 21e42e45)
+- **#w-20261128-d1f0 maintenance | released | normal:** Adopt upstream CHIRP f28d9202 (99 commits past pin 21e42e45)
   First upstream review (docs/upstream_reviews/2026-11-28-f28d9202f.md): all NewChirp source patches apply; 84/86 Python and 12/12 Dart test files pass. Blockers: DM-32UV _Link.xfer signature changed upstream (our PASSSTA/SYSINFO retry wrapper breaks); upstream added its own Yaesu FTX-1 driver (ours collides; static_bank_zones test fails) and FTM-150E (next to our FTM-150R). 16 changed upstream drivers that our code extends need review; 14 radios would be added.
   Source: `review` docs/upstream_reviews/2026-11-28-f28d9202f.md
 
@@ -995,7 +998,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261126-8502 bug | hardware_tested | normal:** USB DFU identity reply of 32 bytes stops the read
   macOS 1.0.73: 'USB DFU transfer returned 32 of 64 bytes' on the 0xA2 identity upload. dmrconfig requests 64 and accepts any length; model name is in the first 32 bytes. Identity now accepts a short reply; memory reads stay strict.
   Source: `email` INBOX:986
-- **#w-20261128-e650 bug | fix_committed | high:** Write stops with libusb "Pipe error" (USB stall) before any erase
+- **#w-20261128-e650 bug | released | high:** Write stops with libusb "Pipe error" (USB stall) before any erase
   macOS 1.0.77: two writes (23 channels, then 1 channel) failed with "Pipe error" ~6 s after the write started (channel preparation), before the erase changed anything; the following read matched the earlier image except the edit. Transport diverged from dmrconfig/QDMR: download/upload-idle treated as ready instead of aborted to dfuIDLE, no programming-mode re-entry before erase, 2 s timeouts, and any status stall after an erase was fatal (QDMR ignores those errors).
   Source: `email` mailbox:UID 1083
 - **#36 maintenance | experimental | normal:** Current driver status

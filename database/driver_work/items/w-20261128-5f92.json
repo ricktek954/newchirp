@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-28 10:53:46",
+  "kind": "release",
+  "manufacturer": "NewChirp",
+  "model": "macOS desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "",
+  "source": "release",
+  "source_ref": "desktop:11391df2f",
+  "status": "released",
+  "summary": "Published a universal signed, notarized and stapled DMG from source commit 11391df2f. Since 1.0.77: CHIRP pin f28d9202 (99 upstream commits, new radios incl. BTECH UV-PRO, Kenwood TH-K20/TM-D750, Zastone ZT-D9000); NewChirp drivers keep precedence in packaged builds (FTX-1, FTM-150E, RA89 had resolved to upstream in the built app); UV-5RM Pro graduated; TK-359 6.25 kHz decode and name order; MD-UV380 DFU write aligned with dmrconfig/QDMR; DM-32UV short-read retry; quoted-line CSV import; IC-41S prompts; FTM-150E entry. Verification: analyzer clean; 258 Flutter tests; 87/87 Python test files; embedded 1.0.78 / 78; arm64 and x86_64 runtimes load 621 models / 64 vendors with no NewChirp ID lost; bundled drivers and bridge match source; Gatekeeper (Notarized Developer ID) accepted DMG and mounted app; mounted-app launch passed; local/server/public SHA-256 matched. Artifact SHA-256: fdc039f4223b1b1cfe664d16f24ea5ddcc02f38502ebf89a4310594e50482055. Apple notarization: 007ae547-cc4a-4b30-8f31-960b866f2ac1. The live manifest reports macOS 1.0.78.",
+  "title": "macOS 1.0.78 published",
+  "uid": "w-20261128-5f92"
+}

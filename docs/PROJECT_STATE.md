@@ -8,6 +8,29 @@ release requirements.
 
 ## Resume here
 
+- macOS `1.0.78` is live from source commit `11391df2f` as a universal,
+  signed, notarized and stapled DMG. Since 1.0.77: CHIRP pin `f28d9202`
+  (99 upstream commits; BTECH UV-PRO, Kenwood TH-K20 / TM-D750, Zastone
+  ZT-D9000 and more), NewChirp drivers keep precedence in packaged builds
+  (bridge `_prefer_newchirp_drivers`; the built app had given Yaesu FTX-1,
+  FTM-150E and Retevis RA89 to upstream because CHIRP imports drivers in
+  unsorted directory order), UV-5RM Pro graduated, TK-359 6.25 kHz decode
+  and name order, MD-UV380 DFU write aligned with dmrconfig/QDMR, DM-32UV
+  short-read retry, quoted-line CSV import, IC-41S cable-before-power
+  prompts, FTM-150E entry. Verification: analyzer clean; 258 Flutter tests;
+  all 87 Python test files; embedded `1.0.78` / `78`; arm64 and x86_64
+  (Rosetta) bundled runtimes load 621 models / 64 vendors with no NewChirp
+  ID lost to upstream; bundled drivers and bridge match source; Gatekeeper
+  accepted DMG and mounted app; launch from the mounted image; local, server
+  and public SHA-256
+  `fdc039f4223b1b1cfe664d16f24ea5ddcc02f38502ebf89a4310594e50482055`.
+  Notarization: `007ae547-cc4a-4b30-8f31-960b866f2ac1`.
+- Linux and Windows owners: `11391df2f` fixes driver precedence in packaged
+  layouts. Linux `1.0.80` (`35d6776a`) predates it, so its packages may give
+  Yaesu_FTX-1, Yaesu_FTM-150E and Retevis_RA89 to upstream CHIRP drivers.
+  Check with `test/newchirp_precedence_test.py` (packaged-layout case) and
+  ship the fix in the next build.
+
 - Linux `1.0.80` is live from source commit `35d6776a`. It adopts upstream
   CHIRP `f28d9202` with 99 upstream commits and adds the upstream-review and
   pinned-catalog export tooling while preserving NewChirp driver precedence.
@@ -50,7 +73,7 @@ release requirements.
 
 ### macOS session handoff, 2026-11-27 (before a reboot)
 
-Released: macOS `1.0.77` (2026-11-27), Windows `1.0.76`, Linux `1.0.79`. The website matches
+Released: macOS `1.0.78` (2026-11-28), Windows `1.0.76`, Linux `1.0.80`. The website matches
 `022980f`; the bundle `index-UeTE45j-.js` went live at
 `03:39`. Desktop and web are committed and pushed. All support mail has been
 answered except one forum notification (UID 1048).

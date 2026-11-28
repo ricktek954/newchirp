@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 10:53:46",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:11391df2f",
+  "item": "w-20261128-2bb1",
+  "occurred_at": "2026-11-28",
+  "summary": "Shipped in macOS 1.0.78"
+}
