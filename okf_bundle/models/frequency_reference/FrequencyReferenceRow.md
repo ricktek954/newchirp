@@ -8,7 +8,7 @@ tags:
   - "type:Class"
   - "module:models"
   - "domain:frequency_reference.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/frequency_reference/FrequencyReferenceRow

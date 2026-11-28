@@ -1,6 +1,6 @@
 ---
 description: Chronological history of bundle generation
-timestamp: '2026-11-28T10:36:31Z'
+timestamp: '2026-11-28T10:36:22Z'
 title: Change Log
 type: Log
 ---
@@ -752,5 +752,4 @@ type: Log
 - 2026-11-27T09:36:15Z — Incremental update: 339 new/changed, 1170 total concepts
 - 2026-11-28T07:37:34Z — Incremental update: 23 new/changed, 1170 total concepts
 - 2026-11-28T07:37:47Z — Incremental update: 23 new/changed, 1170 total concepts
-- 2026-11-28T10:36:29Z — Incremental update: 339 new/changed, 1170 total concepts
-- 2026-11-28T10:36:31Z — Incremental update: 339 new/changed, 1170 total concepts
+- 2026-11-28T10:36:22Z — Incremental update: 339 new/changed, 1170 total concepts

@@ -1111,6 +1111,23 @@ def _allow_driver_specific_modes():
         chirp_common.Memory._valid_map["mode"] = valid + extra
 
 
+def _is_newchirp_driver(radio_class):
+    module = getattr(radio_class, "__module__", "") or ""
+    return (
+        module.startswith("chirp.drivers.newchirp_")
+        or module.startswith("newchirp.drivers.")
+    )
+
+
+def _prefer_newchirp_drivers(directory):
+    for radio_class, ident in list(directory.RADIO_TO_DRV.items()):
+        if not _is_newchirp_driver(radio_class):
+            continue
+        current = directory.DRV_TO_RADIO.get(ident)
+        if current is None or not _is_newchirp_driver(current):
+            directory.DRV_TO_RADIO[ident] = radio_class
+
+
 def load_chirp(
     source, vendor, newchirp_driver_dir=None, module_path=None
 ):
@@ -1139,6 +1156,7 @@ def load_chirp(
     try:
         directory.enable_reregistrations()
         directory.import_drivers()
+        _prefer_newchirp_drivers(directory)
         _allow_driver_specific_modes()
     finally:
         directory.LOG.setLevel(old_log_level)

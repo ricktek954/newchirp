@@ -9,7 +9,7 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:mygmrs_client.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T09:01:42Z"
 concept_id: services/mygmrs_client/ctcssTone

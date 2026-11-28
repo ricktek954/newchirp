@@ -8,7 +8,7 @@ tags:
   - "type:Function"
   - "module:widgets"
   - "domain:marine_template_dialog.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T09:00:11Z"
 concept_id: widgets/marine_template_dialog/build

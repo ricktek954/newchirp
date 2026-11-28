@@ -8,7 +8,7 @@ tags:
   - "type:Class"
   - "module:widgets"
   - "domain:error_report_dialog.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T08:59:31Z"
 concept_id: widgets/error_report_dialog/ErrorReportDialogState

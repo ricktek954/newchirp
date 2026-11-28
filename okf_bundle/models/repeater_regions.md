@@ -8,7 +8,7 @@ tags:
   - "type:Module"
   - "module:models"
   - "domain:repeater_regions.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/repeater_regions

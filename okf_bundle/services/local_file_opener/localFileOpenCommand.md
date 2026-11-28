@@ -8,7 +8,7 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:local_file_opener.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T08:58:48Z"
 concept_id: services/local_file_opener/localFileOpenCommand

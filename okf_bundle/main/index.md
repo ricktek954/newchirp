@@ -228,6 +228,7 @@
 - [createState](createState.md)
 - [didUpdateWidget](didUpdateWidget.md)
 - [dispose](dispose.md)
+- [f5c68ee23](f5c68ee23.md)
 - [fitAllPoints](fitAllPoints.md) — Zooms the map to show every result, after the frame is drawn.
 - [inactive](inactive.md)
 - [initState](initState.md)

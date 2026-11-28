@@ -8,9 +8,9 @@ tags:
   - "type:Module"
   - "module:l10n"
   - "domain:app_localizations.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T13:56:23Z"
+timestamp: "2026-11-28T10:40:53Z"
 concept_id: l10n/app_localizations
 language: dart
 ---

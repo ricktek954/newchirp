@@ -1,43 +1,45 @@
 ---
 okf_version: "0.2"
-type: Enum
-title: ChannelImageMatch
+type: Function
+title: channelImageMatch
+description: "How the on-screen channel list relates to the stored radio image: no image,"
 resource: models/channel_image_baseline.dart
 tags:
   - "lang:dart"
-  - "type:Enum"
+  - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T09:00:11Z"
-concept_id: models/channel_image_baseline/ChannelImageMatch
+concept_id: models/channel_image_baseline/channelImageMatch
 language: dart
 ---
 
-# ChannelImageMatch
+# channelImageMatch
+
+How the on-screen channel list relates to the stored radio image: no image,
 
 ## Signature
 
 ```dart
-enum ChannelImageMatch
+ChannelImageMatchchannelImageMatch({
+  required String? imagePath,
+  required int? zone,
+  required List<RadioChannel> channels,
+  required Iterable<int> cleared,
+  String mappingSignature = '',
+  required ChannelImageBaseline? baseline,
+})
 ```
 
-## Methods
+## Docstring
 
-- `noImage`
-- `noImage`
-- `notLoaded`
-- `notLoaded`
-- `matchesRadio`
-- `matchesRadio`
-- `matchesImage`
-- `matchesImage`
-- `differs`
-- `differs`
+How the on-screen channel list relates to the stored radio image: no image,
+not loaded this session, identical to it, or edited since.
 
 ## Source
-Lines 26–32 in `models/channel_image_baseline.dart`
+Lines 99–106 in `models/channel_image_baseline.dart`
 
 ## Relationships
 

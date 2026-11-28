@@ -9,9 +9,9 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:gm32_channel.dart"
-  - "git:branch:codex/handle-open-prs"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
-timestamp: "2026-10-26T12:18:51Z"
+timestamp: "2026-10-26T12:22:15Z"
 concept_id: models/gm32_channel/gm32MhzLabel
 language: dart
 ---

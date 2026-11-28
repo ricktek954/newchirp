@@ -8,7 +8,7 @@ tags:
   - "type:Module"
   - "module:models"
   - "domain:repeater_counties.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-23T19:20:02Z"
 concept_id: models/repeater_counties

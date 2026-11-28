@@ -8,7 +8,7 @@ tags:
   - "type:Class"
   - "module:widgets"
   - "domain:radio_mapping_dialog.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T09:00:50Z"
 concept_id: widgets/radio_mapping_dialog/RadioMappingDialogState

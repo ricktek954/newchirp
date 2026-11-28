@@ -9,7 +9,7 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:radio_channel.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T09:01:42Z"
 concept_id: models/radio_channel/shouldShowTransmitPower

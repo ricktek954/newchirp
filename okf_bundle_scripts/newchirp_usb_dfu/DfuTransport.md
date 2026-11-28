@@ -23,26 +23,6 @@ ST DfuSe control-transfer transport for the MD-UV380 family.
 
 ST DfuSe control-transfer transport for the MD-UV380 family.
 
-## Methods
-
-- `__init__`
-- `libusb_exit`
-- `_transfer`
-- `_status`
-- `_wait_idle`
-- `_download`
-- `_upload`
-- `command`
-- `program_mode`
-- `identity`
-- `set_address`
-- `erase`
-- `_erase_page`
-- `read`
-- `write`
-- `reboot`
-- `close`
-
 ## Source
 Lines 235–500 in `newchirp_usb_dfu.py`
 
@@ -68,3 +48,4 @@ Lines 235–500 in `newchirp_usb_dfu.py`
 | related | [write](/newchirp_usb_dfu/write.md) |
 | related | [reboot](/newchirp_usb_dfu/reboot.md) |
 | related | [close](/newchirp_usb_dfu/close.md) |
+| called_by | [radio_for](/chirp_bridge/radio_for.md) |

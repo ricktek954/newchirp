@@ -17,12 +17,14 @@
 - [_binary_label](binary_label.md)
 - [_command_summary](command_summary.md)
 - [_finish_pending](finish_pending.md)
+- [_is_newchirp_driver](is_newchirp_driver.md)
 - [_load_module](load_module.md)
 - [_mapping_entries_by_index](mapping_entries_by_index.md)
 - [_mapping_index_key](mapping_index_key.md)
 - [_mapping_models_by_index](mapping_models_by_index.md)
 - [_note_serial_activity](note_serial_activity.md) — Bytes moved (or progress was made); record what happens next.
 - [_note_serial_state](note_serial_state.md) — Record what the bridge is doing without counting it as activity.
+- [_prefer_newchirp_drivers](prefer_newchirp_drivers.md)
 - [apply_json](apply_json.md)
 - [apply_mapping_payload](apply_mapping_payload.md) — Apply bank/zone names and memberships to an already loaded image.
 - [apply_setting_changes](apply_setting_changes.md)

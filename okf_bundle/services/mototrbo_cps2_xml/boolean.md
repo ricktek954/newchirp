@@ -8,7 +8,7 @@ tags:
   - "type:Function"
   - "module:services"
   - "domain:mototrbo_cps2_xml.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T09:05:28Z"
 concept_id: services/mototrbo_cps2_xml/boolean

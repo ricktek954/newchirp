@@ -9,7 +9,7 @@ tags:
   - "type:Function"
   - "module:models"
   - "domain:channel_image_baseline.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T09:00:11Z"
 concept_id: models/channel_image_baseline/channelLibraryWriteReady

@@ -9,7 +9,7 @@ tags:
   - "type:Enum"
   - "module:models"
   - "domain:marine_channels.dart"
-  - "git:branch:main"
+  - "git:branch:HEAD"
   - "git:repo:newchirp"
 timestamp: "2026-11-27T08:59:31Z"
 concept_id: models/marine_channels/MarineChannelPlan
