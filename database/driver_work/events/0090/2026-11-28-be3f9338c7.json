@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 11:46:27",
+  "details": "",
+  "event_type": "release",
+  "external_ref": "desktop:c2a12382",
+  "item": "90",
+  "occurred_at": "2026-11-28",
+  "summary": "Linux 1.0.81 ships the structural driver precedence fix; newchirp_ra89 now wins over upstream th_uv88 in packaged builds"
+}

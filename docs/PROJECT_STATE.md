@@ -8,6 +8,20 @@ release requirements.
 
 ## Resume here
 
+- Linux `1.0.81` is live from source commit `c2a12382`. It is the first
+  Linux build with the structural driver layout: NewChirp drivers live in
+  `newchirp_drivers/` beside CHIRP and load afterward, so all 75 NewChirp
+  driver IDs take precedence. The Linux release scripts now enforce the
+  driver-bundle gate. Verification: analyzer clean; all 259 Flutter tests
+  with the bundled Python 3.13 runtime; 726 bundled Python tests with two
+  fixture-dependent skips; Ubuntu 20.04 ABI maximum GLIBC `2.18`; the
+  bundle-driver gate loaded 621 models across 64 vendors with zero problems
+  and preserved every NewChirp ID; DEB, RPM, and Pacman metadata plus
+  embedded version `1.0.81`; DEB and AppImage Xvfb smoke tests; AppImage
+  host launches under Wayland and X11; package payloads use the dedicated
+  driver folder, contain no `newchirp_*.py` files under `chirp/drivers`, and
+  omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and
+  the Linux platform manifest reports `1.0.81`.
 - macOS `1.0.79` is live from source commit `e568a752b` as a universal,
   signed, notarized and stapled DMG. It ships the separated driver layout:
   `chirp/drivers` holds no NewChirp files and all 80 NewChirp drivers load
@@ -19,7 +33,6 @@ release requirements.
   image; local, server and public SHA-256
   `6170206440c3c8cf765136fe62188ed659e921e60236b58d8649642a01913d6b`.
   Notarization: `1d52c383-e5b5-46c5-b73a-5eb3cb966644`.
-
 - macOS `1.0.78` is live from source commit `11391df2f` as a universal,
   signed, notarized and stapled DMG. Since 1.0.77: CHIRP pin `f28d9202`
   (99 upstream commits; BTECH UV-PRO, Kenwood TH-K20 / TM-D750, Zastone
@@ -45,9 +58,9 @@ release requirements.
   and Linux release scripts; run it by hand on macOS for both runtimes).
   Released builds: macOS `1.0.77` used upstream's RA89 driver; macOS
   `1.0.78` has the bridge backstop (all IDs correct) but the old mixed
-  layout; Linux `1.0.80` and Windows `1.0.76` predate both fixes. Linux and
-  Windows owners: ship the next build from this commit or later and let the
-  gate pass.
+  layout; Linux `1.0.80` and Windows `1.0.76` predate both fixes. Linux
+  `1.0.81` ships the structural layout and passed the gate; Windows owner:
+  ship the next build from this commit or later and let the gate pass.
 
 - Linux `1.0.80` is live from source commit `35d6776a`. It adopts upstream
   CHIRP `f28d9202` with 99 upstream commits and adds the upstream-review and
@@ -1704,6 +1717,7 @@ Session tools:
 - macOS `1.0.59` artifact source commit: `170c63f3`
 - macOS `1.0.58` artifact source commit: `0ccff82c`
 - macOS `1.0.57` artifact source commit: `1d94b15f`
+- Linux `1.0.81` artifact source commit: `c2a12382`
 - Linux `1.0.80` artifact source commit: `35d6776a`
 - Linux `1.0.79` artifact source commit: `d1665f13`
 - Linux `1.0.78` artifact source commit: `3d16733f`
@@ -1718,7 +1732,7 @@ Session tools:
 - Linux `1.0.69` artifact source commit: `5dd9aa67`
 - Linux `1.0.68` artifact source commit: `360773be`
 - Open pull requests: none
-- Checked-out source version: `1.0.80+80`
+- Checked-out source version: `1.0.79+79` (macOS `1.0.79`; Linux artifact is `1.0.81`)
 - macOS builds are pinned to CocoaPods with
   `flutter.config.enable-swift-package-manager: false`.
 - Intended untracked file: `tshirt - i chirp often.png`
@@ -1732,9 +1746,31 @@ Latest public artifacts reported by
 
 | Platform | Version |
 |---|---:|
-| macOS | 1.0.77 |
+| macOS | 1.0.79 |
 | Windows | 1.0.76 |
-| Linux | 1.0.80 |
+| Linux | 1.0.81 |
+
+Linux `1.0.81` artifacts:
+
+- DEB URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.81.deb`
+- RPM URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.81.rpm`
+- AppImage URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.81.AppImage`
+- Pacman URL:
+  `https://newchirp.net/downloads/NewChirp-linux-x64-1.0.81.pkg.tar.zst`
+- DEB: `49,109,332` bytes, SHA-256
+  `bb1f8418f44788925b849a337b28a4858a06e3842158dedfe1b4447cb2be62f8`
+- RPM: `49,191,380` bytes, SHA-256
+  `588deec35d4aec9c0492bceb0c919efeb29bdc581a25ce64abef45d5869cedfa`
+- AppImage: `49,394,880` bytes, SHA-256
+  `c92a8c92ed1aa227f2cf1c3b05603c9d9fc4c9e9bbee833bdbfaf6984c06ae23`
+- Pacman: `48,022,362` bytes, SHA-256
+  `67b02634b02030d07fb0860a253b6e2418e097e736c94f7862a708d077a16e6a`
+- Public HTTP checks returned `200 OK`
+- Server checksums, sizes, and permissions matched the local artifacts
+- Linux platform manifest reports `1.0.81`
 
 Linux `1.0.80` artifacts:
 

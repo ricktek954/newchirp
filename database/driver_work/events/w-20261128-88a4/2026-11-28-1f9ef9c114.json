@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 11:46:23",
+  "details": "Published DEB, RPM, AppImage, and Pacman packages from source commit c2a12382. The release keeps NewChirp drivers in a dedicated newchirp_drivers folder beside CHIRP and loads them after upstream drivers, so all 75 NewChirp driver IDs take precedence in packaged builds; it adds the driver-bundle verification gate to Linux packaging and carries the upstream CHIRP f28d9202 changes. Verification: flutter analyze passed; all 259 Flutter tests passed with the bundled Python 3.13 runtime; 726 bundled Python tests passed with two fixture-dependent skips; the Ubuntu 20.04 ABI check passed with maximum GLIBC 2.18; the bundle-driver gate loaded 621 models across 64 vendors with zero problems and preserved all 75 NewChirp IDs; DEB, RPM, and Pacman metadata and embedded version 1.0.81 were verified; DEB and AppImage Xvfb smoke tests passed; the AppImage launched under host Wayland and X11; package payloads contain the dedicated driver folder, have no newchirp driver mixed into chirp/drivers, and omit GLVND/EGL/GLES loaders; all public downloads returned HTTP 200; and the Linux platform manifest reports 1.0.81. Package SHA-256 values: bb1f8418f44788925b849a337b28a4858a06e3842158dedfe1b4447cb2be62f8, 588deec35d4aec9c0492bceb0c919efeb29bdc581a25ce64abef45d5869cedfa, c92a8c92ed1aa227f2cf1c3b05603c9d9fc4c9e9bbee833bdbfaf6984c06ae23, and 67b02634b02030d07fb0860a253b6e2418e097e736c94f7862a708d077a16e6a.",
+  "event_type": "created",
+  "external_ref": "desktop:c2a12382",
+  "item": "w-20261128-88a4",
+  "occurred_at": "2026-11-28",
+  "summary": "Linux 1.0.81 published"
+}
