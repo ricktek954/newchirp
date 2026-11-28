@@ -10,7 +10,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-27T09:00:50Z"
+timestamp: "2026-11-28T07:37:45Z"
 concept_id: services/chirp_csv/parse
 language: dart
 ---
@@ -24,7 +24,7 @@ List_parse_parse
 ```
 
 ## Source
-Lines 202–202 in `services/chirp_csv.dart`
+Lines 218–218 in `services/chirp_csv.dart`
 
 ## Relationships
 

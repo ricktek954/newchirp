@@ -150,6 +150,26 @@ def _query_v_with_retry(self, cmd):
     )
 
 
+_current_read_block = baofeng_dm32uv._Link.read_block
+_original_read_block = getattr(
+    _current_read_block,
+    "newchirp_original",
+    _current_read_block,
+)
+
+
+def _read_block_with_retry(self, addr, length, timeout=5.0):
+    for attempt in range(3):
+        try:
+            return _original_read_block(self, addr, length, timeout)
+        except errors.RadioError as exc:
+            if attempt == 2:
+                raise
+            LOG.warning(
+                "DM-32UV flash read at %06x failed (%s); retrying", addr, exc)
+            time.sleep(0.3)
+
+
 _xfer_with_passsta_retry.newchirp_passsta_retry = True
 _xfer_with_passsta_retry.newchirp_original = _original_xfer
 _query_v_with_retry.newchirp_query_retry = True
@@ -157,6 +177,14 @@ _query_v_with_retry.newchirp_original = _original_query_v
 _link_init_with_fixed_timeout.newchirp_fixed_timeout = True
 _link_init_with_fixed_timeout.newchirp_original = _original_construct
 _recv_with_deadline.newchirp_deadline_read = True
+_read_block_with_retry.newchirp_read_retry = True
+_read_block_with_retry.newchirp_original = _original_read_block
+if not getattr(
+    baofeng_dm32uv._Link.read_block,
+    "newchirp_read_retry",
+    False,
+):
+    baofeng_dm32uv._Link.read_block = _read_block_with_retry
 if not getattr(baofeng_dm32uv._Link.__init__, "newchirp_fixed_timeout", False):
     baofeng_dm32uv._Link.__init__ = _link_init_with_fixed_timeout
 if not getattr(baofeng_dm32uv._Link.recv, "newchirp_deadline_read", False):

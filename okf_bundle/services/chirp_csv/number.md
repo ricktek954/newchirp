@@ -11,7 +11,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-27T09:00:50Z"
+timestamp: "2026-11-28T07:37:45Z"
 concept_id: services/chirp_csv/number
 language: dart
 ---
@@ -31,7 +31,7 @@ doublenumber(List<String> row, String name, double fallback)
 Cell as a number, or [fallback] if empty or not a number.
 
 ## Source
-Lines 143–143 in `services/chirp_csv.dart`
+Lines 156–156 in `services/chirp_csv.dart`
 
 ## Relationships
 

@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/init
 language: python
 ---
@@ -31,7 +31,7 @@ def __init__(self, port)
 | `port` | `—` | `—` |
 
 ## Source
-Lines 234–284 in `newchirp_usb_dfu.py`
+Lines 238–288 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

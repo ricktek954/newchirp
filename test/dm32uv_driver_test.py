@@ -199,6 +199,29 @@ class DM32UVDriverTest(unittest.TestCase):
         self.assertEqual(reply, b"P\x00\x00")
         self.assertEqual(serial.writes, [b"PASSSTA", b"PASSSTA"])
 
+    def test_flash_read_retries_a_damaged_block(self):
+        command = b"R\x00\x00\x02\x08\x00"
+        good = b"W" + command[1:] + bytes(range(8))
+        serial = _SequenceSerial([b"\xd7" + good[1:], good])
+        link = self.driver.baofeng_dm32uv._Link(serial)
+
+        with mock.patch.object(self.driver.time, "sleep"):
+            data = link.read_block(0x020000, 8, timeout=0.05)
+
+        self.assertEqual(data, bytes(range(8)))
+        self.assertEqual(serial.writes, [command, command])
+
+    def test_flash_read_gives_up_after_three_damaged_blocks(self):
+        command = b"R\x00\x00\x02\x08\x00"
+        bad = b"X" + command[1:] + bytes(8)
+        serial = _SequenceSerial([bad] * 3)
+        link = self.driver.baofeng_dm32uv._Link(serial)
+
+        with mock.patch.object(self.driver.time, "sleep"):
+            with self.assertRaisesRegex(Exception, "reading flash at 020000"):
+                link.read_block(0x020000, 8, timeout=0.05)
+        self.assertEqual(len(serial.writes), 3)
+
     def test_link_accumulates_fragmented_replies_without_changing_timeout(self):
         serial = _SequenceSerial([b"\x06", b"\x00", b"\x00"])
         link = self.driver.baofeng_dm32uv._Link(serial)

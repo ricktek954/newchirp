@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/error_text
 language: python
 ---
@@ -31,7 +31,7 @@ def _error_text(lib, code)
 | `code` | `—` | `—` |
 
 ## Source
-Lines 171–176 in `newchirp_usb_dfu.py`
+Lines 175–180 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

@@ -10,7 +10,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/list_devices
 language: python
 ---
@@ -30,7 +30,7 @@ def list_devices()
 Return DfuSe radio interfaces as bridge pseudo-port records.
 
 ## Source
-Lines 203–228 in `newchirp_usb_dfu.py`
+Lines 207–232 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

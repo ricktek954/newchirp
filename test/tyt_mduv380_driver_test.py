@@ -169,6 +169,110 @@ class DfuShortReplyTest(unittest.TestCase):
             transport.read(0x2000, 1024)
 
 
+class DfuStateLibusb:
+    def __init__(self, stall_status_after_erase=0, refuse_erase_at=None):
+        self.state = 2
+        self.stall_status_after_erase = stall_status_after_erase
+        self.refuse_erase_at = refuse_erase_at
+        self.erased = []
+        self.requests = []
+        self.busy_polls = 0
+
+    def libusb_control_transfer(self, _handle, request_type, request, value,
+                                _index, buffer, length, _timeout):
+        import ctypes
+        self.requests.append((request, self.state))
+        if request == 1:
+            payload = bytes(buffer[:length])
+            if self.state not in (2, 5):
+                return -9
+            if value == 0 and payload[:1] == b"\x41":
+                address = int.from_bytes(payload[1:5], "little")
+                if address == self.refuse_erase_at:
+                    return -9
+                self.erased.append(address)
+                self.busy_polls = 2
+            self.state = 3
+            return length
+        if request == 2:
+            self.state = 9
+            return length
+        if request == 3:
+            if self.busy_polls and self.stall_status_after_erase:
+                self.stall_status_after_erase -= 1
+                return -9
+            ctypes.memset(buffer, 0, 6)
+            if self.state == 3:
+                self.state = 4 if self.busy_polls else 5
+            buffer[4] = self.state
+            return 6
+        if request == 5:
+            if self.state == 4:
+                self.busy_polls -= 1
+                if self.busy_polls <= 0:
+                    self.busy_polls = 0
+                    self.state = 5
+            buffer[0] = self.state
+            return 1
+        if request == 6:
+            self.state = 2
+            return 0
+        if request == 4:
+            self.state = 2
+            return 0
+        return -1
+
+
+class DfuEraseTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        spec = importlib.util.spec_from_file_location(
+            "newchirp_usb_dfu_erase_test", ROOT / "scripts/newchirp_usb_dfu.py")
+        cls.dfu = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.dfu)
+
+    def _transport(self, lib):
+        transport = object.__new__(self.dfu.DfuTransport)
+        transport.lib = lib
+        transport.handle = None
+        return transport
+
+    def test_download_idle_is_aborted_back_to_dfu_idle(self):
+        lib = DfuStateLibusb()
+        transport = self._transport(lib)
+        with mock.patch.object(self.dfu.time, "sleep"):
+            transport.set_address(0)
+        self.assertEqual(lib.state, 2)
+        self.assertIn((6, 5), lib.requests)
+
+    def test_erase_recovers_from_a_stall_while_the_page_erases(self):
+        lib = DfuStateLibusb(stall_status_after_erase=1)
+        transport = self._transport(lib)
+        with mock.patch.object(self.dfu.time, "sleep"):
+            transport.erase(0x110000, 0x90000)
+        self.assertEqual(
+            lib.erased, [0x110000 + i * 0x10000 for i in range(9)])
+        self.assertEqual(lib.state, 2)
+
+    def test_refused_erase_stops_with_the_address(self):
+        lib = DfuStateLibusb(refuse_erase_at=0x120000)
+        transport = self._transport(lib)
+        with mock.patch.object(self.dfu.time, "sleep"):
+            with self.assertRaisesRegex(
+                    self.dfu.DfuError, "erase at 0x120000 failed"):
+                transport.erase(0x110000, 0x90000)
+        self.assertEqual(lib.erased, [0x110000])
+
+    def test_write_error_names_the_address(self):
+        lib = DfuStateLibusb()
+        transport = self._transport(lib)
+        lib.state = 9
+        with mock.patch.object(self.dfu.time, "sleep"):
+            with self.assertRaisesRegex(
+                    self.dfu.DfuError, "write at 0x002000 failed"):
+                transport.write(0x2000, bytes(1024))
+
+
 class TYTMDUV380Test(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

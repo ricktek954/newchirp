@@ -13,6 +13,7 @@
 - [_candidate_libraries](candidate_libraries.md)
 - [_devices](devices.md)
 - [_download](download.md)
+- [_erase_page](erase_page.md)
 - [_error_text](error_text.md)
 - [_load_library](load_library.md)
 - [_status](status.md)

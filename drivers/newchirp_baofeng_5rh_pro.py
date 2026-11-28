@@ -1093,6 +1093,12 @@ class BaofengUV5RMPro(Baofeng5RHPro):
     # at the wrong rate may leave its parser out of step. Follow the CPS.
     ANNOUNCE_BAUDS = (19200, 115200)
 
+    @classmethod
+    def get_prompts(cls):
+        rp = super().get_prompts()
+        rp.experimental = None
+        return rp
+
 
 @directory.register
 class BaofengUV5RMPlusV2(Baofeng5RHPro):

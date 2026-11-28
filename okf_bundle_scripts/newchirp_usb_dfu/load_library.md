@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/load_library
 language: python
 ---
@@ -23,7 +23,7 @@ def _load_library()
 ```
 
 ## Source
-Lines 104–114 in `newchirp_usb_dfu.py`
+Lines 108–118 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

@@ -11,7 +11,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-27T09:00:50Z"
+timestamp: "2026-11-28T07:37:45Z"
 concept_id: services/chirp_csv/integer
 language: dart
 ---
@@ -31,7 +31,7 @@ intinteger(List<String> row, String name, int fallback)
 Cell as an integer, or [fallback] if empty or not an integer.
 
 ## Source
-Lines 146–146 in `services/chirp_csv.dart`
+Lines 160–160 in `services/chirp_csv.dart`
 
 ## Relationships
 

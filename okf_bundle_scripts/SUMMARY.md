@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 217 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 218 concepts across 10 domains and 10 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-26T13:50:34Z'
+timestamp: '2026-11-28T07:42:56Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 217 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 218 concepts | 10 domains | 10 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 193 |
+| Function | 194 |
 | Class | 14 |
 | Module | 10 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 217 |
+| python | 218 |
 
 ## Domain Map
 
@@ -64,9 +64,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 
 - [newchirp_mass_storage](newchirp_mass_storage/index.md) (23 concepts) — Reusable raw SCSI transport and RAP framing for NewChirp radios.
 
-### [newchirp_usb_dfu.py](newchirp_usb_dfu.py/index.md) — 26 concepts
+### [newchirp_usb_dfu.py](newchirp_usb_dfu.py/index.md) — 27 concepts
 
-- [newchirp_usb_dfu](newchirp_usb_dfu/index.md) (26 concepts) — Minimal libusb DFU transport used by experimental STM32 radios.
+- [newchirp_usb_dfu](newchirp_usb_dfu/index.md) (27 concepts) — Minimal libusb DFU transport used by experimental STM32 radios.
 
 ## Key Concepts
 
@@ -75,25 +75,25 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | Concept | Type | Module | Description |
 |---------|------|--------|-------------|
 | [preserve_unloadable_settings](/chirp_bridge/preserve_unloadable_settings.md) | Function | `chirp_bridge.py` | Write back settings CHIRP could not load exactly as the radi… |
-| [reported_model_choice](/chirp_bridge/reported_model_choice.md) | Function | `chirp_bridge.py` | Return (vendor, model) when a driver's ID check names a sibl… |
-| [live_models_by_vendor](/chirp_bridge/live_models_by_vendor.md) | Function | `chirp_bridge.py` | Return selectable serial/transport radios, excluding file-on… |
 | [external_memory_owner](/chirp_bridge/external_memory_owner.md) | Function | `chirp_bridge.py` | Return the object that owns metadata for a radio or channel … |
+| [live_models_by_vendor](/chirp_bridge/live_models_by_vendor.md) | Function | `chirp_bridge.py` | Return selectable serial/transport radios, excluding file-on… |
+| [reported_model_choice](/chirp_bridge/reported_model_choice.md) | Function | `chirp_bridge.py` | Return (vendor, model) when a driver's ID check names a sibl… |
 | [set_memory_with_extras](/chirp_bridge/set_memory_with_extras.md) | Function | `chirp_bridge.py` | Write a channel and persist fields CHIRP stores outside radi… |
-| [memory_with_extras](/chirp_bridge/memory_with_extras.md) | Function | `chirp_bridge.py` | Load a channel plus CHIRP's metadata-backed fields such as c… |
 | [extra_field_doc](/chirp_bridge/extra_field_doc.md) | Function | `chirp_bridge.py` | Return CHIRP's documentation or a concise fallback for commo… |
+| [memory_with_extras](/chirp_bridge/memory_with_extras.md) | Function | `chirp_bridge.py` | Load a channel plus CHIRP's metadata-backed fields such as c… |
 | [prepare_upload_channels](/chirp_bridge/prepare_upload_channels.md) | Function | `chirp_bridge.py` | Validate and apply imported channels without touching invali… |
-| [emit_progress](/chirp_bridge/emit_progress.md) | Function | `chirp_bridge.py` | Send structured transfer progress without touching the JSON … |
 | [download_decode_error_message](/chirp_bridge/download_decode_error_message.md) | Function | `chirp_bridge.py` | Explain a post-download map failure without losing the saved… |
-| [uvk5_firmware_from_hello](/chirp_bridge/uvk5_firmware_from_hello.md) | Function | `chirp_bridge.py` | Decode the UV-K5 hello reply without trusting non-printable … |
-| [radio_firmware](/chirp_bridge/radio_firmware.md) | Function | `chirp_bridge.py` | Return the best available firmware identity from a radio or … |
-| [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
+| [emit_progress](/chirp_bridge/emit_progress.md) | Function | `chirp_bridge.py` | Send structured transfer progress without touching the JSON … |
+| [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
 | [_allow_driver_specific_modes](/chirp_bridge/allow_driver_specific_modes.md) | Function | `chirp_bridge.py` | Permit declared radio modes rejected by CHIRP's shared memor… |
 | [memory_with_new_extras](/chirp_bridge/memory_with_new_extras.md) | Function | `chirp_bridge.py` | Reload a slot after giving it the incoming channel's basic f… |
+| [radio_firmware](/chirp_bridge/radio_firmware.md) | Function | `chirp_bridge.py` | Return the best available firmware identity from a radio or … |
+| [status_progress](/chirp_bridge/status_progress.md) | Function | `chirp_bridge.py` | Translate a CHIRP Status message into a structured progress … |
+| [uvk5_firmware_from_hello](/chirp_bridge/uvk5_firmware_from_hello.md) | Function | `chirp_bridge.py` | Decode the UV-K5 hello reply without trusting non-printable … |
 | [verify_live_write](/chirp_bridge/verify_live_write.md) | Function | `chirp_bridge.py` | Read back live memories so a rejected write cannot report su… |
-| [TracedSerial](/chirp_bridge/TracedSerial.md) | Class | `chirp_bridge.py` | Delegate a serial port while recording sanitized CAT transac… |
-| [live_refusal_message](/chirp_bridge/live_refusal_message.md) | Function | `chirp_bridge.py` | Say which channel a live radio refused and how far the write… |
-| [manual_send_key](/chirp_bridge/manual_send_key.md) | Function | `chirp_bridge.py` | Return the control a clone prompt says to press after OK, if… |
 | [apply_mapping_payload](/chirp_bridge/apply_mapping_payload.md) | Function | `chirp_bridge.py` | Apply bank/zone names and memberships to an already loaded i… |
+| [fetch_repeaterbook_search](/chirp_bridge/fetch_repeaterbook_search.md) | Function | `chirp_bridge.py` | Query NewChirp's relay without exposing RepeaterBook credent… |
+| [live_refusal_message](/chirp_bridge/live_refusal_message.md) | Function | `chirp_bridge.py` | Say which channel a live radio refused and how far the write… |
 
 ## Usage with OpenCode
 

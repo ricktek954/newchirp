@@ -47,11 +47,15 @@ DFU_MANIFEST = 7
 DFU_MANIFEST_WAIT_RESET = 8
 DFU_UPLOAD_IDLE = 9
 DFU_ERROR = 10
-IDLE_STATES = {DFU_IDLE, DFU_DNLOAD_IDLE, DFU_UPLOAD_IDLE}
+
+LIBUSB_ERROR_PIPE = -9
+TRANSFER_TIMEOUT_MS = 30000
 
 
 class DfuError(Exception):
-    pass
+    def __init__(self, message, code=None):
+        super().__init__(message)
+        self.code = code
 
 
 class _DeviceDescriptor(ctypes.Structure):
@@ -289,7 +293,7 @@ class DfuTransport:
             self.context = ctypes.c_void_p()
 
     def _transfer(self, request_type, request, value, data_or_length,
-                  timeout=2000, allow_short=False):
+                  timeout=TRANSFER_TIMEOUT_MS, allow_short=False):
         if isinstance(data_or_length, int):
             length = data_or_length
             buffer = (ctypes.c_ubyte * length)()
@@ -310,7 +314,7 @@ class DfuTransport:
             timeout,
         )
         if result < 0:
-            raise DfuError(_error_text(self.lib, result))
+            raise DfuError(_error_text(self.lib, result), result)
         if result != length and not (allow_short and result > 0):
             raise DfuError(
                 "USB DFU transfer returned %i of %i bytes" % (result, length)
@@ -329,13 +333,13 @@ class DfuTransport:
             "state": value[4],
         }
 
-    def _wait_idle(self, timeout=5):
+    def _wait_idle(self, timeout=10):
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
             state = self._transfer(
                 REQUEST_TO_HOST, REQUEST_GET_STATE, 0, 1
             )[0]
-            if state in IDLE_STATES:
+            if state == DFU_IDLE:
                 return
             if state == APP_IDLE:
                 self._transfer(
@@ -376,10 +380,15 @@ class DfuTransport:
         self._wait_idle()
 
     def program_mode(self):
-        self._wait_idle()
-        self.command(b"\x91\x01")
-        identity = self.identity()
-        self.set_address(0)
+        try:
+            self._wait_idle()
+            self.command(b"\x91\x01")
+            identity = self.identity()
+            self.set_address(0)
+        except DfuError as exc:
+            raise DfuError(
+                "USB DFU programming mode failed: %s" % exc, exc.code
+            ) from exc
         return identity
 
     def identity(self):
@@ -396,13 +405,55 @@ class DfuTransport:
         )
 
     def erase(self, start, size):
-        start = int(start) & ~0xFFFF
+        first = int(start) & ~0xFFFF
         end = (int(start) + int(size) + 0xFFFF) & ~0xFFFF
-        for address in range(start, end, 0x10000):
-            self.command(
-                b"\x41" + address.to_bytes(4, "little")
-            )
-        self.set_address(0)
+        try:
+            self._status()
+            self._wait_idle()
+            self.command(b"\x91\x01")
+            time.sleep(0.1)
+        except DfuError as exc:
+            raise DfuError(
+                "USB DFU programming mode before erase failed: %s" % exc,
+                exc.code,
+            ) from exc
+        for address in range(first, end, 0x10000):
+            self._erase_page(address)
+        try:
+            self.set_address(0)
+        except DfuError as exc:
+            raise DfuError(
+                "USB DFU address reset after erase failed: %s" % exc,
+                exc.code,
+            ) from exc
+
+    def _erase_page(self, address):
+        command = b"\x41" + int(address).to_bytes(4, "little")
+        try:
+            self._transfer(REQUEST_TO_DEVICE, REQUEST_DOWNLOAD, 0, command)
+        except DfuError as exc:
+            raise DfuError(
+                "USB DFU erase at 0x%06X failed: %s" % (address, exc),
+                exc.code,
+            ) from exc
+        try:
+            self._status()
+            self._wait_idle()
+        except DfuError as exc:
+            if exc.code != LIBUSB_ERROR_PIPE:
+                raise DfuError(
+                    "USB DFU erase at 0x%06X failed: %s" % (address, exc),
+                    exc.code,
+                ) from exc
+            time.sleep(1.0)
+            try:
+                self._wait_idle()
+            except DfuError as again:
+                raise DfuError(
+                    "USB DFU erase at 0x%06X did not finish: %s"
+                    % (address, again),
+                    again.code,
+                ) from again
 
     def read(self, address, length):
         data = bytearray()
@@ -420,8 +471,15 @@ class DfuTransport:
             if len(chunk) != DFU_BLOCK:
                 raise DfuError("DFU writes must be 1024-byte aligned")
             block = (address + offset) // DFU_BLOCK
-            self._download(block + 2, chunk)
-            self._wait_idle()
+            try:
+                self._download(block + 2, chunk)
+                self._wait_idle()
+            except DfuError as exc:
+                raise DfuError(
+                    "USB DFU write at 0x%06X failed: %s"
+                    % (address + offset, exc),
+                    exc.code,
+                ) from exc
 
     def reboot(self):
         if self.handle:

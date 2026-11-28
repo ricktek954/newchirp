@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/bind_library
 language: python
 ---
@@ -29,7 +29,7 @@ def _bind_library(lib)
 | `lib` | `—` | `—` |
 
 ## Source
-Lines 117–168 in `newchirp_usb_dfu.py`
+Lines 121–172 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

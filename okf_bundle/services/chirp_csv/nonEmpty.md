@@ -11,7 +11,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-27T09:00:50Z"
+timestamp: "2026-11-28T07:37:45Z"
 concept_id: services/chirp_csv/nonEmpty
 language: dart
 ---
@@ -31,7 +31,7 @@ StringnonEmpty(String text, String fallback)
 [text], or [fallback] when it is empty.
 
 ## Source
-Lines 149–149 in `services/chirp_csv.dart`
+Lines 164–164 in `services/chirp_csv.dart`
 
 ## Relationships
 

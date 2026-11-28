@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/program_mode
 language: python
 ---
@@ -29,7 +29,7 @@ def program_mode(self)
 | `self` | `—` | `—` |
 
 ## Source
-Lines 378–383 in `newchirp_usb_dfu.py`
+Lines 382–392 in `newchirp_usb_dfu.py`
 
 ## Relationships
 
@@ -40,3 +40,4 @@ Lines 378–383 in `newchirp_usb_dfu.py`
 | calls | [command](/newchirp_usb_dfu/command.md) |
 | calls | [identity](/newchirp_usb_dfu/identity.md) |
 | calls | [set_address](/newchirp_usb_dfu/set_address.md) |
+| calls | [DfuError](/newchirp_usb_dfu/DfuError.md) |

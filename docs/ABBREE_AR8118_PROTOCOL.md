@@ -121,11 +121,35 @@ clamps to 134-520 MHz.
 - 2: DCS normal; the word is `0x2800 +` the three-digit octal code.
 - 3: DCS inverted; same encoding as normal.
 
+## Third-party file-format cross-check
+
+On 2026-11-28 the AR-8118 owner (mailbox UID 1086) pointed to a public
+converter for the CPS's saved `.Ysf` files
+(github.com/rulerofoz/CHIRP---Hiroyasu-IC-980-PRO-KSUN-5200D-ABBREE-AR-8118,
+a fork of lu7cgj's IC-980 Pro converter). Its decoder was read as text, not
+run. It works on the CPS file (240 records of 76 bytes from offset 1440),
+not on radio memory, but its field rules agree with the static analysis
+above:
+
+- frequencies are u32 little-endian Hz;
+- tone words are CTCSS Hz × 10, or DCS `0x2800 +` the octal code (D023 =
+  10259 = 0x2813), with a type of 1 (CTCSS), 2 (DCS normal) or 3 (DCS
+  inverted);
+- the flags byte (radio record byte 13) has bit 5 high power, bit 4 wide,
+  bit 7 scan add and bit 1 compander. It calls bits 2-3 "Special DCS"
+  where this document says encryption;
+- the byte before it (record byte 12) uses bit 3 and bit 4 for busy lock
+  (it labels them "DQT" and "CAT"); the scrambler is the byte after it;
+- names are 10 ASCII bytes.
+
+This is community file-format evidence, not radio evidence.
+
 ## Still to confirm on a radio
 
 - The USB VID/PID and the HID report sizes.
 - The exact reply to "PROGR81": only its first byte is checked.
-- The meaning of channels 241/242 and of byte 12 bits 0-2 and byte 13 bit 0.
+- The meaning of channels 241/242, of byte 12 bits 0-2 and byte 13 bit 0,
+  and whether byte 13 bits 2-3 are encryption or "Special DCS".
 - The settings layout at 0xA000 and 0xB000 beyond the band limits.
 - Whether the GMRS model uses the same layout. Its CPS uses the same
   protocol constants, but its band limits and GMRS channel rules have not

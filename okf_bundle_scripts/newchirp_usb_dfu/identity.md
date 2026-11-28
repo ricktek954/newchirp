@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/identity
 language: python
 ---
@@ -29,7 +29,7 @@ def identity(self)
 | `self` | `—` | `—` |
 
 ## Source
-Lines 385–390 in `newchirp_usb_dfu.py`
+Lines 394–399 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

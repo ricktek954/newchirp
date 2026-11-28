@@ -83,6 +83,18 @@ Location,Name,Frequency,Duplex,Offset,Tone,rToneFreq,cToneFreq,DtcsCode,DtcsPola
       expect(decoded.single.mode, 'FM');
     });
 
+    // 2026-11-27 report (mailbox UID 1084): a GMRS CHIRP.csv whose lines
+    // were each wrapped in quotes was rejected for having no Frequency
+    // column although the one-cell header named it.
+    test('a CSV with every line wrapped in quotes decodes', () {
+      final quotedRow = row.replaceAll('"', '""');
+      final source = '"$header"\r\n"$quotedRow"\r\n';
+      final decoded = ChirpCsv.decode(source);
+      expect(decoded.single.frequency, 462.5625);
+      expect(decoded.single.name, 'CAFE');
+      expect(decoded.single.comment, 'Café 5°');
+    });
+
     test('a non-CHIRP CSV is rejected instead of importing 0 MHz rows', () {
       const source = 'CH,RX Freq,TX Freq,Name\n1,462.5625,462.5625,GMRS1\n';
       expect(

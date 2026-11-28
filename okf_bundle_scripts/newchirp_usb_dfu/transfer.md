@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/transfer
 language: python
 ---
@@ -19,7 +19,7 @@ language: python
 ## Signature
 
 ```python
-def _transfer(self, request_type, request, value, data_or_length, timeout = 2000, allow_short = False)
+def _transfer(self, request_type, request, value, data_or_length, timeout = TRANSFER_TIMEOUT_MS, allow_short = False)
 ```
 
 ## Parameters
@@ -36,12 +36,12 @@ def _transfer(self, request_type, request, value, data_or_length, timeout = 2000
 
 | `data_or_length` | `—` | `—` |
 
-| `timeout` | `—` | `2000` |
+| `timeout` | `—` | `TRANSFER_TIMEOUT_MS` |
 
 | `allow_short` | `—` | `False` |
 
 ## Source
-Lines 291–320 in `newchirp_usb_dfu.py`
+Lines 295–324 in `newchirp_usb_dfu.py`
 
 ## Relationships
 
@@ -51,6 +51,7 @@ Lines 291–320 in `newchirp_usb_dfu.py`
 | calls | [DfuError](/newchirp_usb_dfu/DfuError.md) |
 | calls | [_error_text](/newchirp_usb_dfu/error_text.md) |
 | called_by | [_download](/newchirp_usb_dfu/download.md) |
+| called_by | [_erase_page](/newchirp_usb_dfu/erase_page.md) |
 | called_by | [_status](/newchirp_usb_dfu/status.md) |
 | called_by | [_upload](/newchirp_usb_dfu/upload.md) |
 | called_by | [_wait_idle](/newchirp_usb_dfu/wait_idle.md) |

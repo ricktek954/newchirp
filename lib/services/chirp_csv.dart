@@ -120,8 +120,20 @@ class ChirpCsv {
   /// columns are optional and get CHIRP's defaults.
   static List<RadioChannel> decode(String source) {
     if (source.startsWith('\uFEFF')) source = source.substring(1);
-    final rows = _parse(source, _delimiter(source));
+    final delimiter = _delimiter(source);
+    var rows = _parse(source, delimiter);
     if (rows.isEmpty) return [];
+    // A spreadsheet that kept each CHIRP line in one cell saves every line
+    // wrapped in quotes ("Location,Name,Frequency,..."), so the header
+    // parses as one field. Split each one-field row again.
+    if (rows.first.length == 1 && rows.first.first.contains(delimiter)) {
+      rows = [
+        for (final row in rows)
+          row.length == 1
+              ? _parse(row.first, delimiter).firstOrNull ?? row
+              : row,
+      ];
+    }
     final names = rows.first.map((e) => e.trim()).toList();
     if (!names.contains('Frequency')) {
       final found = names.where((n) => n.isNotEmpty).take(8).join(', ');
@@ -133,6 +145,7 @@ class ChirpCsv {
       );
     }
     int col(String name) => names.indexOf(name);
+
     /// Trimmed cell [name] of [row], or [fallback] when the column is missing.
     String value(List<String> row, String name, [String fallback = '']) {
       final index = col(name);
@@ -142,12 +155,15 @@ class ChirpCsv {
     /// Cell as a number, or [fallback] if empty or not a number.
     double number(List<String> row, String name, double fallback) =>
         double.tryParse(value(row, name)) ?? fallback;
+
     /// Cell as an integer, or [fallback] if empty or not an integer.
     int integer(List<String> row, String name, int fallback) =>
         int.tryParse(value(row, name)) ?? fallback;
+
     /// [text], or [fallback] when it is empty.
     String nonEmpty(String text, String fallback) =>
         text.isEmpty ? fallback : text;
+
     /// DTCS polarity ("NN", "NR", ...); defaults to "NN" (normal both ways).
     String dtcsPolarity(List<String> row) {
       final polarity = value(row, 'DtcsPolarity', 'NN').toUpperCase();

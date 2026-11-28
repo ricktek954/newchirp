@@ -171,14 +171,19 @@ class IcomIC41SRadio(icf.IcomCloneModeRadio, chirp_common.ExperimentalRadio):
             "and channel order all look correct.\n"
         )
         prompts.info = (
-            "Use an Icom OPC-478/U/UC programming cable, turn the radio on, "
-            "and close Icom CS-41S before starting a transfer. The radio uses "
+            "Use an Icom OPC-478/U/UC programming cable in the [SP] jack. "
+            "Turn the radio off, connect the cable, then turn the radio on "
+            "with [VOL]. "
+            "Close Icom CS-41S before starting a transfer. The radio uses "
             "9600 baud, 8 data bits, no parity, and one stop bit."
         )
         prompts.pre_download = (
-            "1. Turn on the IC-41S and connect the OPC-478/U/UC cable.\n"
-            "2. Close CS-41S and any other program using the serial port.\n"
-            "3. Read the radio and save the unedited image as a backup.\n\n"
+            "1. Turn the IC-41S off.\n"
+            "2. Connect the OPC-478/U/UC cable to the [SP] jack and tighten "
+            "the jack-cover screw.\n"
+            "3. Turn the radio on with [VOL].\n"
+            "4. Close CS-41S and any other program using the serial port.\n"
+            "5. Read the radio and save the unedited image as a backup.\n\n"
             "Verify channel order, RX/TX frequencies, split operation, and "
             "8-character labels before enabling upload."
         )

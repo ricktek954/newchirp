@@ -252,6 +252,14 @@ class Baofeng5RHProDriverTest(unittest.TestCase):
     def test_uv5rm_pro_is_listed(self):
         self.assertIsNotNone(self.directory.get_radio("Baofeng_UV-5RM_Pro"))
 
+    def test_uv5rm_pro_graduated_without_experimental_prompt(self):
+        """2026-11-27 owner write + read-back (mailbox UID 1080)."""
+        pro = self.directory.get_radio("Baofeng_UV-5RM_Pro")
+        self.assertIsNone(pro.get_prompts().experimental)
+        self.assertIsNotNone(pro.get_prompts().pre_download)
+        sibling = self.directory.get_radio("Baofeng_UV-5RH_Pro")
+        self.assertIsNotNone(sibling.get_prompts().experimental)
+
     def test_stray_announce_reply_advises_a_power_cycle(self):
         """2026-11-19 report: after failed attempts with the older profile
         the radio sent a stray byte until it was power-cycled."""

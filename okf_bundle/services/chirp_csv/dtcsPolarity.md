@@ -11,7 +11,7 @@ tags:
   - "domain:chirp_csv.dart"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-27T09:00:50Z"
+timestamp: "2026-11-28T07:37:45Z"
 concept_id: services/chirp_csv/dtcsPolarity
 language: dart
 ---
@@ -31,7 +31,7 @@ StringdtcsPolarity(List<String> row)
 DTCS polarity ("NN", "NR", ...); defaults to "NN" (normal both ways).
 
 ## Source
-Lines 152–152 in `services/chirp_csv.dart`
+Lines 168–168 in `services/chirp_csv.dart`
 
 ## Relationships
 

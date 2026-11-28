@@ -10,7 +10,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/DfuTransport
 language: python
 ---
@@ -23,8 +23,28 @@ ST DfuSe control-transfer transport for the MD-UV380 family.
 
 ST DfuSe control-transfer transport for the MD-UV380 family.
 
+## Methods
+
+- `__init__`
+- `libusb_exit`
+- `_transfer`
+- `_status`
+- `_wait_idle`
+- `_download`
+- `_upload`
+- `command`
+- `program_mode`
+- `identity`
+- `set_address`
+- `erase`
+- `_erase_page`
+- `read`
+- `write`
+- `reboot`
+- `close`
+
 ## Source
-Lines 231–442 in `newchirp_usb_dfu.py`
+Lines 235–500 in `newchirp_usb_dfu.py`
 
 ## Relationships
 
@@ -43,8 +63,8 @@ Lines 231–442 in `newchirp_usb_dfu.py`
 | related | [identity](/newchirp_usb_dfu/identity.md) |
 | related | [set_address](/newchirp_usb_dfu/set_address.md) |
 | related | [erase](/newchirp_usb_dfu/erase.md) |
+| related | [_erase_page](/newchirp_usb_dfu/erase_page.md) |
 | related | [read](/newchirp_usb_dfu/read.md) |
 | related | [write](/newchirp_usb_dfu/write.md) |
 | related | [reboot](/newchirp_usb_dfu/reboot.md) |
 | related | [close](/newchirp_usb_dfu/close.md) |
-| called_by | [radio_for](/chirp_bridge/radio_for.md) |

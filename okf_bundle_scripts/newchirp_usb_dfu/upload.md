@@ -9,7 +9,7 @@ tags:
   - "module:newchirp_usb_dfu.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-26T06:35:35Z"
+timestamp: "2026-11-28T07:42:55Z"
 concept_id: newchirp_usb_dfu/upload
 language: python
 ---
@@ -35,7 +35,7 @@ def _upload(self, block, length, allow_short = False)
 | `allow_short` | `—` | `False` |
 
 ## Source
-Lines 365–371 in `newchirp_usb_dfu.py`
+Lines 369–375 in `newchirp_usb_dfu.py`
 
 ## Relationships
 

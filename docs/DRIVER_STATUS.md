@@ -60,7 +60,7 @@ Last updated: 2026-11-20
 | Baofeng DM-32UV | `drivers/newchirp_dm32uv.py` | CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS | Stock CHIRP driver; receive-only airband accepted | Stock CHIRP driver | Stock CHIRP driver | Experimental |
 | Baofeng BF-V12D | `drivers/newchirp_baofeng_bfv12d.py` | CPS-derived P3107 clone serial, 9600 8N1 | Original-firmware sequence traced; hardware pending | Stock image/upload path | Stock channel decoder | Experimental |
 | Baofeng K67 Pro | `drivers/newchirp_baofeng_k67pro.py` | Shared K6/K63 CPS serial, 115200 8N1 + DTR/RTS | 1,000 channels + sparse full image, offline-tested | Disabled | Hidden | Experimental read-only |
-| Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 / UV-5RM Pro | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1; XORed (V1.17) then plain (v1.12) `PROGRAM` sync | 640 channels + 10 zones, offline-tested | Full image, offline-tested | Basic settings and zone names | Experimental |
+| Baofeng 5RH Pro / UV-5RH Pro / UV-5RH Plus / UV-5RM Plus v2 / UV-5RM Pro | `drivers/newchirp_baofeng_5rh_pro.py` | UV-5RH v2 encrypted clone serial, 115200 then 19200 8N1; XORed (V1.17) then plain (v1.12) `PROGRAM` sync | 640 channels + 10 zones | Full image | Basic settings and zone names | UV-5RM Pro: Supported; core read/write hardware-confirmed 2026-11-27. Others: Experimental |
 | Baofeng UV-5RM Plus | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-5RH | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv5rm_plus.py` | UV-17-family serial, 115200 8N1 + DTR/RTS | OEM-style handshake retry; stock channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
 | Baofeng UV-17ProGPS | Pinned CHIRP `baofeng_uv17Pro.py` with `drivers/newchirp_uv17progps_compat.py` | UV-17-family serial, 115200 8N1 | Malformed CTCSS values no longer abort channel decode | Stock CHIRP driver | Stock CHIRP driver | Experimental compatibility override |
@@ -123,7 +123,7 @@ Last updated: 2026-11-20
 - Extracted CPS executable SHA-256:
   `0a455577b791204c42f538b04e23bfd83fef4d509f8826d753a5379d92981300`
 - Driver SHA-256:
-  `681e9c20e66ecde764321a3c04d1655b2721ac551877cca4526fe42584074f6d`
+  `db4a69801d758bb2dc318dbea17cecfc2c3846dbbe4e94f1f159ef7bd5aa879c`
 - Transport: 115200 then 19200 baud, 8N1, DTR and RTS asserted
 - Implemented: `A` announce, seeded `PROGRAM` handshake,
   `INFORMATION` model stage, read/write direction, twelve encrypted
@@ -152,8 +152,15 @@ Last updated: 2026-11-20
   answers the V1.17 XORed form with `N`. The driver falls back to the plain
   sync, and a "UV-5RM Pro" entry was added. Web Programmer profiles for the
   whole family (5RH Pro, UV-5RH Pro, UV-5RH Plus, UV-5RM Pro) were added the
-  same day with the same read/write policy and zone rebuild. Not yet
-  confirmed on hardware.
+  same day with the same read/write policy and zone rebuild.
+- UV-5RM Pro: Supported; core read/write hardware-confirmed 2026-11-27.
+  The owner read the radio in the Web Programmer (19200-first announce and
+  stray-byte-tolerant sync ACK), edited and wrote one channel, and found the
+  change on the radio and in a fresh read (mailbox UID 1080); the Windows
+  desktop build 1.0.77 also connects. The desktop experimental prompt is
+  removed for this model only. Known limitations: no desktop write yet
+  confirmed on this model; zone edits and the settings page untested on it.
+  The other family models stay experimental.
 - Next milestone: the 2026-11-06 UV-5RH Pro reporter completes a read,
   compares channels with the radio, edits one unused channel, uploads it,
   reads it back, and verifies it on the radio.
@@ -595,8 +602,20 @@ Last updated: 2026-11-20
 - Driver SHA-256:
   `37626dfbf0a556cd9f02bc7712c5581e805e7e39d1debe6fda4e9b1d87121f81`
 - USB transport SHA-256:
-  `3e6fdd3d76d7126757b062a00969921521f79bef2dd075bc5c3e8c87eae7597c`
-- Hardware validation: none
+  `7c220107a7e2e2410425a189a3e04c9c5870bda2eb7c74c3734aa02240a3742a`
+- Hardware validation: full read on macOS 1.0.77 (2026-11-27, mailbox UIDs
+  1083/1085; two reads of the same radio match byte for byte apart from one
+  edit). Write not yet working: both writes stopped with libusb "Pipe
+  error" (USB stall) before any erase, and the radio's codeplug was intact
+  afterward.
+- Write transport (2026-11-28, ledger `w-20261128-e650`): aligned with
+  dmrconfig `dfu-libusb.c` and QDMR `tyt_interface.cc`: only dfuIDLE counts
+  as ready (download/upload-idle states are aborted), erase re-enters
+  programming mode first, control transfers wait up to 30 s, and a stall on
+  the status poll after an accepted page erase is retried once after 1 s
+  (QDMR ignores those errors). A refused erase or write stops with its
+  address in the message. Like dmrconfig and QDMR, the 64 KiB page at 0 is
+  erased and rewritten from 0x2000.
 - Next milestone: physical identify/read/edit/write/read-back test and
   libusb-runtime validation in native platform release builds
 - Identity: the 0xA2 identity upload asks for 64 bytes and accepts a shorter
@@ -1644,7 +1663,7 @@ Last updated: 2026-11-20
   A second report from [redacted-email] reached a slow, retried PSEARCH
   sequence and received a non-ACK SYSINFO reply.
 - Driver SHA-256:
-  `59aca2e9624b57a173cd0b6964b5b922818684a26defe2311fee32d3a1036b9c`
+  `40b73c7b64123f32e683d6409952f0cfa3c9b759ee2d423fcb7d8f0231541108`
 - Hardware validation: the upstream driver completed read and write tests on
   firmware DM32.01.01.047. This NewChirp timing and retry override has
   synthetic serial coverage but no physical revalidation. The NewChirp
@@ -1656,6 +1675,12 @@ Last updated: 2026-11-20
   read and verified write with both a working cable and the affected cable.
   Include a zone rename, a spare-zone creation, a channel in two zones, and a
   read-back comparison against the CHIRP CPS image.
+- Flash read retry (2026-11-28, ledger `w-20261128-5455`, mailbox UID
+  1087): during a write's scan one 0x1000-byte block read returned 4007 of
+  4102 bytes on a macOS `/dev/cu.usbserial` cable and stock CHIRP stopped
+  with "Bad reply reading flash at 020000". Block reads are idempotent, so
+  `_Link.read_block` now retries up to 3 times (0.3 s apart) before
+  failing. Writes are not retried.
 
 ### Baofeng BF-V12D
 
@@ -2666,7 +2691,7 @@ Last updated: 2026-11-20
   populated sample ICF SHA-256
   `eb3dd05b5e4add4bcfeeddb6de8e86f1e2c6cdb2785469b71750891d608ddb9a`.
 - Driver SHA-256:
-  `5f884d58a8bd3dea5d5d8dc4da2137877f5eff9b2d6b97c110851ad4d4dd247c`
+  `a85b5c30164ee85ab6acae5fd72f0a3845bd568c6a81a450c524998bdc9e9d7b`
 - Read/write state: both enabled for this experimental driver.
 - Hardware validation: none. Offline tests cover CPS image parsing, channel
   editing, split operation, empty channels, model matching, and preservation
@@ -2675,6 +2700,11 @@ Last updated: 2026-11-20
   with CS-41S, edit one simplex and one split channel, write them, and verify
   the result with both CS-41S and NewChirp.
 - Website catalog: listed as experimental in New Experimental Radio Support.
+- First physical attempt (2026-11-28, ledger `w-20261128-ac5c`, mailbox
+  UID 1090): the cable echoed the identify frame and the radio sent nothing.
+  The CS-41S user manual connects the cable to the [SP] jack first and then
+  turns the radio on with [VOL]; NewChirp's prompts had the reverse order
+  and now follow the manual.
 
 ### Midland MXT295
 
