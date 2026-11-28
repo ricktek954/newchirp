@@ -119,9 +119,15 @@ fi
 
 rm -rf "$BUNDLE_DIR/chirp"
 cp -a "$CHIRP_PACKAGE" "$BUNDLE_DIR/chirp"
+# NewChirp's drivers live in their own folder, loaded after CHIRP's, so a
+# NewChirp driver always takes precedence over an upstream driver with the
+# same ID. Never mix them into chirp/drivers: CHIRP imports that folder in
+# unsorted directory order.
+rm -f "$BUNDLE_DIR"/chirp/drivers/newchirp_*.py
+rm -rf "$BUNDLE_DIR/newchirp_drivers"
 if [[ -d "$PROJECT_DIR/drivers" ]]; then
-  mkdir -p "$BUNDLE_DIR/chirp/drivers"
-  cp "$PROJECT_DIR"/drivers/*.py "$BUNDLE_DIR/chirp/drivers/"
+  mkdir -p "$BUNDLE_DIR/newchirp_drivers"
+  cp "$PROJECT_DIR"/drivers/*.py "$BUNDLE_DIR/newchirp_drivers/"
 fi
 
 if [[ -f "$CHIRP_ROOT/COPYING" ]]; then

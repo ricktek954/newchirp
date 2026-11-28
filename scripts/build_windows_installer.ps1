@@ -127,9 +127,16 @@ function Test-BundledChirpDrivers {
   }
 
   Write-Host "==> verifying bundled CHIRP drivers"
-  & $Python $Bridge --source $Bundle --vendor $Vendor.FullName list-models | Out-Null
+  & $Python $Bridge --source $Bundle --vendor $Vendor.FullName --newchirp-driver-dir (Join-Path $Bundle "newchirp_drivers") list-models | Out-Null
   if ($LASTEXITCODE -ne 0) {
     throw "Bundled CHIRP driver verification failed. Ensure the selected CHIRP snapshot supports every driver in drivers\."
+  }
+
+  Write-Host "==> verifying NewChirp driver precedence"
+  $Gate = Join-Path $ProjectRoot "scripts\check_bundle_drivers.py"
+  & $Python -I -B $Gate --resources $Bundle --bridge $Bridge --vendor $Vendor.FullName --expect-drivers (Join-Path $ProjectRoot "drivers")
+  if ($LASTEXITCODE -ne 0) {
+    throw "NewChirp driver precedence check failed: a NewChirp driver is mixed into chirp\drivers or an upstream driver wins its ID."
   }
 }
 

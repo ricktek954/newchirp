@@ -1,29 +1,29 @@
 ---
-description: 'Top-level OKF summary: 1170 concepts across 5 domains and 39 modules'
+description: 'Top-level OKF summary: 1171 concepts across 5 domains and 39 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-28T10:36:22Z'
+timestamp: '2026-11-28T11:32:01Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle — Knowledge Summary
 
-> OKF v0.2 bundle | 1,170 concepts | 5 domains | 39 modules
+> OKF v0.2 bundle | 1,171 concepts | 5 domains | 39 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 1,014 |
-| Class | 107 |
+| Function | 1,017 |
+| Class | 106 |
 | Module | 39 |
-| Enum | 10 |
+| Enum | 9 |
 
 | Language | Concepts |
 |----------|----------|
-| dart | 1,170 |
+| dart | 1,171 |
 
 ## Domain Map
 
@@ -37,9 +37,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [l10n/app_localizations_fr](l10n/app_localizations_fr/index.md) (117 concepts)
 - [l10n/l10n](l10n/l10n/index.md) (1 concepts)
 
-### [main.dart](main.dart/index.md) — 255 concepts
+### [main.dart](main.dart/index.md) — 256 concepts
 
-- [main](main/index.md) (255 concepts)
+- [main](main/index.md) (256 concepts)
 
 ### [models](models/index.md) — 113 concepts
 
@@ -90,16 +90,16 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [_australianUhfNote](/models/frequency_reference/australianUhfNote.md) | Function | `models/frequency_reference.dart` | Usage note for an Australian UHF CB channel (repeater output… |
 | [repeaterCountiesForRegion](/models/repeater_regions/repeaterCountiesForRegion.md) | Function | `models/repeater_regions.dart` | Counties to offer for [region]: the built-in list plus any c… |
 | [currentUpdatePlatform](/services/update_checker/currentUpdatePlatform.md) | Function | `services/update_checker.dart` | Platform name used by the release API: windows, macos, linux… |
+| [_settingsMessage](/main/settingsMessage.md) | Function | `main.dart` | Centered icon, title, text and optional button for the setti… |
 | [normalizeRepeaterCounty](/models/repeater_regions/normalizeRepeaterCounty.md) | Function | `models/repeater_regions.dart` | County name without suffixes like " County" or " census area… |
 | [check](/services/update_checker/check.md) | Function | `services/update_checker.dart` | Asks the website for this platform's latest release and comp… |
-| [_settingsMessage](/main/settingsMessage.md) | Function | `main.dart` | Centered icon, title, text and optional button for the setti… |
 | [load](/services/app_language/load.md) | Function | `services/app_language.dart` | Reads the saved choice; returns "system" when nothing is sav… |
 | [_postJson](/services/mygmrs_client/postJson.md) | Function | `services/mygmrs_client.dart` | POSTs [payload] as JSON to the website and returns the JSON … |
+| [_loadChirpModule](/main/loadChirpModule.md) | Function | `main.dart` | Loads a user-supplied CHIRP driver module (after a warning),… |
 | [_remapLocations](/models/radio_mapping/remapLocations.md) | Function | `models/radio_mapping.dart` | Applies [locations] to a list of channel numbers, dropping d… |
 | [load](/services/column_layout_store/load.md) | Function | `services/column_layout_store.dart` | Reads the saved channel-table column order and widths; null … |
-| [_loadChirpModule](/main/loadChirpModule.md) | Function | `main.dart` | Loads a user-supplied CHIRP driver module (after a warning),… |
-| [copy](/models/radio_channel/copy.md) | Function | `models/radio_channel.dart` | The 22 standard GMRS channels as a starter list (repeater ch… |
-| [gmrsStarterChannels](/models/radio_channel/gmrsStarterChannels.md) | Function | `models/radio_channel.dart` | The 22 standard GMRS channels as a starter list (repeater ch… |
+| [_clearChannelsAtLocations](/main/clearChannelsAtLocations.md) | Function | `main.dart` | Clears the channels at [locations] in one undo step (Midland… |
+| [_confirmOverwriteChannels](/main/confirmOverwriteChannels.md) | Function | `main.dart` | Asks before overwriting several channels (one channel uses t… |
 
 ## Usage with OpenCode
 

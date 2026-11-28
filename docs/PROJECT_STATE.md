@@ -25,11 +25,17 @@ release requirements.
   and public SHA-256
   `fdc039f4223b1b1cfe664d16f24ea5ddcc02f38502ebf89a4310594e50482055`.
   Notarization: `007ae547-cc4a-4b30-8f31-960b866f2ac1`.
-- Linux and Windows owners: `11391df2f` fixes driver precedence in packaged
-  layouts. Linux `1.0.80` (`35d6776a`) predates it, so its packages may give
-  Yaesu_FTX-1, Yaesu_FTM-150E and Retevis_RA89 to upstream CHIRP drivers.
-  Check with `test/newchirp_precedence_test.py` (packaged-layout case) and
-  ship the fix in the next build.
+- Driver precedence is now structural (2026-11-28): every bundle script
+  puts NewChirp drivers in `newchirp_drivers/` beside `chirp/`, the app
+  finds that folder, and the bridge loads it after CHIRP's drivers. The
+  Windows installer deletes old `chirp\drivers\newchirp_*.py` copies, and
+  `scripts/check_bundle_drivers.py` is a release gate (run by the Windows
+  and Linux release scripts; run it by hand on macOS for both runtimes).
+  Released builds: macOS `1.0.77` used upstream's RA89 driver; macOS
+  `1.0.78` has the bridge backstop (all IDs correct) but the old mixed
+  layout; Linux `1.0.80` and Windows `1.0.76` predate both fixes. Linux and
+  Windows owners: ship the next build from this commit or later and let the
+  gate pass.
 
 - Linux `1.0.80` is live from source commit `35d6776a`. It adopts upstream
   CHIRP `f28d9202` with 99 upstream commits and adds the upstream-review and

@@ -19,7 +19,7 @@
 - [_deduplicatePorts](deduplicatePorts.md) — Drops repeated port names, keeping the first.
 - [_findChirpSource](findChirpSource.md) — CHIRP source folder: the configured path or CHIRP_SOURCE, else the copy
 - [_findLibusbRuntime](findLibusbRuntime.md) — The bundled libusb library (for USB radios), if found.
-- [_findNewChirpDrivers](findNewChirpDrivers.md) — NewChirp's own drivers folder from the settings or NEWCHIRP_DRIVERS, if it exists.
+- [_findNewChirpDrivers](findNewChirpDrivers.md) — NewChirp's own drivers folder: the settings or NEWCHIRP_DRIVERS, else
 - [_findScsiHelper](findScsiHelper.md) — The SCSI helper used for USB mass-storage radios on macOS, if found.
 - [_firmwareFromPayload](firmwareFromPayload.md) — Firmware version reported by the bridge, or null when it sent none.
 - [_loadAssetBytes](loadAssetBytes.md) — Asset bytes, cached; falls back to reading the file from known install locations.

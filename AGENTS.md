@@ -105,6 +105,24 @@ model on the forum. Never graduate a radio on elapsed time alone. A
 read-only radio (`NEWCHIRP_WRITE_DISABLED`) stays experimental until its
 write path is built and confirmed.
 
+## NewChirp drivers always take precedence
+
+A working driver NewChirp writes always wins over an upstream CHIRP driver
+for the same radio (driver ID). This is structural:
+
+- Installed builds keep NewChirp drivers in their own `newchirp_drivers/`
+  folder beside CHIRP's `chirp/` package, never inside `chirp/drivers`.
+  CHIRP imports its driver folder in unsorted directory order, so mixing the
+  two let upstream drivers win at random (Retevis RA89 in macOS 1.0.77;
+  Yaesu FTX-1 and FTM-150E in a 1.0.78 test build).
+- The bridge imports CHIRP's drivers (skipping any `newchirp_*.py` left in
+  `chirp/drivers`), then NewChirp's folder, then re-points every NewChirp-
+  owned ID to the NewChirp class (`_prefer_newchirp_drivers`), and only then
+  loads a user's CHIRP module, which may still replace built-ins.
+- `test/newchirp_precedence_test.py` and
+  `test/radio_bridge_bundled_drivers_test.dart` cover this. When an
+  upstream driver appears for a radio we maintain, keep ours; do not ask.
+
 ## Upstream CHIRP review
 
 NewChirp ships one pinned CHIRP commit (`scripts/chirp-source.pin`) and
@@ -203,6 +221,12 @@ Every production installer build must contain and expose its version.
 4. Never overwrite a previously released versioned artifact.
 5. Upload to `/opt/newchirp/public/downloads/` with the versioned filename.
 6. Verify the embedded version after building.
+   Also run the driver precedence gate with the app's own bundled Python
+   against the built app (`scripts/check_bundle_drivers.py --resources
+   <dir with chirp/ and newchirp_drivers/> --bridge <bundled
+   chirp_bridge.py> --vendor <bundled pyserial wheel> --expect-drivers
+   drivers`). It must report `"ok": true`; on macOS run it for both the
+   arm64 and x64 runtimes. The Windows and Linux release scripts run it.
 7. Do not rely solely on generic filenames such as `newchirp-setup.exe` or
    `newchirp.dmg`. The website intentionally ignores generic filenames when
    determining the published version.

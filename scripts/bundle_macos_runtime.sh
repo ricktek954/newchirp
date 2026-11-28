@@ -114,9 +114,15 @@ fi
 
 rm -rf "$RESOURCES_DIR/chirp"
 ditto "$CHIRP_PACKAGE" "$RESOURCES_DIR/chirp"
+# NewChirp's drivers live in their own folder, loaded after CHIRP's, so a
+# NewChirp driver always takes precedence over an upstream driver with the
+# same ID. Never mix them into chirp/drivers: CHIRP imports that folder in
+# unsorted directory order.
+rm -f "$RESOURCES_DIR"/chirp/drivers/newchirp_*.py
+rm -rf "$RESOURCES_DIR/newchirp_drivers"
 if [[ -d "$PROJECT_DIR/drivers" ]]; then
-  mkdir -p "$RESOURCES_DIR/chirp/drivers"
-  cp "$PROJECT_DIR"/drivers/*.py "$RESOURCES_DIR/chirp/drivers/"
+  mkdir -p "$RESOURCES_DIR/newchirp_drivers"
+  cp "$PROJECT_DIR"/drivers/*.py "$RESOURCES_DIR/newchirp_drivers/"
 fi
 
 if [[ -f "$PROJECT_DIR/tools/newchirp_scsi_mac.c" ]]; then

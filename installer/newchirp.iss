@@ -48,6 +48,13 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
+[InstallDelete]
+; NewChirp drivers now live in {app}\newchirp_drivers, loaded after CHIRP's.
+; Remove copies an older installer put inside CHIRP's own driver folder.
+Type: files; Name: "{app}\chirp\drivers\newchirp_*.py"
+Type: files; Name: "{app}\chirp\drivers\__pycache__\newchirp_*.pyc"
+Type: filesandordirs; Name: "{app}\newchirp_drivers"
+
 [Files]
 Source: "{#SourceDir}\*"; DestDir: "{app}"; Flags: recursesubdirs ignoreversion; Excludes: "*.pdb;*.exp;*.ilk;*.lib;*.obj"
 Source: "..\assets\licenses\CHIRP-GPL-3.0.txt"; DestDir: "{app}\licenses"; Flags: ignoreversion

@@ -16,6 +16,7 @@
 - [_allow_driver_specific_modes](allow_driver_specific_modes.md) — Permit declared radio modes rejected by CHIRP's shared memory map.
 - [_binary_label](binary_label.md)
 - [_command_summary](command_summary.md)
+- [_finish_loading](finish_loading.md)
 - [_finish_pending](finish_pending.md)
 - [_is_newchirp_driver](is_newchirp_driver.md)
 - [_load_module](load_module.md)
@@ -25,6 +26,7 @@
 - [_note_serial_activity](note_serial_activity.md) — Bytes moved (or progress was made); record what happens next.
 - [_note_serial_state](note_serial_state.md) — Record what the bridge is doing without counting it as activity.
 - [_prefer_newchirp_drivers](prefer_newchirp_drivers.md)
+- [_upstream_driver_modules](upstream_driver_modules.md)
 - [apply_json](apply_json.md)
 - [apply_mapping_payload](apply_mapping_payload.md) — Apply bank/zone names and memberships to an already loaded image.
 - [apply_setting_changes](apply_setting_changes.md)

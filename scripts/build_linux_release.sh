@@ -41,6 +41,12 @@ PYTHONPATH="$SERIAL_WHEEL${PYTHONPATH:+:$PYTHONPATH}" \
     -s "$PROJECT_DIR/test" \
     -p '*_test.py'
 
+"$BUNDLED_PYTHON" -I -B "$SCRIPT_DIR/check_bundle_drivers.py" \
+  --resources "$BUNDLE" \
+  --bridge "$BUNDLE/data/flutter_assets/scripts/chirp_bridge.py" \
+  --vendor "$SERIAL_WHEEL" \
+  --expect-drivers "$PROJECT_DIR/drivers"
+
 bash "$SCRIPT_DIR/build_linux_deb.sh" \
   --bundle-dir "$BUNDLE" \
   --output "$PROJECT_DIR/build/NewChirp-linux-x64-${VERSION}.deb"

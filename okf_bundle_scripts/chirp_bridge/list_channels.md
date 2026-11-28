@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T10:43:55Z"
+timestamp: "2026-11-28T11:25:20Z"
 concept_id: chirp_bridge/list_channels
 language: python
 ---
@@ -48,7 +48,7 @@ itself is wrong and the first error is raised as before.
 | `progress` | `—` | `None` |
 
 ## Source
-Lines 1284–1327 in `chirp_bridge.py`
+Lines 1303–1346 in `chirp_bridge.py`
 
 ## Relationships
 

@@ -1128,6 +1128,26 @@ def _prefer_newchirp_drivers(directory):
             directory.DRV_TO_RADIO[ident] = radio_class
 
 
+def _upstream_driver_modules(source, newchirp_driver_dir):
+    if not newchirp_driver_dir or not os.path.isdir(newchirp_driver_dir):
+        return None
+    installed = os.path.join(source, "chirp", "drivers")
+    if os.path.realpath(newchirp_driver_dir) == os.path.realpath(installed):
+        return None
+    return [
+        os.path.splitext(os.path.basename(path))[0]
+        for path in glob.glob(os.path.join(installed, "*.py"))
+        if not os.path.basename(path).startswith("newchirp_")
+    ]
+
+
+def _finish_loading(directory, module_path):
+    _prefer_newchirp_drivers(directory)
+    if module_path:
+        _load_module(os.path.abspath(module_path), directory)
+    return directory
+
+
 def load_chirp(
     source, vendor, newchirp_driver_dir=None, module_path=None
 ):
@@ -1155,7 +1175,8 @@ def load_chirp(
     directory.LOG.setLevel(logging.ERROR)
     try:
         directory.enable_reregistrations()
-        directory.import_drivers()
+        directory.import_drivers(
+            limit=_upstream_driver_modules(source, newchirp_driver_dir))
         _prefer_newchirp_drivers(directory)
         _allow_driver_specific_modes()
     finally:
@@ -1167,8 +1188,6 @@ def load_chirp(
         category=DeprecationWarning,
         module=r"chirp(\.|$)",
     )
-    if module_path:
-        _load_module(os.path.abspath(module_path), directory)
     if newchirp_driver_dir and os.path.isdir(newchirp_driver_dir):
         # NewChirp drivers may intentionally replace a bundled CHIRP driver
         # while preserving its stable model identifier.
@@ -1178,7 +1197,7 @@ def load_chirp(
         requested_driver_dir = os.path.realpath(newchirp_driver_dir)
         if requested_driver_dir == installed_driver_dir:
             # The initial directory scan already loaded the overrides.
-            return directory
+            return _finish_loading(directory, module_path)
         old_log_level = directory.LOG.level
         directory.LOG.setLevel(logging.ERROR)
         try:
@@ -1212,7 +1231,7 @@ def load_chirp(
                 spec.loader.exec_module(module)
         finally:
             directory.LOG.setLevel(old_log_level)
-    return directory
+    return _finish_loading(directory, module_path)
 
 
 def live_models_by_vendor(directory):

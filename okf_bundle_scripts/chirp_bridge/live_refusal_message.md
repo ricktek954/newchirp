@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T10:43:55Z"
+timestamp: "2026-11-28T11:25:20Z"
 concept_id: chirp_bridge/live_refusal_message
 language: python
 ---
@@ -45,7 +45,7 @@ model; the slot's values and the stopping point were not shown.
 | `end` | `—` | `—` |
 
 ## Source
-Lines 2086–2125 in `chirp_bridge.py`
+Lines 2105–2144 in `chirp_bridge.py`
 
 ## Relationships
 

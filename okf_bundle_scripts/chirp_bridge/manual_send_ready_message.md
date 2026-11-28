@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T10:43:55Z"
+timestamp: "2026-11-28T11:25:20Z"
 concept_id: chirp_bridge/manual_send_ready_message
 language: python
 ---
@@ -36,7 +36,7 @@ Ready cue for a radio that starts the clone from its own key.
 | `key` | `—` | `—` |
 
 ## Source
-Lines 2421–2425 in `chirp_bridge.py`
+Lines 2440–2444 in `chirp_bridge.py`
 
 ## Relationships
 

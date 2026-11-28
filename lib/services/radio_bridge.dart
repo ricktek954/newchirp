@@ -1298,14 +1298,24 @@ class RadioBridge {
     );
   }
 
-  /// NewChirp's own drivers folder from the settings or NEWCHIRP_DRIVERS, if it exists.
+  /// NewChirp's own drivers folder: the settings or NEWCHIRP_DRIVERS, else
+  /// the `newchirp_drivers` folder installed beside CHIRP's package. The
+  /// bridge loads it after CHIRP's drivers so a NewChirp driver always takes
+  /// precedence over an upstream driver with the same ID.
   String? _findNewChirpDrivers() {
     final configured =
         newDriversPath ?? Platform.environment['NEWCHIRP_DRIVERS'];
-    if (configured == null || configured.isEmpty) return null;
-    final directory = Directory(configured);
-    if (!directory.existsSync()) return null;
-    return directory.absolute.path;
+    if (configured != null && configured.isNotEmpty) {
+      final directory = Directory(configured);
+      return directory.existsSync() ? directory.absolute.path : null;
+    }
+    try {
+      final bundled = Directory('${_findChirpSource()}/newchirp_drivers');
+      if (bundled.existsSync()) return bundled.absolute.path;
+    } on RadioBridgeException {
+      return null;
+    }
+    return null;
   }
 
   /// The SCSI helper used for USB mass-storage radios on macOS, if found.

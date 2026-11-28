@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T10:43:55Z"
+timestamp: "2026-11-28T11:25:20Z"
 concept_id: chirp_bridge/load_module
 language: python
 ---
@@ -39,4 +39,4 @@ Lines 1048–1101 in `chirp_bridge.py`
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
 | calls | [read](/chirp_bridge/read.md) |
-| called_by | [load_chirp](/chirp_bridge/load_chirp.md) |
+| called_by | [_finish_loading](/chirp_bridge/finish_loading.md) |

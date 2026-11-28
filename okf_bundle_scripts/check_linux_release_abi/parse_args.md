@@ -33,4 +33,4 @@ Lines 162–180 in `check_linux_release_abi.py`
 | Type | Target |
 |------|--------|
 | related | [check_linux_release_abi](/check_linux_release_abi.md) |
-| called_by | [main](/chirp_bridge/main.md) |
+| called_by | [main](/check_bundle_drivers/main.md) |

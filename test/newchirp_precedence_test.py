@@ -74,30 +74,90 @@ spec = importlib.util.spec_from_file_location("bridge", sys.argv[1])
 bridge = importlib.util.module_from_spec(spec)
 sys.modules["bridge"] = bridge
 spec.loader.exec_module(bridge)
-directory = bridge.load_chirp(sys.argv[2], sys.argv[3], None)
+driver_dir = sys.argv[4] if len(sys.argv) > 4 else None
+directory = bridge.load_chirp(sys.argv[2], sys.argv[3], driver_dir)
 for ident in ("Yaesu_FTX-1", "Yaesu_FTM-150E", "Retevis_RA89"):
     print(ident, directory.get_radio(ident).__module__)
+print("stale", "chirp.drivers.newchirp_stale_probe" in sys.modules)
 """
+
+STALE_DRIVER = (
+    "from chirp import chirp_common, directory\n"
+    "@directory.register\n"
+    "class Stale(chirp_common.CloneModeRadio):\n"
+    "    VENDOR = 'Yaesu'\n"
+    "    MODEL = 'FTX-1'\n"
+)
 
 
 class PackagedLayoutTest(unittest.TestCase):
-    def test_packaged_layout_keeps_newchirp_drivers(self):
+    def _run(self, source, driver_dir=None):
+        command = [sys.executable, "-B", "-c", PACKAGED_CHECK,
+                   str(ROOT / "scripts/chirp_bridge.py"), str(source),
+                   str(PYTHON_VENDOR)]
+        if driver_dir:
+            command.append(str(driver_dir))
+        result = subprocess.run(command, capture_output=True, text=True,
+                                timeout=600)
+        self.assertEqual(result.returncode, 0, result.stderr[-2000:])
+        return dict(line.split() for line in result.stdout.splitlines()
+                    if line.count(" ") == 1)
+
+    def _source(self, scratch):
+        source = Path(scratch) / "source"
+        shutil.copytree(SOURCE / "chirp", source / "chirp",
+                        ignore=shutil.ignore_patterns("__pycache__"))
+        return source
+
+    def test_separate_driver_folder_wins_and_ignores_stale_copies(self):
         with tempfile.TemporaryDirectory() as scratch:
-            source = Path(scratch) / "source"
-            shutil.copytree(SOURCE / "chirp", source / "chirp",
+            source = self._source(scratch)
+            ours = source / "newchirp_drivers"
+            shutil.copytree(ROOT / "drivers", ours,
                             ignore=shutil.ignore_patterns("__pycache__"))
+            (source / "chirp/drivers/newchirp_stale_probe.py").write_text(
+                STALE_DRIVER)
+            owners = self._run(source, ours)
+            for ident in ("Yaesu_FTX-1", "Yaesu_FTM-150E", "Retevis_RA89"):
+                self.assertTrue(
+                    owners.get(ident, "").startswith("newchirp.drivers."),
+                    (ident, owners.get(ident)))
+            self.assertEqual(owners["stale"], "False")
+
+    def test_legacy_merged_layout_still_keeps_newchirp_drivers(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            source = self._source(scratch)
             for driver in (ROOT / "drivers").glob("*.py"):
                 shutil.copy2(driver, source / "chirp/drivers" / driver.name)
-            result = subprocess.run(
-                [sys.executable, "-B", "-c", PACKAGED_CHECK,
-                 str(ROOT / "scripts/chirp_bridge.py"), str(source),
-                 str(PYTHON_VENDOR)],
-                capture_output=True, text=True, timeout=600)
-            self.assertEqual(result.returncode, 0, result.stderr[-2000:])
-            owners = dict(line.split() for line in result.stdout.splitlines()
-                          if line.count(" ") == 1)
+            owners = self._run(source)
             for ident in ("Yaesu_FTX-1", "Yaesu_FTM-150E", "Retevis_RA89"):
                 self.assertIn(".newchirp_", owners.get(ident, ""), ident)
+
+
+class BundleGateTest(unittest.TestCase):
+    def _gate(self, resources):
+        return subprocess.run(
+            [sys.executable, "-B", str(ROOT / "scripts/check_bundle_drivers.py"),
+             "--resources", str(resources),
+             "--bridge", str(ROOT / "scripts/chirp_bridge.py"),
+             "--vendor", str(PYTHON_VENDOR),
+             "--expect-drivers", str(ROOT / "drivers")],
+            capture_output=True, text=True, timeout=600)
+
+    def test_gate_passes_separate_layout_and_fails_mixed_layout(self):
+        with tempfile.TemporaryDirectory() as scratch:
+            resources = Path(scratch)
+            shutil.copytree(SOURCE / "chirp", resources / "chirp",
+                            ignore=shutil.ignore_patterns("__pycache__"))
+            shutil.copytree(ROOT / "drivers", resources / "newchirp_drivers",
+                            ignore=shutil.ignore_patterns("__pycache__"))
+            passed = self._gate(resources)
+            self.assertEqual(passed.returncode, 0, passed.stdout[-1500:])
+            shutil.copy2(ROOT / "drivers/newchirp_ra89.py",
+                         resources / "chirp/drivers/newchirp_ra89.py")
+            failed = self._gate(resources)
+            self.assertNotEqual(failed.returncode, 0)
+            self.assertIn("inside chirp/drivers", failed.stdout)
 
 
 if __name__ == "__main__":

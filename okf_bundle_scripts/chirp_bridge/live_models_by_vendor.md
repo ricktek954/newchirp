@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T10:43:55Z"
+timestamp: "2026-11-28T11:25:20Z"
 concept_id: chirp_bridge/live_models_by_vendor
 language: python
 ---
@@ -36,11 +36,11 @@ Return selectable serial/transport radios, excluding file-only models.
 | `directory` | `—` | `—` |
 
 ## Source
-Lines 1218–1232 in `chirp_bridge.py`
+Lines 1237–1251 in `chirp_bridge.py`
 
 ## Relationships
 
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
-| called_by | [main](/chirp_bridge/main.md) |
+| called_by | [main](/check_bundle_drivers/main.md) |
