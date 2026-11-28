@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-28 14:19:45",
+  "kind": "bug",
+  "manufacturer": "Wouxun",
+  "model": "KG-UV9GX Plus",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1100",
+  "status": "fix_committed",
+  "summary": "KG-UV9GX+ on Windows (1.0.79, COM3) fails every read at identification. CHIRP kguv9dplus waits 250 ms total for the 75-byte ident tail; the radio delivered 26-27 bytes. OEM KG-UV9D(Plus) CPS allows ReadInterval 388 ms, 100 ms/byte + 1000 ms, and sleeps 150 ms after the request.",
+  "title": "Ident reply cut short: Wanted 75, got 27/26",
+  "uid": "w-20261128-6456"
+}

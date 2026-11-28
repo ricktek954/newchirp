@@ -1063,6 +1063,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### KG-UV9GX Plus
 
+- **#w-20261128-6456 bug | fix_committed | high:** Ident reply cut short: Wanted 75, got 27/26
+  KG-UV9GX+ on Windows (1.0.79, COM3) fails every read at identification. CHIRP kguv9dplus waits 250 ms total for the 75-byte ident tail; the radio delivered 26-27 bytes. OEM KG-UV9D(Plus) CPS allows ReadInterval 388 ms, 100 ms/byte + 1000 ms, and sleeps 150 ms after the request.
+  Source: `email` mailbox:UID 1100
 - **#w-20261122-cac2 enhancement | released | low:** Owner could not find the KG-UV9GX Plus; it uses the KG-UV9GX profile
   Request to add the KG-UV9GX+ (cable, not Bluetooth). Already supported: CHIRP Wouxun_KG-UV9GX on desktop and the Web Programmer KG-UV9GX serial profile; the website catalog says 'KG-UV9GX Plus (use KG-UV9GX)'. The desktop picker search 'KG-UV9GX Plus' found nothing; a search hint now covers it.
   Source: `email` INBOX:896

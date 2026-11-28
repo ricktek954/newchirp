@@ -1,7 +1,7 @@
 {
-  "aliases": "",
+  "aliases": "KG-UV9GX,KG-UV9GX+",
   "created_at": "2026-11-22 10:28:58",
-  "driver_path": "",
+  "driver_path": "build_support chirp/drivers/kguv9dplus.py + scripts/chirp_bridge.py serial_read_timeout",
   "manufacturer": "Wouxun",
   "model": "KG-UV9GX Plus",
   "notes": ""

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 14:19:55",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1099",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-28",
+  "summary": "Repeat report on 1.0.78: read OK (20 channels), write blocked as read-only by design; same image hash as UID 1093 evidence."
+}

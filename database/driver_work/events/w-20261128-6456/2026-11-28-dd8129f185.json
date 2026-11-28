@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 14:19:54",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:aee9d118c830a211114ed3a83eb43ad0bde949b727f4ec122bafb47dc12e5f95",
+  "item": "w-20261128-6456",
+  "occurred_at": "2026-11-28",
+  "summary": "REA of Wouxun UV9DP_SEN.rar (KG-UV9D(Plus).exe, Setup Factory 6 payload): port open 0x40bbf0 = 19200 8N1, COMMTIMEOUTS 388/100/1000 ms; ident 0x40bd40 sends 0x80 then Sleep(150). CPS copy in ~/Downloads."
+}
