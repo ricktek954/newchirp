@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 218 concepts across 10 domains and 10 modules'
+description: 'Top-level OKF summary: 224 concepts across 11 domains and 11 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-28T07:42:56Z'
+timestamp: '2026-11-28T08:08:57Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 218 concepts | 10 domains | 10 modules
+> OKF v0.2 bundle | 224 concepts | 11 domains | 11 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 194 |
+| Function | 199 |
 | Class | 14 |
-| Module | 10 |
+| Module | 11 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 218 |
+| python | 224 |
 
 ## Domain Map
 
@@ -47,6 +47,10 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 ### [driver_work.py](driver_work.py/index.md) — 32 concepts
 
 - [driver_work](driver_work/index.md) (32 concepts) — Manufacturer/model work ledger for NewChirp radio support.
+
+### [export_radio_catalog.py](export_radio_catalog.py/index.md) — 6 concepts
+
+- [export_radio_catalog](export_radio_catalog/index.md) (6 concepts) — Export the radio model catalog from the pinned CHIRP source.
 
 ### [generate_gmrs_frs_pdf.py](generate_gmrs_frs_pdf.py/index.md) — 15 concepts
 

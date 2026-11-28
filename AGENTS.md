@@ -91,8 +91,9 @@ When the core confirmation is recorded:
    hardware-confirmed <date>`, followed by the known limitations.
 3. Website: if the model is in `newChirpExperimentalModels` in
    `scripts/sync-chirp-radios.mjs`, remove it. Add it to
-   `newChirpSupportedModels` only if upstream CHIRP's catalog does not
-   already list it. Run `npm run sync:radios` and check that it is gone from
+   `newChirpSupportedModels` only if the pinned CHIRP catalog
+   (`catalog/chirp-pinned-models.json`) does not already list it. Run
+   `npm run sync:radios` and check that it is gone from
    **New Experimental Radio Support** and appears under its manufacturer
    without the `(experimental)` suffix. Keep the Web Programmer profile.
 4. Deploy the website if step 3 changed it, and record the graduation as a
@@ -103,6 +104,12 @@ send the reporter one reminder and post a short request for owners of that
 model on the forum. Never graduate a radio on elapsed time alone. A
 read-only radio (`NEWCHIRP_WRITE_DISABLED`) stays experimental until its
 write path is built and confirmed.
+
+The website's CHIRP radio list is built from the CHIRP commit pinned in
+`scripts/chirp-source.pin`, never from CHIRP's website. Whenever the pin
+changes, run `python3 scripts/export_radio_catalog.py --out
+/Volumes/RICKEXT/web/newchirpweb/catalog/chirp-pinned-models.json`, then
+`npm run sync:radios` in the website, and commit both repositories.
 
 Show radios by the manufacturer's official model name wherever people read
 it (desktop picker, website catalog, Web Programmer, messages and replies),
