@@ -1,12 +1,25 @@
 # NewChirp Project State
 
-Last updated: 2026-11-27
+Last updated: 2026-11-28
 
 This is the short operational handoff for restarting work with no conversation
 history. `README.md` and `AGENTS.md` remain authoritative for build rules and
 release requirements.
 
 ## Resume here
+
+- CHIRP pin moved 2026-11-28 from `21e42e45` to upstream master
+  `f28d9202f98118af16706b3f1a8d89458da1fa1c` (99 commits, archive SHA-256
+  `0c291cad...a8c7`) after the first upstream review
+  (`docs/upstream_reviews/2026-11-28-f28d9202f.md`, ledger
+  `w-20261128-d1f0`). Every platform's next build ships it: run
+  `bash scripts/update_chirp.sh` first. New radios include BTECH UV-PRO,
+  Kenwood TH-K20 / TM-D750, Yaesu FTM-150E (NewChirp driver) and Zastone
+  ZT-D9000. NewChirp drivers keep precedence (FTX-1, FTM-150E;
+  `test/newchirp_precedence_test.py`). Verified on macOS: all 87 Python
+  test files and all 258 Flutter tests pass on the new pin. The website
+  catalog is built from the pin (`catalog/chirp-pinned-models.json`).
+  Next review due around 2026-12-12.
 
 - Linux `1.0.79` is live from source commit `d1665f13`. It adds the
   Quansheng TK11 OEM login/session flow before uploads, decodes and writes

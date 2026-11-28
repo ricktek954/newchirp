@@ -2,5 +2,5 @@
 # commit is one full commit from https://github.com/kk7ds/chirp
 # sha256 is the codeload tarball for that commit, before NewChirp patches.
 # Change both together. Do not point this file at a branch.
-commit 21e42e4518c167548af90ed7f9edf75e516c491a
-sha256 3d7d4424c0133a3cac5838c743b7f6ae7fe57d0ca27cb458664796039f4083a0
+commit f28d9202f98118af16706b3f1a8d89458da1fa1c
+sha256 0c291cad0f0b196e0a7ea3721f00757d2e79227afe2a0b4410fe59eee778a8c7
