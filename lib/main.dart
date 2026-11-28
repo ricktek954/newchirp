@@ -50,7 +50,7 @@ import 'widgets/radio_mapping_dialog.dart';
 
 const _menuChannel = MethodChannel('newchirp/menu');
 
-const String _newChirpVersion = '1.0.81';
+const String _newChirpVersion = '1.0.79';
 const bool _enableMyGmrsDirectory = true;
 
 /// True when a model is chosen and it exists in the loaded catalog.
