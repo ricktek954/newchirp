@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 08:03:32",
+  "details": "",
+  "event_type": "email",
+  "external_ref": "msgid:<179585296159.19106.16596429590363851336@newchirp.net>",
+  "item": "w-20261128-7604",
+  "occurred_at": "2026-11-28",
+  "summary": "Asked to stop ModemManager, avoid hubs, retry and send dmesg"
+}

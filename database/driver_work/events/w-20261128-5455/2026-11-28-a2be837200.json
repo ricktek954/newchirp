@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 08:03:33",
+  "details": "",
+  "event_type": "email",
+  "external_ref": "msgid:<179585297896.19249.4320303782561645337@newchirp.net>",
+  "item": "w-20261128-5455",
+  "occurred_at": "2026-11-28",
+  "summary": "Explained dropout fix in next update; retry meanwhile; FTDI/CP2102 advice"
+}
