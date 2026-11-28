@@ -1010,7 +1010,11 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
     #   +0x08 TX step count (big-endian), +0x0A TX flag
     #   +0x11 name, 4 bytes stored last character first (a real TK-359
     #   holds "OPEN" as "NEPO"; mailbox UID 1054, 2026-11-28)
-    # Flag bit 7 = 6.25 kHz steps (else 5 kHz); RX flag bit 0 = step bit 16.
+    # Steps are 6.25 kHz; RX flag bit 0 = step bit 16. Flag bit 7 is not a
+    # step-size bit: two owners' TK-359s (mailbox UIDs 1054, 1093) store
+    # RX/TX words with it clear that only decode in band at 6.25 kHz
+    # (460.100/460.000, 450.100/450.000, 469.900/470.000 test pairs). Its
+    # meaning is unknown, so writes leave the flag bytes as read.
     CHANNEL_BASE = 0x3400
     RECORD_SIZE = 0x20
     NAME_OFFSET = 0x11
@@ -1030,12 +1034,11 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
 
     @staticmethod
     def _kpg32_frequency(flag, word, high_bit):
-        step = 6_250 if flag & 0x80 else 5_000
         steps = word | (0x10000 if high_bit else 0)
-        if not high_bit and steps * step < 300_000_000:
-            # UHF counts all exceed 16 bits except 406-409.6 MHz at 6.25 kHz.
+        if not high_bit and steps * 6_250 < 300_000_000:
+            # UHF counts all exceed 16 bits except 406-409.6 MHz.
             steps |= 0x10000
-        return steps * step
+        return steps * 6_250
 
     def get_memory(self, number):
         if not 1 <= number <= self._channel_count:
@@ -1081,18 +1084,12 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
 
     @staticmethod
     def _kpg32_encode(frequency, flag):
-        """Flag byte and big-endian step count for a frequency."""
-        if frequency % 6_250 == 0:
-            flag |= 0x80
-            step = 6_250
-        elif frequency % 5_000 == 0:
-            flag &= ~0x80 & 0xFF
-            step = 5_000
-        else:
+        """Flag byte (unchanged) and 6.25 kHz step count for a frequency."""
+        if frequency % 6_250:
             raise errors.RadioError(
-                "TK-359 frequencies must be multiples of 5 or 6.25 kHz")
-        steps = frequency // step
-        return flag, steps
+                "TK-359 frequencies must be multiples of 6.25 kHz; the "
+                "KPG-32D encoding for 5 kHz channels is not traced yet")
+        return flag, frequency // 6_250
 
     def set_memory(self, memory):
         current = self._check_edit(memory)

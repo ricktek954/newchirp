@@ -497,14 +497,40 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         self.assertEqual(radio.get_memory(5).duplex, "")
         self.assertEqual(radio.get_memory(4).duplex, "+")
         self.assertEqual(radio.get_memory(4).offset, 6_500_000)
-        # A TX word outside the TK-359 band (373.64 MHz) is not a frequency.
-        self.assertEqual(radio.get_memory(1).duplex, "off")
+        # Flag 0x00 TX word 0x23E8 is 467.050 at 6.25 kHz, like channel 4.
+        self.assertEqual(radio.get_memory(1).duplex, "+")
+        self.assertEqual(radio.get_memory(1).offset, 6_500_000)
+
+    # Second owner TK-359 (mailbox UID 1093): KPG test-channel pairs.
+    TK359_REAL_2 = {
+        5: "05ea6f1f747505ea1f740010ff342c31353530484301ffffffffffffffffffff",
+        19: "05eaef1f907505ea1f80001fffffffffff3931484301ffffffffffffffffffff",
+        20: "05eaff19507505ea1940001fffffffffff3032484301ffffffffffffffffffff",
+        21: "05eaef25b07505ea25c0001fffffffffff3132484301ffffffffffffffffffff",
+    }
+
+    def test_tk359_flag_bit7_clear_is_still_6_25_khz(self):
+        image = bytearray(b"\xFF" * 0x53FF)
+        for number, record in self.TK359_REAL_2.items():
+            offset = 0x3400 + (number - 1) * 0x20
+            image[offset:offset + 0x20] = bytes.fromhex(record.replace(" ", ""))
+        radio = self._radio_from_image(self.tk359, image)
+        self.assertEqual(radio.get_memory(5).freq, 459_925_000)
+        self.assertEqual(radio.get_memory(5).name, "CH05")
+        for number, rx, tx in ((19, 460_100_000, 460_000_000),
+                               (20, 450_100_000, 450_000_000),
+                               (21, 469_900_000, 470_000_000)):
+            memory = radio.get_memory(number)
+            self.assertEqual(memory.freq, rx, number)
+            self.assertEqual(memory.freq + (memory.offset if memory.duplex == "+"
+                             else -memory.offset), tx, number)
 
     def test_tk359_frequency_flags(self):
         decode = self.tk359._kpg32_frequency
         self.assertEqual(decode(0x81, 0x1F90, True), 460_100_000)   # test freq 1
-        self.assertEqual(decode(0x00, 0x6760, False), 460_000_000)  # 5 kHz step
-        self.assertEqual(decode(0x01, 0x6760, True), 460_000_000)
+        # Flag bit 7 clear is still 6.25 kHz on real radios (UIDs 1054/1093).
+        self.assertEqual(decode(0x00, 0x23E8, False), 467_050_000)
+        self.assertEqual(decode(0x6F, 0x1F74, True), 459_925_000)
         self.assertEqual(decode(0x80, 0xFDC0, False), 406_000_000)  # below bit 16
 
     def test_tk359_accepts_z_fill_blocks_like_kpg32d(self):

@@ -264,8 +264,16 @@ KPG-23D-saved values:
   `1` 450-470, `2` 406-430 MHz).
 - 250 channel records of 32 bytes from `0x3400` (offset 0 is unused `FF`).
 - Record: `+02` RX flag, `+03..04` RX step count (big-endian), `+08..09` TX
-  step count (big-endian), `+0A` TX flag, `+12` name (printable ASCII).
-- Flag bit 7: 6.25 kHz steps, else 5 kHz. RX flag bit 0: step-count bit 16.
+  step count (big-endian), `+0A` TX flag, `+11..14` name, 4 bytes stored
+  last character first (a real radio holds "OPEN" as `NEPO`).
+- Counts are 6.25 kHz steps. RX flag bit 0: step-count bit 16. Flag bit 7
+  is not a step-size bit (corrected 2026-11-28): two owners' radios
+  (mailbox UIDs 1054, 1093) store words with bit 7 clear that only decode in
+  band at 6.25 kHz, including KPG test pairs RX 460.100 / TX 460.000,
+  450.100 / 450.000 and 469.900 / 470.000; flags seen are RX `EF`, `FF`,
+  `6F` and TX `80`, `40`, `00`. Their meaning is unknown, so writes keep
+  them. The 5 kHz encoding (if any) is not traced; NewChirp refuses TK-359
+  frequencies that are not 6.25 kHz multiples.
   For TX, NewChirp sets bit 16 when the count would decode below 300 MHz
   (true for every TK-359 frequency except 406-409.6 MHz at 6.25 kHz).
 - Erased slot: `FF FF FF` at `+02`.

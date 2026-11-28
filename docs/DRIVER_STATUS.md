@@ -2040,7 +2040,7 @@ Last updated: 2026-11-20
   - KPG-32D `SAMPLE.FDT`:
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
 - Driver SHA-256:
-  `006720406ee8b04ab0cbc060845f7a6fa17d671cb45334019132753ab5f8e41e`
+  `460b913b5e2c8ff69a41bfeb3e3d82644043c775cf006013605b5ba805401511`
 - Ground-truth files saved by the OEM programmers in QEMU with known
   frequencies typed in (2026-11-26; hashes in `docs/KPG23_PROTOCOL.md`):
   `sample.u1f` (TK-350 450-470), `sample.u4f` (TK-350 400-430),
@@ -2094,9 +2094,17 @@ Last updated: 2026-11-20
   with a TX word of 0x23E8 and TX flag 0x00, which the 5 kHz rule turns into
   373.64 MHz; channel 4 has the same word with flag 0x80 (467.050) and
   channel 5 is 460.700 simplex. A TX value outside 406-470 MHz is now shown
-  as TX off instead of a -86.9 MHz offset. What TX flag 0x00 means
-  (TX inhibit, or another step rule) is unknown, so TK-359 writes stay
-  disabled until the owner confirms what those channels transmit on.
+  as TX off instead of a -86.9 MHz offset.
+- TK-359 step rule corrected (2026-11-28, second owner radio, mailbox UID
+  1093, image SHA-256
+  `6befe9b408dfadd5aa9d27a37e955d2bc5de020efd6590378a2357b78858fb4a`): all
+  counts are 6.25 kHz steps; flag bit 7 is not a step bit. Bit-7-clear words
+  decode to the KPG test pairs 460.100/460.000, 450.100/450.000 and
+  469.900/470.000 (RX matching the owner's screen), 459.925 MHz instead of
+  367.94, and the first radio's TX to 467.050 (+6.5 MHz). Flags are kept on
+  write; non-6.25 kHz frequencies are refused. Writes stay disabled: the Web
+  Programmer has no KPG-32D write session yet, and the desktop write needs
+  a controlled owner test.
 - Write path (2026-11-26): both OEM write sessions traced in QEMU and
   implemented (TK-350: 26 `W` blocks, never 0xFC00-0xFCFF, identity must
   match the image's `P350n`; TK-359: only blocks changed since the read, `Z`
