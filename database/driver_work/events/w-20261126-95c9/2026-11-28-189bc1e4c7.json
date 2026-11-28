@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 08:50:17",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1092",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-28",
+  "summary": "Owner asks to enable TK-359 writes; blocked on TX flag meaning"
+}

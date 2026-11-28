@@ -98,17 +98,31 @@ fi
 
 COMMIT="$(awk '/^commit / {print $2; exit}' "$PIN_FILE")"
 EXPECTED_SHA="$(awk '/^sha256 / {print $2; exit}' "$PIN_FILE")"
+# Review mode (scripts/upstream_review.py): fetch another commit into its own
+# folder to test it. The pin and chirp-version.txt are left untouched.
+REVIEW_COMMIT="${NEWCHIRP_CHIRP_REVIEW_COMMIT:-}"
+if [[ -n "$REVIEW_COMMIT" ]]; then
+  if [[ ! "$REVIEW_COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
+    echo "NEWCHIRP_CHIRP_REVIEW_COMMIT must be 40 hex characters." >&2
+    exit 1
+  fi
+  COMMIT="$REVIEW_COMMIT"
+  EXPECTED_SHA="review"
+fi
 if [[ ! "$COMMIT" =~ ^[0-9a-f]{40}$ ]]; then
   echo "CHIRP pin commit must be 40 hex characters." >&2
   exit 1
 fi
-if [[ ! "$EXPECTED_SHA" =~ ^[0-9a-f]{64}$ ]]; then
+if [[ "$EXPECTED_SHA" != "review" && ! "$EXPECTED_SHA" =~ ^[0-9a-f]{64}$ ]]; then
   echo "CHIRP pin sha256 must be 64 hex characters." >&2
   exit 1
 fi
 
 ARCHIVE="$CACHE_DIR/chirp-$COMMIT.tar.gz"
 TARGET_DIR="$BUILD_SUPPORT_DIR/chirp-$COMMIT"
+if [[ -n "$REVIEW_COMMIT" ]]; then
+  TARGET_DIR="$BUILD_SUPPORT_DIR/chirp-review-$COMMIT"
+fi
 URL="https://codeload.github.com/kk7ds/chirp/tar.gz/$COMMIT"
 
 download_pinned_archive() {
@@ -127,7 +141,9 @@ import tarfile
 
 archive, expected = sys.argv[1], sys.argv[2]
 digest = hashlib.sha256(open(archive, "rb").read()).hexdigest()
-if digest != expected:
+if expected == "review":
+    print("CHIRP archive sha256 %s" % digest, file=sys.stderr)
+elif digest != expected:
     print("CHIRP archive checksum does not match the pin.", file=sys.stderr)
     print("Expected %s" % expected, file=sys.stderr)
     print("Actual   %s" % digest, file=sys.stderr)
@@ -185,6 +201,11 @@ if [[ ! -d "$TARGET_DIR/chirp" ]]; then
   exit 1
 fi
 
+if [[ -n "$REVIEW_COMMIT" ]]; then
+  echo "Prepared CHIRP review commit $COMMIT" >&2
+  echo "$TARGET_DIR"
+  exit 0
+fi
 printf '%s\n' "$COMMIT" > "$CURRENT_VERSION_FILE"
 echo "Using pinned CHIRP commit $COMMIT" >&2
 echo "$TARGET_DIR"

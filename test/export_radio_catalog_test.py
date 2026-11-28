@@ -1,6 +1,7 @@
 """Offline tests for the pinned CHIRP radio catalog export."""
 
 import importlib.util
+import os
 from pathlib import Path
 import unittest
 
@@ -28,6 +29,8 @@ class ExportRadioCatalogTest(unittest.TestCase):
             for vendor in cls.exporter.collect(cls.source)
         }
 
+    @unittest.skipIf(os.environ.get("NEWCHIRP_CHIRP_SOURCE"),
+                     "running against an upstream review tree")
     def test_source_is_the_pinned_commit(self):
         self.assertIn(self.exporter.pinned_commit(), str(self.source))
 

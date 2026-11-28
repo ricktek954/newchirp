@@ -105,6 +105,26 @@ model on the forum. Never graduate a radio on elapsed time alone. A
 read-only radio (`NEWCHIRP_WRITE_DISABLED`) stays experimental until its
 write path is built and confirmed.
 
+## Upstream CHIRP review
+
+NewChirp ships one pinned CHIRP commit (`scripts/chirp-source.pin`) and
+never pulls upstream changes automatically. Every two weeks, and before
+any release that should pick up upstream fixes, run:
+
+```sh
+python3 scripts/upstream_review.py            # compares the pin with master
+```
+
+It prepares the target in `build_support/chirp-review-<commit>` with
+NewChirp's source patches, lists new and removed radios, flags changed
+upstream modules that NewChirp drivers patch or extend, runs the Python and
+CHIRP-dependent Dart tests against the target, and writes
+`docs/upstream_reviews/<date>-<commit>.md`. Commit the report. It never
+changes the pin. Adopt a target only in a separate reviewed commit, after
+every overlap is resolved (our patch still needed, conflicting, or fixed
+upstream) and every test passes; follow the report's "Adopting the target"
+steps and record the pin change in the driver ledger.
+
 The website's CHIRP radio list is built from the CHIRP commit pinned in
 `scripts/chirp-source.pin`, never from CHIRP's website. Whenever the pin
 changes, run `python3 scripts/export_radio_catalog.py --out

@@ -706,6 +706,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
   Published a universal signed and notarized DMG from source commit 0e9a4242b. Since 1.0.76: TK-350 5 kHz channels decoded and written by their byte-13 step bits, CTCSS tone writes, and frequency edits no longer refused by the tone check; UV-5RM Pro handshake follows CPS v1.12 (19200 announce first, stray bytes before the ACK skipped); Quansheng TK11 upload opens its own session and checks every block; every lib/ function documented. Verification: analyzer clean; 257 Flutter tests; 701 Python tests passed (2 fixture skips); embedded version 1.0.77 / 77; arm64 and x86_64; 278 driver modules; bundled kpg23, 5rh_pro, tk11_upload and bridge match source; strict codesigning and Gatekeeper (Notarized Developer ID) accepted for the DMG and mounted app; local/server/public SHA-256 matched. Artifact SHA-256: 1feead825b8d8a9e2fc5c3ec5181139babc2d17008007ed908a2718cad7d879c. Apple notarization: 8e4766d8-b1ba-48ba-b9db-81f3fdab5206. The live manifest reports macOS 1.0.77.
   Source: `release` desktop:0e9a4242b
 
+### Upstream CHIRP
+
+- **#w-20261128-d1f0 maintenance | open | normal:** Adopt upstream CHIRP f28d9202 (99 commits past pin 21e42e45)
+  First upstream review (docs/upstream_reviews/2026-11-28-f28d9202f.md): all NewChirp source patches apply; 84/86 Python and 12/12 Dart test files pass. Blockers: DM-32UV _Link.xfer signature changed upstream (our PASSSTA/SYSINFO retry wrapper breaks); upstream added its own Yaesu FTX-1 driver (ours collides; static_bank_zones test fails) and FTM-150E (next to our FTM-150R). 16 changed upstream drivers that our code extends need review; 14 radios would be added.
+  Source: `review` docs/upstream_reviews/2026-11-28-f28d9202f.md
+
 ### Website
 
 - **#w-20261125-daa3 bug | fix_committed | high:** myGMRS sign-in returns 503: server credentials missing

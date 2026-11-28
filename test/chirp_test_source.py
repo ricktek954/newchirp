@@ -1,5 +1,6 @@
 """Resolve the local CHIRP source used by offline tests."""
 
+import os
 from pathlib import Path
 
 
@@ -19,7 +20,14 @@ def _pinned_commit():
 
 
 def chirp_source():
-    """Return the downloaded source for the currently pinned CHIRP commit."""
+    """Return the downloaded source for the currently pinned CHIRP commit.
+
+    NEWCHIRP_CHIRP_SOURCE points the tests at another prepared tree, such as
+    a build_support/chirp-review-<commit> folder from scripts/upstream_review.py.
+    """
+    override = os.environ.get("NEWCHIRP_CHIRP_SOURCE")
+    if override:
+        return Path(override)
     commit = _pinned_commit()
     if VERSION_FILE.is_file():
         current = VERSION_FILE.read_text(encoding="utf-8").strip()

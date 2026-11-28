@@ -1,6 +1,10 @@
 import 'dart:io';
 
 String? chirpSourceForTests() {
+  // NEWCHIRP_CHIRP_SOURCE points the tests at another prepared tree, such as
+  // a build_support/chirp-review-<commit> folder from upstream_review.py.
+  final override = Platform.environment['NEWCHIRP_CHIRP_SOURCE'];
+  if (override != null && override.isNotEmpty) return override;
   final pinFile = File('scripts/chirp-source.pin');
   if (!pinFile.existsSync()) {
     throw StateError('CHIRP source pin is missing.');

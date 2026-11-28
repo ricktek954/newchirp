@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 08:50:16",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "artifact:sha256:2c3bb88fd91e949cdcb2e3e71ff9f14b419bbdbc95ac4cfa21323f51a1829ba6",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-28",
+  "summary": "Owner image: name is 4 bytes at 0x11 stored last character first (NEPO=OPEN, FF MYG=GYM); 20/22 channels RX 460.550 with TX word 0x23E8 + flag 0x00 (373.64 MHz under the 5 kHz rule); ch4 same word flag 0x80 = 467.050; ch5 460.700 simplex. TX flag 0x00 meaning unknown."
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 08:50:16",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:fdccd2f1b",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-28",
+  "summary": "Names decoded reversed at 0x11; TX outside 406-470 MHz shown as TX off; writes still disabled"
+}
