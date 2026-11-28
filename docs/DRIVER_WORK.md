@@ -708,7 +708,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Upstream CHIRP
 
-- **#w-20261128-d1f0 maintenance | open | normal:** Adopt upstream CHIRP f28d9202 (99 commits past pin 21e42e45)
+- **#w-20261128-d1f0 maintenance | fix_committed | normal:** Adopt upstream CHIRP f28d9202 (99 commits past pin 21e42e45)
   First upstream review (docs/upstream_reviews/2026-11-28-f28d9202f.md): all NewChirp source patches apply; 84/86 Python and 12/12 Dart test files pass. Blockers: DM-32UV _Link.xfer signature changed upstream (our PASSSTA/SYSINFO retry wrapper breaks); upstream added its own Yaesu FTX-1 driver (ours collides; static_bank_zones test fails) and FTM-150E (next to our FTM-150R). 16 changed upstream drivers that our code extends need review; 14 radios would be added.
   Source: `review` docs/upstream_reviews/2026-11-28-f28d9202f.md
 
