@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 10:19:21",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:b6e661462",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-28",
+  "summary": "6.25 kHz decode for all counts; flags preserved on write; non-6.25 kHz refused"
+}

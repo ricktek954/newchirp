@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 10:19:24",
+  "details": "",
+  "event_type": "email",
+  "external_ref": "mailbox:UID 1097",
+  "item": "w-20261119-7381",
+  "occurred_at": "2026-11-28",
+  "summary": "The 2026-11-23 reply to the 1.0.37 owner bounced after 5 days: Outlook rate-limits the server IP for reputation (451 4.7.650)"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 10:19:20",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "mailbox:UID 1093",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-28",
+  "summary": "Flag bit 7 is not a step bit: bit-7-clear words decode to KPG test pairs 460.100/460.000, 450.100/450.000, 469.900/470.000 only at 6.25 kHz; first radio TX 467.050. Remaining for writes: Web Programmer KPG-32D write session, controlled owner test"
+}

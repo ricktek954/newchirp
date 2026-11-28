@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 10:19:19",
+  "details": "",
+  "event_type": "evidence",
+  "external_ref": "artifact:sha256:6befe9b408dfadd5aa9d27a37e955d2bc5de020efd6590378a2357b78858fb4a",
+  "item": "w-20261126-95c9",
+  "occurred_at": "2026-11-28",
+  "summary": "Second TK-359 read (Windows 1.0.77, 20 channels); owner tried to write a CSV and was blocked as read-only; photo shows names reversed (1HC) on 1.0.77"
+}
