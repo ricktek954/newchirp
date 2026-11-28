@@ -3,7 +3,7 @@ description: 'Top-level OKF summary: 1170 concepts across 5 domains and 39 modul
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-28T07:37:47Z'
+timestamp: '2026-11-28T10:36:31Z'
 title: okf_bundle — Knowledge Summary
 type: Index
 ---
@@ -58,9 +58,9 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 - [services/radio_bridge](services/radio_bridge/index.md) (57 concepts)
 - [services/module_sandbox](services/module_sandbox/index.md) (36 concepts)
 - [services/mygmrs_client](services/mygmrs_client/index.md) (22 concepts)
+- [services/chirp_csv](services/chirp_csv/index.md) (17 concepts)
 - [services/mototrbo_cps2_xml](services/mototrbo_cps2_xml/index.md) (17 concepts)
 - [services/update_checker](services/update_checker/index.md) (17 concepts)
-- [services/chirp_csv](services/chirp_csv/index.md) (17 concepts)
 - [services/diagnostic_log](services/diagnostic_log/index.md) (15 concepts)
 - [services/channel_list_pdf](services/channel_list_pdf/index.md) (14 concepts)
 - *…and 10 more modules*
@@ -90,16 +90,16 @@ Highest-value concepts across all domains (Classes and Functions with rich descr
 | [_australianUhfNote](/models/frequency_reference/australianUhfNote.md) | Function | `models/frequency_reference.dart` | Usage note for an Australian UHF CB channel (repeater output… |
 | [repeaterCountiesForRegion](/models/repeater_regions/repeaterCountiesForRegion.md) | Function | `models/repeater_regions.dart` | Counties to offer for [region]: the built-in list plus any c… |
 | [currentUpdatePlatform](/services/update_checker/currentUpdatePlatform.md) | Function | `services/update_checker.dart` | Platform name used by the release API: windows, macos, linux… |
-| [_settingsMessage](/main/settingsMessage.md) | Function | `main.dart` | Centered icon, title, text and optional button for the setti… |
 | [normalizeRepeaterCounty](/models/repeater_regions/normalizeRepeaterCounty.md) | Function | `models/repeater_regions.dart` | County name without suffixes like " County" or " census area… |
 | [check](/services/update_checker/check.md) | Function | `services/update_checker.dart` | Asks the website for this platform's latest release and comp… |
+| [_settingsMessage](/main/settingsMessage.md) | Function | `main.dart` | Centered icon, title, text and optional button for the setti… |
 | [load](/services/app_language/load.md) | Function | `services/app_language.dart` | Reads the saved choice; returns "system" when nothing is sav… |
 | [_postJson](/services/mygmrs_client/postJson.md) | Function | `services/mygmrs_client.dart` | POSTs [payload] as JSON to the website and returns the JSON … |
-| [_loadChirpModule](/main/loadChirpModule.md) | Function | `main.dart` | Loads a user-supplied CHIRP driver module (after a warning),… |
 | [_remapLocations](/models/radio_mapping/remapLocations.md) | Function | `models/radio_mapping.dart` | Applies [locations] to a list of channel numbers, dropping d… |
 | [load](/services/column_layout_store/load.md) | Function | `services/column_layout_store.dart` | Reads the saved channel-table column order and widths; null … |
-| [_clearChannelsAtLocations](/main/clearChannelsAtLocations.md) | Function | `main.dart` | Clears the channels at [locations] in one undo step (Midland… |
-| [_confirmOverwriteChannels](/main/confirmOverwriteChannels.md) | Function | `main.dart` | Asks before overwriting several channels (one channel uses t… |
+| [_loadChirpModule](/main/loadChirpModule.md) | Function | `main.dart` | Loads a user-supplied CHIRP driver module (after a warning),… |
+| [copy](/models/radio_channel/copy.md) | Function | `models/radio_channel.dart` | The 22 standard GMRS channels as a starter list (repeater ch… |
+| [gmrsStarterChannels](/models/radio_channel/gmrsStarterChannels.md) | Function | `models/radio_channel.dart` | The 22 standard GMRS channels as a starter list (repeater ch… |
 
 ## Usage with OpenCode
 
