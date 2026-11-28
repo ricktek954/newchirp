@@ -1,28 +1,28 @@
 ---
-description: 'Top-level OKF summary: 224 concepts across 11 domains and 11 modules'
+description: 'Top-level OKF summary: 245 concepts across 12 domains and 12 modules'
 git_branch: main
 git_repo: newchirp
 okf_version: '0.2'
-timestamp: '2026-11-28T08:08:57Z'
+timestamp: '2026-11-28T08:47:50Z'
 title: okf_bundle_scripts — Knowledge Summary
 type: Index
 ---
 
 # okf_bundle_scripts — Knowledge Summary
 
-> OKF v0.2 bundle | 224 concepts | 11 domains | 11 modules
+> OKF v0.2 bundle | 245 concepts | 12 domains | 12 modules
 
 ## Stats
 
 | Type | Count |
 |------|-------|
-| Function | 199 |
+| Function | 219 |
 | Class | 14 |
-| Module | 11 |
+| Module | 12 |
 
 | Language | Concepts |
 |----------|----------|
-| python | 224 |
+| python | 245 |
 
 ## Domain Map
 
@@ -71,6 +71,10 @@ Use these links to navigate the bundle or prime an AI agent with focused context
 ### [newchirp_usb_dfu.py](newchirp_usb_dfu.py/index.md) — 27 concepts
 
 - [newchirp_usb_dfu](newchirp_usb_dfu/index.md) (27 concepts) — Minimal libusb DFU transport used by experimental STM32 radios.
+
+### [upstream_review.py](upstream_review.py/index.md) — 21 concepts
+
+- [upstream_review](upstream_review/index.md) (21 concepts) — Review upstream CHIRP changes against NewChirp's pinned commit.
 
 ## Key Concepts
 

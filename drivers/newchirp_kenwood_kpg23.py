@@ -1008,11 +1008,12 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
     # saved by KPG-32D with 460.0125/465.000 and 455.500/455.500 typed in):
     #   +0x02 RX flag, +0x03 RX step count (big-endian)
     #   +0x08 TX step count (big-endian), +0x0A TX flag
-    #   +0x12 name
+    #   +0x11 name, 4 bytes stored last character first (a real TK-359
+    #   holds "OPEN" as "NEPO"; mailbox UID 1054, 2026-11-28)
     # Flag bit 7 = 6.25 kHz steps (else 5 kHz); RX flag bit 0 = step bit 16.
     CHANNEL_BASE = 0x3400
     RECORD_SIZE = 0x20
-    NAME_OFFSET = 0x12
+    NAME_OFFSET = 0x11
     NAME_LENGTH = 4
 
     def get_features(self):
@@ -1060,12 +1061,17 @@ class KenwoodTK359Radio(_KenwoodKPG23Base):
         if record[8:11] != b"\xff\xff\xff":
             tx_frequency = self._kpg32_frequency(
                 record[10], (record[8] << 8) | record[9], False)
-        offset = tx_frequency - memory.freq
-        memory.duplex = "+" if offset > 0 else "-" if offset < 0 else ""
-        memory.offset = abs(offset)
+        band_low, band_high = self.get_features().valid_bands[0]
+        if not band_low <= tx_frequency <= band_high:
+            memory.duplex = "off"
+            memory.offset = 0
+        else:
+            offset = tx_frequency - memory.freq
+            memory.duplex = "+" if offset > 0 else "-" if offset < 0 else ""
+            memory.offset = abs(offset)
         raw_name = record[self.NAME_OFFSET:self.NAME_OFFSET + self.NAME_LENGTH]
         name = bytearray()
-        for byte in raw_name:
+        for byte in reversed(raw_name):
             if not 0x20 <= byte < 0x7F:
                 break
             name.append(byte)

@@ -30,6 +30,4 @@ Lines 78–79 in `driver_work.py`
 | Type | Target |
 |------|--------|
 | related | [driver_work](/driver_work.md) |
-| called_by | [add_event](/driver_work/add_event.md) |
-| called_by | [_execute](/driver_work/execute.md) |
-| called_by | [new_uid](/driver_work/new_uid.md) |
+| called_by | [main](/upstream_review/main.md) |

@@ -475,6 +475,31 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         self.assertTrue(radio.get_memory(3).empty)
         self.assertTrue(radio.get_memory(250).empty)
 
+    # Records from an owner's TK-359 read (mailbox UID 1054, 2026-11-27).
+    TK359_REAL = {
+        1: "04a4ff1fd8d504a423e8001fffffffffff45534c430420f90ff1ffffffffffff",
+        4: "04a4ff1fd8d504a423e8801fffffffffff4e45504f0320f90ff5ffffffffffff",
+        5: "8fffff1ff0f08fff1ff0801fffffffffff32204843 0220f90ff6ffffffffffff",
+        13: "04a4ff1fd8d504a423e8001fffffffffffff432f480420f91ff3ffffffffffff",
+    }
+
+    def test_tk359_real_radio_names_read_last_character_first(self):
+        image = bytearray(b"\xFF" * 0x53FF)
+        for number, record in self.TK359_REAL.items():
+            offset = 0x3400 + (number - 1) * 0x20
+            image[offset:offset + 0x20] = bytes.fromhex(record.replace(" ", ""))
+        radio = self._radio_from_image(self.tk359, image)
+        self.assertEqual(radio.get_memory(1).name, "CLSE")
+        self.assertEqual(radio.get_memory(4).name, "OPEN")
+        self.assertEqual(radio.get_memory(5).name, "CH 2")
+        self.assertEqual(radio.get_memory(13).name, "H/C")
+        self.assertEqual(radio.get_memory(5).freq, 460_700_000)
+        self.assertEqual(radio.get_memory(5).duplex, "")
+        self.assertEqual(radio.get_memory(4).duplex, "+")
+        self.assertEqual(radio.get_memory(4).offset, 6_500_000)
+        # A TX word outside the TK-359 band (373.64 MHz) is not a frequency.
+        self.assertEqual(radio.get_memory(1).duplex, "off")
+
     def test_tk359_frequency_flags(self):
         decode = self.tk359._kpg32_frequency
         self.assertEqual(decode(0x81, 0x1F90, True), 460_100_000)   # test freq 1

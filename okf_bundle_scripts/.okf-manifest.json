@@ -180,6 +180,19 @@
         "driver_work"
       ]
     },
+    "export_radio_catalog.py": {
+      "path": "export_radio_catalog.py",
+      "mtime_ns": 1795853336084685436,
+      "hash": "b2bb8e6f3a44d7e45522631888ac081194c2dea3e07c33ed233f40863f5b54c3",
+      "concept_ids": [
+        "export_radio_catalog/collect",
+        "export_radio_catalog/load_alias_map",
+        "export_radio_catalog/main",
+        "export_radio_catalog/pinned_commit",
+        "export_radio_catalog/yaml_scalar",
+        "export_radio_catalog"
+      ]
+    },
     "generate_gmrs_frs_pdf.py": {
       "path": "generate_gmrs_frs_pdf.py",
       "mtime_ns": 1787526889873622751,
@@ -291,17 +304,32 @@
         "newchirp_usb_dfu"
       ]
     },
-    "export_radio_catalog.py": {
-      "path": "export_radio_catalog.py",
-      "mtime_ns": 1795853336084685436,
-      "hash": "b2bb8e6f3a44d7e45522631888ac081194c2dea3e07c33ed233f40863f5b54c3",
+    "upstream_review.py": {
+      "path": "upstream_review.py",
+      "mtime_ns": 1795855669668922282,
+      "hash": "2f2fa60c9251e83a928b1ed32eb2d3077f90a72e858ebc14da80638495417381",
       "concept_ids": [
-        "export_radio_catalog",
-        "export_radio_catalog/pinned_commit",
-        "export_radio_catalog/yaml_scalar",
-        "export_radio_catalog/load_alias_map",
-        "export_radio_catalog/collect",
-        "export_radio_catalog/main"
+        "upstream_review",
+        "upstream_review/pinned",
+        "upstream_review/resolve_target",
+        "upstream_review/prepare_tree",
+        "upstream_review/pinned_tree",
+        "upstream_review/upstream_commits",
+        "upstream_review/changed_files",
+        "upstream_review/line_delta",
+        "upstream_review/export_catalog",
+        "upstream_review/newchirp_references",
+        "upstream_review/module_users",
+        "upstream_review/run_python_tests",
+        "upstream_review/flutter_binary",
+        "upstream_review/run_dart_tests",
+        "upstream_review/module_name",
+        "upstream_review/mentions",
+        "upstream_review/family",
+        "upstream_review/newchirp_models",
+        "upstream_review/maintained_collisions",
+        "upstream_review/write_report",
+        "upstream_review/main"
       ]
     }
   },
@@ -1607,7 +1635,7 @@
       "type": "Function",
       "resource": "check_linux_release_abi.py",
       "render_hash": "stale",
-      "edge_hash": "0e0fa7d11532bef56781f7c5a66f470bae76a81b1dadb74179fd66dc5368498d",
+      "edge_hash": "aab8edceb5c9a44ff8d904f9de746c1bc6745f7013f1aec5cf905427682d6560",
       "enriched": false
     },
     "check_linux_release_abi/main": {
@@ -1655,7 +1683,7 @@
       "type": "Function",
       "resource": "driver_work.py",
       "render_hash": "stale",
-      "edge_hash": "8487df2a1367afc0c55de06128a66e326f05bb9e4021219eec49951870adb533",
+      "edge_hash": "e22d1b99bdb16f40ccd20c92840395b42949e79448adff8ea131511a0756041a",
       "enriched": false
     },
     "driver_work/display_path": {
@@ -2153,7 +2181,175 @@
       "render_hash": "stale",
       "edge_hash": "36f3657a557e4dc9a0971accf93f09696178ebcc879a7ac8367a4e57243439d4",
       "enriched": false
+    },
+    "upstream_review": {
+      "concept_id": "upstream_review",
+      "type": "Module",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "04976f379099cd6474c20b2b37f3888d57c5308f2674fabfbc9a1231ae9f2857",
+      "enriched": false
+    },
+    "upstream_review/pinned": {
+      "concept_id": "upstream_review/pinned",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/resolve_target": {
+      "concept_id": "upstream_review/resolve_target",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/prepare_tree": {
+      "concept_id": "upstream_review/prepare_tree",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/pinned_tree": {
+      "concept_id": "upstream_review/pinned_tree",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/upstream_commits": {
+      "concept_id": "upstream_review/upstream_commits",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/changed_files": {
+      "concept_id": "upstream_review/changed_files",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/line_delta": {
+      "concept_id": "upstream_review/line_delta",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/export_catalog": {
+      "concept_id": "upstream_review/export_catalog",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/newchirp_references": {
+      "concept_id": "upstream_review/newchirp_references",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/module_users": {
+      "concept_id": "upstream_review/module_users",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/run_python_tests": {
+      "concept_id": "upstream_review/run_python_tests",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/flutter_binary": {
+      "concept_id": "upstream_review/flutter_binary",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "ca98227060110207bceb0ccbfe672f7f4cb28f981b3ddcb2429d4700462e2069",
+      "enriched": false
+    },
+    "upstream_review/run_dart_tests": {
+      "concept_id": "upstream_review/run_dart_tests",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "60fb8c13c16a3fd72b8f80d554571fdbf790750dd167f9f1f9c0e826fd7535b0",
+      "enriched": false
+    },
+    "upstream_review/module_name": {
+      "concept_id": "upstream_review/module_name",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/mentions": {
+      "concept_id": "upstream_review/mentions",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/family": {
+      "concept_id": "upstream_review/family",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e81fd81f886e052eb8c231dad8dfc8e3805c33c0fed8b08f58d8420fe5ea4113",
+      "enriched": false
+    },
+    "upstream_review/newchirp_models": {
+      "concept_id": "upstream_review/newchirp_models",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "c088c2c62977d5877a6de0423fe2d93f5fbb040b0266f0ef8d543b2f6e94d5bf",
+      "enriched": false
+    },
+    "upstream_review/maintained_collisions": {
+      "concept_id": "upstream_review/maintained_collisions",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e3b8a17e4e6e63f5bcf9fafc039647f9e9d1c37eaa67425c8f3e61953e27f1c1",
+      "enriched": false
+    },
+    "upstream_review/write_report": {
+      "concept_id": "upstream_review/write_report",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "e61e2fabb4af627f00cbfc0d58b3dc97317f816bc97567e0183f33a0750ad674",
+      "enriched": false
+    },
+    "upstream_review/main": {
+      "concept_id": "upstream_review/main",
+      "type": "Function",
+      "resource": "upstream_review.py",
+      "render_hash": "stale",
+      "edge_hash": "5c28a0fa5fd73f9097d39389722b09c0254cbd80a417d0af0e83ce0c5a584a7a",
+      "enriched": false
     }
   },
-  "generated_at": "2026-11-28T08:08:57Z"
+  "generated_at": "2026-11-28T08:47:50Z"
 }

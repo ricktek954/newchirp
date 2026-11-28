@@ -2022,7 +2022,7 @@ Last updated: 2026-11-20
   - KPG-32D `SAMPLE.FDT`:
     `0107e63b70d156acabb2873b6ab8ddcbb0e291e94b15b0cff95889ae00ba5189`
 - Driver SHA-256:
-  `5e4e8da43d82cbd19db8ab6ef7b452cffb70f64a98bc146503d5a19b63ce4072`
+  `006720406ee8b04ab0cbc060845f7a6fa17d671cb45334019132753ab5f8e41e`
 - Ground-truth files saved by the OEM programmers in QEMU with known
   frequencies typed in (2026-11-26; hashes in `docs/KPG23_PROTOCOL.md`):
   `sample.u1f` (TK-350 450-470), `sample.u4f` (TK-350 400-430),
@@ -2067,6 +2067,18 @@ Last updated: 2026-11-20
   radio with 1.0.74 (2026-11-26, mailbox UIDs 1011-1016); channels not yet
   confirmed. TK-359 handshake and `Z` replies observed (UIDs 1014, 1015,
   1018); read not yet completed.
+- TK-359 real-radio decode (2026-11-28, ledger `w-20261126-95c9`, owner
+  image from mailbox UID 1054, SHA-256
+  `2c3bb88fd91e949cdcb2e3e71ff9f14b419bbdbc95ac4cfa21323f51a1829ba6`): the
+  name is the 4 bytes at 0x11 stored last character first ("OPEN" is held
+  as `NEPO`, "GYM" as `FF MYG`); KPG-32D's own " 1 " sample reads the same
+  either way, which hid this. 20 of the 22 channels decode to RX 460.550
+  with a TX word of 0x23E8 and TX flag 0x00, which the 5 kHz rule turns into
+  373.64 MHz; channel 4 has the same word with flag 0x80 (467.050) and
+  channel 5 is 460.700 simplex. A TX value outside 406-470 MHz is now shown
+  as TX off instead of a -86.9 MHz offset. What TX flag 0x00 means
+  (TX inhibit, or another step rule) is unknown, so TK-359 writes stay
+  disabled until the owner confirms what those channels transmit on.
 - Write path (2026-11-26): both OEM write sessions traced in QEMU and
   implemented (TK-350: 26 `W` blocks, never 0xFC00-0xFCFF, identity must
   match the image's `P350n`; TK-359: only blocks changed since the read, `Z`
