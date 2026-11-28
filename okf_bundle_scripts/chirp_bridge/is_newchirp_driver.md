@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T11:25:20Z"
+timestamp: "2026-11-28T14:18:15Z"
 concept_id: chirp_bridge/is_newchirp_driver
 language: python
 ---
@@ -36,4 +36,4 @@ Lines 1114–1119 in `chirp_bridge.py`
 | Type | Target |
 |------|--------|
 | related | [chirp_bridge](/chirp_bridge.md) |
-| called_by | [main](/check_bundle_drivers/main.md) |
+| called_by | [_prefer_newchirp_drivers](/chirp_bridge/prefer_newchirp_drivers.md) |

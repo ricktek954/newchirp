@@ -2059,6 +2059,8 @@ def serial_read_timeout(radio_class):
     # appears as "Failed to read full block (67!=68)".
     if getattr(radio_class, "MODEL", "") == "KG-UVD1P":
         return 1.0
+    if getattr(radio_class, "__module__", "").endswith(".kguv9dplus"):
+        return 2.0
     return 0.25
 
 

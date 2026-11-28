@@ -10,7 +10,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T11:25:20Z"
+timestamp: "2026-11-28T14:18:15Z"
 concept_id: chirp_bridge/normalize_repeaterbook_query
 language: python
 ---
@@ -36,7 +36,7 @@ Treat location words like "Broward County" as a county name.
 | `query` | `—` | `—` |
 
 ## Source
-Lines 3065–3073 in `chirp_bridge.py`
+Lines 3067–3075 in `chirp_bridge.py`
 
 ## Relationships
 

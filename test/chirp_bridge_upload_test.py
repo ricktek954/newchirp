@@ -1508,6 +1508,15 @@ class UploadHandshakeTest(unittest.TestCase):
             0.25,
         )
 
+    def test_kguv9_family_uses_cps_length_serial_timeout(self):
+        for module in ("chirp.drivers.kguv9dplus", "chirp.drivers.ft60"):
+            radio_class = type("Radio", (), {"MODEL": "KG-UV9GX",
+                                             "__module__": module})
+            self.assertEqual(
+                bridge.serial_read_timeout(radio_class),
+                2.0 if module.endswith("kguv9dplus") else 0.25,
+            )
+
     def test_legacy_wouxun_timeout_is_applied_to_serial_port(self):
         radio_class = SimpleNamespace(
             MODEL="KG-UVD1P",

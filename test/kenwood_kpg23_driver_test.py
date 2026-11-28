@@ -766,6 +766,13 @@ class KenwoodKPG23DriverTest(unittest.TestCase):
         radio.set_memory(memory)
         again = radio.get_memory(2)
         self.assertEqual((again.duplex, again.offset), ("+", 5_000_000))
+        for duplex in ("+", "-"):
+            memory.duplex = duplex
+            memory.offset = 1_600_000
+            radio.set_memory(memory)
+            again = radio.get_memory(2)
+            self.assertEqual((again.duplex, again.offset), (duplex, 1_600_000))
+        memory = radio.get_memory(2)
         empty = radio.get_memory(5)
         empty.empty = False
         empty.freq = 460_000_000

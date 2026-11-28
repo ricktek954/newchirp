@@ -81,6 +81,7 @@ Last updated: 2026-11-20
 | Radioddity X1 Pro GMRS | `drivers/newchirp_x1pro.py` | OEM X1 Pro CPS serial, 115200 8N1, no DTR/RTS | Settings + 30 channel pages, offline-tested | Settings + all 30 channel pages, offline-tested | Full exposed settings page | Experimental |
 | Radioddity GS-5B 1.XX | `drivers/newchirp_gs5b.py` | OEM GS-5B Pro CPS v1.1.3 serial, 115200 8N1, DTR/RTS on | 512 channels, offline-tested | All mapped pages, offline-tested | Preserved, hidden | Experimental |
 | Midland MXT295 | `drivers/newchirp_mxt295.py` | CHIRP clone serial, 115200 8N1 | Yes, designed | Yes, hardware-tested | Radio & Modes | Hardware-tested |
+| Wouxun KG-UV9D Plus / 9PX / 9GX / 9K / 9G Pro | Pinned CHIRP `kguv9dplus.py` with NewChirp bridge timing | CHIRP KG-UV9D Plus clone serial, 19200 8N1 | Two-second read timeout (OEM CPS timing) | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Wouxun KG-UVD1P / KG-UV2D | Pinned CHIRP `wouxun.py` with NewChirp bridge timing | CHIRP clone serial, 9600 8N1 | One-second block timeout | Stock CHIRP driver | Stock CHIRP driver | Experimental timing override |
 | Wouxun KG-UV8D | Pinned CHIRP `kguv8d.py` with `drivers/newchirp_kg_uv8d_compat.py` | Wouxun clone serial, 19200 8N1, 64-byte blocks | Reserved DCS words no longer abort channel decode; raw bytes preserved | Stock CHIRP driver, offline round-trip | Stock CHIRP settings | Experimental compatibility override |
 | Wouxun KG-689E / KG-699E | `drivers/newchirp_wouxun_kg689e.py` | Wouxun KG669V clone serial, 9600 8N1, DTR on (OEM CPS) | 128 channels + names, CPS block plan, replay-tested | CPS write spans with radio-limit check, replay-tested | Preserved, not decoded | Experimental; no hardware |
@@ -2765,6 +2766,30 @@ Last updated: 2026-11-20
 - Write guidance: make a backup before using NewChirp to change the radio.
 - Next milestone: none for first read/write support. Several physical uploads have succeeded.
 - Website catalog: listed in the normal Midland catalog with desktop and Web Programmer support, and not included in New Experimental Radio Support.
+
+### Wouxun KG-UV9D Plus family (KG-UV9D Plus, KG-UV9PX, KG-UV9GX, KG-UV9K, KG-UV9G Pro)
+
+- Driver: pinned upstream CHIRP `chirp/drivers/kguv9dplus.py`, with NewChirp's
+  bridge applying a two-second serial read timeout to every class in that
+  module (`serial_read_timeout` in `scripts/chirp_bridge.py`)
+- Transport: 0x7D-framed, XOR-obfuscated records at 19200 8N1; the ident
+  reply is a 4-byte header plus 74 payload bytes and a checksum byte
+- Read policy: identification and transfer are unchanged. CHIRP's 250 ms
+  total read timeout cut the 75-byte ident tail short ("Radio reply wrong
+  size. Wanted 75, got 27/26") on a KG-UV9GX+ (Windows, NewChirp 1.0.79).
+- OEM evidence (static): Wouxun `UV9DP_SEN.rar` (SHA-256
+  `aee9d118c830a211114ed3a83eb43ad0bde949b727f4ec122bafb47dc12e5f95`),
+  `KG-UV9D(Plus).exe` (SHA-256 `29cbfd2e6b5bfb04ee1524adc9ff524f9c6ee35f18c17f908504ab01819ef127`). The port-open routine at 0x40bbf0 sets
+  19200 8N1, ReadIntervalTimeout 388 ms, ReadTotalTimeoutMultiplier 100 ms,
+  ReadTotalTimeoutConstant 1000 ms; the ident routine at 0x40bd40 sends 0x80
+  and sleeps 150 ms before reading. The CPS therefore allows about 8.5 s for
+  this reply; two seconds covers the observed rate with margin.
+- Write policy: stock CHIRP behavior; the timeout does not change the image or
+  write sequence.
+- Evidence: CHIRP `kguv9dplus.py` SHA-256 `dfb532a98caf2529791dfd68a9d3d6ffc87e7ac94caca317623d4e5fc8bc947d`; mailbox UID 1100.
+- Hardware validation: none for the timeout override.
+- Next milestone: the KG-UV9GX+ owner retests a full read on a build with the
+  override.
 
 ### Wouxun KG-UVD1P / KG-UV2D
 

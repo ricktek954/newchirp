@@ -9,7 +9,7 @@ tags:
   - "module:chirp_bridge.py"
   - "git:branch:main"
   - "git:repo:newchirp"
-timestamp: "2026-11-28T11:25:20Z"
+timestamp: "2026-11-28T14:18:15Z"
 concept_id: chirp_bridge/load_chirp
 language: python
 ---
@@ -46,4 +46,4 @@ Lines 1151–1234 in `chirp_bridge.py`
 | calls | [_prefer_newchirp_drivers](/chirp_bridge/prefer_newchirp_drivers.md) |
 | calls | [_allow_driver_specific_modes](/chirp_bridge/allow_driver_specific_modes.md) |
 | calls | [_upstream_driver_modules](/chirp_bridge/upstream_driver_modules.md) |
-| called_by | [main](/check_bundle_drivers/main.md) |
+| called_by | [main](/chirp_bridge/main.md) |
