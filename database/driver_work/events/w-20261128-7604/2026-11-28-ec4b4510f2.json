@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:53:55",
+  "details": "Ubuntu 24.04, /dev/ttyACM0: read started 17:43:38, transfer began ~17:46:07 (184 frames in 5 s), then a permission-denied/in-use error at 17:46:15. The port had opened, so dialout is unlikely; suspect the device dropping and re-enumerating or ModemManager grabbing the CDC-ACM port. The message wrongly says \"could not open\".",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1082",
+  "item": "w-20261128-7604",
+  "occurred_at": "2026-11-28",
+  "summary": "Linux 1.0.79: port reported denied/in use after the read was already transferring"
+}

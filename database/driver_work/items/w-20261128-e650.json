@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-28 07:53:54",
+  "kind": "bug",
+  "manufacturer": "TYT",
+  "model": "MD-UV380",
+  "occurred_at": null,
+  "priority": "high",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1083",
+  "status": "fix_committed",
+  "summary": "macOS 1.0.77: two writes (23 channels, then 1 channel) failed with \"Pipe error\" ~6 s after the write started (channel preparation), before the erase changed anything; the following read matched the earlier image except the edit. Transport diverged from dmrconfig/QDMR: download/upload-idle treated as ready instead of aborted to dfuIDLE, no programming-mode re-entry before erase, 2 s timeouts, and any status stall after an erase was fatal (QDMR ignores those errors).",
+  "title": "Write stops with libusb \"Pipe error\" (USB stall) before any erase",
+  "uid": "w-20261128-e650"
+}

@@ -39,6 +39,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-60bd bug | fix_committed | high:** Channels 129+ used a 1000-per-bank layout; QDMR/CPS layout is 128 per bank
   Found while adding the D878UVII. Channel 129 was read/written at 0x00802000 (channel-extension area) instead of 0x00840000. Reads of channels 129+ wrong; a write could overwrite extension records. Desktop and Web Programmer fixed. No hardware reports affected.
   Source: `analysis` QDMR fb9c96af d868uv_codeplug.cc:1618
+- **#w-20261128-7604 bug | awaiting_user | normal:** Linux 1.0.79: port reported denied/in use after the read was already transferring
+  Ubuntu 24.04, /dev/ttyACM0: read started 17:43:38, transfer began ~17:46:07 (184 frames in 5 s), then a permission-denied/in-use error at 17:46:15. The port had opened, so dialout is unlikely; suspect the device dropping and re-enumerating or ModemManager grabbing the CDC-ACM port. The message wrongly says "could not open".
+  Source: `email` mailbox:UID 1082
 - **#35 maintenance | experimental | normal:** Current driver status
   Transport: D578UV CPS serial, 115200 8N1. Read: 4000 channels + zones. Write: Yes, offline-tested. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:59
@@ -128,6 +131,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261123-9a28 bug | closed | normal:** Firmware DM32.00.01.048: tone 0x3E08 decoded as 3e8 Hz, whole read failed
   Read completed; decode failed with 30000000.0 not valid for rtone. 0x3E08 is not BCD; stock formats it as '3e08' and parses scientific notation. CPS v1.60 offers CHIRP's 50 tones; OEM data from another radio stores BCD. Image not attached.
   Source: `email` INBOX:907
+- **#w-20261128-5455 bug | fix_committed | normal:** Write stops on one short 4 KiB flash read ("Bad reply reading flash at 020000")
+  macOS 1.0.77, firmware DM32.NRF.01.049, CH340-style /dev/cu.usbserial: two full reads succeeded, then during the write one 0x1000-byte flash read returned 4007 of 4102 bytes after 5 s and the stock driver stopped. Reads are idempotent; the block read is now retried up to 3 times.
+  Source: `email` mailbox:UID 1087
 - **#24 maintenance | experimental | normal:** Current driver status
   Transport: CHIRP DM-32UV serial protocol, 115200 8N1 + DTR/RTS. Read: Stock CHIRP driver; receive-only airband accepted. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:48
@@ -281,7 +287,7 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-5RM Pro
 
-- **#w-20261125-2905 new_driver | awaiting_user | normal:** Support the UV-5RM Pro (firmware 1.0.94)
+- **#w-20261125-2905 new_driver | hardware_tested | normal:** Support the UV-5RM Pro (firmware 1.0.94)
   Windows 11 (26300), 1.0.72, COM5, model 5RH Pro selected: the 16-byte magic was answered e0 then 41, and the 8-byte command 4e ('N'), so the radio talks but refuses the 5RH Pro handshake. Owner reports UV-5RM PRO, firmware 1_0_94, hardware 1_0_0. Not in CHIRP. Next: OEM CPS REA.
   Source: `email triage 2026-11-25` INBOX:978
 
@@ -335,6 +341,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### IC-41S
 
+- **#w-20261128-ac5c bug | awaiting_user | normal:** First physical read: cable echoes the identify frame, radio silent
+  Windows 1.0.77 COM3: "Icom identify (10 bytes) | echo only". The attached image is our CS-41S sample (SHA-256 eb3dd05b...), not the radio. CS-41S user manual: connect the cable to [SP] first, then power on with [VOL]; NewChirp prompts said the opposite order. Prompts fixed; ask the owner to retry in that order.
+  Source: `email` mailbox:UID 1090
 - **#58 maintenance | experimental | normal:** Current driver status
   Transport: Legacy Icom clone serial, 9600 8N1. Read: Yes, hardware pending. Write: Yes, experimental. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:82
@@ -561,6 +570,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### Desktop
 
+- **#w-20261128-2bb1 bug | fix_committed | normal:** CSV with every line wrapped in quotes rejected as having no Frequency column
+  Windows 1.0.66: a GMRS-provided CHIRP.csv failed with "no Frequency column (columns found: Location,Name,Frequency,...)". The columns are listed without spaces, so the whole header was one quoted cell: the file has each line wrapped in quotes (a spreadsheet that kept each line in column A). Decode now re-splits one-field rows.
+  Source: `email` mailbox:UID 1084
 - **#w-20261120-393e enhancement | fix_committed | normal:** Collapsible Channel Library summary cards
   UV-32 owner asked to collapse the Channels / Scan enabled / Needs attention cards to see more channels.
   Source: `email` INBOX:834
@@ -737,6 +749,9 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### UV-K5 family
 
+- **#w-20261128-260c bug | awaiting_user | normal:** Firmware V-N3.40 not recognized; unsupported fallback decode fails (list index out of range)
+  Windows 1.0.70: hello reports firmware V-N3.40; stock, OSFW and egzumer profiles refuse it; the read-only unsupported profile downloaded the image but decoding failed with "list index out of range". Need the saved .img and where the firmware came from.
+  Source: `email` mailbox:UID 1081
 - **#18 maintenance | experimental | normal:** Current driver status
   Transport: UV-K5 framed serial, 38400 8N1. Read: Yes, firmware-ID retry. Write: Stock CHIRP policy. Settings: Stock CHIRP policy. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:42
@@ -936,12 +951,21 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 - **#w-20261127-31d2 bug | awaiting_user | normal:** Android app does not list the adapter after it was paired in Android settings
   UV-5R owner: Android Bluetooth sees and pairs the Tidradio adapter, but NewChirp's scan never shows it. The app only lists advertising devices (service filter, then unfiltered after 4 s); an adapter already connected by the system usually stops advertising. Workaround: forget it in Android settings and connect from the app. Possible fix: also list system-connected devices (UniversalBle.getSystemDevices).
   Source: `email` mailbox:UID 1053
+- **#w-20261128-ad06 bug | awaiting_user | normal:** Mobile connect fails "Operation Not Supported" on Android 8.1, Android 16 and iPadOS 17.7
+  Adapter is found by scan; connect fails with universal_ble operationNotSupported (GATT 0x06 request not supported) on three devices, while ODMaster connects. Which step (subscribe ff21, handshake write ff22, MTU) is unknown; need the Bluetooth diagnostics report.
+  Source: `email` mailbox:UID 1078
 
 ### TD-H3 family
 
 - **#39 maintenance | experimental | normal:** Current driver status
   Transport: OEM-verified TD-H3 clone serial, 38400 8N1. Read: Invalid brightness normalized; five-attempt identity probe. Write: Stock CHIRP driver. Settings: Stock CHIRP driver. Ledger status: Experimental compatibility override.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:63
+
+### TD-H3 Plus
+
+- **#w-20261128-0ea3 new_driver | awaiting_user | normal:** Support request: TIDRADIO TD-H3 Plus
+  Windows 1.0.77 general report: "please add support for tidradio td h3 plus". Upstream CHIRP lists TD-H3 / TD-H3-HAM / TD-H3-GMRS only. Ask for a read attempt with the TD-H3 profile (read-only) and the label/firmware.
+  Source: `email` mailbox:UID 1088
 
 ### TD-H8 fourth-generation
 
@@ -959,9 +983,12 @@ Use `python3 scripts/driver_work.py show <id>` for event history.
 
 ### MD-UV380
 
-- **#w-20261126-8502 bug | awaiting_user | normal:** USB DFU identity reply of 32 bytes stops the read
+- **#w-20261126-8502 bug | hardware_tested | normal:** USB DFU identity reply of 32 bytes stops the read
   macOS 1.0.73: 'USB DFU transfer returned 32 of 64 bytes' on the 0xA2 identity upload. dmrconfig requests 64 and accepts any length; model name is in the first 32 bytes. Identity now accepts a short reply; memory reads stay strict.
   Source: `email` INBOX:986
+- **#w-20261128-e650 bug | fix_committed | high:** Write stops with libusb "Pipe error" (USB stall) before any erase
+  macOS 1.0.77: two writes (23 channels, then 1 channel) failed with "Pipe error" ~6 s after the write started (channel preparation), before the erase changed anything; the following read matched the earlier image except the edit. Transport diverged from dmrconfig/QDMR: download/upload-idle treated as ready instead of aborted to dfuIDLE, no programming-mode re-entry before erase, 2 s timeouts, and any status stall after an erase was fatal (QDMR ignores those errors).
+  Source: `email` mailbox:UID 1083
 - **#36 maintenance | experimental | normal:** Current driver status
   Transport: ST DfuSe USB 0483:DF11 + libusb. Read: 3000 channels + zones. Write: Yes, offline-tested. Settings: Hidden. Ledger status: Experimental.
   Source: `docs/DRIVER_STATUS.md` docs/DRIVER_STATUS.md:60

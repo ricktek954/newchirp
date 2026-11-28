@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:55:45",
+  "details": "",
+  "event_type": "fix",
+  "external_ref": "desktop:cd3260677",
+  "item": "w-20261128-e650",
+  "occurred_at": "2026-11-28",
+  "summary": "DFU transport aligned with dmrconfig/QDMR; one retry after a stall on the post-erase status poll; refused erase/write errors name the address. 4 new transport tests fail on the old code."
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:55:48",
+  "details": "",
+  "event_type": "hardware_report",
+  "external_ref": "mailbox:UID 1075",
+  "item": "w-20261127-dc5d",
+  "occurred_at": "2026-11-28",
+  "summary": "Owner asks again for CTCSS and DCS tones; CTCSS already shipped (Web Programmer, macOS 1.0.77, Linux 1.0.79). Also considering turning internal adjustment screws for 430 MHz."
+}

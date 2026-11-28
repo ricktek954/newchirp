@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:53:54",
+  "details": "Windows 1.0.70: hello reports firmware V-N3.40; stock, OSFW and egzumer profiles refuse it; the read-only unsupported profile downloaded the image but decoding failed with \"list index out of range\". Need the saved .img and where the firmware came from.",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1081",
+  "item": "w-20261128-260c",
+  "occurred_at": "2026-11-28",
+  "summary": "Firmware V-N3.40 not recognized; unsupported fallback decode fails (list index out of range)"
+}

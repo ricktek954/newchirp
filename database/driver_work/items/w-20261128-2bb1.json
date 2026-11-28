@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-28 07:53:54",
+  "kind": "bug",
+  "manufacturer": "NewChirp",
+  "model": "Desktop",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1084",
+  "status": "fix_committed",
+  "summary": "Windows 1.0.66: a GMRS-provided CHIRP.csv failed with \"no Frequency column (columns found: Location,Name,Frequency,...)\". The columns are listed without spaces, so the whole header was one quoted cell: the file has each line wrapped in quotes (a spreadsheet that kept each line in column A). Decode now re-splits one-field rows.",
+  "title": "CSV with every line wrapped in quotes rejected as having no Frequency column",
+  "uid": "w-20261128-2bb1"
+}

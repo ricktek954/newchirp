@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-28 07:53:55",
+  "kind": "new_driver",
+  "manufacturer": "TIDRADIO",
+  "model": "TD-H3 Plus",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1088",
+  "status": "awaiting_user",
+  "summary": "Windows 1.0.77 general report: \"please add support for tidradio td h3 plus\". Upstream CHIRP lists TD-H3 / TD-H3-HAM / TD-H3-GMRS only. Ask for a read attempt with the TD-H3 profile (read-only) and the label/firmware.",
+  "title": "Support request: TIDRADIO TD-H3 Plus",
+  "uid": "w-20261128-0ea3"
+}

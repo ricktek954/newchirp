@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:55:45",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "mailbox:UID 1085",
+  "item": "w-20261128-e650",
+  "occurred_at": "2026-11-28",
+  "summary": "Compared with dmrconfig dfu-libusb.c and QDMR tyt_interface.cc/dfu_libusb.cc (commit fb9c96af): both abort download/upload-idle back to dfuIDLE, re-enter 91 01 before erasing, use unlimited control timeouts, and QDMR ignores every error from erase_block. Image after the failed write equals the earlier read except the edited byte at 0x2d004, so no erase happened."
+}

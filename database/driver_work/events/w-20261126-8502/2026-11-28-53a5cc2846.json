@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:55:45",
+  "details": "Identity accepted and full read completed on macOS 1.0.77 (mailbox UIDs 1083/1085)",
+  "event_type": "hardware_test",
+  "external_ref": "",
+  "item": "w-20261126-8502",
+  "occurred_at": "2026-11-28",
+  "summary": "reporter hardware test: pass"
+}

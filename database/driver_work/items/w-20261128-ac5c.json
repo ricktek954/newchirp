@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-28 07:53:55",
+  "kind": "bug",
+  "manufacturer": "Icom",
+  "model": "IC-41S",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1090",
+  "status": "awaiting_user",
+  "summary": "Windows 1.0.77 COM3: \"Icom identify (10 bytes) | echo only\". The attached image is our CS-41S sample (SHA-256 eb3dd05b...), not the radio. CS-41S user manual: connect the cable to [SP] first, then power on with [VOL]; NewChirp prompts said the opposite order. Prompts fixed; ask the owner to retry in that order.",
+  "title": "First physical read: cable echoes the identify frame, radio silent",
+  "uid": "w-20261128-ac5c"
+}

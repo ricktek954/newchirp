@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:53:55",
+  "details": "Windows 1.0.77 general report: \"please add support for tidradio td h3 plus\". Upstream CHIRP lists TD-H3 / TD-H3-HAM / TD-H3-GMRS only. Ask for a read attempt with the TD-H3 profile (read-only) and the label/firmware.",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1088",
+  "item": "w-20261128-0ea3",
+  "occurred_at": "2026-11-28",
+  "summary": "Support request: TIDRADIO TD-H3 Plus"
+}

@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:56:04",
+  "details": "Web Programmer: read, edit one channel, write, fresh read shows the change and the radio shows it (mailbox UID 1080); Windows desktop 1.0.77 connects",
+  "event_type": "hardware_test",
+  "external_ref": "",
+  "item": "w-20261125-2905",
+  "occurred_at": "2026-11-28",
+  "summary": "reporter hardware test: pass"
+}

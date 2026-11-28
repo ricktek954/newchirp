@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:55:48",
+  "details": "",
+  "event_type": "analysis",
+  "external_ref": "mailbox:UID 1086",
+  "item": "w-20261126-044a",
+  "occurred_at": "2026-11-28",
+  "summary": "Owner linked a public .Ysf (CPS file) CSV converter; read as text: frequency, tone, DCS 0x2800+octal, flag bits and 10-byte names agree with the static REA; it names byte 13 bits 2-3 \"Special DCS\". Owner installed the clean GMRS CPS; Windows Defender caught the infected dual-band file. Radio arrives 2026-11-28."
+}

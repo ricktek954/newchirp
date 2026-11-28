@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-11-28 07:53:54",
+  "details": "macOS 1.0.77, firmware DM32.NRF.01.049, CH340-style /dev/cu.usbserial: two full reads succeeded, then during the write one 0x1000-byte flash read returned 4007 of 4102 bytes after 5 s and the stock driver stopped. Reads are idempotent; the block read is now retried up to 3 times.",
+  "event_type": "created",
+  "external_ref": "mailbox:UID 1087",
+  "item": "w-20261128-5455",
+  "occurred_at": "2026-11-28",
+  "summary": "Write stops on one short 4 KiB flash read (\"Bad reply reading flash at 020000\")"
+}

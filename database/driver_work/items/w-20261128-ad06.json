@@ -1,0 +1,15 @@
+{
+  "created_at": "2026-11-28 07:53:55",
+  "kind": "bug",
+  "manufacturer": "TIDRADIO",
+  "model": "TD-BL1 adapter",
+  "occurred_at": null,
+  "priority": "normal",
+  "reporter": "reporter",
+  "source": "email",
+  "source_ref": "mailbox:UID 1078",
+  "status": "awaiting_user",
+  "summary": "Adapter is found by scan; connect fails with universal_ble operationNotSupported (GATT 0x06 request not supported) on three devices, while ODMaster connects. Which step (subscribe ff21, handshake write ff22, MTU) is unknown; need the Bluetooth diagnostics report.",
+  "title": "Mobile connect fails \"Operation Not Supported\" on Android 8.1, Android 16 and iPadOS 17.7",
+  "uid": "w-20261128-ad06"
+}
